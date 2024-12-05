@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using FakeItEasy;
@@ -44,7 +46,7 @@ public class DeviceFactoryTests
 
         var logger = A.Fake<ILogger<DeviceFactory>>();
 
-        var consumerApiClient = A.Fake<IConsumerApiClient>();
+        var consumerApiClient = A.Fake<IConsumerApiHelper>();
 
         A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
 

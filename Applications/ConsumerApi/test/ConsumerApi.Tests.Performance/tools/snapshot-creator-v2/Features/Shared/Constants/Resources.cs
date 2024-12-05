@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Constants;

@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
 
-public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiClient consumerApiClient) : IDeviceFactory
+public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper consumerApiHelper) : IDeviceFactory
 {
     private int _numberOfCreatedDevices;
     public int TotalNumberOfDevices { get; set; }
@@ -49,7 +51,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiClient con
     {
         List<string> deviceIds = [];
 
-        var sdkClient = consumerApiClient.CreateForExistingIdentity(request, identity);
+        var sdkClient = consumerApiHelper.CreateForExistingIdentity(request, identity);
 
         if (identity.DeviceIds.Count == 1)
         {
@@ -59,7 +61,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiClient con
 
         for (var i = 1; i < identity.NumberOfDevices; i++)
         {
-            var newDeviceId = await consumerApiClient.OnBoardNewDevice(identity, sdkClient);
+            var newDeviceId = await consumerApiHelper.OnBoardNewDevice(identity, sdkClient);
 
             deviceIds.Add(newDeviceId);
         }

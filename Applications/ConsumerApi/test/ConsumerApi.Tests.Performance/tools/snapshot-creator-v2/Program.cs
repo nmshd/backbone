@@ -1,5 +1,6 @@
 ﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
@@ -48,7 +49,7 @@ public class Program
                     services.AddSingleton<IOutputHelper, OutputHelper>();
                     services.AddSingleton<IExcelWriter, ExcelWriter>();
 
-                    services.AddSingleton<IConsumerApiClient, ConsumerApiClient>();
+                    services.AddSingleton<IConsumerApiHelper, ConsumerApiHelper>();
                     services.AddTransient<IIdentityFactory, IdentityFactory>();
                     services.AddTransient<IDeviceFactory, DeviceFactory>();
                 });

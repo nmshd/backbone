@@ -1,16 +1,17 @@
 ﻿using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Backbone.Tooling;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 
-public class ConsumerApiClient : IConsumerApiClient
+public class ConsumerApiHelper : IConsumerApiHelper
 {
-    public Client CreateForExistingIdentity(CreateDevices.Command request, DomainIdentity identity)
-    {
-        var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
-        return sdkClient;
-    }
+    public Task<Client> CreateForNewIdentity(CreateIdentities.Command request) =>
+        Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
+
+    public Client CreateForExistingIdentity(CreateDevices.Command request, DomainIdentity identity) =>
+        Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
 
     public async Task<string> OnBoardNewDevice(DomainIdentity identity, Client sdkClient)
     {

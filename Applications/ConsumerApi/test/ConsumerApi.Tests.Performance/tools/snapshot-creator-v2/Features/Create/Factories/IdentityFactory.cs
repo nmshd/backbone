@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics;
-using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using Backbone.Tooling;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
 
-public class IdentityFactory(ILogger<IdentityFactory> logger) : IIdentityFactory
+public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper consumerApiHelper) : IIdentityFactory
 {
     private int _numberOfCreatedIdentities;
     public int TotalIdentities { get; set; }
@@ -49,9 +49,9 @@ public class IdentityFactory(ILogger<IdentityFactory> logger) : IIdentityFactory
         return createdIdentity;
     }
 
-    private static async Task<DomainIdentity> InnerCreate(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
+    internal async Task<DomainIdentity> InnerCreate(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
     {
-        var sdkClient = await Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
+        var sdkClient = await consumerApiHelper.CreateForNewIdentity(request);
 
         if (sdkClient.DeviceData is null)
             throw new InvalidOperationException(

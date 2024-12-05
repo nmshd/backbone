@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Modes;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Backbone.Crypto;
 using MediatR;
@@ -59,7 +60,7 @@ public abstract record CreateMessages
             {
                 var recipientBag = GetRecipientIdentities(request, senderIdentity);
 
-                var tasks = recipientBag.RecipientIdentities
+                var tasks = recipientBag.RecipientDomainIdentities
                     .Select(recipientIdentity => ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag))
                     .ToArray();
 
@@ -118,7 +119,7 @@ public abstract record CreateMessages
 
             List<MessageBag> sentMessages = [];
 
-            var numSentMessages = recipientBag.RelationshipIds.First(relationshipIdBag =>
+            var numSentMessages = recipientBag.RelationshipIdentityBags.First(relationshipIdBag =>
                 relationshipIdBag.IdentityAddress == recipientIdentity.ConfigurationIdentityAddress &&
                 relationshipIdBag.PoolAlias == recipientIdentity.PoolAlias).NumberOfSentMessages;
 

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 
 public class OutputHelper : IOutputHelper
 {
