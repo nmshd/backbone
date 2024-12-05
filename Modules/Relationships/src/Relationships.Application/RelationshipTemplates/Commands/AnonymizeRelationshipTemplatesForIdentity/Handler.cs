@@ -21,7 +21,8 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplatesForIdentity
     {
         var relationshipTemplates = (await _relationshipTemplatesRepository.FindTemplates(RelationshipTemplate.IsFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken)).ToList();
 
-        foreach (var relationshipTemplate in relationshipTemplates) relationshipTemplate.AnonymizeForIdentity(_applicationOptions.DidDomainName);
+        foreach (var relationshipTemplate in relationshipTemplates)
+            relationshipTemplate.AnonymizeForIdentity(_applicationOptions.DidDomainName);
 
         await _relationshipTemplatesRepository.Update(relationshipTemplates, cancellationToken);
     }
