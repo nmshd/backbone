@@ -8,10 +8,10 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper consumerApiHelper) : IDeviceFactory
 {
-    private int _numberOfCreatedDevices;
+    internal int NumberOfCreatedDevices;
     public int TotalNumberOfDevices { get; set; }
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task Create(CreateDevices.Command request, DomainIdentity identity)
     {
@@ -27,12 +27,12 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
 
             using (_lockObj.EnterScope())
             {
-                _numberOfCreatedDevices += deviceIds.Count;
+                NumberOfCreatedDevices += deviceIds.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedDevices}/{TotalNumberOfDevices} devices.  Semaphore.Count: {SemaphoreCount} - Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedDevices,
+                NumberOfCreatedDevices,
                 TotalNumberOfDevices,
                 _semaphoreSlim.CurrentCount,
                 string.Join(',', deviceIds),

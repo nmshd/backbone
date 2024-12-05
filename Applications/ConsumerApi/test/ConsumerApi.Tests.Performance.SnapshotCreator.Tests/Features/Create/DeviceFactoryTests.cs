@@ -38,6 +38,32 @@ public class DeviceFactoryTests
             null);
     }
 
+
+    [Fact]
+    public async Task CreateDevices_NumDeviceIdsIsOne_ReturnsEmptyList()
+    {
+        // ARRANGE
+        _sdkClient ??= GetSdkClient();
+        var logger = A.Fake<ILogger<DeviceFactory>>();
+        var consumerApiClient = A.Fake<IConsumerApiHelper>();
+
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+            .Returns($"deviceId");
+
+        var request = A.Fake<CreateDevices.Command>();
+        var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 1 };
+
+        var sut = new DeviceFactory(logger, consumerApiClient);
+
+        // ACT
+        var result = await sut.CreateDevices(request, identity);
+
+        // ASSERT
+        result.Should().BeEmpty();
+        identity.DeviceIds.Should().BeEmpty();
+    }
+
     [Fact]
     public async Task CreateDevices_NumDeviceIdsGreaterOne_ReturnsDeviceId()
     {
@@ -71,5 +97,55 @@ public class DeviceFactoryTests
 
         result.Should().HaveCount(identity.NumberOfDevices - 1);
         identity.DeviceIds.Should().BeEquivalentTo(result);
+    }
+
+
+    [Fact]
+    public async Task Create_NumDeviceIdsGreaterOne_NumberOfCreatedDevicesShouldBeEqualToIdentityDevices()
+    {
+        // ARRANGE
+        _sdkClient ??= GetSdkClient();
+        var logger = A.Fake<ILogger<DeviceFactory>>();
+        var consumerApiClient = A.Fake<IConsumerApiHelper>();
+
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+            .Returns($"deviceId");
+
+        var request = A.Fake<CreateDevices.Command>();
+        var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 5 };
+        var sut = new DeviceFactory(logger, consumerApiClient);
+
+        // ACT
+        await sut.Create(request, identity);
+
+        // ASSERT
+
+        sut.NumberOfCreatedDevices.Should().Be(identity.NumberOfDevices - 1);
+        identity.DeviceIds.Should().HaveCount(identity.NumberOfDevices - 1);
+    }
+
+    [Fact]
+    public async Task Create_AfterInvoked_ShouldReleaseSemaphoreSlim()
+    {
+        // ARRANGE
+        _sdkClient ??= GetSdkClient();
+        var logger = A.Fake<ILogger<DeviceFactory>>();
+        var consumerApiClient = A.Fake<IConsumerApiHelper>();
+
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+            .Returns($"deviceId");
+
+        var request = A.Fake<CreateDevices.Command>();
+        var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 5 };
+
+        var sut = new DeviceFactory(logger, consumerApiClient);
+
+        // ACT
+        await sut.Create(request, identity);
+
+        // ASSERT
+        sut._semaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
     }
 }
