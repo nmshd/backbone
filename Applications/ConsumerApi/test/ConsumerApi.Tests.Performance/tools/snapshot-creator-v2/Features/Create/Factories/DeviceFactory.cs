@@ -62,6 +62,6 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
         }
 
         identity.AddDevices(deviceIds);
-        return deviceIds;
+        return identity.DeviceIds;
     }
 }
