@@ -8,17 +8,17 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper consumerApiHelper) : IIdentityFactory
 {
-    private int _numberOfCreatedIdentities;
+    internal int NumberOfCreatedIdentities;
     public int TotalIdentities { get; set; }
 
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task<DomainIdentity> Create(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
     {
         DomainIdentity createdIdentity;
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
         try
         {
             Stopwatch stopwatch = new();
@@ -28,14 +28,14 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
 
             using (_lockObj.EnterScope())
             {
-                _numberOfCreatedIdentities++;
+                NumberOfCreatedIdentities++;
             }
 
             logger.LogDebug(
                 "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
-                _numberOfCreatedIdentities,
+                NumberOfCreatedIdentities,
                 TotalIdentities,
-                _semaphoreSlim.CurrentCount,
+                SemaphoreSlim.CurrentCount,
                 createdIdentity.IdentityAddress,
                 createdIdentity.ConfigurationIdentityAddress,
                 createdIdentity.PoolAlias,
@@ -43,7 +43,7 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
 
         return createdIdentity;

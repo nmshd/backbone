@@ -11,11 +11,11 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
     internal int NumberOfCreatedDevices;
     public int TotalNumberOfDevices { get; set; }
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task Create(CreateDevices.Command request, DomainIdentity identity)
     {
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
 
         try
         {
@@ -34,7 +34,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
                 "Created {CreatedDevices}/{TotalNumberOfDevices} devices.  Semaphore.Count: {SemaphoreCount} - Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
                 NumberOfCreatedDevices,
                 TotalNumberOfDevices,
-                _semaphoreSlim.CurrentCount,
+                SemaphoreSlim.CurrentCount,
                 string.Join(',', deviceIds),
                 identity.IdentityAddress,
                 identity.ConfigurationIdentityAddress,
@@ -43,7 +43,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
     }
 

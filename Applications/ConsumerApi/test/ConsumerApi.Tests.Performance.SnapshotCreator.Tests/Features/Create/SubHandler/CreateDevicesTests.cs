@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using FakeItEasy;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create.SubHandler;
 
 public class CreateDevicesTests
 {

@@ -1,6 +1,5 @@
-﻿using System.Reflection;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
@@ -8,39 +7,14 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create.Factories;
 
-public class DeviceFactoryTests
+public class DeviceFactoryTests : SnapshotCreatorTestsBase
 {
     private Client? _sdkClient;
 
-
-    private Client? GetSdkClient()
-    {
-        var httpClient = new HttpClient();
-        var configuration = new Configuration
-        {
-            Authentication = new Configuration.AuthenticationConfiguration
-            {
-                ClientCredentials = new ClientCredentials("test", "test"),
-                UserCredentials = new UserCredentials("username", "password")
-            }
-        };
-
-        var deviceData = new DeviceData { DeviceId = "deviceId", UserCredentials = new UserCredentials("username", "password") };
-        var identityData = new IdentityData { Address = "address", KeyPair = null! };
-
-        return _sdkClient = (Client?)Activator.CreateInstance(
-            typeof(Client),
-            BindingFlags.NonPublic | BindingFlags.Instance,
-            null,
-            [httpClient, configuration, deviceData, identityData],
-            null);
-    }
-
-
     [Fact]
-    public async Task CreateDevices_NumDeviceIdsIsOne_ReturnsEmptyList()
+    public async Task CreateDevices_NumDeviceIdsIsOne_ShouldReturnEmptyList()
     {
         // ARRANGE
         _sdkClient ??= GetSdkClient();
@@ -65,7 +39,7 @@ public class DeviceFactoryTests
     }
 
     [Fact]
-    public async Task CreateDevices_NumDeviceIdsGreaterOne_ReturnsDeviceId()
+    public async Task CreateDevices_NumDeviceIdsGreaterOne_ShouldBeEqualToIdentityDevices()
     {
         // ARRANGE
         _sdkClient ??= GetSdkClient();
@@ -101,7 +75,7 @@ public class DeviceFactoryTests
 
 
     [Fact]
-    public async Task Create_NumDeviceIdsGreaterOne_NumberOfCreatedDevicesShouldBeEqualToIdentityDevices()
+    public async Task Create_NumDeviceIdsGreaterOne_ShouldBeEqualToIdentityDevices()
     {
         // ARRANGE
         _sdkClient ??= GetSdkClient();
@@ -146,6 +120,6 @@ public class DeviceFactoryTests
         await sut.Create(request, identity);
 
         // ASSERT
-        sut._semaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
     }
 }
