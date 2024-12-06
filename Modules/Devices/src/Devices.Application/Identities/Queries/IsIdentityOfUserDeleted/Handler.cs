@@ -16,17 +16,29 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
 
     public async Task<IsIdentityOfUserDeletedResponse> Handle(IsIdentityOfUserDeletedQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindSingle(Identity.HasUser(request.Username), cancellationToken);
+        var identity = await _identitiesRepository.FindFirst(Identity.HasUser(request.Username), cancellationToken);
 
-        if (identity.IsGracePeriodOver)
-            return new IsIdentityOfUserDeletedResponse(true, identity.DeletionGracePeriodEndsAt);
+        bool isDeleted;
+        DateTime? deletionGracePeriodEndsAt;
 
-        var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(
-            IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(Username.Parse(request.Username)),
-            cancellationToken);
+        if (identity != null)
+        {
+            isDeleted = identity.IsGracePeriodOver;
+            deletionGracePeriodEndsAt = identity.IsGracePeriodOver ? identity.DeletionGracePeriodEndsAt : null;
+        }
+        else
+        {
+            var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(
+                IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(Username.Parse(request.Username)),
+                cancellationToken);
 
-        var deletionCompletedAuditLogEntry = auditLogEntries.FirstOrDefault(l => l.MessageKey == MessageKey.DeletionCompleted);
+            var deletionCompletedAuditLogEntry = auditLogEntries.FirstOrDefault(l => l.MessageKey == MessageKey.DeletionCompleted);
 
-        return new IsIdentityOfUserDeletedResponse(deletionCompletedAuditLogEntry != null, deletionCompletedAuditLogEntry?.CreatedAt);
+            isDeleted = deletionCompletedAuditLogEntry != null;
+            deletionGracePeriodEndsAt = deletionCompletedAuditLogEntry?.CreatedAt;
+        }
+
+        return new IsIdentityOfUserDeletedResponse(isDeleted, deletionGracePeriodEndsAt);
+
     }
 }
