@@ -3,6 +3,8 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
@@ -63,6 +65,19 @@ public class ConsumerApiHelper : IConsumerApiHelper
                 MaxNumberOfAllocations = 1000
             });
     }
+
+    public Task<ApiResponse<RelationshipMetadata>> CreateRelationship(Client appIdentitySdkClient, RelationshipTemplateBag nextRelationshipTemplate) =>
+        appIdentitySdkClient.Relationships.CreateRelationship(
+            new CreateRelationshipRequest
+            {
+                RelationshipTemplateId = nextRelationshipTemplate.Template.Id,
+                Content = []
+            });
+
+    public Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(Client connectorIdentitySdkClient, ApiResponse<RelationshipMetadata> createRelationshipResponse) =>
+        connectorIdentitySdkClient.Relationships.AcceptRelationship(
+            createRelationshipResponse.Result!.Id,
+            new AcceptRelationshipRequest());
 
     private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
     {

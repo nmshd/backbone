@@ -55,6 +55,7 @@ public class Program
                     services.AddTransient<IChallengeFactory, ChallengeFactory>();
                     services.AddTransient<IDatawalletModificationFactory, DatawalletModificationFactory>();
                     services.AddTransient<IRelationshipTemplateFactory, RelationshipTemplateFactory>();
+                    services.AddTransient<IRelationshipFactory, RelationshipFactory>();
                 });
 
             await hostBuilder.RunCommandLineApplicationAsync(args, app =>
