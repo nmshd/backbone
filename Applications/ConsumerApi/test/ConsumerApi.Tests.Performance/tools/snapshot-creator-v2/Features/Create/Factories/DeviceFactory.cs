@@ -51,7 +51,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
     {
         List<string> deviceIds = [];
 
-        var sdkClient = consumerApiHelper.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials);
+        var sdkClient = consumerApiHelper.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
 
         // Note: The reason for starting the loop at 1 is that the first device is already created in the IdentityFactory
         for (var i = 1; i < identity.NumberOfDevices; i++)
