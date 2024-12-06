@@ -110,6 +110,11 @@ final _router = GoRouter(
             ),
           ],
         ),
+        GoRoute(
+          parentNavigatorKey: _shellNavigatorKey,
+          path: '/announcements',
+          pageBuilder: (context, state) => const NoTransitionPage(child: AnnouncementsOverview()),
+        ),
       ],
       builder: (context, state, child) => HomeScreen(location: state.fullPath!, child: child),
     ),
