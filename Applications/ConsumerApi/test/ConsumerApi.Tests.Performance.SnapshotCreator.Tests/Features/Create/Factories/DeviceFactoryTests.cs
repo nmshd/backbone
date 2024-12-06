@@ -63,7 +63,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         var result = await sut.CreateDevices(request, identity);
 
         // ASSERT
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, null))
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData))
             .MustHaveHappenedOnceExactly();
 
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(identity, _sdkClient!))
