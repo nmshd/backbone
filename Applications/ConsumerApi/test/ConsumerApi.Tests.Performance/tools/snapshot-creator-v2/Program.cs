@@ -53,6 +53,7 @@ public class Program
                     services.AddTransient<IIdentityFactory, IdentityFactory>();
                     services.AddTransient<IDeviceFactory, DeviceFactory>();
                     services.AddTransient<IChallengeFactory, ChallengeFactory>();
+                    services.AddTransient<IDatawalletModificationFactory, DatawalletModificationFactory>();
                 });
 
             await hostBuilder.RunCommandLineApplicationAsync(args, app =>
