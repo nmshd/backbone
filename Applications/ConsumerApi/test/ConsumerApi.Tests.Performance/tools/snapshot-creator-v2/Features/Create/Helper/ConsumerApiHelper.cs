@@ -3,11 +3,14 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 
@@ -49,6 +52,17 @@ public class ConsumerApiHelper : IConsumerApiHelper
             NewDatawalletVersion = 3
         });
 
+
+    public async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateRelationshipTemplate(Client sdkClient)
+    {
+        return await sdkClient.RelationshipTemplates.CreateTemplate(
+            new CreateRelationshipTemplateRequest
+            {
+                Content = [],
+                ExpiresAt = DateTime.Now.EndOfYear(),
+                MaxNumberOfAllocations = 1000
+            });
+    }
 
     private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
     {
