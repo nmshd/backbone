@@ -171,12 +171,12 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Identity> FindSingle(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> FindFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
             .Where(filter)
-            .SingleAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)

@@ -16,7 +16,7 @@ public interface IIdentitiesRepository
     Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
-    Task<Identity> FindSingle(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<Identity?> FindFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
     Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
 
     Task Add(Identity identity, string password);
