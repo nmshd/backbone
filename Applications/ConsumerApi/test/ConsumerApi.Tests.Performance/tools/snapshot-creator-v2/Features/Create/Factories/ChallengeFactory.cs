@@ -12,11 +12,11 @@ public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelp
     internal int NumberOfCreatedChallenges;
     public int TotalChallenges { get; set; }
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task Create(CreateChallenges.Command request, DomainIdentity identityWithChallenge)
     {
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
 
         try
         {
@@ -35,7 +35,7 @@ public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelp
                 "Created {CreatedChallenges}/{TotalChallenges} challenges.  Semaphore.Count: {SemaphoreCount} - Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
                 NumberOfCreatedChallenges,
                 TotalChallenges,
-                _semaphoreSlim.CurrentCount,
+                SemaphoreSlim.CurrentCount,
                 identityWithChallenge.IdentityAddress,
                 identityWithChallenge.ConfigurationIdentityAddress,
                 identityWithChallenge.PoolAlias,
@@ -43,7 +43,7 @@ public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelp
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
     }
 

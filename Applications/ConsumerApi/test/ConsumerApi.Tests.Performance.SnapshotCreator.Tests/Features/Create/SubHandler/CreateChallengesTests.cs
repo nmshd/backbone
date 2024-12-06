@@ -1,16 +1,15 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Enums;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using MediatR;
 using FakeItEasy;
-using Xunit;
 
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create.SubHandler;
 
-public class CreateChallengesTests
+public class CreateChallengesTests : SnapshotCreatorTestsBase
 {
     private readonly IChallengeFactory _challengeFactory;
     private readonly CreateChallenges.CommandHandler _handler;
