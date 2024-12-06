@@ -3,6 +3,8 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
@@ -11,6 +13,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
+using Backbone.Crypto;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
@@ -78,6 +81,22 @@ public class ConsumerApiHelper : IConsumerApiHelper
         connectorIdentitySdkClient.Relationships.AcceptRelationship(
             createRelationshipResponse.Result!.Id,
             new AcceptRelationshipRequest());
+
+
+    public Task<ApiResponse<SendMessageResponse>> SendMessage(DomainIdentity recipientIdentity, Client senderIdentitySdkClient) =>
+        senderIdentitySdkClient.Messages.SendMessage(new SendMessageRequest
+        {
+            Recipients =
+            [
+                new SendMessageRequestRecipientInformation
+                {
+                    Address = recipientIdentity.IdentityAddress!,
+                    EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation
+                }
+            ],
+            Attachments = [],
+            Body = ConvertibleString.FromUtf8("Message body").BytesRepresentation
+        });
 
     private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
     {

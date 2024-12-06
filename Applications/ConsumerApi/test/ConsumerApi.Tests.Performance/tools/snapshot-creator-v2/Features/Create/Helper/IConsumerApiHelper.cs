@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
@@ -27,4 +28,5 @@ public interface IConsumerApiHelper
     Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateRelationshipTemplate(Client sdkClient);
     Task<ApiResponse<RelationshipMetadata>> CreateRelationship(Client appIdentitySdkClient, RelationshipTemplateBag nextRelationshipTemplate);
     Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(Client connectorIdentitySdkClient, ApiResponse<RelationshipMetadata> createRelationshipResponse);
+    Task<ApiResponse<SendMessageResponse>> SendMessage(DomainIdentity recipientIdentity, Client senderIdentitySdkClient);
 }
