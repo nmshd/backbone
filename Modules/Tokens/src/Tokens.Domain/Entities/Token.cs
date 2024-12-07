@@ -43,7 +43,7 @@ public class Token : Entity
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
 
-    public IdentityAddress? ForIdentity { get; set; }
+    public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
     public byte[] Content { get; private set; }
@@ -58,9 +58,23 @@ public class Token : Entity
             CreatedBy == address; // The owner shouldn't need a password to get the template
     }
 
+    public void AnonymizeForIdentity(string didDomainName)
+    {
+        EnsureIsPersonalized();
+
+        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
+
+        ForIdentity = anonymousIdentity;
+    }
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
+    }
+
+    public void EnsureIsPersonalized()
+    {
+        if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
     }
 
     #region Expressions
@@ -89,6 +103,11 @@ public class Token : Entity
             token.Password == null ||
             token.Password == password ||
             token.CreatedBy == address; // The owner shouldn't need a password to get the template
+    }
+
+    public static Expression<Func<Token, bool>> IsFor(IdentityAddress identityAddress)
+    {
+        return token => token.ForIdentity == identityAddress;
     }
 
     #endregion

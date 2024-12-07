@@ -48,6 +48,13 @@ public class TokensRepository : ITokensRepository
         return templates;
     }
 
+    public async Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .Where(filter)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
     {
         var token = await _readonlyTokensDbSet
@@ -84,6 +91,12 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken)
+    {
+        _tokensDbSet.UpdateRange(tokens);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)

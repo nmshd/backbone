@@ -2,6 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplatesForIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 using MediatR;
 
@@ -23,6 +24,7 @@ public class IdentityDeleter : IIdentityDeleter
         await _mediator.Send(new DecomposeAndAnonymizeRelationshipsOfIdentityCommand(identityAddress));
         await _deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
         await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand(identityAddress));
+        await _mediator.Send(new AnonymizeRelationshipTemplatesForIdentityCommand(identityAddress));
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
         await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(identityAddress));
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
