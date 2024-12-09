@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -21,12 +22,16 @@ public class Device : Entity
         CommunicationLanguage = null!;
     }
 
+    /**
+     * This constructor is only used for creating test devices.
+     */
     private Device(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = false;
 
         User = new ApplicationUser(this, username);
 
@@ -34,12 +39,13 @@ public class Device : Entity
         IdentityAddress = null!;
     }
 
-    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null)
+    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null, bool isBackupDevice = false)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = isBackupDevice;
 
         User = new ApplicationUser(this);
 
@@ -69,13 +75,12 @@ public class Device : Entity
 
     public DeviceId CreatedByDevice { get; set; }
 
+    public bool IsBackupDevice { get; private set; }
+
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
 
     public bool IsOnboarded => User.HasLoggedIn;
-
-    public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletedAt == null && device.DeletedByDevice == null;
 
     private DomainError? CanBeDeletedBy(IdentityAddress addressOfActiveIdentity)
     {
@@ -111,8 +116,29 @@ public class Device : Entity
         DeletedByDevice = deletedByDevice;
     }
 
+    public void LoginOccurred()
+    {
+        if (IsBackupDevice)
+        {
+            IsBackupDevice = false;
+            RaiseDomainEvent(new BackupDeviceUsedDomainEvent(IdentityAddress));
+        }
+
+        User.LoginOccurred();
+    }
+
     public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         return new Device(identity, communicationLanguage, username);
     }
+
+    #region Expressions
+
+    public static Expression<Func<Device, bool>> IsNotDeleted =>
+        device => device.DeletedAt == null && device.DeletedByDevice == null;
+
+    public static Expression<Func<Device, bool>> IsBackup =>
+        device => device.IsBackupDevice;
+
+    #endregion
 }

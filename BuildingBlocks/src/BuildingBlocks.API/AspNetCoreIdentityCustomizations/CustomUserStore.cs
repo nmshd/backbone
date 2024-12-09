@@ -9,7 +9,9 @@ namespace Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 
 public class CustomUserStore : UserStore<ApplicationUser>
 {
-    public CustomUserStore(DevicesDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer) { }
+    public CustomUserStore(DevicesDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer)
+    {
+    }
 
     public override async Task<ApplicationUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
@@ -33,5 +35,12 @@ public class CustomUserStore : UserStore<ApplicationUser>
             .FirstOrDefaultAsync(filter, cancellationToken);
 
         return user;
+    }
+
+    public override Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = new CancellationToken())
+    {
+        Context.Attach(user.Device);
+        Context.Update(user.Device);
+        return base.UpdateAsync(user, cancellationToken);
     }
 }

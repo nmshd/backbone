@@ -53,10 +53,28 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToArrayAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    public async Task<bool> HasBackupDevice(IdentityAddress identity, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentityDeletionProcessAuditLogs
-            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
+        return await _readonlyDevices
+            .OfIdentity(identity)
+            .Where(Device.IsBackup)
+            .AnyAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
+        CancellationToken cancellationToken, bool track = false)
+    {
+        // Clearing the change tracker needs to be done because in case of the actual identity deletion, the deletion
+        // process including all its audit log entries is read first. Then the deletion process is deleted without the
+        // change tracker being involved. This leads to auditLogEntry.ProcessId being set to null in the database (because
+        // of the foreign key configuration). But the change tracker does not know about that.
+        // Later on during the actual deletion we want to update all existing audit log entries to set the usernames.
+        // And when trying to save the updated audit log entries, EF Core tries to save the process id as well, which is
+        // impossible, because the deletion process was deleted already.
+        _dbContext.ChangeTracker.Clear();
+
+        return await (track ? _identityDeletionProcessAuditLogs : _readonlyIdentityDeletionProcessAuditLogs)
+            .Where(filter)
             .ToListAsync(cancellationToken);
     }
 
@@ -115,6 +133,15 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
 
+    public async Task<IEnumerable<Device>> GetDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _devices : _readonlyDevices)
+            .NotDeleted()
+            .IncludeAll(_dbContext)
+            .Where(d => deviceIds.Contains(d.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task Update(Device device, CancellationToken cancellationToken)
     {
         _devices.Update(device);
@@ -144,6 +171,14 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<Identity?> FindFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
@@ -153,5 +188,11 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identityDeletionProcessAuditLogs.Add(auditLogEntry);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken)
+    {
+        _identityDeletionProcessAuditLogs.UpdateRange(auditLogEntries);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

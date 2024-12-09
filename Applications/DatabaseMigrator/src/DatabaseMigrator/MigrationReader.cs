@@ -1,4 +1,5 @@
 ﻿using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
@@ -26,7 +27,8 @@ public class MigrationReader
         typeof(TokensDbContext),
         typeof(MessagesDbContext),
         typeof(QuotasDbContext),
-        typeof(AdminApiDbContext)
+        typeof(AdminApiDbContext),
+        typeof(AnnouncementsDbContext)
     ];
 
     public MigrationReader(DbContextProvider dbContextProvider)

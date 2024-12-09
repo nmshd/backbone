@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -222,6 +222,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
+                    b.Property<bool>("IsBackupDevice")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
@@ -395,11 +398,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NewStatus")
+                    b.Property<int?>("NewStatus")
                         .HasColumnType("int");
 
                     b.Property<int?>("OldStatus")
                         .HasColumnType("int");
+
+                    b.PrimitiveCollection<string>("UsernameHashesBase64")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

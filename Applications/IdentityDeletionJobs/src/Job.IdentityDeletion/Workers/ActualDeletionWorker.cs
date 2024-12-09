@@ -2,7 +2,9 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -78,10 +80,16 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
+        var identity = await _mediator.Send(new GetIdentityQuery(identityAddress.Value));
+
         foreach (var identityDeleter in _identityDeleters)
         {
             await identityDeleter.Delete(identityAddress);
         }
+
+        var usernames = identity.Devices.Select(d => d.Username);
+
+        await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress.Value, usernames));
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
