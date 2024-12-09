@@ -9,13 +9,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 {
     public class CreateDatawalletModificationsTests
     {
+        private readonly IDatawalletModificationFactory _datawalletModificationFactory;
+        private readonly CreateDatawalletModifications.CommandHandler _sut;
+
+        public CreateDatawalletModificationsTests()
+        {
+            _datawalletModificationFactory = A.Fake<IDatawalletModificationFactory>();
+            _sut = new CreateDatawalletModifications.CommandHandler(_datawalletModificationFactory);
+        }
+
         [Fact]
         public async Task Handle_ShouldProcessIdentitiesWithDatawalletModifications()
         {
             // Arrange
-            var datawalletModificationFactory = A.Fake<IDatawalletModificationFactory>();
-            var handler = new CreateDatawalletModifications.CommandHandler(datawalletModificationFactory);
-
             var identities = new List<DomainIdentity>
             {
                 new(null!, null, 0, 0, 0, IdentityPoolType.Never, 5, "", 2, 0),
@@ -32,22 +38,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
             );
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            A.CallTo(() => datawalletModificationFactory.Create(A<CreateDatawalletModifications.Command>._, A<DomainIdentity>._))
+            A.CallTo(() => _datawalletModificationFactory.Create(A<CreateDatawalletModifications.Command>._, A<DomainIdentity>._))
                 .MustHaveHappened(3, Times.Exactly);
 
-            datawalletModificationFactory.TotalDatawalletModifications.Should().Be(expectedTotalDatawalletModifications);
+            _datawalletModificationFactory.TotalConfiguredDatawalletModifications.Should().Be(expectedTotalDatawalletModifications);
         }
 
         [Fact]
         public async Task Handle_ShouldNotProcessIdentitiesWithoutDatawalletModifications()
         {
             // Arrange
-            var datawalletModificationFactory = A.Fake<IDatawalletModificationFactory>();
-            var handler = new CreateDatawalletModifications.CommandHandler(datawalletModificationFactory);
-
             var identities = new List<DomainIdentity>
             {
                 new(null!, null, 0, 0, 0, IdentityPoolType.Never, 5, "", 0, 0),
@@ -63,13 +66,13 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
             );
 
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            await _sut.Handle(command, CancellationToken.None);
 
             // Assert
-            A.CallTo(() => datawalletModificationFactory.Create(A<CreateDatawalletModifications.Command>._, A<DomainIdentity>._))
+            A.CallTo(() => _datawalletModificationFactory.Create(A<CreateDatawalletModifications.Command>._, A<DomainIdentity>._))
                 .MustNotHaveHappened();
 
-            datawalletModificationFactory.TotalDatawalletModifications.Should().Be(expectedTotalDatawalletModifications);
+            _datawalletModificationFactory.TotalConfiguredDatawalletModifications.Should().Be(expectedTotalDatawalletModifications);
         }
     }
 }

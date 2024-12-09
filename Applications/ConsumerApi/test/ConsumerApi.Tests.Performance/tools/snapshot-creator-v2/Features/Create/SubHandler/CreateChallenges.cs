@@ -19,7 +19,7 @@ public abstract record CreateChallenges
         {
             var identitiesWithChallenges = request.Identities.Where(i => i.NumberOfChallenges > 0).ToArray();
 
-            challengeFactory.TotalChallenges = identitiesWithChallenges.Sum(i => i.NumberOfChallenges);
+            challengeFactory.TotalConfiguredChallenges = identitiesWithChallenges.Sum(i => i.NumberOfChallenges);
 
             var tasks = identitiesWithChallenges
                 .Select(identityWithChallenge => challengeFactory.Create(request, identityWithChallenge))

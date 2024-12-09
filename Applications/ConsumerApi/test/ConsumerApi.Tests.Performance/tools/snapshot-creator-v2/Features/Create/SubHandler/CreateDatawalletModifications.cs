@@ -22,7 +22,7 @@ public abstract record CreateDatawalletModifications
                 .Where(i => i.NumberOfDatawalletModifications > 0)
                 .ToArray();
 
-            datawalletModificationFactory.TotalDatawalletModifications = identitiesWithDatawalletModifications.Sum(i => i.NumberOfDatawalletModifications);
+            datawalletModificationFactory.TotalConfiguredDatawalletModifications = identitiesWithDatawalletModifications.Sum(i => i.NumberOfDatawalletModifications);
 
             var tasks = identitiesWithDatawalletModifications
                 .Select(identityWithDatawalletModifications => datawalletModificationFactory.Create(request, identityWithDatawalletModifications))

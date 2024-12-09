@@ -8,19 +8,23 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class CreateDevicesTests
 {
+    private readonly IDeviceFactory _deviceFactory;
+    private readonly CreateDevices.CommandHandler _sut;
+
+    public CreateDevicesTests()
+    {
+        _deviceFactory = A.Fake<IDeviceFactory>();
+        _sut = new CreateDevices.CommandHandler(_deviceFactory);
+    }
+
     [Fact]
     public async Task Handle_ShouldReturnListOfDomainIdentities_WhenValidCommand()
     {
         // ARRANGE
-        var createDevicesCommand = A.Fake<IDeviceFactory>();
-
-        A.CallTo(() => createDevicesCommand.Create(
+        A.CallTo(() => _deviceFactory.Create(
                 A<CreateDevices.Command>.Ignored,
                 A<DomainIdentity>.Ignored))
             .Returns(Task.CompletedTask);
-
-
-        var handler = new CreateDevices.CommandHandler(createDevicesCommand);
 
         var domainIdentity = A.Fake<DomainIdentity>();
 
@@ -39,39 +43,31 @@ public class CreateDevicesTests
 
 
         // ACT
-        await handler.Handle(command, CancellationToken.None);
+        await _sut.Handle(command, CancellationToken.None);
 
         // ASSERT
-        A.CallTo(() => createDevicesCommand.Create(
+        A.CallTo(() => _deviceFactory.Create(
             A<CreateDevices.Command>.Ignored,
             A<DomainIdentity>.Ignored)).MustHaveHappened(domainIdentities.Count, Times.Exactly);
 
-        createDevicesCommand.TotalNumberOfDevices.Should().Be(sumOfExpectedDevices);
+        _deviceFactory.TotalConfiguredDevices.Should().Be(sumOfExpectedDevices);
     }
 
     [Fact]
     public async Task Handle_ShouldThrowException_WhenCommandIsNull()
     {
-        // ARRANGE
-        var deviceFactory = A.Fake<IDeviceFactory>();
-        var handler = new CreateDevices.CommandHandler(deviceFactory);
-
         // ACT & ASSERT
-        await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(null!, CancellationToken.None));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.Handle(null!, CancellationToken.None));
     }
 
     [Fact]
     public async Task Handle_ShouldReturnEmptyList_WhenNoDevicesCreated()
     {
         // ARRANGE
-        var deviceFactory = A.Fake<IDeviceFactory>();
-
-        A.CallTo(() => deviceFactory.Create(
+        A.CallTo(() => _deviceFactory.Create(
                 A<CreateDevices.Command>.Ignored,
                 A<DomainIdentity>.Ignored))
             .Returns(Task.CompletedTask);
-
-        var handler = new CreateDevices.CommandHandler(deviceFactory);
 
         var domainIdentity = A.Fake<DomainIdentity>();
 
@@ -85,13 +81,13 @@ public class CreateDevicesTests
             new ClientCredentials("test", "test"));
 
         // ACT
-        await handler.Handle(command, CancellationToken.None);
+        await _sut.Handle(command, CancellationToken.None);
 
         // ASSERT
-        A.CallTo(() => deviceFactory.Create(
+        A.CallTo(() => _deviceFactory.Create(
             A<CreateDevices.Command>.Ignored,
             A<DomainIdentity>.Ignored)).MustHaveHappenedOnceExactly();
 
-        deviceFactory.TotalNumberOfDevices.Should().Be(0);
+        _deviceFactory.TotalConfiguredDevices.Should().Be(0);
     }
 }

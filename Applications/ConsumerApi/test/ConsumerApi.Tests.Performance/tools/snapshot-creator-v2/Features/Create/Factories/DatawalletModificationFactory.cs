@@ -10,14 +10,16 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class DatawalletModificationFactory(ILogger<DatawalletModificationFactory> logger, IConsumerApiHelper consumerApiHelper) : IDatawalletModificationFactory
 {
-    internal int NumberOfCreatedDatawalletModifications;
-    public int TotalDatawalletModifications { get; set; }
+    public int TotalCreatedDatawalletModifications { get; private set; }
+    public int TotalConfiguredDatawalletModifications { get; set; }
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
 
     public async Task Create(CreateDatawalletModifications.Command request, DomainIdentity identity)
     {
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
         try
         {
             Stopwatch stopwatch = new();
@@ -35,14 +37,14 @@ public class DatawalletModificationFactory(ILogger<DatawalletModificationFactory
 
             using (_lockObj.EnterScope())
             {
-                NumberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
+                TotalCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications.  Semaphore.Count: {SemaphoreCount} - Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                NumberOfCreatedDatawalletModifications,
-                TotalDatawalletModifications,
-                SemaphoreSlim.CurrentCount,
+                TotalCreatedDatawalletModifications,
+                TotalConfiguredDatawalletModifications,
+                _semaphore.CurrentCount,
                 identity.IdentityAddress,
                 identity.ConfigurationIdentityAddress,
                 identity.PoolAlias,
@@ -52,7 +54,7 @@ public class DatawalletModificationFactory(ILogger<DatawalletModificationFactory
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
     }
 

@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IMessageFactory
 {
     Task Create(CreateMessages.Command request, DomainIdentity senderIdentity);
-    long TotalMessages { get; set; }
+    long TotalConfiguredMessages { get; set; }
 }

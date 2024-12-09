@@ -8,8 +8,8 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper consumerApiHelper) : IIdentityFactory
 {
-    internal int NumberOfCreatedIdentities;
-    public int TotalIdentities { get; set; }
+    internal int TotalCreatedIdentities;
+    public int TotalConfiguredIdentities { get; set; }
 
 
     private readonly Lock _lockObj = new();
@@ -28,13 +28,13 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
 
             using (_lockObj.EnterScope())
             {
-                NumberOfCreatedIdentities++;
+                TotalCreatedIdentities++;
             }
 
             logger.LogDebug(
                 "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
-                NumberOfCreatedIdentities,
-                TotalIdentities,
+                TotalCreatedIdentities,
+                TotalConfiguredIdentities,
                 SemaphoreSlim.CurrentCount,
                 createdIdentity.IdentityAddress,
                 createdIdentity.ConfigurationIdentityAddress,

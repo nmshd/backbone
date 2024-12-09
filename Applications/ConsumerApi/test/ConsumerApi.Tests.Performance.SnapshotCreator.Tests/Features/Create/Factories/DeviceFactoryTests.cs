@@ -12,61 +12,58 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class DeviceFactoryTests : SnapshotCreatorTestsBase
 {
-    private Client? _sdkClient;
+    private readonly Client? _sdkClient;
+    private readonly IConsumerApiHelper _consumerApiClient;
+    private readonly DeviceFactory _sut;
+
+    public DeviceFactoryTests()
+    {
+        _sdkClient = GetSdkClient();
+        var logger = A.Fake<ILogger<DeviceFactory>>();
+        _consumerApiClient = A.Fake<IConsumerApiHelper>();
+
+        _sut = new DeviceFactory(logger, _consumerApiClient);
+    }
 
     [Fact]
     public async Task CreateDevices_NumDeviceIdsIsOne_ShouldReturnEmptyList()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient();
-        var logger = A.Fake<ILogger<DeviceFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
-        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+        A.CallTo(() => _consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => _consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 
         var request = A.Fake<CreateDevices.Command>();
         var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 1 };
 
-        var sut = new DeviceFactory(logger, consumerApiClient);
-
         // ACT
-        var result = await sut.CreateDevices(request, identity);
+        var result = await _sut.CreateDevices(request, identity);
 
         // ASSERT
         result.Should().BeEmpty();
         identity.DeviceIds.Should().BeEmpty();
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
     public async Task CreateDevices_NumDeviceIdsGreaterOne_ShouldBeEqualToIdentityDevices()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient();
-
-        var logger = A.Fake<ILogger<DeviceFactory>>();
-
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
-
-        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+        A.CallTo(() => _consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => _consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 
         var request = A.Fake<CreateDevices.Command>();
         var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 5 };
 
-        var sut = new DeviceFactory(logger, consumerApiClient);
-
         // ACT
-        var result = await sut.CreateDevices(request, identity);
+        var result = await _sut.CreateDevices(request, identity);
 
         // ASSERT
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData))
+        A.CallTo(() => _consumerApiClient.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => consumerApiClient.OnBoardNewDevice(identity, _sdkClient!))
+        A.CallTo(() => _consumerApiClient.OnBoardNewDevice(identity, _sdkClient!))
             .MustHaveHappened(identity.NumberOfDevices - 1, Times.Exactly);
 
         result.Should().HaveCount(identity.NumberOfDevices - 1);
@@ -78,48 +75,20 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
     public async Task Create_NumDeviceIdsGreaterOne_ShouldBeEqualToIdentityDevices()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient();
-        var logger = A.Fake<ILogger<DeviceFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
-        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
+        A.CallTo(() => _consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => _consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 
         var request = A.Fake<CreateDevices.Command>();
         var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 5 };
-        var sut = new DeviceFactory(logger, consumerApiClient);
 
         // ACT
-        await sut.Create(request, identity);
+        await _sut.Create(request, identity);
 
         // ASSERT
 
-        sut.NumberOfCreatedDevices.Should().Be(identity.NumberOfDevices - 1);
+        _sut.TotalCreatedDevices.Should().Be(identity.NumberOfDevices - 1);
         identity.DeviceIds.Should().HaveCount(identity.NumberOfDevices - 1);
-    }
-
-    [Fact]
-    public async Task Create_AfterInvoked_ShouldReleaseSemaphoreSlim()
-    {
-        // ARRANGE
-        _sdkClient ??= GetSdkClient();
-        var logger = A.Fake<ILogger<DeviceFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
-        A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
-            .Returns($"deviceId");
-
-        var request = A.Fake<CreateDevices.Command>();
-        var identity = A.Fake<DomainIdentity>() with { NumberOfDevices = 5 };
-
-        var sut = new DeviceFactory(logger, consumerApiClient);
-
-        // ACT
-        await sut.Create(request, identity);
-
-        // ASSERT
-        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 }

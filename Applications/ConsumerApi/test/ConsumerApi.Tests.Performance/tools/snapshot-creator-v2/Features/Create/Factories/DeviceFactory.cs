@@ -8,14 +8,17 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper consumerApiHelper) : IDeviceFactory
 {
-    internal int NumberOfCreatedDevices;
-    public int TotalNumberOfDevices { get; set; }
+    public int TotalCreatedDevices { get; private set; }
+    public int TotalConfiguredDevices { get; set; }
+
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
 
     public async Task Create(CreateDevices.Command request, DomainIdentity identity)
     {
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
 
         try
         {
@@ -27,14 +30,14 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
 
             using (_lockObj.EnterScope())
             {
-                NumberOfCreatedDevices += deviceIds.Count;
+                TotalCreatedDevices += deviceIds.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedDevices}/{TotalNumberOfDevices} devices.  Semaphore.Count: {SemaphoreCount} - Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                NumberOfCreatedDevices,
-                TotalNumberOfDevices,
-                SemaphoreSlim.CurrentCount,
+                TotalCreatedDevices,
+                TotalConfiguredDevices,
+                _semaphore.CurrentCount,
                 string.Join(',', deviceIds),
                 identity.IdentityAddress,
                 identity.ConfigurationIdentityAddress,
@@ -43,7 +46,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
     }
 

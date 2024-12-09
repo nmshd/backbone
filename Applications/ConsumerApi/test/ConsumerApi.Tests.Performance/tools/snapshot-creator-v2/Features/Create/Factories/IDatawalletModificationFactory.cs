@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IDatawalletModificationFactory
 {
     Task Create(CreateDatawalletModifications.Command request, DomainIdentity identity);
-    int TotalDatawalletModifications { get; set; }
+    int TotalConfiguredDatawalletModifications { get; set; }
 }

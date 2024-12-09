@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IIdentityFactory
 {
     Task<DomainIdentity> Create(CreateIdentities.Command request, IdentityConfiguration identityConfiguration);
-    int TotalIdentities { get; set; }
+    int TotalConfiguredIdentities { get; set; }
 }

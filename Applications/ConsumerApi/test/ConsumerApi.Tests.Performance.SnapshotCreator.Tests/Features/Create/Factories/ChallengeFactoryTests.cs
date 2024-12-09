@@ -16,13 +16,12 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 {
     private readonly IConsumerApiHelper _consumerApiHelper;
     private readonly ChallengeFactory _sut;
-    private readonly ILogger<ChallengeFactory> _logger;
 
     public ChallengeFactoryTests()
     {
-        _logger = A.Fake<ILogger<ChallengeFactory>>();
+        var logger = A.Fake<ILogger<ChallengeFactory>>();
         _consumerApiHelper = A.Fake<IConsumerApiHelper>();
-        _sut = new ChallengeFactory(_logger, _consumerApiHelper);
+        _sut = new ChallengeFactory(logger, _consumerApiHelper);
     }
 
     [Fact]
@@ -41,8 +40,8 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
         await _sut.Create(command, identity);
 
         // Assert
-        _sut.NumberOfCreatedChallenges.Should().Be(expectedNumberOfCreatedChallenges);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedChallenges.Should().Be(expectedNumberOfCreatedChallenges);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -64,6 +63,7 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 
         // Assert
         result.Count.Should().Be(expectedNumberOfCreatedChallenges);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -74,12 +74,6 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
         var client = GetSdkClient(isDeviceDataDeviceIdSet: false);
         var identity = new DomainIdentity(null!, null, 0, 0, 0, IdentityPoolType.App, 5, "", 0, 0);
         var expectedNumberOfCreatedChallenges = identity.NumberOfChallenges;
-
-        var identityDeviceId = identity.DeviceIds.Count > 0 ? string.Join(',', identity.DeviceIds) : "null";
-        var expectedMessage = $"SDK Client DeviceId is {client!.DeviceData?.DeviceId is null}! " +
-                              $"Configuration {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} \r\n" +
-                              $"Identity DeviceIds: {identityDeviceId}";
-
 
         var command = new CreateChallenges.Command([identity], "http://baseurl", new ClientCredentials("clientId", "clientSecret"));
         var challenge = new Challenge { Id = "challengeId", ExpiresAt = DateTime.UtcNow };
@@ -92,6 +86,7 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 
         // Assert
         result.Count.Should().Be(expectedNumberOfCreatedChallenges);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -114,5 +109,6 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.CreateChallenges(command, identity));
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 }

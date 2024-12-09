@@ -10,15 +10,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper consumerApiHelper) : IMessageFactory
 {
-    private int _numberOfCreatedMessages;
-    public long TotalMessages { get; set; }
+    public long TotalConfiguredMessages { get; set; }
+    public int TotalCreatedMessages { get; private set; }
+
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _createSemaphore = new(Environment.ProcessorCount);
     private readonly SemaphoreSlim _createMessagesSemaphore = new(Environment.ProcessorCount);
+
+    internal int GetCreateSemaphoreCurrentCount() => _createSemaphore.CurrentCount;
+    internal int GetCreateMessagesSemaphoreCurrentCount() => _createMessagesSemaphore.CurrentCount;
 
     public async Task Create(CreateMessages.Command request, DomainIdentity senderIdentity)
     {
-        await _semaphoreSlim.WaitAsync();
+        await _createSemaphore.WaitAsync();
 
         try
         {
@@ -32,7 +36,7 @@ public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper c
         }
         finally
         {
-            _semaphoreSlim.Release();
+            _createSemaphore.Release();
         }
     }
 
@@ -52,13 +56,13 @@ public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper c
             using (_lockObj.EnterScope())
             {
                 senderIdentity.SentMessages.AddRange(sentMessages);
-                _numberOfCreatedMessages += sentMessages.Count;
+                TotalCreatedMessages += sentMessages.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedMessages,
-                TotalMessages,
+                TotalCreatedMessages,
+                TotalConfiguredMessages,
                 senderIdentity.IdentityAddress,
                 senderIdentity.ConfigurationIdentityAddress,
                 senderIdentity.PoolAlias,
@@ -129,6 +133,14 @@ public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper c
                 recipient.ConfigurationIdentityAddress == relationship.IdentityAddress))
             .ToArray();
 
+        VerifyRecipientConfiguration(senderIdentity, recipientsRelationshipIds, recipientIdentities);
+
+        return new RecipientBag(recipientsRelationshipIds, recipientIdentities);
+    }
+
+    private static void VerifyRecipientConfiguration(DomainIdentity senderIdentity,
+        RelationshipIdentityBag[] recipientsRelationshipIds, DomainIdentity[] recipientIdentities)
+    {
         var recipientRelationshipIdsWithoutNumMessages = recipientsRelationshipIds
             .Select(relationshipIdBag => relationshipIdBag with { NumberOfSentMessages = default })
             .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
@@ -141,11 +153,13 @@ public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper c
             .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
             .ToArray();
 
-        return !recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds)
-            ? throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",
-                senderIdentity,
-                recipientRelationshipIdsWithoutNumMessages,
-                recipientIdentityIds))
-            : new RecipientBag(recipientsRelationshipIds, recipientIdentities);
+        var isValid = recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds);
+
+        if (isValid) return;
+
+        throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",
+            senderIdentity,
+            recipientRelationshipIdsWithoutNumMessages,
+            recipientIdentityIds));
     }
 }

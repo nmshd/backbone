@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IDeviceFactory
 {
     Task Create(CreateDevices.Command request, DomainIdentity identity);
-    int TotalNumberOfDevices { get; set; }
+    int TotalConfiguredDevices { get; set; }
 }

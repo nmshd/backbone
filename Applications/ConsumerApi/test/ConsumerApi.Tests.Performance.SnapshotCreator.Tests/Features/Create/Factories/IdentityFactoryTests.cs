@@ -12,49 +12,52 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 public class IdentityFactoryTests : SnapshotCreatorTestsBase
 {
     private Client? _sdkClient;
+    private readonly IdentityFactory _sut;
+    private readonly IConsumerApiHelper _consumerApiClient;
+    private readonly ILogger<IdentityFactory> _logger;
+
+    public IdentityFactoryTests()
+    {
+        _logger = A.Fake<ILogger<IdentityFactory>>();
+        _consumerApiClient = A.Fake<IConsumerApiHelper>();
+
+        _sut = new IdentityFactory(_logger, _consumerApiClient);
+    }
 
     [Fact]
     public async Task Create_NumIdentitiesIsOne_ReturnsIdentity()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient();
-        var logger = A.Fake<ILogger<IdentityFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-        A.CallTo(() => consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
+        _sdkClient = GetSdkClient();
+        A.CallTo(() => _consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
 
         var request = A.Fake<CreateIdentities.Command>();
         var identityConfiguration = A.Fake<IdentityConfiguration>();
 
-        var sut = new IdentityFactory(logger, consumerApiClient);
-
         // ACT
-        var result = await sut.Create(request, identityConfiguration);
+        var result = await _sut.Create(request, identityConfiguration);
 
         // ASSERT
         result.Should().NotBeNull();
         result.DeviceIds.Count.Should().Be(1);
-        sut.NumberOfCreatedIdentities.Should().Be(result.DeviceIds.Count);
+        _sut.TotalCreatedIdentities.Should().Be(result.DeviceIds.Count);
     }
 
     [Fact]
     public async Task Create_AfterInvoked_ShouldReleaseSemaphoreSlim()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient();
-        var logger = A.Fake<ILogger<IdentityFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-        A.CallTo(() => consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
+        _sdkClient = GetSdkClient();
+        A.CallTo(() => _consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
 
         var request = A.Fake<CreateIdentities.Command>();
         var identityConfiguration = A.Fake<IdentityConfiguration>();
 
-        var sut = new IdentityFactory(logger, consumerApiClient);
-
         // ACT
-        await sut.Create(request, identityConfiguration);
+        await _sut.Create(request, identityConfiguration);
 
         // ASSERT
-        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -62,20 +65,16 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
     public async Task InnerCreate_SdkClientDeviceDataNull_ShouldThrowException()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient(isDeviceDataSet: false);
-
-        var logger = A.Fake<ILogger<IdentityFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-        A.CallTo(() => consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
+        _sdkClient = GetSdkClient(isDeviceDataSet: false);
+        A.CallTo(() => _consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
 
         var request = A.Fake<CreateIdentities.Command>();
         var identityConfiguration = A.Fake<IdentityConfiguration>();
 
-        var sut = new IdentityFactory(logger, consumerApiClient);
-
         // ACT + ASSERT
-        Func<Task<DomainIdentity>> act = async () => await sut.InnerCreate(request, identityConfiguration);
+        Func<Task<DomainIdentity>> act = async () => await _sut.InnerCreate(request, identityConfiguration);
         await act.Should().ThrowAsync<InvalidOperationException>();
+        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -83,19 +82,17 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
     public async Task InnerCreate_SdkClientDeviceDataDeviceIdNull_ShouldThrowException()
     {
         // ARRANGE
-        _sdkClient ??= GetSdkClient(isDeviceDataDeviceIdSet: false);
-
-        var logger = A.Fake<ILogger<IdentityFactory>>();
-        var consumerApiClient = A.Fake<IConsumerApiHelper>();
-        A.CallTo(() => consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
+        _sdkClient = GetSdkClient(isDeviceDataDeviceIdSet: false);
+        A.CallTo(() => _consumerApiClient.CreateForNewIdentity(A<CreateIdentities.Command>.Ignored))!.Returns(_sdkClient);
 
         var request = A.Fake<CreateIdentities.Command>();
         var identityConfiguration = A.Fake<IdentityConfiguration>();
 
-        var sut = new IdentityFactory(logger, consumerApiClient);
+        var sut = new IdentityFactory(_logger, _consumerApiClient);
 
         // ACT + ASSERT
         Func<Task<DomainIdentity>> act = async () => await sut.InnerCreate(request, identityConfiguration);
         await act.Should().ThrowAsync<InvalidOperationException>();
+        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
     }
 }

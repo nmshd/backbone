@@ -9,12 +9,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class CreateIdentitiesTests : SnapshotCreatorTestsBase
 {
+    private readonly CreateIdentities.CommandHandler _sut;
+    private readonly IIdentityFactory _identityFactory;
+
+    public CreateIdentitiesTests()
+    {
+        _identityFactory = A.Fake<IIdentityFactory>();
+        _sut = new CreateIdentities.CommandHandler(_identityFactory);
+    }
+
     [Fact]
     public async Task Handle_ShouldReturnListOfDomainIdentities_WhenValidCommand()
     {
         // Arrange
-        var identityFactory = A.Fake<IIdentityFactory>();
-
         var identities = new List<IdentityPoolConfiguration>()
         {
             new(new PoolConfiguration() { Alias = "e", Amount = 1, Type = POOL_TYPE_NEVER }),
@@ -24,12 +31,10 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
 
         var fakeDomainIdentity = A.Fake<DomainIdentity>();
 
-        A.CallTo(() => identityFactory.Create(
+        A.CallTo(() => _identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).Returns(fakeDomainIdentity);
 
-
-        var handler = new CreateIdentities.CommandHandler(identityFactory);
         var command = new CreateIdentities.Command(
             identities,
             "http://localhost:8081",
@@ -37,51 +42,54 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
         );
 
         // Act
-        var result = await handler.Handle(command, CancellationToken.None);
+        var result = await _sut.Handle(command, CancellationToken.None);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().NotBeEmpty();
 
-        A.CallTo(() => identityFactory.Create(
+        A.CallTo(() => _identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).MustHaveHappened(identities.Count, Times.Exactly);
 
         result.Count.Should().Be(identities.Count);
-        identityFactory.TotalIdentities.Should().Be(result.Count);
+        _identityFactory.TotalConfiguredIdentities.Should().Be(result.Count);
     }
 
     [Fact]
     public async Task Handle_ShouldReturnEmptyList_WhenNoIdentitiesProvided()
     {
-        var identityFactory = A.Fake<IIdentityFactory>();
-        var handler = new CreateIdentities.CommandHandler(identityFactory);
+        // ARRANGE
         var command = new CreateIdentities.Command(
-            new List<IdentityPoolConfiguration>(),
+            [],
             "http://localhost:8081",
             new ClientCredentials("test", "test")
         );
 
-        var result = await handler.Handle(command, CancellationToken.None);
+        // ACT
+        var result = await _sut.Handle(command, CancellationToken.None);
 
+        // ASSERT
         result.Should().NotBeNull();
         result.Should().BeEmpty();
-        A.CallTo(() => identityFactory.Create(
+        A.CallTo(() => _identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).MustNotHaveHappened();
+        _identityFactory.TotalConfiguredIdentities.Should().Be(0);
     }
 
     [Fact]
     public async Task Handle_ShouldThrowException_WhenNullIdentitiesProvided()
     {
-        var identityFactory = A.Fake<IIdentityFactory>();
-        var handler = new CreateIdentities.CommandHandler(identityFactory);
+        // ARRANGE
         var command = new CreateIdentities.Command(
             null!,
             "http://localhost:8081",
             new ClientCredentials("test", "test")
         );
 
-        await Assert.ThrowsAsync<ArgumentNullException>(() => handler.Handle(command, CancellationToken.None));
+        // ACT & ASSERT
+        var act = () => _sut.Handle(command, CancellationToken.None);
+        await act.Should().ThrowAsync<ArgumentNullException>();
     }
 }

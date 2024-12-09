@@ -6,7 +6,6 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using FakeItEasy;
 
-
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.Create.SubHandler;
 
 public class CreateChallengesTests : SnapshotCreatorTestsBase
@@ -38,7 +37,7 @@ public class CreateChallengesTests : SnapshotCreatorTestsBase
         await _handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallToSet(() => _challengeFactory.TotalChallenges).To(expectedTotalChallenges).MustHaveHappenedOnceExactly();
+        A.CallToSet(() => _challengeFactory.TotalConfiguredChallenges).To(expectedTotalChallenges).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

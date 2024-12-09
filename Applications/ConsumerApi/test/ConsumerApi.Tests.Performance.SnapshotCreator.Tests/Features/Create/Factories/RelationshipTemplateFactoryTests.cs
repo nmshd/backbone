@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
@@ -14,15 +15,22 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
 {
+    private readonly RelationshipTemplateFactory _sut;
+    private readonly IConsumerApiHelper _consumerApiHelper;
+    private readonly Client? _sdkClient;
+
+    public RelationshipTemplateFactoryTests()
+    {
+        _sdkClient = GetSdkClient();
+        var logger = A.Fake<ILogger<RelationshipTemplateFactory>>();
+        _consumerApiHelper = A.Fake<IConsumerApiHelper>();
+        _sut = new RelationshipTemplateFactory(logger, _consumerApiHelper);
+    }
+
     [Fact]
     public async Task Create_ShouldCreateRelationshipTemplates()
     {
         // Arrange
-        var logger = A.Fake<ILogger<RelationshipTemplateFactory>>();
-        var consumerApiHelper = A.Fake<IConsumerApiHelper>();
-        var sut = new RelationshipTemplateFactory(logger, consumerApiHelper);
-
-
         var command = new CreateRelationshipTemplates.Command(
             [
                 new DomainIdentity(null!, null, 0, 0, 1, IdentityPoolType.App, 5, "", 2, 0)
@@ -34,9 +42,9 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
         var identity = command.Identities[0];
         var expectedTotalRelationshipTemplates = identity.NumberOfRelationshipTemplates;
 
-        var sdkClient = GetSdkClient();
-        A.CallTo(() => consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
-            .Returns(sdkClient);
+
+        A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
+            .Returns(_sdkClient);
 
         var relationshipTemplateResponse = new ApiResponse<CreateRelationshipTemplateResponse>
         {
@@ -47,17 +55,17 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
             }
         };
 
-        A.CallTo(() => consumerApiHelper.CreateRelationshipTemplate(sdkClient!))
+        A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!))
             .Returns(relationshipTemplateResponse);
 
         // Act
-        await sut.Create(command, identity);
+        await _sut.Create(command, identity);
 
         // Assert
         identity.RelationshipTemplates.Should().HaveCount(expectedTotalRelationshipTemplates);
-        A.CallTo(() => consumerApiHelper.CreateRelationshipTemplate(sdkClient!)).MustHaveHappened(expectedTotalRelationshipTemplates, Times.Exactly);
-        sut.NumberOfCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
-        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!)).MustHaveHappened(expectedTotalRelationshipTemplates, Times.Exactly);
+        _sut.TotalCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -65,11 +73,6 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
     public async Task Create_RelationshipTemplateResponseNull_ShouldNotCreateRelationshipTemplates()
     {
         // Arrange
-        var logger = A.Fake<ILogger<RelationshipTemplateFactory>>();
-        var consumerApiHelper = A.Fake<IConsumerApiHelper>();
-        var sut = new RelationshipTemplateFactory(logger, consumerApiHelper);
-
-
         var command = new CreateRelationshipTemplates.Command(
             [
                 new DomainIdentity(null!, null, 0, 0, 1, IdentityPoolType.App, 5, "", 2, 0)
@@ -80,9 +83,8 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
 
         var identity = command.Identities[0];
 
-        var sdkClient = GetSdkClient();
-        A.CallTo(() => consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
-            .Returns(sdkClient);
+        A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
+            .Returns(_sdkClient);
 
         var relationshipTemplateResponse = new ApiResponse<CreateRelationshipTemplateResponse>
         {
@@ -92,17 +94,17 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
         const int expectedTotalRelationshipTemplates = 0;
         var expectedNumCreateRelationshipTemplateCalls = identity.NumberOfRelationshipTemplates;
 
-        A.CallTo(() => consumerApiHelper.CreateRelationshipTemplate(sdkClient!))
+        A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!))
             .Returns(relationshipTemplateResponse);
 
         // Act
-        await sut.Create(command, identity);
+        await _sut.Create(command, identity);
 
         // Assert
         identity.RelationshipTemplates.Should().HaveCount(expectedTotalRelationshipTemplates);
-        A.CallTo(() => consumerApiHelper.CreateRelationshipTemplate(sdkClient!)).MustHaveHappened(expectedNumCreateRelationshipTemplateCalls, Times.Exactly);
-        sut.NumberOfCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
-        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!)).MustHaveHappened(expectedNumCreateRelationshipTemplateCalls, Times.Exactly);
+        _sut.TotalCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
 
@@ -110,11 +112,6 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
     public async Task Create_RelationshipTemplateResponseIsError_ShouldThrowException()
     {
         // Arrange
-        var logger = A.Fake<ILogger<RelationshipTemplateFactory>>();
-        var consumerApiHelper = A.Fake<IConsumerApiHelper>();
-        var sut = new RelationshipTemplateFactory(logger, consumerApiHelper);
-
-
         var command = new CreateRelationshipTemplates.Command(
             [
                 new DomainIdentity(null!, null, 0, 0, 1, IdentityPoolType.App, 5, "", 2, 0)
@@ -125,9 +122,9 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
 
         var identity = command.Identities[0];
 
-        var sdkClient = GetSdkClient();
-        A.CallTo(() => consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
-            .Returns(sdkClient);
+
+        A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(command.BaseUrlAddress, command.ClientCredentials, identity.UserCredentials, null))!
+            .Returns(_sdkClient);
 
         var relationshipTemplateResponse = new ApiResponse<CreateRelationshipTemplateResponse>
         {
@@ -146,14 +143,14 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
             }
         };
 
-        A.CallTo(() => consumerApiHelper.CreateRelationshipTemplate(sdkClient!))
+        A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!))
             .Returns(relationshipTemplateResponse);
 
         // Act
-        var act = async () => await sut.Create(command, identity);
+        var act = () => _sut.Create(command, identity);
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-        sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 }

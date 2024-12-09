@@ -8,15 +8,17 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> logger, IConsumerApiHelper consumerApiHelper) : IRelationshipTemplateFactory
 {
-    internal int NumberOfCreatedRelationshipTemplates;
-    public int TotalRelationshipTemplates { get; set; }
+    public int TotalCreatedRelationshipTemplates { get; private set; }
+    public int TotalConfiguredRelationshipTemplates { get; set; }
 
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
 
     public async Task Create(CreateRelationshipTemplates.Command request, DomainIdentity identity)
     {
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
 
         try
         {
@@ -28,14 +30,14 @@ public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> lo
 
             using (_lockObj.EnterScope())
             {
-                NumberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
+                TotalCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.  Semaphore.Count: {SemaphoreCount} - Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                NumberOfCreatedRelationshipTemplates,
-                TotalRelationshipTemplates,
-                SemaphoreSlim.CurrentCount,
+                TotalCreatedRelationshipTemplates,
+                TotalConfiguredRelationshipTemplates,
+                _semaphore.CurrentCount,
                 identity.IdentityAddress,
                 identity.ConfigurationIdentityAddress,
                 identity.PoolAlias,
@@ -43,7 +45,7 @@ public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> lo
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
     }
 

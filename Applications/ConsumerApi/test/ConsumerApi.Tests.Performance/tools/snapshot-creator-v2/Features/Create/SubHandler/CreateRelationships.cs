@@ -22,7 +22,7 @@ public abstract record CreateRelationships
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            relationshipFactory.TotalRelationships = request.RelationshipAndMessages.Count / 2;
+            relationshipFactory.TotalConfiguredRelationships = request.RelationshipAndMessages.Count / 2;
 
             _connectorIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.Connector).ToArray();
             var appIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.App).ToArray();

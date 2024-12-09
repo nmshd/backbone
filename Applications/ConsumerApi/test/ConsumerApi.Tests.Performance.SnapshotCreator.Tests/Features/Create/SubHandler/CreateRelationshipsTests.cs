@@ -11,11 +11,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class CreateRelationshipsTests
 {
+    private readonly IRelationshipFactory _relationshipFactory;
+    private readonly CreateRelationships.CommandHandler _sut;
+
+    public CreateRelationshipsTests()
+    {
+        _relationshipFactory = A.Fake<IRelationshipFactory>();
+        _sut = new CreateRelationships.CommandHandler(_relationshipFactory);
+    }
+
     [Fact]
     public async Task Handle_ShouldCreateRelationships()
     {
-        var relationshipFactory = A.Fake<IRelationshipFactory>();
-        var sut = new CreateRelationships.CommandHandler(relationshipFactory);
+        // Arrange
         var command = new CreateRelationships.Command(
             [
                 new DomainIdentity(null!, null, 0, 0, 2, IdentityPoolType.App, 5, "", 2, 0),
@@ -40,21 +48,20 @@ public class CreateRelationshipsTests
         var expectedConnectorCount = command.Identities.Count(i => i.IdentityPoolType == IdentityPoolType.Connector);
         var expectedAppCount = command.Identities.Count(i => i.IdentityPoolType == IdentityPoolType.App);
 
-        var result = await sut.Handle(command, CancellationToken.None);
+        var result = await _sut.Handle(command, CancellationToken.None);
 
         result.Should().Be(Unit.Value);
-        A.CallTo(() => relationshipFactory.Create(command,
+        A.CallTo(() => _relationshipFactory.Create(command,
                 A<DomainIdentity>.That.Matches(d => d.IdentityPoolType == IdentityPoolType.App),
                 A<DomainIdentity[]>.That.Matches(d => d.Length == expectedConnectorCount)))
             .MustHaveHappened(expectedAppCount, Times.Exactly);
-        relationshipFactory.TotalRelationships.Should().Be(command.RelationshipAndMessages.Count / 2);
+        _relationshipFactory.TotalConfiguredRelationships.Should().Be(command.RelationshipAndMessages.Count / 2);
     }
 
     [Fact]
     public async Task Handle_ConnectorIdenitityHasNoRelationshipTemplates_ShouldThrowException()
     {
-        var relationshipFactory = A.Fake<IRelationshipFactory>();
-        var sut = new CreateRelationships.CommandHandler(relationshipFactory);
+        // Arrange
         var command = new CreateRelationships.Command(
             [
                 new DomainIdentity(null!, null, 0, 0, 2, IdentityPoolType.App, 5, "", 2, 0),
@@ -66,7 +73,8 @@ public class CreateRelationshipsTests
             new ClientCredentials("clientId", "clientSecret")
         );
 
-        var act = () => sut.Handle(command, CancellationToken.None);
+        // Act + Assert
+        var act = () => _sut.Handle(command, CancellationToken.None);
         await act.Should().ThrowAsync<InvalidOperationException>();
     }
 }

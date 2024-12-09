@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IRelationshipTemplateFactory
 {
     Task Create(CreateRelationshipTemplates.Command request, DomainIdentity identity);
-    int TotalRelationshipTemplates { get; set; }
+    int TotalConfiguredRelationshipTemplates { get; set; }
 }

@@ -119,10 +119,10 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustHaveHappenedOnceExactly();
 
 
-        _sut.NumberOfCreatedRelationships.Should().Be(1);
+        _sut.TotalCreatedRelationships.Should().Be(1);
         appIdentity.EstablishedRelationshipsById.Should().ContainKey(expectedRelationshipId);
         appIdentity.EstablishedRelationshipsById.Count.Should().Be(1);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
@@ -208,8 +208,8 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
 
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustHaveHappenedOnceExactly();
-        _sut.NumberOfCreatedRelationships.Should().Be(0);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedRelationships.Should().Be(0);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
@@ -293,8 +293,8 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
 
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustNotHaveHappened();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
-        _sut.NumberOfCreatedRelationships.Should().Be(0);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedRelationships.Should().Be(0);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
@@ -396,8 +396,8 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
 
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
-        _sut.NumberOfCreatedRelationships.Should().Be(0);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedRelationships.Should().Be(0);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
@@ -483,8 +483,8 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
 
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
-        _sut.NumberOfCreatedRelationships.Should().Be(0);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedRelationships.Should().Be(0);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 
     [Fact]
@@ -586,7 +586,71 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
 
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustHaveHappenedOnceExactly();
-        _sut.NumberOfCreatedRelationships.Should().Be(0);
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.TotalCreatedRelationships.Should().Be(0);
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+    }
+
+    [Fact]
+    public async Task Create_RelationshipConfiguratonMismatch_ShouldThrowException()
+    {
+        // Arrange
+        var appIdentity = new DomainIdentity(
+            null!,
+            null,
+            1,
+            0,
+            2,
+            IdentityPoolType.App,
+            5,
+            "a1",
+            2,
+            0);
+
+        var connectorIdentity = new DomainIdentity(
+            null!,
+            null,
+            1,
+            0,
+            3,
+            IdentityPoolType.Connector,
+            5,
+            "c1",
+            3,
+            0)
+        {
+            RelationshipTemplates =
+            {
+                new RelationshipTemplateBag(new CreateRelationshipTemplateResponse
+                {
+                    Id = "templateId",
+                    CreatedAt = default
+                }, used: false)
+            }
+        };
+
+        var command = new CreateRelationships.Command(
+            [appIdentity, connectorIdentity],
+            [
+                new RelationshipAndMessages(
+                    SenderPoolAlias: appIdentity.PoolAlias,
+                    SenderIdentityAddress: appIdentity.ConfigurationIdentityAddress,
+                    RecipientIdentityAddress: connectorIdentity.ConfigurationIdentityAddress,
+                    RecipientPoolAlias: "c3")
+            ],
+            "http://baseurl",
+            new ClientCredentials("clientId", "clientSecret")
+        );
+
+        // Act
+        var act = () => _sut.Create(command, appIdentity, [connectorIdentity]);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+
+        A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(A<string>._, A<ClientCredentials>._, A<UserCredentials>._, null)).MustNotHaveHappened();
+        A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustNotHaveHappened();
+        A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
+
+        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
     }
 }

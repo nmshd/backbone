@@ -9,13 +9,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class CreateRelationshipTemplatesTests
 {
+    private readonly CreateRelationshipTemplates.CommandHandler _sut;
+    private readonly IRelationshipTemplateFactory _relationshipTemplateFactory;
+
+    public CreateRelationshipTemplatesTests()
+    {
+        _relationshipTemplateFactory = A.Fake<IRelationshipTemplateFactory>();
+        _sut = new CreateRelationshipTemplates.CommandHandler(_relationshipTemplateFactory);
+    }
+
     [Fact]
     public async Task Handle_ShouldCreateRelationshipTemplates()
     {
         // Arrange
-        var relationshipTemplateFactory = A.Fake<IRelationshipTemplateFactory>();
-        var handler = new CreateRelationshipTemplates.CommandHandler(relationshipTemplateFactory);
-
         var identities = new List<DomainIdentity>
         {
             new(null!, null, 0, 0, 2, IdentityPoolType.Never, 5, "", 2, 0),
@@ -33,12 +39,12 @@ public class CreateRelationshipTemplatesTests
         );
 
         // Act
-        await handler.Handle(command, CancellationToken.None);
+        await _sut.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => relationshipTemplateFactory.Create(A<CreateRelationshipTemplates.Command>._, A<DomainIdentity>._))
+        A.CallTo(() => _relationshipTemplateFactory.Create(A<CreateRelationshipTemplates.Command>._, A<DomainIdentity>._))
             .MustHaveHappened(countIdentitiesWithRelationshipTemplates, Times.Exactly);
 
-        relationshipTemplateFactory.TotalRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
+        _relationshipTemplateFactory.TotalConfiguredRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
     }
 }

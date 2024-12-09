@@ -19,7 +19,7 @@ public abstract record CreateMessages
     {
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            messageFactory.TotalMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
+            messageFactory.TotalConfiguredMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
 
             var senderIdentities = request.Identities
                 .Where(identity => request.RelationshipAndMessages.Any(relationship =>
@@ -28,11 +28,11 @@ public abstract record CreateMessages
                     relationship.NumberOfSentMessages > 0))
                 .ToArray();
 
-            var sum = senderIdentities.Sum(s => s.NumberOfSentMessages);
-            if (sum != messageFactory.TotalMessages)
+            var sumOfAllMessages = senderIdentities.Sum(s => s.NumberOfSentMessages);
+            if (sumOfAllMessages != messageFactory.TotalConfiguredMessages)
             {
                 throw new InvalidOperationException(
-                    $"Mismatch between configured relationships and connector identities. SenderIdentities.SumMessages: {sum}, TotalMessages: {messageFactory.TotalMessages}");
+                    $"Mismatch between configured relationships and connector identities. SenderIdentities.SumMessages: {sumOfAllMessages}, TotalMessages: {messageFactory.TotalConfiguredMessages}");
             }
 
             var tasks = senderIdentities.Select(senderIdentity => messageFactory.Create(request, senderIdentity)).ToArray();

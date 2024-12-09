@@ -16,7 +16,7 @@ public abstract class CreateDevices
         {
             ArgumentNullException.ThrowIfNull(request);
 
-            deviceFactory.TotalNumberOfDevices = request.Identities.Sum(i => i.NumberOfDevices);
+            deviceFactory.TotalConfiguredDevices = request.Identities.Sum(i => i.NumberOfDevices);
 
             var tasks = request.Identities
                 .Select(identity => deviceFactory.Create(request, identity))

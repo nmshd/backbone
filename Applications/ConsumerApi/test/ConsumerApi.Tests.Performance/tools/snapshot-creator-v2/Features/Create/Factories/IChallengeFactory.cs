@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public interface IChallengeFactory
 {
     Task Create(CreateChallenges.Command request, DomainIdentity identityWithChallenge);
-    int TotalChallenges { get; set; }
+    int TotalConfiguredChallenges { get; set; }
 }

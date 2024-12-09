@@ -9,14 +9,17 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelper consumerApiHelper) : IChallengeFactory
 {
-    internal int NumberOfCreatedChallenges;
-    public int TotalChallenges { get; set; }
+    public int TotalCreatedChallenges { get; private set; }
+    public int TotalConfiguredChallenges { get; set; }
+
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
 
     public async Task Create(CreateChallenges.Command request, DomainIdentity identityWithChallenge)
     {
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
 
         try
         {
@@ -28,14 +31,14 @@ public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelp
 
             using (_lockObj.EnterScope())
             {
-                NumberOfCreatedChallenges += challenges.Count;
+                TotalCreatedChallenges += challenges.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedChallenges}/{TotalChallenges} challenges.  Semaphore.Count: {SemaphoreCount} - Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                NumberOfCreatedChallenges,
-                TotalChallenges,
-                SemaphoreSlim.CurrentCount,
+                TotalCreatedChallenges,
+                TotalConfiguredChallenges,
+                _semaphore.CurrentCount,
                 identityWithChallenge.IdentityAddress,
                 identityWithChallenge.ConfigurationIdentityAddress,
                 identityWithChallenge.PoolAlias,
@@ -43,7 +46,7 @@ public class ChallengeFactory(ILogger<ChallengeFactory> logger, IConsumerApiHelp
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
     }
 

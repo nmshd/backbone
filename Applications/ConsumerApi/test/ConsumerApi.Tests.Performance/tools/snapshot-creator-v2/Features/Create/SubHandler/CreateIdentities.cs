@@ -24,7 +24,7 @@ public abstract class CreateIdentities
                 .SelectMany(identityPoolConfiguration => identityPoolConfiguration.Identities)
                 .ToArray();
 
-            identityFactory.TotalIdentities = identityConfigurations.Length;
+            identityFactory.TotalConfiguredIdentities = identityConfigurations.Length;
 
             var tasks = identityConfigurations
                 .Select(identityConfiguration => identityFactory.Create(request, identityConfiguration))

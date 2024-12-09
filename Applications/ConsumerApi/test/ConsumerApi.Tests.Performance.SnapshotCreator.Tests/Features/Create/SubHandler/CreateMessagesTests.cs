@@ -9,13 +9,19 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class CreateMessagesTests
 {
+    private readonly CreateMessages.CommandHandler _sut;
+    private readonly IMessageFactory _messageFactory;
+
+    public CreateMessagesTests()
+    {
+        _messageFactory = A.Fake<IMessageFactory>();
+        _sut = new CreateMessages.CommandHandler(_messageFactory);
+    }
+
     [Fact]
     public async Task Handle_ShouldCreateMessages()
     {
         // Arrange
-        var messageFactory = A.Fake<IMessageFactory>();
-        var sut = new CreateMessages.CommandHandler(messageFactory);
-
         var appIdentity = new DomainIdentity(null!, null, 1, 0, 2, IdentityPoolType.App, 5, "a1", 2, 10);
         var connectorIdentity = new DomainIdentity(null!, null, 1, 0, 3, IdentityPoolType.Connector, 5, "c1", 3, 20);
         var neverUsedIdentity = new DomainIdentity(null!, null, 1, 0, 0, IdentityPoolType.Never, 5, "e", 5, 5);
@@ -43,22 +49,19 @@ public class CreateMessagesTests
         var request = new CreateMessages.Command(identities, relationshipAndMessages, "http://baseurl", new ClientCredentials("clientId", "clientSecret"));
 
         // Act
-        await sut.Handle(request, CancellationToken.None);
+        await _sut.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
+        A.CallTo(() => _messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
             .MustHaveHappened(relationshipAndMessages.Count, Times.Exactly);
 
-        messageFactory.TotalMessages.Should().Be(expectedTotalMessages);
+        _messageFactory.TotalConfiguredMessages.Should().Be(expectedTotalMessages);
     }
 
     [Fact]
     public async Task Handle_RelationshipAndMessagesIsEmpty_ShouldDoNothing()
     {
         // Arrange
-        var messageFactory = A.Fake<IMessageFactory>();
-        var sut = new CreateMessages.CommandHandler(messageFactory);
-
         var appIdentity = new DomainIdentity(null!, null, 1, 0, 2, IdentityPoolType.App, 5, "a1", 2, 10);
         var connectorIdentity = new DomainIdentity(null!, null, 1, 0, 3, IdentityPoolType.Connector, 5, "c1", 3, 20);
         var neverUsedIdentity = new DomainIdentity(null!, null, 1, 0, 0, IdentityPoolType.Never, 5, "e", 5, 5);
@@ -76,22 +79,19 @@ public class CreateMessagesTests
         var request = new CreateMessages.Command(identities, relationshipAndMessages, "http://baseurl", new ClientCredentials("clientId", "clientSecret"));
 
         // Act
-        await sut.Handle(request, CancellationToken.None);
+        await _sut.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
+        A.CallTo(() => _messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
             .MustNotHaveHappened();
 
-        messageFactory.TotalMessages.Should().Be(expectedTotalMessages);
+        _messageFactory.TotalConfiguredMessages.Should().Be(expectedTotalMessages);
     }
 
     [Fact]
     public async Task Handle_InvalidMessageConfiguration_ShouldThrowException()
     {
         // Arrange
-        var messageFactory = A.Fake<IMessageFactory>();
-        var sut = new CreateMessages.CommandHandler(messageFactory);
-
         var appIdentity = new DomainIdentity(null!, null, 1, 0, 2, IdentityPoolType.App, 5, "a1", 2, 10);
         var connectorIdentity = new DomainIdentity(null!, null, 1, 0, 3, IdentityPoolType.Connector, 5, "c1", 3, 20);
         var neverUsedIdentity = new DomainIdentity(null!, null, 1, 0, 0, IdentityPoolType.Never, 5, "e", 5, 5);
@@ -120,14 +120,14 @@ public class CreateMessagesTests
         var request = new CreateMessages.Command(identities, relationshipAndMessages, "http://baseurl", new ClientCredentials("clientId", "clientSecret"));
 
         // Act
-        var act = () => sut.Handle(request, CancellationToken.None);
+        var act = () => _sut.Handle(request, CancellationToken.None);
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
 
-        A.CallTo(() => messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
+        A.CallTo(() => _messageFactory.Create(A<CreateMessages.Command>.Ignored, A<DomainIdentity>.Ignored))
             .MustNotHaveHappened();
 
-        messageFactory.TotalMessages.Should().Be(expectedTotalMessages - digit);
+        _messageFactory.TotalConfiguredMessages.Should().Be(expectedTotalMessages - digit);
     }
 }

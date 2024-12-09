@@ -11,14 +11,17 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerApiHelper consumerApiHelper) : IRelationshipFactory
 {
-    internal int NumberOfCreatedRelationships;
-    public int TotalRelationships { get; set; }
+    public int TotalCreatedRelationships { get; private set; }
+    public int TotalConfiguredRelationships { get; set; }
+
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
 
     public async Task Create(CreateRelationships.Command request, DomainIdentity appIdentity, DomainIdentity[] connectorIdentities)
     {
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
         try
         {
             var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, connectorIdentities);
@@ -37,7 +40,7 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
     }
 
@@ -57,15 +60,15 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
 
         using (_lockObj.EnterScope())
         {
-            NumberOfCreatedRelationships++;
+            TotalCreatedRelationships++;
             appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
         }
 
         logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
                         "for App Identity {Address}/{ConfigurationAddress}/{Pool} " +
                         "with Connector Identity {ConnectorAddress}/{ConnectorConfigurationAddress}/{ConnectorPool} created in {ElapsedMilliseconds} ms",
-            NumberOfCreatedRelationships,
-            TotalRelationships,
+            TotalCreatedRelationships,
+            TotalConfiguredRelationships,
             acceptRelationshipResponse.Result!.Id,
             appIdentity.IdentityAddress,
             appIdentity.ConfigurationIdentityAddress,
@@ -138,6 +141,14 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
                 connectorIdentity.ConfigurationIdentityAddress == relationship.IdentityAddress))
             .ToArray();
 
+        VerifyRecipientConfiguration(appIdentity, connectorIdentityToEstablishRelationshipWith, connectorRecipientIds);
+
+        return connectorIdentityToEstablishRelationshipWith;
+    }
+
+    private static void VerifyRecipientConfiguration(DomainIdentity appIdentity,
+        DomainIdentity[] connectorIdentityToEstablishRelationshipWith, RelationshipIdentityBag[] connectorRecipientIds)
+    {
         var connectorIdentityToEstablishRelationshipWithIds = connectorIdentityToEstablishRelationshipWith
             .Select(connectorIdentity => new RelationshipIdentityBag(
                 connectorIdentity.ConfigurationIdentityAddress,
@@ -146,11 +157,10 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
             .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
             .ToArray();
 
-        return !connectorRecipientIds.SequenceEqual(connectorIdentityToEstablishRelationshipWithIds)
-            ? throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",
+        if (!connectorRecipientIds.SequenceEqual(connectorIdentityToEstablishRelationshipWithIds))
+            throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",
                 appIdentity,
                 connectorRecipientIds,
-                connectorIdentityToEstablishRelationshipWithIds))
-            : connectorIdentityToEstablishRelationshipWith;
+                connectorIdentityToEstablishRelationshipWithIds));
     }
 }

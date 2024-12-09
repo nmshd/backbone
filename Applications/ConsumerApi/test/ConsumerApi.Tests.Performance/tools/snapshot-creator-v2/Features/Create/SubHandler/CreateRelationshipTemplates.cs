@@ -22,7 +22,7 @@ public abstract record CreateRelationshipTemplates
                 .Where(i => i.NumberOfRelationshipTemplates > 0)
                 .ToArray();
 
-            relationshipTemplateFactory.TotalRelationshipTemplates = identitiesWithRelationshipTemplates.Sum(i => i.NumberOfRelationshipTemplates);
+            relationshipTemplateFactory.TotalConfiguredRelationshipTemplates = identitiesWithRelationshipTemplates.Sum(i => i.NumberOfRelationshipTemplates);
 
             var tasks = identitiesWithRelationshipTemplates
                 .Select(identityWithRelationshipTemplate => relationshipTemplateFactory.Create(request, identityWithRelationshipTemplate))
