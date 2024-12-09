@@ -1,3 +1,4 @@
+export 'announcements/announcements.dart';
 export 'clients/clients.dart';
 export 'identities/identities.dart';
 export 'messages/messages.dart';
