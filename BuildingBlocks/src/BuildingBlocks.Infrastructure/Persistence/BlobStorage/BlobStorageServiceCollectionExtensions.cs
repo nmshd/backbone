@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -11,6 +13,7 @@ public static class BlobStorageServiceCollectionExtensions
 {
     public const string AZURE_CLOUD_PROVIDER = "Azure";
     public const string GOOGLE_CLOUD_PROVIDER = "GoogleCloud";
+    public const string S3_CLOUD_PROVIDER = "S3";
 
     public static void AddBlobStorage(this IServiceCollection services, Action<BlobStorageOptions> setupOptions)
     {
@@ -34,6 +37,19 @@ public static class BlobStorageServiceCollectionExtensions
                     googleCloudStorageOptions.BucketName = options.Container;
                 });
                 break;
+            case S3_CLOUD_PROVIDER:
+                services.Configure<S3Options>(opt =>
+                {
+                    opt.ServiceUrl = options.S3Config!.ServiceUrl;
+                    opt.KeyId = options.S3Config!.AccessKey;
+                    opt.Key = options.S3Config!.SecretKey;
+                    opt.BucketName = options.S3Config!.BucketName;
+                });
+
+                services.AddScoped<IBlobStorage, S3BlobStorage>();
+
+                break;
+
             default:
             {
                 if (options.CloudProvider.IsNullOrEmpty())
@@ -56,9 +72,29 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
+    [Required]
+    [MinLength(1)]
+    [RegularExpression("Azure|GoogleCloud|S3")]
     public string CloudProvider { get; set; } = null!;
 
     public string Container { get; set; } = null!;
 
-    public string? ConnectionInfo { get; set; }
+    public string? ConnectionInfo { get; set; } = null;
+
+    public S3Config? S3Config { get; set; }
+}
+
+public class S3Config
+{
+    [Required]
+    public string ServiceUrl { get; set; } = string.Empty;
+
+    [Required]
+    public string AccessKey { get; set; } = string.Empty;
+
+    [Required]
+    public string SecretKey { get; set; } = string.Empty;
+
+    [Required]
+    public string BucketName { get; set; } = string.Empty;
 }

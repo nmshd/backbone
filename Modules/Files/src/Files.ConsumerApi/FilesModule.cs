@@ -35,6 +35,11 @@ public class FilesModule : AbstractModule
                 parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
                     ? "files"
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
+
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.AccessKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.AccessKey;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.BucketName = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.BucketName;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.SecretKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.SecretKey;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.ServiceUrl = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.ServiceUrl;
         });
 
         if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
