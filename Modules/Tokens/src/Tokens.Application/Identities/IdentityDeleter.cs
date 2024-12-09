@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.AnonymizeTokensForIdentity;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
 using MediatR;
 
@@ -19,6 +20,7 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteTokensOfIdentityCommand(identityAddress));
+        await _mediator.Send(new AnonymizeTokensForIdentityCommand(identityAddress));
         await _deletionProcessLogger.LogDeletion(identityAddress, "Tokens");
     }
 }
