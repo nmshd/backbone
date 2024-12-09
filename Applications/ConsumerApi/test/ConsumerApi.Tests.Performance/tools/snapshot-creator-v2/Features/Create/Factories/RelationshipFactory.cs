@@ -11,14 +11,14 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerApiHelper consumerApiHelper) : IRelationshipFactory
 {
-    private int _numberOfCreatedRelationships;
+    internal int NumberOfCreatedRelationships;
     public int TotalRelationships { get; set; }
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task Create(CreateRelationships.Command request, DomainIdentity appIdentity, DomainIdentity[] connectorIdentities)
     {
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
         try
         {
             var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, connectorIdentities);
@@ -37,7 +37,7 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
     }
 
@@ -57,14 +57,14 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
 
         using (_lockObj.EnterScope())
         {
-            _numberOfCreatedRelationships++;
+            NumberOfCreatedRelationships++;
             appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
         }
 
         logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
                         "for App Identity {Address}/{ConfigurationAddress}/{Pool} " +
                         "with Connector Identity {ConnectorAddress}/{ConnectorConfigurationAddress}/{ConnectorPool} created in {ElapsedMilliseconds} ms",
-            _numberOfCreatedRelationships,
+            NumberOfCreatedRelationships,
             TotalRelationships,
             acceptRelationshipResponse.Result!.Id,
             appIdentity.IdentityAddress,
@@ -119,6 +119,7 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
         CreateRelationships.Command request,
         DomainIdentity appIdentity,
         DomainIdentity[] connectorIdentities)
+
     {
         var connectorRecipientIds = request.RelationshipAndMessages
             .Where(relationship =>
