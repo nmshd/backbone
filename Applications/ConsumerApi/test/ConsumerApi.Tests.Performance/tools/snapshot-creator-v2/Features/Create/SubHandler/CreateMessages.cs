@@ -21,7 +21,6 @@ public abstract record CreateMessages
         {
             messageFactory.TotalMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
 
-
             var senderIdentities = request.Identities
                 .Where(identity => request.RelationshipAndMessages.Any(relationship =>
                     identity.PoolAlias == relationship.SenderPoolAlias &&
