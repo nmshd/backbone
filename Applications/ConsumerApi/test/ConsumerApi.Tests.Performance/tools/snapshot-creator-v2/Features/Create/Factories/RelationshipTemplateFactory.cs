@@ -8,15 +8,15 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> logger, IConsumerApiHelper consumerApiHelper) : IRelationshipTemplateFactory
 {
-    private int _numberOfCreatedRelationshipTemplates;
+    internal int NumberOfCreatedRelationshipTemplates;
     public int TotalRelationshipTemplates { get; set; }
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
 
     public async Task Create(CreateRelationshipTemplates.Command request, DomainIdentity identity)
     {
-        await _semaphoreSlim.WaitAsync();
+        await SemaphoreSlim.WaitAsync();
 
         try
         {
@@ -28,14 +28,14 @@ public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> lo
 
             using (_lockObj.EnterScope())
             {
-                _numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
+                NumberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
             }
 
             logger.LogDebug(
                 "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.  Semaphore.Count: {SemaphoreCount} - Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedRelationshipTemplates,
+                NumberOfCreatedRelationshipTemplates,
                 TotalRelationshipTemplates,
-                _semaphoreSlim.CurrentCount,
+                SemaphoreSlim.CurrentCount,
                 identity.IdentityAddress,
                 identity.ConfigurationIdentityAddress,
                 identity.PoolAlias,
@@ -43,7 +43,7 @@ public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> lo
         }
         finally
         {
-            _semaphoreSlim.Release();
+            SemaphoreSlim.Release();
         }
     }
 
