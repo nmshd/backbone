@@ -57,8 +57,4 @@
     <ProjectReference Include="..\ConsumerApi.Tests.Performance\tools\snapshot-creator-v2\ConsumerApi.Tests.Performance.SnapshotCreator.V2.csproj" />
   </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Features\Verify\" />
-    </ItemGroup>
-
 </Project>
