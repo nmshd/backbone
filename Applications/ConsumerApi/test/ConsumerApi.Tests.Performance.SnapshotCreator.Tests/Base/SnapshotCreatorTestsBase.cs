@@ -25,6 +25,7 @@ public abstract class SnapshotCreatorTestsBase : AbstractTestsBase
         return result;
     }
 
+
     protected static Client? GetSdkClient(bool isDeviceDataSet = true, bool isDeviceDataDeviceIdSet = true)
     {
         var httpClient = new HttpClient();

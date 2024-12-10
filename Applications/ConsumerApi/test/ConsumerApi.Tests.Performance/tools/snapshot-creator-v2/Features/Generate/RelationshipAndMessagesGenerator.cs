@@ -63,7 +63,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
         return relationshipAndMessagesList;
     }
 
-    private static IdentityConfiguration? TryFindConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> availableConnectorIdentities,
+    internal static IdentityConfiguration? TryFindConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> availableConnectorIdentities,
         IdentityConfiguration appIdentity)
     {
         IdentityConfiguration? recipientConnectorIdentity = null;
@@ -91,7 +91,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
         return recipientConnectorIdentity;
     }
 
-    private static IdentityConfiguration? TryFindAnotherConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> connectorIdentities,
+    internal static IdentityConfiguration? TryFindAnotherConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> connectorIdentities,
         IdentityConfiguration appIdentity, IdentityConfiguration? recipientConnectorIdentity, List<IdentityConfiguration> appIdentities)
     {
         var connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith = connectorIdentities
@@ -219,12 +219,10 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
         relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
     }
 
-    private static void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType recipientIdentityPoolType, long expectedTotalNumberOfSentMessages)
+    internal static void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType recipientIdentityPoolType, long expectedTotalNumberOfSentMessages)
     {
         var filteredRelationships = relationshipAndMessages.Where(rm => rm.RecipientIdentityPoolType == recipientIdentityPoolType).ToList();
         var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
-
-        if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
 
         var messageDifference = expectedTotalNumberOfSentMessages - actualTotalNumberOfSentMessages;
 

@@ -10,7 +10,7 @@ public record IdentityConfiguration(int Address, IdentityPoolType IdentityPoolTy
 
     public string PoolAlias => PoolConfiguration.Alias;
 
-    private int NumberOfRelationships { get; set; } = PoolConfiguration.NumberOfRelationships;
+    internal int NumberOfRelationships { get; set; } = PoolConfiguration.NumberOfRelationships;
 
     public int DecrementAvailableRelationships() => NumberOfRelationships == 0 ? throw new InvalidOperationException("No more relationships available") : NumberOfRelationships--;
 

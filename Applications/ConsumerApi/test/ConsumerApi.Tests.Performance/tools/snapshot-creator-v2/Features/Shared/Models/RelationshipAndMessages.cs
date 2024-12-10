@@ -18,6 +18,15 @@ public record RelationshipAndMessages(
     public long NumberOfSentMessages { get; set; }
 
     [Ignore, JsonIgnore]
+    public IdentityPoolType SenderIdentityPoolType => SenderPoolAlias.FirstOrDefault() switch
+    {
+        'n' => IdentityPoolType.Never,
+        'a' => IdentityPoolType.App,
+        'c' => IdentityPoolType.Connector,
+        _ => throw new InvalidOperationException(POOL_TYPE_UNKNOWN)
+    };
+
+    [Ignore, JsonIgnore]
     public IdentityPoolType RecipientIdentityPoolType => RecipientPoolAlias.FirstOrDefault() switch
     {
         'n' => IdentityPoolType.Never,
