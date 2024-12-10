@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
@@ -17,9 +18,11 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
     {
         private readonly DatawalletModificationFactory _sut;
         private readonly IConsumerApiHelper _consumerApiHelper;
+        private readonly Client? _sdkClient;
 
         public DatawalletModificationFactoryTests()
         {
+            _sdkClient = GetSdkClient();
             var logger = A.Fake<ILogger<DatawalletModificationFactory>>();
             _consumerApiHelper = A.Fake<IConsumerApiHelper>();
             _sut = new DatawalletModificationFactory(logger, _consumerApiHelper);
@@ -52,11 +55,11 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
                 }
             };
 
-            var sdkClient = GetSdkClient();
+
             A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(A<string>._, A<ClientCredentials>._, A<UserCredentials>._, null))!
-                .Returns(sdkClient);
-            A.CallTo(() => _consumerApiHelper.StartSyncRun(sdkClient!))
-                .Returns(new ApiResponse<StartSyncRunResponse>()
+                .Returns(_sdkClient);
+            A.CallTo(() => _consumerApiHelper.StartSyncRun(_sdkClient!))
+                .Returns(new ApiResponse<StartSyncRunResponse>
                 {
                     Result = new StartSyncRunResponse
                     {
@@ -64,7 +67,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
                         SyncRun = null!
                     }
                 });
-            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
+            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, _sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
                 .Returns(response);
 
             // Act
@@ -72,7 +75,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
             // Assert
             _sut.TotalCreatedDatawalletModifications.Should().Be(1);
-            _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+            _sut.GetSemaphoreCurrentCount().Should().Be(DatawalletModificationFactory.MaxDegreeOfParallelism);
         }
 
 
@@ -89,12 +92,11 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
             var identity = request.Identities.First();
             var response = new ApiResponse<FinalizeDatawalletVersionUpgradeResponse>();
 
-            var sdkClient = GetSdkClient();
             A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(A<string>._, A<ClientCredentials>._, A<UserCredentials>._, null))!
-                .Returns(sdkClient);
-            A.CallTo(() => _consumerApiHelper.StartSyncRun(sdkClient!))
+                .Returns(_sdkClient);
+            A.CallTo(() => _consumerApiHelper.StartSyncRun(_sdkClient!))
                 .Returns(new ApiResponse<StartSyncRunResponse>());
-            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
+            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, _sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
                 .Returns(response);
 
             // Act
@@ -102,7 +104,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>();
-            _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+            _sut.GetSemaphoreCurrentCount().Should().Be(DatawalletModificationFactory.MaxDegreeOfParallelism);
         }
 
         [Fact]
@@ -118,19 +120,18 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
             var identity = request.Identities.First();
             var response = new ApiResponse<FinalizeDatawalletVersionUpgradeResponse>() { Result = null };
 
-            var sdkClient = GetSdkClient();
             A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(A<string>._, A<ClientCredentials>._, A<UserCredentials>._, null))!
-                .Returns(sdkClient);
-            A.CallTo(() => _consumerApiHelper.StartSyncRun(sdkClient!))
-                .Returns(new ApiResponse<StartSyncRunResponse>()
+                .Returns(_sdkClient);
+            A.CallTo(() => _consumerApiHelper.StartSyncRun(_sdkClient!))
+                .Returns(new ApiResponse<StartSyncRunResponse>
                 {
-                    Result = new()
+                    Result = new StartSyncRunResponse
                     {
                         Status = "null",
                         SyncRun = null!
                     }
                 });
-            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
+            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, _sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
                 .Returns(response);
 
             // Act
@@ -138,7 +139,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>();
-            _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+            _sut.GetSemaphoreCurrentCount().Should().Be(DatawalletModificationFactory.MaxDegreeOfParallelism);
         }
 
 
@@ -153,13 +154,12 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
             );
 
             var identity = request.Identities.First();
-            var response = new ApiResponse<FinalizeDatawalletVersionUpgradeResponse>() { Result = null };
+            var response = new ApiResponse<FinalizeDatawalletVersionUpgradeResponse> { Result = null };
 
-            var sdkClient = GetSdkClient();
             A.CallTo(() => _consumerApiHelper.CreateForExistingIdentity(A<string>._, A<ClientCredentials>._, A<UserCredentials>._, null))!
-                .Returns(sdkClient);
-            A.CallTo(() => _consumerApiHelper.StartSyncRun(sdkClient!))
-                .Returns(new ApiResponse<StartSyncRunResponse>()
+                .Returns(_sdkClient);
+            A.CallTo(() => _consumerApiHelper.StartSyncRun(_sdkClient!))
+                .Returns(new ApiResponse<StartSyncRunResponse>
                 {
                     Error = new ApiError
                     {
@@ -170,7 +170,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
                         Time = default
                     }
                 });
-            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
+            A.CallTo(() => _consumerApiHelper.FinalizeDatawalletVersionUpgrade(A<DomainIdentity>._, _sdkClient!, A<ApiResponse<StartSyncRunResponse>>._))
                 .Returns(response);
 
             // Act
@@ -178,7 +178,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>();
-            _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+            _sut.GetSemaphoreCurrentCount().Should().Be(DatawalletModificationFactory.MaxDegreeOfParallelism);
         }
     }
 }

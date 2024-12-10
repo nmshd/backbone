@@ -65,7 +65,7 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
         identity.RelationshipTemplates.Should().HaveCount(expectedTotalRelationshipTemplates);
         A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!)).MustHaveHappened(expectedTotalRelationshipTemplates, Times.Exactly);
         _sut.TotalCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipTemplateFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -104,7 +104,7 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
         identity.RelationshipTemplates.Should().HaveCount(expectedTotalRelationshipTemplates);
         A.CallTo(() => _consumerApiHelper.CreateRelationshipTemplate(_sdkClient!)).MustHaveHappened(expectedNumCreateRelationshipTemplateCalls, Times.Exactly);
         _sut.TotalCreatedRelationshipTemplates.Should().Be(expectedTotalRelationshipTemplates);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipTemplateFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -151,6 +151,6 @@ public class RelationshipTemplateFactoryTests : SnapshotCreatorTestsBase
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipTemplateFactory.MaxDegreeOfParallelism);
     }
 }

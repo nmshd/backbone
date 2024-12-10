@@ -12,9 +12,11 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
     public int TotalConfiguredDevices { get; set; }
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(MaxDegreeOfParallelism);
 
     internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
+
+    internal static int MaxDegreeOfParallelism => Environment.ProcessorCount;
 
     public async Task Create(CreateDevices.Command request, DomainIdentity identity)
     {

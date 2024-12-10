@@ -86,7 +86,7 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 
         // Assert
         result.Count.Should().Be(expectedNumberOfCreatedChallenges);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(ChallengeFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -109,6 +109,6 @@ public class ChallengeFactoryTests : SnapshotCreatorTestsBase
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.CreateChallenges(command, identity));
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(ChallengeFactory.MaxDegreeOfParallelism);
     }
 }

@@ -14,11 +14,13 @@ public class MessageFactory(ILogger<MessageFactory> logger, IConsumerApiHelper c
     public int TotalCreatedMessages { get; private set; }
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _createSemaphore = new(Environment.ProcessorCount);
-    private readonly SemaphoreSlim _createMessagesSemaphore = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _createSemaphore = new(MaxDegreeOfParallelism);
+    private readonly SemaphoreSlim _createMessagesSemaphore = new(MaxDegreeOfParallelism);
 
     internal int GetCreateSemaphoreCurrentCount() => _createSemaphore.CurrentCount;
     internal int GetCreateMessagesSemaphoreCurrentCount() => _createMessagesSemaphore.CurrentCount;
+
+    internal static int MaxDegreeOfParallelism => Environment.ProcessorCount;
 
     public async Task Create(CreateMessages.Command request, DomainIdentity senderIdentity)
     {

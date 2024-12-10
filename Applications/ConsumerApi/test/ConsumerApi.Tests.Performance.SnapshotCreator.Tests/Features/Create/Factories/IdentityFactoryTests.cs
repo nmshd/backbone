@@ -41,6 +41,7 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
         result.Should().NotBeNull();
         result.DeviceIds.Count.Should().Be(1);
         _sut.TotalCreatedIdentities.Should().Be(result.DeviceIds.Count);
+        _sut.GetSemaphoreCurrentCount().Should().Be(IdentityFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -57,7 +58,7 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
         await _sut.Create(request, identityConfiguration);
 
         // ASSERT
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(IdentityFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -74,7 +75,7 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
         // ACT + ASSERT
         Func<Task<DomainIdentity>> act = async () => await _sut.InnerCreate(request, identityConfiguration);
         await act.Should().ThrowAsync<InvalidOperationException>();
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(IdentityFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -93,6 +94,6 @@ public class IdentityFactoryTests : SnapshotCreatorTestsBase
         // ACT + ASSERT
         Func<Task<DomainIdentity>> act = async () => await sut.InnerCreate(request, identityConfiguration);
         await act.Should().ThrowAsync<InvalidOperationException>();
-        _sut.SemaphoreSlim.CurrentCount.Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(IdentityFactory.MaxDegreeOfParallelism);
     }
 }

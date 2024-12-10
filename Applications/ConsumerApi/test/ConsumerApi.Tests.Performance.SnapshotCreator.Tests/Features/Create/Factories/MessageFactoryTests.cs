@@ -102,8 +102,8 @@ public class MessageFactoryTests : SnapshotCreatorTestsBase
 
         _sut.TotalCreatedMessages.Should().Be(senderIdentity.NumberOfSentMessages);
         senderIdentity.SentMessages.Should().HaveCount(senderIdentity.NumberOfSentMessages);
-        _sut.GetCreateSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
-        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetCreateSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
+        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -181,8 +181,8 @@ public class MessageFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.SendMessage(recipientIdentity, _sdkCLient!))
             .MustNotHaveHappened();
 
-        _sut.GetCreateSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
-        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetCreateSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
+        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -268,8 +268,8 @@ public class MessageFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.SendMessage(recipientIdentity, _sdkCLient!))
             .MustHaveHappenedOnceOrMore();
 
-        _sut.GetCreateSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
-        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetCreateSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
+        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -342,7 +342,7 @@ public class MessageFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.SendMessage(recipientIdentity, _sdkCLient!))
             .MustNotHaveHappened();
 
-        _sut.GetCreateSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
-        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetCreateSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
+        _sut.GetCreateMessagesSemaphoreCurrentCount().Should().Be(MessageFactory.MaxDegreeOfParallelism);
     }
 }

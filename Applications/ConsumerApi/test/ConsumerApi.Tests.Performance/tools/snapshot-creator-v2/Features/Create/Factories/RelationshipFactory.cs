@@ -15,9 +15,11 @@ public class RelationshipFactory(ILogger<RelationshipFactory> logger, IConsumerA
     public int TotalConfiguredRelationships { get; set; }
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(MaxDegreeOfParallelism);
 
     internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
+
+    internal static int MaxDegreeOfParallelism => Environment.ProcessorCount;
 
     public async Task Create(CreateRelationships.Command request, DomainIdentity appIdentity, DomainIdentity[] connectorIdentities)
     {

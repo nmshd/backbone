@@ -42,7 +42,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         // ASSERT
         result.Should().BeEmpty();
         identity.DeviceIds.Should().BeEmpty();
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(DeviceFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -68,6 +68,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
 
         result.Should().HaveCount(identity.NumberOfDevices - 1);
         identity.DeviceIds.Should().BeEquivalentTo(result);
+        _sut.GetSemaphoreCurrentCount().Should().Be(DeviceFactory.MaxDegreeOfParallelism);
     }
 
 
@@ -89,6 +90,6 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
 
         _sut.TotalCreatedDevices.Should().Be(identity.NumberOfDevices - 1);
         identity.DeviceIds.Should().HaveCount(identity.NumberOfDevices - 1);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(DeviceFactory.MaxDegreeOfParallelism);
     }
 }

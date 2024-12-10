@@ -12,9 +12,11 @@ public class RelationshipTemplateFactory(ILogger<RelationshipTemplateFactory> lo
     public int TotalConfiguredRelationshipTemplates { get; set; }
 
     private readonly Lock _lockObj = new();
-    private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+    private readonly SemaphoreSlim _semaphore = new(MaxDegreeOfParallelism);
 
     internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
+
+    internal static int MaxDegreeOfParallelism => Environment.ProcessorCount;
 
     public async Task Create(CreateRelationshipTemplates.Command request, DomainIdentity identity)
     {

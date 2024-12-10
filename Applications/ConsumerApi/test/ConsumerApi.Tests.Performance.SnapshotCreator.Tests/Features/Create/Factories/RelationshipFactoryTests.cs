@@ -122,7 +122,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         _sut.TotalCreatedRelationships.Should().Be(1);
         appIdentity.EstablishedRelationshipsById.Should().ContainKey(expectedRelationshipId);
         appIdentity.EstablishedRelationshipsById.Count.Should().Be(1);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -209,7 +209,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustHaveHappenedOnceExactly();
         _sut.TotalCreatedRelationships.Should().Be(0);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -294,7 +294,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustNotHaveHappened();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
         _sut.TotalCreatedRelationships.Should().Be(0);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -397,7 +397,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
         _sut.TotalCreatedRelationships.Should().Be(0);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -484,7 +484,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
         _sut.TotalCreatedRelationships.Should().Be(0);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -587,7 +587,7 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustHaveHappenedOnceExactly();
         _sut.TotalCreatedRelationships.Should().Be(0);
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 
     [Fact]
@@ -651,6 +651,6 @@ public class RelationshipFactoryTests : SnapshotCreatorTestsBase
         A.CallTo(() => _consumerApiHelper.CreateRelationship(_sdkCLient!, A<RelationshipTemplateBag>._)).MustNotHaveHappened();
         A.CallTo(() => _consumerApiHelper.AcceptRelationship(_sdkCLient!, A<ApiResponse<RelationshipMetadata>>._)).MustNotHaveHappened();
 
-        _sut.GetSemaphoreCurrentCount().Should().Be(Environment.ProcessorCount);
+        _sut.GetSemaphoreCurrentCount().Should().Be(RelationshipFactory.MaxDegreeOfParallelism);
     }
 }

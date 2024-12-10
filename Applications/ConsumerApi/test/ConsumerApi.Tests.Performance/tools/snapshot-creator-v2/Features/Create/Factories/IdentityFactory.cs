@@ -11,14 +11,17 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
     internal int TotalCreatedIdentities;
     public int TotalConfiguredIdentities { get; set; }
 
-
     private readonly Lock _lockObj = new();
-    internal readonly SemaphoreSlim SemaphoreSlim = new(Environment.ProcessorCount);
+
+    private readonly SemaphoreSlim _semaphore = new(MaxDegreeOfParallelism);
+
+    internal int GetSemaphoreCurrentCount() => _semaphore.CurrentCount;
+    internal static int MaxDegreeOfParallelism => Environment.ProcessorCount;
 
     public async Task<DomainIdentity> Create(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
     {
         DomainIdentity createdIdentity;
-        await SemaphoreSlim.WaitAsync();
+        await _semaphore.WaitAsync();
         try
         {
             Stopwatch stopwatch = new();
@@ -35,7 +38,7 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
                 "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
                 TotalCreatedIdentities,
                 TotalConfiguredIdentities,
-                SemaphoreSlim.CurrentCount,
+                _semaphore.CurrentCount,
                 createdIdentity.IdentityAddress,
                 createdIdentity.ConfigurationIdentityAddress,
                 createdIdentity.PoolAlias,
@@ -43,7 +46,7 @@ public class IdentityFactory(ILogger<IdentityFactory> logger, IConsumerApiHelper
         }
         finally
         {
-            SemaphoreSlim.Release();
+            _semaphore.Release();
         }
 
         return createdIdentity;
