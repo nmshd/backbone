@@ -4,31 +4,31 @@ using MediatR;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Verify;
 
-public abstract record VerifyConfig
+public abstract class VerifyConfig
 {
     public record Command(string ExcelFilePath, string WorkSheetName, string JsonFilePath) : IRequest<bool>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(
-        IPoolConfigurationExcelReader PoolConfigurationExcelReader,
-        IPoolConfigurationJsonReader PoolConfigurationJsonReader,
-        IRelationshipAndMessagesGenerator RelationshipAndMessagesGenerator,
-        IPoolConfigurationJsonValidator PoolConfigurationJsonValidator) : IRequestHandler<Command, bool>
+    public class CommandHandler(
+        IPoolConfigurationExcelReader poolConfigurationExcelReader,
+        IPoolConfigurationJsonReader poolConfigurationJsonReader,
+        IRelationshipAndMessagesGenerator relationshipAndMessagesGenerator,
+        IPoolConfigurationJsonValidator poolConfigurationJsonValidator) : IRequestHandler<Command, bool>
     {
         public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
         {
-            var poolConfigFromExcel = await PoolConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
+            var poolConfigFromExcel = await poolConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
 
-            var relationshipAndMessages = RelationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
+            var relationshipAndMessages = relationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
 
             poolConfigFromExcel.RelationshipAndMessages.Clear();
             poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
 
-            var poolConfigFromJson = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
+            var poolConfigFromJson = await poolConfigurationJsonReader.Read(request.JsonFilePath);
 
             if (poolConfigFromJson is null) return false;
 
-            var result = await PoolConfigurationJsonValidator.Validate(poolConfigFromJson, poolConfigFromExcel);
+            var result = await poolConfigurationJsonValidator.Validate(poolConfigFromJson, poolConfigFromExcel);
 
             return result;
         }
