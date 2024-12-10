@@ -35,7 +35,7 @@ public abstract record CreateSnapshot
 
                 if (poolConfig is null)
                 {
-                    return new StatusMessage(false, "Pool configuration could not be read.");
+                    return new StatusMessage(false, POOL_CONFIG_FILE_READ_ERROR);
                 }
 
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
@@ -110,14 +110,14 @@ public abstract record CreateSnapshot
                 return new StatusMessage(false, e.Message, e);
             }
 
-            return new StatusMessage(true, "Pool configuration with relationships and messages created successfully.");
+            return new StatusMessage(true, SNAPSHOT_CREATION_SUCCEED_MESSAGE);
         }
 
         private static string CreateSnapshotDirAndCopyPoolConfigFiles(string jsonFullFilePath)
         {
             if (!File.Exists(jsonFullFilePath))
             {
-                throw new FileNotFoundException("Pool configuration file not found.", jsonFullFilePath);
+                throw new FileNotFoundException(POOL_CONFIG_FILE_NOT_FOUND_ERROR, jsonFullFilePath);
             }
 
             var loadTestToken = Path.GetFileNameWithoutExtension(jsonFullFilePath).Split('.').Last();

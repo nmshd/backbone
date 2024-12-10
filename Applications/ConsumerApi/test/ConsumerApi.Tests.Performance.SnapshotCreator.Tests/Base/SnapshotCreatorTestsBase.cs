@@ -15,6 +15,8 @@ public abstract class SnapshotCreatorTestsBase : AbstractTestsBase
 
     protected string TestDataFolder { get; } = Path.Combine(AppContext.BaseDirectory, "TestData");
 
+    protected string GetFullFilePath(string filename) => Path.Combine(TestDataFolder, filename);
+
     protected async Task<PerformanceTestConfiguration?> GetExpectedPoolConfiguration(string expectedPoolConfigJsonFilename)
     {
         var fullFilePath = Path.Combine(TestDataFolder, expectedPoolConfigJsonFilename);
@@ -23,7 +25,7 @@ public abstract class SnapshotCreatorTestsBase : AbstractTestsBase
         return result;
     }
 
-    protected Client? GetSdkClient(bool isDeviceDataSet = true, bool isDeviceDataDeviceIdSet = true)
+    protected static Client? GetSdkClient(bool isDeviceDataSet = true, bool isDeviceDataDeviceIdSet = true)
     {
         var httpClient = new HttpClient();
         var configuration = new Configuration
