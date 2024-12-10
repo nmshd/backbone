@@ -5,7 +5,7 @@ using Ganss.Excel;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
 
-public class PoolConfigurationExcelReader : PoolConfigurationReaderBase, IPoolConfigurationExcelReader
+public class PoolConfigurationExcelReader(IExcelReader excelReader) : PoolConfigurationReaderBase, IPoolConfigurationExcelReader
 {
     protected override string[] ValidExtensions { get; } = [".xlsx", ".xls"];
 
@@ -16,8 +16,7 @@ public class PoolConfigurationExcelReader : PoolConfigurationReaderBase, IPoolCo
         var excelMapper = new ExcelMapper(filePath) { SkipBlankRows = true, SkipBlankCells = true, TrackObjects = false };
 
         await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        var poolConfigFromExcel = await excelMapper.FetchAsync(stream, workSheet);
-
+        var poolConfigFromExcel = await excelReader.FetchAsync(workSheet, excelMapper, stream);
 
         List<PoolConfiguration> identityPoolConfigs = [];
         VerificationConfiguration verificationConfiguration = new();

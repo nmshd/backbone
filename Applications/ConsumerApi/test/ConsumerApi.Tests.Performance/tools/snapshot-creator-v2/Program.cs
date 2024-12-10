@@ -41,6 +41,7 @@ public class Program
                 .ConfigureServices((_, services) =>
                 {
                     services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
+                    services.AddSingleton<IExcelReader, ExcelReader>();
                     services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                     services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
                     services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
