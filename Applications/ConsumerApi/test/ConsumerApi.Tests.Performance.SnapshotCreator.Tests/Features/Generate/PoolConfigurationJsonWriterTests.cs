@@ -31,13 +31,11 @@ public class PoolConfigurationJsonWriterTests : SnapshotCreatorTestsBase
     [Fact]
     public async Task Write_InvalidFileNamesNull_ReturnsFalse()
     {
-        var filePath = GetFullFilePath($"poolConfiguration-{DateTime.Now:O}.json");
-
         // Arrange
         var sut = new PoolConfigurationJsonWriter();
 
         // Act
-        var result = await sut.Write(null!, filePath);
+        var result = await sut.Write(null!, null!);
 
         // Assert
         result.Status.Should().BeFalse();
