@@ -1,6 +1,9 @@
-﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
+
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 
 public interface IExcelWriter
 {
-    Task Write<T>(string filePath, IEnumerable<T> data);
+    Task WritePoolConfigurations(string snapshotFolder, string worksheet, List<PoolConfiguration> poolConfigurations);
+    Task WriteRelationshipsAndMessages(string snapshotFolder, string worksheet, List<RelationshipAndMessages> relationshipAndMessages);
 }
