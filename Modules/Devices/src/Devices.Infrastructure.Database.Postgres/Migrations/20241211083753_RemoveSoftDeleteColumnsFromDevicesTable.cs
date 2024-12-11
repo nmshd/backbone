@@ -12,7 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""DELETE FROM "Devices"."Devices" WHERE "DeletedAt" IS NOT NULL""");
-            
+
             migrationBuilder.DropColumn(
                 name: "DeletedAt",
                 schema: "Devices",
