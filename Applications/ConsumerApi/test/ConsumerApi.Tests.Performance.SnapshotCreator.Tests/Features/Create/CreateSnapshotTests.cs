@@ -66,6 +66,11 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
         A.CallTo(() => _outputHelper.WriteMessages(A<string>._, A<List<DomainIdentity>>._)).MustHaveHappenedOnceExactly();
 
         result.Should().BeEquivalentTo(new StatusMessage(true, SNAPSHOT_CREATION_SUCCEED_MESSAGE));
+
+        if (Directory.Exists(_sut.OutputDirName))
+        {
+            Directory.Delete(_sut.OutputDirName, true);
+        }
     }
 
     [Theory]
@@ -85,6 +90,11 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
 
         // Assert
         result.Should().BeEquivalentTo(new StatusMessage(false, POOL_CONFIG_FILE_READ_ERROR));
+
+        if (Directory.Exists(_sut.OutputDirName))
+        {
+            Directory.Delete(_sut.OutputDirName, true);
+        }
     }
 
     [Fact]
@@ -100,6 +110,11 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
 
         // Assert
         result.Should().BeEquivalentTo(new StatusMessage(false, expectedException.Message, expectedException));
+
+        if (Directory.Exists(_sut.OutputDirName))
+        {
+            Directory.Delete(_sut.OutputDirName, true);
+        }
     }
 
     [Fact]
@@ -116,5 +131,10 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
         result.Message.Should().Be(POOL_CONFIG_FILE_NOT_FOUND_ERROR);
         result.Status.Should().BeFalse();
         result.Exception.Should().BeOfType<FileNotFoundException>();
+
+        if (Directory.Exists(_sut.OutputDirName))
+        {
+            Directory.Delete(_sut.OutputDirName, true);
+        }
     }
 }

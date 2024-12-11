@@ -24,13 +24,16 @@ public abstract record CreateSnapshot
         IOutputHelper OutputHelper)
         : IRequestHandler<Command, StatusMessage>
     {
+        internal string? OutputDirName { get; private set; }
+
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
         {
             try
             {
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
-                var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
+                OutputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
+
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
 
                 if (poolConfig is null)
@@ -52,7 +55,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteIdentities(outputDirName, identities);
+                await OutputHelper.WriteIdentities(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
@@ -61,7 +64,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteChallenges(outputDirName, identities);
+                await OutputHelper.WriteChallenges(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
@@ -70,7 +73,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
+                await OutputHelper.WriteDatawalletModifications(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
@@ -79,7 +82,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteRelationshipTemplates(outputDirName, identities);
+                await OutputHelper.WriteRelationshipTemplates(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
@@ -88,7 +91,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteRelationships(outputDirName, identities);
+                await OutputHelper.WriteRelationships(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
@@ -97,7 +100,7 @@ public abstract record CreateSnapshot
                 stopwatch.Restart();
 
                 await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteMessages(outputDirName, identities);
+                await OutputHelper.WriteMessages(OutputDirName, identities);
 
                 stopwatch.Stop();
                 totalRunTime += stopwatch.Elapsed;
