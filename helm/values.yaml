@@ -225,7 +225,7 @@ consumerapi:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `BackendConfig`s
   backendConfig:
     healthCheck:
       # checkIntervalSec - time from the start of one prober's check to the start of its next check
@@ -236,6 +236,19 @@ consumerapi:
       healthyThreshold: 1
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
+
+  # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
+  healthCheckPolicy:
+    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
+    hostOverride: ""
+    # interval - the interval in seconds between health checks
+    interval: 15
+    # timeout - the timeout in seconds for each health check
+    timeout: 15
+    # healthyThreshold - the number of consecutive successful health checks required to mark a backend as healthy
+    healthyThreshold: 1
+    # unhealthyThreshold - the number of consecutive failed health checks required to mark a backend as unhealthy
+    unhealthyThreshold: 2
 
 #=========================== Database Migrator ===========================
 
@@ -542,7 +555,7 @@ sseserver:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `BackendConfig`s
   backendConfig:
     healthCheck:
       # checkIntervalSec - time from the start of one prober's check to the start of its next check
@@ -553,6 +566,19 @@ sseserver:
       healthyThreshold: 1
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
+
+  # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
+  healthCheckPolicy:
+    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
+    hostOverride: ""
+    # interval - the interval in seconds between health checks
+    interval: 15
+    # timeout - the timeout in seconds for each health check
+    timeout: 15
+    # healthyThreshold - the number of consecutive successful health checks required to mark a backend as healthy
+    healthyThreshold: 1
+    # unhealthyThreshold - the number of consecutive failed health checks required to mark a backend as unhealthy
+    unhealthyThreshold: 2
 
 global:
   # useBuiltInEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
