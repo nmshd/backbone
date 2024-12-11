@@ -166,9 +166,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication);
 
-    if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
-
     services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders =
@@ -205,9 +202,6 @@ static void Configure(WebApplication app)
     );
 
     var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-
-    if (configuration.SwaggerUi.Enabled)
-        app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;
