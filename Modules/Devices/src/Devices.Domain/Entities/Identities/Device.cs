@@ -77,10 +77,15 @@ public class Device : Entity
 
     public bool IsBackupDevice { get; private set; }
 
-    public DateTime? DeletedAt { get; set; }
-    public DeviceId? DeletedByDevice { get; set; }
-
     public bool IsOnboarded => User.HasLoggedIn;
+
+    public void EnsureCanBeDeleted(IdentityAddress addressOfActiveIdentity)
+    {
+        var error = CanBeDeletedBy(addressOfActiveIdentity);
+
+        if (error != null)
+            throw new DomainException(error);
+    }
 
     private DomainError? CanBeDeletedBy(IdentityAddress addressOfActiveIdentity)
     {
@@ -105,17 +110,6 @@ public class Device : Entity
         return hasChanges;
     }
 
-    public void MarkAsDeleted(DeviceId deletedByDevice, IdentityAddress addressOfActiveIdentity)
-    {
-        var error = CanBeDeletedBy(addressOfActiveIdentity);
-
-        if (error != null)
-            throw new DomainException(error);
-
-        DeletedAt = SystemTime.UtcNow;
-        DeletedByDevice = deletedByDevice;
-    }
-
     public void LoginOccurred()
     {
         if (IsBackupDevice)
@@ -133,9 +127,6 @@ public class Device : Entity
     }
 
     #region Expressions
-
-    public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletedAt == null && device.DeletedByDevice == null;
 
     public static Expression<Func<Device, bool>> IsBackup =>
         device => device.IsBackupDevice;
