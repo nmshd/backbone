@@ -1,5 +1,7 @@
 #=========================== Admin CLI ===========================
 
+hostname: ""
+
 admincli:
   name: "admincli"
 
@@ -113,28 +115,6 @@ adminui:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
-  # httpRoute - the configuration of the HttpRoute for the Consumer API
-  httpRoute:
-    # enabled - whether to enable the HttpRoute for the Consumer API
-    enabled: false
-    # parentRefName - the name of the gateway this Route wants to be attached to
-    parentRefName: ""
-    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
-    parentRefNamespace: ""
-    hostnames: []
-
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
-  backendConfig:
-    healthCheck:
-      # checkIntervalSec - time from the start of one prober's check to the start of its next check
-      checkIntervalSec: 15
-      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
-      timeoutSec: 15
-      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
-      healthyThreshold: 1
-      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
-      unhealthyThreshold: 2
-
 #=========================== Consumer API ===========================
 
 consumerapi:
@@ -199,8 +179,8 @@ consumerapi:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnames - the hostnames the Consumer API should be reachable under
-    hostnames: []
+    # hostnamesOverride - the hostnames the Consumer API should be reachable under; if empty, the toplevel `hostname` property is used
+    hostnamesOverride: []
 
   ingress:
     # enabled - whether to enable the Ingress for the Consumer API
@@ -523,8 +503,8 @@ sseserver:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnames - the hostnames the Consumer API should be reachable under
-    hostnames: []
+    # hostnamesOverride - the hostnames the SSE Server should be reachable under; if empty, the toplevel `hostname` property is used
+    hostnamesOverride: []
 
   ingress:
     # enabled - whether to enable the Ingress for the Consumer API
