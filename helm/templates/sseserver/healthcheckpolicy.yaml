@@ -14,7 +14,7 @@ spec:
     healthyThreshold: {{ .Values.sseserver.healthCheckPolicy.healthyThreshold }}
     unhealthyThreshold: {{ .Values.sseserver.healthCheckPolicy.unhealthyThreshold }}
     http:
-      host: {{ default .Values.global.hostname .Values.sseserver.healthCheckPolicy.hostOverride }}
+      host: {{ default .Values.global.defaultHostname .Values.sseserver.healthCheckPolicy.hostOverride }}
       path: /health
       match:
         statusCodes:

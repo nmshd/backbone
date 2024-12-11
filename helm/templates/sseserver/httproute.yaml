@@ -15,7 +15,7 @@ spec:
   {{- if .Values.consumerapi.httpRoute.hostnamesOverride }}
     {{- toYaml .Values.consumerapi.httpRoute.hostnamesOverride | nindent 4 }}
   {{- else }}
-    - {{ .Values.hostname }}
+    - {{ .Values.global.defaultHostname }}
   {{- end }}
   rules:
     - matches:

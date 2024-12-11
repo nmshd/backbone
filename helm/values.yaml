@@ -1,7 +1,5 @@
 #=========================== Admin CLI ===========================
 
-hostname: ""
-
 admincli:
   name: "admincli"
 
@@ -174,7 +172,7 @@ consumerapi:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnamesOverride - the hostnames the Consumer API should be reachable under; if empty, the toplevel `hostname` property is used
+    # hostnamesOverride - the hostnames the Consumer API should be reachable under; if empty, the `.global.defaultHostname` property is used
     hostnamesOverride: []
 
   ingress:
@@ -214,7 +212,7 @@ consumerapi:
 
   # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
   healthCheckPolicy:
-    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
+    # hostOverride - the host name that should be used for the health check; if empty, the `.global.defaultHostname` property is used
     hostOverride: ""
     # interval - the interval in seconds between health checks
     interval: 15
@@ -511,7 +509,7 @@ sseserver:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnamesOverride - the hostnames the SSE Server should be reachable under; if empty, the toplevel `hostname` property is used
+    # hostnamesOverride - the hostnames the SSE Server should be reachable under; if empty, the `.global.defaultHostname` property is used
     hostnamesOverride: []
 
   ingress:
@@ -544,7 +542,7 @@ sseserver:
 
   # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
   healthCheckPolicy:
-    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
+    # hostOverride - the host name that should be used for the health check; if empty, the `.global.defaultHostname` property is used
     hostOverride: ""
     # interval - the interval in seconds between health checks
     interval: 15
@@ -556,6 +554,9 @@ sseserver:
     unhealthyThreshold: 2
 
 global:
+  # defaultHostname - the default hostname the services should be reachable under (this can be overriden in the individual service configurations)
+  defaultHostname: ""
+
   # useBuiltInEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
   useBuiltInEventbus: false
 
