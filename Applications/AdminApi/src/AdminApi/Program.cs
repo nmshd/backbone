@@ -113,9 +113,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
 
-    if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerWithUi();
-
     services
         .AddOpenIddict()
         .AddCore(options =>
@@ -189,9 +186,6 @@ static void Configure(WebApplication app)
         if (configuration.Cors.AccessControlAllowCredentials)
             policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
     });
-
-    if (configuration.SwaggerUi.Enabled)
-        app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;

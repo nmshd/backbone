@@ -587,9 +587,6 @@ global:
       allowedOrigins: ""
       # allowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
       exposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
-    swaggerUi:
-      # enabled - whether the Swagger UI should be enabled
-      enabled: false
     infrastructure:
       eventBus:
         # vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
