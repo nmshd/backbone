@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
               NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
+              NavigationRailDestination(icon: Icon(Icons.event_note), label: Text('Announcements')),
             ],
             trailing: Expanded(
               child: Align(
@@ -61,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   0 => '/identities',
                   1 => '/tiers',
                   2 => '/clients',
+                  3 => '/announcements',
                   _ => throw Exception(),
                 },
               );
@@ -76,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (widget.location.startsWith('/identities')) return 0;
     if (widget.location.startsWith('/tiers')) return 1;
     if (widget.location.startsWith('/clients')) return 2;
+    if (widget.location.startsWith('/announcements')) return 3;
 
     throw Exception();
   }
