@@ -167,7 +167,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomOpenIddict(parsedConfiguration.Authentication);
 
     if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
+        services.AddCustomSwaggerUi();
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
