@@ -15,13 +15,15 @@ public abstract record CreateSnapshot
         string BaseAddress,
         string ClientId,
         string ClientSecret,
-        string JsonFilePath) : IRequest<StatusMessage>;
+        string JsonFilePath,
+        bool ClearDatabase) : IRequest<StatusMessage>;
 
-    public record CommandHandler(
+    public class CommandHandler(
         ILogger<CommandHandler> Logger,
         IPoolConfigurationJsonReader PoolConfigurationJsonReader,
         IMediator Mediator,
-        IOutputHelper OutputHelper)
+        IOutputHelper OutputHelper,
+        IDatabaseRestoreHelper databaseRestoreHelper)
         : IRequestHandler<Command, StatusMessage>
     {
         internal string? OutputDirName { get; private set; }
@@ -31,6 +33,18 @@ public abstract record CreateSnapshot
             try
             {
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
+
+                if (request.ClearDatabase)
+                {
+                    var cleanDatabaseFilePath = Path.Combine(AppContext.BaseDirectory, @"Config\Database\load-postgres-with-clean-db.ps1");
+                    var result = await databaseRestoreHelper.RestoreCleanDatabase(cleanDatabaseFilePath);
+
+                    if (!result.Status)
+                    {
+                        return result;
+                    }
+                }
+
 
                 OutputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
 

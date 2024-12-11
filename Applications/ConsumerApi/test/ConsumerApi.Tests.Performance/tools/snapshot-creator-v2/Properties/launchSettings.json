@@ -47,6 +47,10 @@
     "SnapshotCreator.V2 - create-snapshot heavy": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-HEAVY\\pool-config.heavy.json"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (clean-db)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json --clearDB"
     }
   }
 }

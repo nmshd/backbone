@@ -42,6 +42,7 @@ public class Program
                 {
                     services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
                     services.AddSingleton<IExcelReader, ExcelReader>();
+                    services.AddSingleton<IDatabaseRestoreHelper, DatabaseRestoreHelper>();
                     services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                     services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
                     services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
@@ -147,6 +148,7 @@ public class Program
         var clientIdOption = command.Option<string>("-c|--clientId <CLIENTID>", "Client Id of the Consumer API", CommandOptionType.SingleValue);
         var clientSecretOption = command.Option<string>("-s|--clientSecret <CLIENTSECRET>", "Client Secret of the Consumer API", CommandOptionType.SingleValue);
         var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
+        var clearDatabaseOption = command.Option<bool>("-r|--clearDB", "Clear the Database before applying the Pool Config", CommandOptionType.NoValue);
 
         command.OnExecuteAsync(async cancellationToken =>
         {
@@ -154,11 +156,12 @@ public class Program
             var clientId = clientIdOption.Value();
             var clientSecret = clientSecretOption.Value();
             var poolConfigJsonFilePath = poolConfigOption.Value();
+            var clearDatabase = clearDatabaseOption.ParsedValue;
 
             var mediator = command.GetRequiredService<IMediator>();
             var logger = command.GetRequiredService<ILogger<CreateSnapshot>>();
 
-            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress, clientId!, clientSecret!, poolConfigJsonFilePath!), cancellationToken);
+            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress, clientId!, clientSecret!, poolConfigJsonFilePath!, clearDatabase), cancellationToken);
 
             if (result.Status)
             {
