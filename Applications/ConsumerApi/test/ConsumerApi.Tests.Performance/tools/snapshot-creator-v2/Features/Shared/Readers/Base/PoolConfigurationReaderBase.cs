@@ -4,7 +4,7 @@ public abstract class PoolConfigurationReaderBase
 {
     protected abstract string[] ValidExtensions { get; }
 
-    public void VerifyFileExtension(string filePath)
+    protected void VerifyFileExtension(string filePath)
     {
         var fileExtension = Path.GetExtension(filePath);
 

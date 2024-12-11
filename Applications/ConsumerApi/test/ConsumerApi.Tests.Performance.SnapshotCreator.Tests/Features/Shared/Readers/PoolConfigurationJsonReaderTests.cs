@@ -5,8 +5,6 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Features.
 
 public class PoolConfigurationJsonReaderTests : SnapshotCreatorTestsBase
 {
-    #region Deserialize From Json Tests
-
     [Theory]
     [InlineData("pool-config.heavy.json", "expected-pool-config.heavy.json")]
     [InlineData("pool-config.light.json", "expected-pool-config.light.json")]
@@ -27,5 +25,17 @@ public class PoolConfigurationJsonReaderTests : SnapshotCreatorTestsBase
         actualPoolConfig.Should().BeEquivalentTo(expectedPoolConfig);
     }
 
-    #endregion
+    [Fact]
+    public async Task Read_InvalidFileExtension_ShouldThrowException()
+    {
+        // Arrange
+        var poolConfigJsonFile = Path.Combine(TestDataFolder, "expected-pool-config.test.jinx");
+        var sut = new PoolConfigurationJsonReader();
+
+        // Act
+        var act = () => sut.Read(poolConfigJsonFile);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentException>();
+    }
 }

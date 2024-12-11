@@ -141,4 +141,18 @@ public class PoolConfigurationExcelReaderTests : SnapshotCreatorTestsBase
         result.PoolConfigurations.Should().HaveCount(1);
         result.PoolConfigurations.First().Should().BeEquivalentTo(expectedPoolConfiguration);
     }
+
+    [Fact]
+    public async Task Read_InvalidFileExtension_ShouldThrowException()
+    {
+        // Arrange
+        var poolConfigJsonFile = Path.Combine(TestDataFolder, "PerformanceTestData.xyz");
+        var sut = new PoolConfigurationExcelReader(new ExcelReader());
+
+        // Act
+        var act = () => sut.Read(poolConfigJsonFile, "test");
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentException>();
+    }
 }
