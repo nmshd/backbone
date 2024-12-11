@@ -614,6 +614,18 @@ global:
         # connectionString - should be set via environment variable
         connectionString: ""
     modules:
+      announcements:
+        application:
+          # pagination - the following options describe the default and maximum page size for the different endpoints
+          pagination:
+            defaultPageSize: 50
+            maxPageSize: 200
+        infrastructure:
+          sqlDatabase:
+            # provider - possible values: "Postgres"/"SqlServer"
+            provider: ""
+            # connectionString - should be set via environment variable
+            connectionString: ""
       challenges:
         infrastructure:
           sqlDatabase:
@@ -623,8 +635,8 @@ global:
             connectionString: ""
       devices:
         application:
-          # addressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
-          addressPrefix: id1
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
@@ -691,6 +703,8 @@ global:
             # containerName: ""
       messages:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
           maxNumberOfUnreceivedMessagesFromOneSender: 20
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -717,6 +731,8 @@ global:
             connectionString: ""
       relationships:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
@@ -741,6 +757,8 @@ global:
             connectionString: ""
       tokens:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
