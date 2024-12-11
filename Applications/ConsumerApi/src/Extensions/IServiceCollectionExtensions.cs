@@ -165,15 +165,6 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-
-    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services)
-    {
-        services
-            .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
-
-        return services;
-    }
 }
 
 public class SseServerHealthCheck : IHealthCheck

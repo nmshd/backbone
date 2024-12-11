@@ -159,15 +159,6 @@ public static class IServiceCollectionExtensions
         return source;
     }
 
-    public static IServiceCollection AddCustomSwaggerWithUi(this IServiceCollection services)
-    {
-        services
-            .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
-
-        return services;
-    }
-
     public static IServiceCollection AddOData(this IServiceCollection services)
     {
         var builder = new ODataConventionModelBuilder()

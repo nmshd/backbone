@@ -10,8 +10,6 @@ public class AdminConfiguration
 
     public CorsConfiguration Cors { get; set; } = new();
 
-    public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
-
     [Required]
     public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
 
@@ -28,12 +26,6 @@ public class AdminConfiguration
         public string AllowedOrigins { get; set; } = string.Empty;
         public string ExposedHeaders { get; set; } = string.Empty;
         public bool AccessControlAllowCredentials { get; set; } = false;
-    }
-
-    public class SwaggerUiConfiguration
-    {
-        [Required]
-        public bool Enabled { get; set; } = false;
     }
 
     public class AdminInfrastructureConfiguration
