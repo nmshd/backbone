@@ -31,12 +31,27 @@ public class BlobStorageConfiguration
 {
     [Required]
     [MinLength(1)]
-    [RegularExpression("Azure|GoogleCloud")]
+    [RegularExpression("Azure|GoogleCloud|S3")]
     public string CloudProvider { get; set; } = string.Empty;
 
-    [Required]
-    [MinLength(1)]
     public string ConnectionInfo { get; set; } = string.Empty;
 
     public string ContainerName { get; set; } = string.Empty;
+
+    public S3Config? S3Config { get; set; }
+}
+
+public class S3Config
+{
+    [Required]
+    public string ServiceUrl { get; set; } = string.Empty;
+
+    [Required]
+    public string AccessKey { get; set; } = string.Empty;
+
+    [Required]
+    public string SecretKey { get; set; } = string.Empty;
+
+    [Required]
+    public string BucketName { get; set; } = string.Empty;
 }
