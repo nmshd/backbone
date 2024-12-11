@@ -1,0 +1,32 @@
+IdentityAddress;ConfigurationIdentityAddress;PoolAlias;IdentityPoolType;DeviceId;Username;Password;;
+did:e:localhost:dids:5c62eab9c987f84e959da6;1;e;Never;DVCcDatn0TVZwGXunhf6;USRuCRWKbhDiqjVAvNeF;2EgznjC6E7zkLEcec#1jWL4E ;;
+did:e:localhost:dids:72ec3dc47628c17f925d53;2;e;Never;DVCOIorAY5vdlxvdIKZ8;USRktLgwx2f5XGJzRvWa;wH6FYgnz:SD5Uja4KeknvYLh ;;
+did:e:localhost:dids:0ad946a8e5cd748efba341;3;e;Never;DVCzNi30eeDVwX1h5DaS;USRXanzhO0duymEPetv8;L?7MKoidrBZ9sZJ2pi9 ;;5
+did:e:localhost:dids:b72b7fad8f5d43d12ebaff;4;e;Never;DVCicshRxgkoNQXV3EiQ;USRiLVbLzsVFpVzxi9Pu;DNdQx_VmAacPNUX9DD4p ;;
+did:e:localhost:dids:478187ea56a6d1f6c37860;5;e;Never;DVCFbCfR7iMhxt3vLrQJ;USRjWAOWFGDM845RJWgd;H7b3MBHrIq8CGn_Bnrln ;;
+did:e:localhost:dids:7fe2cac8520bce2fced893;1;a1;App;DVCrz3jpYL80xtVMQH16;USRT9K1RYpq2sIOIE9sN;T8WAXmWo9lzn+4SfbZ ;;1
+did:e:localhost:dids:94bae0cef5be23b0a8a323;1;a2;App;DVCNA3E9yN3yVPnnZNis;USRie4Y0QIUpm19wwwu5;2p6HqKCJKuMtY,PxsNW ;;
+did:e:localhost:dids:94bae0cef5be23b0a8a323;1;a2;App;DVClLsdRuZNLw24mEgF0;USRie4Y0QIUpm19wwwu5;2p6HqKCJKuMtY,PxsNW ;;
+did:e:localhost:dids:99bf67e383671bfc521ed3;2;a2;App;DVCiPzcgkW0Jg6mJTrrq;USRKPBr8W5KrW1L2FEOj;0fKSE8FR,y8Sd20DsiM ;;6
+did:e:localhost:dids:99bf67e383671bfc521ed3;2;a2;App;DVCQNgpvP6Lio41CPTCa;USRKPBr8W5KrW1L2FEOj;0fKSE8FR,y8Sd20DsiM ;;
+did:e:localhost:dids:44f6c3f9e48d93f3ca8138;3;a2;App;DVCAlNeEQTsrBJmWyuWr;USRXzTXLLsImtyo6EnYw;innRubEFeYm4v81LPe?Y0 ;;
+did:e:localhost:dids:44f6c3f9e48d93f3ca8138;3;a2;App;DVC78tkoWeTOvpLrljm1;USRXzTXLLsImtyo6EnYw;innRubEFeYm4v81LPe?Y0 ;;
+did:e:localhost:dids:7e1e53d47b31b3502327a9;1;a3;App;DVCm5r4y3XHG3LdIEEA3;USR5LXELgtxO739QLVng;KoEuAzsgwvf:kx64vSpdbW ;;
+did:e:localhost:dids:7e1e53d47b31b3502327a9;1;a3;App;DVCOLfvviUPUulnXfYKI;USR5LXELgtxO739QLVng;KoEuAzsgwvf:kx64vSpdbW ;;
+did:e:localhost:dids:7e1e53d47b31b3502327a9;1;a3;App;DVCYn9AeBYXolvMfxXtd;USR5LXELgtxO739QLVng;KoEuAzsgwvf:kx64vSpdbW ;;
+did:e:localhost:dids:5a87711feb610aa1536a73;2;a3;App;DVCwn7gMTdFOXRNTCe5H;USRYIMPwwQCcUlXRfLqa;44I,FfnhYiAzyK1Fpm ;;
+did:e:localhost:dids:5a87711feb610aa1536a73;2;a3;App;DVCjmnI7vFKoYOpDeHIt;USRYIMPwwQCcUlXRfLqa;44I,FfnhYiAzyK1Fpm ;;9
+did:e:localhost:dids:5a87711feb610aa1536a73;2;a3;App;DVCwRp5LiUlXXj4bgGQR;USRYIMPwwQCcUlXRfLqa;44I,FfnhYiAzyK1Fpm ;;
+did:e:localhost:dids:68173ca13be2e93bb5753e;3;a3;App;DVCfWf3zGBPtlWHkdb9w;USR9rnos5mPRmvJWfCgj;teb:bVL5ZY6sm5aD4wcLaj ;;
+did:e:localhost:dids:68173ca13be2e93bb5753e;3;a3;App;DVCgVkeq6FHxaEYCwO4X;USR9rnos5mPRmvJWfCgj;teb:bVL5ZY6sm5aD4wcLaj ;;
+did:e:localhost:dids:68173ca13be2e93bb5753e;3;a3;App;DVCtE3hIWgd4lNapC8a6;USR9rnos5mPRmvJWfCgj;teb:bVL5ZY6sm5aD4wcLaj ;;
+did:e:localhost:dids:5890c2237a70296747559e;1;c1;Connector;DVCe39EcCg1QxXN6E02C;USRyJHP8ogvVotRgWW4c;MQe5-6GfbV1IIDNfVkdNKTM ;;1
+did:e:localhost:dids:8dcb0b2848e50f9ba4e962;1;c2;Connector;DVC49jy34c5Nt2EVlsNi;USRKDfjLG1T53pXNjP4K;BTsfE0aFIefRAyh_b7 ;;
+did:e:localhost:dids:d6cf193129e5e208a1d8aa;2;c2;Connector;DVCc8ACIKmJUI8UNty0f;USR5KWFSxkFd97LEPbrp;Clx8vizPbPvyEKj1E4!L1 ;;2
+did:e:localhost:dids:d2d08a2e151011fdf88133;1;c3;Connector;DVCvC7ul1RhbmqgMcyfr;USRa2B6DptDpsTvkq8GE;5KiYvAbNu1gwQbJy+J ;;
+did:e:localhost:dids:4fea781eba626ca23bf0a5;2;c3;Connector;DVCp8s9yEZIhxbv2Y2m6;USRRY4PGwoP0HpH3FQKG;945,jUskW6IwzSm6Ak ;;
+did:e:localhost:dids:18e74a0cec4a2e4e499721;3;c3;Connector;DVCy4EH6Y0vDJC4miJB4;USRDTQLmmSfIyBHfufrp;EhmMaGMSbDxGu44X13!zd ;;4
+did:e:localhost:dids:ba24c8f59eccd3c274e097;4;c3;Connector;DVCQUJ1qKDOWI6UiWFSJ;USRboJJG96jtHL6gjnWx;sYdza2bf2_9W7iNrr6D ;;
+;;;;;;;;
+;;;;;;;;
+;;;;;;;Total Identity;28
