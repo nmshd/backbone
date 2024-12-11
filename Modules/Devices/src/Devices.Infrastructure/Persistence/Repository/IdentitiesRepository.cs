@@ -61,6 +61,12 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(cancellationToken);
     }
 
+    public async Task DeleteDevice(Device device, CancellationToken cancellationToken)
+    {
+        _devices.Remove(device);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false)
     {
@@ -115,7 +121,6 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices
-            .NotDeleted()
             .IncludeAll(_dbContext)
             .OfIdentity(identity);
 
@@ -128,7 +133,6 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
-            .NotDeleted()
             .IncludeAll(_dbContext)
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
@@ -136,7 +140,6 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<IEnumerable<Device>> GetDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
-            .NotDeleted()
             .IncludeAll(_dbContext)
             .Where(d => deviceIds.Contains(d.Id))
             .ToListAsync(cancellationToken);

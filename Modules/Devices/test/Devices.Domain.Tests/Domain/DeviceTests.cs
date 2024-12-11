@@ -81,20 +81,19 @@ public class DeviceTests : AbstractTestsBase
     }
 
     [Fact]
-    public void An_unOnboarded_device_can_be_deleted()
+    public void An_unonboarded_device_can_be_deleted()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithoutDevice();
 
-        var activeDevice = CreateOnboardedDevice(identity);
+        CreateOnboardedDevice(identity);
         var unOnboardedDevice = CreateUnonboardedDevice(identity);
 
         // Act
-        unOnboardedDevice.MarkAsDeleted(activeDevice.Id, identity.Address);
+        var acting = () => unOnboardedDevice.EnsureCanBeDeleted(identity.Address);
 
         // Assert
-        unOnboardedDevice.DeletedAt.Should().NotBeNull();
-        unOnboardedDevice.DeletedByDevice.Should().Be(activeDevice.Id);
+        acting.Should().NotThrow();
     }
 
     [Fact]
@@ -103,14 +102,14 @@ public class DeviceTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
 
-        var activeDevice = CreateOnboardedDevice(identity);
+        CreateOnboardedDevice(identity);
         var onboardedDevice = CreateOnboardedDevice(identity);
 
         // Act
-        var action = () => onboardedDevice.MarkAsDeleted(activeDevice.Id, identity.Address);
+        var acting = () => onboardedDevice.EnsureCanBeDeleted(identity.Address);
 
         // Assert
-        var domainException = action.Should().Throw<DomainException>().Which;
+        var domainException = acting.Should().Throw<DomainException>().Which;
         domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
@@ -121,11 +120,11 @@ public class DeviceTests : AbstractTestsBase
         var activeIdentity = TestDataGenerator.CreateIdentity();
         var otherIdentity = TestDataGenerator.CreateIdentityWithoutDevice();
 
-        var activeDevice = CreateOnboardedDevice(activeIdentity);
-        var unOnboardedDeviceOfOtherIdentity = CreateUnonboardedDevice(otherIdentity);
+        CreateOnboardedDevice(activeIdentity);
+        var unonboardedDeviceOfOtherIdentity = CreateUnonboardedDevice(otherIdentity);
 
         // Act
-        var action = () => unOnboardedDeviceOfOtherIdentity.MarkAsDeleted(activeDevice.Id, activeIdentity.Address);
+        var action = () => unonboardedDeviceOfOtherIdentity.EnsureCanBeDeleted(activeIdentity.Address);
 
         // Assert
         var domainException = action.Should().Throw<DomainException>().Which;
