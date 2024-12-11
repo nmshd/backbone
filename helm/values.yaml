@@ -92,13 +92,8 @@ adminui:
   podAnnotations: {}
 
   # env - environment variables for the Admin UI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
-  env:
-    - name: Database__ConnectionString
-      valueFrom:
-        secretKeyRef:
-          name: "devices-sql-connectionstring"
-          key: VALUE
-
+  env: []
+  
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
 
