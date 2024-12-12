@@ -4,5 +4,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public interface IDatabaseRestoreHelper
 {
-    Task<StatusMessage> RestoreCleanDatabase(string scriptPath);
+    Task<DatabaseRestoreResult> RestoreCleanDatabase();
 }

@@ -27,6 +27,7 @@ public static class Resources
 
     public const string IDENTITY_LOG_SUFFIX = "[IdentityAddress/ConfigurationIdentityAddress/PoolAlias]";
 
+    public const string ERROR = "Error";
     public const string POOL_CONFIG_FILE_WRITE_ERROR = "Pool configuration could not be written.";
     public const string POOL_CONFIG_FILE_READ_ERROR = "Pool configuration could not be read.";
     public const string POOL_CONFIG_FILE_NOT_FOUND_ERROR = "Pool configuration file not found.";

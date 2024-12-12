@@ -37,7 +37,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath(poolConfigJsonFilename);
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, _databaseRestoreHelper);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false);
 
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).Returns(
             new PerformanceTestConfiguration(

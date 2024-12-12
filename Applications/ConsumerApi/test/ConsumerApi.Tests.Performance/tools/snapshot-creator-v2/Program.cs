@@ -42,6 +42,7 @@ public class Program
                 {
                     services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
                     services.AddSingleton<IExcelReader, ExcelReader>();
+                    services.AddSingleton<IProcessHelper, ProcessHelper>();
                     services.AddSingleton<IDatabaseRestoreHelper, DatabaseRestoreHelper>();
                     services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                     services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();

@@ -1,22 +1,35 @@
-﻿using System.Diagnostics;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
 
-public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger) : IDatabaseRestoreHelper
+public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProcessHelper processHelper) : IDatabaseRestoreHelper
 {
     private const string HOSTNAME = "host.docker.internal";
     private const string USERNAME = "postgres";
     private const string PASSWORD = "admin";
     private const string DB_NAME = "enmeshed";
     private const string CONTAINER_NAME = "tmp-postgres-container";
+    private const string CLEAN_DB_NAME = "clean-db.rg";
 
-    public async Task<StatusMessage> RestoreCleanDatabase(string scriptPath)
+    private static bool QueryUserConsent()
+    {
+        Console.WriteLine("Do you want to drop db and create a clean-db before snapshot is created(default: y)? (y/n)");
+        var input = Console.ReadKey().KeyChar;
+
+        if (input is not ('y' or 'n'))
+        {
+            input = 'y';
+        }
+
+        return input == 'y';
+    }
+
+    public async Task<DatabaseRestoreResult> RestoreCleanDatabase()
     {
         try
         {
-            var createContainerResult = CreatePostgresDockerContainer(CONTAINER_NAME, PASSWORD);
+            var createContainerResult = await CreateTemporaryPostgresDockerContainer(CONTAINER_NAME, PASSWORD);
 
             if (!createContainerResult.Status)
             {
@@ -25,178 +38,199 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger) : IDat
 
             logger.LogInformation("Postgres container created successfully: {Message}", createContainerResult.Message);
 
-
             var checkForOpenConnectionsResult = await CheckForOpenConnections(CONTAINER_NAME, HOSTNAME, USERNAME, PASSWORD, DB_NAME);
 
-            if (checkForOpenConnectionsResult.Status)
+            switch (checkForOpenConnectionsResult.Status)
             {
-                logger.LogInformation("Open connections checked successfully: {Message}", checkForOpenConnectionsResult.Message);
-
-                var forceDropOpenConnectionsResult = ForceDropOpenConnections(CONTAINER_NAME, HOSTNAME, USERNAME, PASSWORD, DB_NAME);
-
-                if (!forceDropOpenConnectionsResult.Status)
+                case false when checkForOpenConnectionsResult.IsError:
+                    //Note; Error shouldn't stop the snapshot creation process, therefore, return true
+                    return new DatabaseRestoreResult(true, checkForOpenConnectionsResult.Message);
+                case true:
                 {
-                    throw new InvalidOperationException(forceDropOpenConnectionsResult.Message, forceDropOpenConnectionsResult.Exception);
+                    logger.LogInformation("Open connections checked successfully: {Message}", checkForOpenConnectionsResult.Message);
+
+                    var consent = QueryUserConsent();
+
+                    if (!consent)
+                    {
+                        return new DatabaseRestoreResult(true, "User chose not to drop db and create a clean-db");
+                    }
+
+                    var forceDropOpenConnectionsResult = await ForceDropOpenConnections(CONTAINER_NAME, HOSTNAME, USERNAME, PASSWORD, DB_NAME);
+
+                    if (!forceDropOpenConnectionsResult.Status)
+                    {
+                        throw new InvalidOperationException(forceDropOpenConnectionsResult.Message);
+                    }
+
+                    logger.LogInformation("Open connections terminated successfully: {Message}", forceDropOpenConnectionsResult.Message);
+                    break;
                 }
-
-                logger.LogInformation("Open connections terminated successfully: {Message}", forceDropOpenConnectionsResult.Message);
             }
 
 
-            var executeScriptResult = ExecuteScript(scriptPath);
+            var result = await DropDatabase(CONTAINER_NAME, PASSWORD, HOSTNAME, USERNAME, DB_NAME);
 
-            if (!executeScriptResult.Status)
+            if (!result.Status)
             {
-                throw new InvalidOperationException(executeScriptResult.Message, executeScriptResult.Exception);
+                throw new InvalidOperationException(result.Message);
             }
 
-            logger.LogInformation("Script executed successfully: {Message}", executeScriptResult.Message);
+            logger.LogInformation("{Message}", result.Message);
+
+            result = await CreateDatabase(CONTAINER_NAME, PASSWORD, HOSTNAME, USERNAME, DB_NAME);
+
+            if (!result.Status)
+            {
+                throw new InvalidOperationException(result.Message);
+            }
+
+            logger.LogInformation("{Message}", result.Message);
+
+            result = await AlterDatabase(CONTAINER_NAME, PASSWORD, HOSTNAME, USERNAME, DB_NAME);
+
+            if (!result.Status)
+            {
+                throw new InvalidOperationException(result.Message);
+            }
+
+            logger.LogInformation("{Message}", result.Message);
+
+            result = await RestoreDatabase(CONTAINER_NAME, PASSWORD, HOSTNAME, USERNAME, DB_NAME, CLEAN_DB_NAME);
+
+            if (!result.Status)
+            {
+                throw new InvalidOperationException(result.Message);
+            }
+
+            logger.LogInformation("{Message}", result.Message);
         }
         catch (Exception e)
         {
-            return new StatusMessage(false, e.Message, e);
+            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+        }
+        finally
+        {
+            await StopTemporaryPostgresDockerContainer(CONTAINER_NAME);
         }
 
-        return new StatusMessage(true, "Database restored successfully");
+        return new DatabaseRestoreResult(true, "Database restored successfully");
     }
 
-    private StatusMessage CreatePostgresDockerContainer(string containerName, string password)
+    private async Task<DatabaseRestoreResult> DropDatabase(string containerName, string password, string hostname, string username, string dbname)
+    {
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"DROP DATABASE IF EXISTS {dbname}\"";
+        return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                            !string.IsNullOrWhiteSpace(processParams.Output) &&
+                                                                            !processParams.HasError);
+    }
+
+    private async Task<DatabaseRestoreResult> CreateDatabase(string containerName, string password, string hostname, string username, string dbname)
+    {
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"CREATE DATABASE {dbname}\"";
+        return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                            !string.IsNullOrWhiteSpace(processParams.Output) &&
+                                                                            !processParams.HasError);
+    }
+
+    private async Task<DatabaseRestoreResult> AlterDatabase(string containerName, string password, string hostname, string username, string dbname)
+    {
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"ALTER DATABASE {dbname} OWNER TO {username};\"";
+        return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                            !string.IsNullOrWhiteSpace(processParams.Output) &&
+                                                                            !processParams.HasError);
+    }
+
+    private async Task<DatabaseRestoreResult> RestoreDatabase(string containerName, string password, string hostname, string username, string dbname, string backupFile)
+    {
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} {dbname} -f /dump/{backupFile}";
+        return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                            !string.IsNullOrWhiteSpace(processParams.Output) &&
+                                                                            !processParams.HasError);
+    }
+
+    private async Task<DatabaseRestoreResult> CreateTemporaryPostgresDockerContainer(string containerName, string password)
     {
         try
         {
-            // Check if the container is already running
-            var checkCommand = $"docker ps -q -f name={containerName}";
-            var checkPsi = new ProcessStartInfo("cmd", $"/c {checkCommand}")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
+            var result = await IsTemporaryContainerRunning(containerName);
+            if (result.Status) return result;
 
-            using var checkProcess = Process.Start(checkPsi);
-            var checkOutput = checkProcess!.StandardOutput.ReadToEnd();
-            var checkError = checkProcess.StandardError.ReadToEnd();
-            checkProcess.WaitForExit();
-
-            if (!string.IsNullOrEmpty(checkError))
-            {
-                return new StatusMessage(false, checkError);
-            }
-
-            if (!string.IsNullOrEmpty(checkOutput.Trim()))
-            {
-                return new StatusMessage(true, "Postgres container already running");
-            }
-
-            // Create the container
-            var command = $"docker run -d --rm --name {containerName} -e POSTGRES_PASSWORD=\"{password}\" postgres";
-
-            var psi = new ProcessStartInfo("cmd", $"/c {command}")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = Process.Start(psi);
-
-            var createOutput = process!.StandardOutput.ReadToEnd();
-            var createError = process.StandardError.ReadToEnd();
-
-            process.WaitForExit();
-            var isContainerCreated = !string.IsNullOrEmpty(createOutput.Trim());
-            return isContainerCreated ? new StatusMessage(true, createOutput) : new StatusMessage(false, createError);
+            var directory = Path.Combine(AppContext.BaseDirectory, @"Config\Database\dump-files");
+            var command = $"docker run -d --rm --name {containerName} -v \"{directory}:/dump\" -e POSTGRES_PASSWORD=\"{password}\" postgres";
+            // docker run -d --rm --name $ContainerName -v "$PSScriptRoot\dump-files:/dump" -e POSTGRES_PASSWORD="admin" postgres
+            return await processHelper.ExecuteProcess(command, processParams => !string.IsNullOrEmpty(processParams.Output?.Trim()));
         }
         catch (Exception e)
         {
-            return new StatusMessage(false, e.Message, e);
+            return new DatabaseRestoreResult(false, e.Message, Exception: e);
         }
     }
 
-    private static async Task<StatusMessage> CheckForOpenConnections(string containerName, string hostname, string username, string password, string dbName)
+    private async Task<DatabaseRestoreResult> IsTemporaryContainerRunning(string containerName)
     {
         try
         {
-            var query = $"SELECT pid FROM pg_stat_activity WHERE datname = '{dbName}';";
-            var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"{query}\"";
-
-            var psi = new ProcessStartInfo("cmd", $"/c {command}")
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = Process.Start(psi);
-            var output = await process!.StandardOutput.ReadToEndAsync();
-            var error = await process.StandardError.ReadToEndAsync();
-            await process.WaitForExitAsync();
-
-            var hasOpenConnections = !output.Trim().Contains("(0 rows)", StringComparison.OrdinalIgnoreCase);
-
-            return hasOpenConnections
-                ? new StatusMessage(true, $"output: {output}. {(!string.IsNullOrWhiteSpace(error) ? $"error:{error}" : string.Empty)}")
-                : new StatusMessage(false, $"No open connections found. {(!string.IsNullOrWhiteSpace(error) ? $"error:{error}" : string.Empty)}");
+            var command = $"docker ps -q -f name={containerName}";
+            return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                                !string.IsNullOrWhiteSpace(processParams.Output) &&
+                                                                                !processParams.HasError);
         }
         catch (Exception e)
         {
-            return new StatusMessage(false, e.Message, e);
+            return new DatabaseRestoreResult(false, e.Message, Exception: e);
         }
     }
 
-    private static StatusMessage ForceDropOpenConnections(string containerName, string hostname, string username, string password, string dbName)
+    private async Task StopTemporaryPostgresDockerContainer(string containerName)
+    {
+        var command = $"docker stop {containerName}";
+
+        var result = await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                                  !processParams.HasError);
+
+        if (result.Status)
+        {
+            logger.LogInformation("Temporary postgres container stopped successfully: {Message}", result.Message);
+        }
+        else
+        {
+            logger.LogError("Error stopping the temporary postgres container: {Message}", result.Message);
+        }
+    }
+
+
+    private async Task<DatabaseRestoreResult> CheckForOpenConnections(string containerName, string hostname, string username, string password, string dbName)
+    {
+        try
+        {
+            var databaseQuery = $"SELECT pid FROM pg_stat_activity WHERE datname = '{dbName}';";
+            var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"{databaseQuery}\"";
+
+            return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                                processParams.Output != null &&
+                                                                                !processParams.Output.Trim().Contains("(0 rows)", StringComparison.OrdinalIgnoreCase));
+        }
+        catch (Exception e)
+        {
+            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+        }
+    }
+
+    private async Task<DatabaseRestoreResult> ForceDropOpenConnections(string containerName, string hostname, string username, string password, string dbName)
     {
         try
         {
             var query = $"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{dbName}';";
             var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"{query}\"";
 
-            var psi = new ProcessStartInfo("cmd", $"/c {command}")
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = Process.Start(psi);
-            var output = process!.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-
-            var succeed = process.ExitCode == 0 && !string.IsNullOrEmpty(output.Trim());
-            return succeed ? new StatusMessage(true, "Open connections terminated successfully") : new StatusMessage(false, output);
+            return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                                !string.IsNullOrEmpty(processParams.Output?.Trim()) &&
+                                                                                !processParams.HasError);
         }
         catch (Exception e)
         {
-            return new StatusMessage(false, e.Message, e);
-        }
-    }
-
-    private StatusMessage ExecuteScript(string scriptPath)
-    {
-        try
-        {
-            const string command = "powershell";
-            var arguments = $"-File {scriptPath}";
-
-            var psi = new ProcessStartInfo(command, arguments)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = Process.Start(psi);
-            var output = process!.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-
-            return process.ExitCode == 0 ? new StatusMessage(true, $"Script executed successfully. Output: {output}") : new StatusMessage(false, output);
-        }
-        catch (Exception e)
-        {
-            return new StatusMessage(false, e.Message, e);
+            return new DatabaseRestoreResult(false, e.Message, Exception: e);
         }
     }
 }
