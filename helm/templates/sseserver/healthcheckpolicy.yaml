@@ -20,3 +20,4 @@ spec:
         statusCodes:
           - start: 200
             end: 200
+{{- end }}
