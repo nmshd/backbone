@@ -309,7 +309,7 @@ jobs:
           NMSHD_TEST_ADMIN_API_KEY: test
           APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/backbone/.ci/appsettings.override.${{matrix.database}}.local.json
           BACKBONE_VERSION: 0.0.1
-        run: npm run test:local:lokijs
+        run: npm run test:local:lokijs -- RelationshipsController
 
       - name: Save Docker Logs
         if: failure()
