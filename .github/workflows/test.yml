@@ -271,6 +271,8 @@ jobs:
           repository: nmshd/runtime
           path: runtime
 
+      - run: ls ${{ github.workspace }}/.ci
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22.4.1
@@ -306,7 +308,7 @@ jobs:
           NMSHD_TEST_CLIENTSECRET: test
           NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
           NMSHD_TEST_ADMIN_API_KEY: test
-          APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/../runtime/appsettings.override.${{matrix.database}}.local.json
+          APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/.ci/appsettings.override.${{matrix.database}}.local.json
           BACKBONE_VERSION: 0.0.1
         run: npm run test:local:lokijs
 
