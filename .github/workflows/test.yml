@@ -93,28 +93,28 @@ jobs:
       matrix:
         include:
           - dockerfile: Applications/ConsumerApi/src/Dockerfile
-            image: consumer-api
+            image: ghcr.io/nmshd/backbone-consumer-api
 
           - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
-            image: admin-ui
+            image: ghcr.io/nmshd/backbone-admin-ui
 
           - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
-            image: admin-cli
+            image: ghcr.io/nmshd/backbone-admin-cli
 
           - dockerfile: Applications/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
-            image: database-migrator
+            image: ghcr.io/nmshd/backbone-database-migrator
 
           - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
-            image: event-handler-service
+            image: ghcr.io/nmshd/backbone-event-handler
 
           - dockerfile: Applications/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
-            image: files-sanity-check
+            image: ghcr.io/nmshd/backbone-files-sanity-check
 
           - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
-            image: identity-deletion-jobs
+            image: ghcr.io/nmshd/backbone-identity-deletion-jobs
 
           - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
-            image: sse-server
+            image: ghcr.io/nmshd/backbone-sse-server
 
     steps:
       - name: Checkout
