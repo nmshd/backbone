@@ -21,7 +21,7 @@ services:
   admin-ui:
     container_name: admin-ui-test
     hostname: admin-ui
-    image: ghcr.io/nmshd/backbone-admin-ui:0.0.1
+    image: ghcr.io/nmshd/backbone-admin-ui:v0.1.0
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
