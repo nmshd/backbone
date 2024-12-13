@@ -210,19 +210,6 @@ consumerapi:
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
 
-  # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
-  healthCheckPolicy:
-    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
-    hostOverride: ""
-    # interval - the interval in seconds between health checks
-    interval: 15
-    # timeout - the timeout in seconds for each health check
-    timeout: 15
-    # healthyThreshold - the number of consecutive successful health checks required to mark a backend as healthy
-    healthyThreshold: 1
-    # unhealthyThreshold - the number of consecutive failed health checks required to mark a backend as unhealthy
-    unhealthyThreshold: 2
-
 #=========================== Database Migrator ===========================
 
 databasemigrator:
@@ -539,19 +526,6 @@ sseserver:
       healthyThreshold: 1
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
-
-  # healthCheckPolicy - only applicable if .Values.global.provider is set to "Azure"; see https://learn.microsoft.com/en-us/azure/application-gateway/for-containers/custom-health-probe for a description of `HealthCheckPolicy`s
-  healthCheckPolicy:
-    # hostOverride - the host name that should be used for the health check; if empty, the toplevel `hostname` property is used
-    hostOverride: ""
-    # interval - the interval in seconds between health checks
-    interval: 15
-    # timeout - the timeout in seconds for each health check
-    timeout: 15
-    # healthyThreshold - the number of consecutive successful health checks required to mark a backend as healthy
-    healthyThreshold: 1
-    # unhealthyThreshold - the number of consecutive failed health checks required to mark a backend as unhealthy
-    unhealthyThreshold: 2
 
 global:
   # defaultHostname - the default hostname the services should be reachable under (this can be overriden in the individual service configurations)
