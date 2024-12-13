@@ -93,28 +93,28 @@ jobs:
       matrix:
         include:
           - dockerfile: Applications/ConsumerApi/src/Dockerfile
-            image: ghcr.io/nmshd/backbone-consumer-api
+            image: consumer-api
 
           - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
-            image: ghcr.io/nmshd/backbone-admin-ui
+            image: admin-ui
 
           - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
-            image: ghcr.io/nmshd/backbone-admin-cli
+            image: admin-cli
 
           - dockerfile: Applications/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
-            image: ghcr.io/nmshd/backbone-database-migrator
+            image: database-migrator
 
           - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
-            image: ghcr.io/nmshd/backbone-event-handler
+            image: event-handler
 
           - dockerfile: Applications/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
-            image: ghcr.io/nmshd/backbone-files-sanity-check
+            image: files-sanity-check
 
           - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
-            image: ghcr.io/nmshd/backbone-identity-deletion-jobs
+            image: identity-deletion-jobs
 
           - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
-            image: ghcr.io/nmshd/backbone-sse-server
+            image: sse-server
 
     steps:
       - name: Checkout
@@ -146,14 +146,14 @@ jobs:
       - name: Build Image
         uses: docker/build-push-action@v6
         env:
-          DOCKER_BUILD_SUMMARY: true # TODO: set to false after debugging
+          DOCKER_BUILD_SUMMARY: false
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
-          tags: ${{ matrix.image }}:0.0.1
+          tags: ghcr.io/nmshd/backbone-${{ matrix.image }}:0.0.1
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
