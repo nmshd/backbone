@@ -101,7 +101,7 @@ services:
 
   admin-cli:
     container_name: admin-cli-test
-    image: ghcr.io/nmshd/backbone-admin-cli:0.0.1
+    image: ghcr.io/nmshd/backbone-admin-cli:6.25.0
     depends_on:
       consumer-api:
         condition: service_healthy
