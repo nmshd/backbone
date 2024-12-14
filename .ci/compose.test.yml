@@ -51,7 +51,7 @@ services:
 
   sse-server:
     container_name: sse-server-test
-    image: ghcr.io/nmshd/backbone-sse-server:0.0.1
+    image: ghcr.io/nmshd/backbone-sse-server:6.25.0
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
