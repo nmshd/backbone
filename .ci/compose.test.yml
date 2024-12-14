@@ -65,7 +65,7 @@ services:
 
   database-migrator:
     container_name: database-migrator-test
-    image: ghcr.io/nmshd/backbone-database-migrator:0.0.1
+    image: ghcr.io/nmshd/backbone-database-migrator:6.25.0
     depends_on:
       seed-database:
         condition: service_completed_successfully
