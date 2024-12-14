@@ -37,7 +37,7 @@ services:
 
   event-handler-service:
     container_name: event-handler-service-test
-    image: ghcr.io/nmshd/backbone-event-handler:0.0.1
+    image: ghcr.io/nmshd/backbone-event-handler:6.25.0
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
