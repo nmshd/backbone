@@ -2,7 +2,7 @@ services:
   consumer-api:
     container_name: consumer-api-test
     hostname: consumer-api
-    image: ghcr.io/nmshd/backbone-consumer-api:0.0.1
+    image: ghcr.io/nmshd/backbone-consumer-api:6.25.0
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
