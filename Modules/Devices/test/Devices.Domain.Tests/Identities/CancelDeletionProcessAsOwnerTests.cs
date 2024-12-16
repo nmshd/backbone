@@ -59,6 +59,21 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
     }
 
     [Fact]
+    public void Throws_when_grace_period_has_expired()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        SystemTime.Set(DateTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
+
+        // Act
+        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.gracePeriodHasAlreadyExpired");
+    }
+
+    [Fact]
     public void Raises_domain_events()
     {
         // Arrange
