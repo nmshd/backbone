@@ -18,8 +18,6 @@ public class BackboneConfiguration
 
     public CorsConfiguration Cors { get; set; } = new();
 
-    public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
-
     [Required]
     public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
 
@@ -39,14 +37,6 @@ public class BackboneConfiguration
     {
         public string AllowedOrigins { get; set; } = "";
         public string ExposedHeaders { get; set; } = "";
-    }
-
-    public class SwaggerUiConfiguration
-    {
-        [Required]
-        public bool Enabled { get; set; } = false;
-
-        public string TokenUrl { get; set; } = "";
     }
 
     public class BackboneInfrastructureConfiguration

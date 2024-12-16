@@ -26,10 +26,11 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         var deviceId = DeviceId.Parse(request.DeviceId);
         var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(deviceId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
-        deviceThatIsBeingDeleted.MarkAsDeleted(_userContext.GetDeviceId(), _userContext.GetAddress());
-        await _identitiesRepository.Update(deviceThatIsBeingDeleted, cancellationToken);
+        deviceThatIsBeingDeleted.EnsureCanBeDeleted(_userContext.GetAddress());
 
-        _logger.MarkedDeviceAsDeleted();
+        await _identitiesRepository.DeleteDevice(deviceThatIsBeingDeleted, cancellationToken);
+
+        _logger.DeviceDeleted();
     }
 }
 
@@ -37,8 +38,8 @@ internal static partial class DeleteDeviceLogs
 {
     [LoggerMessage(
         EventId = 776010,
-        EventName = "Devices.MarkDeviceAsDeleted.MarkedDeviceAsDeleted",
+        EventName = "Devices.DeleteDevice.DeviceDeleted",
         Level = LogLevel.Information,
-        Message = "Successfully marked the device as deleted.")]
-    public static partial void MarkedDeviceAsDeleted(this ILogger logger);
+        Message = "The device was deleted.")]
+    public static partial void DeviceDeleted(this ILogger logger);
 }

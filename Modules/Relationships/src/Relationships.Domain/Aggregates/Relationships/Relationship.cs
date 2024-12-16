@@ -306,7 +306,8 @@ public class Relationship : Entity
     public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted, string didDomainName)
     {
         EnsureHasParticipant(identityToBeDeleted);
-        EnsureRelationshipNotDecomposedBy(identityToBeDeleted);
+
+        if (From == identityToBeDeleted && FromHasDecomposed || To == identityToBeDeleted && ToHasDecomposed) return;
 
         if (Status is RelationshipStatus.DeletionProposed)
             DecomposeAsSecondParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);

@@ -46,7 +46,7 @@ public class ApplicationUser : IdentityUser
 
     public bool HasLoggedIn => LastLoginAt.HasValue;
 
-    public void LoginOccurred()
+    internal void LoginOccurred()
     {
         LastLoginAt = SystemTime.UtcNow;
     }

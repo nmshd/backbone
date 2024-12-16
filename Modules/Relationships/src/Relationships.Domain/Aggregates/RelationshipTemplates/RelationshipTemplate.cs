@@ -50,7 +50,7 @@ public class RelationshipTemplate : Entity
 
     public DateTime CreatedAt { get; set; }
 
-    public IdentityAddress? ForIdentity { get; set; }
+    public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
     public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
@@ -69,6 +69,15 @@ public class RelationshipTemplate : Entity
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
     }
 
+    public void AnonymizeForIdentity(string didDomainName)
+    {
+        EnsureIsPersonalized();
+
+        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
+
+        ForIdentity = anonymousIdentity;
+    }
+
     public bool IsAllocatedBy(IdentityAddress identity)
     {
         return Allocations.Any(x => x.AllocatedBy == identity);
@@ -85,6 +94,11 @@ public class RelationshipTemplate : Entity
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
+    }
+
+    public void EnsureIsPersonalized()
+    {
+        if (ForIdentity == null) throw new DomainException(DomainErrors.RelationshipTemplateNotPersonalized());
     }
 
     #region Expressions
@@ -115,6 +129,11 @@ public class RelationshipTemplate : Entity
             relationshipTemplate.CreatedBy == activeIdentity || // The owner shouldn't need a password to get the template
             relationshipTemplate.Allocations.Any(a =>
                 a.AllocatedBy == activeIdentity); // if the template has already been allocated by the active identity, it doesn't need to pass the password again;
+    }
+
+    public static Expression<Func<RelationshipTemplate, bool>> IsFor(IdentityAddress identityAddress)
+    {
+        return relationshipTemplate => relationshipTemplate.ForIdentity == identityAddress;
     }
 
     #endregion

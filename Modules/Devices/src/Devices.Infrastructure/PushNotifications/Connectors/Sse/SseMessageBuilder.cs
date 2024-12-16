@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 
@@ -16,7 +17,7 @@ public class SseMessageBuilder
 
     public HttpRequestMessage Build()
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_recipient}/events")
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{HttpUtility.UrlEncode(_recipient)}/events")
         {
             Content = JsonContent.Create(new EventPayload(_eventName))
         };

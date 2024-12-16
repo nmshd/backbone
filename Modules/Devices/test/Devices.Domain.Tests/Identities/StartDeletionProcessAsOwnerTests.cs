@@ -10,12 +10,6 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 {
-    public override void Dispose()
-    {
-        Hasher.Reset();
-        base.Dispose();
-    }
-
     [Fact]
     public void Start_deletion_process()
     {
@@ -105,6 +99,22 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
+    [Fact]
+    public void Passing_a_lengthOfDeletionGracePeriod_overrides_the_configured_value()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var activeDevice = activeIdentity.Devices[0];
+        SystemTime.Set("2000-01-01");
+
+        //Act
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id, 1);
+
+        // Assert
+        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
+        activeIdentity.DeletionProcesses.First().GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
+    }
+
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
         activeIdentity.DeletionProcesses.Should().HaveCount(1);
@@ -132,5 +142,11 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
     {
         var address = IdentityAddress.Create([], "prod.enmeshed.eu");
         return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }
