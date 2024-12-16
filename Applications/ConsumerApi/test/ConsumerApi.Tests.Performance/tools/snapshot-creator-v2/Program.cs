@@ -150,6 +150,8 @@ public class Program
         var clientSecretOption = command.Option<string>("-s|--clientSecret <CLIENTSECRET>", "Client Secret of the Consumer API", CommandOptionType.SingleValue);
         var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
         var clearDatabaseOption = command.Option<bool>("-r|--clearDB", "Clear the Database before applying the Pool Config", CommandOptionType.NoValue);
+        var clearOnlyOption = command.Option<bool>("-l|--clearOnly", "Just clear the Database, without created a snapshot", CommandOptionType.NoValue);
+        var backupDatabaseOption = command.Option<bool>("-b|--backupDB", "Backup the Database after snapshot is created", CommandOptionType.NoValue);
 
         command.OnExecuteAsync(async cancellationToken =>
         {
@@ -158,11 +160,13 @@ public class Program
             var clientSecret = clientSecretOption.Value();
             var poolConfigJsonFilePath = poolConfigOption.Value();
             var clearDatabase = clearDatabaseOption.ParsedValue;
+            var clearOnly = clearOnlyOption.ParsedValue;
+            var backupDatabase = backupDatabaseOption.ParsedValue;
 
             var mediator = command.GetRequiredService<IMediator>();
             var logger = command.GetRequiredService<ILogger<CreateSnapshot>>();
 
-            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress, clientId!, clientSecret!, poolConfigJsonFilePath!, clearDatabase), cancellationToken);
+            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress, clientId!, clientSecret!, poolConfigJsonFilePath!, clearDatabase, backupDatabase, clearOnly), cancellationToken);
 
             if (result.Status)
             {

@@ -32,6 +32,7 @@ public static class Resources
     public const string POOL_CONFIG_FILE_READ_ERROR = "Pool configuration could not be read.";
     public const string POOL_CONFIG_FILE_NOT_FOUND_ERROR = "Pool configuration file not found.";
     public const string SNAPSHOT_CREATION_SUCCEED_MESSAGE = "Pool configuration with relationships and messages created successfully.";
+    public const string CLEAN_DB_SUCCEED_MESSAGE = "Restore of Clean-DB completed successfully.";
 
     public static string BuildErrorDetails<TResult>(string message, DomainIdentity? senderIdentity, DomainIdentity? recipientIdentity, ApiResponse<TResult>? apiResponse = null)
     {

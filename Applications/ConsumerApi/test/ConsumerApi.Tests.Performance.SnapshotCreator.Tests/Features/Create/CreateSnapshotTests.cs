@@ -17,7 +17,6 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     private readonly IMediator _mediator;
     private readonly IOutputHelper _outputHelper;
     private readonly CreateSnapshot.CommandHandler _sut;
-    private readonly IDatabaseRestoreHelper _databaseRestoreHelper;
 
     public CreateSnapshotTests()
     {
@@ -25,8 +24,8 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
         _poolConfigurationJsonReader = A.Fake<IPoolConfigurationJsonReader>();
         _mediator = A.Fake<IMediator>();
         _outputHelper = A.Fake<IOutputHelper>();
-        _databaseRestoreHelper = A.Fake<IDatabaseRestoreHelper>();
-        _sut = new CreateSnapshot.CommandHandler(logger, _poolConfigurationJsonReader, _mediator, _outputHelper, _databaseRestoreHelper);
+        var databaseRestoreHelper = A.Fake<IDatabaseRestoreHelper>();
+        _sut = new CreateSnapshot.CommandHandler(logger, _poolConfigurationJsonReader, _mediator, _outputHelper, databaseRestoreHelper);
     }
 
     [Theory]
@@ -37,7 +36,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath(poolConfigJsonFilename);
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
 
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).Returns(
             new PerformanceTestConfiguration(
@@ -83,7 +82,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath(poolConfigJsonFilename);
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
 
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).Returns(null as PerformanceTestConfiguration);
 
@@ -103,7 +102,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     public async Task Handle_ShouldReturnFailureStatusMessage_WhenExceptionIsThrown()
     {
         // Arrange
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", GetFullFilePath("pool-config.test.json"), ClearDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", GetFullFilePath("pool-config.test.json"), ClearDatabase: false, BackupDatabase: false);
         var expectedException = new Exception("some exception");
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).ThrowsAsync(expectedException);
 
@@ -124,7 +123,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath("not-existing-pool-config.test.json");
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
 
         // Act
         var result = await _sut.Handle(command, CancellationToken.None);

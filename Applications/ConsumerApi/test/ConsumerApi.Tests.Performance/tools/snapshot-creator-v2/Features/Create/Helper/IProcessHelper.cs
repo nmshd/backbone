@@ -5,5 +5,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public interface IProcessHelper
 {
-    Task<DatabaseRestoreResult> ExecuteProcess(string command, Predicate<ProcessParams> processPredicate);
+    Task<DatabaseResult> ExecuteProcess(string command, Predicate<ProcessParams> processPredicate);
 }

@@ -11,6 +11,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
     private const string DB_NAME = "enmeshed";
     private const string CONTAINER_NAME = "tmp-postgres-container";
     private const string CLEAN_DB_NAME = "clean-db.rg";
+    private const string SNAPHOT_DB_NAME = "snapshot-db.rg";
 
     private static bool QueryUserConsent()
     {
@@ -25,7 +26,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         return input == 'y';
     }
 
-    public async Task<DatabaseRestoreResult> RestoreCleanDatabase()
+    public async Task<DatabaseResult> RestoreCleanDatabase()
     {
         try
         {
@@ -43,8 +44,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
             switch (checkForOpenConnectionsResult.Status)
             {
                 case false when checkForOpenConnectionsResult.IsError:
-                    //Note; Error shouldn't stop the snapshot creation process, therefore, return true
-                    return new DatabaseRestoreResult(true, checkForOpenConnectionsResult.Message);
+                    return new DatabaseResult(false, checkForOpenConnectionsResult.Message);
                 case true:
                 {
                     logger.LogInformation("Open connections checked successfully: {Message}", checkForOpenConnectionsResult.Message);
@@ -53,7 +53,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
 
                     if (!consent)
                     {
-                        return new DatabaseRestoreResult(true, "User chose not to drop db and create a clean-db");
+                        return new DatabaseResult(true, "User chose not to drop db and create a clean-db");
                     }
 
                     var forceDropOpenConnectionsResult = await ForceDropOpenConnections(CONTAINER_NAME, HOSTNAME, USERNAME, PASSWORD, DB_NAME);
@@ -107,17 +107,51 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         }
         catch (Exception e)
         {
-            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+            return new DatabaseResult(false, e.Message, Exception: e);
         }
         finally
         {
             await StopTemporaryPostgresDockerContainer(CONTAINER_NAME);
         }
 
-        return new DatabaseRestoreResult(true, "Database restored successfully");
+        return new DatabaseResult(true, "Database restored successfully");
     }
 
-    private async Task<DatabaseRestoreResult> DropDatabase(string containerName, string password, string hostname, string username, string dbname)
+    public async Task<DatabaseResult> BackupDatabase(string outputDirName)
+    {
+        try
+        {
+            var createContainerResult = await CreateTemporaryPostgresDockerContainer(CONTAINER_NAME, PASSWORD, forceRecreate: true, outputDirName);
+
+            if (!createContainerResult.Status)
+            {
+                throw new InvalidOperationException(createContainerResult.Message, createContainerResult.Exception);
+            }
+
+            logger.LogInformation("Postgres container created successfully: {Message}", createContainerResult.Message);
+
+            var result = await DumpDatabase(CONTAINER_NAME, PASSWORD, HOSTNAME, USERNAME, DB_NAME, SNAPHOT_DB_NAME);
+
+            if (!result.Status)
+            {
+                throw new InvalidOperationException(result.Message);
+            }
+        }
+        catch (Exception e)
+        {
+            return new DatabaseResult(false, e.Message, Exception: e);
+        }
+        finally
+        {
+            await StopTemporaryPostgresDockerContainer(CONTAINER_NAME);
+        }
+
+
+        return new DatabaseResult(true, "Database backup completed successfully");
+    }
+
+
+    private async Task<DatabaseResult> DropDatabase(string containerName, string password, string hostname, string username, string dbname)
     {
         var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"DROP DATABASE IF EXISTS {dbname}\"";
         return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
@@ -125,7 +159,14 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
                                                                             !processParams.HasError);
     }
 
-    private async Task<DatabaseRestoreResult> CreateDatabase(string containerName, string password, string hostname, string username, string dbname)
+    private async Task<DatabaseResult> DumpDatabase(string containerName, string password, string hostname, string username, string dbname, string backupFile)
+    {
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} pg_dump -h {hostname} -U {username} {dbname} -f /dump/{backupFile}";
+        return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
+                                                                            !processParams.HasError);
+    }
+
+    private async Task<DatabaseResult> CreateDatabase(string containerName, string password, string hostname, string username, string dbname)
     {
         var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"CREATE DATABASE {dbname}\"";
         return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
@@ -133,7 +174,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
                                                                             !processParams.HasError);
     }
 
-    private async Task<DatabaseRestoreResult> AlterDatabase(string containerName, string password, string hostname, string username, string dbname)
+    private async Task<DatabaseResult> AlterDatabase(string containerName, string password, string hostname, string username, string dbname)
     {
         var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} postgres -c \"ALTER DATABASE {dbname} OWNER TO {username};\"";
         return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
@@ -141,33 +182,45 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
                                                                             !processParams.HasError);
     }
 
-    private async Task<DatabaseRestoreResult> RestoreDatabase(string containerName, string password, string hostname, string username, string dbname, string backupFile)
+    private async Task<DatabaseResult> RestoreDatabase(string containerName, string password, string hostname, string username, string dbname, string restoreFile)
     {
-        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} {dbname} -f /dump/{backupFile}";
+        var command = $"docker exec --env PGPASSWORD=\"{password}\" {containerName} psql -h {hostname} -U {username} {dbname} -f /dump/{restoreFile}";
         return await processHelper.ExecuteProcess(command, processParams => processParams.Process.ExitCode == 0 &&
                                                                             !string.IsNullOrWhiteSpace(processParams.Output) &&
                                                                             !processParams.HasError);
     }
 
-    private async Task<DatabaseRestoreResult> CreateTemporaryPostgresDockerContainer(string containerName, string password)
+    private async Task<DatabaseResult> CreateTemporaryPostgresDockerContainer(string containerName, string password, bool forceRecreate = false, string? outputDirectory = null)
     {
         try
         {
-            var result = await IsTemporaryContainerRunning(containerName);
-            if (result.Status) return result;
+            if (forceRecreate)
+            {
+                await StopTemporaryPostgresDockerContainer(containerName);
+            }
+            else
+            {
+                var result = await IsTemporaryContainerRunning(containerName);
+                if (result.Status) return result;
 
-            var directory = Path.Combine(AppContext.BaseDirectory, @"Config\Database\dump-files");
+                if (result.IsError)
+                {
+                    return new DatabaseResult(false, result.Message);
+                }
+            }
+
+            var directory = outputDirectory ?? Path.Combine(AppContext.BaseDirectory, @"Config\Database\dump-files");
             var command = $"docker run -d --rm --name {containerName} -v \"{directory}:/dump\" -e POSTGRES_PASSWORD=\"{password}\" postgres";
             // docker run -d --rm --name $ContainerName -v "$PSScriptRoot\dump-files:/dump" -e POSTGRES_PASSWORD="admin" postgres
             return await processHelper.ExecuteProcess(command, processParams => !string.IsNullOrEmpty(processParams.Output?.Trim()));
         }
         catch (Exception e)
         {
-            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+            return new DatabaseResult(false, e.Message, Exception: e);
         }
     }
 
-    private async Task<DatabaseRestoreResult> IsTemporaryContainerRunning(string containerName)
+    private async Task<DatabaseResult> IsTemporaryContainerRunning(string containerName)
     {
         try
         {
@@ -178,7 +231,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         }
         catch (Exception e)
         {
-            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+            return new DatabaseResult(false, e.Message, Exception: e);
         }
     }
 
@@ -199,8 +252,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         }
     }
 
-
-    private async Task<DatabaseRestoreResult> CheckForOpenConnections(string containerName, string hostname, string username, string password, string dbName)
+    private async Task<DatabaseResult> CheckForOpenConnections(string containerName, string hostname, string username, string password, string dbName)
     {
         try
         {
@@ -213,11 +265,11 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         }
         catch (Exception e)
         {
-            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+            return new DatabaseResult(false, e.Message, Exception: e);
         }
     }
 
-    private async Task<DatabaseRestoreResult> ForceDropOpenConnections(string containerName, string hostname, string username, string password, string dbName)
+    private async Task<DatabaseResult> ForceDropOpenConnections(string containerName, string hostname, string username, string password, string dbName)
     {
         try
         {
@@ -230,7 +282,7 @@ public class DatabaseRestoreHelper(ILogger<DatabaseRestoreHelper> logger, IProce
         }
         catch (Exception e)
         {
-            return new DatabaseRestoreResult(false, e.Message, Exception: e);
+            return new DatabaseResult(false, e.Message, Exception: e);
         }
     }
 }

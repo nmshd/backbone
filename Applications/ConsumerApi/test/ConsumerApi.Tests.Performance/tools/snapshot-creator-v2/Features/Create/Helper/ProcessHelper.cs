@@ -6,7 +6,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public class ProcessHelper : IProcessHelper
 {
-    public async Task<DatabaseRestoreResult> ExecuteProcess(string command, Predicate<ProcessParams> processPredicate)
+    public async Task<DatabaseResult> ExecuteProcess(string command, Predicate<ProcessParams> processPredicate)
     {
         var psi = new ProcessStartInfo("cmd", $"/c {command}")
         {
@@ -26,7 +26,7 @@ public class ProcessHelper : IProcessHelper
 
         var status = processPredicate(new ProcessParams(process, output, hasError));
 
-        return new DatabaseRestoreResult(status, $"{output} {errorMessage}", IsError: hasError);
+        return new DatabaseResult(status, $"{output} {errorMessage}", IsError: hasError);
     }
 
     private static string GetErrorMessage(string error)
@@ -34,7 +34,9 @@ public class ProcessHelper : IProcessHelper
         return !string.IsNullOrWhiteSpace(error)
             ? error.StartsWith("psql: error: connection to server", StringComparison.OrdinalIgnoreCase)
                 ? $"Is enmeshed backbone postgres container running?{Environment.NewLine}{ERROR}: {error}"
-                : $"{Environment.NewLine}{ERROR}:{error}"
+                : error.Contains("error during connect", StringComparison.OrdinalIgnoreCase)
+                    ? $"Is docker running?{Environment.NewLine}{ERROR}: {error}"
+                    : $"{Environment.NewLine}{ERROR}:{error}"
             : string.Empty;
     }
 }

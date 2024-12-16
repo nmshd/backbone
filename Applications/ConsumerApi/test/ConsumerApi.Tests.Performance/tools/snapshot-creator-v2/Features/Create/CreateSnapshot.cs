@@ -16,7 +16,9 @@ public abstract record CreateSnapshot
         string ClientId,
         string ClientSecret,
         string JsonFilePath,
-        bool ClearDatabase) : IRequest<StatusMessage>;
+        bool ClearDatabase,
+        bool BackupDatabase,
+        bool ClearOnly) : IRequest<StatusMessage>;
 
     public class CommandHandler(
         ILogger<CommandHandler> logger,
@@ -32,6 +34,19 @@ public abstract record CreateSnapshot
         {
             try
             {
+                if (request.ClearOnly)
+                {
+                    var result = await databaseRestoreHelper.RestoreCleanDatabase();
+
+                    if (!result.Status)
+                    {
+                        return result;
+                    }
+
+                    logger.LogInformation("Restore clean-db completed: {Message}", result.Message);
+                    return new StatusMessage(true, CLEAN_DB_SUCCEED_MESSAGE);
+                }
+
                 logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
                 if (request.ClearDatabase)
@@ -43,7 +58,7 @@ public abstract record CreateSnapshot
                         return result;
                     }
 
-                    logger.LogInformation("RestoreCleanDatabase: {Message}", result.Message);
+                    logger.LogInformation("Restore clean-db completed: {Message}", result.Message);
                 }
 
 
@@ -122,6 +137,18 @@ public abstract record CreateSnapshot
                 logger.LogInformation("Messages created in {ElapsedTime}", stopwatch.Elapsed);
 
                 logger.LogInformation("Pool configuration with relationships and messages created in {ElapsedTime}", totalRunTime);
+
+                if (request.BackupDatabase)
+                {
+                    var result = await databaseRestoreHelper.BackupDatabase(OutputDirName);
+
+                    if (!result.Status)
+                    {
+                        return result;
+                    }
+
+                    logger.LogInformation("Backup completed: {Message}", result.Message);
+                }
             }
             catch (Exception e)
             {
