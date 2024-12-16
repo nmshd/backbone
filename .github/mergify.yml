@@ -1,6 +1,7 @@
 pull_request_rules:
   - name: update pull request
     conditions:
-      - label!=wip
+      - label != wip
+      - author != renovate[bot]
     actions:
       update:
