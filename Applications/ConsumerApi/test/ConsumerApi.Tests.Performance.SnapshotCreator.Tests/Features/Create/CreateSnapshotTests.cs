@@ -36,7 +36,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath(poolConfigJsonFilename);
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false, ClearOnly: false);
 
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).Returns(
             new PerformanceTestConfiguration(
@@ -82,7 +82,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath(poolConfigJsonFilename);
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false, ClearOnly: false);
 
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).Returns(null as PerformanceTestConfiguration);
 
@@ -102,7 +102,8 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     public async Task Handle_ShouldReturnFailureStatusMessage_WhenExceptionIsThrown()
     {
         // Arrange
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", GetFullFilePath("pool-config.test.json"), ClearDatabase: false, BackupDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", GetFullFilePath("pool-config.test.json"), ClearDatabase: false, BackupDatabase: false,
+            ClearOnly: false);
         var expectedException = new Exception("some exception");
         A.CallTo(() => _poolConfigurationJsonReader.Read(command.JsonFilePath)).ThrowsAsync(expectedException);
 
@@ -123,7 +124,7 @@ public class CreateSnapshotTests : SnapshotCreatorTestsBase
     {
         // Arrange
         var fullFilePath = GetFullFilePath("not-existing-pool-config.test.json");
-        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false);
+        var command = new CreateSnapshot.Command("http://baseaddress", "clientId", "clientSecret", fullFilePath, ClearDatabase: false, BackupDatabase: false, ClearOnly: false);
 
         // Act
         var result = await _sut.Handle(command, CancellationToken.None);
