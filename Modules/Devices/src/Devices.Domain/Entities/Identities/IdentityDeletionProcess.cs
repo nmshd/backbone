@@ -181,6 +181,9 @@ public class IdentityDeletionProcess : Entity
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
+        if (GracePeriodEndsAt < SystemTime.UtcNow)
+            throw new DomainException(DomainErrors.GracePeriodHasAlreadyExpired());
+
         ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
