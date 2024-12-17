@@ -26,8 +26,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         };
 
         _s3Client = new AmazonS3Client(config.Value.KeyId, config.Value.Key, s3Config);
-        _changedBlobs = new List<ChangedBlob>();
-        _removedBlobs = new List<RemovedBlob>();
+        _changedBlobs = [];
+        _removedBlobs = [];
         _bucketName = config.Value.BucketName;
         _logger = logger;
     }
