@@ -54,7 +54,8 @@ public class MessagesRepository : IMessagesRepository
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
-            .IncludeAll(_dbContext);
+            .IncludeAll(_dbContext)
+            .AsSplitQuery();
 
         if (ids.Any())
             query = query.WithIdsIn(ids);

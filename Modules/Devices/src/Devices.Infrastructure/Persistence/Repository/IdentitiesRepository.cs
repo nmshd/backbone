@@ -41,6 +41,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
@@ -122,6 +123,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         var query = _readonlyDevices
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .OfIdentity(identity);
 
         if (ids.Any())
@@ -134,6 +136,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _devices : _readonlyDevices)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
 

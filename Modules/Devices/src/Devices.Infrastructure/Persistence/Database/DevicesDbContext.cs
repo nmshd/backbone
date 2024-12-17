@@ -15,6 +15,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverte
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
@@ -71,6 +72,13 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
+        
+#if DEBUG
+        // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
+        // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
+        // multiple queries. See: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
+        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+#endif
     }
 
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
