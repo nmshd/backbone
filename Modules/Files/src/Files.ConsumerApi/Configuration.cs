@@ -34,20 +34,5 @@ public class Configuration
             [Required]
             public bool EnableHealthCheck { get; set; } = true;
         }
-
-        public class S3Config
-        {
-            [Required]
-            public string ServiceUrl { get; set; } = string.Empty;
-
-            [Required]
-            public string AccessKey { get; set; } = string.Empty;
-
-            [Required]
-            public string SecretKey { get; set; } = string.Empty;
-
-            [Required]
-            public string BucketName { get; set; } = string.Empty;
-        }
     }
 }
