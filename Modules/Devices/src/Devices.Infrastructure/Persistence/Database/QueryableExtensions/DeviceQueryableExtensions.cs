@@ -1,6 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 
@@ -16,18 +15,8 @@ public static class DeviceQueryableExtensions
         return query.Where(d => d.IdentityAddress == address);
     }
 
-    public static IQueryable<Device> NotDeleted(this IQueryable<Device> query)
-    {
-        return query.Where(Device.IsNotDeleted);
-    }
-
     public static IQueryable<Device> WithIdIn(this IQueryable<Device> query, IEnumerable<DeviceId> ids)
     {
         return query.Where(d => ids.Contains(d.Id));
-    }
-
-    public static IQueryable<Device> IncludeUser(this IQueryable<Device> query)
-    {
-        return query.Include(d => d.User);
     }
 }

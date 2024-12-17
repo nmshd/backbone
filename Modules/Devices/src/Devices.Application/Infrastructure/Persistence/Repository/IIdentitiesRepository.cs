@@ -32,6 +32,7 @@ public interface IIdentitiesRepository
     Task Update(Device device, CancellationToken cancellationToken);
     Task<T[]> FindDevices<T>(Expression<Func<Device, bool>> filter, Expression<Func<Device, T>> selector, CancellationToken cancellationToken, bool track = false);
     Task<bool> HasBackupDevice(IdentityAddress identity, CancellationToken cancellationToken);
+    Task DeleteDevice(Device device, CancellationToken cancellationToken);
 
     #endregion
 
