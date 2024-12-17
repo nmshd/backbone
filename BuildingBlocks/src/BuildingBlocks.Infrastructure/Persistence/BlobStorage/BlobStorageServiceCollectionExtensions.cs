@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
@@ -30,27 +29,19 @@ public static class BlobStorageServiceCollectionExtensions
             case BlobStorageOptions.GOOGLE_CLOUD_STORAGE:
                 services.AddGoogleCloudStorage(options.GoogleCloudStorage!);
                 break;
-            case BlobStorageOptions.S3_CLOUD_PROVIDER:
-                services.Configure<S3Options>(opt =>
-                {
-                    opt.ServiceUrl = options.S3Config!.ServiceUrl;
-                    opt.KeyId = options.S3Config!.AccessKey;
-                    opt.Key = options.S3Config!.SecretKey;
-                    opt.BucketName = options.S3Config!.BucketName;
-                });
-                TODO
-                services.AddScoped<IBlobStorage, S3BlobStorage>();
+            case BlobStorageOptions.S3_BUCKET:
+                services.AddS3(options.S3Bucket!);
 
                 break;
 
             default:
-                {
-                    if (options.ProductName.IsNullOrEmpty())
-                        throw new NotSupportedException("No cloud provider was specified.");
+            {
+                if (options.ProductName.IsNullOrEmpty())
+                    throw new NotSupportedException("No cloud provider was specified.");
 
-                    throw new NotSupportedException(
-                        $"{options.ProductName} is not a currently supported cloud provider.");
-                }
+                throw new NotSupportedException(
+                    $"{options.ProductName} is not a currently supported cloud provider.");
+            }
         }
 
         services.AddHealthChecks().Add(
@@ -67,19 +58,22 @@ public class BlobStorageOptions : IValidatableObject
 {
     public const string AZURE_STORAGE_ACCOUNT = "AzureStorageAccount";
     public const string GOOGLE_CLOUD_STORAGE = "GoogleCloudStorage";
-    public const string S3_CLOUD_PROVIDER = "S3";
+    public const string S3_BUCKET = "S3Bucket";
 
-    [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}")]
+    [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}|{S3_BUCKET}")]
     public string ProductName { get; set; } = null!;
 
     public AzureStorageAccountOptions? AzureStorageAccount { get; set; }
 
     public GoogleCloudStorageOptions? GoogleCloudStorage { get; set; }
 
+    public S3BucketOptions? S3Bucket { get; set; }
+
     public string RootFolder => ProductName switch
     {
         AZURE_STORAGE_ACCOUNT => AzureStorageAccount!.ContainerName,
         GOOGLE_CLOUD_STORAGE => GoogleCloudStorage!.BucketName,
+        S3_BUCKET => S3Bucket!.BucketName,
         _ => throw new Exception("Unsupported ProductName")
     };
 
@@ -91,22 +85,4 @@ public class BlobStorageOptions : IValidatableObject
         if (ProductName == GOOGLE_CLOUD_STORAGE && GoogleCloudStorage == null)
             yield return new ValidationResult($"The property '{nameof(GoogleCloudStorage)}' must be set when the {nameof(ProductName)} is '{GOOGLE_CLOUD_STORAGE}'.", [nameof(GoogleCloudStorage)]);
     }
-    public string? ConnectionInfo { get; set; } = null;
-
-    public S3Config? S3Config { get; set; }
-}
-
-public class S3Config
-{
-    [Required]
-    public string ServiceUrl { get; set; } = string.Empty;
-
-    [Required]
-    public string AccessKey { get; set; } = string.Empty;
-
-    [Required]
-    public string SecretKey { get; set; } = string.Empty;
-
-    [Required]
-    public string BucketName { get; set; } = string.Empty;
 }

@@ -11,13 +11,13 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 
 public class S3BlobStorage : IBlobStorage, IDisposable
 {
-    private readonly IAmazonS3 _s3Client;
+    private readonly AmazonS3Client _s3Client;
     private readonly List<ChangedBlob> _changedBlobs;
     private readonly IList<RemovedBlob> _removedBlobs;
     private readonly string _bucketName;
     private readonly ILogger<S3BlobStorage> _logger;
 
-    public S3BlobStorage(IOptions<S3Options> config, ILogger<S3BlobStorage> logger)
+    public S3BlobStorage(IOptions<S3BucketOptions> config, ILogger<S3BlobStorage> logger)
     {
         var s3Config = new AmazonS3Config
         {
@@ -25,7 +25,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             ForcePathStyle = true
         };
 
-        _s3Client = new AmazonS3Client(config.Value.KeyId, config.Value.Key, s3Config);
+        _s3Client = new AmazonS3Client(config.Value.AccessKeyId, config.Value.SecretAccessKey, s3Config);
         _changedBlobs = [];
         _removedBlobs = [];
         _bucketName = config.Value.BucketName;
