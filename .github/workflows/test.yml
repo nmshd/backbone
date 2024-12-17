@@ -107,9 +107,6 @@ jobs:
           - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler
 
-          - dockerfile: Applications/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
-            image: files-sanity-check
-
           - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
 
