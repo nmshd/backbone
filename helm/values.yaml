@@ -17,11 +17,11 @@ admincli:
   # resources - the resources for the Admin CLI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
   resources:
     requests:
-      cpu: "200m"
+      cpu: "50m"
       memory: "128Mi"
     limits:
-      cpu: "400m"
-      memory: "1Gi"
+      cpu: "50m"
+      memory: "128Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
