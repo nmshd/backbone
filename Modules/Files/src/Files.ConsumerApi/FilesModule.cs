@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Extensions;
 using Backbone.Modules.Files.Infrastructure.Persistence;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -29,17 +28,7 @@ public class FilesModule : AbstractModule
             options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
 
-            options.BlobStorageOptions.ConnectionInfo = parsedConfiguration.Infrastructure.BlobStorage.ConnectionInfo;
-            options.BlobStorageOptions.CloudProvider = parsedConfiguration.Infrastructure.BlobStorage.CloudProvider;
-            options.BlobStorageOptions.Container =
-                parsedConfiguration.Infrastructure.BlobStorage.ContainerName.IsNullOrEmpty()
-                    ? "files"
-                    : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
-
-            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.AccessKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.AccessKey;
-            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.BucketName = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.BucketName;
-            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.SecretKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.SecretKey;
-            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.ServiceUrl = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.ServiceUrl;
+            options.BlobStorageOptions = parsedConfiguration.Infrastructure.BlobStorage;
         });
 
         if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)

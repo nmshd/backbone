@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Files.Application;
 
 namespace Backbone.Modules.Files.ConsumerApi;
@@ -17,21 +18,7 @@ public class Configuration
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
         [Required]
-        public BlobStorageConfiguration BlobStorage { get; set; } = new();
-
-        public class BlobStorageConfiguration
-        {
-            [Required]
-            [MinLength(1)]
-            [RegularExpression("Azure|GoogleCloud|S3")]
-            public string CloudProvider { get; set; } = string.Empty;
-
-            public string ConnectionInfo { get; set; } = string.Empty;
-
-            public string ContainerName { get; set; } = string.Empty;
-
-            public S3Config? S3Config { get; set; }
-        }
+        public BlobStorageOptions BlobStorage { get; set; } = new();
 
         public class SqlDatabaseConfiguration
         {
