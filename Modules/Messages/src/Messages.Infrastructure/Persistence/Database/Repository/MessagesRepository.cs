@@ -27,7 +27,8 @@ public class MessagesRepository : IMessagesRepository
     public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         var message = await (track ? _messages : _readOnlyMessages)
-            .IncludeAll(_dbContext)
+            .Include(m => m.Recipients) // Note: Don't use IncludeAll(_dbContext) when only one navigation property is needed!
+            .AsSplitQuery() // Use split query to avoid cartesian explosion. see: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
             .Where(Message.HasParticipant(address))
             .FirstWithId(id, cancellationToken);
 
