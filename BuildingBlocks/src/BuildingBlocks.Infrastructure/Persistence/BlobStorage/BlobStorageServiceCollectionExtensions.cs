@@ -31,7 +31,6 @@ public static class BlobStorageServiceCollectionExtensions
                 break;
             case BlobStorageOptions.S3_BUCKET:
                 services.AddS3(options.S3Bucket!);
-
                 break;
 
             default:
