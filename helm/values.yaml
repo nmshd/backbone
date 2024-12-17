@@ -680,6 +680,16 @@ global:
               # serviceAccountJson: ""
               # bucketName - the name of the bucket that should be used to store the files
               # bucketName: ""
+            # s3Bucket - only applicable if ProductName is "S3Bucket"
+            # s3Bucket:
+              # accessKeyId - the access key id that should be used to authenticate
+              # accessKeyId: ""
+              # secretAccessKey - the secret access key that should be used to authenticate
+              # secretAccessKey: ""
+              # bucketName - the name of the bucket that should be used to store the files
+              # bucketName: ""
+              # serviceUrl - the url of the S3 service
+              # serviceUrl: ""
       messages:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
