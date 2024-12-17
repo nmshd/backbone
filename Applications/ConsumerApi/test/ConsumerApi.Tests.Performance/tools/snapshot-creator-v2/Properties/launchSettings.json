@@ -1,0 +1,68 @@
+{
+  "profiles": {
+    "SnapshotCreator.V2 - verify-config test": {
+      "commandName": "Project",
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json"
+    },
+    "SnapshotCreator.V2 - verify-config light": {
+      "commandName": "Project",
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\PoolConfig-LIGHT\\pool-config.light.json"
+    },
+    "SnapshotCreator.V2 - verify-config heavy": {
+      "commandName": "Project",
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\PoolConfig-HEAVY\\pool-config.heavy.json"
+    },
+    "SnapshotCreator.V2 - generate-config test": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
+    },
+    "SnapshotCreator.V2 - generate-config light": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light"
+    },
+    "SnapshotCreator.V2 - generate-config heavy": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
+    },
+    "SnapshotCreator.V2 - generate-config test (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --debug"
+    },
+    "SnapshotCreator.V2 - generate-config light (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --debug"
+    },
+    "SnapshotCreator.V2 - generate-config heavy (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --debug"
+    },
+    "SnapshotCreator.V2 - create-snapshot test": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json"
+    },
+    "SnapshotCreator.V2 - create-snapshot light": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-LIGHT\\pool-config.light.json"
+    },
+    "SnapshotCreator.V2 - create-snapshot heavy": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-HEAVY\\pool-config.heavy.json"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (clean-db)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json --clearDB"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (backup-db)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json --backupDB"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (clean-db + backup-db)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json --clearDB --backupDB"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (clean-db ONLY)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json --clearOnly"
+    }
+  }
+}

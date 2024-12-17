@@ -4,7 +4,7 @@ namespace Backbone.Modules.Messages.Application;
 
 public class ApplicationOptions
 {
-    [Range(1, 100)]
+    [Range(1, int.MaxValue)]
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 
     [Required]

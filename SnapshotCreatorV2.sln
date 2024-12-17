@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backbone", "Backbone", "{73242E54-09D8-432B-951C-BEE69FB01078}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{041D0D3B-5859-473E-AC3C-C7A98505D134}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsumerApi", "ConsumerApi", "{22131EAD-DAF8-4FBF-9F02-9BEF97116712}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8D429F3A-D4C6-450A-A5F1-23FF563B61E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator.V2", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator-v2\ConsumerApi.Tests.Performance.SnapshotCreator.V2.csproj", "{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator.Tests", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance.SnapshotCreator.Tests\ConsumerApi.Tests.Performance.SnapshotCreator.Tests.csproj", "{94F14836-533B-49B6-AA5C-48CA8512CAAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdks", "Sdks", "{6BDABD58-1942-458F-956D-086939118D88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk", "{1E6B1BC0-FB6D-4154-8292-66209E7D7482}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6E7C4F86-94EC-473D-AEDD-CF72AEE58F7F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Sdk", "Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj", "{5636619C-B9C0-4A42-8AA3-3D825178CF3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{C6C653CD-E1C9-466A-B514-ECA69DB86270}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{85C3FD17-3460-4161-A80F-0B4CF01649B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestTools", "BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj", "{E22FBCE6-39D1-4627-93D1-347C1688179F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator\ConsumerApi.Tests.Performance.SnapshotCreator.csproj", "{D8F2E60E-C020-4757-9253-4F4F9DA275B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94F14836-533B-49B6-AA5C-48CA8512CAAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F14836-533B-49B6-AA5C-48CA8512CAAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F14836-533B-49B6-AA5C-48CA8512CAAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F14836-533B-49B6-AA5C-48CA8512CAAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5636619C-B9C0-4A42-8AA3-3D825178CF3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5636619C-B9C0-4A42-8AA3-3D825178CF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5636619C-B9C0-4A42-8AA3-3D825178CF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5636619C-B9C0-4A42-8AA3-3D825178CF3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E22FBCE6-39D1-4627-93D1-347C1688179F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E22FBCE6-39D1-4627-93D1-347C1688179F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E22FBCE6-39D1-4627-93D1-347C1688179F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E22FBCE6-39D1-4627-93D1-347C1688179F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F2E60E-C020-4757-9253-4F4F9DA275B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F2E60E-C020-4757-9253-4F4F9DA275B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F2E60E-C020-4757-9253-4F4F9DA275B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F2E60E-C020-4757-9253-4F4F9DA275B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{041D0D3B-5859-473E-AC3C-C7A98505D134} = {73242E54-09D8-432B-951C-BEE69FB01078}
+		{22131EAD-DAF8-4FBF-9F02-9BEF97116712} = {041D0D3B-5859-473E-AC3C-C7A98505D134}
+		{8D429F3A-D4C6-450A-A5F1-23FF563B61E3} = {22131EAD-DAF8-4FBF-9F02-9BEF97116712}
+		{F02BC2CA-E015-4B2C-B36C-C4D594BDE2F1} = {8D429F3A-D4C6-450A-A5F1-23FF563B61E3}
+		{94F14836-533B-49B6-AA5C-48CA8512CAAD} = {8D429F3A-D4C6-450A-A5F1-23FF563B61E3}
+		{6BDABD58-1942-458F-956D-086939118D88} = {73242E54-09D8-432B-951C-BEE69FB01078}
+		{1E6B1BC0-FB6D-4154-8292-66209E7D7482} = {6BDABD58-1942-458F-956D-086939118D88}
+		{6E7C4F86-94EC-473D-AEDD-CF72AEE58F7F} = {1E6B1BC0-FB6D-4154-8292-66209E7D7482}
+		{5636619C-B9C0-4A42-8AA3-3D825178CF3E} = {6E7C4F86-94EC-473D-AEDD-CF72AEE58F7F}
+		{C6C653CD-E1C9-466A-B514-ECA69DB86270} = {73242E54-09D8-432B-951C-BEE69FB01078}
+		{85C3FD17-3460-4161-A80F-0B4CF01649B7} = {C6C653CD-E1C9-466A-B514-ECA69DB86270}
+		{E22FBCE6-39D1-4627-93D1-347C1688179F} = {85C3FD17-3460-4161-A80F-0B4CF01649B7}
+		{D8F2E60E-C020-4757-9253-4F4F9DA275B9} = {8D429F3A-D4C6-450A-A5F1-23FF563B61E3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6916B601-BC4A-4AB4-8557-CB7B4166C1C2}
+	EndGlobalSection
+EndGlobal
