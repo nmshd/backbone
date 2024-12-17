@@ -2,7 +2,7 @@ services:
   consumer-api:
     container_name: consumer-api-test
     hostname: consumer-api
-    image: consumer-api:0.0.1
+    image: ghcr.io/nmshd/backbone-consumer-api:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -21,7 +21,7 @@ services:
   admin-ui:
     container_name: admin-ui-test
     hostname: admin-ui
-    image: admin-ui:0.0.1
+    image: ghcr.io/nmshd/backbone-admin-ui:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -37,7 +37,7 @@ services:
 
   event-handler-service:
     container_name: event-handler-service-test
-    image: event-handler-service:0.0.1
+    image: ghcr.io/nmshd/backbone-event-handler:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -51,7 +51,7 @@ services:
 
   sse-server:
     container_name: sse-server-test
-    image: sse-server:0.0.1
+    image: ghcr.io/nmshd/backbone-sse-server:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -65,7 +65,7 @@ services:
 
   database-migrator:
     container_name: database-migrator-test
-    image: database-migrator:0.0.1
+    image: ghcr.io/nmshd/backbone-database-migrator:0.0.1
     depends_on:
       seed-database:
         condition: service_completed_successfully
@@ -101,7 +101,7 @@ services:
 
   admin-cli:
     container_name: admin-cli-test
-    image: admin-cli:0.0.1
+    image: ghcr.io/nmshd/backbone-admin-cli:0.0.1
     depends_on:
       consumer-api:
         condition: service_healthy

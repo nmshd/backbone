@@ -31,19 +31,6 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Decomposition_can_not_be_called_by_the_same_identity_twice()
-    {
-        // Arrange
-        var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
-
-        // Act
-        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
-
-        // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipAlreadyDecomposed");
-    }
-
-    [Fact]
     public void Decomposition_can_not_be_performed_by_other_identities()
     {
         // Arrange

@@ -105,10 +105,7 @@ jobs:
             image: database-migrator
 
           - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
-            image: event-handler-service
-
-          - dockerfile: Applications/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
-            image: files-sanity-check
+            image: event-handler
 
           - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
@@ -153,7 +150,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
-          tags: ${{ matrix.image }}:0.0.1
+          tags: ghcr.io/nmshd/backbone-${{ matrix.image }}:0.0.1
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -306,6 +303,8 @@ jobs:
           NMSHD_TEST_CLIENTSECRET: test
           NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
           NMSHD_TEST_ADMIN_API_KEY: test
+          APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/backbone/.ci/appsettings.override.${{matrix.database}}.docker.json
+          BACKBONE_VERSION: 0.0.1
         run: npm run test:local:lokijs
 
       - name: Save Docker Logs

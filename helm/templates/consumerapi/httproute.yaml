@@ -10,9 +10,11 @@ spec:
     - name: {{ .Values.consumerapi.httpRoute.parentRefName }}
       namespace: {{ .Values.consumerapi.httpRoute.parentRefNamespace }}
       sectionName: {{ .Values.consumerapi.httpRoute.parentRefSectionName }}
-  {{- with .Values.consumerapi.httpRoute.hostnames }}
   hostnames:
-    {{- toYaml . | nindent 4 }}
+  {{- if .Values.consumerapi.httpRoute.hostnamesOverride }}
+    {{- toYaml .Values.consumerapi.httpRoute.hostnamesOverride | nindent 4 }}
+  {{- else }}
+    - {{ .Values.global.defaultHostname }}
   {{- end }}
   rules:
     - matches:
