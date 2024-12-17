@@ -65,15 +65,23 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
-        services.AddAuthentication().AddJwtBearer(options =>
+        services.AddAuthentication().AddJwtBearer("default", options =>
         {
             var privateKeyBytes = Convert.FromBase64String(configuration.Authentication.JwtSigningCertificate);
+#pragma warning disable SYSLIB0057 // The constructor is obsolete. But I didn't manage to get the suggested alternative to work.
             var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+#pragma warning restore SYSLIB0057
             options.TokenValidationParameters.IssuerSigningKey = new X509SecurityKey(certificate);
             options.TokenValidationParameters.ValidateIssuer = false;
             options.TokenValidationParameters.ValidateAudience = false;
         });
-        services.AddAuthorization();
+
+        services.AddAuthorizationBuilder()
+            .AddDefaultPolicy("default", policy =>
+            {
+                policy.AddAuthenticationSchemes("default");
+                policy.RequireAuthenticatedUser();
+            });
 
         services.AddHttpContextAccessor();
 

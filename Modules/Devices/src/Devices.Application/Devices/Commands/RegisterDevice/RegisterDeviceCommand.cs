@@ -8,4 +8,5 @@ public class RegisterDeviceCommand : IRequest<RegisterDeviceResponse>
     public required string DevicePassword { get; set; }
     public required string CommunicationLanguage { get; set; }
     public required SignedChallengeDTO SignedChallenge { get; set; }
+    public required bool IsBackupDevice { get; set; }
 }

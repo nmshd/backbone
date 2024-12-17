@@ -14,6 +14,10 @@ public interface ITokensRepository
     Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
+    Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+
     Task<Token?> Find(TokenId tokenId, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false);
+    Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken);
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
+    Task DeleteToken(Token token, CancellationToken cancellationToken);
 }

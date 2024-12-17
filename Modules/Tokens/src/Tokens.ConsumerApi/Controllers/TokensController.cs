@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
@@ -23,12 +24,10 @@ namespace Backbone.Modules.Tokens.ConsumerApi.Controllers;
 public class TokensController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public TokensController(IMediator mediator, IOptions<ApplicationOptions> options, IOptions<JsonOptions> jsonOptions) : base(mediator)
+    public TokensController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
     {
         _options = options.Value;
-        _jsonSerializerOptions = jsonOptions.Value.JsonSerializerOptions;
     }
 
     [HttpPost]
@@ -51,28 +50,14 @@ public class TokensController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? tokens,
+    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListTokensQueryItem[]? tokens,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        List<ListTokensQueryItem>? tokenQueryItems;
+        // We keep this code for backwards compatibility reasons. In a few months the `templates`
+        // parameter will become required, and the fallback to `ids` will be removed.
+        tokens = tokens is { Length: > 0 } ? tokens : ids.Select(id => new ListTokensQueryItem { Id = id }).ToArray();
 
-        if (tokens != null)
-        {
-            try
-            {
-                tokenQueryItems = JsonSerializer.Deserialize<List<ListTokensQueryItem>>(tokens, _jsonSerializerOptions);
-            }
-            catch (JsonException ex)
-            {
-                throw new ApplicationException(GenericApplicationErrors.Validation.InputCannotBeParsed(ex.Message));
-            }
-        }
-        else
-        {
-            tokenQueryItems = ids.Select(id => new ListTokensQueryItem { Id = id }).ToList();
-        }
-
-        var request = new ListTokensQuery(paginationFilter, tokenQueryItems);
+        var request = new ListTokensQuery(paginationFilter, tokens);
 
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -83,5 +68,14 @@ public class TokensController : ApiControllerBase
         var response = await _mediator.Send(request, cancellationToken);
 
         return Paged(response);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteToken([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteTokenCommand { Id = id }, cancellationToken);
+        return NoContent();
     }
 }

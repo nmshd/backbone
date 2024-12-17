@@ -1,0 +1,24 @@
+meta {
+  name: Get OAuth Token (B)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{auth.url}}
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  grant_type: password
+  username: {{auth.username_b}}
+  password: {{auth.password_b}}
+  client_id: {{auth.client_id}}
+  client_secret: {{auth.client_secret}}
+}
+
+vars:post-response {
+  jwt.token: res.body.access_token
+  jwt.expires_in: res.body.expires_in
+}

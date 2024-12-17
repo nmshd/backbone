@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
 
@@ -17,6 +18,9 @@ public class DatawalletModifiedDomainEventHandler : IDomainEventHandler<Datawall
     public async Task Handle(DatawalletModifiedDomainEvent domainEvent)
     {
         var notification = new DatawalletModificationsCreatedPushNotification(domainEvent.ModifiedByDevice);
-        await _pushSenderService.SendFilteredNotification(domainEvent.Identity, notification, [domainEvent.ModifiedByDevice], CancellationToken.None);
+        await _pushSenderService.SendNotification(
+            notification,
+            SendPushNotificationFilter.AllDevicesOfExcept(IdentityAddress.ParseUnsafe(domainEvent.Identity), DeviceId.Parse(domainEvent.ModifiedByDevice)),
+            CancellationToken.None);
     }
 }

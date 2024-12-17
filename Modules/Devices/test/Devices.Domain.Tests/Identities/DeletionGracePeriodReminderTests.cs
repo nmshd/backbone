@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -9,12 +9,6 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class DeletionGracePeriodReminderTests : AbstractTestsBase
 {
-    public override void Dispose()
-    {
-        Hasher.Reset();
-        base.Dispose();
-    }
-
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
     {
@@ -138,5 +132,11 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
     {
         var address = IdentityAddress.Create([], "prod.enmeshed.eu");
         return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }

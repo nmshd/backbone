@@ -11,9 +11,11 @@ spec:
     - name: {{ .Values.sseserver.httpRoute.parentRefName }}
       namespace: {{ .Values.sseserver.httpRoute.parentRefNamespace }}
       sectionName: {{ .Values.sseserver.httpRoute.parentRefSectionName }}
-  {{- with .Values.sseserver.httpRoute.hostnames }}
   hostnames:
-    {{- toYaml . | nindent 4 }}
+  {{- if .Values.consumerapi.httpRoute.hostnamesOverride }}
+    {{- toYaml .Values.consumerapi.httpRoute.hostnamesOverride | nindent 4 }}
+  {{- else }}
+    - {{ .Values.global.defaultHostname }}
   {{- end }}
   rules:
     - matches:

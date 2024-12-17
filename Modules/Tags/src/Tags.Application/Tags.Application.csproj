@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+        <ProjectReference Include="..\Tags.Domain\Tags.Domain.csproj" />
+    </ItemGroup>
+</Project>

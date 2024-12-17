@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
@@ -127,5 +127,11 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
         identity.StartDeletionProcessAsSupport();
         return identity;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }

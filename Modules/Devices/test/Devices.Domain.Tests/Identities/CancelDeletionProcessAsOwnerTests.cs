@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -56,6 +56,21 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+    }
+
+    [Fact]
+    public void Throws_when_grace_period_has_expired()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        SystemTime.Set(DateTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
+
+        // Act
+        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.gracePeriodHasAlreadyExpired");
     }
 
     [Fact]

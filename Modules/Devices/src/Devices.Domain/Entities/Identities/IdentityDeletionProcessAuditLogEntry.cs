@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
@@ -16,7 +17,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
-        DeletionProcessStatus newStatus, Dictionary<string, string>? additionalData = null)
+        DeletionProcessStatus? newStatus, Dictionary<string, string>? additionalData = null)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
@@ -36,8 +37,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public byte[] IdentityAddressHash { get; }
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
-    public DeletionProcessStatus NewStatus { get; }
+    public DeletionProcessStatus? NewStatus { get; }
     public Dictionary<string, string>? AdditionalData { get; }
+    public List<string>? UsernameHashesBase64 { get; private set; }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
@@ -209,6 +211,32 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             }
         );
     }
+
+    public static IdentityDeletionProcessAuditLogEntry DeletionCompleted(IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId: null,
+            messageKey: MessageKey.DeletionCompleted,
+            identityAddressHash: Hasher.HashUtf8(identityAddress.Value),
+            deviceIdHash: null,
+            oldStatus: DeletionProcessStatus.Deleting,
+            newStatus: null
+        );
+    }
+
+    public void AssociateUsernames(IEnumerable<Username> usernames)
+    {
+        UsernameHashesBase64 = usernames
+            .Select(u => Hasher.HashUtf8(u.Value.Trim()))
+            .Select(Convert.ToBase64String)
+            .ToList();
+    }
+
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
+    {
+        var usernameHashBase64 = Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim()));
+        return logEntry => logEntry.UsernameHashesBase64 != null && logEntry.UsernameHashesBase64.Contains(usernameHashBase64);
+    }
 }
 
 public enum MessageKey
@@ -226,5 +254,6 @@ public enum MessageKey
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,
-    DataDeleted = 14
+    DataDeleted = 14,
+    DeletionCompleted = 15
 }

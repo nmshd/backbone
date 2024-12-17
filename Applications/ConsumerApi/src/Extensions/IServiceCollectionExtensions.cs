@@ -14,10 +14,8 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
@@ -131,7 +129,9 @@ public static class IServiceCollectionExtensions
             .AddServer(options =>
             {
                 var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
+#pragma warning disable SYSLIB0057 // The constructor is obsolete. But I didn't manage to get the suggested alternative to work.
                 var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+#pragma warning restore SYSLIB0057
                 options.AddSigningCertificate(certificate);
 
                 options.SetTokenEndpointUris("connect/token");
@@ -162,39 +162,6 @@ public static class IServiceCollectionExtensions
     {
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services,
-        BackboneConfiguration.SwaggerUiConfiguration configuration)
-    {
-        services
-            .AddEndpointsApiExplorer()
-            .AddSwaggerGen(c =>
-            {
-                var securityScheme = new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows { Password = new OpenApiOAuthFlow { TokenUrl = new Uri(configuration.TokenUrl) } },
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    UnresolvedReference = false,
-                    BearerFormat = "JWT",
-                    Reference = new OpenApiReference
-                    {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
-                        Type = ReferenceType.SecurityScheme
-                    }
-                };
-
-                c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { securityScheme, Array.Empty<string>() }
-                });
-            });
 
         return services;
     }

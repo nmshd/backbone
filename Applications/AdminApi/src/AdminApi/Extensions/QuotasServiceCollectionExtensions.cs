@@ -17,7 +17,6 @@ public static class QuotasServiceCollectionExtensions
             options.Provider = configuration.Infrastructure.SqlDatabase.Provider;
         });
 
-
         return services;
     }
 }

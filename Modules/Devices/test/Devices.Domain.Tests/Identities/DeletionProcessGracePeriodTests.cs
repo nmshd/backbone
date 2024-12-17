@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
@@ -7,12 +7,6 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class DeletionProcessGracePeriodTests : AbstractTestsBase
 {
-    public override void Dispose()
-    {
-        Hasher.Reset();
-        base.Dispose();
-    }
-
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
     {
@@ -127,5 +121,11 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 
         return identity;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }

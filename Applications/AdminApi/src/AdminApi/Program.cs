@@ -11,7 +11,6 @@ using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -96,9 +95,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSingleton<ApiKeyValidator>();
 
-    services
-        .ConfigureAndValidate<AdminConfiguration>(configuration.Bind)
-        .ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Modules:Devices:Application").Bind(options));
+    services.ConfigureAndValidate<AdminConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
@@ -110,13 +107,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
-        .AddDevices(parsedConfiguration.Modules.Devices)
+        .AddDevices(configuration.GetSection("Modules:Devices"))
         .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddAnnouncements(parsedConfiguration.Modules.Announcements)
         .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
-
-    if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerWithUi();
 
     services
         .AddOpenIddict()
@@ -191,9 +186,6 @@ static void Configure(WebApplication app)
         if (configuration.Cors.AccessControlAllowCredentials)
             policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
     });
-
-    if (configuration.SwaggerUi.Enabled)
-        app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;

@@ -33,4 +33,10 @@ public static class GenericDomainErrors
         return new DomainError("error.platform.validation.newAndOldMatch",
             $"The new {nameOfParameter} and the old {nameOfParameter} cannot be the same.");
     }
+
+    public static DomainError Forbidden()
+    {
+        return new DomainError("error.platform.forbidden",
+            "You are not allowed to perform this action due to insufficient privileges.");
+    }
 }

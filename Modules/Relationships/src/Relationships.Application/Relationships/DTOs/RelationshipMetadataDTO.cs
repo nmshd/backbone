@@ -7,7 +7,7 @@ public class RelationshipMetadataDTO
     public RelationshipMetadataDTO(Relationship relationship)
     {
         Id = relationship.Id;
-        RelationshipTemplateId = relationship.RelationshipTemplateId;
+        RelationshipTemplateId = relationship.RelationshipTemplateId?.Value;
         From = relationship.From;
         To = relationship.To;
         CreatedAt = relationship.CreatedAt;
@@ -16,7 +16,7 @@ public class RelationshipMetadataDTO
     }
 
     public string Id { get; set; }
-    public string RelationshipTemplateId { get; set; }
+    public string? RelationshipTemplateId { get; set; }
 
     public string From { get; set; }
     public string To { get; set; }

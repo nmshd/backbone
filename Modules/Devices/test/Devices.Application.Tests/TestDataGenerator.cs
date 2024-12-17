@@ -76,7 +76,7 @@ public static class TestDataGenerator
     {
         var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 
-        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
         identity.DeletionStarted();
         SystemTime.UndoSet();
 

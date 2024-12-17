@@ -1,6 +1,13 @@
 /* Server Configuration */
 IF NOT EXISTS(SELECT *
 FROM sys.server_principals
+WHERE name = 'announcements')
+BEGIN
+	CREATE LOGIN announcements WITH PASSWORD = 'Passw0rd'
+	PRINT 'Login "announcements" created' ;
+END
+IF NOT EXISTS(SELECT *
+FROM sys.server_principals
 WHERE name = 'challenges')
 BEGIN
 	CREATE LOGIN challenges WITH PASSWORD = 'Passw0rd'
@@ -88,6 +95,14 @@ END
 
 IF NOT EXISTS ( SELECT *
 FROM sys.schemas
+WHERE name = N'Announcements' )
+BEGIN
+	EXEC('CREATE SCHEMA [Announcements]')
+	PRINT 'Schema "Announcements" created' ;
+END
+
+IF NOT EXISTS ( SELECT *
+FROM sys.schemas
 WHERE name = N'Devices' )
 BEGIN
 	EXEC('CREATE SCHEMA [Devices]')
@@ -151,6 +166,14 @@ BEGIN
 END
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++ Users ++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+IF NOT EXISTS (SELECT *
+FROM sys.database_principals
+WHERE name = 'announcements')
+BEGIN
+	CREATE USER announcements FOR LOGIN announcements
+	PRINT 'User "announcements" created' ;
+END
+
 IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'challenges')
@@ -229,6 +252,7 @@ GO
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Announcements TO announcements;
 GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Challenges TO challenges;
 GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Devices TO devices;
 GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Files TO files;
@@ -246,10 +270,10 @@ GRANT SELECT ON SCHEMA::Challenges TO quotas
 GRANT SELECT ON SCHEMA::Devices TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
 GRANT SELECT ON SCHEMA::Messages TO quotas
-GRANT SELECT ON SCHEMA::Relationships TO synchronization
 GRANT SELECT ON SCHEMA::Relationships TO quotas
 GRANT SELECT ON SCHEMA::Synchronization TO quotas
 GRANT SELECT ON SCHEMA::Tokens TO quotas
+GRANT SELECT ON SCHEMA::Relationships TO synchronization
 GRANT SELECT ON SCHEMA::Relationships TO adminUi
 GRANT SELECT ON SCHEMA::Files TO adminUi
 GRANT SELECT ON SCHEMA::Messages TO adminUi

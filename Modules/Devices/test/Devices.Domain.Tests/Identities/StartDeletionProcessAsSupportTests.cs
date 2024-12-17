@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
@@ -91,5 +91,11 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
     {
         var address = IdentityAddress.Create([], "prod.enmeshed.eu");
         return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }

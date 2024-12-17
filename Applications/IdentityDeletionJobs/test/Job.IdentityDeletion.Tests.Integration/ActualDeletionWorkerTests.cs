@@ -8,7 +8,6 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ using Relationship = Backbone.Modules.Relationships.Domain.Aggregates.Relationsh
 
 namespace Backbone.Job.IdentityDeletion.Tests.Integration;
 
-public class ActualDeletionWorkerTests
+public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     private readonly IHost _host;
 

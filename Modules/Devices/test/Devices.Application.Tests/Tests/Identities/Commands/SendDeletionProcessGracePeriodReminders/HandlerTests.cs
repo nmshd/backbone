@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
@@ -20,7 +19,7 @@ public class HandlerTests : AbstractTestsBase
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Identity>());
+            .Returns([]);
 
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
@@ -30,7 +29,10 @@ public class HandlerTests : AbstractTestsBase
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
             .MustNotHaveHappened();
-        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<IPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>._,
+                A<CancellationToken>._))
             .MustNotHaveHappened();
     }
 
@@ -55,7 +57,10 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+                A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
             i.Address == identity.Address
@@ -85,7 +90,10 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+                A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -117,7 +125,10 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+                A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -147,7 +158,10 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+                A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -170,7 +184,7 @@ public class HandlerTests : AbstractTestsBase
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.Approved, A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Identity> { identity });
+            .Returns([identity]);
 
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
@@ -178,7 +192,10 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+                A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address

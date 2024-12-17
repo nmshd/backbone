@@ -12,6 +12,8 @@ using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProc
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,7 +54,7 @@ public class IdentitiesController : ApiControllerBase
             DevicePassword = request.DevicePassword,
             IdentityPublicKey = request.IdentityPublicKey,
             IdentityVersion = request.IdentityVersion,
-            CommunicationLanguage = request.DeviceCommunicationLanguage ?? "en",
+            CommunicationLanguage = request.DeviceCommunicationLanguage ?? CommunicationLanguage.DEFAULT_LANGUAGE.Value,
             SignedChallenge = new SignedChallengeDTO
             {
                 Challenge = request.SignedChallenge.Challenge,
@@ -68,9 +70,10 @@ public class IdentitiesController : ApiControllerBase
     [HttpPost("Self/DeletionProcesses")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartDeletionProcessAsOwnerResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
+    public async Task<IActionResult> StartDeletionProcess(StartDeletionProcessAsOwnerCommand? request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new StartDeletionProcessAsOwnerCommand(), cancellationToken);
+        request ??= new StartDeletionProcessAsOwnerCommand();
+        var response = await _mediator.Send(request, cancellationToken);
         return Created("", response);
     }
 
@@ -126,6 +129,16 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> GetOwnIdentity(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetOwnIdentityQuery(), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("IsDeleted")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(IsIdentityOfUserDeletedResponse), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status200OK)]
+    public async Task<IActionResult> IsIdentityOfUserDeleted([FromQuery(Name = "username")] string username, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new IsIdentityOfUserDeletedQuery { Username = username }, cancellationToken);
         return Ok(response);
     }
 }

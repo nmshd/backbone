@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -38,9 +38,16 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        var daysUntilDeletion = deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ??
-                                throw new Exception($"Expected '{nameof(deletionProcess.GracePeriodEndsAt)}' to be set but found 'null' instead.");
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(daysUntilDeletion), cancellationToken);
+        if (deletionProcess.GracePeriodEndsAt == null)
+            throw new Exception($"Expected '{nameof(deletionProcess.GracePeriodEndsAt)}' to be set but found 'null' instead.");
+
+        var daysUntilDeletion = deletionProcess.GracePeriodEndsAt.Value.DaysUntilDate();
+
+        await _notificationSender.SendNotification(
+            new DeletionProcessApprovedPushNotification(daysUntilDeletion),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
 
         return new ApproveDeletionProcessResponse(deletionProcess);
     }

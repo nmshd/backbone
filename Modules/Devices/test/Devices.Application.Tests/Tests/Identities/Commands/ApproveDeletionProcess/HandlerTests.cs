@@ -33,7 +33,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
@@ -51,8 +51,11 @@ public class HandlerTests : AbstractTestsBase
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.LengthOfGracePeriod), A<CancellationToken>._)
+
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+            A<DeletionProcessApprovedPushNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays),
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+            A<CancellationToken>._)
         ).MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);

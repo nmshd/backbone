@@ -1,36 +1,41 @@
 ﻿using System.Globalization;
 using System.Resources;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
 public class PushNotificationTextProvider : IPushNotificationTextProvider
 {
-    private readonly IIdentitiesRepository _identitiesRepository;
     private readonly PushNotificationResourceManager _resourceManager;
 
-    public PushNotificationTextProvider(IIdentitiesRepository identitiesRepository, PushNotificationResourceManager resourceManager)
+    public PushNotificationTextProvider(PushNotificationResourceManager resourceManager)
     {
-        _identitiesRepository = identitiesRepository;
         _resourceManager = resourceManager;
     }
 
-    public async Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId)
+    public Dictionary<CommunicationLanguage, NotificationText> GetNotificationTextsForLanguages(Type pushNotificationType, IEnumerable<CommunicationLanguage> languages)
     {
-        var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None, track: false) ?? throw new Exception("A device with the given id could not be found.");
-        var languageCode = device.CommunicationLanguage.Value;
-
-        return GetNotificationTextForLanguage(pushNotificationType, languageCode);
+        return languages.ToDictionary(
+            language => language,
+            language => GetNotificationTextForLanguage(pushNotificationType, language)
+        );
     }
 
-    private (string Title, string Body) GetNotificationTextForLanguage(Type pushNotificationType, string? languageCode)
+    public NotificationText GetNotificationTextForLanguage(Type pushNotificationType, CommunicationLanguage languageCode)
     {
-        var titleKey = $"{pushNotificationType.Name}.Title";
-        var bodyKey = $"{pushNotificationType.Name}.Body";
+        return GetNotificationTextFromResourceManager(pushNotificationType, languageCode);
+    }
 
-        var culture = languageCode != null ? new CultureInfo(languageCode) : null;
+    private NotificationText GetNotificationTextFromResourceManager(Type pushNotificationType, CommunicationLanguage languageCode)
+    {
+        var pushNotificationTypeName = pushNotificationType.Name;
+
+        var titleKey = $"{pushNotificationTypeName}.Title";
+        var bodyKey = $"{pushNotificationTypeName}.Body";
+
+        var culture = new CultureInfo(languageCode.Value);
 
         try
         {
@@ -38,23 +43,18 @@ public class PushNotificationTextProvider : IPushNotificationTextProvider
             var body = _resourceManager.GetString(bodyKey, culture);
 
             if (title.IsNullOrEmpty())
-                throw new MissingPushNotificationTextException($"Title for notification type '{pushNotificationType.Name}' not found.");
+                throw new MissingPushNotificationTextException($"Title for notification type '{pushNotificationTypeName}' not found.");
 
             if (body.IsNullOrEmpty())
-                throw new MissingPushNotificationTextException($"Body for notification type '{pushNotificationType.Name}' not found.");
+                throw new MissingPushNotificationTextException($"Body for notification type '{pushNotificationTypeName}' not found.");
 
-            return (title, body);
+            return new NotificationText(title, body);
         }
         catch (MissingManifestResourceException)
         {
-            throw new MissingPushNotificationTextException($"Title or body for notification type {pushNotificationType.Name} not found.");
+            throw new MissingPushNotificationTextException($"Title or body for notification type {pushNotificationTypeName} not found.");
         }
     }
 }
 
-public class MissingPushNotificationTextException : Exception
-{
-    public MissingPushNotificationTextException(string message) : base(message)
-    {
-    }
-}
+public class MissingPushNotificationTextException(string message) : Exception(message);

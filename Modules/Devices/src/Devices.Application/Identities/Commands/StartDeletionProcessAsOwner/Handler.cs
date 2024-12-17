@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain;
@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
-        var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId());
+        var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId(), request.LengthOfGracePeriodInDays);
 
         try
         {
@@ -38,7 +38,11 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
         }
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
+        await _notificationSender.SendNotification(
+            new DeletionProcessStartedPushNotification(),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
 
         return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }

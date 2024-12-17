@@ -27,7 +27,11 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
 
         // Assert
-        A.CallTo(() => mockPushSender.SendNotification(externalEventOwner, A<ExternalEventCreatedPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushSender.SendNotification(
+            A<ExternalEventCreatedPushNotification>._,
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(externalEventOwner)),
+            A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -50,7 +54,11 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
 
         // Assert
-        A.CallTo(() => mockPushSender.SendNotification(externalEventOwner, A<ExternalEventCreatedPushNotification>._, A<CancellationToken>._)).MustNotHaveHappened();
+        A.CallTo(() => mockPushSender.SendNotification(
+            A<ExternalEventCreatedPushNotification>._,
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(externalEventOwner)),
+            A<CancellationToken>._)
+        ).MustNotHaveHappened();
     }
 
     [Fact]
@@ -71,6 +79,10 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = true });
 
         // Assert
-        A.CallTo(() => mockPushSender.SendNotification(externalEventOwner, A<ExternalEventCreatedPushNotification>._, A<CancellationToken>._)).MustNotHaveHappened();
+        A.CallTo(() => mockPushSender.SendNotification(
+            A<ExternalEventCreatedPushNotification>._,
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(externalEventOwner)),
+            A<CancellationToken>._)
+        ).MustNotHaveHappened();
     }
 }

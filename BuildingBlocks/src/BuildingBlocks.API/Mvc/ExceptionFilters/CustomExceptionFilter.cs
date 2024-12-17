@@ -3,8 +3,8 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -166,6 +166,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         if (exception.Code == GenericDomainErrors.NotFound().Code)
             return HttpStatusCode.NotFound;
+        if (exception.Code == GenericDomainErrors.Forbidden().Code)
+            return HttpStatusCode.Forbidden;
 
         return HttpStatusCode.BadRequest;
     }

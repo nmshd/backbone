@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -131,10 +131,9 @@ public class DeletionProcessApprovalReminderTests : AbstractTestsBase
         return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
-    [Fact]
     public override void Dispose()
     {
-        Hasher.Reset();
         base.Dispose();
+        Hasher.Reset();
     }
 }

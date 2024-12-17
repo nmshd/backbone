@@ -67,7 +67,7 @@ public class IdentityDeletionProcessAuditLogEntryDTO
     public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
     public DeletionProcessStatus? OldStatus { get; set; }
-    public DeletionProcessStatus NewStatus { get; set; }
+    public DeletionProcessStatus? NewStatus { get; set; }
     public Dictionary<string, string> AdditionalData { get; set; }
     public MessageKey MessageKey { get; set; }
 }

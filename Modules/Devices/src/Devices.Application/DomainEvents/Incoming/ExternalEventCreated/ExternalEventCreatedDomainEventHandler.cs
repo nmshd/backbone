@@ -27,6 +27,10 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
         var identity = await _identitiesRepository.FindByAddress(@event.Owner, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
         if (identity.Status != IdentityStatus.ToBeDeleted)
-            await _pushSenderService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
+            await _pushSenderService.SendNotification(
+                new ExternalEventCreatedPushNotification(),
+                SendPushNotificationFilter.AllDevicesOf(@event.Owner),
+                CancellationToken.None
+            );
     }
 }

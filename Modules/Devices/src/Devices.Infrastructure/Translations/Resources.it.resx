@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
             
         </xsd:element>
@@ -24,22 +24,22 @@
     <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
         <value>Aggiornamenti disponibili</value>
     </data>
-    <data name="DeletionProcessApprovedNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
         <value>Un processo di eliminazione di una delle Sue identità è stato approvato e verrà elaborato a breve.</value>
     </data>
-    <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
         <value>Un processo di eliminazione è stato approvato.</value>
     </data>
-    <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Body" xml:space="preserve">
         <value>Un processo di eliminazione di una delle Sue identità è stato annullato da Lei.</value>
     </data>
-    <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Title" xml:space="preserve">
         <value>Un processo di eliminazione è stato annullato.</value>
     </data>
-    <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Body" xml:space="preserve">
         <value>Un processo di eliminazione di una delle Sue identità è stato annullato dal nostro team di supporto.</value>
     </data>
-    <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Title" xml:space="preserve">
         <value>Un processo di eliminazione è stato annullato.</value>
     </data>
     <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">
@@ -77,5 +77,11 @@
     </data>
     <data name="TestPushNotification.Body" xml:space="preserve">
         <value>Questa è una notifica push di prova.</value>
+    </data>
+    <data name="BackupDeviceUsedPushNotification.Title" xml:space="preserve">
+        <value>Dispositivo di recupero usato</value>
+    </data>
+    <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
+        <value>Il dispositivo di backup è stato utilizzato.</value>
     </data>
 </root>

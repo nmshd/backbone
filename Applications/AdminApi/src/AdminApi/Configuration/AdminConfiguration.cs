@@ -10,8 +10,6 @@ public class AdminConfiguration
 
     public CorsConfiguration Cors { get; set; } = new();
 
-    public SwaggerUiConfiguration SwaggerUi { get; set; } = new();
-
     [Required]
     public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
 
@@ -30,12 +28,6 @@ public class AdminConfiguration
         public bool AccessControlAllowCredentials { get; set; } = false;
     }
 
-    public class SwaggerUiConfiguration
-    {
-        [Required]
-        public bool Enabled { get; set; } = false;
-    }
-
     public class AdminInfrastructureConfiguration
     {
         [Required]
@@ -46,6 +38,9 @@ public class AdminConfiguration
 
     public class ModulesConfiguration
     {
+        [Required]
+        public AnnouncementsConfiguration Announcements { get; set; } = new();
+
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
 

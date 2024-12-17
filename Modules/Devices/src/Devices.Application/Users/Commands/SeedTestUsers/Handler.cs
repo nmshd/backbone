@@ -1,5 +1,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -11,6 +12,8 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
     private readonly ApplicationOptions _applicationOptions;
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
+    private Tier? _basicTier;
+    private CancellationToken _cancellationToken;
 
     public Handler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IOptions<ApplicationOptions> applicationOptions)
     {
@@ -21,12 +24,23 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
 
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
     {
-        var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
+        _cancellationToken = cancellationToken;
+        _basicTier = (await _tiersRepository.FindBasicTier(cancellationToken))!;
 
-        var identityA = Identity.CreateTestIdentity(IdentityAddress.Create([1, 1, 1, 1, 1], _applicationOptions.DidDomainName), [1, 1, 1, 1, 1], basicTier!.Id, "USRa");
-        var identityB = Identity.CreateTestIdentity(IdentityAddress.Create([2, 2, 2, 2, 2], _applicationOptions.DidDomainName), [2, 2, 2, 2, 2], basicTier.Id, "USRb");
+        await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Aaaaaaaa1!");
+        await CreateIdentityIfNecessary([2, 2, 2, 2, 2], "USRb", "Bbbbbbbb1!");
+    }
 
-        await _identitiesRepository.Add(identityA, "a");
-        await _identitiesRepository.Add(identityB, "b");
+    private async Task CreateIdentityIfNecessary(byte[] publicKey, string username, string password)
+    {
+        var address = IdentityAddress.Create(publicKey, _applicationOptions.DidDomainName);
+
+        var identityExists = await _identitiesRepository.Exists(address, _cancellationToken);
+
+        if (!identityExists)
+        {
+            var identity = Identity.CreateTestIdentity(address, publicKey, _basicTier!.Id, username);
+            await _identitiesRepository.Add(identity, password);
+        }
     }
 }

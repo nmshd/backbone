@@ -10,31 +10,16 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.
 public class ServerSentEventsConnectorTests : AbstractTestsBase
 {
     [Fact]
-    public async Task Can_handle_empty_list_of_registrations()
+    public async Task Happy_path()
     {
         // Arrange
         var sseConnector = CreateConnector();
 
         // Act
-        var results = await sseConnector.Send([], new TestPushNotification());
+        var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        results.Successes.Should().BeEmpty();
-        results.Failures.Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task Returns_a_success_if_a_registration_is_passed()
-    {
-        // Arrange
-        var sseConnector = CreateConnector();
-
-        // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
-
-        // Assert
-        results.Successes.Should().HaveCount(1);
-        results.Failures.Should().BeEmpty();
+        result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]
@@ -48,7 +33,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(mockSseServerClient);
 
         // Act
-        await sseConnector.Send([CreatePnsRegistrationForSse(identityAddress: recipient)], new TestPushNotification());
+        await sseConnector.Send(CreatePnsRegistrationForSse(identityAddress: recipient), new TestPushNotification());
 
         // Assert
         A.CallTo(() => mockSseServerClient.SendEvent(recipient, "Test")).MustHaveHappenedOnceExactly();
@@ -63,12 +48,11 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
+        var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        results.Failures.Should().HaveCount(1);
-        results.Successes.Should().BeEmpty();
-        results.Failures.First().Error!.Reason.Should().Be(ErrorReason.InvalidHandle);
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Reason.Should().Be(ErrorReason.InvalidHandle);
     }
 
     [Fact]
@@ -80,12 +64,11 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
+        var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        results.Failures.Should().HaveCount(1);
-        results.Successes.Should().BeEmpty();
-        results.Failures.First().Error!.Reason.Should().Be(ErrorReason.Unexpected);
+        result.IsSuccess.Should().BeFalse();
+        result.Error!.Reason.Should().Be(ErrorReason.Unexpected);
     }
 
     private static ServerSentEventsConnector CreateConnector(ISseServerClient? sseServerClient = null)

@@ -18,7 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -139,7 +139,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("boolean");
 
                     b.Property<string>("RelationshipTemplateId")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -192,7 +191,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -234,8 +232,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
                         .HasForeignKey("RelationshipTemplateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("RelationshipTemplate");
                 });

@@ -1,7 +1,9 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -20,12 +22,16 @@ public class Device : Entity
         CommunicationLanguage = null!;
     }
 
+    /**
+     * This constructor is only used for creating test devices.
+     */
     private Device(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = false;
 
         User = new ApplicationUser(this, username);
 
@@ -33,12 +39,13 @@ public class Device : Entity
         IdentityAddress = null!;
     }
 
-    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null)
+    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null, bool isBackupDevice = false)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = isBackupDevice;
 
         User = new ApplicationUser(this);
 
@@ -68,13 +75,17 @@ public class Device : Entity
 
     public DeviceId CreatedByDevice { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
-    public DeviceId? DeletedByDevice { get; set; }
+    public bool IsBackupDevice { get; private set; }
 
     public bool IsOnboarded => User.HasLoggedIn;
 
-    public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletedAt == null && device.DeletedByDevice == null;
+    public void EnsureCanBeDeleted(IdentityAddress addressOfActiveIdentity)
+    {
+        var error = CanBeDeletedBy(addressOfActiveIdentity);
+
+        if (error != null)
+            throw new DomainException(error);
+    }
 
     private DomainError? CanBeDeletedBy(IdentityAddress addressOfActiveIdentity)
     {
@@ -99,19 +110,26 @@ public class Device : Entity
         return hasChanges;
     }
 
-    public void MarkAsDeleted(DeviceId deletedByDevice, IdentityAddress addressOfActiveIdentity)
+    public void LoginOccurred()
     {
-        var error = CanBeDeletedBy(addressOfActiveIdentity);
+        if (IsBackupDevice)
+        {
+            IsBackupDevice = false;
+            RaiseDomainEvent(new BackupDeviceUsedDomainEvent(IdentityAddress));
+        }
 
-        if (error != null)
-            throw new DomainException(error);
-
-        DeletedAt = SystemTime.UtcNow;
-        DeletedByDevice = deletedByDevice;
+        User.LoginOccurred();
     }
 
     public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         return new Device(identity, communicationLanguage, username);
     }
+
+    #region Expressions
+
+    public static Expression<Func<Device, bool>> IsBackup =>
+        device => device.IsBackupDevice;
+
+    #endregion
 }

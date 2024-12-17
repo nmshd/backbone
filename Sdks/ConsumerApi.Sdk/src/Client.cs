@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Announcements;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
@@ -17,6 +18,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
@@ -38,6 +40,7 @@ public class Client
         DeviceData = deviceData;
         IdentityData = identityData;
 
+        Announcements = new AnnouncementsEndpoint(endpointClient);
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
@@ -49,6 +52,7 @@ public class Client
         Relationships = new RelationshipsEndpoint(endpointClient);
         RelationshipTemplates = new RelationshipTemplatesEndpoint(endpointClient);
         SyncRuns = new SyncRunsEndpoint(endpointClient);
+        Tags = new TagsEndpoint(endpointClient);
         Tokens = new TokensEndpoint(endpointClient);
     }
 
@@ -56,6 +60,7 @@ public class Client
     public IdentityData? IdentityData { get; }
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
+    public AnnouncementsEndpoint Announcements { get; }
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }
@@ -67,6 +72,7 @@ public class Client
     public RelationshipsEndpoint Relationships { get; }
     public RelationshipTemplatesEndpoint RelationshipTemplates { get; }
     public SyncRunsEndpoint SyncRuns { get; }
+    public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
@@ -198,6 +204,16 @@ public class Client
 
     public async Task<Client> OnboardNewDevice(string password)
     {
+        return await OnboardNewDevice(password, false);
+    }
+
+    public async Task<Client> OnboardNewBackupDevice(string password)
+    {
+        return await OnboardNewDevice(password, true);
+    }
+
+    private async Task<Client> OnboardNewDevice(string password, bool isBackupDevice)
+    {
         if (DeviceData == null)
             throw new Exception("The device data is missing. This is probably because you're using an unauthenticated client. In order to onboard a new device, the client needs to be authenticated.");
 
@@ -206,7 +222,8 @@ public class Client
         var createDeviceResponse = await Devices.RegisterDevice(new RegisterDeviceRequest
         {
             DevicePassword = password,
-            SignedChallenge = signedChallenge
+            SignedChallenge = signedChallenge,
+            IsBackupDevice = isBackupDevice
         });
 
         if (createDeviceResponse.IsError)

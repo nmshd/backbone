@@ -11,6 +11,8 @@ using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.ConsumerApi;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -26,6 +28,7 @@ using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tags.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
@@ -101,6 +104,7 @@ static WebApplication CreateApp(string[] args)
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
         app
+            .MigrateDbContext<AnnouncementsDbContext>()
             .MigrateDbContext<ChallengesDbContext>()
             .MigrateDbContext<DevicesDbContext>()
             .MigrateDbContext<FilesDbContext>()
@@ -140,6 +144,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
+        .AddModule<AnnouncementsModule>(configuration)
         .AddModule<ChallengesModule>(configuration)
         .AddModule<DevicesModule>(configuration)
         .AddModule<FilesModule>(configuration)
@@ -147,6 +152,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule>(configuration)
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
+        .AddModule<TagsModule>(configuration)
         .AddModule<TokensModule>(configuration);
 
     var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
@@ -159,9 +165,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication);
-
-    if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -199,9 +202,6 @@ static void Configure(WebApplication app)
     );
 
     var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-
-    if (configuration.SwaggerUi.Enabled)
-        app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;

@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
@@ -73,11 +74,11 @@ public class Relationship : Entity
     }
 
     public RelationshipId Id { get; }
-    public RelationshipTemplateId RelationshipTemplateId { get; }
-    public RelationshipTemplate RelationshipTemplate { get; }
+    public RelationshipTemplateId? RelationshipTemplateId { get; }
+    public RelationshipTemplate? RelationshipTemplate { get; }
 
-    public IdentityAddress From { get; }
-    public IdentityAddress To { get; }
+    public IdentityAddress From { get; private set; }
+    public IdentityAddress To { get; private set; }
 
     public DateTime CreatedAt { get; }
 
@@ -295,23 +296,36 @@ public class Relationship : Entity
         EnsureStatus(RelationshipStatus.Rejected, RelationshipStatus.Revoked, RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed);
 
         if (Status is RelationshipStatus.Terminated or RelationshipStatus.Rejected or RelationshipStatus.Revoked)
-            DecomposeAsFirstParticipant(activeIdentity, activeDevice);
+            DecomposeAsFirstParticipant(activeIdentity, activeDevice, RelationshipAuditLogEntryReason.Decomposition);
         else
-            DecomposeAsSecondParticipant(activeIdentity, activeDevice);
+            DecomposeAsSecondParticipant(activeIdentity, activeDevice, RelationshipAuditLogEntryReason.Decomposition);
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
-    private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted, string didDomainName)
     {
-        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.Rejected, RelationshipStatus.Revoked);
+        EnsureHasParticipant(identityToBeDeleted);
 
+        if (From == identityToBeDeleted && FromHasDecomposed || To == identityToBeDeleted && ToHasDecomposed) return;
+
+        if (Status is RelationshipStatus.DeletionProposed)
+            DecomposeAsSecondParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
+        else
+            DecomposeAsFirstParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
+
+        AnonymizeParticipant(identityToBeDeleted, didDomainName);
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+    }
+
+    private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)
+    {
         var oldStatus = Status;
 
         Status = RelationshipStatus.DeletionProposed;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposition,
+            reason,
             oldStatus,
             RelationshipStatus.DeletionProposed,
             activeIdentity,
@@ -325,14 +339,14 @@ public class Relationship : Entity
             ToHasDecomposed = true;
     }
 
-    private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)
     {
         EnsureStatus(RelationshipStatus.DeletionProposed);
 
         Status = RelationshipStatus.ReadyForDeletion;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposition,
+            reason,
             RelationshipStatus.DeletionProposed,
             RelationshipStatus.ReadyForDeletion,
             activeIdentity,
@@ -354,6 +368,23 @@ public class Relationship : Entity
     {
         if (From != activeIdentity && To != activeIdentity)
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
+    }
+
+    private void AnonymizeParticipant(IdentityAddress identityToAnonymize, string didDomainName)
+    {
+        EnsureHasParticipant(identityToAnonymize);
+        EnsureStatus(RelationshipStatus.DeletionProposed, RelationshipStatus.ReadyForDeletion);
+
+        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
+
+        if (From == identityToAnonymize)
+            From = anonymousIdentity;
+        else
+            To = anonymousIdentity;
+
+        foreach (var auditLogEntry in AuditLog)
+            if (auditLogEntry.CreatedBy == identityToAnonymize)
+                auditLogEntry.AnonymizeIdentity(anonymousIdentity);
     }
 
     public void ParticipantIsToBeDeleted(IdentityAddress identityToBeDeleted, DateTime gracePeriodEndsAt)

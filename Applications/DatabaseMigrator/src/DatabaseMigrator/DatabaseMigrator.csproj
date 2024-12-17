@@ -7,31 +7,34 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.3" />
-        <PackageReference Include="Serilog" Version="4.1.0" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.0" />
+        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.Postgres\Announcements.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.SqlServer\Announcements.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />

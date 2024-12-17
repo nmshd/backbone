@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
@@ -30,13 +31,13 @@ public class IdentityDeletionProcess : Entity
         RaiseDomainEvent(new IdentityDeletionProcessStartedDomainEvent(createdBy, Id, null));
     }
 
-    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
+    private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice, double? lengthOfGracePeriodInDays)
     {
         Id = IdentityDeletionProcessId.Generate();
         IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
 
-        ApproveInternally(createdBy, createdByDevice);
+        ApproveInternally(createdBy, createdByDevice, lengthOfGracePeriodInDays);
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
@@ -48,7 +49,7 @@ public class IdentityDeletionProcess : Entity
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
-    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
+    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInDays);
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
@@ -80,9 +81,9 @@ public class IdentityDeletionProcess : Entity
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
     }
 
-    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId)
+    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId, double? lengthOfGracePeriodInDays)
     {
-        return new IdentityDeletionProcess(createdBy, createdByDeviceId);
+        return new IdentityDeletionProcess(createdBy, createdByDeviceId, lengthOfGracePeriodInDays);
     }
 
     public bool IsActive()
@@ -149,11 +150,12 @@ public class IdentityDeletionProcess : Entity
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 
-    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
+    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice, double? lengthOfGracePeriodInDays = null)
     {
+        lengthOfGracePeriodInDays ??= IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays;
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(lengthOfGracePeriodInDays.Value);
         ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 
@@ -178,6 +180,9 @@ public class IdentityDeletionProcess : Entity
     {
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+
+        if (GracePeriodEndsAt < SystemTime.UtcNow)
+            throw new DomainException(DomainErrors.GracePeriodHasAlreadyExpired());
 
         ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;

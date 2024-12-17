@@ -12,6 +12,7 @@ public class AspNetCoreUserContext : IUserContext
     private const string DEVICE_ID_CLAIM = "device_id";
     private const string USER_ID_CLAIM = "sub";
     private const string SUBSCRIPTION_PLAN_CLAIM = "subscription_plan";
+    private const string CLIENT_ID_CLAIM = "client_id";
     private readonly IHttpContextAccessor _context;
 
     public AspNetCoreUserContext(IHttpContextAccessor context)
@@ -64,6 +65,17 @@ public class AspNetCoreUserContext : IUserContext
     {
         var username = GetHttpContext().User.Identities.FirstOrDefault()?.Name;
         return username;
+    }
+
+    public string GetClientId()
+    {
+        return GetClientIdOrNull() ?? throw new NotFoundException();
+    }
+
+    public string? GetClientIdOrNull()
+    {
+        var clientId = GetHttpContext().User.FindFirstValue(CLIENT_ID_CLAIM);
+        return clientId;
     }
 
     private HttpContext GetHttpContext()

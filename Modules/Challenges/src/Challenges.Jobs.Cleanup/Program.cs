@@ -4,7 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Challenges.Jobs.Cleanup;
@@ -79,6 +79,16 @@ public class FakeUserContext : IUserContext
     }
 
     public string GetUsernameOrNull()
+    {
+        throw new NotSupportedException();
+    }
+
+    public string GetClientId()
+    {
+        throw new NotSupportedException();
+    }
+
+    public string? GetClientIdOrNull()
     {
         throw new NotSupportedException();
     }

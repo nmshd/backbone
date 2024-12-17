@@ -1,0 +1,21 @@
+meta {
+  name: /Relationships/{id}/Accept
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/Relationships/{{id}}/Accept
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "creationResponseContent": ""
+  }
+}
+
+vars:pre-request {
+  id: RELquh4tVcr3zOTQGti7
+}
