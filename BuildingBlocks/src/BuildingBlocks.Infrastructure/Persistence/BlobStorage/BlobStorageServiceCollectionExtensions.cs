@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -28,6 +29,10 @@ public static class BlobStorageServiceCollectionExtensions
             case BlobStorageOptions.GOOGLE_CLOUD_STORAGE:
                 services.AddGoogleCloudStorage(options.GoogleCloudStorage!);
                 break;
+            case BlobStorageOptions.S3_BUCKET:
+                services.AddS3(options.S3Bucket!);
+                break;
+
             default:
             {
                 if (options.ProductName.IsNullOrEmpty())
@@ -52,18 +57,22 @@ public class BlobStorageOptions : IValidatableObject
 {
     public const string AZURE_STORAGE_ACCOUNT = "AzureStorageAccount";
     public const string GOOGLE_CLOUD_STORAGE = "GoogleCloudStorage";
+    public const string S3_BUCKET = "S3Bucket";
 
-    [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}")]
+    [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}|{S3_BUCKET}")]
     public string ProductName { get; set; } = null!;
 
     public AzureStorageAccountOptions? AzureStorageAccount { get; set; }
 
     public GoogleCloudStorageOptions? GoogleCloudStorage { get; set; }
 
+    public S3BucketOptions? S3Bucket { get; set; }
+
     public string RootFolder => ProductName switch
     {
         AZURE_STORAGE_ACCOUNT => AzureStorageAccount!.ContainerName,
         GOOGLE_CLOUD_STORAGE => GoogleCloudStorage!.BucketName,
+        S3_BUCKET => S3Bucket!.BucketName,
         _ => throw new Exception("Unsupported ProductName")
     };
 
