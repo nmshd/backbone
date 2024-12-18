@@ -5,13 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/Tokens
+  url: {{baseUrl}}/Tokens?tokens.1.Id=TOKHEcZTpgaH72X4oJ4c&tokens.0.Id=TOKbEqqNENFeX1bZ6Gqs&PageNumber=1&PageSize=3
   body: none
   auth: inherit
 }
 
 params:query {
-  ~ids: TOKsjPynl0FHYJzHnkIo
-  ~PageNumber: 1
-  ~PageSize: 1
+  tokens.1.Id: TOKHEcZTpgaH72X4oJ4c
+  tokens.0.Id: TOKbEqqNENFeX1bZ6Gqs
+  PageNumber: 1
+  PageSize: 3
 }
