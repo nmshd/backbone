@@ -17,6 +17,7 @@ public interface ITokensRepository
     Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
 
     Task<Token?> Find(TokenId tokenId, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false);
+    Task Update(Token token, CancellationToken cancellationToken);
     Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken);
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
     Task DeleteToken(Token token, CancellationToken cancellationToken);
