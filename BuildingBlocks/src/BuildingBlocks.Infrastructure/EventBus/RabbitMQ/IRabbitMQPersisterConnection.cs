@@ -7,7 +7,7 @@ public interface IRabbitMqPersistentConnection
 {
     bool IsConnected { get; }
 
-    bool TryConnect();
+    Task Connect();
 
-    IModel CreateModel();
+    IChannel GetChannel();
 }
