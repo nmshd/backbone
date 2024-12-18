@@ -4,9 +4,11 @@ using Backbone.Modules.Devices.Application.DomainEvents.Incoming.BackupDeviceUse
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.ExternalEventCreated;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
+using Backbone.Modules.Devices.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.AnnouncementCreated;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.ExternalEventCreated;
+using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Devices.Application.Extensions;
@@ -18,6 +20,7 @@ public static class IEventBusExtensions
         eventBus.SubscribeToAnnouncementsEvents();
         eventBus.SubscribeToDevicesEvents();
         eventBus.SubscribeToSynchronizationEvents();
+        eventBus.SubscribeToTokensEvents();
     }
 
     private static void SubscribeToAnnouncementsEvents(this IEventBus eventBus)
@@ -35,5 +38,10 @@ public static class IEventBusExtensions
         eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>();
         eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>();
         eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
+    }
+
+    private static void SubscribeToTokensEvents(this IEventBus eventBus)
+    {
+        eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
 }

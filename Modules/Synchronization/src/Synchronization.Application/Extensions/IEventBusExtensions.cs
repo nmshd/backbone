@@ -8,6 +8,7 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToB
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
@@ -17,6 +18,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.TokenLocked;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 
@@ -26,6 +28,7 @@ public static class IEventBusExtensions
     {
         SubscribeToMessagesEvents(eventBus);
         SubscribeToRelationshipsEvents(eventBus);
+        SubscribeToTokensEvents(eventBus);
     }
 
     private static void SubscribeToMessagesEvents(IEventBus eventBus)
@@ -43,5 +46,10 @@ public static class IEventBusExtensions
         eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>();
         eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>();
         eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>();
+    }
+
+    private static void SubscribeToTokensEvents(IEventBus eventBus)
+    {
+        eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
 }
