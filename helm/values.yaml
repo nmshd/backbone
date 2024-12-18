@@ -17,11 +17,11 @@ admincli:
   # resources - the resources for the Admin CLI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
   resources:
     requests:
-      cpu: "200m"
+      cpu: "50m"
       memory: "128Mi"
     limits:
-      cpu: "400m"
-      memory: "1Gi"
+      cpu: "50m"
+      memory: "128Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
@@ -666,12 +666,30 @@ global:
             # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
+            # productName - possible values: "AzureStorageAccount"/"GoogleCloudStorage"
+            productName: ""
+            # azureStorageAccount - only applicable if ProductName is "AzureStorageAccount"
+            # azureStorageAccount:
+              # containerName - the name of the container that should be used to store the files
+              # containerName: ""
+              # connectionString - should be set via environment variable
+              # connectionString: ""
+            # googleCloudStorage - only applicable if ProductName is "GoogleCloudStorage"
+            # googleCloudStorage:
+              # serviceAccountJson - the content of the service account json file that should be used to authenticate
+              # serviceAccountJson: ""
+              # bucketName - the name of the bucket that should be used to store the files
+              # bucketName: ""
+            # s3Bucket - only applicable if ProductName is "S3Bucket"
+            # s3Bucket:
+              # accessKeyId - the access key id that should be used to authenticate
+              # accessKeyId: ""
+              # secretAccessKey - the secret access key that should be used to authenticate
+              # secretAccessKey: ""
+              # bucketName - the name of the bucket that should be used to store the files
+              # bucketName: ""
+              # serviceUrl - the url of the S3 service
+              # serviceUrl: ""
       messages:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses

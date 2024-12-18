@@ -63,7 +63,11 @@ public class AzureStorageAccountTests : AbstractTestsBase
         var services = new ServiceCollection()
             .AddLogging();
 
-        services.AddAzureStorageAccount(x => { x.ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;"; });
+        services.AddAzureStorageAccount(new AzureStorageAccountOptions
+        {
+            ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;",
+            ContainerName = "test"
+        });
 
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider.GetRequiredService<IBlobStorage>();
