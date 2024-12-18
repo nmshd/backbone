@@ -84,13 +84,22 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
-        
+
 #if DEBUG
         // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
         // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
@@ -124,15 +133,6 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
         var entities = GetChangedEntities();
         var result = base.SaveChanges(acceptAllChangesOnSuccess);
-        PublishDomainEvents(entities);
-
-        return result;
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(cancellationToken);
         PublishDomainEvents(entities);
 
         return result;
