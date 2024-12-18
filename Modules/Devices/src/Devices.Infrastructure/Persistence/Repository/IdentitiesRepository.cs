@@ -16,14 +16,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class IdentitiesRepository : IIdentitiesRepository
 {
-    private readonly DbSet<Identity> _identities;
-    private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly DevicesDbContext _dbContext;
     private readonly DbSet<Device> _devices;
-    private readonly IQueryable<Device> _readonlyDevices;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<Identity> _identities;
     private readonly DbSet<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
+    private readonly IQueryable<Device> _readonlyDevices;
+    private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
@@ -173,6 +173,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(filter)
             .ToListAsync(cancellationToken);
     }
