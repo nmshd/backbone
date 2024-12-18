@@ -105,6 +105,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddCustomAspNetCore(parsedConfiguration)
         .AddOData()
         .AddCustomFluentValidation()
+        .AddRepositories()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(configuration.GetSection("Modules:Devices"))
@@ -129,6 +130,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
     services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
+    
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

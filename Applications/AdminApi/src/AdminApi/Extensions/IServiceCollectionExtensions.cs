@@ -10,9 +10,13 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Infrastructure.Persistence;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
+using Microsoft.Extensions.Options;
 using Microsoft.OData.ModelBuilder;
 
 namespace Backbone.AdminApi.Extensions;
@@ -171,6 +175,21 @@ public static class IServiceCollectionExtensions
         services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
+        return services;
+    }
+    
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
+
+        services.AddPersistence(options =>
+        {
+            options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
+            options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+        });
+        
+        services.AddTransient<ITokensRepository, TokensRepository>();
+        
         return services;
     }
 }
