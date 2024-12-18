@@ -10,6 +10,9 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
+    public const int MAX_FAILED_ACCESSES = 100;
+
+    private readonly List<TokenAllocation> _allocations;
 
     // ReSharper disable once UnusedMember.Local
     private Token()
@@ -19,6 +22,7 @@ public class Token : Entity
         CreatedBy = null!;
         CreatedByDevice = null!;
         Content = null!;
+        _allocations = null!;
     }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
@@ -35,6 +39,8 @@ public class Token : Entity
         ForIdentity = forIdentity;
         Password = password;
 
+        _allocations = [];
+
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
 
@@ -49,6 +55,10 @@ public class Token : Entity
     public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+    public int AccessFailedCount { get; private set; }
+
+    public IReadOnlyList<TokenAllocation> Allocations => _allocations;
+    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESSES;
 
     public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
     {
@@ -56,6 +66,20 @@ public class Token : Entity
             Password == null ||
             password != null && Password.SequenceEqual(password) ||
             CreatedBy == address; // The owner shouldn't need a password to get the template
+    }
+
+    public bool HasAllocationForIdentity(IdentityAddress? address)
+    {
+        return address != null && Allocations.Any(allocation => allocation.AllocatedBy == address);
+    }
+
+    public void AddAllocationFor(IdentityAddress address, DeviceId deviceId)
+    {
+        EnsureIsNotOwner(address);
+        EnsureHasNoAllocationFor(address);
+
+        var allocation = new TokenAllocation(this, address, deviceId);
+        _allocations.Add(allocation);
     }
 
     public void AnonymizeForIdentity(string didDomainName)
@@ -67,6 +91,17 @@ public class Token : Entity
         ForIdentity = anonymousIdentity;
     }
 
+    public void IncrementAccessFailedCount()
+    {
+        if (IsLocked) return;
+
+        AccessFailedCount++;
+        if (IsLocked)
+        {
+            RaiseDomainEvent(new TokenLockedDomainEvent(this));
+        }
+    }
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
@@ -75,6 +110,16 @@ public class Token : Entity
     public void EnsureIsPersonalized()
     {
         if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
+    }
+
+    public void EnsureHasNoAllocationFor(IdentityAddress identityAddress)
+    {
+        if (HasAllocationForIdentity(identityAddress)) throw new DomainException(DomainErrors.AlreadyAllocated());
+    }
+
+    public void EnsureIsNotOwner(IdentityAddress identityAddress)
+    {
+        if (identityAddress == CreatedBy) throw new DomainException(DomainErrors.NoAllocationForOwner());
     }
 
     #region Expressions
@@ -108,6 +153,11 @@ public class Token : Entity
     public static Expression<Func<Token, bool>> IsFor(IdentityAddress identityAddress)
     {
         return token => token.ForIdentity == identityAddress;
+    }
+
+    public static Expression<Func<Token, bool>> HasAllocationFor(IdentityAddress identityAddress)
+    {
+        return token => token.CreatedBy == identityAddress || token.Allocations.Any(allocation => allocation.AllocatedBy == identityAddress);
     }
 
     #endregion
