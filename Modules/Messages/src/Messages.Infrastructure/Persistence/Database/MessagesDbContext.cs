@@ -43,15 +43,4 @@ public class MessagesDbContext : AbstractDbContextBase
 
         builder.ApplyConfigurationsFromAssembly(typeof(MessagesDbContext).Assembly);
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-#if DEBUG
-        // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
-        // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
-        // multiple queries. See: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
-        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
-#endif
-        base.OnConfiguring(optionsBuilder);
-    }
 }
