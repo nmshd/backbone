@@ -25,11 +25,6 @@ public class Validator : AbstractValidator<ListTokensQuery>
                 queryItems
                     .RuleFor(query => query.Id)
                     .ValidId<ListTokensQueryItem, TokenId>();
-
-                queryItems
-                    .RuleFor(query => query.Password)
-                    .NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH)
-                    .When(query => query.Password != null);
             });
     }
 }
