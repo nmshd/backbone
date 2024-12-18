@@ -21,8 +21,6 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 
     private async Task SeedEverything(QuotasDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
-
         await SeedQueuedForDeletionTierMetrics();
     }
 

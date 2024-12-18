@@ -1,6 +1,6 @@
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;

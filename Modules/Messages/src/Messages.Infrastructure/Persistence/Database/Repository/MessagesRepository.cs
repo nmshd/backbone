@@ -13,9 +13,9 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Reposito
 
 public class MessagesRepository : IMessagesRepository
 {
+    private readonly MessagesDbContext _dbContext;
     private readonly DbSet<Message> _messages;
     private readonly IQueryable<Message> _readOnlyMessages;
-    private readonly MessagesDbContext _dbContext;
 
     public MessagesRepository(MessagesDbContext dbContext)
     {
@@ -28,6 +28,7 @@ public class MessagesRepository : IMessagesRepository
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAll(_dbContext)
+            .AsSplitQuery() // Use split query to avoid cartesian explosion. see: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
             .Where(Message.HasParticipant(address))
             .FirstWithId(id, cancellationToken);
 
@@ -53,7 +54,8 @@ public class MessagesRepository : IMessagesRepository
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
-            .IncludeAll(_dbContext);
+            .IncludeAll(_dbContext)
+            .AsSplitQuery();
 
         if (ids.Any())
             query = query.WithIdsIn(ids);
@@ -78,7 +80,9 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task<IEnumerable<Message>> Find(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
-        return await _messages.IncludeAll(_dbContext)
+        return await _messages
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(expression)
             .ToListAsync(cancellationToken);
     }

@@ -128,4 +128,10 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         identity.StartDeletionProcessAsSupport();
         return identity;
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
+    }
 }

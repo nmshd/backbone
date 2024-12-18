@@ -15,7 +15,10 @@ public class Handler : IRequestHandler<GetDeletionProcessesAuditLogsQuery, GetDe
 
     public async Task<GetDeletionProcessesAuditLogsResponse> Handle(GetDeletionProcessesAuditLogsQuery request, CancellationToken cancellationToken)
     {
-        var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogsByAddress(Hasher.HashUtf8(request.IdentityAddress), cancellationToken);
+        var addressHash = Hasher.HashUtf8(request.IdentityAddress);
+
+        var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogs(l => l.IdentityAddressHash == addressHash, cancellationToken);
+
         return new GetDeletionProcessesAuditLogsResponse(identityDeletionProcessAuditLogEntries.OrderBy(e => e.CreatedAt));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplatesForIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 using FakeItEasy;
 using MediatR;
@@ -27,6 +28,9 @@ public class IdentityDeleterTests : AbstractTestsBase
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
             A<DeleteRelationshipTemplatesOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockMediator.Send(
+            A<AnonymizeRelationshipTemplatesForIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
             A<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),

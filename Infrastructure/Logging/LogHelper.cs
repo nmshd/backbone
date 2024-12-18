@@ -44,12 +44,12 @@ public static class LogHelper
             diagnosticContext.Set("QueryString", request.QueryString.Value);
         }
 
-        diagnosticContext.Set("ContentType", httpContext.Response.ContentType);
+        if (httpContext.Response.ContentType != null)
+            diagnosticContext.Set("ContentType", httpContext.Response.ContentType);
 
         var endpoint = httpContext.GetEndpoint();
-        if (endpoint != null)
-        {
+
+        if (endpoint?.DisplayName != null)
             diagnosticContext.Set("EndpointName", endpoint.DisplayName);
-        }
     }
 }

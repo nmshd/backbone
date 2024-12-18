@@ -9,6 +9,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
@@ -31,18 +32,21 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
+        if (command.IsBackupDevice && await _identitiesRepository.HasBackupDevice(identity.Address, cancellationToken))
+            throw new ApplicationException(ApplicationErrors.Devices.BackupDeviceAlreadyExists());
+
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
         _logger.LogTrace("Successfully validated challenge.");
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
 
-        var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId());
+        var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId(), command.IsBackupDevice);
 
         await _identitiesRepository.UpdateWithNewDevice(identity, command.DevicePassword);
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse(newDevice.User);
+        return new RegisterDeviceResponse(newDevice);
     }
 }
 

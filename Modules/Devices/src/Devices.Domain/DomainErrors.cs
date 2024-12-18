@@ -64,6 +64,12 @@ public static class DomainErrors
             "The deletion via this deletion process cannot be started because the grace period has not yet expired.");
     }
 
+    public static DomainError GracePeriodHasAlreadyExpired()
+    {
+        return new DomainError("error.platform.validation.device.gracePeriodHasAlreadyExpired",
+            "You cannot perform this action, because the grace period of this deletion process has already expired.");
+    }
+
     public static DomainError DeletionProcessMustBePastDueApproval()
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");

@@ -16,14 +16,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class IdentitiesRepository : IIdentitiesRepository
 {
-    private readonly DbSet<Identity> _identities;
-    private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly DevicesDbContext _dbContext;
     private readonly DbSet<Device> _devices;
-    private readonly IQueryable<Device> _readonlyDevices;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<Identity> _identities;
     private readonly DbSet<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
+    private readonly IQueryable<Device> _readonlyDevices;
+    private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
@@ -41,6 +41,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
@@ -53,10 +54,34 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToArrayAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    public async Task<bool> HasBackupDevice(IdentityAddress identity, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentityDeletionProcessAuditLogs
-            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
+        return await _readonlyDevices
+            .OfIdentity(identity)
+            .Where(Device.IsBackup)
+            .AnyAsync(cancellationToken);
+    }
+
+    public async Task DeleteDevice(Device device, CancellationToken cancellationToken)
+    {
+        _devices.Remove(device);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
+        CancellationToken cancellationToken, bool track = false)
+    {
+        // Clearing the change tracker needs to be done because in case of the actual identity deletion, the deletion
+        // process including all its audit log entries is read first. Then the deletion process is deleted without the
+        // change tracker being involved. This leads to auditLogEntry.ProcessId being set to null in the database (because
+        // of the foreign key configuration). But the change tracker does not know about that.
+        // Later on during the actual deletion we want to update all existing audit log entries to set the usernames.
+        // And when trying to save the updated audit log entries, EF Core tries to save the process id as well, which is
+        // impossible, because the deletion process was deleted already.
+        _dbContext.ChangeTracker.Clear();
+
+        return await (track ? _identityDeletionProcessAuditLogs : _readonlyIdentityDeletionProcessAuditLogs)
+            .Where(filter)
             .ToListAsync(cancellationToken);
     }
 
@@ -97,8 +122,8 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices
-            .NotDeleted()
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .OfIdentity(identity);
 
         if (ids.Any())
@@ -110,9 +135,17 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
-            .NotDeleted()
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Device>> GetDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _devices : _readonlyDevices)
+            .IncludeAll(_dbContext)
+            .Where(d => deviceIds.Contains(d.Id))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task Update(Device device, CancellationToken cancellationToken)
@@ -140,8 +173,17 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(filter)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Identity?> FindFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
@@ -153,5 +195,11 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identityDeletionProcessAuditLogs.Add(auditLogEntry);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken)
+    {
+        _identityDeletionProcessAuditLogs.UpdateRange(auditLogEntries);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

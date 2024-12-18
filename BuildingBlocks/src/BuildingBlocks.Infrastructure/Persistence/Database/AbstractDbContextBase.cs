@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverter
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
@@ -83,12 +84,28 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
 
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
+
+#if DEBUG
+        // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
+        // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
+        // multiple queries. See: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
+        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+#endif
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -116,15 +133,6 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
         var entities = GetChangedEntities();
         var result = base.SaveChanges(acceptAllChangesOnSuccess);
-        PublishDomainEvents(entities);
-
-        return result;
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(cancellationToken);
         PublishDomainEvents(entities);
 
         return result;

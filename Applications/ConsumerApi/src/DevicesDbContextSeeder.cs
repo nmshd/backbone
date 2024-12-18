@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.ConsumerApi;
 
@@ -26,11 +25,9 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 
     private async Task SeedEverything(DevicesDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
-
         await SeedBasicTier(context);
         await SeedQueuedForDeletionTier();
-        await SeedApplicationUsers(context);
+        await SeedApplicationUsers();
     }
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
@@ -38,11 +35,8 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         return await context.Tiers.GetBasicTier(CancellationToken.None);
     }
 
-    private async Task SeedApplicationUsers(DevicesDbContext context)
+    private async Task SeedApplicationUsers()
     {
-        if (await context.Users.AnyAsync())
-            return;
-
         await _mediator.Send(new SeedTestUsersCommand());
     }
 

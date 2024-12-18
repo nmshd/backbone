@@ -82,4 +82,10 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationship.relationshipTemplateNotAllocated",
             "The relationship template has to be allocated before it can be used to establish a relationship. Send a GET request to the /RelationshipTemplates/{id} endpoint to allocate the template.");
     }
+
+    public static DomainError RelationshipTemplateNotPersonalized()
+    {
+        return new DomainError("error.platform.validation.relationship.relationshipTemplateNotPersonalized",
+            "The relationship template has to be personalized.");
+    }
 }

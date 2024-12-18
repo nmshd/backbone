@@ -6,6 +6,7 @@ using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence;
+
 public static class IServiceCollectionExtensions
 {
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
@@ -19,10 +20,9 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
     {
         services.AddDatabase(options.DbOptions);
-        services.Configure<BlobOptions>(blobOptions =>
-            blobOptions.RootFolder = options.BlobStorageOptions.Container);
         services.AddBlobStorage(options.BlobStorageOptions);
 
+        services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = options.BlobStorageOptions.RootFolder);
         services.AddTransient<IFilesRepository, FilesRepository>();
     }
 }

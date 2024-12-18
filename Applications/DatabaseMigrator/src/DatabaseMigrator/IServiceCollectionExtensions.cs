@@ -4,6 +4,13 @@ public static class IServiceCollectionExtensions
 {
     public static void AddAllDbContexts(this IServiceCollection services, SqlDatabaseConfiguration databaseConfiguration)
     {
+        Modules.Announcements.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
+        {
+            options.Provider = databaseConfiguration.Provider;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
+            options.CommandTimeout = databaseConfiguration.CommandTimeout;
+        });
+
         Modules.Challenges.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;

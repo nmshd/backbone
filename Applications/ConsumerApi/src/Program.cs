@@ -11,6 +11,8 @@ using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.ConsumerApi;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -102,6 +104,7 @@ static WebApplication CreateApp(string[] args)
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
         app
+            .MigrateDbContext<AnnouncementsDbContext>()
             .MigrateDbContext<ChallengesDbContext>()
             .MigrateDbContext<DevicesDbContext>()
             .MigrateDbContext<FilesDbContext>()
@@ -141,6 +144,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
+        .AddModule<AnnouncementsModule>(configuration)
         .AddModule<ChallengesModule>(configuration)
         .AddModule<DevicesModule>(configuration)
         .AddModule<FilesModule>(configuration)
@@ -161,9 +165,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication);
-
-    if (parsedConfiguration.SwaggerUi.Enabled)
-        services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -201,9 +202,6 @@ static void Configure(WebApplication app)
     );
 
     var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-
-    if (configuration.SwaggerUi.Enabled)
-        app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;

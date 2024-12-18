@@ -17,11 +17,11 @@ admincli:
   # resources - the resources for the Admin CLI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
   resources:
     requests:
-      cpu: "200m"
+      cpu: "50m"
       memory: "128Mi"
     limits:
-      cpu: "400m"
-      memory: "1Gi"
+      cpu: "50m"
+      memory: "128Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
@@ -90,13 +90,8 @@ adminui:
   podAnnotations: {}
 
   # env - environment variables for the Admin UI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
-  env:
-    - name: Database__ConnectionString
-      valueFrom:
-        secretKeyRef:
-          name: "devices-sql-connectionstring"
-          key: VALUE
-
+  env: []
+  
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
 
@@ -112,28 +107,6 @@ adminui:
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
-
-  # httpRoute - the configuration of the HttpRoute for the Consumer API
-  httpRoute:
-    # enabled - whether to enable the HttpRoute for the Consumer API
-    enabled: false
-    # parentRefName - the name of the gateway this Route wants to be attached to
-    parentRefName: ""
-    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
-    parentRefNamespace: ""
-    hostnames: []
-
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
-  backendConfig:
-    healthCheck:
-      # checkIntervalSec - time from the start of one prober's check to the start of its next check
-      checkIntervalSec: 15
-      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
-      timeoutSec: 15
-      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
-      healthyThreshold: 1
-      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
-      unhealthyThreshold: 2
 
 #=========================== Consumer API ===========================
 
@@ -199,8 +172,8 @@ consumerapi:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnames - the hostnames the Consumer API should be reachable under
-    hostnames: []
+    # hostnamesOverride - the hostnames the Consumer API should be reachable under; if empty, the `.global.defaultHostname` property is used
+    hostnamesOverride: []
 
   ingress:
     # enabled - whether to enable the Ingress for the Consumer API
@@ -225,7 +198,7 @@ consumerapi:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `BackendConfig`s
   backendConfig:
     healthCheck:
       # checkIntervalSec - time from the start of one prober's check to the start of its next check
@@ -523,8 +496,8 @@ sseserver:
     parentRefNamespace: ""
     # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
     parentRefSectionName: ""
-    # hostnames - the hostnames the Consumer API should be reachable under
-    hostnames: []
+    # hostnamesOverride - the hostnames the SSE Server should be reachable under; if empty, the `.global.defaultHostname` property is used
+    hostnamesOverride: []
 
   ingress:
     # enabled - whether to enable the Ingress for the Consumer API
@@ -542,7 +515,7 @@ sseserver:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `BackendConfig`s
   backendConfig:
     healthCheck:
       # checkIntervalSec - time from the start of one prober's check to the start of its next check
@@ -555,6 +528,9 @@ sseserver:
       unhealthyThreshold: 2
 
 global:
+  # defaultHostname - the default hostname the services should be reachable under (this can be overriden in the individual service configurations)
+  defaultHostname: ""
+
   # useBuiltInEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
   useBuiltInEventbus: false
 
@@ -585,11 +561,6 @@ global:
       allowedOrigins: ""
       # allowedMethods - a semicolon-separated list of headers that are exposed to the client; the specified headers are recommended, because they are used by the official Enmeshed app
       exposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
-    swaggerUi:
-      # enabled - whether the Swagger UI should be enabled
-      enabled: false
-      # tokenUrl - the URL from which the Swagger UI can obtain a JWT; it usually follows the pattern "<backbone-base-url>/connect/token"
-      tokenUrl: ""
     infrastructure:
       eventBus:
         # vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
@@ -614,6 +585,18 @@ global:
         # connectionString - should be set via environment variable
         connectionString: ""
     modules:
+      announcements:
+        application:
+          # pagination - the following options describe the default and maximum page size for the different endpoints
+          pagination:
+            defaultPageSize: 50
+            maxPageSize: 200
+        infrastructure:
+          sqlDatabase:
+            # provider - possible values: "Postgres"/"SqlServer"
+            provider: ""
+            # connectionString - should be set via environment variable
+            connectionString: ""
       challenges:
         infrastructure:
           sqlDatabase:
@@ -623,8 +606,8 @@ global:
             connectionString: ""
       devices:
         application:
-          # addressPrefix - the prefix that should be used when generating Identity Addresses; the official Enmeshed App currently only supports "id1"
-          addressPrefix: id1
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
@@ -683,14 +666,34 @@ global:
             # connectionString - should be set via environment variable
             connectionString: ""
           blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
+            # productName - possible values: "AzureStorageAccount"/"GoogleCloudStorage"
+            productName: ""
+            # azureStorageAccount - only applicable if ProductName is "AzureStorageAccount"
+            # azureStorageAccount:
+              # containerName - the name of the container that should be used to store the files
+              # containerName: ""
+              # connectionString - should be set via environment variable
+              # connectionString: ""
+            # googleCloudStorage - only applicable if ProductName is "GoogleCloudStorage"
+            # googleCloudStorage:
+              # serviceAccountJson - the content of the service account json file that should be used to authenticate
+              # serviceAccountJson: ""
+              # bucketName - the name of the bucket that should be used to store the files
+              # bucketName: ""
+            # s3Bucket - only applicable if ProductName is "S3Bucket"
+            # s3Bucket:
+              # accessKeyId - the access key id that should be used to authenticate
+              # accessKeyId: ""
+              # secretAccessKey - the secret access key that should be used to authenticate
+              # secretAccessKey: ""
+              # bucketName - the name of the bucket that should be used to store the files
+              # bucketName: ""
+              # serviceUrl - the url of the S3 service
+              # serviceUrl: ""
       messages:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
           maxNumberOfUnreceivedMessagesFromOneSender: 20
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -717,6 +720,8 @@ global:
             connectionString: ""
       relationships:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
@@ -741,6 +746,8 @@ global:
             connectionString: ""
       tokens:
         application:
+          # didDomainName - the didDomainName that should be used when generating Identity Addresses
+          didDomainName: ""
           # pagination - the following options describe the default and maximum page size for the different endpoints
           pagination:
             defaultPageSize: 50
