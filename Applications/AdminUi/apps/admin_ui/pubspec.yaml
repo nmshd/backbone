@@ -37,7 +37,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   translations_cleaner: ^0.0.5
-  very_good_analysis: ^6.0.0
+  very_good_analysis: ^7.0.0
 
 flutter:
   generate: true
