@@ -42,10 +42,10 @@ public class PushNotificationTextProvider : IPushNotificationTextProvider
             var title = _resourceManager.GetString(titleKey, culture);
             var body = _resourceManager.GetString(bodyKey, culture);
 
-            if (title.IsNullOrEmpty())
+            if (title == null)
                 throw new MissingPushNotificationTextException($"Title for notification type '{pushNotificationTypeName}' not found.");
 
-            if (body.IsNullOrEmpty())
+            if (body == null)
                 throw new MissingPushNotificationTextException($"Body for notification type '{pushNotificationTypeName}' not found.");
 
             return new NotificationText(title, body);
