@@ -84,4 +84,10 @@
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
         <value>Ihr Wiederherstellungsgerät wurde benutzt.</value>
     </data>
+    <data name="TokenLockedPushNotification.Title" xml:space="preserve">
+        <value>Token gesperrt</value>
+    </data>
+    <data name="TokenLockedPushNotification.Body" xml:space="preserve">
+        <value>Ihr Token wurde aufgrund zu vieler falscher Passwortversuche gesperrt</value>
+    </data>
 </root>

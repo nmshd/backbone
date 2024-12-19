@@ -183,4 +183,10 @@
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
         <value>O seu dispositivo de cópia de segurança foi utilizado.</value>
     </data>
+    <data name="TokenLockedPushNotification.Body" xml:space="preserve">
+        <value>O seu token foi bloqueado devido a demasiadas tentativas erradas de introdução de palavra-passe</value>
+    </data>
+    <data name="TokenLockedPushNotification.Title" xml:space="preserve">
+        <value>Token bloqueado</value>
+    </data>
 </root>
