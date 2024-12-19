@@ -21,7 +21,7 @@ public static class RabbitMqServiceCollectionExtensions
 
             var factory = new ConnectionFactory
             {
-                HostName = options.HostName
+                HostName = options.HostName, ConsumerDispatchConcurrency = 5
             };
 
             if (!string.IsNullOrEmpty(options.Username)) factory.UserName = options.Username;
