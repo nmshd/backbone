@@ -53,7 +53,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         await _processor.CloseAsync();
     }
 
-    public async void Publish(DomainEvent @event)
+    public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
@@ -78,7 +78,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
     }
 
-    public void Subscribe<T, TH>()
+    public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
@@ -90,12 +90,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             {
                 _logger.LogInformation("Trying to create subscription on Service Bus...");
 
-                _serviceBusPersisterConnection.AdministrationClient.CreateRuleAsync(TOPIC_NAME, _subscriptionName,
+                await _serviceBusPersisterConnection.AdministrationClient.CreateRuleAsync(TOPIC_NAME, _subscriptionName,
                     new CreateRuleOptions
                     {
                         Filter = new CorrelationRuleFilter { Subject = eventName },
                         Name = eventName
-                    }).GetAwaiter().GetResult();
+                    });
 
                 _logger.LogInformation("Successfully created subscription on Service Bus.");
             }
@@ -109,9 +109,9 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _subscriptionManager.AddSubscription<T, TH>();
     }
 
-    public void StartConsuming()
+    public async Task StartConsuming()
     {
-        RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
+        await RegisterSubscriptionClientMessageHandlerAsync();
     }
 
     private async Task RegisterSubscriptionClientMessageHandlerAsync()

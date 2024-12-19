@@ -10,7 +10,9 @@ public abstract class AbstractModule
 
     public abstract void ConfigureServices(IServiceCollection services, IConfigurationSection configuration);
 
-    public abstract void ConfigureEventBus(IEventBus eventBus);
+    public abstract Task ConfigureEventBus(IEventBus eventBus);
 
-    public virtual void PostStartupValidation(IServiceProvider serviceProvider) { }
+    public virtual void PostStartupValidation(IServiceProvider serviceProvider)
+    {
+    }
 }

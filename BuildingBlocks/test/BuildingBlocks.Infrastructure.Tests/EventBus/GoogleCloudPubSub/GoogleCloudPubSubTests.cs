@@ -32,9 +32,9 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        await subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
 
-        publisher.Publish(new TestEvent1DomainEvent());
+        await publisher.Publish(new TestEvent1DomainEvent());
 
         TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
     }
@@ -47,10 +47,10 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
-        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
+        await subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        await subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1DomainEvent());
+        await publisher.Publish(new TestEvent1DomainEvent());
 
         TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
         TestEvent1DomainEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
@@ -65,10 +65,10 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         var subscriber2 = _factory.CreateEventBus("subscription2");
         var publisher = _factory.CreateEventBus();
 
-        subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
-        subscriber2.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
+        await subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        await subscriber2.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1DomainEvent());
+        await publisher.Publish(new TestEvent1DomainEvent());
 
         TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
         TestEvent1DomainEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
@@ -83,10 +83,10 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         var subscriber1B = _factory.CreateEventBus("subscription1");
         var publisher = _factory.CreateEventBus();
 
-        subscriber1A.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
-        subscriber1B.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
+        await subscriber1A.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        await subscriber1B.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1DomainEvent());
+        await publisher.Publish(new TestEvent1DomainEvent());
 
         await Task.Delay(5.Seconds()); // wait some time to make sure all subscribers were notified
 
@@ -109,10 +109,10 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         var subscriber1 = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
-        subscriber1.Subscribe<TestEvent2DomainEvent, TestEvent2DomainEventHandler>();
+        await subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        await subscriber1.Subscribe<TestEvent2DomainEvent, TestEvent2DomainEventHandler>();
 
-        publisher.Publish(new TestEvent1DomainEvent());
+        await publisher.Publish(new TestEvent1DomainEvent());
 
         TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
         TestEvent1DomainEventHandler2.ShouldNotHaveAnyTriggeredInstance();

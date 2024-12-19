@@ -52,7 +52,7 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
         await _connection.DisposeAsync();
     }
 
-    public async void Publish(DomainEvent @event)
+    public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
 
@@ -77,7 +77,7 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
         _logger.EventWasNotProcessed(messageId);
     }
 
-    public void Subscribe<T, TH>()
+    public Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
@@ -86,11 +86,13 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subscriptionManager.AddSubscription<T, TH>();
+
+        return Task.CompletedTask;
     }
 
-    public void StartConsuming()
+    public async Task StartConsuming()
     {
-        _connection.SubscriberClient.StartAsync(OnIncomingEvent);
+        await _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
     private static string RemoveDomainEventSuffix(string typeName)

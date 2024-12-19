@@ -8,15 +8,15 @@ namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static void AddRelationshipsDomainEventSubscriptions(this IEventBus eventBus)
+    public static async Task AddRelationshipsDomainEventSubscriptions(this IEventBus eventBus)
     {
-        SubscribeToIdentitiesEvents(eventBus);
+        await SubscribeToIdentitiesEvents(eventBus);
     }
 
-    private static void SubscribeToIdentitiesEvents(IEventBus eventBus)
+    private static async Task SubscribeToIdentitiesEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<IdentityToBeDeletedDomainEvent, IdentityToBeDeletedDomainEventHandler>();
-        eventBus.Subscribe<IdentityDeletionCancelledDomainEvent, IdentityDeletionCancelledDomainEventHandler>();
-        eventBus.Subscribe<IdentityDeletedDomainEvent, IdentityDeletedDomainEventHandler>();
+        await eventBus.Subscribe<IdentityToBeDeletedDomainEvent, IdentityToBeDeletedDomainEventHandler>();
+        await eventBus.Subscribe<IdentityDeletionCancelledDomainEvent, IdentityDeletionCancelledDomainEventHandler>();
+        await eventBus.Subscribe<IdentityDeletedDomainEvent, IdentityDeletedDomainEventHandler>();
     }
 }

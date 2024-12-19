@@ -112,11 +112,11 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return await RunInTransaction(func, null, isolationLevel);
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(cancellationToken);
-        PublishDomainEvents(entities);
+        var result = await base.SaveChangesAsync(cancellationToken);
+        await PublishDomainEvents(entities);
 
         return result;
     }
@@ -151,7 +151,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         var entities = GetChangedEntities();
         var result = base.SaveChanges();
-        PublishDomainEvents(entities);
+        PublishDomainEvents(entities).GetAwaiter().GetResult();
 
         return result;
     }
@@ -160,16 +160,16 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         var entities = GetChangedEntities();
         var result = base.SaveChanges(acceptAllChangesOnSuccess);
-        PublishDomainEvents(entities);
+        PublishDomainEvents(entities).GetAwaiter().GetResult();
 
         return result;
     }
 
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
+    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
     {
         var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        PublishDomainEvents(entities);
+        var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        await PublishDomainEvents(entities);
 
         return result;
     }
@@ -240,11 +240,11 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         .Select(x => (Entity)x.Entity)
         .ToList();
 
-    private void PublishDomainEvents(List<Entity> entities)
+    private async Task PublishDomainEvents(List<Entity> entities)
     {
         foreach (var e in entities)
         {
-            _eventBus.Publish(e.DomainEvents);
+            await _eventBus.Publish(e.DomainEvents);
             e.ClearDomainEvents();
         }
     }

@@ -47,6 +47,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await (track ? _identitiesDbSet : _readOnlyIdentities)
             .Where(i => identityAddresses.Contains(i.Address))
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .ToListAsync(cancellationToken);
     }
 

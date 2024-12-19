@@ -35,8 +35,8 @@ public class ChallengesModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override Task ConfigureEventBus(IEventBus eventBus)
     {
-
+        return Task.CompletedTask;
     }
 }

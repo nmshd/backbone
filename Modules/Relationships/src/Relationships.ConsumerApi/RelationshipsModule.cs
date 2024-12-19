@@ -35,8 +35,8 @@ public class RelationshipsModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override async Task ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddRelationshipsDomainEventSubscriptions();
+        await eventBus.AddRelationshipsDomainEventSubscriptions();
     }
 }

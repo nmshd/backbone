@@ -25,23 +25,23 @@ namespace Backbone.Modules.Quotas.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static void AddQuotasDomainEventSubscriptions(this IEventBus eventBus)
+    public static async Task AddQuotasDomainEventSubscriptions(this IEventBus eventBus)
     {
-        SubscribeToSynchronizationEvents(eventBus);
+        await SubscribeToSynchronizationEvents(eventBus);
     }
 
-    private static void SubscribeToSynchronizationEvents(IEventBus eventBus)
+    private static async Task SubscribeToSynchronizationEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<IdentityCreatedDomainEvent, IdentityCreatedDomainEventHandler>();
-        eventBus.Subscribe<TierCreatedDomainEvent, TierCreatedDomainEventHandler>();
-        eventBus.Subscribe<TierDeletedDomainEvent, TierDeletedDomainEventHandler>();
-        eventBus.Subscribe<TierQuotaDefinitionCreatedDomainEvent, TierQuotaDefinitionCreatedDomainEventHandler>();
-        eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
-        eventBus.Subscribe<TierQuotaDefinitionDeletedDomainEvent, TierQuotaDefinitionDeletedDomainEventHandler>();
-        eventBus.Subscribe<FileUploadedDomainEvent, FileUploadedDomainEventHandler>();
-        eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
-        eventBus.Subscribe<RelationshipTemplateCreatedDomainEvent, RelationshipTemplateCreatedDomainEventHandler>();
-        eventBus.Subscribe<TokenCreatedDomainEvent, TokenCreatedDomainEventHandler>();
-        eventBus.Subscribe<TierOfIdentityChangedDomainEvent, TierOfIdentityChangedDomainEventHandler>();
+        await eventBus.Subscribe<IdentityCreatedDomainEvent, IdentityCreatedDomainEventHandler>();
+        await eventBus.Subscribe<TierCreatedDomainEvent, TierCreatedDomainEventHandler>();
+        await eventBus.Subscribe<TierDeletedDomainEvent, TierDeletedDomainEventHandler>();
+        await eventBus.Subscribe<TierQuotaDefinitionCreatedDomainEvent, TierQuotaDefinitionCreatedDomainEventHandler>();
+        await eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
+        await eventBus.Subscribe<TierQuotaDefinitionDeletedDomainEvent, TierQuotaDefinitionDeletedDomainEventHandler>();
+        await eventBus.Subscribe<FileUploadedDomainEvent, FileUploadedDomainEventHandler>();
+        await eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
+        await eventBus.Subscribe<RelationshipTemplateCreatedDomainEvent, RelationshipTemplateCreatedDomainEventHandler>();
+        await eventBus.Subscribe<TokenCreatedDomainEvent, TokenCreatedDomainEventHandler>();
+        await eventBus.Subscribe<TierOfIdentityChangedDomainEvent, TierOfIdentityChangedDomainEventHandler>();
     }
 }

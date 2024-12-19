@@ -8,19 +8,19 @@ namespace Backbone.Modules.Messages.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static void AddMessagesDomainEventSubscriptions(this IEventBus eventBus)
+    public static async Task AddMessagesDomainEventSubscriptions(this IEventBus eventBus)
     {
-        SubscribeToMessagesEvents(eventBus);
-        SubscribeToRelationshipsEvents(eventBus);
+        await SubscribeToMessagesEvents(eventBus);
+        await SubscribeToRelationshipsEvents(eventBus);
     }
 
-    private static void SubscribeToMessagesEvents(IEventBus eventBus)
+    private static async Task SubscribeToMessagesEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<MessageOrphanedDomainEvent, MessageOrphanedDomainEventHandler>();
+        await eventBus.Subscribe<MessageOrphanedDomainEvent, MessageOrphanedDomainEventHandler>();
     }
 
-    private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
+    private static async Task SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
+        await eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
     }
 }

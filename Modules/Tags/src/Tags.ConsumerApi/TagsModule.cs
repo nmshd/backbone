@@ -20,8 +20,9 @@ public class TagsModule : AbstractModule
         services.AddPersistence();
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override Task ConfigureEventBus(IEventBus eventBus)
     {
         // No Event bus needed here
+        return Task.CompletedTask;
     }
 }

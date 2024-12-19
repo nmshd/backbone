@@ -37,8 +37,8 @@ public class QuotasModule : AbstractModule
         services.AddResponseCaching();
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override async Task ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddQuotasDomainEventSubscriptions();
+        await eventBus.AddQuotasDomainEventSubscriptions();
     }
 }
