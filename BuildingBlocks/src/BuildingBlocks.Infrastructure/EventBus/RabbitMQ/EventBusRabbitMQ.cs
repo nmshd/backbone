@@ -77,8 +77,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
 
-        _logger.LogInformation("Declaring RabbitMQ exchange to publish a '{EventName}'.", eventName);
-
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
             ContractResolver = new ContractResolverWithPrivates()
