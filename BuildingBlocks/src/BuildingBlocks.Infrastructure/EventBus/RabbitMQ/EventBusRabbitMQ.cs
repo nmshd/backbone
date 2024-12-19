@@ -54,8 +54,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public async Task StartConsuming()
     {
-        await _consumerChannel!.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
-
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
@@ -162,7 +160,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _consumerChannel = await _persistentConnection.CreateChannel();
 
-        await _consumerChannel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct"); // TODO: why declare again? This is already up in StartConsuming
+        await _consumerChannel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
 
         await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
