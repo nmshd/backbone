@@ -157,7 +157,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
         foreach (var e in entities)
         {
-            _eventBus.Publish(e.DomainEvents);
+            _ = _eventBus.Publish(e.DomainEvents);
             e.ClearDomainEvents();
         }
     }

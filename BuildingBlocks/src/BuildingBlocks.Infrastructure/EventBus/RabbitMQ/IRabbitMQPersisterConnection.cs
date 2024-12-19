@@ -9,5 +9,5 @@ public interface IRabbitMqPersistentConnection
 
     Task Connect();
 
-    IChannel GetChannel();
+    Task<IChannel> CreateChannel();
 }

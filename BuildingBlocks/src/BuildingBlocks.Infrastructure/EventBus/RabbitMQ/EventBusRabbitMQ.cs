@@ -52,21 +52,19 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _subsManager.Clear();
     }
 
-    public async void StartConsuming()
+    public async Task StartConsuming()
     {
-        _consumerChannel = await CreateConsumerChannel();
-        var channel = _persistentConnection.GetChannel();
-        await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+        await _consumerChannel!.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
 
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
         }
 
-        _consumerChannel.BasicConsumeAsync(_queueName, false, _consumer).GetAwaiter().GetResult();
+        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumer);
     }
 
-    public async void Publish(DomainEvent @event)
+    public async Task Publish(DomainEvent @event)
     {
         if (!_persistentConnection.IsConnected)
             await _persistentConnection.Connect();
@@ -94,7 +92,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             _logger.LogDebug("Publishing a {EventName} to RabbitMQ.", eventName);
 
-            var channel = _persistentConnection.GetChannel();
+            await using var channel = await _persistentConnection.CreateChannel();
             var properties = new BasicProperties
             {
                 DeliveryMode = DeliveryModes.Persistent,
@@ -112,16 +110,26 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         });
     }
 
-    public async void Subscribe<T, TH>()
+    public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
+        await EnsureConsumerChannelExists();
+
         var eventName = _subsManager.GetEventKey<T>();
         await DoInternalSubscription(eventName);
 
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subsManager.AddSubscription<T, TH>();
+    }
+
+    private async Task EnsureConsumerChannelExists()
+    {
+        if (_consumerChannel is null)
+        {
+            await CreateConsumerChannel();
+        }
     }
 
     private async Task DoInternalSubscription(string eventName)
@@ -138,32 +146,31 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
 
-        var channel = _persistentConnection.GetChannel();
-        await channel.QueueBindAsync(_queueName,
+        await _consumerChannel!.QueueBindAsync(_queueName,
             EXCHANGE_NAME,
             eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
     }
 
-    private async Task<IChannel> CreateConsumerChannel()
+    private async Task CreateConsumerChannel()
     {
         if (!_persistentConnection.IsConnected)
             await _persistentConnection.Connect();
 
         _logger.LogInformation("Creating RabbitMQ consumer channel");
 
-        var channel = _persistentConnection.GetChannel();
+        _consumerChannel = await _persistentConnection.CreateChannel();
 
-        await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct"); // TODO: why declare again? This is already up in StartConsuming
+        await _consumerChannel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct"); // TODO: why declare again? This is already up in StartConsuming
 
-        await channel.QueueDeclareAsync(_queueName,
+        await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
             exclusive: false,
             autoDelete: false
         );
 
-        _consumer = new AsyncEventingBasicConsumer(channel);
+        _consumer = new AsyncEventingBasicConsumer(_consumerChannel);
         _consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
@@ -178,26 +185,24 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 {
                     await ProcessEvent(eventName, message);
 
-                    await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
+                    await _consumerChannel.BasicAckAsync(eventArgs.DeliveryTag, false);
                 }
             }
             catch (Exception ex)
             {
-                await channel.BasicRejectAsync(eventArgs.DeliveryTag, false);
+                await _consumerChannel.BasicRejectAsync(eventArgs.DeliveryTag, false);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
         };
 
-        channel.CallbackExceptionAsync += async (_, ea) =>
+        _consumerChannel.CallbackExceptionAsync += async (_, ea) =>
         {
             _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel");
 
             _consumerChannel?.Dispose();
-            _consumerChannel = await CreateConsumerChannel();
+            await CreateConsumerChannel();
         };
-
-        return channel;
     }
 
     private async Task ProcessEvent(string eventName, string message)

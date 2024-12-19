@@ -17,7 +17,6 @@ public class DefaultRabbitMqPersistentConnection
     private readonly int _retryCount;
 
     private IConnection? _connection;
-    private IChannel? _channel;
     private bool _disposed;
 
     public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory,
@@ -74,16 +73,16 @@ public class DefaultRabbitMqPersistentConnection
 
         _logger.LogInformation("RabbitMQ persistent connection acquired a connection to '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
 
-        _channel = await _connection.CreateChannelAsync();
-
         _logger.LogInformation("Created a new channel");
     }
 
-    public IChannel GetChannel()
+    public async Task<IChannel> CreateChannel()
     {
-        Debug.Assert(_channel != null, nameof(_channel) + " != null");
+        Debug.Assert(IsConnected, "RabbitMQ connection is not established");
 
-        return _channel;
+        var channel = await _connection!.CreateChannelAsync();
+
+        return channel;
     }
 
     public void Dispose()
