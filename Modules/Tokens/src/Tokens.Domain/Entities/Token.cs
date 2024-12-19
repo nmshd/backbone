@@ -110,5 +110,10 @@ public class Token : Entity
         return token => token.ForIdentity == identityAddress;
     }
 
+    private static Expression<Func<Token, bool>> WasCreatedBy(string createdBy)
+    {
+        return token => token.CreatedBy == createdBy;
+    }
+
     #endregion
 }

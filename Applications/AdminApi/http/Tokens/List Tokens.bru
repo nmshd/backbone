@@ -1,0 +1,17 @@
+meta {
+  name: /Tokens
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/Tokens?createdBy=did:e:localhost:dids:c179861648989f28d189c9&PageNumber=1&PageSize=1
+  body: none
+  auth: inherit
+}
+
+params:query {
+  createdBy: did:e:localhost:dids:c179861648989f28d189c9
+  PageNumber: 1
+  PageSize: 1
+}
