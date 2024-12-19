@@ -10,13 +10,9 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Infrastructure.Persistence;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
-using Microsoft.Extensions.Options;
 using Microsoft.OData.ModelBuilder;
 
 namespace Backbone.AdminApi.Extensions;
@@ -41,30 +37,7 @@ public static class IServiceCollectionExtensions
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
             })
-            .ConfigureApiBehaviorOptions(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var firstPropertyWithError =
-                        context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
-                    var nameOfPropertyWithError = firstPropertyWithError.Key;
-                    var firstError = firstPropertyWithError.Value!.Errors.First();
-                    var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)
-                        ? firstError.ErrorMessage
-                        : firstError.Exception != null
-                            ? firstError.Exception.Message
-                            : "";
-
-                    var formattedMessage = string.IsNullOrEmpty(nameOfPropertyWithError)
-                        ? firstErrorMessage
-                        : $"'{nameOfPropertyWithError}': {firstErrorMessage}";
-                    context.HttpContext.Response.ContentType = "application/json";
-                    var responsePayload = new HttpResponseEnvelopeError(
-                        HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code, formattedMessage,
-                            "")); // TODO: add docs
-                    return new BadRequestObjectResult(responsePayload);
-                };
-            })
+            .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory())
             .AddJsonOptions(options =>
             {
                 var jsonConverters =
@@ -155,6 +128,31 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
+    private static Func<ActionContext, IActionResult> InvalidModelStateResponseFactory() => context =>
+    {
+        var (nameOfPropertyWithError, value) = context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
+
+        var firstError = value!.Errors.First();
+        var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)
+            ? firstError.ErrorMessage
+            : firstError.Exception != null
+                ? firstError.Exception.Message
+                : "";
+
+        var formattedMessage = string.IsNullOrEmpty(nameOfPropertyWithError)
+            ? firstErrorMessage
+            : $"'{nameOfPropertyWithError}': {firstErrorMessage}";
+
+        context.HttpContext.Response.ContentType = "application/json";
+
+        var responsePayload = new HttpResponseEnvelopeError(
+            HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code,
+                formattedMessage,
+                ""));
+
+        return new BadRequestObjectResult(responsePayload);
+    };
+
     private static object GetPropertyValue(object source, string propertyPath)
     {
         foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
@@ -175,21 +173,6 @@ public static class IServiceCollectionExtensions
         services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
-        return services;
-    }
-    
-    public static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
-
-        services.AddPersistence(options =>
-        {
-            options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-        });
-        
-        services.AddTransient<ITokensRepository, TokensRepository>();
-        
         return services;
     }
 }
