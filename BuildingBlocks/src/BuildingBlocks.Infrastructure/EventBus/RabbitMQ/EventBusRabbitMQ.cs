@@ -31,6 +31,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private IChannel? _consumerChannel;
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
+    private bool _exchangeExistenceEnsured;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string queueName,
@@ -106,12 +107,40 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         });
     }
 
+    private async Task EnsureExchangeExists()
+    {
+        if (_exchangeExistenceEnsured)
+            return;
+
+        try
+        {
+            await using var channel = await _persistentConnection.CreateChannel();
+            await channel.ExchangeDeclarePassiveAsync(EXCHANGE_NAME);
+            _exchangeExistenceEnsured = true;
+        }
+        catch (OperationInterruptedException ex)
+        {
+            if (ex.ShutdownReason?.ReplyCode == 404)
+            {
+                try
+                {
+                    await using var channel = await _persistentConnection.CreateChannel();
+                    await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+                    _exchangeExistenceEnsured = true;
+                }
+                catch (Exception)
+                {
+                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", EXCHANGE_NAME);
+                    throw new Exception($"The exchange '{EXCHANGE_NAME}' does not exist and could not be created.");
+                }
+            }
+        }
+    }
+
     public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
-        await EnsureConsumerChannelExists();
-
         var eventName = _subsManager.GetEventKey<T>();
         await DoInternalSubscription(eventName);
 
@@ -120,16 +149,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _subsManager.AddSubscription<T, TH>();
     }
 
-    private async Task EnsureConsumerChannelExists()
-    {
-        if (_consumerChannel is null)
-        {
-            await CreateConsumerChannel();
-        }
-    }
-
     private async Task DoInternalSubscription(string eventName)
     {
+        await EnsureConsumerChannelExists();
+
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
         if (containsKey)
         {
@@ -142,11 +165,21 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
 
+        await EnsureExchangeExists();
+
         await _consumerChannel!.QueueBindAsync(_queueName,
             EXCHANGE_NAME,
             eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
+    }
+
+    private async Task EnsureConsumerChannelExists()
+    {
+        if (_consumerChannel is null)
+        {
+            await CreateConsumerChannel();
+        }
     }
 
     private async Task CreateConsumerChannel()
@@ -158,7 +191,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _consumerChannel = await _persistentConnection.CreateChannel();
 
-        await _consumerChannel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+        await EnsureExchangeExists();
 
         await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
