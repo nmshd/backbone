@@ -307,7 +307,8 @@ public class Relationship : Entity
     {
         EnsureHasParticipant(identityToBeDeleted);
 
-        if (From == identityToBeDeleted && FromHasDecomposed || To == identityToBeDeleted && ToHasDecomposed) return;
+        if (From == identityToBeDeleted && FromHasDecomposed || To == identityToBeDeleted && ToHasDecomposed)
+            return;
 
         if (Status is RelationshipStatus.DeletionProposed)
             DecomposeAsSecondParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
@@ -354,8 +355,10 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        FromHasDecomposed = true;
-        ToHasDecomposed = true;
+        if (From == activeIdentity)
+            FromHasDecomposed = true;
+        else
+            ToHasDecomposed = true;
     }
 
     private void EnsureRelationshipNotDecomposedBy(IdentityAddress activeIdentity)
