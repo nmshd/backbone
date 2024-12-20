@@ -190,7 +190,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         var dbContext = GetService<DevicesDbContext>();
 
-        var identity = new Identity("test", CreateRandomIdentityAddress(), [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var tier = await dbContext.Tiers.FirstAsync(t => t.Id != Tier.QUEUED_FOR_DELETION.Id);
+
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], tier!.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
