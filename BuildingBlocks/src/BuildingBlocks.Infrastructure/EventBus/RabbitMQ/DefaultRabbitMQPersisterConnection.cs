@@ -72,8 +72,6 @@ public class DefaultRabbitMqPersistentConnection
         _connection.ConnectionBlockedAsync += OnConnectionBlocked;
 
         _logger.LogInformation("RabbitMQ persistent connection acquired a connection to '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
-
-        _logger.LogInformation("Created a new channel");
     }
 
     public async Task<IChannel> CreateChannel()
@@ -81,6 +79,8 @@ public class DefaultRabbitMqPersistentConnection
         Debug.Assert(IsConnected, "RabbitMQ connection is not established");
 
         var channel = await _connection!.CreateChannelAsync();
+
+        _logger.CreatedChannel();
 
         return channel;
     }
@@ -137,6 +137,13 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
         Level = LogLevel.Warning,
         Message = "There was an error while trying to connect to RabbitMQ. Attempting to retry...")]
     public static partial void ConnectionError(this ILogger logger, Exception exception);
+
+    [LoggerMessage(
+        EventId = 953485,
+        EventName = "DefaultRabbitMqPersistentConnection.CreatedChannel",
+        Level = LogLevel.Debug,
+        Message = "Successfully created a new channel.")]
+    public static partial void CreatedChannel(this ILogger logger);
 
     [LoggerMessage(
         EventId = 119836,
