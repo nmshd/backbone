@@ -27,6 +27,7 @@ Feature: GET /SyncRuns/{id}/ExternalEvents
         And i1 has sent a Message m to i2
         And i1 has terminated r
         And a sync run sr started by i2
+        And 2 second(s) have passed
         When i2 sends a GET request to the /SyncRuns/sr.id/ExternalEvents endpoint
         Then the response status code is 200 (OK)
         Then the response contains an external event for the Message m
