@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 
@@ -5,12 +6,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
 {
-    private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
-
-    public InMemoryEventBusSubscriptionsManager()
-    {
-        _handlers = new Dictionary<string, List<SubscriptionInfo>>();
-    }
+    private readonly ConcurrentDictionary<string, List<SubscriptionInfo>> _handlers = [];
 
     public void Clear()
     {
@@ -45,7 +41,7 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
         return GetEventKey(typeof(T));
     }
 
-    public static string GetEventKey(Type eventType)
+    private static string GetEventKey(Type eventType)
     {
         return eventType.Name;
     }
@@ -54,7 +50,7 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
     {
         var eventName = GetEventKey(eventType);
 
-        if (!HasSubscriptionsForEvent(eventName)) _handlers.Add(eventName, []);
+        _handlers.TryAdd(eventName, []);
 
         if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
             throw new ArgumentException(

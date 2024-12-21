@@ -35,8 +35,8 @@ public class MessagesModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override async Task ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddMessagesDomainEventSubscriptions();
+        await eventBus.AddMessagesDomainEventSubscriptions();
     }
 }
