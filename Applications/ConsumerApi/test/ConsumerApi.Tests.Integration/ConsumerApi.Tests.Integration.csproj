@@ -15,7 +15,7 @@
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.0" />
         <PackageReference Include="SolidToken.SpecFlow.DependencyInjection" Version="3.9.3" />
         <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
-        <PackageReference Include="nunit" Version="4.3.0" />
+        <PackageReference Include="nunit" Version="4.3.1" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     </ItemGroup>
 
