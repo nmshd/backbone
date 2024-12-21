@@ -88,12 +88,11 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = CreateRandomIdentityAddress();
+        var peer = await SeedDatabaseWithIdentity();
+        var relationship = await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peer);
 
-        GetService<MessagesDbContext>();
-
-        var sentMessage = await SeedDatabaseWithMessage(from: identityToBeDeleted.Address, to: peer);
-        var receivedMessage = await SeedDatabaseWithMessage(from: peer, to: identityToBeDeleted.Address);
+        var sentMessage = await SeedDatabaseWithMessage(relationship, from: identityToBeDeleted, to: peer);
+        var receivedMessage = await SeedDatabaseWithMessage(relationship, from: peer, to: identityToBeDeleted);
 
         // Act
         await _host.StartAsync();
@@ -116,11 +115,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = CreateRandomIdentityAddress();
+        var peerOfIdentityToBeDeleted = await SeedDatabaseWithIdentity();
 
-        GetService<RelationshipsDbContext>();
-
-        await SeedDatabaseWithActiveRelationshipBetween(peer, identityToBeDeleted.Address);
+        await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted);
 
         // Act
         await _host.StartAsync();
@@ -138,8 +135,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
 
-        GetService<RelationshipsDbContext>();
-
         await SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address);
 
         // Act
@@ -154,27 +149,29 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     #region Seeders
 
-    private async Task<Message> SeedDatabaseWithMessage(IdentityAddress from, IdentityAddress to)
+    private async Task<Message> SeedDatabaseWithMessage(Relationship relationship, Identity from, Identity to)
     {
         var dbContext = GetService<MessagesDbContext>();
 
-        var recipient = new RecipientInformation(to, RelationshipId.New(), []);
-        var message = new Message(from, DeviceId.New(), [], [], [recipient]);
+        var recipient = new RecipientInformation(to.Address, RelationshipId.Parse(relationship.Id.Value), []);
+        var message = new Message(from.Address, from.Devices.First().Id, [], [], [recipient]);
 
         await dbContext.SaveEntity(message);
 
         return message;
     }
 
-    private async Task SeedDatabaseWithActiveRelationshipBetween(IdentityAddress from, IdentityAddress to)
+    private async Task<Relationship> SeedDatabaseWithActiveRelationshipBetween(Identity from, Identity to)
     {
         var dbContext = GetService<RelationshipsDbContext>();
 
-        var template = new RelationshipTemplate(from, DeviceId.New(), null, null, []);
-        var relationship = new Relationship(template, to, DeviceId.New(), [], []);
-        relationship.Accept(from, DeviceId.New(), []);
+        var template = new RelationshipTemplate(to.Address, to.Devices.First().Id, null, null, []);
+        var relationship = new Relationship(template, from.Address, from.Devices.First().Id, [], []);
+        relationship.Accept(to.Address, to.Devices.First().Id, []);
 
         await dbContext.SaveEntity(relationship);
+
+        return relationship;
     }
 
     private async Task SeedDatabaseWithRelationshipTemplateOf(IdentityAddress owner)
@@ -190,14 +187,28 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         var dbContext = GetService<DevicesDbContext>();
 
-        var identity = new Identity("test", CreateRandomIdentityAddress(), [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var tier = await dbContext.Tiers.FirstAsync(t => t.Id != Tier.QUEUED_FOR_DELETION.Id);
 
-        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        identity.Devices.Add(device);
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], tier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+
+        var device = identity.Devices.First();
 
         SystemTime.Set(SystemTime.UtcNow.AddMonths(-1));
         identity.StartDeletionProcessAsOwner(device.Id);
         SystemTime.Reset();
+
+        await dbContext.SaveEntity(identity);
+
+        return identity;
+    }
+
+    private async Task<Identity> SeedDatabaseWithIdentity()
+    {
+        var dbContext = GetService<DevicesDbContext>();
+
+        var tier = await dbContext.Tiers.FirstAsync(t => t.Id != Tier.QUEUED_FOR_DELETION.Id);
+
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], tier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         await dbContext.SaveEntity(identity);
 
