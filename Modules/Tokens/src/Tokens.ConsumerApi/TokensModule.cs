@@ -33,7 +33,8 @@ public class TokensModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override Task ConfigureEventBus(IEventBus eventBus)
     {
+        return Task.CompletedTask;
     }
 }

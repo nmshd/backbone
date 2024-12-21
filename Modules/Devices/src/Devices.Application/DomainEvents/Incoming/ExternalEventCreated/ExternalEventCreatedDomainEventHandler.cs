@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -24,13 +23,9 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
         if (@event.IsDeliveryBlocked)
             return;
 
-        var identity = await _identitiesRepository.FindByAddress(@event.Owner, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.FindByAddress(@event.Owner, CancellationToken.None);
 
-        if (identity.Status != IdentityStatus.ToBeDeleted)
-            await _pushSenderService.SendNotification(
-                new ExternalEventCreatedPushNotification(),
-                SendPushNotificationFilter.AllDevicesOf(@event.Owner),
-                CancellationToken.None
-            );
+        if (identity != null && identity.Status != IdentityStatus.ToBeDeleted)
+            await _pushSenderService.SendNotification(new ExternalEventCreatedPushNotification(), SendPushNotificationFilter.AllDevicesOf(@event.Owner), CancellationToken.None);
     }
 }
