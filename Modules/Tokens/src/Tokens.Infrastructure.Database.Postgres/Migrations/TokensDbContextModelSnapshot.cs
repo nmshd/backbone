@@ -18,7 +18,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Tokens")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -30,6 +30,9 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
 
                     b.Property<byte[]>("Content")
                         .HasColumnType("bytea");
@@ -67,6 +70,49 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tokens", "Tokens");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenAllocation", b =>
+                {
+                    b.Property<string>("TokenId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("AllocatedBy")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<DateTime>("AllocatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("AllocatedByDevice")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.HasKey("TokenId", "AllocatedBy");
+
+                    b.ToTable("TokenAllocations", "Tokens");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenAllocation", b =>
+                {
+                    b.HasOne("Backbone.Modules.Tokens.Domain.Entities.Token", null)
+                        .WithMany("Allocations")
+                        .HasForeignKey("TokenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.Token", b =>
+                {
+                    b.Navigation("Allocations");
                 });
 #pragma warning restore 612, 618
         }

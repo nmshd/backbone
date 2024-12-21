@@ -5,11 +5,15 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/Tokens/{{TokenId}}
+  url: {{baseUrl}}/Tokens/{{TokenId}}?password=AAAA
   body: none
   auth: inherit
 }
 
+params:query {
+  password: AAAA
+}
+
 vars:pre-request {
-  TokenId: null
+  TokenId: TOKHEcZTpgaH72X4oJ4c
 }

@@ -29,19 +29,17 @@ public class TokensRepository : ITokensRepository
     {
         var queryItemsList = queryItems.ToList();
 
-        Expression<Func<Token, bool>> idAndPasswordFilter = template => false;
+        Expression<Func<Token, bool>> idFilter = template => false;
 
         foreach (var inputQuery in queryItemsList)
-        {
-            idAndPasswordFilter = idAndPasswordFilter
-                .Or(Token.HasId(TokenId.Parse(inputQuery.Id))
-                    .And(Token.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
-        }
+            idFilter = idFilter.Or(Token.HasId(TokenId.Parse(inputQuery.Id)));
 
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .IncludeAll(_dbContext)
             .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
-            .Where(idAndPasswordFilter);
+            .Where(Token.HasAllocationFor(activeIdentity))
+            .Where(idFilter);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
@@ -57,7 +55,8 @@ public class TokensRepository : ITokensRepository
 
     public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
     {
-        var token = await _readonlyTokensDbSet
+        var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .IncludeAll(_dbContext)
             .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
             .Where(Token.HasId(id))
@@ -91,6 +90,12 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(Token token, CancellationToken cancellationToken)
+    {
+        _tokensDbSet.Update(token);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken)

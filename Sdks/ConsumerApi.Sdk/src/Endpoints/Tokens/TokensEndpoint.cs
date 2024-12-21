@@ -34,10 +34,6 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         foreach (var queryItem in queryItems)
         {
             request.AddQueryParameter($"tokens.{i}.id", queryItem.Id);
-
-            if (queryItem.Password != null)
-                request.AddQueryParameter($"tokens.{i}.password", queryItem.Password);
-
             i++;
         }
 
