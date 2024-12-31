@@ -20,4 +20,5 @@ public interface ITokensRepository
     Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken);
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
     Task DeleteToken(Token token, CancellationToken cancellationToken);
+    Task<DbPaginationResult<Token>> FindAllTokens(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
 }
