@@ -2,7 +2,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
-        <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
     </ItemGroup>
 
     <ItemGroup>
