@@ -32,6 +32,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _exchangeExistenceEnsured;
+    private string _consumerTag = Guid.NewGuid().ToString("N");
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string queueName,
@@ -53,14 +54,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _subsManager.Clear();
     }
 
-    public async Task StartConsuming()
+    public async Task StartConsuming(CancellationToken cancellationToken)
     {
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
         }
 
-        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumer);
+        _consumerTag = await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumerTag, _consumer, cancellationToken);
     }
 
     public async Task Publish(DomainEvent @event)
@@ -273,6 +274,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             _logger.NoSubscriptionForEvent(eventName);
         }
+    }
+
+    public async Task StopConsuming(CancellationToken cancellationToken)
+    {
+        if (_consumer is null)
+            return;
+
+        await _consumerChannel!.BasicCancelAsync(_consumerTag, cancellationToken: cancellationToken);
     }
 }
 
