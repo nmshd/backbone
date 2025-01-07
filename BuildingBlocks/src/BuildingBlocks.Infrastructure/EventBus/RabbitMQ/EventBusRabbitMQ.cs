@@ -198,7 +198,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
             exclusive: false,
-            autoDelete: false
+            autoDelete: false,
+            arguments: new Dictionary<string, object?>
+            {
+                { "x-queue-type", "quorum" }
+            }
         );
 
         _consumer = new AsyncEventingBasicConsumer(_consumerChannel);
