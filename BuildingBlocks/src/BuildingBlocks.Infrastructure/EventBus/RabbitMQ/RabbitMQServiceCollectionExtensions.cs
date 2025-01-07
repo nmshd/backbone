@@ -53,8 +53,19 @@ public class RabbitMqOptions : BasicBusOptions
     [Length(1, 1000)]
     public string ExchangeName { get; set; } = "enmeshed";
 
+    [Required]
+    [Length(1, 1000)]
     public string HostName { get; set; } = null!;
+
+    [Required]
+    [Length(1, 1000)]
     public string Username { get; set; } = null!;
+
+    [Required]
+    [Length(1, 1000)]
     public string Password { get; set; } = null!;
+
+    [Required]
+    [Range(0, 100)]
     public int ConnectionRetryCount { get; set; } = 5;
 }
