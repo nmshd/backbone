@@ -573,6 +573,10 @@ global:
         rabbitMQUsername: ""
         # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQPassword: ""
+        # rabbitMqExchangeName - only applicable if Vendor is "RabbitMQ"; the name of the exchange that should be used
+        rabbitMqExchangeName: ""
+        # rabbitMqQueueName - only applicable if Vendor is "RabbitMQ"; the name of the queue the Consumer API should listen to
+        rabbitMqQueueName: ""
         # connectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the Consumer API should retry to connect to the RabbitMQ service
         connectionRetryCount: 5
         # gcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
