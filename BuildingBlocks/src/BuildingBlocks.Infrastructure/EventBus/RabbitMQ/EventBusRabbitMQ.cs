@@ -32,6 +32,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _exchangeExistenceEnsured;
+    private bool _queueExistenceEnsured;
     private string _consumerTag = Guid.NewGuid().ToString("N");
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
@@ -195,6 +196,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         await EnsureExchangeExists();
 
+        await EnsureQueueExists();
+
         await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
             exclusive: false,
@@ -238,6 +241,46 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             _consumerChannel?.Dispose();
             await CreateConsumerChannel();
         };
+    }
+
+    private async Task EnsureQueueExists()
+    {
+        if (_queueExistenceEnsured)
+            return;
+
+        try
+        {
+            await using var channel = await _persistentConnection.CreateChannel();
+            await channel.QueueDeclarePassiveAsync(_queueName);
+            _queueExistenceEnsured = true;
+        }
+        catch (OperationInterruptedException ex)
+        {
+            if (ex.ShutdownReason?.ReplyCode == 404)
+            {
+                try
+                {
+                    await using var channel = await _persistentConnection.CreateChannel();
+
+                    await channel.QueueDeclareAsync(_queueName,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: new Dictionary<string, object?>
+                        {
+                            { "x-queue-type", "quorum" }
+                        }
+                    );
+
+                    _queueExistenceEnsured = true;
+                }
+                catch (Exception)
+                {
+                    _logger.LogCritical("The queue '{QueueName}' does not exist and could not be created.", _queueName);
+                    throw new Exception($"The queue '{_queueName}' does not exist and could not be created.");
+                }
+            }
+        }
     }
 
     private async Task ProcessEvent(string eventName, string message)
