@@ -17,7 +17,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    private const string EXCHANGE_NAME = "event_bus";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
@@ -29,19 +28,21 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly IEventBusSubscriptionsManager _subsManager;
 
     private IChannel? _consumerChannel;
+    private readonly string _exchangeName;
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _exchangeExistenceEnsured;
     private string _consumerTag = Guid.NewGuid().ToString("N");
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string queueName,
+        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, string queueName,
         int connectionRetryCount = 5)
     {
         _persistentConnection =
             persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
+        _exchangeName = exchangeName;
         _queueName = queueName;
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
@@ -98,7 +99,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 CorrelationId = CustomLogContext.GetCorrelationId()
             };
 
-            await channel.BasicPublishAsync(EXCHANGE_NAME,
+            await channel.BasicPublishAsync(_exchangeName,
                 eventName,
                 true,
                 properties,
@@ -116,7 +117,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         try
         {
             await using var channel = await _persistentConnection.CreateChannel();
-            await channel.ExchangeDeclarePassiveAsync(EXCHANGE_NAME);
+            await channel.ExchangeDeclarePassiveAsync(_exchangeName);
             _exchangeExistenceEnsured = true;
         }
         catch (OperationInterruptedException ex)
@@ -126,13 +127,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 try
                 {
                     await using var channel = await _persistentConnection.CreateChannel();
-                    await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+                    await channel.ExchangeDeclareAsync(_exchangeName, "direct");
                     _exchangeExistenceEnsured = true;
                 }
                 catch (Exception)
                 {
-                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", EXCHANGE_NAME);
-                    throw new Exception($"The exchange '{EXCHANGE_NAME}' does not exist and could not be created.");
+                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", _exchangeName);
+                    throw new Exception($"The exchange '{_exchangeName}' does not exist and could not be created.");
                 }
             }
         }
@@ -169,7 +170,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         await EnsureExchangeExists();
 
         await _consumerChannel!.QueueBindAsync(_queueName,
-            EXCHANGE_NAME,
+            _exchangeName,
             eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
