@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,23 +48,10 @@ public static class RabbitMqServiceCollectionExtensions
 
 public class RabbitMqOptions : BasicBusOptions
 {
-    [Required]
-    [Length(1, 1000)]
-    public string ExchangeName { get; set; } = "enmeshed";
-
-    [Required]
-    [Length(1, 1000)]
+    public string ExchangeName { get; set; } = null!;
+    public string QueueName { get; set; } = null!;
     public string HostName { get; set; } = null!;
-
-    [Required]
-    [Length(1, 1000)]
     public string Username { get; set; } = null!;
-
-    [Required]
-    [Length(1, 1000)]
     public string Password { get; set; } = null!;
-
-    [Required]
-    [Range(0, 100)]
     public int ConnectionRetryCount { get; set; } = 5;
 }
