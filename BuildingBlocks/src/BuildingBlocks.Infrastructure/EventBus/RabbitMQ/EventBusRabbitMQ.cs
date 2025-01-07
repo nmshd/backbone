@@ -17,7 +17,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    private const string BROKER_NAME = "event_bus";
+    private const string EXCHANGE_NAME = "event_bus";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
@@ -28,12 +28,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
-    private IModel _consumerChannel;
-    private readonly string? _queueName;
-    private EventingBasicConsumer? _consumer;
+    private IChannel? _consumerChannel;
+    private readonly string _queueName;
+    private AsyncEventingBasicConsumer? _consumer;
+    private bool _exchangeExistenceEnsured;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
+        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string queueName,
         int connectionRetryCount = 5)
     {
         _persistentConnection =
@@ -41,7 +42,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _queueName = queueName;
-        _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
         _handlerRetryBehavior = handlerRetryBehavior;
@@ -49,38 +49,34 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public void Dispose()
     {
-        _consumerChannel.Dispose();
+        _consumerChannel?.Dispose();
         _subsManager.Clear();
     }
 
-    public void StartConsuming()
+    public async Task StartConsuming()
     {
-        using var channel = _persistentConnection.CreateModel();
-        channel.ExchangeDeclare(BROKER_NAME, "direct");
-
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
         }
 
-        _consumerChannel.BasicConsume(_queueName, false, _consumer);
+        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumer);
     }
 
-    public void Publish(DomainEvent @event)
+    public async Task Publish(DomainEvent @event)
     {
-        if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
+        if (!_persistentConnection.IsConnected)
+            await _persistentConnection.Connect();
 
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
-            .WaitAndRetry(_connectionRetryCount,
+            .WaitAndRetryAsync(_connectionRetryCount,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, _) => _logger.ErrorOnPublish(ex));
 
         var eventName = @event.GetType().Name;
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
-
-        _logger.LogInformation("Declaring RabbitMQ exchange to publish a '{EventName}'.", eventName);
 
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -89,18 +85,19 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var body = Encoding.UTF8.GetBytes(message);
 
-        policy.Execute(() =>
+        await policy.ExecuteAsync(async () =>
         {
             _logger.LogDebug("Publishing a {EventName} to RabbitMQ.", eventName);
 
-            using var channel = _persistentConnection.CreateModel();
-            var properties = channel.CreateBasicProperties();
-            properties.DeliveryMode = 2; // persistent
-            properties.MessageId = @event.DomainEventId;
+            await using var channel = await _persistentConnection.CreateChannel();
+            var properties = new BasicProperties
+            {
+                DeliveryMode = DeliveryModes.Persistent,
+                MessageId = @event.DomainEventId,
+                CorrelationId = CustomLogContext.GetCorrelationId()
+            };
 
-            properties.CorrelationId = CustomLogContext.GetCorrelationId();
-
-            channel.BasicPublish(BROKER_NAME,
+            await channel.BasicPublishAsync(EXCHANGE_NAME,
                 eventName,
                 true,
                 properties,
@@ -110,20 +107,52 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         });
     }
 
-    public void Subscribe<T, TH>()
+    private async Task EnsureExchangeExists()
+    {
+        if (_exchangeExistenceEnsured)
+            return;
+
+        try
+        {
+            await using var channel = await _persistentConnection.CreateChannel();
+            await channel.ExchangeDeclarePassiveAsync(EXCHANGE_NAME);
+            _exchangeExistenceEnsured = true;
+        }
+        catch (OperationInterruptedException ex)
+        {
+            if (ex.ShutdownReason?.ReplyCode == 404)
+            {
+                try
+                {
+                    await using var channel = await _persistentConnection.CreateChannel();
+                    await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+                    _exchangeExistenceEnsured = true;
+                }
+                catch (Exception)
+                {
+                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", EXCHANGE_NAME);
+                    throw new Exception($"The exchange '{EXCHANGE_NAME}' does not exist and could not be created.");
+                }
+            }
+        }
+    }
+
+    public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
-        DoInternalSubscription(eventName);
+        await DoInternalSubscription(eventName);
 
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
         _subsManager.AddSubscription<T, TH>();
     }
 
-    private void DoInternalSubscription(string eventName)
+    private async Task DoInternalSubscription(string eventName)
     {
+        await EnsureConsumerChannelExists();
+
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
         if (containsKey)
         {
@@ -131,37 +160,47 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             return;
         }
 
-        if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
+        if (!_persistentConnection.IsConnected)
+            await _persistentConnection.Connect();
 
         _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
 
-        using var channel = _persistentConnection.CreateModel();
-        channel.QueueBind(_queueName,
-            BROKER_NAME,
+        await EnsureExchangeExists();
+
+        await _consumerChannel!.QueueBindAsync(_queueName,
+            EXCHANGE_NAME,
             eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
     }
 
-    private IModel CreateConsumerChannel()
+    private async Task EnsureConsumerChannelExists()
     {
-        if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
+        if (_consumerChannel is null)
+        {
+            await CreateConsumerChannel();
+        }
+    }
+
+    private async Task CreateConsumerChannel()
+    {
+        if (!_persistentConnection.IsConnected)
+            await _persistentConnection.Connect();
 
         _logger.LogInformation("Creating RabbitMQ consumer channel");
 
-        var channel = _persistentConnection.CreateModel();
+        _consumerChannel = await _persistentConnection.CreateChannel();
 
-        channel.ExchangeDeclare(BROKER_NAME,
-            "direct");
+        await EnsureExchangeExists();
 
-        channel.QueueDeclare(_queueName,
-            true,
-            false,
-            false,
-            null);
+        await _consumerChannel.QueueDeclareAsync(_queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false
+        );
 
-        _consumer = new EventingBasicConsumer(channel);
-        _consumer.Received += async (_, eventArgs) =>
+        _consumer = new AsyncEventingBasicConsumer(_consumerChannel);
+        _consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
@@ -175,26 +214,24 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 {
                     await ProcessEvent(eventName, message);
 
-                    channel.BasicAck(eventArgs.DeliveryTag, false);
+                    await _consumerChannel.BasicAckAsync(eventArgs.DeliveryTag, false);
                 }
             }
             catch (Exception ex)
             {
-                channel.BasicReject(eventArgs.DeliveryTag, false);
+                await _consumerChannel.BasicRejectAsync(eventArgs.DeliveryTag, false);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
         };
 
-        channel.CallbackException += (_, ea) =>
+        _consumerChannel.CallbackExceptionAsync += async (_, ea) =>
         {
             _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel");
 
-            _consumerChannel.Dispose();
-            _consumerChannel = CreateConsumerChannel();
+            _consumerChannel?.Dispose();
+            await CreateConsumerChannel();
         };
-
-        return channel;
     }
 
     private async Task ProcessEvent(string eventName, string message)
