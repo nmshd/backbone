@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -10,11 +11,11 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 public class DefaultRabbitMqPersistentConnection
     : IRabbitMqPersistentConnection
 {
+    private readonly SemaphoreSlim _semaphore = new(1);
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<DefaultRabbitMqPersistentConnection> _logger;
     private readonly int _retryCount;
 
-    private readonly object _syncRoot = new();
     private IConnection? _connection;
     private bool _disposed;
 
@@ -28,12 +29,60 @@ public class DefaultRabbitMqPersistentConnection
 
     public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
 
-    public IModel CreateModel()
+    public async Task Connect()
     {
-        if (!IsConnected)
-            throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
+        if (IsConnected)
+            return;
 
-        return _connection!.CreateModel();
+        await _semaphore.WaitAsync();
+
+        try
+        {
+            if (IsConnected)
+                return;
+
+            await ConnectInternal();
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    private async Task ConnectInternal()
+    {
+        _logger.LogInformation("RabbitMQ Client is trying to connect");
+
+        var policy = Policy.Handle<SocketException>()
+            .Or<BrokerUnreachableException>()
+            .WaitAndRetryAsync(_retryCount,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (ex, _) => _logger.ConnectionError(ex));
+
+        await policy.ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync());
+
+        if (!IsConnected)
+        {
+            _logger.LogCritical("FATAL ERROR: RabbitMQ connections could not be created and opened");
+            throw new Exception("RabbitMQ connections could not be created and opened");
+        }
+
+        _connection!.ConnectionShutdownAsync += OnConnectionShutdown;
+        _connection.CallbackExceptionAsync += OnCallbackException;
+        _connection.ConnectionBlockedAsync += OnConnectionBlocked;
+
+        _logger.LogInformation("RabbitMQ persistent connection acquired a connection to '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
+    }
+
+    public async Task<IChannel> CreateChannel()
+    {
+        Debug.Assert(IsConnected, "RabbitMQ connection is not established");
+
+        var channel = await _connection!.CreateChannelAsync();
+
+        _logger.CreatedChannel();
+
+        return channel;
     }
 
     public void Dispose()
@@ -52,57 +101,31 @@ public class DefaultRabbitMqPersistentConnection
         }
     }
 
-    public bool TryConnect()
+    private async Task OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
     {
-        _logger.LogInformation("RabbitMQ Client is trying to connect");
+        if (_disposed)
+            return;
 
-        lock (_syncRoot)
-        {
-            var policy = Policy.Handle<SocketException>()
-                .Or<BrokerUnreachableException>()
-                .WaitAndRetry(_retryCount,
-                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                    (ex, _) => _logger.ConnectionError(ex));
-
-            policy.Execute(() => _connection = _connectionFactory
-                    .CreateConnection());
-
-            if (!IsConnected)
-            {
-                _logger.LogCritical("FATAL ERROR: RabbitMQ connections could not be created and opened");
-                return false;
-            }
-
-            _connection!.ConnectionShutdown += OnConnectionShutdown;
-            _connection!.CallbackException += OnCallbackException;
-            _connection!.ConnectionBlocked += OnConnectionBlocked;
-
-            _logger.LogInformation(
-                "RabbitMQ persistent connection acquired a connection '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
-
-            return true;
-        }
-    }
-
-    private void OnConnectionBlocked(object? sender, ConnectionBlockedEventArgs e)
-    {
-        if (_disposed) return;
         _logger.ConnectionIsBlocked();
-        TryConnect();
+        await Connect();
     }
 
-    private void OnCallbackException(object? sender, CallbackExceptionEventArgs e)
+    private async Task OnCallbackException(object sender, CallbackExceptionEventArgs e)
     {
-        if (_disposed) return;
+        if (_disposed)
+            return;
+
         _logger.ConnectionThrewAnException();
-        TryConnect();
+        await Connect();
     }
 
-    private void OnConnectionShutdown(object? sender, ShutdownEventArgs reason)
+    private async Task OnConnectionShutdown(object sender, ShutdownEventArgs reason)
     {
-        if (_disposed) return;
+        if (_disposed)
+            return;
+
         _logger.ConnectionIsShutdown();
-        TryConnect();
+        await Connect();
     }
 }
 
@@ -114,6 +137,13 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
         Level = LogLevel.Warning,
         Message = "There was an error while trying to connect to RabbitMQ. Attempting to retry...")]
     public static partial void ConnectionError(this ILogger logger, Exception exception);
+
+    [LoggerMessage(
+        EventId = 953485,
+        EventName = "DefaultRabbitMqPersistentConnection.CreatedChannel",
+        Level = LogLevel.Debug,
+        Message = "Successfully created a new channel.")]
+    public static partial void CreatedChannel(this ILogger logger);
 
     [LoggerMessage(
         EventId = 119836,
