@@ -27,13 +27,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
+    private readonly string _consumerChannelTag = Guid.NewGuid().ToString("N");
     private IChannel? _consumerChannel;
     private readonly string _exchangeName;
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _exchangeExistenceEnsured;
     private bool _queueExistenceEnsured;
-    private string _consumerTag = Guid.NewGuid().ToString("N");
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, string queueName,
@@ -63,7 +63,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             throw new Exception("Cannot start consuming without a consumer set.");
         }
 
-        _consumerTag = await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumerTag, _consumer, cancellationToken);
+        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumerChannelTag, _consumer, cancellationToken);
     }
 
     public async Task Publish(DomainEvent @event)
@@ -329,7 +329,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         if (_consumer is null)
             return;
 
-        await _consumerChannel!.BasicCancelAsync(_consumerTag, cancellationToken: cancellationToken);
+        await _consumerChannel!.BasicCancelAsync(_consumerChannelTag, cancellationToken: cancellationToken);
     }
 }
 
