@@ -15,33 +15,33 @@ namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static void AddDevicesDomainEventSubscriptions(this IEventBus eventBus)
+    public static async Task AddDevicesDomainEventSubscriptions(this IEventBus eventBus)
     {
-        eventBus.SubscribeToAnnouncementsEvents();
-        eventBus.SubscribeToDevicesEvents();
-        eventBus.SubscribeToSynchronizationEvents();
-        eventBus.SubscribeToTokensEvents();
+        await eventBus.SubscribeToAnnouncementsEvents();
+        await eventBus.SubscribeToDevicesEvents();
+        await eventBus.SubscribeToSynchronizationEvents();
+        await eventBus.SubscribeToTokensEvents();
     }
 
-    private static void SubscribeToAnnouncementsEvents(this IEventBus eventBus)
+    private static async Task SubscribeToAnnouncementsEvents(this IEventBus eventBus)
     {
-        eventBus.Subscribe<AnnouncementCreatedDomainEvent, AnnouncementCreatedDomainEventHandler>();
+        await eventBus.Subscribe<AnnouncementCreatedDomainEvent, AnnouncementCreatedDomainEventHandler>();
     }
 
-    private static void SubscribeToDevicesEvents(this IEventBus eventBus)
+    private static async Task SubscribeToDevicesEvents(this IEventBus eventBus)
     {
-        eventBus.Subscribe<BackupDeviceUsedDomainEvent, BackupDeviceUsedDomainEventHandler>();
+        await eventBus.Subscribe<BackupDeviceUsedDomainEvent, BackupDeviceUsedDomainEventHandler>();
     }
 
-    private static void SubscribeToSynchronizationEvents(this IEventBus eventBus)
+    private static async Task SubscribeToSynchronizationEvents(this IEventBus eventBus)
     {
-        eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>();
-        eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>();
-        eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
+        await eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>();
+        await eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>();
+        await eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
     }
 
-    private static void SubscribeToTokensEvents(this IEventBus eventBus)
+    private static async Task SubscribeToTokensEvents(this IEventBus eventBus)
     {
-        eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
+        await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
 }

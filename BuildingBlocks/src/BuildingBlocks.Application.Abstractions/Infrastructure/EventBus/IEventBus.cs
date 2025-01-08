@@ -4,18 +4,19 @@ namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventB
 
 public interface IEventBus
 {
-    void Publish(IEnumerable<DomainEvent> events)
+    async Task Publish(IEnumerable<DomainEvent> events)
     {
         foreach (var domainEvent in events)
         {
-            Publish(domainEvent);
+            await Publish(domainEvent);
         }
     }
 
-    void Publish(DomainEvent @event);
-    void StartConsuming();
+    Task Publish(DomainEvent @event);
+    Task StartConsuming(CancellationToken cancellationToken);
+    Task StopConsuming(CancellationToken cancellationToken);
 
-    void Subscribe<T, TH>()
+    Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>;
 }

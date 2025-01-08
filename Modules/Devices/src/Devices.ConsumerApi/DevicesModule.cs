@@ -40,9 +40,9 @@ public class DevicesModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override async Task ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddDevicesDomainEventSubscriptions();
+        await eventBus.AddDevicesDomainEventSubscriptions();
     }
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
