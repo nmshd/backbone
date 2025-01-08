@@ -36,6 +36,7 @@ public static class EventBusServiceCollectionExtensions
                 services.AddRabbitMq(options =>
                 {
                     LoadBasicBusOptions(configuration, options);
+                    options.EnableSsl = configuration.RabbitMqEnableSsl;
                     options.HostName = configuration.ConnectionInfo;
                     options.Port = configuration.RabbitMqPort;
                     options.Username = configuration.RabbitMqUsername;

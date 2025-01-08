@@ -14,6 +14,7 @@ public class EventBusConfiguration
     [Required]
     public string SubscriptionClientName { get; set; } = null!;
 
+    public bool RabbitMqEnableSsl { get; set; } = true;
     public int RabbitMqPort { get; set; } = 5672;
     public string RabbitMqUsername { get; set; } = null!;
     public string RabbitMqPassword { get; set; } = null!;

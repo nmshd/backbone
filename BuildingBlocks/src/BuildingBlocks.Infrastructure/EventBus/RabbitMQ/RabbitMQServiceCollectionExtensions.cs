@@ -22,12 +22,23 @@ public static class RabbitMqServiceCollectionExtensions
             var factory = new ConnectionFactory
             {
                 HostName = options.HostName,
-                Port = options.Port
+                Port = options.Port,
             };
 
-            if (!string.IsNullOrEmpty(options.Username)) factory.UserName = options.Username;
+            if (options.EnableSsl)
+            {
+                factory.Ssl = new SslOption
+                {
+                    Enabled = true,
+                    ServerName = options.HostName
+                };
+            }
 
-            if (!string.IsNullOrEmpty(options.Password)) factory.Password = options.Password;
+            if (!string.IsNullOrEmpty(options.Username))
+                factory.UserName = options.Username;
+
+            if (!string.IsNullOrEmpty(options.Password))
+                factory.Password = options.Password;
 
             return new DefaultRabbitMqPersistentConnection(factory, logger, options.ConnectionRetryCount);
         });
@@ -49,6 +60,7 @@ public static class RabbitMqServiceCollectionExtensions
 
 public class RabbitMqOptions : BasicBusOptions
 {
+    public bool EnableSsl { get; set; } = true;
     public string ExchangeName { get; set; } = null!;
     public string QueueName { get; set; } = null!;
     public string HostName { get; set; } = null!;
