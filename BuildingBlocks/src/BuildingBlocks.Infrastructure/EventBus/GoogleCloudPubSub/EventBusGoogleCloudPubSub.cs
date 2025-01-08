@@ -90,7 +90,7 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
         return Task.CompletedTask;
     }
 
-    public async Task StartConsuming()
+    public async Task StartConsuming(CancellationToken cancellationToken)
     {
         await _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
@@ -161,6 +161,11 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
                 return Task.CompletedTask;
             });
         }
+    }
+
+    public async Task StopConsuming(CancellationToken cancellationToken)
+    {
+        await _connection.SubscriberClient.StopAsync(CancellationToken.None);
     }
 
     [GeneratedRegex("^(.+)DomainEvent$")]

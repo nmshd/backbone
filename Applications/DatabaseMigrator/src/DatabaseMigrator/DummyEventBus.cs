@@ -10,7 +10,12 @@ public class DummyEventBus : IEventBus
         return Task.CompletedTask;
     }
 
-    public Task StartConsuming()
+    public Task StartConsuming(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task StopConsuming(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
