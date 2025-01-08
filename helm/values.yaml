@@ -505,11 +505,16 @@ sseserver:
     hostnamesOverride: []
 
   ingress:
-    # enabled - whether to enable the Ingress for the Consumer API
+    # enabled - whether to enable the Ingress for the SSE Server
     enabled: false
-    host: ""
-    # certName - the name of the certificate to use for SSL/TLS
-    certName: ""
+    # hostnameOverride - the hostname the SSE Server should be reachable under; if empty, the `.global.defaultHostname` property is used
+    hostnameOverride: ""
+    annotations: {}
+    tls:
+      # enabled - whether to enable tls or not
+      enabled: false
+      # certificateSecretName - the name of the secret containing the tls certificate
+      certificateSecretName: ""
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
