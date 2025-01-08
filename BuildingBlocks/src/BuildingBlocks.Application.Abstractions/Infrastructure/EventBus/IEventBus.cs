@@ -13,7 +13,8 @@ public interface IEventBus
     }
 
     Task Publish(DomainEvent @event);
-    Task StartConsuming();
+    Task StartConsuming(CancellationToken cancellationToken);
+    Task StopConsuming(CancellationToken cancellationToken);
 
     Task Subscribe<T, TH>()
         where T : DomainEvent

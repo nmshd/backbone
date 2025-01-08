@@ -19,7 +19,7 @@ public class EventHandlerServiceTests : AbstractTestsBase
         await eventHandlerService.StartAsync(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.StartConsuming()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockEventBus.StartConsuming(A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static EventHandlerService CreateService(IEventBus eventBus)
