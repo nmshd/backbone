@@ -109,12 +109,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _subscriptionManager.AddSubscription<T, TH>();
     }
 
-    public async Task StartConsuming()
+    public async Task StartConsuming(CancellationToken cancellationToken)
     {
-        await RegisterSubscriptionClientMessageHandlerAsync();
+        await RegisterSubscriptionClientMessageHandlerAsync(cancellationToken);
     }
 
-    private async Task RegisterSubscriptionClientMessageHandlerAsync()
+    private async Task RegisterSubscriptionClientMessageHandlerAsync(CancellationToken cancellationToken)
     {
         _processor.ProcessMessageAsync +=
             async args =>
@@ -136,7 +136,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
-        await _processor.StartProcessingAsync();
+        await _processor.StartProcessingAsync(cancellationToken);
     }
 
     private Task ErrorHandler(ProcessErrorEventArgs args)
@@ -192,6 +192,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         }
 
         return true;
+    }
+
+    public async Task StopConsuming(CancellationToken cancellationToken)
+    {
+        await _processor.StopProcessingAsync(cancellationToken);
     }
 }
 

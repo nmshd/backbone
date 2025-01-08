@@ -19,12 +19,12 @@ public class EventHandlerService : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await SubscribeToEvents();
-        await StartConsuming();
+        await _eventBus.StartConsuming(cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await _eventBus.StopConsuming(cancellationToken);
     }
 
     private async Task SubscribeToEvents()
@@ -36,10 +36,5 @@ public class EventHandlerService : IHostedService
         }
 
         _logger.LogInformation("Successfully subscribed to events.");
-    }
-
-    private async Task StartConsuming()
-    {
-        await _eventBus.StartConsuming();
     }
 }

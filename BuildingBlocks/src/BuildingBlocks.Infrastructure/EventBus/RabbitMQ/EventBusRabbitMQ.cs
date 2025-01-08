@@ -17,7 +17,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    private const string EXCHANGE_NAME = "event_bus";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
@@ -28,19 +27,23 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly IEventBusSubscriptionsManager _subsManager;
 
+    private readonly string _consumerChannelTag = Guid.NewGuid().ToString("N");
     private IChannel? _consumerChannel;
+    private readonly string _exchangeName;
     private readonly string _queueName;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _exchangeExistenceEnsured;
+    private bool _queueExistenceEnsured;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string queueName,
+        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, string queueName,
         int connectionRetryCount = 5)
     {
         _persistentConnection =
             persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
+        _exchangeName = exchangeName;
         _queueName = queueName;
         _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
@@ -53,14 +56,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _subsManager.Clear();
     }
 
-    public async Task StartConsuming()
+    public async Task StartConsuming(CancellationToken cancellationToken)
     {
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
         }
 
-        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumer);
+        await _consumerChannel!.BasicConsumeAsync(_queueName, false, _consumerChannelTag, _consumer, cancellationToken);
     }
 
     public async Task Publish(DomainEvent @event)
@@ -97,7 +100,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 CorrelationId = CustomLogContext.GetCorrelationId()
             };
 
-            await channel.BasicPublishAsync(EXCHANGE_NAME,
+            await channel.BasicPublishAsync(_exchangeName,
                 eventName,
                 true,
                 properties,
@@ -115,7 +118,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         try
         {
             await using var channel = await _persistentConnection.CreateChannel();
-            await channel.ExchangeDeclarePassiveAsync(EXCHANGE_NAME);
+            await channel.ExchangeDeclarePassiveAsync(_exchangeName);
             _exchangeExistenceEnsured = true;
         }
         catch (OperationInterruptedException ex)
@@ -125,13 +128,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 try
                 {
                     await using var channel = await _persistentConnection.CreateChannel();
-                    await channel.ExchangeDeclareAsync(EXCHANGE_NAME, "direct");
+                    await channel.ExchangeDeclareAsync(_exchangeName, "direct");
                     _exchangeExistenceEnsured = true;
                 }
                 catch (Exception)
                 {
-                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", EXCHANGE_NAME);
-                    throw new Exception($"The exchange '{EXCHANGE_NAME}' does not exist and could not be created.");
+                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", _exchangeName);
+                    throw new Exception($"The exchange '{_exchangeName}' does not exist and could not be created.");
                 }
             }
         }
@@ -168,7 +171,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         await EnsureExchangeExists();
 
         await _consumerChannel!.QueueBindAsync(_queueName,
-            EXCHANGE_NAME,
+            _exchangeName,
             eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
@@ -193,10 +196,16 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         await EnsureExchangeExists();
 
+        await EnsureQueueExists();
+
         await _consumerChannel.QueueDeclareAsync(_queueName,
             durable: true,
             exclusive: false,
-            autoDelete: false
+            autoDelete: false,
+            arguments: new Dictionary<string, object?>
+            {
+                { "x-queue-type", "quorum" }
+            }
         );
 
         _consumer = new AsyncEventingBasicConsumer(_consumerChannel);
@@ -232,6 +241,46 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             _consumerChannel?.Dispose();
             await CreateConsumerChannel();
         };
+    }
+
+    private async Task EnsureQueueExists()
+    {
+        if (_queueExistenceEnsured)
+            return;
+
+        try
+        {
+            await using var channel = await _persistentConnection.CreateChannel();
+            await channel.QueueDeclarePassiveAsync(_queueName);
+            _queueExistenceEnsured = true;
+        }
+        catch (OperationInterruptedException ex)
+        {
+            if (ex.ShutdownReason?.ReplyCode == 404)
+            {
+                try
+                {
+                    await using var channel = await _persistentConnection.CreateChannel();
+
+                    await channel.QueueDeclareAsync(_queueName,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: new Dictionary<string, object?>
+                        {
+                            { "x-queue-type", "quorum" }
+                        }
+                    );
+
+                    _queueExistenceEnsured = true;
+                }
+                catch (Exception)
+                {
+                    _logger.LogCritical("The queue '{QueueName}' does not exist and could not be created.", _queueName);
+                    throw new Exception($"The queue '{_queueName}' does not exist and could not be created.");
+                }
+            }
+        }
     }
 
     private async Task ProcessEvent(string eventName, string message)
@@ -273,6 +322,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             _logger.NoSubscriptionForEvent(eventName);
         }
+    }
+
+    public async Task StopConsuming(CancellationToken cancellationToken)
+    {
+        if (_consumer is null)
+            return;
+
+        await _consumerChannel!.BasicCancelAsync(_consumerChannelTag, cancellationToken: cancellationToken);
     }
 }
 

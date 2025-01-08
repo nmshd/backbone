@@ -16,6 +16,8 @@ public class EventBusConfiguration
 
     public string RabbitMqUsername { get; set; } = null!;
     public string RabbitMqPassword { get; set; } = null!;
+    public string RabbitMqExchangeName { get; set; } = "enmeshed";
+    public string RabbitMqQueueName { get; set; } = "eventhandler";
     public int ConnectionRetryCount { get; set; }
 
     public string GcpPubSubProjectId { get; set; } = null!;

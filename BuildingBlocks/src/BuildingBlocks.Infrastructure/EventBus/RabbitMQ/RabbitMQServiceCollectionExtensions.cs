@@ -41,13 +41,15 @@ public static class RabbitMqServiceCollectionExtensions
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
             return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubscriptionsManager,
-                options.HandlerRetryBehavior, subscriptionClientName, options.ConnectionRetryCount);
+                options.HandlerRetryBehavior, options.ExchangeName, subscriptionClientName, options.ConnectionRetryCount);
         });
     }
 }
 
 public class RabbitMqOptions : BasicBusOptions
 {
+    public string ExchangeName { get; set; } = null!;
+    public string QueueName { get; set; } = null!;
     public string HostName { get; set; } = null!;
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
