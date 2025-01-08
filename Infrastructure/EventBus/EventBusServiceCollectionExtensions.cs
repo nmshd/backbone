@@ -37,6 +37,7 @@ public static class EventBusServiceCollectionExtensions
                 {
                     LoadBasicBusOptions(configuration, options);
                     options.HostName = configuration.ConnectionInfo;
+                    options.Port = configuration.RabbitMqPort;
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
                     options.ExchangeName = configuration.RabbitMqExchangeName;

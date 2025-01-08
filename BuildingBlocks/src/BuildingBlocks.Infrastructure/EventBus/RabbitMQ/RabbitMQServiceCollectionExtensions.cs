@@ -21,7 +21,8 @@ public static class RabbitMqServiceCollectionExtensions
 
             var factory = new ConnectionFactory
             {
-                HostName = options.HostName
+                HostName = options.HostName,
+                Port = options.Port
             };
 
             if (!string.IsNullOrEmpty(options.Username)) factory.UserName = options.Username;
@@ -51,6 +52,7 @@ public class RabbitMqOptions : BasicBusOptions
     public string ExchangeName { get; set; } = null!;
     public string QueueName { get; set; } = null!;
     public string HostName { get; set; } = null!;
+    public int Port { get; set; } = 5672;
     public string Username { get; set; } = null!;
     public string Password { get; set; } = null!;
     public int ConnectionRetryCount { get; set; } = 5;
