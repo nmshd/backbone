@@ -18,12 +18,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
-        <value>Nuovi aggiornamenti sono disponibili nell'app.</value>
-    </data>
-    <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
-        <value>Aggiornamenti disponibili</value>
-    </data>
     <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
         <value>Un processo di eliminazione di una delle Sue identità è stato approvato e verrà elaborato a breve.</value>
     </data>

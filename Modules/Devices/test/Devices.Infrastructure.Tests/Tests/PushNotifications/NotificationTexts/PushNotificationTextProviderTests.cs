@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Announcements;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
@@ -62,7 +63,8 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
             typeof(TestPushNotification)
                 .Assembly.GetTypes()
                 .Where(t => t.IsAssignableTo(typeof(IPushNotification)) && !t.IsInterface)
-                .Where(t => t != typeof(NewAnnouncementPushNotification)); // `NewAnnouncementPushNotification` does not have a translatable text and must therefore be excluded
+                .Where(t => t != typeof(NewAnnouncementPushNotification)) // `NewAnnouncementPushNotification` does not have a translatable text and must therefore be excluded
+                .Where(t => t != typeof(DatawalletModificationsCreatedPushNotification)); //`DatawalletModificationsCreatedPushNotification` is empty and must therefore be excluded
     }
 
     private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<CommunicationLanguage, Type>
