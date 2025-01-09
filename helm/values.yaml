@@ -579,10 +579,14 @@ global:
         connectionInfo: ""
         # subscriptionClientName - the name of the subscription that should be used to receive events
         subscriptionClientName: "consumerapi"
+        # enableSsl - only applicable if Vendor is "RabbitMQ"; whether to use SSL to connect to the RabbitMQ service
+        rabbitMqEnableSsl: true
+        # rabbitMQPort - only applicable if Vendor is "RabbitMQ"; the port under which the RabbitMQ service is reachable
+        rabbitMqPort: 5672
         # rabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMQUsername: ""
+        rabbitMqUsername: ""
         # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMQPassword: ""
+        rabbitMqPassword: ""
         # rabbitMqExchangeName - only applicable if Vendor is "RabbitMQ"; the name of the exchange that should be used
         rabbitMqExchangeName: ""
         # rabbitMqQueueName - only applicable if Vendor is "RabbitMQ"; the name of the queue the Consumer API should listen to
