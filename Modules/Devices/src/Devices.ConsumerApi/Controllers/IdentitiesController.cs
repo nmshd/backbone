@@ -49,14 +49,6 @@ public class IdentitiesController : ApiControllerBase
     {
         var client = await _applicationManager.FindByClientIdAsync(request.ClientId, cancellationToken);
 
-        var clients = await _applicationManager.ListAsync(cancellationToken: cancellationToken).ToListAsync(cancellationToken);
-
-        _logger.LogInformation("NUMBER OF CLIENTS: {NumberOfClients}", clients.Count);
-        foreach (var clientItem in clients)
-        {
-            _logger.LogInformation("Client: {ClientId}", clientItem.ClientId);
-        }
-
         if (client == null || !await _applicationManager.ValidateClientSecretAsync(client, request.ClientSecret, cancellationToken))
             throw new OperationFailedException(GenericApplicationErrors.Unauthorized());
 
