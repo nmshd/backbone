@@ -176,20 +176,9 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     private List<string> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
     {
-        var query = PnsRegistrations.FromSqlRaw(
-            Database.IsNpgsql()
-                ? $"""
-                     SELECT "AppId"
-                     FROM "Devices"."PnsRegistrations"
-                     WHERE "Handle" LIKE '{platform}%'
-                   """
-                : $"""
-                     SELECT "AppId"
-                     FROM [Devices].[PnsRegistrations]
-                     WHERE Handle LIKE '{platform}%'
-                   """);
-
-        return query
+        return PnsRegistrations
+            .AsNoTracking()
+            .Where(x => ((string)(object)x.Handle).StartsWith(platform))
             .Where(x => !supportedAppIds.Contains(x.AppId))
             .Select(x => x.AppId)
             .Distinct()
