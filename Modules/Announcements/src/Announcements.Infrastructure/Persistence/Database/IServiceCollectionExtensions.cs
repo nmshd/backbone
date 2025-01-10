@@ -52,6 +52,7 @@ public static class IServiceCollectionExtensions
             });
 
         services.AddTransient<IAnnouncementsRepository, AnnouncementsRepository>();
+        services.AddTransient<IAnnouncementRecipientsRepository, AnnouncementRecipientsRepository>();
     }
 
     public class DbOptions

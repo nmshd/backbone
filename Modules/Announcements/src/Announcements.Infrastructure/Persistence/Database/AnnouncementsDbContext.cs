@@ -21,6 +21,7 @@ public class AnnouncementsDbContext : AbstractDbContextBase
     }
 
     public virtual DbSet<Announcement> Announcements { get; set; } = null!;
+    public virtual DbSet<AnnouncementRecipient> AnnouncementRecipients { get; set; } = null!;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -36,6 +37,8 @@ public class AnnouncementsDbContext : AbstractDbContextBase
         base.OnModelCreating(builder);
 
         builder.HasDefaultSchema("Announcements");
+
+        builder.Entity<AnnouncementRecipient>(entity => { entity.HasKey(e => e.Id); });
 
         builder.ApplyConfigurationsFromAssembly(typeof(AnnouncementsDbContext).Assembly);
     }

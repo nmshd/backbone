@@ -329,6 +329,11 @@ public class Identity : Entity
         return i => i.Address == address.ToString();
     }
 
+    public static Expression<Func<Identity, bool>> ContainsAddressValue(IEnumerable<string> recipients)
+    {
+        return i => recipients.Contains(i.Address.Value);
+    }
+
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()
     {
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
