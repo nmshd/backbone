@@ -137,14 +137,14 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 #endif
     }
 
-    public List<string> GetFcmAppIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
+    public async Task<List<string>> GetFcmAppIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
     {
-        return GetAppIdsForWhichNoConfigurationExists("fcm", supportedAppIds);
+        return await GetAppIdsForWhichNoConfigurationExists("fcm", supportedAppIds);
     }
 
-    public List<string> GetApnsBundleIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
+    public async Task<List<string>> GetApnsBundleIdsForWhichNoConfigurationExists(ICollection<string> supportedAppIds)
     {
-        return GetAppIdsForWhichNoConfigurationExists("apns", supportedAppIds);
+        return await GetAppIdsForWhichNoConfigurationExists("apns", supportedAppIds);
     }
 
     public override int SaveChanges()
@@ -174,26 +174,15 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return result;
     }
 
-    private List<string> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
+    private async Task<List<string>> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
     {
-        var query = PnsRegistrations.FromSqlRaw(
-            Database.IsNpgsql()
-                ? $"""
-                     SELECT "AppId"
-                     FROM "Devices"."PnsRegistrations"
-                     WHERE "Handle" LIKE '{platform}%'
-                   """
-                : $"""
-                     SELECT "AppId"
-                     FROM [Devices].[PnsRegistrations]
-                     WHERE Handle LIKE '{platform}%'
-                   """);
-
-        return query
+        return await PnsRegistrations
+            .AsNoTracking()
+            .Where(x => ((string)(object)x.Handle).StartsWith(platform))
             .Where(x => !supportedAppIds.Contains(x.AppId))
             .Select(x => x.AppId)
             .Distinct()
-            .ToList();
+            .ToListAsync();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
