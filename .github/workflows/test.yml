@@ -230,6 +230,7 @@ jobs:
         run: |
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
 
       - name: Run integration tests
         run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
