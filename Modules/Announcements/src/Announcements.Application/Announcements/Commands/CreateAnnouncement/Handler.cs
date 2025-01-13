@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Announcements.Application.Announcements.DTOs;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Announcements.Application.Announcements.DTOs;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -10,18 +11,15 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Commands.Crea
 
 public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDTO>
 {
-    private readonly IAnnouncementRecipientsRepository _announcementRecipientRepository;
     private readonly IAnnouncementsRepository _announcementsRepository;
     private readonly IIdentitiesRepository _identityRepository;
     private readonly ILogger<Handler> _logger;
 
-    public Handler(IAnnouncementsRepository announcementsRepository, ILogger<Handler> logger, IIdentitiesRepository identityRepository,
-        IAnnouncementRecipientsRepository announcementRecipientRepository)
+    public Handler(IAnnouncementsRepository announcementsRepository, ILogger<Handler> logger, IIdentitiesRepository identityRepository)
     {
         _announcementsRepository = announcementsRepository;
         _logger = logger;
         _identityRepository = identityRepository;
-        _announcementRecipientRepository = announcementRecipientRepository;
     }
 
     public async Task<AnnouncementDTO> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
@@ -32,11 +30,12 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
         {
             var requestRecipients = request.Recipients.OrderBy(address => address).ToList();
 
-            var foundRecipients = (await _identityRepository.Find(Identity.ContainsAddressValue(requestRecipients), cancellationToken)).ToArray();
+            var requestRecipientsAsIdentityAddresses = requestRecipients.Select(IdentityAddress.Parse).ToList();
+            var foundRecipients = (await _identityRepository.Find(Identity.HasAddress(requestRecipientsAsIdentityAddresses), cancellationToken)).ToArray();
             var foundRecipientAddresses = foundRecipients.Select(r => r.Address.Value).OrderBy(address => address).ToList();
             var notFoundRecipientAddresses = requestRecipients.Except(foundRecipientAddresses).ToList();
 
-            if (notFoundRecipientAddresses.Count != 0)
+            if (notFoundRecipientAddresses.Count > 0)
             {
                 _logger.LogError("Not all recipients were found in the database. \r\n" +
                                  "Request Recipients: {requestRecipients}. \r\n" +
@@ -49,11 +48,6 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
             {
                 announcementRecipients.AddRange(recipient.Devices.Select(recipientDevice =>
                     new AnnouncementRecipient(recipientDevice.Id.Value, recipient.Address.Value)));
-            }
-
-            foreach (var announcementRecipient in announcementRecipients)
-            {
-                await _announcementRecipientRepository.Add(announcementRecipient, cancellationToken);
             }
         }
 

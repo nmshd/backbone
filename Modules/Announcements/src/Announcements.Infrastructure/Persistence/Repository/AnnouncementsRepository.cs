@@ -8,8 +8,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 
 public class AnnouncementsRepository : IAnnouncementsRepository
 {
-    private readonly AnnouncementsDbContext _dbContext;
     private readonly DbSet<Announcement> _announcements;
+    private readonly AnnouncementsDbContext _dbContext;
     private readonly IQueryable<Announcement> _readOnlyAnnouncements;
 
     public AnnouncementsRepository(AnnouncementsDbContext dbContext)
@@ -28,6 +28,6 @@ public class AnnouncementsRepository : IAnnouncementsRepository
 
     public Task<List<Announcement>> FindAll(CancellationToken cancellationToken)
     {
-        return _readOnlyAnnouncements.IncludeAll(_dbContext).ToListAsync(cancellationToken);
+        return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 }

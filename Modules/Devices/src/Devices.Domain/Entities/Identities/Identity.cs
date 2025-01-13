@@ -329,9 +329,9 @@ public class Identity : Entity
         return i => i.Address == address.ToString();
     }
 
-    public static Expression<Func<Identity, bool>> ContainsAddressValue(IEnumerable<string> recipients)
+    public static Expression<Func<Identity, bool>> HasAddress(List<IdentityAddress> recipients)
     {
-        return i => recipients.Contains(i.Address.Value);
+        return i => recipients.Contains(i.Address);
     }
 
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()
