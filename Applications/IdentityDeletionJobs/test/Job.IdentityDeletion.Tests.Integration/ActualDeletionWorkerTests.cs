@@ -8,6 +8,7 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -124,6 +125,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
+
+        await Task.Delay(1.Seconds());
 
         var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
         relationshipsAfterAct.Should().BeEmpty();
