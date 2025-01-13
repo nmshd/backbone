@@ -9,21 +9,21 @@ public class AnnouncementRecipient : Entity
     public AnnouncementRecipient()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = null!;
         AnnouncementId = null!;
+        DeviceId = null!;
         Address = null!;
     }
 
-    public AnnouncementRecipient(string address)
+    public AnnouncementRecipient(string deviceId, string address)
     {
-        Id = null!; // will be set by EF Core (primary key)
         AnnouncementId = null!; // will be set by EF Core (back navigation property)
+        DeviceId = deviceId;
         Address = address;
         CreatedAt = SystemTime.UtcNow;
     }
 
-    public string Id { get; set; }
-    public AnnouncementId AnnouncementId { get; }
+    public AnnouncementId AnnouncementId { get; set; }
+    public string DeviceId { get; set; }
     public string Address { get; set; }
     public DateTime CreatedAt { get; set; }
 }

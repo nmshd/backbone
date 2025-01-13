@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AnnouncementsDbContext))]
-    [Migration("20250110112331_AddingAnnouncementRecipient")]
+    [Migration("20250113084824_AddingAnnouncementRecipient")]
     partial class AddingAnnouncementRecipient
     {
         /// <inheritdoc />
@@ -25,24 +25,6 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Backbone.BuildingBlocks.Domain.Events.DomainEvent", b =>
-                {
-                    b.Property<string>("DomainEventId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AnnouncementRecipientId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("DomainEventId");
-
-                    b.HasIndex("AnnouncementRecipientId");
-
-                    b.ToTable("DomainEvent", "Announcements");
-                });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
@@ -68,25 +50,22 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("AnnouncementId1")
+                    b.Property<string>("AnnouncementId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnnouncementId1");
+                    b.HasKey("AnnouncementId", "DeviceId", "Address");
 
                     b.ToTable("AnnouncementRecipients", "Announcements");
                 });
@@ -118,18 +97,13 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.ToTable("AnnouncementText", "Announcements");
                 });
 
-            modelBuilder.Entity("Backbone.BuildingBlocks.Domain.Events.DomainEvent", b =>
-                {
-                    b.HasOne("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", null)
-                        .WithMany("DomainEvents")
-                        .HasForeignKey("AnnouncementRecipientId");
-                });
-
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
                         .WithMany("Recipients")
-                        .HasForeignKey("AnnouncementId1");
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementText", b =>
@@ -146,11 +120,6 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.Navigation("Recipients");
 
                     b.Navigation("Texts");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
-                {
-                    b.Navigation("DomainEvents");
                 });
 #pragma warning restore 612, 618
         }

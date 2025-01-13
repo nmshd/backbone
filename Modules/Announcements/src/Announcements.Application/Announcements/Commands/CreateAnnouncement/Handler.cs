@@ -32,19 +32,24 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
         {
             var requestRecipients = request.Recipients.OrderBy(address => address).ToList();
 
-            var recipients = (await _identityRepository.Find(Identity.ContainsAddressValue(requestRecipients), cancellationToken)).ToArray();
-            var foundRecipients = recipients.Select(r => r.Address.Value).OrderBy(address => address).ToList();
+            var foundRecipients = (await _identityRepository.Find(Identity.ContainsAddressValue(requestRecipients), cancellationToken)).ToArray();
+            var foundRecipientAddresses = foundRecipients.Select(r => r.Address.Value).OrderBy(address => address).ToList();
+            var notFoundRecipientAddresses = requestRecipients.Except(foundRecipientAddresses).ToList();
 
-            if (!foundRecipients.SequenceEqual(requestRecipients))
+            if (notFoundRecipientAddresses.Count != 0)
             {
                 _logger.LogError("Not all recipients were found in the database. \r\n" +
-                                 "Request Recipients: {recipients}. \r\n" +
-                                 "Found Recipients: {foundRecipients}",
+                                 "Request Recipients: {requestRecipients}. \r\n" +
+                                 "Not Found Recipients: {notFoundRecipientAddresses}",
                     string.Join(',', requestRecipients),
-                    string.Join(',', foundRecipients));
+                    string.Join(',', notFoundRecipientAddresses));
             }
 
-            announcementRecipients = requestRecipients.Select(address => new AnnouncementRecipient(address)).ToList();
+            foreach (var recipient in foundRecipients)
+            {
+                announcementRecipients.AddRange(recipient.Devices.Select(recipientDevice =>
+                    new AnnouncementRecipient(recipientDevice.Id.Value, recipient.Address.Value)));
+            }
 
             foreach (var announcementRecipient in announcementRecipients)
             {

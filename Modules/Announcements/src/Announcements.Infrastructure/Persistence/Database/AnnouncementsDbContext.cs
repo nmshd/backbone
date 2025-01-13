@@ -38,8 +38,6 @@ public class AnnouncementsDbContext : AbstractDbContextBase
 
         builder.HasDefaultSchema("Announcements");
 
-        builder.Entity<AnnouncementRecipient>(entity => { entity.HasKey(e => e.Id); });
-
         builder.ApplyConfigurationsFromAssembly(typeof(AnnouncementsDbContext).Assembly);
     }
 }
