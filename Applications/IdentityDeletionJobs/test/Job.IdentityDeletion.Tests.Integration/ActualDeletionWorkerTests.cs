@@ -126,7 +126,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
-        await Task.Delay(1.Seconds());
+        await assertionContext.SaveChangesAsync();
 
         var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
         relationshipsAfterAct.Should().BeEmpty();
