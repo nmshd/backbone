@@ -1,4 +1,3 @@
-{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
 {{- if .Values.sseserver.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -8,13 +7,11 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
     app: {{ .Values.sseserver.name }}
   annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.sseserver.ingress.certName }}
-    appgw.ingress.kubernetes.io/connection-draining: "true"
-    appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+    kubernetes.io/ingress.class: {{ .Values.sseserver.ingress.class }}
+{{ toYaml .Values.sseserver.ingress.annotations | indent 4 }}
 spec:
   rules:
-    - host: {{ .Values.sseserver.ingress.host }}
+    - host: {{ .Values.sseserver.ingress.hostnameOverride | default .Values.global.defaultHostname }}
       http:
         paths:
           - path: "/api/v1/sse"
@@ -23,6 +20,11 @@ spec:
               service:
                 name: {{ .Values.sseserver.name }}
                 port:
-                  number: 8080   
-{{- end }}
+                  number: 8080
+  {{- if .Values.sseserver.ingress.tls.enabled }}
+  tls: 
+    - hosts:
+        - {{ .Values.sseserver.ingress.hostnameOverride | default .Values.global.defaultHostname }}
+      secretName: {{ .Values.sseserver.ingress.tls.certificateSecretName }}
+  {{- end }}
 {{- end }}

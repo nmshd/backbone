@@ -19,6 +19,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OpenIddict.Core;
 using OpenIddict.Validation.AspNetCore;
 
@@ -29,12 +30,15 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly ILogger<IdentitiesController> _logger;
 
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager,
+        ILogger<IdentitiesController> logger) : base(mediator)
     {
         _applicationManager = applicationManager;
+        _logger = logger;
     }
 
     [HttpPost]
