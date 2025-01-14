@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Announcements.Domain.Entities;
@@ -26,4 +27,10 @@ public class AnnouncementRecipient : Entity
     public string DeviceId { get; set; }
     public string Address { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public void Anonymize(string didDomainName)
+    {
+        DeviceId = "Anonymized";
+        Address = IdentityAddress.GetAnonymized(didDomainName);
+    }
 }
