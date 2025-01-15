@@ -8,3 +8,5 @@ pubspec.lock
 
 # schemes
 schemes/*.json
+
+pubspec_overrides.yaml
