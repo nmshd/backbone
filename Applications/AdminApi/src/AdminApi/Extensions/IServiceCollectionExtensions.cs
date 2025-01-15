@@ -10,9 +10,13 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
+using Microsoft.Extensions.Options;
 using Microsoft.OData.ModelBuilder;
 
 namespace Backbone.AdminApi.Extensions;
@@ -148,7 +152,7 @@ public static class IServiceCollectionExtensions
         var responsePayload = new HttpResponseEnvelopeError(
             HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code,
                 formattedMessage,
-                ""));
+                "")); // TODO: add docs
 
         return new BadRequestObjectResult(responsePayload);
     };
@@ -174,5 +178,19 @@ public static class IServiceCollectionExtensions
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
         return services;
+    }
+    
+    public static void AddPersistence(this IServiceCollection services)
+    {
+        var infrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokensConfiguration.InfrastructureConfiguration>>().Value;
+
+        services.AddDatabase(options =>
+        {
+            options.Provider = infrastructureConfiguration.SqlDatabase.Provider;
+            options.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
+        });
+
+        // Note: Registration required. Only Modules have their used repositories registered in the DI container.
+        services.AddTransient<ITokensRepository, TokensRepository>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Backbone.AdminApi.Configuration;
 using Backbone.Modules.Tokens.Application.Extensions;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Infrastructure.Persistence;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.Options;
@@ -15,17 +16,9 @@ public static class TokensServiceCollectionExtensions
 
         services.ConfigureAndValidate<TokensConfiguration.InfrastructureConfiguration>(configuration.GetSection("Infrastructure").Bind);
 
-        var infrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokensConfiguration.InfrastructureConfiguration>>().Value;
-
-        services.AddDatabase(options =>
-        {
-            options.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            options.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-        });
-
-        // Note: Registration required. Only Modules have their used repositories registered in the DI container.
-        services.AddTransient<ITokensRepository, TokensRepository>();
-
+        services.AddPersistence();
         return services;
     }
+
+    
 }

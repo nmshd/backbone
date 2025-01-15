@@ -10,16 +10,13 @@ public class Validator : AbstractValidator<ListTokensByIdentityQuery>
     public Validator()
     {
         RuleFor(q => q.CreatedBy)
-            .Cascade(CascadeMode.Stop)
             .DetailedNotEmpty();
 
         RuleFor(q => q.PaginationFilter.PageNumber)
-            .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(q => q.PaginationFilter.PageSize)
-            .Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(1)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
