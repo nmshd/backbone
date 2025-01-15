@@ -10,7 +10,7 @@ public class AnnouncementCreatedDomainEvent : DomainEvent
         Id = announcement.Id.Value;
         Severity = announcement.Severity.ToString();
         Texts = announcement.Texts.Select(t => new AnnouncementCreatedDomainEventText(t)).ToList();
-        Recipients = announcement.Recipients.Select(r => r.Address).ToList();
+        Recipients = announcement.Recipients.Select(r => r.Address.Value).ToList();
     }
 
     public string Id { get; }

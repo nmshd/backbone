@@ -11,9 +11,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class PnsRegistrationsRepository : IPnsRegistrationsRepository
 {
-    private readonly DbSet<PnsRegistration> _registrations;
-    private readonly IQueryable<PnsRegistration> _readonlyRegistrations;
     private readonly DevicesDbContext _dbContext;
+    private readonly IQueryable<PnsRegistration> _readonlyRegistrations;
+    private readonly DbSet<PnsRegistration> _registrations;
 
     public PnsRegistrationsRepository(DevicesDbContext dbContext)
     {
@@ -42,10 +42,11 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
     }
 
-    public async Task<PnsRegistration[]> FindByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
+    public async Task<PnsRegistration[]> FindDistinctByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .Where(r => deviceIds.Contains(r.DeviceId))
+            .DistinctBy(r => r.Handle)
             .ToArrayAsync(cancellationToken);
     }
 

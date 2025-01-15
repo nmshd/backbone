@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/Announcements
+  url: {{baseUrl}}/Announcements?language=en
   body: none
   auth: inherit
+}
+
+params:query {
+  language: en
 }

@@ -10,9 +10,8 @@ public class AnnouncementRecipientEntityTypeConfiguration : EntityEntityTypeConf
     {
         base.Configure(builder);
 
-        builder.HasKey(a => new { a.AnnouncementId, a.DeviceId, a.Address });
+        builder.HasKey(a => new { a.AnnouncementId, a.Address });
 
-        builder.Property(a => a.DeviceId);
         builder.Property(a => a.Address);
         builder.Property(a => a.CreatedAt);
     }

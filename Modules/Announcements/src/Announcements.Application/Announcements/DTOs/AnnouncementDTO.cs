@@ -26,11 +26,9 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
     {
         public AnnouncementRecipientDTO(AnnouncementRecipient announcementRecipient)
         {
-            DeviceId = announcementRecipient.DeviceId;
             Address = announcementRecipient.Address;
         }
 
-        public string DeviceId { get; set; }
         public string Address { get; set; }
     }
 }

@@ -44,11 +44,7 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
                     string.Join(',', notFoundRecipientAddresses));
             }
 
-            foreach (var recipient in foundRecipients)
-            {
-                announcementRecipients.AddRange(recipient.Devices.Select(recipientDevice =>
-                    new AnnouncementRecipient(recipientDevice.Id.Value, recipient.Address.Value)));
-            }
+            announcementRecipients.AddRange(foundRecipients.Select(recipient => new AnnouncementRecipient(recipient.Address)));
         }
 
         var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
