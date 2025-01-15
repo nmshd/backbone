@@ -1,10 +1,5 @@
 ﻿using Backbone.AdminApi.Configuration;
 using Backbone.Modules.Tokens.Application.Extensions;
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Infrastructure.Persistence;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Extensions;
 
@@ -19,6 +14,4 @@ public static class TokensServiceCollectionExtensions
         services.AddPersistence();
         return services;
     }
-
-    
 }

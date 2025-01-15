@@ -179,7 +179,7 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
-    
+
     public static void AddPersistence(this IServiceCollection services)
     {
         var infrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokensConfiguration.InfrastructureConfiguration>>().Value;
