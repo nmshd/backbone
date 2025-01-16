@@ -3,7 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.AnonymizeRecipient;
 using MediatR;
 
-namespace Backbone.Modules.Announcements.Application.Identities;
+namespace Backbone.Modules.Announcements.Application.Announcements;
 
 public class IdentityDeleter : IIdentityDeleter
 {
