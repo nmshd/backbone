@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
     private readonly IIdentitiesRepository _identityRepository;
     private readonly ILogger<Handler> _logger;
 
-    public Handler(IAnnouncementsRepository announcementsRepository, ILogger<Handler> logger, IIdentitiesRepository identityRepository)
+    public Handler(ILogger<Handler> logger, IAnnouncementsRepository announcementsRepository, IIdentitiesRepository identityRepository)
     {
         _announcementsRepository = announcementsRepository;
         _logger = logger;
