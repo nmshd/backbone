@@ -9,22 +9,25 @@ public static class ExhaustionDateExtensions
 {
     public static ExhaustionDateAssertions Should(this ExhaustionDate instance)
     {
-        return new ExhaustionDateAssertions(instance);
+        return new ExhaustionDateAssertions(instance, AssertionChain.GetOrCreate());
     }
 }
 
 public class ExhaustionDateAssertions :
     ComparableTypeAssertions<ExhaustionDate, ExhaustionDateAssertions>
 {
-    public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject)
+    private readonly AssertionChain _assertionChain;
+
+    public ExhaustionDateAssertions(ExhaustionDate subject, AssertionChain assertionChain) : base(subject, assertionChain)
     {
+        _assertionChain = assertionChain;
     }
 
     protected override string Identifier => "ExhaustionDate";
 
     public AndConstraint<ExhaustionDateAssertions> BeEndOfHour(string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject)
             .ForCondition(exhaustionDate => ((ExhaustionDate)exhaustionDate).Value == ((ExhaustionDate)exhaustionDate).Value.EndOfHour())
@@ -36,7 +39,7 @@ public class ExhaustionDateAssertions :
 
     public AndConstraint<ExhaustionDateAssertions> BeEndOfDay(string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject)
             .ForCondition(exhaustionDate => ((ExhaustionDate)exhaustionDate).Value == ((ExhaustionDate)exhaustionDate).Value.EndOfDay())

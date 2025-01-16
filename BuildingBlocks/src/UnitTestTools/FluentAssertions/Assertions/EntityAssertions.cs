@@ -7,8 +7,11 @@ namespace Backbone.UnitTestTools.FluentAssertions.Assertions;
 
 public class EntityAssertions : ObjectAssertions<Entity?, EntityAssertions>
 {
-    public EntityAssertions(Entity? instance) : base(instance)
+    private readonly AssertionChain _assertionChain;
+
+    public EntityAssertions(Entity? instance, AssertionChain assertionChain) : base(instance, assertionChain)
     {
+        _assertionChain = assertionChain;
     }
 
     protected override string Identifier => "entity";
@@ -18,7 +21,8 @@ public class EntityAssertions : ObjectAssertions<Entity?, EntityAssertions>
         if (Subject == null)
             throw new Exception("Subject cannot be null.");
 
-        Execute.Assertion
+
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.DomainEvents)
             .ForCondition(e => e.Count == 1)
@@ -39,7 +43,7 @@ public class EntityAssertions : ObjectAssertions<Entity?, EntityAssertions>
 
         var joinedEvents = string.Join(", ", Subject.DomainEvents.Select(e => e.GetType().Name));
 
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.DomainEvents)
             .ForCondition(events => events.Count == 2)
@@ -62,7 +66,7 @@ public class EntityAssertions : ObjectAssertions<Entity?, EntityAssertions>
         if (Subject == null)
             throw new Exception("Subject cannot be null.");
 
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.DomainEvents)
             .ForCondition(events => events.All(e => e is not TEvent))

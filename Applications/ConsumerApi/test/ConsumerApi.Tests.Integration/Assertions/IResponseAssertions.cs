@@ -8,13 +8,16 @@ namespace Backbone.ConsumerApi.Tests.Integration.Assertions;
 
 public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertions>
 {
-    public IResponseAssertions(IResponse instance) : base(instance)
+    private readonly AssertionChain _assertionChain;
+
+    public IResponseAssertions(IResponse instance, AssertionChain assertionChain) : base(instance, assertionChain)
     {
+        _assertionChain = assertionChain;
     }
 
     public void BeASuccess(string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject)
             .ForCondition(result => result.IsSuccess)
@@ -23,7 +26,7 @@ public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertio
 
     public void BeAnError(string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject)
             .ForCondition(result => result.IsError)
@@ -32,7 +35,7 @@ public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertio
 
     public async Task ComplyWithSchema(string because = "", params object[] becauseArgs)
     {
-        var assertion = Execute.Assertion
+        var assertion = _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject!)
             .ForCondition(result => result != null)

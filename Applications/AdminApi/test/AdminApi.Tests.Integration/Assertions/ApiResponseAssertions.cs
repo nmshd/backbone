@@ -8,15 +8,18 @@ namespace Backbone.AdminApi.Tests.Integration.Assertions;
 
 public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, ApiResponseAssertions<T>>
 {
-    public ApiResponseAssertions(ApiResponse<T> instance) : base(instance)
+    private readonly AssertionChain _assertionChain;
+
+    public ApiResponseAssertions(ApiResponse<T> instance, AssertionChain assertionChain) : base(instance, assertionChain)
     {
+        _assertionChain = assertionChain;
     }
 
     protected override string Identifier => "ApiResponse";
 
     public async Task ComplyWithSchema(string because = "", params object[] becauseArgs)
     {
-        var assertion = Execute.Assertion
+        var assertion = _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.Result!)
             .ForCondition(result => result != null)
@@ -35,7 +38,7 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
 
     public void BeASuccess(string because = "", params object[] becauseArgs)
     {
-        Execute.Assertion
+        _assertionChain
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject)
             .ForCondition(result => result.IsSuccess)
