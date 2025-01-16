@@ -35,8 +35,12 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
         _tokensResult = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentity, CancellationToken.None);
     }
 
+    [Then(@"the response status code is (\d+) \(.+\)")]
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    {
+        ((int)_tokensResult!.Status).Should().Be(expectedStatusCode);
+    }
 
-    //_tokensResult.Result!.Pagination!.TotalRecords.Should().Be(0);
 
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
