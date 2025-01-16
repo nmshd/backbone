@@ -1,5 +1,7 @@
 ﻿using Backbone.AdminApi.Configuration;
 using Backbone.Modules.Tokens.Application.Extensions;
+using Backbone.Modules.Tokens.Infrastructure.Persistence;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Extensions;
 
@@ -11,7 +13,14 @@ public static class TokensServiceCollectionExtensions
 
         services.ConfigureAndValidate<TokensConfiguration.InfrastructureConfiguration>(configuration.GetSection("Infrastructure").Bind);
 
-        services.AddPersistence();
+        var infrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TokensConfiguration.InfrastructureConfiguration>>().Value;
+
+        services.AddPersistence(options =>
+        {
+            options.DbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
+            options.DbOptions.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
+        });
+
         return services;
     }
 }
