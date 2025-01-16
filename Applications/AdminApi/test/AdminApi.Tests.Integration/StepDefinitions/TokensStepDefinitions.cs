@@ -1,5 +1,4 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
-using Backbone.AdminApi.Sdk.Endpoints.Tokens.Response;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Tokens.Response;
 using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
@@ -14,38 +13,37 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET /Tokens?createdBy={identity-address}")]
 internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
-    private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
-    private string _newIdentity = string.Empty;
-    private ApiResponse<ListTokensTestResponse> _tokensResult = null!;
+    private ApiResponse<ListTokensTestResponse> _listTokensTestResponse = null!;
+    private string _newIdentityAddress = string.Empty;
 
     [Given(@"an identity with no tokens")]
     public async Task GivenAnIdentityWithNoTokens()
     {
-        _createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
+        var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
 
-        _createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.Should().BeASuccess();
 
-        _newIdentity = _createIdentityResponse.Result!.Address;
+        _newIdentityAddress = createIdentityResponse.Result!.Address;
     }
 
 
     [When(@"a GET request is sent to the /Tokens endpoint with the identity's address")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithTheIdentitysAddress()
     {
-        _tokensResult = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentity, CancellationToken.None);
+        _listTokensTestResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_tokensResult!.Status).Should().Be(expectedStatusCode);
+        ((int)_listTokensTestResponse!.Status).Should().Be(expectedStatusCode);
     }
 
 
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        var tokens = _tokensResult.Result!.Count;
+        var tokens = _listTokensTestResponse.Result!.Count;
         tokens.Should().Be(0);
     }
 }
