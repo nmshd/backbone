@@ -18,6 +18,8 @@ public class Handler : IRequestHandler<AnonymizeRecipientForIdentityCommand>
 
     public async Task Handle(AnonymizeRecipientForIdentityCommand request, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(request.IdentityAddress)) return;
+
         var announcementRecipients = await _announcementRecipientRepository.FindAllForIdentityAddress(IdentityAddress.Parse(request.IdentityAddress), cancellationToken);
 
         foreach (var announcementRecipient in announcementRecipients)

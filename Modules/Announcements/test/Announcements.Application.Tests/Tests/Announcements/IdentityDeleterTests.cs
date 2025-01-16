@@ -8,8 +8,6 @@ namespace Backbone.Modules.Announcements.Application.Tests.Tests.Announcements;
 
 public class IdentityDeleterTests : AbstractTestsBase
 {
-    // write tests for IModules.Announcements.Application.Announcements.IdentityDeleter
-
     [Fact]
     public async Task Deleter_calls_correct_command()
     {

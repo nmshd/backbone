@@ -21,7 +21,7 @@ public class AnnouncementRecipient : Entity
         CreatedAt = SystemTime.UtcNow;
     }
 
-    public AnnouncementId AnnouncementId { get; }
+    public AnnouncementId AnnouncementId { get; internal set; }
     public IdentityAddress Address { get; private set; }
     public DateTime CreatedAt { get; }
 
