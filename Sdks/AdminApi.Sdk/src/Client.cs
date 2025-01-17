@@ -9,6 +9,7 @@ using Backbone.AdminApi.Sdk.Endpoints.Messages;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
 using Backbone.AdminApi.Sdk.Endpoints.Relationships;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers;
+using Backbone.AdminApi.Sdk.Endpoints.Tokens;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.Tooling.JsonConverters;
 
@@ -34,6 +35,7 @@ public class Client
         Tiers = new TiersEndpoint(endpointClient);
         Challenges = new ChallengesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
+        Tokens = new TokensEndpoint(endpointClient);
     }
 
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
@@ -45,6 +47,8 @@ public class Client
     public TiersEndpoint Tiers { get; }
     public ChallengesEndpoint Challenges { get; }
     public MessagesEndpoint Messages { get; }
+
+    public TokensEndpoint Tokens { get; }
 
     public static Client Create(string baseUrl, string apiKey)
     {
