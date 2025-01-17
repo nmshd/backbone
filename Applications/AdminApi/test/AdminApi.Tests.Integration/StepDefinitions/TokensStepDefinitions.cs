@@ -13,7 +13,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET /Tokens?createdBy={identity-address}")]
 internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
-    private ApiResponse<ListTokensTestResponse> _listTokensTestResponse = null!;
+    private ApiResponse<ListTokensTestResponse> _listTokensResponse = null!;
     private string _newIdentityAddress = string.Empty;
 
     [Given(@"an identity with no tokens")]
@@ -30,20 +30,20 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     [When(@"a GET request is sent to the /Tokens endpoint with the identity's address")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithTheIdentitysAddress()
     {
-        _listTokensTestResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
+        _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_listTokensTestResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_listTokensResponse!.Status).Should().Be(expectedStatusCode);
     }
 
 
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        var tokens = _listTokensTestResponse.Result!.Count;
+        var tokens = _listTokensResponse.Result!.Count;
         tokens.Should().Be(0);
     }
 }
