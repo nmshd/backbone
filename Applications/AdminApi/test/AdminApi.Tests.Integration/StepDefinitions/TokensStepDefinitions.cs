@@ -43,7 +43,6 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        var tokens = _listTokensResponse.Result!.Count;
-        tokens.Should().Be(0);
+        _listTokensResponse.Result!.Count.Should().Be(0);
     }
 }
