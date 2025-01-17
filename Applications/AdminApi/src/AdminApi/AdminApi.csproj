@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.1.3" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="6.0.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.0" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.1" />
         <PackageReference Include="Serilog" Version="4.2.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
         <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.2" />
@@ -21,10 +21,10 @@
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
         <!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
@@ -37,6 +37,8 @@
         <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
         <ProjectReference Include="..\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />

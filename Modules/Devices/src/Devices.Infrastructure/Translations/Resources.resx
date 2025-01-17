@@ -117,12 +117,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
-      <value>New updates are available in the app.</value>
-  </data>
-    <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
-      <value>Updates available</value>
-  </data>
     <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
       <value>A deletion process of one of your identities has been was approved and will be processed shortly.</value>
   </data>
@@ -182,5 +176,11 @@
     </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
         <value>Your backup device was used.</value>
+    </data>
+    <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
+        <value />
+    </data>
+    <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
+        <value />
     </data>
 </root>

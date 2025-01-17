@@ -8,7 +8,7 @@
         {
             // we don't want to update ArchUnitNET currently, because there is a bug in the latest version (see https://github.com/TNG/ArchUnitNET/issues/320)
             matchDatasources: ["nuget"],
-            packageNames: ["TngTech.ArchUnitNET.xUnit"],
+            packageNames: ["TngTech.ArchUnitNET.xUnit", "FluentAssertions", "FluentAssertions.Json"],
             enabled: false
         },
 

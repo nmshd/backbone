@@ -7,20 +7,24 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
     app: {{ .Values.consumerapi.name }}
   annotations:
-    kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.consumerapi.ingress.certName }}
-    appgw.ingress.kubernetes.io/connection-draining: "true"
-    appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+    kubernetes.io/ingress.class: {{ .Values.consumerapi.ingress.class }}
+{{ toYaml .Values.consumerapi.ingress.annotations | indent 4 }}
 spec:
   rules:
-    - host: {{ .Values.consumerapi.ingress.host }}
+    - host: {{ .Values.consumerapi.ingress.hostnameOverride | default .Values.global.defaultHostname }}
       http:
         paths:
-          - path: "/*"
+          - path: "/"
             pathType: Prefix
             backend:
               service:
                 name: {{ .Values.consumerapi.name }}
                 port:
-                  number: 8080   
+                  number: 8080
+  {{- if .Values.consumerapi.ingress.tls.enabled }}
+  tls: 
+    - hosts:
+        - {{ .Values.consumerapi.ingress.hostnameOverride | default .Values.global.defaultHostname }}
+      secretName: {{ .Values.consumerapi.ingress.tls.certificateSecretName }}
+  {{- end }}
 {{- end }}

@@ -40,9 +40,9 @@ public class DevicesModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override async Task ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddDevicesDomainEventSubscriptions();
+        await eventBus.AddDevicesDomainEventSubscriptions();
     }
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
@@ -60,14 +60,14 @@ public class DevicesModule : AbstractModule
         {
             var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsOptions>>().Value;
             supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
-            failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds);
+            failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds).GetAwaiter().GetResult();
         }
 
         if (configuration.Value.Infrastructure.PushNotifications.Providers.Fcm is { Enabled: true })
         {
             var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmOptions>>().Value;
             supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
-            failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds);
+            failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds).GetAwaiter().GetResult();
         }
 
         if (failingFcmAppIds.Count + failingApnsBundleIds.Count > 0)
