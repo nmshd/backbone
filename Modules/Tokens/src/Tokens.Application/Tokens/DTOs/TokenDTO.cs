@@ -13,6 +13,7 @@ public class TokenDTO
         ExpiresAt = token.ExpiresAt;
         Content = token.Content;
         ForIdentity = token.ForIdentity?.Value;
+        IsPasswordProtected = token.Password is { Length: > 0 };
     }
 
     public string Id { get; set; }
@@ -26,4 +27,6 @@ public class TokenDTO
     public DateTime ExpiresAt { get; set; }
 
     public byte[] Content { get; set; }
+
+    public bool IsPasswordProtected { get; }
 }
