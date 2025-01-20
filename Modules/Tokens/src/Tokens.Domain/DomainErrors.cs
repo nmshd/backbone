@@ -10,13 +10,8 @@ public static class DomainErrors
             "The token has to be personalized.");
     }
 
-    public static DomainError NoAllocationForOwner()
+    public static DomainError NoAllocationForIdentity()
     {
-        return new DomainError("error.platform.validation.token.noAllocationForOwner", "The owner of the token cannot be allocated.");
-    }
-
-    public static DomainError AlreadyAllocated()
-    {
-        return new DomainError("error.platform.validation.token.alreadyAllocated", "The identity already has an allocation for this token.");
+        return new DomainError("error.platform.validation.token.noAllocationForIdentity", "The identity doesn't have an allocation for this token.");
     }
 }

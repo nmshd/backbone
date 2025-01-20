@@ -118,7 +118,16 @@ public class Token : Entity
         ForIdentity = anonymousIdentity;
     }
 
-    public void IncrementAccessFailedCount()
+    public void AnonymizeTokenAllocation(IdentityAddress address, string didDomainName)
+    {
+        var tokenAllocation = _allocations.Find(a => a.AllocatedBy == address) ?? throw new DomainException(DomainErrors.NoAllocationForIdentity());
+
+        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
+
+        tokenAllocation.AllocatedBy = anonymousIdentity;
+    }
+
+    private void IncrementAccessFailedCount()
     {
         if (IsLocked) return;
 
