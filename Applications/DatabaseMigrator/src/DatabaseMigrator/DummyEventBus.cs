@@ -5,15 +5,23 @@ namespace Backbone.DatabaseMigrator;
 
 public class DummyEventBus : IEventBus
 {
-    public void Publish(DomainEvent @event)
+    public Task Publish(DomainEvent @event)
     {
+        return Task.CompletedTask;
     }
 
-    public void StartConsuming()
+    public Task StartConsuming(CancellationToken cancellationToken)
     {
+        return Task.CompletedTask;
     }
 
-    public void Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
+    public Task StopConsuming(CancellationToken cancellationToken)
     {
+        return Task.CompletedTask;
+    }
+
+    public Task Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
+    {
+        return Task.CompletedTask;
     }
 }

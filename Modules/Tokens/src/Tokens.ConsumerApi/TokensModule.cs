@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Extensions;
 using Backbone.Modules.Tokens.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +15,6 @@ public class TokensModule : AbstractModule
 
     public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
@@ -27,7 +25,7 @@ public class TokensModule : AbstractModule
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
-        services.AddApplication();
+        services.AddApplication(configuration.GetSection("Application"));
 
         if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(Name,
@@ -35,7 +33,8 @@ public class TokensModule : AbstractModule
                 parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
-    public override void ConfigureEventBus(IEventBus eventBus)
+    public override Task ConfigureEventBus(IEventBus eventBus)
     {
+        return Task.CompletedTask;
     }
 }

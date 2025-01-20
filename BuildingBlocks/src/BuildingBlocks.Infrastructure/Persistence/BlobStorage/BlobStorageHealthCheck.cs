@@ -14,12 +14,12 @@ public class BlobStorageHealthCheck : IHealthCheck
     private static int _numberOfTries;
 
     private readonly IBlobStorage _storage;
-    private readonly string _bucketName;
+    private readonly string _rootFolderName;
 
-    public BlobStorageHealthCheck(IBlobStorage storage, string bucketName)
+    public BlobStorageHealthCheck(IBlobStorage storage, string rootFolderName)
     {
         _storage = storage;
-        _bucketName = bucketName;
+        _rootFolderName = rootFolderName;
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ public class BlobStorageHealthCheck : IHealthCheck
     {
         try
         {
-            _storage.Add(_bucketName, filename, FILE_TEXT.GetBytes());
+            _storage.Add(_rootFolderName, filename, FILE_TEXT.GetBytes());
             await _storage.SaveAsync();
             return true;
         }
@@ -56,7 +56,7 @@ public class BlobStorageHealthCheck : IHealthCheck
     {
         try
         {
-            var downloadBytes = await _storage.FindAsync(_bucketName, filename);
+            var downloadBytes = await _storage.FindAsync(_rootFolderName, filename);
             var downloadedString = Encoding.UTF8.GetString(downloadBytes);
             return downloadedString == FILE_TEXT;
         }
@@ -70,7 +70,7 @@ public class BlobStorageHealthCheck : IHealthCheck
     {
         try
         {
-            _storage.Remove(_bucketName, filename);
+            _storage.Remove(_rootFolderName, filename);
             await _storage.SaveAsync();
             return true;
         }

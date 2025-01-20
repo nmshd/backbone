@@ -40,6 +40,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .WithParticipant(identityAddress)
             .FirstWithId(id, cancellationToken);
 
@@ -52,6 +53,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         var query = (track ? _relationships : _readOnlyRelationships)
             .AsQueryable()
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .WithParticipant(identityAddress)
             .WithIdIn(ids);
 
@@ -104,6 +106,6 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        return await _relationships.IncludeAll(_dbContext).Where(filter).ToListAsync(cancellationToken);
+        return await _relationships.IncludeAll(_dbContext).AsSplitQuery().Where(filter).ToListAsync(cancellationToken);
     }
 }

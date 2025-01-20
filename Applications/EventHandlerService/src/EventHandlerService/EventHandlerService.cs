@@ -16,32 +16,25 @@ public class EventHandlerService : IHostedService
         _logger = logger;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
-        SubscribeToEvents();
-        StartConsuming();
-
-        return Task.CompletedTask;
+        await SubscribeToEvents();
+        await _eventBus.StartConsuming(cancellationToken);
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await _eventBus.StopConsuming(cancellationToken);
     }
 
-    private void SubscribeToEvents()
+    private async Task SubscribeToEvents()
     {
         _logger.LogInformation("Subscribing to events...");
         foreach (var module in _modules)
         {
-            module.ConfigureEventBus(_eventBus);
+            await module.ConfigureEventBus(_eventBus);
         }
 
         _logger.LogInformation("Successfully subscribed to events.");
-    }
-
-    private void StartConsuming()
-    {
-        _eventBus.StartConsuming();
     }
 }
