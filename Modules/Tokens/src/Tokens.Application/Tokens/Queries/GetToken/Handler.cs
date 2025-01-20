@@ -31,12 +31,12 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
                     throw new NotFoundException(nameof(Token));
 
         var activeIdentity = _userContext.GetAddressOrNull();
-        var result = token.TryToAccess(activeIdentity, password);
+        var activeDevice = _userContext.GetDeviceIdOrNull();
+        var result = token.TryToAccess(activeIdentity, activeDevice, password);
 
         switch (result)
         {
-            case TokenAccessResult.AddAllocation:
-                token.AddAllocationFor(activeIdentity!, _userContext.GetDeviceId());
+            case TokenAccessResult.AllocationAdded:
                 await _tokensRepository.Update(token, cancellationToken);
                 return token;
 

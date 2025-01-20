@@ -73,14 +73,23 @@ public class Token : Entity
         return address != null && Allocations.Any(allocation => allocation.AllocatedBy == address);
     }
 
-    public TokenAccessResult TryToAccess(IdentityAddress? address, byte[]? password)
+    public TokenAccessResult TryToAccess(IdentityAddress? address, DeviceId? device, byte[]? password)
     {
         if (address is null) return EnsureCanBeCollected(null, password);
 
         if (address != CreatedBy && !HasAllocationForIdentity(address))
         {
             var result = EnsureCanBeCollected(address, password);
-            return result == TokenAccessResult.Ok ? TokenAccessResult.AddAllocation : result; //Create an allocation for authenticated users
+
+            if (result == TokenAccessResult.Ok)
+            {
+                var allocation = new TokenAllocation(this, address, device!);
+                _allocations.Add(allocation);
+
+                return TokenAccessResult.AllocationAdded;
+            }
+
+            return result;
         }
 
         return TokenAccessResult.Ok;
@@ -98,15 +107,6 @@ public class Token : Entity
         }
 
         return TokenAccessResult.Ok;
-    }
-
-    public void AddAllocationFor(IdentityAddress address, DeviceId deviceId)
-    {
-        EnsureIsNotOwner(address);
-        EnsureHasNoAllocationFor(address);
-
-        var allocation = new TokenAllocation(this, address, deviceId);
-        _allocations.Add(allocation);
     }
 
     public void AnonymizeForIdentity(string didDomainName)
@@ -146,16 +146,6 @@ public class Token : Entity
     public void EnsureIsPersonalized()
     {
         if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
-    }
-
-    public void EnsureHasNoAllocationFor(IdentityAddress identityAddress)
-    {
-        if (HasAllocationForIdentity(identityAddress)) throw new DomainException(DomainErrors.AlreadyAllocated());
-    }
-
-    public void EnsureIsNotOwner(IdentityAddress identityAddress)
-    {
-        if (identityAddress == CreatedBy) throw new DomainException(DomainErrors.NoAllocationForOwner());
     }
 
     #region Expressions
@@ -207,7 +197,7 @@ public class Token : Entity
 public enum TokenAccessResult
 {
     Ok,
-    AddAllocation,
+    AllocationAdded,
     WrongPassword,
     Locked
 }
