@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Domain.Entities;
@@ -31,36 +30,27 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
         var token = await _tokensRepository.Find(TokenId.Parse(tokenId), _userContext.GetAddressOrNull(), cancellationToken, true) ??
                     throw new NotFoundException(nameof(Token));
 
-        var identity = _userContext.GetAddressOrNull();
-        if (identity == null)
-        {
-            await EnsureTokenCanBeCollected(token, null, password, cancellationToken);
-        }
-        else if (identity != token.CreatedBy)
-        {
-            if (!token.HasAllocationForIdentity(identity))
-            {
-                await EnsureTokenCanBeCollected(token, identity, password, cancellationToken);
+        var activeIdentity = _userContext.GetAddressOrNull();
+        var result = token.TryToAccess(activeIdentity, password);
 
-                token.AddAllocationFor(identity, _userContext.GetDeviceId());
+        switch (result)
+        {
+            case TokenAccessResult.AddAllocation:
+                token.AddAllocationFor(activeIdentity!, _userContext.GetDeviceId());
                 await _tokensRepository.Update(token, cancellationToken);
-            }
-        }
+                return token;
 
-        return token;
-    }
+            case TokenAccessResult.WrongPassword:
+                await _tokensRepository.Update(token, cancellationToken);
+                throw new NotFoundException(nameof(Token));
 
-    private async Task EnsureTokenCanBeCollected(Token token, IdentityAddress? address, byte[]? password, CancellationToken cancellationToken)
-    {
-        if (token.IsLocked) throw new ApplicationException(ApplicationErrors.TokenIsLocked());
+            case TokenAccessResult.Locked:
+                await _tokensRepository.Update(token, cancellationToken);
+                throw new ApplicationException(ApplicationErrors.TokenIsLocked());
 
-        if (!token.CanBeCollectedUsingPassword(address, password))
-        {
-            token.IncrementAccessFailedCount();
-            await _tokensRepository.Update(token, cancellationToken);
-
-            if (token.IsLocked) throw new ApplicationException(ApplicationErrors.TokenIsLocked());
-            throw new NotFoundException(nameof(Token));
+            case TokenAccessResult.Ok:
+            default:
+                return token;
         }
     }
 }

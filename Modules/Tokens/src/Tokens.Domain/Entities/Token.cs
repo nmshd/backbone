@@ -73,6 +73,33 @@ public class Token : Entity
         return address != null && Allocations.Any(allocation => allocation.AllocatedBy == address);
     }
 
+    public TokenAccessResult TryToAccess(IdentityAddress? address, byte[]? password)
+    {
+        if (address is null) return EnsureCanBeCollected(null, password);
+
+        if (address != CreatedBy && !HasAllocationForIdentity(address))
+        {
+            var result = EnsureCanBeCollected(address, password);
+            return result == TokenAccessResult.Ok ? TokenAccessResult.AddAllocation : result; //Create an allocation for authenticated users
+        }
+
+        return TokenAccessResult.Ok;
+    }
+
+    private TokenAccessResult EnsureCanBeCollected(IdentityAddress? address, byte[]? password)
+    {
+        if (IsLocked) return TokenAccessResult.Locked;
+
+        if (!CanBeCollectedUsingPassword(address, password))
+        {
+            IncrementAccessFailedCount();
+
+            return IsLocked ? TokenAccessResult.Locked : TokenAccessResult.WrongPassword;
+        }
+
+        return TokenAccessResult.Ok;
+    }
+
     public void AddAllocationFor(IdentityAddress address, DeviceId deviceId)
     {
         EnsureIsNotOwner(address);
@@ -166,4 +193,12 @@ public class Token : Entity
     }
 
     #endregion
+}
+
+public enum TokenAccessResult
+{
+    Ok,
+    AddAllocation,
+    WrongPassword,
+    Locked
 }
