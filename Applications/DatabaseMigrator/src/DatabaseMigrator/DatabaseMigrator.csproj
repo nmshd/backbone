@@ -24,7 +24,7 @@
         <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
-        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="9.1.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     </ItemGroup>
