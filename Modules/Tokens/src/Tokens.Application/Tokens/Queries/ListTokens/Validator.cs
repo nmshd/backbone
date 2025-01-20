@@ -20,12 +20,7 @@ public class Validator : AbstractValidator<ListTokensQuery>
 
         RuleForEach(x => x.QueryItems)
             .Cascade(CascadeMode.Stop)
-            .ChildRules(queryItems =>
-            {
-                queryItems
-                    .RuleFor(query => query.Id)
-                    .ValidId<ListTokensQueryItem, TokenId>();
-            });
+            .ValidId<ListTokensQuery, TokenId>();
     }
 }
 

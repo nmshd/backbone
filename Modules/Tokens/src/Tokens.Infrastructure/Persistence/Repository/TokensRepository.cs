@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
@@ -24,22 +23,13 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<string> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
-        var queryItemsList = queryItems.ToList();
-
-        Expression<Func<Token, bool>> idFilter = template => false;
-
-        foreach (var inputQuery in queryItemsList)
-            idFilter = idFilter.Or(Token.HasId(TokenId.Parse(inputQuery.Id)));
-
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)
             .Where(Token.IsNotExpired)
-            .Where(Token.CanBeCollectedBy(activeIdentity))
-            .Where(Token.HasAllocationFor(activeIdentity))
-            .Where(idFilter);
+            .Where(t => queryItems.Contains(t.Id));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 

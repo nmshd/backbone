@@ -199,12 +199,7 @@ internal class TokensStepDefinitions
 
         var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-        var queryItems = getRequestPayloadSet.Select(payload =>
-        {
-            var tokenId = _tokensContext.CreateTokenResponses[payload.TokenName].Id;
-
-            return new ListTokensQueryItem { Id = tokenId };
-        }).ToList();
+        var queryItems = getRequestPayloadSet.Select(payload => _tokensContext.CreateTokenResponses[payload.TokenName].Id);
 
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(queryItems);
     }
