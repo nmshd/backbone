@@ -5,12 +5,13 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Validator : AbstractValidator<SendMessageCommand>
 {
-    public Validator()
+    public Validator(IOptions<ApplicationOptions> options)
     {
         RuleFor(m => m.Recipients)
             .DetailedNotNull()
@@ -21,7 +22,9 @@ public class Validator : AbstractValidator<SendMessageCommand>
                 .SetValidator(new SendMessageCommandRecipientInformationValidator()));
 
         RuleFor(m => m.Recipients.Count)
-            .InclusiveBetween(1, 50).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+            .LessThanOrEqualTo(options.Value.MaxNumberOfMessageRecipients)
+            .WithName("Recipients")
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Body).DetailedNotNull().NumberOfBytes(1, 10.Mebibytes());
 

@@ -59,10 +59,6 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        if (request.Recipients.Count > _options.MaxNumberOfMessageRecipients)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidNumberOfRecipients(_options.MaxNumberOfMessageRecipients));
-
         var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetMessage), new { id = response.Id }, response);
     }

@@ -52,11 +52,5 @@ public static class GenericApplicationErrors
         {
             return new ApplicationError("error.platform.inputCannotBeParsed", reason);
         }
-
-        public static ApplicationError InvalidNumberOfRecipients(int maxNumberOfMessageRecipients)
-        {
-            return new ApplicationError("error.platform.validation.invalidNumberOfRecipients",
-                $"The number of recipients exceeds the maximum allowed number of recipients. The maximum number of recipients is {maxNumberOfMessageRecipients}.");
-        }
     }
 }
