@@ -53,6 +53,16 @@ public class TokensRepository : ITokensRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<DbPaginationResult<Token>> FindAllTokens(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .Where(filter);
+
+        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+
+        return dbPaginationResult;
+    }
+
     public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
     {
         var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)

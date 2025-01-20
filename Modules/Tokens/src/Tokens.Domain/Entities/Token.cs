@@ -155,6 +155,11 @@ public class Token : Entity
         return token => token.ForIdentity == identityAddress;
     }
 
+    private static Expression<Func<Token, bool>> WasCreatedBy(string createdBy)
+    {
+        return token => token.CreatedBy == createdBy;
+    }
+
     public static Expression<Func<Token, bool>> HasAllocationFor(IdentityAddress identityAddress)
     {
         return token => token.CreatedBy == identityAddress || token.Allocations.Any(allocation => allocation.AllocatedBy == identityAddress);
