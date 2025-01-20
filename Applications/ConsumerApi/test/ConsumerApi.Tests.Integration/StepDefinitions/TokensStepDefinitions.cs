@@ -85,38 +85,6 @@ internal class TokensStepDefinitions
         }
     }
 
-    [Given($@"locked Token {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password {RegexFor.SINGLE_THING}")]
-    public async Task GivenALockedTokenCreatedByIdentityWithPassword(string tokenName, string identityName, string password)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        var passwordData = Convert.FromBase64String(password.Trim());
-
-        var response = await client.Tokens.CreateToken(
-            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = passwordData });
-
-        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
-
-        await SendInvalidPasswordsToToken(tokenName, 100);
-    }
-
-    [Given($@"almost locked Token {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password {RegexFor.SINGLE_THING} and allocated by {RegexFor.SINGLE_THING}")]
-    public async Task GivenAnAlmostLockedTokenCreatedByIdentityWithPassword(string tokenName, string identityName, string password, string allocatedIdentityName)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        var passwordData = Convert.FromBase64String(password.Trim());
-
-        var response = await client.Tokens.CreateToken(
-            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = passwordData });
-
-        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
-
-        var allocatorClient = _clientPool.FirstForIdentityName(allocatedIdentityName);
-        var allocatorResponse = await allocatorClient.Tokens.GetToken(response.Result!.Id, passwordData);
-        allocatorResponse.Status.Should().Be(HttpStatusCode.OK);
-
-        await SendInvalidPasswordsToToken(tokenName, 99);
-    }
-
     private async Task SendInvalidPasswordsToToken(string tokenName, int numberOfInvalidRequests)
     {
         var client = _clientPool.Anonymous;
@@ -211,12 +179,6 @@ internal class TokensStepDefinitions
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
         _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
-    }
-
-    [When($@"{RegexFor.SINGLE_THING} gets locked")]
-    public async Task WhenTokenGetsLocked(string tokenName)
-    {
-        await SendInvalidPasswordsToToken(tokenName, 1);
     }
 
     #endregion

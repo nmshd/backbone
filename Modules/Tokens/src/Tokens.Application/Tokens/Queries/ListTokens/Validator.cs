@@ -18,7 +18,7 @@ public class Validator : AbstractValidator<ListTokensQuery>
             .Cascade(CascadeMode.Stop)
             .DetailedNotEmpty();
 
-        RuleForEach(x => x.QueryItems)
+        RuleForEach(q => q.QueryItems)
             .Cascade(CascadeMode.Stop)
             .ValidId<ListTokensQuery, TokenId>();
     }

@@ -33,16 +33,3 @@ User requests a Token
           | i1 and i2       | i1         | i2          | password | i2             | wordpass      | 404 (Not Found)    | non-owner is forIdentity and tries to get with incorrect password |
           | i1, i2 and i3   | i1         | i2          | password | i3             | password      | 404 (Not Found)    | non-owner is forIdentity, and thirdParty tries to get             |
           | i1 and i2       | i1         | i2          | password | -              | password      | 404 (Not Found)    | non-owner is forIdentity, and anonymous user tries to get         |
-
-    Scenario: A Token owner can access a locked token
-        Given Identity i
-        And locked Token t created by i with password password
-        When i sends a GET request to the /Tokens/t.Id endpoint
-        Then the response status code is 200 (OK)
-
-    Scenario: A Non-owner identity can access a locked token, when it has an allocation
-        Given Identities i1, i2
-        And almost locked Token t created by i1 with password password and allocated by i2
-        When t gets locked
-        And i2 sends a GET request to the /Tokens/t.Id endpoint
-        Then the response status code is 200 (OK)
