@@ -100,5 +100,4 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
 COPY --from=publish /app/publish .
-#ENTRYPOINT ["dotnet", "Backbone.DatabaseMigrator.dll"]
-ENTRYPOINT ["sh", "-c", "dotnet Backbone.DatabaseMigrator.dll > /app/migrator.log 2>&1 && tail -f /app/migrator.log"]
+ENTRYPOINT ["dotnet", "Backbone.DatabaseMigrator.dll"]
