@@ -187,6 +187,6 @@
         <value>Token locked</value>
     </data>
     <data name="TokenLockedPushNotification.Body" xml:space="preserve">
-        <value>Your token was locked due to too many wrong password attempts</value>
+        <value>Your token was locked due to too many wrong password attempts.</value>
     </data>
 </root>

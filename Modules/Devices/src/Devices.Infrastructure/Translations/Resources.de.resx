@@ -82,6 +82,6 @@
         <value>Token gesperrt</value>
     </data>
     <data name="TokenLockedPushNotification.Body" xml:space="preserve">
-        <value>Ihr Token wurde aufgrund zu vieler falscher Passwortversuche gesperrt</value>
+        <value>Ihr Token wurde aufgrund zu vieler falscher Passwortversuche gesperrt.</value>
     </data>
 </root>
