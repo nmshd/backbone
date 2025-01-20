@@ -28,7 +28,7 @@ public class TokensRepository : ITokensRepository
     {
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)
-            .Where(Token.IsNotExpired)
+            .Where(Token.HasAllocationFor(activeIdentity))
             .Where(t => queryItems.Contains(t.Id));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
