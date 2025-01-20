@@ -235,7 +235,14 @@ jobs:
 
       - name: Check database-migrator logs
         if: failure()
-        run: docker logs $(docker ps -q -f name=database-migrator-test)
+        run: |
+          CONTAINER_ID=$(docker ps -q -f name=database-migrator-test)
+          if [ -n "$CONTAINER_ID" ]; then
+            docker logs $CONTAINER_ID
+          else
+            echo "No container found with name database-migrator-test"
+          fi
+        shell: bash
         
       - name: Run integration tests
         run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
