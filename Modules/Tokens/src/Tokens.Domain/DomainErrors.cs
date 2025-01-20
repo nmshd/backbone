@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Tokens.Domain;
 
-public class DomainErrors
+public static class DomainErrors
 {
     public static DomainError TokenNotPersonalized()
     {
