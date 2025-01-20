@@ -28,14 +28,8 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         var request = _client
             .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
             .Authenticate()
-            .WithPagination(pagination);
-
-        var i = 0;
-        foreach (var queryItem in queryItems)
-        {
-            request.AddQueryParameter($"ids.{i}", queryItem);
-            i++;
-        }
+            .WithPagination(pagination)
+            .AddQueryParameter("ids", queryItems);
 
         return await request.Execute();
     }
