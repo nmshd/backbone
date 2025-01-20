@@ -3,10 +3,9 @@ param (
     [string]$Hostname = "host.docker.internal",
     [string]$Username = "postgres",
     [string]$Password = "admin",
-    [string]$DbName = "enmeshed"
+    [string]$DbName = "enmeshed",
+    [string]$DumpFile = "enmeshed.pg"
 )
-
-$DumpFile = "enmeshed.pg"
 
 docker run --rm -v "$PSScriptRoot\dump-files:/dump" --env PGPASSWORD="admin" postgres pg_dump -h $Hostname -U $Username $DbName -f /dump/$DumpFile
 

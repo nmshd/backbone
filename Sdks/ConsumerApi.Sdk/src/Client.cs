@@ -98,12 +98,12 @@ public class Client
         return new Client(httpClient, configuration, null, null);
     }
 
-    public static Client CreateForExistingIdentity(string baseUrl, ClientCredentials clientCredentials, UserCredentials userCredentials)
+    public static Client CreateForExistingIdentity(string baseUrl, ClientCredentials clientCredentials, UserCredentials userCredentials, IdentityData? identityData = null)
     {
-        return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials);
+        return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials, identityData);
     }
 
-    public static Client CreateForExistingIdentity(HttpClient httpClient, ClientCredentials clientCredentials, UserCredentials userCredentials)
+    public static Client CreateForExistingIdentity(HttpClient httpClient, ClientCredentials clientCredentials, UserCredentials userCredentials, IdentityData? identityData = null)
     {
         if (httpClient.BaseAddress == null)
             throw new Exception("The base address of the HttpClient must be set.");
@@ -117,7 +117,7 @@ public class Client
             }
         };
 
-        var client = new Client(httpClient, configuration, new DeviceData { DeviceId = "", UserCredentials = userCredentials }, null);
+        var client = new Client(httpClient, configuration, new DeviceData { DeviceId = "", UserCredentials = userCredentials }, identityData);
 
         return client;
     }
