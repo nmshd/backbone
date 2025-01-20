@@ -233,6 +233,10 @@ jobs:
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs database-migrator-test
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
 
+      - name: Check database-migrator logs
+        if: failure()
+        run: docker logs $(docker ps -q -f name=database-migrator-test)
+        
       - name: Run integration tests
         run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
         env:
