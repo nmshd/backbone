@@ -31,8 +31,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   late String _errorMessage;
 
   bool _saving = false;
-  bool _saveSucceeded = false;
-  bool _fillAllRequiredFields = false;
+  final bool _saveSucceeded = false;
+  bool _showRequiredFieldsError = false;
 
   DateTime? _expiresAt;
   String? _selectedImpact;
@@ -92,7 +92,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 Gaps.h32,
                 Text('*${context.l10n.required}'),
                 Gaps.h16,
-                if (_fillAllRequiredFields) ...[
+                if (_showRequiredFieldsError) ...[
                   Text(
                     context.l10n.createAnnouncement_pleaseFillAllRequiredFields,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -172,12 +172,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
           SizedBox(
             height: 40,
             child: OutlinedButton(
-              onPressed: _saving
-                  ? null
-                  : () {
-                      _fillAllRequiredFields = false;
-                      context.pop();
-                    },
+              onPressed: _saving ? null : () => context.pop(),
               child: Text(context.l10n.cancel),
             ),
           ),
@@ -185,7 +180,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
             SizedBox(
               height: 40,
               child: FilledButton(
-                onPressed: _saveSucceeded && _saving ? _createAnnouncement : null,
+                onPressed: !_saveSucceeded && !_saving ? _createAnnouncement : null,
                 child: Text(context.l10n.create),
               ),
             ),
@@ -197,13 +192,19 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   Future<void> _createAnnouncement() async {
     if (_expiresAt == null ||
         _selectedImpact == null ||
-        _englishTextController.titleController.text != '' ||
-        _englishTextController.bodyController.text != '') {
-      _fillAllRequiredFields = true;
+        _englishTextController.titleController.text == '' ||
+        _englishTextController.bodyController.text == '') {
+      setState(() {
+        _showRequiredFieldsError = true;
+      });
+
       return;
     }
 
-    setState(() => _saving = true);
+    setState(() {
+      _showRequiredFieldsError = false;
+      _saving = true;
+    });
 
     final announcementTexts = <AnnouncementText>[
       AnnouncementText(
@@ -242,7 +243,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
     _showSnackbar();
     widget.onAnnouncementCreated();
-    setState(() => _saveSucceeded = true);
+    //setState(() => _saveSucceeded = true);
+    context.pop();
   }
 
   String _getLanguageLabel(OptionalLanguageType language) {
