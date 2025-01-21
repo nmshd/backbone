@@ -18,7 +18,7 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Announcements")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -43,6 +43,28 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.HasKey("Id");
 
                     b.ToTable("Announcements", "Announcements");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
+                {
+                    b.Property<string>("AnnouncementId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("AnnouncementId", "Address");
+
+                    b.ToTable("AnnouncementRecipients", "Announcements");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementText", b =>
@@ -72,6 +94,15 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("AnnouncementText", "Announcements");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
+                {
+                    b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
+                        .WithMany("Recipients")
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementText", b =>
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
@@ -83,6 +114,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
+                    b.Navigation("Recipients");
+
                     b.Navigation("Texts");
                 });
 #pragma warning restore 612, 618

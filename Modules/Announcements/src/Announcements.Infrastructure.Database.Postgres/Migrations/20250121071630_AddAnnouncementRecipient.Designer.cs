@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(AnnouncementsDbContext))]
-    [Migration("20250115091307_AddAnnouncementRecipientV2")]
-    partial class AddAnnouncementRecipientV2
+    [Migration("20250121071630_AddAnnouncementRecipient")]
+    partial class AddAnnouncementRecipient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Announcements")
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

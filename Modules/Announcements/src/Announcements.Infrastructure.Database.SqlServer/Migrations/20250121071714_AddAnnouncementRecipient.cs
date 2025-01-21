@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingAnnouncementRecipient : Migration
+    public partial class AddAnnouncementRecipient : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,14 +16,13 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                 schema: "Announcements",
                 columns: table => new
                 {
-                    AnnouncementId = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
-                    DeviceId = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    AnnouncementId = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
+                    Address = table.Column<string>(type: "varchar(80)", unicode: false, maxLength: 80, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnnouncementRecipients", x => new { x.AnnouncementId, x.DeviceId, x.Address });
+                    table.PrimaryKey("PK_AnnouncementRecipients", x => new { x.AnnouncementId, x.Address });
                     table.ForeignKey(
                         name: "FK_AnnouncementRecipients_Announcements_AnnouncementId",
                         column: x => x.AnnouncementId,

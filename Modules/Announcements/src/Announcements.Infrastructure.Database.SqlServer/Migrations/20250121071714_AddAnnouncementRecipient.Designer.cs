@@ -3,17 +3,17 @@ using System;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AnnouncementsDbContext))]
-    [Migration("20250120121823_AnnouncementsDbContextUpdate")]
-    partial class AnnouncementsDbContextUpdate
+    [Migration("20250121071714_AddAnnouncementRecipient")]
+    partial class AddAnnouncementRecipient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,26 +22,26 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
             modelBuilder
                 .HasDefaultSchema("Announcements")
                 .HasAnnotation("ProductVersion", "9.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Severity")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -53,17 +53,17 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.Property<string>("AnnouncementId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<string>("Address")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character varying(80)")
+                        .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("AnnouncementId", "Address");
 
@@ -75,22 +75,22 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.Property<string>("AnnouncementId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<string>("Language")
                         .HasMaxLength(2)
                         .IsUnicode(false)
-                        .HasColumnType("character(2)")
+                        .HasColumnType("char(2)")
                         .IsFixedLength();
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AnnouncementId", "Language");
 
