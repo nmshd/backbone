@@ -231,7 +231,7 @@ jobs:
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d || true
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs ci-seed-database-1 -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs ci-seed-database-1
 
           CONTAINER_ID=$(docker ps -q -f name=ci-seed-database-1)
             if [ -n "$CONTAINER_ID" ]; then
