@@ -42,12 +42,13 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
     }
 
-    public async Task<PnsRegistration[]> FindDistinctByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
+    public async Task<List<PnsRegistration>> FindDistinctByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .Where(r => deviceIds.Contains(r.DeviceId))
-            .DistinctBy(r => r.Handle)
-            .ToArrayAsync(cancellationToken);
+            .GroupBy(r => r.Handle)
+            .Select(g => g.First())
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<int> Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken)
