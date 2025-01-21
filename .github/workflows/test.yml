@@ -230,11 +230,15 @@ jobs:
         run: |
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d || true
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs database-migrator-test
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs database-migrator-test
           docker ps -a
           CONTAINER_ID=$(docker ps -q -f name=database-migrator-test)
+          if [ -n "$CONTAINER_ID" ]; then
           docker logs $CONTAINER_ID
+          else
+          echo "No container found with name database-migrator-test"
+          fi
 
       - name: Run integration tests
         run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
