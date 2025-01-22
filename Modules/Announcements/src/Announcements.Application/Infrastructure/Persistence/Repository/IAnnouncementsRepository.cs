@@ -7,6 +7,6 @@ public interface IAnnouncementsRepository
 {
     Task Add(Announcement announcement, CancellationToken cancellationToken);
     Task<List<Announcement>> FindAll(CancellationToken cancellationToken);
-    Task<List<Announcement>> FindAllWhereIdentityAddressIs(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken);
+    Task<List<Announcement>> FindAllForIdentityAddress(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken);
     Task Update(List<Announcement> announcements, CancellationToken cancellationToken);
 }

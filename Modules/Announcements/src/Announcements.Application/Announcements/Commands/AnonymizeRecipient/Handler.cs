@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<AnonymizeRecipientForIdentityCommand>
     {
         var parsedIdentityAddress = IdentityAddress.Parse(request.IdentityAddress);
 
-        var announcements = await _announcementsRepository.FindAllWhereIdentityAddressIs(
+        var announcements = await _announcementsRepository.FindAllForIdentityAddress(
             announcement => announcement.Recipients.Any(r => r.Address == parsedIdentityAddress), cancellationToken);
 
         foreach (var announcementRecipient in announcements.SelectMany(announcement => announcement.Recipients))

@@ -32,9 +32,9 @@ public class AnnouncementsRepository : IAnnouncementsRepository
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public Task<List<Announcement>> FindAllWhereIdentityAddressIs(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
+    public Task<List<Announcement>> FindAllForIdentityAddress(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
     {
-        return _readOnlyAnnouncements
+        return _announcements
             .IncludeAll(_dbContext)
             .Where(filter)
             .AsSplitQuery()
