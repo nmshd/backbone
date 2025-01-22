@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Extensions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
@@ -29,5 +30,20 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     public Task<List<Announcement>> FindAll(CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
+    }
+
+    public Task<List<Announcement>> FindAllWhereIdentityAddressIs(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _readOnlyAnnouncements
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .AsSplitQuery()
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task Update(List<Announcement> announcements, CancellationToken cancellationToken)
+    {
+        _announcements.UpdateRange(announcements);
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -20,6 +20,15 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
             .WithMessage("The maximum number of recipients is 100.");
 
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
+        RuleForEach(x => x.Recipients).SetValidator(new CreateAnnouncementCommandRecipientValidator());
+    }
+}
+
+public class CreateAnnouncementCommandRecipientValidator : AbstractValidator<string>
+{
+    public CreateAnnouncementCommandRecipientValidator()
+    {
+        RuleFor(recipient => recipient).DetailedNotEmpty();
     }
 }
 

@@ -7,26 +7,27 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Commands.Anon
 
 public class Handler : IRequestHandler<AnonymizeRecipientForIdentityCommand>
 {
-    private readonly IAnnouncementRecipientRepository _announcementRecipientRepository;
+    private readonly IAnnouncementsRepository _announcementsRepository;
     private readonly ApplicationOptions _applicationOptions;
 
-    public Handler(IAnnouncementRecipientRepository announcementRecipientRepository, IOptions<ApplicationOptions> applicationOptions)
+    public Handler(IAnnouncementsRepository announcementsRepository, IOptions<ApplicationOptions> applicationOptions)
     {
-        _announcementRecipientRepository = announcementRecipientRepository;
+        _announcementsRepository = announcementsRepository;
         _applicationOptions = applicationOptions.Value;
     }
 
     public async Task Handle(AnonymizeRecipientForIdentityCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.IdentityAddress)) return;
+        var parsedIdentityAddress = IdentityAddress.Parse(request.IdentityAddress);
 
-        var announcementRecipients = await _announcementRecipientRepository.FindAllForIdentityAddress(IdentityAddress.Parse(request.IdentityAddress), cancellationToken);
+        var announcements = await _announcementsRepository.FindAllWhereIdentityAddressIs(
+            announcement => announcement.Recipients.Any(r => r.Address == parsedIdentityAddress), cancellationToken);
 
-        foreach (var announcementRecipient in announcementRecipients)
+        foreach (var announcementRecipient in announcements.SelectMany(announcement => announcement.Recipients))
         {
             announcementRecipient.Anonymize(_applicationOptions.DidDomainName);
         }
 
-        await _announcementRecipientRepository.Update(announcementRecipients, cancellationToken);
+        await _announcementsRepository.Update(announcements, cancellationToken);
     }
 }
