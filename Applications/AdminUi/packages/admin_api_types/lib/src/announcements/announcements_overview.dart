@@ -8,12 +8,14 @@ part 'announcements_overview.g.dart';
 
 @JsonSerializable()
 class AnnouncementOverview {
+  final String id;
   final DateTime createdAt;
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
 
   AnnouncementOverview({
+    required this.id,
     required this.createdAt,
     required this.expiresAt,
     required this.severity,

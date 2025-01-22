@@ -7,6 +7,7 @@ part of 'announcements_overview.dart';
 // **************************************************************************
 
 AnnouncementOverview _$AnnouncementOverviewFromJson(Map<String, dynamic> json) => AnnouncementOverview(
+      id: json['id'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       expiresAt: json['expiresAt'] == null ? null : DateTime.parse(json['expiresAt'] as String),
       severity: json['severity'] as String,
@@ -14,6 +15,7 @@ AnnouncementOverview _$AnnouncementOverviewFromJson(Map<String, dynamic> json) =
     );
 
 Map<String, dynamic> _$AnnouncementOverviewToJson(AnnouncementOverview instance) => <String, dynamic>{
+      'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'expiresAt': instance.expiresAt?.toIso8601String(),
       'severity': instance.severity,
