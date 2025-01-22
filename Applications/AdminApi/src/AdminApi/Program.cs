@@ -108,6 +108,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(configuration.GetSection("Modules:Devices"))
+        .AddTokens(configuration.GetSection("Modules:Tokens"))
         .AddQuotas(parsedConfiguration.Modules.Quotas)
         .AddAnnouncements(parsedConfiguration.Modules.Announcements)
         .AddChallenges(parsedConfiguration.Modules.Challenges)

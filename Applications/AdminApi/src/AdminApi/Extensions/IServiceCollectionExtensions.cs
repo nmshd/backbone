@@ -37,30 +37,7 @@ public static class IServiceCollectionExtensions
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
             })
-            .ConfigureApiBehaviorOptions(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var firstPropertyWithError =
-                        context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
-                    var nameOfPropertyWithError = firstPropertyWithError.Key;
-                    var firstError = firstPropertyWithError.Value!.Errors.First();
-                    var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)
-                        ? firstError.ErrorMessage
-                        : firstError.Exception != null
-                            ? firstError.Exception.Message
-                            : "";
-
-                    var formattedMessage = string.IsNullOrEmpty(nameOfPropertyWithError)
-                        ? firstErrorMessage
-                        : $"'{nameOfPropertyWithError}': {firstErrorMessage}";
-                    context.HttpContext.Response.ContentType = "application/json";
-                    var responsePayload = new HttpResponseEnvelopeError(
-                        HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code, formattedMessage,
-                            "")); // TODO: add docs
-                    return new BadRequestObjectResult(responsePayload);
-                };
-            })
+            .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory())
             .AddJsonOptions(options =>
             {
                 var jsonConverters =
@@ -150,6 +127,31 @@ public static class IServiceCollectionExtensions
 
         return services;
     }
+
+    private static Func<ActionContext, IActionResult> InvalidModelStateResponseFactory() => context =>
+    {
+        var (nameOfPropertyWithError, value) = context.ModelState.First(p => p.Value is { Errors.Count: > 0 });
+
+        var firstError = value!.Errors.First();
+        var firstErrorMessage = !string.IsNullOrWhiteSpace(firstError.ErrorMessage)
+            ? firstError.ErrorMessage
+            : firstError.Exception != null
+                ? firstError.Exception.Message
+                : "";
+
+        var formattedMessage = string.IsNullOrEmpty(nameOfPropertyWithError)
+            ? firstErrorMessage
+            : $"'{nameOfPropertyWithError}': {firstErrorMessage}";
+
+        context.HttpContext.Response.ContentType = "application/json";
+
+        var responsePayload = new HttpResponseEnvelopeError(
+            HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code,
+                formattedMessage,
+                "")); // TODO: add docs
+
+        return new BadRequestObjectResult(responsePayload);
+    };
 
     private static object GetPropertyValue(object source, string propertyPath)
     {
