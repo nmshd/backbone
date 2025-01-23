@@ -14,7 +14,6 @@ public class S3BlobStorage : IBlobStorage, IDisposable
     private readonly AmazonS3Client _s3Client;
     private readonly List<ChangedBlob> _changedBlobs;
     private readonly IList<RemovedBlob> _removedBlobs;
-    private readonly string _bucketName;
     private readonly ILogger<S3BlobStorage> _logger;
 
     public S3BlobStorage(IOptions<S3BucketOptions> config, ILogger<S3BlobStorage> logger)
@@ -28,7 +27,6 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         _s3Client = new AmazonS3Client(config.Value.AccessKeyId, config.Value.SecretAccessKey, s3Config);
         _changedBlobs = [];
         _removedBlobs = [];
-        _bucketName = config.Value.BucketName;
         _logger = logger;
     }
 
@@ -56,8 +54,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         {
             var request = new GetObjectRequest
             {
-                BucketName = _bucketName,
-                Key = $"{folder}/{id}"
+                BucketName = folder,
+                Key = id
             };
 
             using var response = await _s3Client.GetObjectAsync(request);
@@ -90,8 +88,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
 
         var request = new ListObjectsV2Request
         {
-            BucketName = _bucketName,
-            Prefix = prefix != null ? $"{folder}/{prefix}" : folder
+            BucketName = folder,
+            Prefix = prefix ?? ""
         };
 
         ListObjectsV2Response response;
@@ -135,8 +133,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
                 var request = new TransferUtilityUploadRequest
                 {
                     InputStream = memoryStream,
-                    Key = $"{blob.Folder}/{blob.Name}",
-                    BucketName = _bucketName
+                    Key = blob.Name,
+                    BucketName = blob.Folder
                 };
 
                 var transferUtility = new TransferUtility(_s3Client);
@@ -162,8 +160,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         {
             var request = new GetObjectRequest
             {
-                BucketName = _bucketName,
-                Key = $"{folder}/{key}"
+                BucketName = folder,
+                Key = key
             };
 
             await _s3Client.GetObjectAsync(request);
@@ -188,8 +186,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             {
                 var request = new DeleteObjectRequest
                 {
-                    BucketName = _bucketName,
-                    Key = $"{blob.Folder}/{blob.Name}"
+                    BucketName = blob.Folder,
+                    Key = blob.Name
                 };
 
                 await _s3Client.DeleteObjectAsync(request);
