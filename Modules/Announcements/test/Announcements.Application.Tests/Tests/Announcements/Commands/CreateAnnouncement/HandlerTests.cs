@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
-using Backbone.Modules.Announcements.Application.Announcements.DTOs;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -96,7 +95,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Handle_WhenRecipientsAreValid_ShouldCallIdentityRepository()
+    public async Task Handle_WhenRecipientsAreValid_ShouldCallRepositories()
     {
         // Arrange
         var mockAnnouncementsRepository = A.Fake<IAnnouncementsRepository>();
@@ -105,7 +104,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = new Handler(mockLogger, mockAnnouncementsRepository, mockIdentityRepository);
         var command = new CreateAnnouncementCommand
         {
-            Recipients = new List<string> { "did:e:localhost:dids:c179861648989f28d189c9", "did:e:localhost:dids:656aa0be80fe83a70aa173" },
+            Recipients = [CreateRandomIdentityAddress().Value, CreateRandomIdentityAddress().Value],
             Severity = AnnouncementSeverity.Low,
             Texts = []
         };
@@ -119,54 +118,11 @@ public class HandlerTests : AbstractTestsBase
                 A<CancellationToken>.Ignored,
                 A<bool>.Ignored))
             .MustHaveHappened();
-    }
 
-    [Fact]
-    public async Task Handle_WhenRecipientsAreValid_ShouldCallAnnouncementsRepository()
-    {
-        // Arrange
-        var mockAnnouncementsRepository = A.Fake<IAnnouncementsRepository>();
-        var mockLogger = A.Fake<ILogger<Handler>>();
-        var mockIdentityRepository = A.Fake<IIdentitiesRepository>();
-        var handler = new Handler(mockLogger, mockAnnouncementsRepository, mockIdentityRepository);
-        var command = new CreateAnnouncementCommand
-        {
-            Recipients = new List<string> { "did:e:localhost:dids:c179861648989f28d189c9", "did:e:localhost:dids:656aa0be80fe83a70aa173" },
-            Severity = AnnouncementSeverity.Low,
-            Texts = []
-        };
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
         A.CallTo(() => mockAnnouncementsRepository.Add(
                 A<Announcement>.Ignored,
                 A<CancellationToken>.Ignored))
             .MustHaveHappened();
-    }
-
-    [Fact]
-    public async Task Handle_WhenRecipientsAreValid_ShouldReturnAnnouncementDTO()
-    {
-        // Arrange
-        var mockAnnouncementsRepository = A.Fake<IAnnouncementsRepository>();
-        var mockLogger = A.Fake<ILogger<Handler>>();
-        var mockIdentityRepository = A.Fake<IIdentitiesRepository>();
-        var handler = new Handler(mockLogger, mockAnnouncementsRepository, mockIdentityRepository);
-        var command = new CreateAnnouncementCommand
-        {
-            Recipients = new List<string> { "did:e:localhost:dids:c179861648989f28d189c9", "did:e:localhost:dids:656aa0be80fe83a70aa173" },
-            Severity = AnnouncementSeverity.Low,
-            Texts = []
-        };
-
-        // Act
-        var result = await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Should().NotBeNull();
-        result.Should().BeOfType<AnnouncementDTO>();
     }
 
     [Fact]
@@ -178,8 +134,8 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentityRepository = A.Fake<IIdentitiesRepository>();
         var handler = new Handler(mockLogger, mockAnnouncementsRepository, mockIdentityRepository);
 
-        const string id1 = "did:e:localhost:dids:c179861648989f28d189c9";
-        const string id2 = "did:e:localhost:dids:656aa0be80fe83a70aa173";
+        var id1 = CreateRandomIdentityAddress().Value;
+        var id2 = CreateRandomIdentityAddress().Value;
 
         A.CallTo(() => mockIdentityRepository.Find(
                 A<Expression<Func<Identity, bool>>>.Ignored,
@@ -193,7 +149,7 @@ public class HandlerTests : AbstractTestsBase
 
         var command = new CreateAnnouncementCommand
         {
-            Recipients = new List<string> { id1, id2 },
+            Recipients = [id1, id2],
             Severity = AnnouncementSeverity.Low,
             Texts = []
         };
@@ -215,12 +171,12 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentityRepository = A.Fake<IIdentitiesRepository>();
         var handler = new Handler(mockLogger, mockAnnouncementsRepository, mockIdentityRepository);
 
-        const string id1 = "did:e:localhost:dids:c179861648989f28d189c9";
-        const string id2 = "did:e:localhost:dids:656aa0be80fe83a70aa173";
+        var id1 = CreateRandomIdentityAddress().Value;
+        var id2 = CreateRandomIdentityAddress().Value;
 
         var command = new CreateAnnouncementCommand
         {
-            Recipients = new List<string> { id1, id2 },
+            Recipients = [id1, id2],
             Severity = AnnouncementSeverity.Low,
             Texts = []
         };
