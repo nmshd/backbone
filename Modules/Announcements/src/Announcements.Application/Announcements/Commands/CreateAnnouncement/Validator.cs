@@ -1,5 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Domain.Entities;
 using FluentValidation;
 
@@ -28,7 +30,7 @@ public class CreateAnnouncementCommandRecipientValidator : AbstractValidator<str
 {
     public CreateAnnouncementCommandRecipientValidator()
     {
-        RuleFor(recipient => recipient).DetailedNotEmpty();
+        RuleFor(recipient => recipient).DetailedNotEmpty().ValidId<string, IdentityAddress>();
     }
 }
 
