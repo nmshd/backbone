@@ -1,3 +1,4 @@
+using Backbone.AdminCli.Commands.Announcements;
 using Backbone.AdminCli.Commands.Clients;
 using Backbone.AdminCli.Commands.Tiers;
 
@@ -9,5 +10,6 @@ public class RootCommand : System.CommandLine.RootCommand
     {
         AddCommand(new ClientCommand(serviceLocator));
         AddCommand(new TierCommand(serviceLocator));
+        AddCommand(new AnnouncementCommand(serviceLocator));
     }
 }
