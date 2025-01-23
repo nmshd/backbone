@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminCli.Configuration;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions;
 
+
 namespace Backbone.AdminCli;
 
 public class ServiceLocator
@@ -20,14 +23,15 @@ public class ServiceLocator
     public T GetService<T>(string dbProvider, string dbConnectionString) where T : notnull
     {
         var services = ConfigureServices(dbProvider, dbConnectionString);
-
-        var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetRequiredService<T>();
+        return services.GetRequiredService<T>();
     }
 
-    private static IServiceCollection ConfigureServices(string dbProvider, string dbConnectionString)
+    private static IServiceProvider ConfigureServices(string dbProvider, string dbConnectionString)
     {
         var services = new ServiceCollection();
+
+        services.AddAutofac();
+
         services
             .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<DevicesDbContext>();
@@ -76,6 +80,9 @@ public class ServiceLocator
             options.ConnectionString = dbConnectionString;
         });
 
-        return services;
+        var containerBuilder = new ContainerBuilder();
+        containerBuilder.Populate(services);
+        var container = containerBuilder.Build();
+        return new AutofacServiceProvider(container);
     }
 }

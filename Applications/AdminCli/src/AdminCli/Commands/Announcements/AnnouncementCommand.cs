@@ -63,6 +63,8 @@ public class SendAnnouncementCommand : AdminCliDbCommand
                 return;
             }
 
+            Console.WriteLine(@"Sending announcement...");
+
             var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
 
             var response = await mediator.Send(new CreateAnnouncementCommand
