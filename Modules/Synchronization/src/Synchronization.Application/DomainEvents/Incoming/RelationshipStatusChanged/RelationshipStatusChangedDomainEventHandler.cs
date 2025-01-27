@@ -23,6 +23,8 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
         {
             await CreateRelationshipStatusChangedExternalEvent(@event);
             await DeleteExternalEvents(@event);
+            await UnblockMessageReceivedExternalEvents(@event);
+            await DeleteBlockedMessageReceivedExternalEvents(@event);
         }
         catch (Exception ex)
         {
@@ -52,5 +54,21 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
         {
             await _dbContext.DeleteUnsyncedExternalEventsWithOwnerAndContext(@event.Initiator, @event.RelationshipId);
         }
+    }
+
+    private async Task UnblockMessageReceivedExternalEvents(RelationshipStatusChangedDomainEvent @event)
+    {
+        if (@event.NewStatus != "Active")
+            return;
+
+        var externalEvents = await _dbContext.GetBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, @event.RelationshipId, CancellationToken.None);
+
+        foreach (var externalEvent in externalEvents)
+        {
+            externalEvent.UnblockDelivery();
+            _dbContext.Set<ExternalEvent>().Update(externalEvent);
+        }
+
+        await _dbContext.SaveChangesAsync(CancellationToken.None);
     }
 }

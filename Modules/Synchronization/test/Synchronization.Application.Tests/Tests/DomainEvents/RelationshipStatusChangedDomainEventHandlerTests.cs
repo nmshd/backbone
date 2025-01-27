@@ -85,6 +85,41 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         A.CallTo(() => mockDbContext.DeleteUnsyncedExternalEventsWithOwnerAndContext(initiator, relationshipId)).MustHaveHappenedOnceExactly();
     }
 
+    [Fact]
+    public async Task Unblocks_MessageReceivedExternalEvents()
+    {
+        // Arrange
+        var relationshipTo = CreateRandomIdentityAddress();
+        const string relationshipId = "REL11111111111111111";
+        var initiator = CreateRandomIdentityAddress();
+
+        var relationshipStatusChangedDomainEvent = new RelationshipStatusChangedDomainEvent
+        {
+            RelationshipId = relationshipId,
+            Peer = relationshipTo,
+            NewStatus = "Active",
+            Initiator = initiator
+        };
+
+        var mockDbContext = A.Fake<ISynchronizationDbContext>();
+
+        var messageReceivedExternalEvent =
+            new MessageReceivedExternalEvent(CreateRandomIdentityAddress(), new MessageReceivedExternalEvent.EventPayload { Id = "MSG11111111111111111" }, new RelationshipId(relationshipId));
+        messageReceivedExternalEvent.BlockDelivery();
+
+        A.CallTo(() => mockDbContext.GetBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, A<string>._, A<CancellationToken>._))
+            .Returns([messageReceivedExternalEvent]);
+
+        var handler = CreateHandler(mockDbContext);
+
+        // Act
+        await handler.Handle(relationshipStatusChangedDomainEvent);
+
+        // Assert
+        messageReceivedExternalEvent.IsDeliveryBlocked.Should().BeFalse();
+        A.CallTo(() => mockDbContext.SaveChangesAsync(A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+    }
+
     private static RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
     {
         return new RelationshipStatusChangedDomainEventHandler(dbContext, A.Fake<ILogger<RelationshipStatusChangedDomainEventHandler>>());
