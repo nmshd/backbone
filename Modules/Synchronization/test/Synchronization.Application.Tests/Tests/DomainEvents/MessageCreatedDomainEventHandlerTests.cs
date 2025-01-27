@@ -62,14 +62,16 @@ public class MessageCreatedDomainEventHandlerTests : AbstractTestsBase
             .MustHaveHappenedOnceExactly();
     }
 
-    [Fact]
-    public async Task Created_external_events_are_blocked_when_relationship_with_recipient_is_in_status_Terminated()
+    [Theory]
+    [InlineData(RelationshipStatus.Pending)]
+    [InlineData(RelationshipStatus.Terminated)]
+    public async Task Created_external_events_are_blocked_when_relationship_with_recipient_is_in_status_pending_or_terminated(RelationshipStatus relationshipStatus)
     {
         // Arrange
         var senderAddress = CreateRandomIdentityAddress();
         var recipientAddress = CreateRandomIdentityAddress();
 
-        var relationshipToRecipient = new Relationship(new RelationshipId("REL11111111111111111"), senderAddress, recipientAddress, RelationshipStatus.Terminated);
+        var relationshipToRecipient = new Relationship(new RelationshipId("REL11111111111111111"), senderAddress, recipientAddress, relationshipStatus);
 
         var mockSynchronizationDbContext = A.Fake<ISynchronizationDbContext>();
         var fakeRelationshipsRepository = RelationshipsRepositoryReturning([relationshipToRecipient]);
