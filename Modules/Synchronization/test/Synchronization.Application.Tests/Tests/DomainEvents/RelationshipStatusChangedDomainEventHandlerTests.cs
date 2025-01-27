@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
@@ -118,6 +119,34 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         // Assert
         messageReceivedExternalEvent.IsDeliveryBlocked.Should().BeFalse();
         A.CallTo(() => mockDbContext.SaveChangesAsync(A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+    }
+
+    [Theory]
+    [InlineData("Revoked")]
+    [InlineData("Rejected")]
+    public async Task Calls_DeleteBlockedExternalEventsWithTypeAndContext_when_new_status_is_Revoked_or_Rejected(string newStatus)
+    {
+        // Arrange
+        var relationshipTo = CreateRandomIdentityAddress();
+        const string relationshipId = "REL11111111111111111";
+        var initiator = CreateRandomIdentityAddress();
+        var @event = new RelationshipStatusChangedDomainEvent
+        {
+            RelationshipId = relationshipId,
+            Peer = relationshipTo,
+            NewStatus = newStatus,
+            Initiator = initiator
+        };
+
+        var mockDbContext = A.Fake<ISynchronizationDbContext>();
+
+        var handler = CreateHandler(mockDbContext);
+
+        // Act
+        await handler.Handle(@event);
+
+        // Assert
+        A.CallTo(() => mockDbContext.DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, relationshipId, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)

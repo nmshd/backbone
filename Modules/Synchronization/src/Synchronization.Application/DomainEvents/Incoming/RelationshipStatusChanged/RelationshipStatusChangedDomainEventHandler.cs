@@ -71,4 +71,12 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         await _dbContext.SaveChangesAsync(CancellationToken.None);
     }
+
+    private async Task DeleteBlockedMessageReceivedExternalEvents(RelationshipStatusChangedDomainEvent @event)
+    {
+        if (@event.NewStatus is not "Revoked" and not "Rejected")
+            return;
+
+        await _dbContext.DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, @event.RelationshipId, CancellationToken.None);
+    }
 }
