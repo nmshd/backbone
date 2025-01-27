@@ -14,6 +14,9 @@ public class ApplicationOptions
     [MinLength(3)]
     [MaxLength(45)]
     public string DidDomainName { get; set; } = null!;
+
+    [Required]
+    public int MaxNumberOfMessageRecipients { get; set; }
 }
 
 public class PaginationOptions
