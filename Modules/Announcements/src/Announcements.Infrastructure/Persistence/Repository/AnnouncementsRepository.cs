@@ -10,6 +10,7 @@ namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 public class AnnouncementsRepository : IAnnouncementsRepository
 {
     private readonly DbSet<Announcement> _announcements;
+    private readonly DbSet<AnnouncementRecipient> _announcementRecipients;
     private readonly AnnouncementsDbContext _dbContext;
     private readonly IQueryable<Announcement> _readOnlyAnnouncements;
 
@@ -17,6 +18,7 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     {
         _dbContext = dbContext;
         _announcements = dbContext.Announcements;
+        _announcementRecipients = dbContext.AnnouncementRecipients;
         _readOnlyAnnouncements = dbContext.Announcements.AsNoTracking();
     }
 
@@ -32,18 +34,17 @@ public class AnnouncementsRepository : IAnnouncementsRepository
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public Task<List<Announcement>> FindAllForIdentityAddress(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
-    {
-        return _announcements
-            .IncludeAll(_dbContext)
-            .Where(filter)
-            .AsSplitQuery()
-            .ToListAsync(cancellationToken);
-    }
-
     public Task Update(List<Announcement> announcements, CancellationToken cancellationToken)
     {
         _announcements.UpdateRange(announcements);
         return _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _announcementRecipients
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

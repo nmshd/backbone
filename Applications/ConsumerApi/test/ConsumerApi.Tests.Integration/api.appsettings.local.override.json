@@ -7,9 +7,6 @@
     },
     "Modules": {
         "Announcements": {
-            "Application": {
-                "DidDomainName": "localhost"
-            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",
@@ -92,6 +89,9 @@
             }
         },
         "Tokens": {
+            "Application": {
+                "DidDomainName": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",
