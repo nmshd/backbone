@@ -180,6 +180,15 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return unsyncedEvents;
     }
 
+    public async Task DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken)
+    {
+        await ExternalEvents
+            .Blocked()
+            .WithType(type)
+            .WithContext(context)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<DbPaginationResult<ExternalEvent>> GetExternalEventsOfSyncRun(PaginationFilter paginationFilter, IdentityAddress owner, SyncRunId syncRunId, CancellationToken cancellationToken)
     {
         var query = await ExternalEvents
