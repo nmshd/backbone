@@ -15,11 +15,11 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class PushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
-    private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly ILogger<PushService> _logger;
-    private readonly IPushNotificationTextProvider _notificationTextProvider;
-    private readonly PnsConnectorFactory _pnsConnectorFactory;
     private readonly IPnsRegistrationsRepository _pnsRegistrationsRepository;
+    private readonly ILogger<PushService> _logger;
+    private readonly PnsConnectorFactory _pnsConnectorFactory;
+    private readonly IPushNotificationTextProvider _notificationTextProvider;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
     public PushService(IPnsRegistrationsRepository pnsRegistrationsRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger,
         IPushNotificationTextProvider notificationTextProvider, IIdentitiesRepository identitiesRepository)
@@ -31,48 +31,6 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,
-        CancellationToken cancellationToken)
-    {
-        var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
-        var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
-
-        if (registration != null)
-        {
-            registration.Update(handle, appId, environment);
-            pnsConnector.ValidateRegistration(registration);
-
-            await _pnsRegistrationsRepository.Update(registration, cancellationToken);
-
-            _logger.LogTrace("Device successfully updated.");
-        }
-        else
-        {
-            registration = new PnsRegistration(address, deviceId, handle, appId, environment);
-            pnsConnector.ValidateRegistration(registration);
-
-            try
-            {
-                await _pnsRegistrationsRepository.Add(registration, cancellationToken);
-                _logger.LogTrace("New device successfully registered.");
-            }
-            catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
-            {
-                _logger.LogInformation(exception, "This exception can be ignored. It is only thrown in case of a concurrent registration request from multiple devices.");
-            }
-        }
-
-        return registration.DevicePushIdentifier;
-    }
-
-    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
-    {
-        var numberOfDeletedDevices = await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
-
-        if (numberOfDeletedDevices == 1)
-            _logger.UnregisteredDevice();
-    }
-
     public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var devices = await FindDevices(filter, cancellationToken);
@@ -82,17 +40,17 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         await SendNotificationInternal(notification, devices, notificationTexts, cancellationToken);
     }
 
+    private static List<CommunicationLanguage> GetDistinctCommunicationLanguages(IEnumerable<DeviceWithOnlyIdAndCommunicationLanguage> devices)
+    {
+        return devices.Select(d => d.CommunicationLanguage).Distinct().ToList();
+    }
+
     public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts, CancellationToken cancellationToken)
     {
         var devices = await FindDevices(filter, cancellationToken);
         var mappedNotificationTexts = notificationTexts.ToDictionary(kvp => CommunicationLanguage.Create(kvp.Key).Value, kvp => kvp.Value);
 
         await SendNotificationInternal(notification, devices, mappedNotificationTexts, cancellationToken);
-    }
-
-    private static List<CommunicationLanguage> GetDistinctCommunicationLanguages(IEnumerable<DeviceWithOnlyIdAndCommunicationLanguage> devices)
-    {
-        return devices.Select(d => d.CommunicationLanguage).Distinct().ToList();
     }
 
     private async Task<DeviceWithOnlyIdAndCommunicationLanguage[]> FindDevices(SendPushNotificationFilter filter, CancellationToken cancellationToken)
@@ -159,6 +117,48 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         await _pnsRegistrationsRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
         _logger.LogTrace("Successfully sent push notifications.");
+    }
+
+    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,
+        CancellationToken cancellationToken)
+    {
+        var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
+
+        if (registration != null)
+        {
+            registration.Update(handle, appId, environment);
+            pnsConnector.ValidateRegistration(registration);
+
+            await _pnsRegistrationsRepository.Update(registration, cancellationToken);
+
+            _logger.LogTrace("Device successfully updated.");
+        }
+        else
+        {
+            registration = new PnsRegistration(address, deviceId, handle, appId, environment);
+            pnsConnector.ValidateRegistration(registration);
+
+            try
+            {
+                await _pnsRegistrationsRepository.Add(registration, cancellationToken);
+                _logger.LogTrace("New device successfully registered.");
+            }
+            catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
+            {
+                _logger.LogInformation(exception, "This exception can be ignored. It is only thrown in case of a concurrent registration request from multiple devices.");
+            }
+        }
+
+        return registration.DevicePushIdentifier;
+    }
+
+    public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        var numberOfDeletedDevices = await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
+
+        if (numberOfDeletedDevices == 1)
+            _logger.UnregisteredDevice();
     }
 
     public class DeviceWithOnlyIdAndCommunicationLanguage
