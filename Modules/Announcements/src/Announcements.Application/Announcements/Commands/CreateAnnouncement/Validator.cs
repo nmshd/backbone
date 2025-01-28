@@ -16,10 +16,9 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
             .WithMessage("There must be a text for English.");
 
-        RuleFor(x => x.Recipients)
-            .Must(x => x is null or { Count: <= 100 })
-            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
-            .WithMessage("The maximum number of recipients is 100.");
+        RuleFor(x => x.Recipients.Count)
+            .LessThanOrEqualTo(100)
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
         RuleForEach(x => x.Recipients).SetValidator(new CreateAnnouncementCommandRecipientValidator());
