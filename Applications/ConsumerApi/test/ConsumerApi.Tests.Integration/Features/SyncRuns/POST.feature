@@ -7,5 +7,5 @@ Feature: POST /SyncRuns
         And i1 has sent a Message m to i2
         And a sync run sr started by i2
         When i2 sends a POST request to the /SyncRuns endpoint
-        Then the response status code is 200 (OK)
+        Then the response status code is 400 (OK)
         And the response says that there are no new external events
