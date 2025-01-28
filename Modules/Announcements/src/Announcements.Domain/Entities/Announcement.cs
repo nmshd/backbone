@@ -15,14 +15,14 @@ public class Announcement : Entity
         Recipients = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt, List<AnnouncementRecipient> recipients)
+    public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
     {
         Id = AnnouncementId.New();
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
         Severity = severity;
         Texts = texts;
-        Recipients = recipients;
+        Recipients = recipients.ToList();
 
         RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
