@@ -43,7 +43,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
 
-        auditLogEntriesForDeletedData.Should().HaveCount(13);
+        auditLogEntriesForDeletedData.Should().HaveCount(14);
 
         auditLogEntriesForDeletedData.Should().AllSatisfy(e =>
         {
@@ -65,6 +65,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         deletedAggregates.Should().Contain("SyncRuns");
         deletedAggregates.Should().Contain("Datawallets");
         deletedAggregates.Should().Contain("Tokens");
+        deletedAggregates.Should().Contain("AnnouncementRecipients");
     }
 
     [Fact]
@@ -147,6 +148,11 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         templatesAfterAct.Should().BeEmpty();
     }
 
+    private T GetService<T>() where T : notnull
+    {
+        return _host.Services.CreateScope().ServiceProvider.GetRequiredService<T>();
+    }
+
     #region Seeders
 
     private async Task<Message> SeedDatabaseWithMessage(Relationship relationship, Identity from, Identity to)
@@ -216,9 +222,4 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     }
 
     #endregion
-
-    private T GetService<T>() where T : notnull
-    {
-        return _host.Services.CreateScope().ServiceProvider.GetRequiredService<T>();
-    }
 }
