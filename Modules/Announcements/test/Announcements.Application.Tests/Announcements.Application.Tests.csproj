@@ -18,8 +18,4 @@
         <ProjectReference Include="..\..\src\Announcements.Application\Announcements.Application.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Tests\Announcements\Commands\AnonymizeRecipient\" />
-    </ItemGroup>
-
 </Project>

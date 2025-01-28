@@ -9,7 +9,7 @@ namespace Backbone.Modules.Announcements.Application.Tests.Tests.Announcements.C
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]
-    public async Task AnonymizeRecipientForIdentityCommand_AnonymizesRecipientsSuccessfully()
+    public async Task DeleteRecipientForIdentityCommand_AnonymizesRecipientsSuccessfully()
     {
         // Arrange
         var mockRepository = A.Fake<IAnnouncementsRepository>();
