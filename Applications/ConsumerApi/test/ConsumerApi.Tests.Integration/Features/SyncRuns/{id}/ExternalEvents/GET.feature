@@ -26,6 +26,7 @@ Feature: GET /SyncRuns/{id}/ExternalEvents
         Given Identities i1 and i2
         And an active Relationship r between i1 and i2
         And i1 has sent a Message m to i2
+        And 2 second(s) have passed
         And i1 has terminated r
         And 2 second(s) have passed
         And a sync run sr started by i2
@@ -39,6 +40,7 @@ Feature: GET /SyncRuns/{id}/ExternalEvents
         And i1 has sent a Message m to i2
         And 2 second(s) have passed
         And r was accepted
+        And 2 second(s) have passed
         And a sync run sr started by i2
         When i2 sends a GET request to the /SyncRuns/sr.id/ExternalEvents endpoint
         Then the response status code is 200 (OK)
