@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Announcements;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.AnnouncementCreated;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application.DomainEvents.Incoming.AnnouncementCreated;
 
@@ -19,9 +20,10 @@ public class AnnouncementCreatedDomainEventHandler : IDomainEventHandler<Announc
     {
         var pushNotificationTexts = @event.Texts.ToDictionary(k => k.Language, k => new NotificationText(k.Title, k.Body) { Title = k.Title, Body = k.Body });
 
-        var recipientIdentityAddresses = @event.Recipients.Select(IdentityAddress.Parse).ToArray();
-        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, SendPushNotificationFilter.AllDevicesOf(recipientIdentityAddresses),
-            pushNotificationTexts,
-            CancellationToken.None);
+        var pushNotificationFilter = @event.Recipients.IsEmpty()
+            ? SendPushNotificationFilter.AllDevicesOfAllIdentities()
+            : SendPushNotificationFilter.AllDevicesOf(@event.Recipients.Select(IdentityAddress.Parse).ToArray());
+
+        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, pushNotificationFilter, pushNotificationTexts, CancellationToken.None);
     }
 }
