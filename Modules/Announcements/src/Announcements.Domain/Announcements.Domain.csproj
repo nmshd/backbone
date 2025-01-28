@@ -9,8 +9,4 @@
         <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <InternalsVisibleTo Include="Backbone.Modules.Announcements.Application.Tests" />
-    </ItemGroup>
-
 </Project>
