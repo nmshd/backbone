@@ -158,11 +158,11 @@ jobs:
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
 
       - name: Save Docker Logs
-        if: failure()
+        if: always()
         run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
 
       - name: Archive logs
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.test-project.display-name}}-${{matrix.database}}
