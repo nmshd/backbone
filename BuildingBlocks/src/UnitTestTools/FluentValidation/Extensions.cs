@@ -22,13 +22,13 @@ public static class ValidationTestExtensions
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor(propertyWithInvalidId);
         errorsForProperty.Should().Contain(r =>
-            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage == "The ID is not valid. Check length, prefix and the used characters.");
+            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage.Contains("The ID or Address is not valid. Check length, prefix and the used characters."));
     }
 
     public static void ShouldHaveValidationErrorForIdInCollection<T>(this TestValidationResult<T> testValidationResult, string collectionWithInvalidId, int indexWithInvalidId)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor($"{collectionWithInvalidId}[{indexWithInvalidId}]");
         errorsForProperty.Should().Contain(r =>
-            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage == "The ID is not valid. Check length, prefix and the used characters.");
+            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage.Contains("The ID or Address is not valid. Check length, prefix and the used characters."));
     }
 }
