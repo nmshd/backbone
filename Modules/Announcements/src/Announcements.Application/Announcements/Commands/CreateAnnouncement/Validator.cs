@@ -21,15 +21,7 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
-        RuleForEach(x => x.Recipients).SetValidator(new CreateAnnouncementCommandRecipientValidator());
-    }
-}
-
-public class CreateAnnouncementCommandRecipientValidator : AbstractValidator<string>
-{
-    public CreateAnnouncementCommandRecipientValidator()
-    {
-        RuleFor(recipient => recipient).DetailedNotEmpty().ValidId<string, IdentityAddress>();
+        RuleForEach(x => x.Recipients).ValidId<CreateAnnouncementCommand, IdentityAddress>();
     }
 }
 
