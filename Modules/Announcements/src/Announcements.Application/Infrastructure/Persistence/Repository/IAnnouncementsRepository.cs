@@ -7,6 +7,5 @@ public interface IAnnouncementsRepository
 {
     Task Add(Announcement announcement, CancellationToken cancellationToken);
     Task<List<Announcement>> FindAll(CancellationToken cancellationToken);
-    Task Update(List<Announcement> announcements, CancellationToken cancellationToken);
     Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken);
 }

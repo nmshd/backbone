@@ -34,12 +34,6 @@ public class AnnouncementsRepository : IAnnouncementsRepository
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public Task Update(List<Announcement> announcements, CancellationToken cancellationToken)
-    {
-        _announcements.UpdateRange(announcements);
-        return _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
     public Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken)
     {
         return _announcementRecipients
