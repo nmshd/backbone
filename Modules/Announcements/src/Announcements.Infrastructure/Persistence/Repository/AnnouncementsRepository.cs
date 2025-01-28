@@ -37,7 +37,6 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     public Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken)
     {
         return _announcementRecipients
-            .IncludeAll(_dbContext)
             .Where(filter)
             .ExecuteDeleteAsync(cancellationToken);
     }
