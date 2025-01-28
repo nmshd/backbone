@@ -9,7 +9,7 @@ public interface IPnsRegistrationsRepository
     Task Add(PnsRegistration registration, CancellationToken cancellationToken);
     Task Update(PnsRegistration registration, CancellationToken cancellationToken);
     Task<PnsRegistration?> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
-    Task<List<PnsRegistration>> FindDistinctByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false);
+    Task<PnsRegistration[]> FindByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false);
     Task<int> Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken);
     Task Delete(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken);
 }
