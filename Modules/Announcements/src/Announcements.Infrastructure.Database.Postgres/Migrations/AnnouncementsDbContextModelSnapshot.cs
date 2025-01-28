@@ -59,10 +59,10 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("AnnouncementId", "Address");
+
+                    b.HasIndex("AnnouncementId", "Address")
+                        .IsUnique();
 
                     b.ToTable("AnnouncementRecipients", "Announcements");
                 });

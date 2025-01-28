@@ -59,10 +59,10 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("AnnouncementId", "Address");
+
+                    b.HasIndex("AnnouncementId", "Address")
+                        .IsUnique();
 
                     b.ToTable("AnnouncementRecipients", "Announcements");
                 });

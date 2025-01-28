@@ -12,7 +12,6 @@ public class AnnouncementRecipientEntityTypeConfiguration : EntityEntityTypeConf
 
         builder.HasKey(a => new { a.AnnouncementId, a.Address });
 
-        builder.Property(a => a.Address);
-        builder.Property(a => a.CreatedAt);
+        builder.HasIndex(a => new { a.AnnouncementId, a.Address }).IsUnique();
     }
 }
