@@ -13,33 +13,32 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 
 public class ActualDeletionWorker : IHostedService
 {
+    public static ILogger<ActualDeletionWorker> Logger = null!;
+
     private readonly IHostApplicationLifetime _host;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
-    private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly List<IIdentityDeleter> _identityDeleters;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
-        IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger)
+        IPushNotificationSender pushNotificationSender)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
-        _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogError("StartAsync start");
+        Logger.LogError("StartAsync start");
         await StartProcessing(cancellationToken);
 
         _host.StopApplication();
-        _logger.LogError("StartAsync end");
+        Logger.LogError("StartAsync end");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -49,36 +48,36 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        _logger.LogError("StartProcessing start");
+        Logger.LogError("StartProcessing start");
         var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
 
-        _logger.LogError("There are {count} ripe deletion processes to be executed", response.Results.Count);
+        Logger.LogError("There are {count} ripe deletion processes to be executed", response.Results.Count);
 
         var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key);
         var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
 
         await ExecuteDeletion(addressesWithTriggeredDeletionProcesses, cancellationToken);
         LogErroringDeletionTriggers(erroringDeletionTriggers);
-        _logger.LogError("StartProcessing end");
+        Logger.LogError("StartProcessing end");
     }
 
     private async Task ExecuteDeletion(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken)
     {
-        _logger.LogError("ExecuteDeletion start");
+        Logger.LogError("ExecuteDeletion start");
         foreach (var identityAddress in addresses)
         {
             await ExecuteDeletion(identityAddress, cancellationToken);
         }
 
-        _logger.LogError("ExecuteDeletion end");
+        Logger.LogError("ExecuteDeletion end");
     }
 
     private async Task ExecuteDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        _logger.LogError("ExecuteDeletion start");
+        Logger.LogError("ExecuteDeletion start");
         await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
-        _logger.LogError("ExecuteDeletion end");
+        Logger.LogError("ExecuteDeletion end");
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
@@ -91,26 +90,26 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        _logger.LogError("Delete start");
+        Logger.LogError("Delete start");
         var identity = await _mediator.Send(new GetIdentityQuery(identityAddress.Value));
 
         foreach (var identityDeleter in _identityDeleters)
         {
-            _logger.LogError("Executing {name}", identityDeleter.GetType().FullName);
+            Logger.LogError("Executing {name}", identityDeleter.GetType().FullName);
             await identityDeleter.Delete(identityAddress);
         }
 
         var usernames = identity.Devices.Select(d => d.Username);
 
         await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress.Value, usernames));
-        _logger.LogError("Delete end");
+        Logger.LogError("Delete end");
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
     {
         foreach (var erroringDeletion in erroringDeletionTriggers)
         {
-            _logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
+            Logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -9,20 +10,26 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
+using Meziantou.Extensions.Logging.Xunit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Xunit.Abstractions;
 using Relationship = Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Integration;
 
 public class ActualDeletionWorkerTests : AbstractTestsBase
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly IHost _host;
 
-    public ActualDeletionWorkerTests()
+    public ActualDeletionWorkerTests(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
+
+        ActualDeletionWorker.Logger = XUnitLogger.CreateLogger<ActualDeletionWorker>(testOutputHelper);
 
         _host = hostBuilder.Build();
     }
@@ -114,6 +121,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     [Fact]
     public async Task Deletes_relationships()
     {
+        _testOutputHelper.WriteLine("test");
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
         var peerOfIdentityToBeDeleted = await SeedDatabaseWithIdentity();
