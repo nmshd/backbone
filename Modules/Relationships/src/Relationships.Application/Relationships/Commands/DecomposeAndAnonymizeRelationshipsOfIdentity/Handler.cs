@@ -11,7 +11,7 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Deco
 
 public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdentityCommand>
 {
-    public static ILogger<Handler> Logger = null!;
+    public static ILogger<Handler>? Logger = null!;
 
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly ApplicationOptions _applicationOptions;
@@ -26,16 +26,16 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
     {
         var relationships = (await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)).ToList();
 
-        Logger.LogError("Decomposing {n} relationships for identity {IdentityAddress}", relationships.Count, request.IdentityAddress);
+        Logger?.LogError("Decomposing {n} relationships for identity {IdentityAddress}", relationships.Count, request.IdentityAddress);
 
         foreach (var relationship in relationships)
             relationship.DecomposeDueToIdentityDeletion(request.IdentityAddress, _applicationOptions.DidDomainName);
 
-        Logger.LogError("Done decomposing relationships for identity {IdentityAddress}", request.IdentityAddress);
+        Logger?.LogError("Done decomposing relationships for identity {IdentityAddress}", request.IdentityAddress);
 
         var rel = relationships.FirstOrDefault();
 
-        Logger.LogError("Relationship: {rel}", JsonSerializer.Serialize(rel, new JsonSerializerOptions
+        Logger?.LogError("Relationship: {rel}", JsonSerializer.Serialize(rel, new JsonSerializerOptions
         {
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
             WriteIndented = true
