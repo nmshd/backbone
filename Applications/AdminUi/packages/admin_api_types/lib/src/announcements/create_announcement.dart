@@ -9,11 +9,13 @@ class CreateAnnouncement {
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
+  final List<String> recipients;
 
   CreateAnnouncement({
-    required this.expiresAt,
     required this.severity,
     required this.texts,
+    required this.recipients,
+    this.expiresAt,
   });
 
   factory CreateAnnouncement.fromJson(dynamic json) => _$CreateAnnouncementFromJson(json as Map<String, dynamic>);
