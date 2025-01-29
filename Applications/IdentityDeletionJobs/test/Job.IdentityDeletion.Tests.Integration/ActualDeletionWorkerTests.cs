@@ -129,6 +129,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
         var peerOfIdentityToBeDeleted = await SeedDatabaseWithIdentity();
 
+        _logger.LogError("from: {from}", identityToBeDeleted.Address);
+        _logger.LogError("to: {to}", peerOfIdentityToBeDeleted.Address);
+
         await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted);
 
         // Act
