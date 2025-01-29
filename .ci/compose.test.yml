@@ -18,22 +18,22 @@ services:
       - source: Config
         target: app/appsettings.override.json
 
-  admin-ui:
-    container_name: admin-ui-test
-    hostname: admin-ui
-    image: ghcr.io/nmshd/backbone-admin-ui:0.0.1
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5173:8080"
-    depends_on:
-      database-migrator:
-        condition: service_completed_successfully
-      rabbitmq:
-        condition: service_started
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
+  # admin-ui:
+  #   container_name: admin-ui-test
+  #   hostname: admin-ui
+  #   image: ghcr.io/nmshd/backbone-admin-ui:0.0.1
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   ports:
+  #     - "5173:8080"
+  #   depends_on:
+  #     database-migrator:
+  #       condition: service_completed_successfully
+  #     rabbitmq:
+  #       condition: service_started
+  #   configs:
+  #     - source: Config
+  #       target: app/appsettings.override.json
 
   event-handler-service:
     container_name: event-handler-service-test
@@ -49,19 +49,19 @@ services:
       - source: Config
         target: app/appsettings.override.json
 
-  sse-server:
-    container_name: sse-server-test
-    image: ghcr.io/nmshd/backbone-sse-server:0.0.1
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      database-migrator:
-        condition: service_completed_successfully
-      rabbitmq:
-        condition: service_started
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
+  # sse-server:
+  #   container_name: sse-server-test
+  #   image: ghcr.io/nmshd/backbone-sse-server:0.0.1
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   depends_on:
+  #     database-migrator:
+  #       condition: service_completed_successfully
+  #     rabbitmq:
+  #       condition: service_started
+  #   configs:
+  #     - source: Config
+  #       target: app/appsettings.override.json
 
   database-migrator:
     container_name: database-migrator-test
@@ -99,13 +99,13 @@ services:
       database:
         condition: service_healthy
 
-  admin-cli:
-    container_name: admin-cli-test
-    image: ghcr.io/nmshd/backbone-admin-cli:0.0.1
-    depends_on:
-      consumer-api:
-        condition: service_healthy
-    command: backbone client create --clientId test --clientSecret test --defaultTier Basic
+  # admin-cli:
+  #   container_name: admin-cli-test
+  #   image: ghcr.io/nmshd/backbone-admin-cli:0.0.1
+  #   depends_on:
+  #     consumer-api:
+  #       condition: service_healthy
+  #   command: backbone client create --clientId test --clientSecret test --defaultTier Basic
 
 networks:
   default:

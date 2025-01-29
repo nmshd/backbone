@@ -18,11 +18,11 @@ jobs:
           - dockerfile: Applications/ConsumerApi/src/Dockerfile
             image: consumer-api
 
-          - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
-            image: admin-ui
+          # - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
+          #   image: admin-ui
 
-          - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
-            image: admin-cli
+          # - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
+          #   image: admin-cli
 
           - dockerfile: Applications/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
             image: database-migrator
@@ -30,11 +30,11 @@ jobs:
           - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler
 
-          - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
-            image: identity-deletion-jobs
+          # - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
+          #   image: identity-deletion-jobs
 
-          - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
-            image: sse-server
+          # - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
+          #   image: sse-server
 
     steps:
       - name: Checkout
