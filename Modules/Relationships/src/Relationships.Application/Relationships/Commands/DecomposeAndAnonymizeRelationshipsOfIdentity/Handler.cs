@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
 
         Logger.LogError("Done decomposing relationships for identity {IdentityAddress}", request.IdentityAddress);
 
-        var rel = relationships.First();
+        var rel = relationships.FirstOrDefault();
 
         Logger.LogError("Relationship: {rel}", JsonSerializer.Serialize(rel, new JsonSerializerOptions
         {
