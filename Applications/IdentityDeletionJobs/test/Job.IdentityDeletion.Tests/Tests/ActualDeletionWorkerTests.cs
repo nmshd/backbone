@@ -13,7 +13,6 @@ using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 
@@ -110,8 +109,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
-        var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender);
     }
 
     private static Identity CreateIdentity()
