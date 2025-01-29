@@ -26,11 +26,6 @@ services:
       - PGPASSWORD=Passw0rd
     command: psql -h postgres -U postgres -d enmeshed -f /app/sql-scripts/setup.sql
 
-  admin-cli:
-    environment:
-      Database__Provider: Postgres
-      Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
-
   database-migrator:
     environment:
       Infrastructure__SqlDatabase__Provider: Postgres

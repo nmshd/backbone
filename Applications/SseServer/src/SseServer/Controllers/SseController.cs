@@ -50,7 +50,9 @@ public class SseController : ControllerBase
 
             await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
             {
+                _logger.LogDebug("Sending event '{EventName}'...", eventName);
                 await streamWriter.SendServerSentEvent(eventName);
+                _logger.LogDebug("Event '{EventName}' successfully sent.", eventName);
             }
         }
         catch (ClientAlreadyRegisteredException)
