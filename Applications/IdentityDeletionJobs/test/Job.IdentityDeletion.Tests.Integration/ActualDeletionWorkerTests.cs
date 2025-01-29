@@ -39,6 +39,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         // Act
         await _host.StartAsync();
 
+        await Task.Delay(10000);
+
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
