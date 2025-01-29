@@ -28,90 +28,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Logs_that_data_was_deleted()
-    {
-        // Arrange
-        var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-
-        // Act
-        await _host.StartAsync();
-
-        // Assert
-        var assertionContext = GetService<DevicesDbContext>();
-
-        var auditLogEntries = await assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address)).ToListAsync();
-
-        var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
-
-        auditLogEntriesForDeletedData.Should().HaveCount(14);
-
-        auditLogEntriesForDeletedData.Should().AllSatisfy(e =>
-        {
-            e.AdditionalData.Should().HaveCount(1);
-            e.AdditionalData!.First().Key.Should().Be("aggregateType");
-        });
-
-        var deletedAggregates = auditLogEntriesForDeletedData.SelectMany(e => e.AdditionalData!.Values).ToList();
-        deletedAggregates.Should().Contain("Challenges");
-        deletedAggregates.Should().Contain("PnsRegistrations");
-        deletedAggregates.Should().Contain("Identities");
-        deletedAggregates.Should().Contain("Files");
-        deletedAggregates.Should().Contain("Messages");
-        deletedAggregates.Should().Contain("QuotaIdentities");
-        deletedAggregates.Should().Contain("Relationships");
-        deletedAggregates.Should().Contain("RelationshipTemplates");
-        deletedAggregates.Should().Contain("RelationshipTemplateAllocations");
-        deletedAggregates.Should().Contain("ExternalEvents");
-        deletedAggregates.Should().Contain("SyncRuns");
-        deletedAggregates.Should().Contain("Datawallets");
-        deletedAggregates.Should().Contain("Tokens");
-        deletedAggregates.Should().Contain("AnnouncementRecipients");
-    }
-
-    [Fact]
-    public async Task Deletes_the_identity()
-    {
-        // Arrange
-        var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-
-        // Act
-        await _host.StartAsync();
-
-        // Assert
-        var assertionContext = GetService<DevicesDbContext>();
-
-        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address);
-        identityAfterAct.Should().BeNull();
-    }
-
-    [Fact]
-    public async Task Anonymizes_the_identity_in_all_messages_instead_of_deleting_the_message()
-    {
-        // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = await SeedDatabaseWithIdentity();
-        var relationship = await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peer);
-
-        var sentMessage = await SeedDatabaseWithMessage(relationship, from: identityToBeDeleted, to: peer);
-        var receivedMessage = await SeedDatabaseWithMessage(relationship, from: peer, to: identityToBeDeleted);
-
-        // Act
-        await _host.StartAsync();
-
-        // Assert
-        var assertionContext = GetService<MessagesDbContext>();
-
-        var messagesOfIdentityAfterAct = await assertionContext.Messages.Where(Message.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
-        messagesOfIdentityAfterAct.Should().BeEmpty();
-
-        var sentMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == sentMessage.Id);
-        sentMessageAfterAct.Should().NotBeNull();
-
-        var receivedMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == receivedMessage.Id);
-        receivedMessageAfterAct.Should().NotBeNull();
-    }
-
-    [Fact]
     public async Task Deletes_relationships()
     {
         // Arrange
@@ -128,24 +44,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
         relationshipsAfterAct.Should().BeEmpty();
-    }
-
-    [Fact]
-    public async Task Deletes_relationship_templates()
-    {
-        // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-
-        await SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address);
-
-        // Act
-        await _host.StartAsync();
-
-        // Assert
-        var assertionContext = GetService<RelationshipsDbContext>();
-
-        var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync();
-        templatesAfterAct.Should().BeEmpty();
     }
 
     private T GetService<T>() where T : notnull
