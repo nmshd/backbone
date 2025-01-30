@@ -121,7 +121,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         receivedMessageAfterAct.Should().NotBeNull();
     }
 
-    [Fact(Skip = "This test is occassionally failing in pipelines for no apparent reason. We're skipping it until it is fixed.")]
+    [Fact]
     public async Task Deletes_relationships()
     {
         _logger.LogError("1");
