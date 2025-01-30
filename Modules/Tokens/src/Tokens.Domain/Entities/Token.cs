@@ -13,6 +13,7 @@ public class Token : Entity
     private const int MAX_FAILED_ACCESS_ATTEMPTS = 100;
 
     private readonly List<TokenAllocation> _allocations;
+    private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
     private Token()
@@ -55,58 +56,71 @@ public class Token : Entity
     public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
-    public int AccessFailedCount { get; private set; }
+
+    public int AccessFailedCount
+    {
+        get => _accessFailedCount;
+        private set
+        {
+            if (IsLocked) return;
+
+            _accessFailedCount = value;
+
+            if (IsLocked)
+            {
+                RaiseDomainEvent(new TokenLockedDomainEvent(this));
+            }
+        }
+    }
 
     public IReadOnlyList<TokenAllocation> Allocations => _allocations;
     public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
 
-    public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
-    {
-        return
-            Password == null ||
-            password != null && Password.SequenceEqual(password) ||
-            CreatedBy == address; // The owner shouldn't need a password to get the template
-    }
-
-    public bool HasAllocationForIdentity(IdentityAddress? address)
-    {
-        return address != null && Allocations.Any(allocation => allocation.AllocatedBy == address);
-    }
-
     public TokenAccessResult TryToAccess(IdentityAddress? address, DeviceId? device, byte[]? password)
     {
-        if (address is null) return EnsureCanBeCollected(null, password);
+        if (HasOwner(address))
+            return TokenAccessResult.Ok;
 
-        if (address != CreatedBy && !HasAllocationForIdentity(address))
+        if (HasAllocationForIdentity(address))
+            return TokenAccessResult.Ok;
+
+        if (IsLocked)
+            return TokenAccessResult.Locked;
+
+        if (!IsPasswordCorrect(password))
         {
-            var result = EnsureCanBeCollected(address, password);
-
-            if (result == TokenAccessResult.Ok)
-            {
-                var allocation = new TokenAllocation(this, address, device!);
-                _allocations.Add(allocation);
-
-                return TokenAccessResult.AllocationAdded;
-            }
-
-            return result;
-        }
-
-        return TokenAccessResult.Ok;
-    }
-
-    private TokenAccessResult EnsureCanBeCollected(IdentityAddress? address, byte[]? password)
-    {
-        if (IsLocked) return TokenAccessResult.Locked;
-
-        if (!CanBeCollectedUsingPassword(address, password))
-        {
-            IncrementAccessFailedCount();
+            AccessFailedCount++;
 
             return IsLocked ? TokenAccessResult.Locked : TokenAccessResult.WrongPassword;
         }
 
-        return TokenAccessResult.Ok;
+        if (address == null)
+            return TokenAccessResult.Ok;
+
+        AllocateFor(address, device);
+
+        return TokenAccessResult.AllocationAdded;
+    }
+
+    private void AllocateFor(IdentityAddress address, DeviceId? device)
+    {
+        var allocation = new TokenAllocation(this, address, device!);
+        _allocations.Add(allocation);
+    }
+
+    private bool HasAllocationForIdentity(IdentityAddress? address)
+    {
+        return address != null && Allocations.Any(a => a.AllocatedBy == address);
+    }
+
+    private bool HasOwner(IdentityAddress? address)
+    {
+        return CreatedBy == address;
+    }
+
+    private bool IsPasswordCorrect(byte[]? password)
+    {
+        return Password == null || password != null && Password.SequenceEqual(password);
     }
 
     public void AnonymizeForIdentity(string didDomainName)
@@ -125,17 +139,6 @@ public class Token : Entity
         var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
 
         tokenAllocation.AllocatedBy = anonymousIdentity;
-    }
-
-    private void IncrementAccessFailedCount()
-    {
-        if (IsLocked) return;
-
-        AccessFailedCount++;
-        if (IsLocked)
-        {
-            RaiseDomainEvent(new TokenLockedDomainEvent(this));
-        }
     }
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
