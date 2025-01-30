@@ -14,11 +14,11 @@ public class Validator : AbstractValidator<ListTokensQuery>
     {
         RuleFor(t => t.PaginationFilter).SetValidator(new PaginationFilterValidator()).When(t => t != null);
 
-        RuleFor(q => q.QueryItems)
+        RuleFor(q => q.Ids)
             .Cascade(CascadeMode.Stop)
             .DetailedNotEmpty();
 
-        RuleForEach(q => q.QueryItems)
+        RuleForEach(q => q.Ids)
             .Cascade(CascadeMode.Stop)
             .ValidId<ListTokensQuery, TokenId>();
     }
