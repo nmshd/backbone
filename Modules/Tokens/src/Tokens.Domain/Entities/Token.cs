@@ -10,7 +10,7 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
-    public const int MAX_FAILED_ACCESSES = 100;
+    private const int MAX_FAILED_ACCESS_ATTEMPTS = 100;
 
     private readonly List<TokenAllocation> _allocations;
 
@@ -58,7 +58,7 @@ public class Token : Entity
     public int AccessFailedCount { get; private set; }
 
     public IReadOnlyList<TokenAllocation> Allocations => _allocations;
-    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESSES;
+    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
 
     public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
     {
