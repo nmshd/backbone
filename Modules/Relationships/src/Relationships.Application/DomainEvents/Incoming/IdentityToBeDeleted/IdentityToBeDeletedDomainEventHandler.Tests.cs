@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -23,33 +24,36 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var relationshipToPeer2 = TestData.CreateActiveRelationship(peer2, identityToBeDeleted);
 
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
+        var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
+        A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
         var gracePeriodEndsAt = DateTime.Parse("2022-01-01");
 
-        var handler = CreateHandler(fakeRelationshipsRepository);
+        var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
         await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted, gracePeriodEndsAt));
 
         //Assert
-        var event1 = relationshipToPeer1.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
-        event1.PeerOfIdentityToBeDeleted.Should().Be(peer1);
-        event1.RelationshipId.Should().Be(relationshipToPeer1.Id);
-        event1.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
-        event1.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
+        A.CallTo(() => mockEventBus.Publish(A<PeerToBeDeletedDomainEvent>.That.Matches(
+                e => e.PeerOfIdentityToBeDeleted == peer1 &&
+                     e.RelationshipId == relationshipToPeer1.Id &&
+                     e.IdentityToBeDeleted == identityToBeDeleted &&
+                     e.GracePeriodEndsAt == gracePeriodEndsAt)))
+            .MustHaveHappenedOnceExactly();
 
-        var event2 = relationshipToPeer2.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
-        event2.PeerOfIdentityToBeDeleted.Should().Be(peer2);
-        event2.RelationshipId.Should().Be(relationshipToPeer2.Id);
-        event2.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
-        event2.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
+        A.CallTo(() => mockEventBus.Publish(A<PeerToBeDeletedDomainEvent>.That.Matches(
+                e => e.PeerOfIdentityToBeDeleted == peer2 &&
+                     e.RelationshipId == relationshipToPeer2.Id &&
+                     e.IdentityToBeDeleted == identityToBeDeleted &&
+                     e.GracePeriodEndsAt == gracePeriodEndsAt)))
+            .MustHaveHappenedOnceExactly();
     }
 
-    private static IdentityToBeDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
+    private static IdentityToBeDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
-        return new IdentityToBeDeletedDomainEventHandler(relationshipsRepository);
+        return new IdentityToBeDeletedDomainEventHandler(relationshipsRepository, eventBus);
     }
 }

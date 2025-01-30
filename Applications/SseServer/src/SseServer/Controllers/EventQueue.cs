@@ -5,7 +5,13 @@ namespace Backbone.SseServer.Controllers;
 
 public class EventQueue : IEventQueue
 {
+    private readonly ILogger<EventQueue> _logger;
     private readonly ConcurrentDictionary<string, Channel<string>> _channels = new();
+
+    public EventQueue(ILogger<EventQueue> logger)
+    {
+        _logger = logger;
+    }
 
     public void Register(string address)
     {
@@ -22,6 +28,8 @@ public class EventQueue : IEventQueue
 
     public async Task EnqueueFor(string address, string eventName, CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Enqueueing event '{EventName}'", eventName);
+
         if (!_channels.TryGetValue(address, out var channel))
             throw new ClientNotFoundException();
 

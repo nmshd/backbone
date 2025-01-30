@@ -23,7 +23,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public ActualDeletionWorkerTests()
     {
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
-
         _host = hostBuilder.Build();
     }
 
@@ -111,7 +110,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         receivedMessageAfterAct.Should().NotBeNull();
     }
 
-    [Fact(Skip = "This test is occassionally failing in pipelines for no apparent reason. We're skipping it until it is fixed.")]
+    [Fact]
     public async Task Deletes_relationships()
     {
         // Arrange
