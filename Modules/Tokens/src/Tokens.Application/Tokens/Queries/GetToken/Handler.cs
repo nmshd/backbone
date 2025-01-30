@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 
     private async Task<Token> GetToken(string tokenId, byte[]? password, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Find(TokenId.Parse(tokenId), _userContext.GetAddressOrNull(), cancellationToken, true) ??
+        var token = await _tokensRepository.Find(TokenId.Parse(tokenId), _userContext.GetAddressOrNull(), cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(Token));
 
         var activeIdentity = _userContext.GetAddressOrNull();
@@ -49,8 +49,10 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
                 throw new ApplicationException(ApplicationErrors.TokenIsLocked());
 
             case TokenAccessResult.Ok:
-            default:
                 return token;
+
+            default:
+                throw new Exception("Unexpected token access result.");
         }
     }
 }
