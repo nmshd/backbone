@@ -18,7 +18,7 @@ spec:
         app: rabbitmq
     spec:
       containers:
-        - image: rabbitmq:3.11.10-alpine
+        - image: rabbitmq:4.0.5-alpine
           name: rabbitmq
           ports:
             - name: amqp
