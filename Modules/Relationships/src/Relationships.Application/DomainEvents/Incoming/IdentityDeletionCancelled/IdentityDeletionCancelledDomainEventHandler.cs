@@ -3,16 +3,19 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 
 public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<IdentityDeletionCancelledDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
+    private readonly IEventBus _eventBus;
 
-    public IdentityDeletionCancelledDomainEventHandler(IRelationshipsRepository relationshipsRepository)
+    public IdentityDeletionCancelledDomainEventHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
         _relationshipsRepository = relationshipsRepository;
+        _eventBus = eventBus;
     }
 
     public async Task Handle(IdentityDeletionCancelledDomainEvent @event)
@@ -33,11 +36,11 @@ public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<I
         return relationships;
     }
 
-    private static void NotifyRelationshipsAboutCancelledDeletion(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    private void NotifyRelationshipsAboutCancelledDeletion(string identityToBeDeleted, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
+            _eventBus.Publish(new PeerDeletionCancelledDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
         }
     }
 }

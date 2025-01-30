@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -24,7 +25,7 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
 
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
-        A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
+        A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns(new List<Relationship> { relationshipToPeer1, relationshipToPeer2 });
 
         var handler = CreateHandler(fakeRelationshipsRepository);
@@ -46,6 +47,6 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
 
     private static IdentityDeletionCancelledDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
     {
-        return new IdentityDeletionCancelledDomainEventHandler(relationshipsRepository);
+        return new IdentityDeletionCancelledDomainEventHandler(relationshipsRepository, A.Dummy<IEventBus>());
     }
 }
