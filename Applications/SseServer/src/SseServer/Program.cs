@@ -142,6 +142,8 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
+    app.UseCors();
+
     app.UseAuthentication().UseAuthorization();
 
     app.MapControllers();
