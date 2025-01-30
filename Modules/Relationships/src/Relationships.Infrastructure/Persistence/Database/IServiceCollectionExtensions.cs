@@ -24,7 +24,6 @@ public static class IServiceCollectionExtensions
         services
             .AddDbContext<RelationshipsDbContext>(dbContextOptions =>
             {
-                dbContextOptions.EnableSensitiveDataLogging();
                 switch (options.Provider)
                 {
                     case SQLSERVER:

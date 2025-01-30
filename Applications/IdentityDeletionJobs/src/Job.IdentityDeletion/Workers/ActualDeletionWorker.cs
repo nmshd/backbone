@@ -13,8 +13,6 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 
 public class ActualDeletionWorker : IHostedService
 {
-    public static ILogger<ActualDeletionWorker>? Logger = null!;
-
     private readonly IHostApplicationLifetime _host;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
@@ -32,7 +30,7 @@ public class ActualDeletionWorker : IHostedService
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
-        _logger = Logger ?? logger;
+        _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
