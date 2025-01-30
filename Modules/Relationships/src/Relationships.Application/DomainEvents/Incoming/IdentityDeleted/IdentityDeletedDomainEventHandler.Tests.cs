@@ -24,29 +24,32 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
         var relationshipToPeer2 = TestData.CreateActiveRelationship(peer2, identityToBeDeleted);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
+        var mockEventBus = A.Fake<IEventBus>();
 
         A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Relationship> { relationshipToPeer1, relationshipToPeer2 });
+            .Returns([relationshipToPeer1, relationshipToPeer2]);
 
-        var handler = CreateHandler(fakeRelationshipsRepository);
+        var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
         await handler.Handle(new IdentityDeletedDomainEvent(identityToBeDeleted));
 
         //Assert
-        var event1 = relationshipToPeer1.Should().HaveASingleDomainEvent<PeerDeletedDomainEvent>();
-        event1.PeerOfDeletedIdentity.Should().Be(peer1);
-        event1.RelationshipId.Should().Be(relationshipToPeer1.Id);
-        event1.DeletedIdentity.Should().Be(identityToBeDeleted);
+        A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(
+                e => e.PeerOfDeletedIdentity == peer1 &&
+                     e.RelationshipId == relationshipToPeer1.Id &&
+                     e.DeletedIdentity == identityToBeDeleted)))
+            .MustHaveHappenedOnceExactly();
 
-        var event2 = relationshipToPeer2.Should().HaveASingleDomainEvent<PeerDeletedDomainEvent>();
-        event2.PeerOfDeletedIdentity.Should().Be(peer2);
-        event2.RelationshipId.Should().Be(relationshipToPeer2.Id);
-        event2.DeletedIdentity.Should().Be(identityToBeDeleted);
+        A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(
+                e => e.PeerOfDeletedIdentity == peer2 &&
+                     e.RelationshipId == relationshipToPeer2.Id &&
+                     e.DeletedIdentity == identityToBeDeleted)))
+            .MustHaveHappenedOnceExactly();
     }
 
-    private static IdentityDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
+    private static IdentityDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
-        return new IdentityDeletedDomainEventHandler(relationshipsRepository, A.Dummy<IEventBus>());
+        return new IdentityDeletedDomainEventHandler(relationshipsRepository, eventBus);
     }
 }

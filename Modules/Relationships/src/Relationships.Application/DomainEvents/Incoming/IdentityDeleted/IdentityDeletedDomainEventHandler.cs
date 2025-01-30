@@ -22,7 +22,7 @@ public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDel
     {
         var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsAboutDeletedPeer(@event.IdentityAddress, relationships);
+        await NotifyRelationshipsAboutDeletedPeer(@event.IdentityAddress, relationships);
     }
 
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
@@ -34,11 +34,11 @@ public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDel
         return relationships;
     }
 
-    private void NotifyRelationshipsAboutDeletedPeer(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    private async Task NotifyRelationshipsAboutDeletedPeer(string identityToBeDeleted, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            _eventBus.Publish(new PeerDeletedDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
+            await _eventBus.Publish(new PeerDeletedDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
         }
     }
 }

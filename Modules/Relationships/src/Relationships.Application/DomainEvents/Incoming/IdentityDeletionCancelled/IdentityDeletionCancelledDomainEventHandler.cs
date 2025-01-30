@@ -22,9 +22,7 @@ public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<I
     {
         var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsAboutCancelledDeletion(@event.IdentityAddress, relationships);
-
-        await _relationshipsRepository.Update(relationships);
+        await NotifyRelationshipsAboutCancelledDeletion(@event.IdentityAddress, relationships);
     }
 
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
@@ -36,11 +34,11 @@ public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<I
         return relationships;
     }
 
-    private void NotifyRelationshipsAboutCancelledDeletion(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    private async Task NotifyRelationshipsAboutCancelledDeletion(string identityToBeDeleted, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            _eventBus.Publish(new PeerDeletionCancelledDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
+            await _eventBus.Publish(new PeerDeletionCancelledDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
         }
     }
 }
