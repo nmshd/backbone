@@ -35,11 +35,9 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogError("StartAsync start");
         await StartProcessing(cancellationToken);
 
         _host.StopApplication();
-        _logger.LogError("StartAsync end");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -49,36 +47,27 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        _logger.LogError("StartProcessing start");
         var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
-
-        _logger.LogError("There are {count} ripe deletion processes to be executed", response.Results.Count);
 
         var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key);
         var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
 
         await ExecuteDeletion(addressesWithTriggeredDeletionProcesses, cancellationToken);
         LogErroringDeletionTriggers(erroringDeletionTriggers);
-        _logger.LogError("StartProcessing end");
     }
 
     private async Task ExecuteDeletion(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken)
     {
-        _logger.LogError("ExecuteDeletion start");
         foreach (var identityAddress in addresses)
         {
             await ExecuteDeletion(identityAddress, cancellationToken);
         }
-
-        _logger.LogError("ExecuteDeletion end");
     }
 
     private async Task ExecuteDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        _logger.LogError("ExecuteDeletion start");
         await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
-        _logger.LogError("ExecuteDeletion end");
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
@@ -91,19 +80,16 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        _logger.LogError("Delete start");
         var identity = await _mediator.Send(new GetIdentityQuery(identityAddress.Value));
 
         foreach (var identityDeleter in _identityDeleters)
         {
-            _logger.LogError("Executing {name}", identityDeleter.GetType().FullName);
             await identityDeleter.Delete(identityAddress);
         }
 
         var usernames = identity.Devices.Select(d => d.Username);
 
         await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress.Value, usernames));
-        _logger.LogError("Delete end");
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
