@@ -73,10 +73,10 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         return $"{baseUrl}/{handle}";
     }
 
-    private static int GetNotificationId(object pushNotification)
+    private static string? GetNotificationId(object pushNotification)
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
-        return attribute?.Value ?? 0;
+        return attribute?.Value;
     }
 }
 
