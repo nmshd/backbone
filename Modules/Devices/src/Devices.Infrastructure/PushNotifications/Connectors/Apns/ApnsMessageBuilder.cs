@@ -59,7 +59,6 @@ public class ApnsMessageBuilder
         if (notificationId == null)
             return this;
 
-        _notification.NotificationId = notificationId;
         _request.Headers.Add("apns-collapse-id", notificationId);
 
         return this;
@@ -74,10 +73,6 @@ public class ApnsMessageBuilder
 
     private class Payload
     {
-        [JsonPropertyName("notId")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? NotificationId { get; set; }
-
         [JsonPropertyName("content")]
         public NotificationContent? Content { get; set; }
 
