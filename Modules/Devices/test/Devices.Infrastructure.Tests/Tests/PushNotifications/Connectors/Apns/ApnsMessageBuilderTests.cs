@@ -45,7 +45,6 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
         actualContent.Should().BeEquivalentToJson(
             """
             {
-                'notId': 'testNotificationId',
                 'content': {
                     'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
                     'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
