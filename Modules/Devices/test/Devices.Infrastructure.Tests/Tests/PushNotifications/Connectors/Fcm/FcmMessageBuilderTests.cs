@@ -15,7 +15,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
     {
         // Act
         var message = new FcmMessageBuilder()
-            .SetTag(1)
+            .SetTag("testNotificationId")
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.New(),
@@ -33,8 +33,8 @@ public class FcmMessageBuilderTests : AbstractTestsBase
 
         message.Data["content-available"].Should().Be("1");
 
-        message.Android.CollapseKey.Should().Be("1");
-        message.Android.Notification.Tag.Should().Be("1");
+        message.Android.CollapseKey.Should().Be("testNotificationId");
+        message.Android.Notification.Tag.Should().Be("testNotificationId");
     }
 
     [Fact]
