@@ -60,10 +60,14 @@ public class FcmMessageBuilder
         _data["content-available"] = contentAvailable ? "1" : "0";
     }
 
-    public FcmMessageBuilder SetTag(int notificationId)
+    public FcmMessageBuilder SetTag(string? notificationId)
     {
-        _message.Android.Notification.Tag = notificationId.ToString();
-        _message.Android.CollapseKey = notificationId.ToString();
+        if (notificationId == null)
+            return this;
+
+        _message.Android.Notification.Tag = notificationId;
+        _message.Android.CollapseKey = notificationId;
+
         return this;
     }
 
