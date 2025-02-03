@@ -187,7 +187,7 @@ public class Token : Entity
 
     public static Expression<Func<Token, bool>> HasAllocationFor(IdentityAddress identityAddress)
     {
-        return token => token.CreatedBy == identityAddress || token.Allocations.Any(allocation => allocation.AllocatedBy == identityAddress);
+        return token => token.Allocations.Any(allocation => allocation.AllocatedBy == identityAddress);
     }
 
     #endregion

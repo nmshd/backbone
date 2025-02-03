@@ -10,7 +10,7 @@ public interface ITokensRepository
 {
     Task Add(Token token);
 
-    Task<DbPaginationResult<Token>> FindTokensWithIdsAndAllocationFor(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<Token>> FindTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
     Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);

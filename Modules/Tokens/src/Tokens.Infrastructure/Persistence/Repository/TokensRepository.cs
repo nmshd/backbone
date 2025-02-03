@@ -23,12 +23,12 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokensWithIdsAndAllocationFor(IEnumerable<string> ids, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)
-            .Where(Token.HasAllocationFor(activeIdentity))
+            .Where(Token.HasAllocationFor(activeIdentity).Or(Token.WasCreatedBy(activeIdentity)))
             .Where(t => ids.Contains(t.Id));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
