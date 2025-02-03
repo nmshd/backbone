@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
 
     public async Task<ListTokensResponse> Handle(ListTokensQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _tokensRepository.FindTokens(request.Ids, _activeIdentity, request.PaginationFilter, cancellationToken, track: false);
+        var dbPaginationResult = await _tokensRepository.FindTokensWithIdsAndAllocationFor(request.Ids, _activeIdentity, request.PaginationFilter, cancellationToken, track: false);
 
         return new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
     }

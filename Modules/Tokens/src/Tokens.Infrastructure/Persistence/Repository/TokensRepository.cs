@@ -23,13 +23,13 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<string> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokensWithIdsAndAllocationFor(IEnumerable<string> ids, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)
             .Where(Token.HasAllocationFor(activeIdentity))
-            .Where(t => queryItems.Contains(t.Id));
+            .Where(t => ids.Contains(t.Id));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
@@ -53,35 +53,13 @@ public class TokensRepository : ITokensRepository
         return dbPaginationResult;
     }
 
-    public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
+    public async Task<Token?> Find(TokenId id, CancellationToken cancellationToken, bool track = false)
     {
         var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)
-            .Where(Token.IsNotExpired)
-            .Where(Token.CanBeCollectedBy(activeIdentity))
-            .Where(Token.HasId(id))
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(Token.HasId(id), cancellationToken);
 
         return token;
-    }
-
-    public async Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress activeIdentity, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        if (paginationFilter == null)
-            throw new Exception("A pagination filter has to be provided.");
-
-        var query = _readonlyTokensDbSet.Where(Token.IsNotExpired);
-
-        var idsArray = ids as TokenId[] ?? ids.ToArray();
-
-        if (idsArray.Length != 0)
-            query = query.Where(t => idsArray.Contains(t.Id));
-
-        query = query.Where(Token.CanBeCollectedBy(activeIdentity));
-
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        return dbPaginationResult;
     }
 
     #region Write
