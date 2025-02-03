@@ -68,10 +68,10 @@ public static class SystemTime
     }
 
     /// <summary>
-    /// Resets <see cref="SystemTime"/> to return the current <see cref="DateTime.Now"/>.
+    /// Resets <see cref="SystemTime"/> to return the current <see cref="DateTime.UtcNow"/>.
     /// </summary>
     public static void Reset()
     {
-        GET_TIME.Value = () => DateTime.Now;
+        GET_TIME.Value = () => DateTime.UtcNow;
     }
 }

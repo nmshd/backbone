@@ -10,6 +10,10 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
+    private const int MAX_FAILED_ACCESS_ATTEMPTS = 100;
+
+    private readonly List<TokenAllocation> _allocations;
+    private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
     private Token()
@@ -19,6 +23,7 @@ public class Token : Entity
         CreatedBy = null!;
         CreatedByDevice = null!;
         Content = null!;
+        _allocations = null!;
     }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
@@ -35,6 +40,8 @@ public class Token : Entity
         ForIdentity = forIdentity;
         Password = password;
 
+        _allocations = [];
+
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
 
@@ -50,12 +57,82 @@ public class Token : Entity
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 
-    public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
+    public int AccessFailedCount
     {
-        return
-            Password == null ||
-            password != null && Password.SequenceEqual(password) ||
-            CreatedBy == address; // The owner shouldn't need a password to get the template
+        get => _accessFailedCount;
+        private set
+        {
+            if (IsLocked) return;
+
+            _accessFailedCount = value;
+
+            if (IsLocked)
+            {
+                RaiseDomainEvent(new TokenLockedDomainEvent(this));
+            }
+        }
+    }
+
+    public IReadOnlyList<TokenAllocation> Allocations => _allocations;
+    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
+    public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
+
+    public TokenAccessResult TryToAccess(IdentityAddress? activeIdentity, DeviceId? device, byte[]? password)
+    {
+        if (HasOwner(activeIdentity))
+            return TokenAccessResult.Ok;
+
+        if (HasAllocationForIdentity(activeIdentity))
+            return TokenAccessResult.Ok;
+
+        if (IsExpired)
+            return TokenAccessResult.Expired;
+
+        if (IsLocked)
+            return TokenAccessResult.Locked;
+
+        if (!CanBeAccessAccordingToForIdentity(activeIdentity))
+            return TokenAccessResult.ForIdentityDoesNotMatch;
+
+        if (!IsPasswordCorrect(password))
+        {
+            AccessFailedCount++;
+
+            return IsLocked ? TokenAccessResult.Locked : TokenAccessResult.WrongPassword;
+        }
+
+        if (activeIdentity == null)
+            return TokenAccessResult.Ok;
+
+        AllocateFor(activeIdentity, device);
+
+        return TokenAccessResult.AllocationAdded;
+    }
+
+    private bool CanBeAccessAccordingToForIdentity(IdentityAddress? address)
+    {
+        return CreatedBy == address || ForIdentity == null || ForIdentity == address;
+    }
+
+    private void AllocateFor(IdentityAddress address, DeviceId? device)
+    {
+        var allocation = new TokenAllocation(this, address, device!);
+        _allocations.Add(allocation);
+    }
+
+    private bool HasAllocationForIdentity(IdentityAddress? address)
+    {
+        return address != null && Allocations.Any(a => a.AllocatedBy == address);
+    }
+
+    private bool HasOwner(IdentityAddress? address)
+    {
+        return CreatedBy == address;
+    }
+
+    private bool IsPasswordCorrect(byte[]? password)
+    {
+        return Password == null || password != null && Password.SequenceEqual(password);
     }
 
     public void AnonymizeForIdentity(string didDomainName)
@@ -67,25 +144,31 @@ public class Token : Entity
         ForIdentity = anonymousIdentity;
     }
 
-    public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
+    private void EnsureIsPersonalized()
     {
-        if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
+        if (ForIdentity == null)
+            throw new DomainException(DomainErrors.TokenNotPersonalized());
     }
 
-    public void EnsureIsPersonalized()
+    public void AnonymizeTokenAllocation(IdentityAddress address, string didDomainName)
     {
-        if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
+        var tokenAllocation = _allocations.Find(a => a.AllocatedBy == address) ?? throw new DomainException(DomainErrors.NoAllocationForIdentity());
+
+        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
+
+        tokenAllocation.AllocatedBy = anonymousIdentity;
+    }
+
+    public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
+    {
+        if (CreatedBy != identityAddress)
+            throw new DomainActionForbiddenException();
     }
 
     #region Expressions
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
-
-    public static Expression<Func<Token, bool>> CanBeCollectedBy(IdentityAddress? address)
-    {
-        return token => token.ForIdentity == null || token.ForIdentity == address || token.CreatedBy == address;
-    }
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
@@ -97,23 +180,25 @@ public class Token : Entity
         return r => r.Id == id;
     }
 
-    public static Expression<Func<Token, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
-    {
-        return token =>
-            token.Password == null ||
-            token.Password == password ||
-            token.CreatedBy == address; // The owner shouldn't need a password to get the template
-    }
-
     public static Expression<Func<Token, bool>> IsFor(IdentityAddress identityAddress)
     {
         return token => token.ForIdentity == identityAddress;
     }
 
-    private static Expression<Func<Token, bool>> WasCreatedBy(string createdBy)
+    public static Expression<Func<Token, bool>> HasAllocationFor(IdentityAddress identityAddress)
     {
-        return token => token.CreatedBy == createdBy;
+        return token => token.Allocations.Any(allocation => allocation.AllocatedBy == identityAddress);
     }
 
     #endregion
+}
+
+public enum TokenAccessResult
+{
+    Ok,
+    AllocationAdded,
+    WrongPassword,
+    ForIdentityDoesNotMatch,
+    Locked,
+    Expired
 }

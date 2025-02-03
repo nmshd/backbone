@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+using Backbone.Tooling;
 
 namespace Backbone.ConsumerApi.Sdk.Authentication;
 
@@ -87,12 +88,12 @@ public class OAuthAuthenticator : IAuthenticator
         public Jwt(string accessToken, int expiresIn)
         {
             AccessToken = accessToken;
-            _expiresAt = DateTime.Now + TimeSpan.FromSeconds(expiresIn);
+            _expiresAt = SystemTime.UtcNow + TimeSpan.FromSeconds(expiresIn);
         }
 
         public string AccessToken { get; }
 
         // we consider JWTs expired 30 seconds before they actually are
-        public bool IsExpired => DateTime.Now > _expiresAt - TimeSpan.FromSeconds(30);
+        public bool IsExpired => SystemTime.UtcNow > _expiresAt - TimeSpan.FromSeconds(30);
     }
 }

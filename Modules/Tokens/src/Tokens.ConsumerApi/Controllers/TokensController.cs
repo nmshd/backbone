@@ -51,13 +51,13 @@ public class TokensController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListTokensQueryItem[]? tokens,
-        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+        [FromQuery] List<string> ids, CancellationToken cancellationToken)
     {
-        // We keep this code for backwards compatibility reasons. In a few months the `templates`
-        // parameter will become required, and the fallback to `ids` will be removed.
-        tokens = tokens is { Length: > 0 } ? tokens : ids.Select(id => new ListTokensQueryItem { Id = id }).ToArray();
+        // We keep this code for backwards compatibility reasons. In a few months the `ids`
+        // parameter will become required again, and the fallback to `tokens` will be removed.
+        ids = ids.Count != 0 ? ids : tokens?.Select(t => t.Id).ToList() ?? [];
 
-        var request = new ListTokensQuery(paginationFilter, tokens);
+        var request = new ListTokensQuery(paginationFilter, ids);
 
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -78,4 +78,9 @@ public class TokensController : ApiControllerBase
         await _mediator.Send(new DeleteTokenCommand { Id = id }, cancellationToken);
         return NoContent();
     }
+}
+
+public class ListTokensQueryItem
+{
+    public required string Id { get; set; }
 }

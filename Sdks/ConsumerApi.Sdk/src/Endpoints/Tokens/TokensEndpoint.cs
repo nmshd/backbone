@@ -23,23 +23,13 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
     }
 
-    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<ListTokensQueryItem> queryItems, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<string> queryItems, PaginationFilter? pagination = null)
     {
         var request = _client
             .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
             .Authenticate()
-            .WithPagination(pagination);
-
-        var i = 0;
-        foreach (var queryItem in queryItems)
-        {
-            request.AddQueryParameter($"tokens.{i}.id", queryItem.Id);
-
-            if (queryItem.Password != null)
-                request.AddQueryParameter($"tokens.{i}.password", queryItem.Password);
-
-            i++;
-        }
+            .WithPagination(pagination)
+            .AddQueryParameter("ids", queryItems);
 
         return await request.Execute();
     }

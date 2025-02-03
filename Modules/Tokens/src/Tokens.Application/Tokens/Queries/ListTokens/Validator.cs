@@ -14,23 +14,13 @@ public class Validator : AbstractValidator<ListTokensQuery>
     {
         RuleFor(t => t.PaginationFilter).SetValidator(new PaginationFilterValidator()).When(t => t != null);
 
-        RuleFor(q => q.QueryItems)
+        RuleFor(q => q.Ids)
             .Cascade(CascadeMode.Stop)
             .DetailedNotEmpty();
 
-        RuleForEach(x => x.QueryItems)
+        RuleForEach(q => q.Ids)
             .Cascade(CascadeMode.Stop)
-            .ChildRules(queryItems =>
-            {
-                queryItems
-                    .RuleFor(query => query.Id)
-                    .ValidId<ListTokensQueryItem, TokenId>();
-
-                queryItems
-                    .RuleFor(query => query.Password)
-                    .NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH)
-                    .When(query => query.Password != null);
-            });
+            .ValidId<ListTokensQuery, TokenId>();
     }
 }
 

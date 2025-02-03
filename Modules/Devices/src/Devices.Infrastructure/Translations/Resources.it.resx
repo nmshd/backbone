@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+        xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -83,5 +85,11 @@
     </data>
     <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
         <value>Aggiornamenti disponibili</value>
+    </data>
+    <data name="TokenLockedPushNotification.Title" xml:space="preserve">
+        <value>Token bloccato</value>
+    </data>
+    <data name="TokenLockedPushNotification.Body" xml:space="preserve">
+        <value>Il token è stato bloccato a causa di un numero eccessivo di tentativi di password errati.</value>
     </data>
 </root>
