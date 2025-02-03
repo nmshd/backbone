@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Xunit.Abstractions;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
@@ -311,7 +311,7 @@ public partial class TokenTryToAccessAccessTests
         }
 
         public Identity CreatedBy { get; private set; }
-        public bool IsExpired { get; }
+        public bool IsExpired { get; private set; }
         public Identity ForIdentity { get; private set; }
         public Password DefinedPassword { get; private set; }
         public bool IsLocked { get; private set; }
@@ -325,6 +325,7 @@ public partial class TokenTryToAccessAccessTests
         public void Deserialize(IXunitSerializationInfo info)
         {
             CreatedBy = info.GetValue<Identity>(nameof(CreatedBy));
+            IsExpired = info.GetValue<bool>(nameof(IsExpired));
             ForIdentity = info.GetValue<Identity>(nameof(ForIdentity));
             DefinedPassword = info.GetValue<Password>(nameof(DefinedPassword));
             IsLocked = info.GetValue<bool>(nameof(IsLocked));
@@ -337,6 +338,7 @@ public partial class TokenTryToAccessAccessTests
         public void Serialize(IXunitSerializationInfo info)
         {
             info.AddValue(nameof(CreatedBy), CreatedBy);
+            info.AddValue(nameof(IsExpired), IsExpired);
             info.AddValue(nameof(ForIdentity), ForIdentity);
             info.AddValue(nameof(DefinedPassword), DefinedPassword);
             info.AddValue(nameof(IsLocked), IsLocked);
