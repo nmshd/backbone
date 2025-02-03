@@ -76,16 +76,22 @@ public class Token : Entity
     public IReadOnlyList<TokenAllocation> Allocations => _allocations;
     public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
 
-    public TokenAccessResult TryToAccess(IdentityAddress? address, DeviceId? device, byte[]? password)
+    public TokenAccessResult TryToAccess(IdentityAddress? activeIdentity, DeviceId? device, byte[]? password)
     {
-        if (HasOwner(address))
+        if (HasOwner(activeIdentity))
             return TokenAccessResult.Ok;
 
-        if (HasAllocationForIdentity(address))
+        if (HasAllocationForIdentity(activeIdentity))
             return TokenAccessResult.Ok;
+
+        if (ExpiresAt < SystemTime.UtcNow)
+            return TokenAccessResult.Expired;
 
         if (IsLocked)
             return TokenAccessResult.Locked;
+
+        if (!CanBeAccessAccordingToForIdentity(activeIdentity))
+            return TokenAccessResult.ForIdentityDoesNotMatch;
 
         if (!IsPasswordCorrect(password))
         {
@@ -94,12 +100,17 @@ public class Token : Entity
             return IsLocked ? TokenAccessResult.Locked : TokenAccessResult.WrongPassword;
         }
 
-        if (address == null)
+        if (activeIdentity == null)
             return TokenAccessResult.Ok;
 
-        AllocateFor(address, device);
+        AllocateFor(activeIdentity, device);
 
         return TokenAccessResult.AllocationAdded;
+    }
+
+    private bool CanBeAccessAccordingToForIdentity(IdentityAddress? address)
+    {
+        return CreatedBy == address || ForIdentity == null || ForIdentity == address;
     }
 
     private void AllocateFor(IdentityAddress address, DeviceId? device)
@@ -132,6 +143,11 @@ public class Token : Entity
         ForIdentity = anonymousIdentity;
     }
 
+    private void EnsureIsPersonalized()
+    {
+        if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
+    }
+
     public void AnonymizeTokenAllocation(IdentityAddress address, string didDomainName)
     {
         var tokenAllocation = _allocations.Find(a => a.AllocatedBy == address) ?? throw new DomainException(DomainErrors.NoAllocationForIdentity());
@@ -143,23 +159,14 @@ public class Token : Entity
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
-        if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
-    }
-
-    public void EnsureIsPersonalized()
-    {
-        if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
+        if (CreatedBy != identityAddress)
+            throw new DomainActionForbiddenException();
     }
 
     #region Expressions
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
-
-    public static Expression<Func<Token, bool>> CanBeCollectedBy(IdentityAddress? address)
-    {
-        return token => token.ForIdentity == null || token.ForIdentity == address || token.CreatedBy == address;
-    }
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
@@ -171,22 +178,9 @@ public class Token : Entity
         return r => r.Id == id;
     }
 
-    public static Expression<Func<Token, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
-    {
-        return token =>
-            token.Password == null ||
-            token.Password == password ||
-            token.CreatedBy == address; // The owner shouldn't need a password to get the template
-    }
-
     public static Expression<Func<Token, bool>> IsFor(IdentityAddress identityAddress)
     {
         return token => token.ForIdentity == identityAddress;
-    }
-
-    private static Expression<Func<Token, bool>> WasCreatedBy(string createdBy)
-    {
-        return token => token.CreatedBy == createdBy;
     }
 
     public static Expression<Func<Token, bool>> HasAllocationFor(IdentityAddress identityAddress)
@@ -202,5 +196,7 @@ public enum TokenAccessResult
     Ok,
     AllocationAdded,
     WrongPassword,
-    Locked
+    ForIdentityDoesNotMatch,
+    Locked,
+    Expired
 }
