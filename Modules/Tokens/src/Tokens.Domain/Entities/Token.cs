@@ -75,6 +75,7 @@ public class Token : Entity
 
     public IReadOnlyList<TokenAllocation> Allocations => _allocations;
     public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
+    public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
 
     public TokenAccessResult TryToAccess(IdentityAddress? activeIdentity, DeviceId? device, byte[]? password)
     {
@@ -84,7 +85,7 @@ public class Token : Entity
         if (HasAllocationForIdentity(activeIdentity))
             return TokenAccessResult.Ok;
 
-        if (ExpiresAt < SystemTime.UtcNow)
+        if (IsExpired)
             return TokenAccessResult.Expired;
 
         if (IsLocked)
@@ -145,7 +146,8 @@ public class Token : Entity
 
     private void EnsureIsPersonalized()
     {
-        if (ForIdentity == null) throw new DomainException(DomainErrors.TokenNotPersonalized());
+        if (ForIdentity == null)
+            throw new DomainException(DomainErrors.TokenNotPersonalized());
     }
 
     public void AnonymizeTokenAllocation(IdentityAddress address, string didDomainName)
