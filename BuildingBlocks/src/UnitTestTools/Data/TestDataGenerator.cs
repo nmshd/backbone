@@ -16,7 +16,7 @@ public static class TestDataGenerator
 
     public static IdentityAddress CreateRandomIdentityAddress()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "prod.enmeshed.eu");
+        return IdentityAddress.Create(CreateRandomBytes(), "localhost");
     }
 
     public static DeviceId CreateRandomDeviceId()

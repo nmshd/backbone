@@ -71,7 +71,9 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         var registrations = await _pnsRegistrationsRepository.FindByDeviceIds(deviceIds, cancellationToken);
 
-        var groups = registrations.GroupBy(registration => registration.Handle.Platform);
+        var groups = registrations
+            .DistinctBy(r => r.Handle) // Since there can be multiple registrations with the same handle, we should make sure we send the same push notification only once per handle
+            .GroupBy(r => r.Handle.Platform);
 
         foreach (var group in groups)
         {

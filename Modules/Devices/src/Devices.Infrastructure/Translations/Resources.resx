@@ -178,10 +178,10 @@
         <value>Your backup device was used.</value>
     </data>
     <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
-        <value />
+        <value>New updates are available in the app.</value>
     </data>
     <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
-        <value />
+        <value>Updates available</value>
     </data>
     <data name="TokenLockedPushNotification.Title" xml:space="preserve">
         <value>Token locked</value>

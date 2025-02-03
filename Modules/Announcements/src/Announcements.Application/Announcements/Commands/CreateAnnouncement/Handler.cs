@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Announcements.Application.Announcements.DTOs;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Announcements.Application.Announcements.DTOs;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
@@ -16,9 +17,11 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
 
     public async Task<AnnouncementDTO> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
+        var announcementRecipients = request.Recipients.Select(r => new AnnouncementRecipient(IdentityAddress.Parse(r)));
+
         var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
 
-        var announcement = new Announcement(request.Severity, texts, request.ExpiresAt);
+        var announcement = new Announcement(request.Severity, texts, request.ExpiresAt, announcementRecipients);
 
         await _announcementsRepository.Add(announcement, cancellationToken);
 

@@ -7,6 +7,7 @@ public class AnnouncementCreatedDomainEvent : DomainEvent
     public required string Id { get; set; }
     public required string Severity { get; set; }
     public required List<AnnouncementCreatedDomainEventText> Texts { get; set; }
+    public required List<string> Recipients { get; set; }
 }
 
 public class AnnouncementCreatedDomainEventText

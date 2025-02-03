@@ -1,0 +1,29 @@
+meta {
+  name: /Announcements
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/Announcements
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "severity": 1,
+    "texts": [
+      {
+        "language": "en",
+        "title": "System Maintenance V2",
+        "body": "The system will be undergoing maintenance on Saturday."
+      }
+    ],
+    "expiresAt": "2023-12-31T23:59:59Z",
+    "recipients": [
+      "did:e:localhost:dids:8234cca0160ff05c785636", 
+      "did:e:localhost:dids:5b8640b14cc9796fbf8d0d"
+    ]
+  }
+}

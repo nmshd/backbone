@@ -1,5 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Domain.Entities;
 using FluentValidation;
 
@@ -14,7 +16,12 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
             .WithMessage("There must be a text for English.");
 
+        RuleFor(x => x.Recipients.Count)
+            .LessThanOrEqualTo(100)
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
+        RuleForEach(x => x.Recipients).ValidId<CreateAnnouncementCommand, IdentityAddress>();
     }
 }
 

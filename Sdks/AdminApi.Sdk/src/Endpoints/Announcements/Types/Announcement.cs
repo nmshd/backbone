@@ -12,6 +12,8 @@ public class Announcement
     public required AnnouncementSeverity Severity { get; set; }
 
     public required IEnumerable<AnnouncementText> Texts { get; set; }
+
+    public required IEnumerable<string> Recipients { get; set; }
 }
 
 public class AnnouncementText

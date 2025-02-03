@@ -3,25 +3,26 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeleted;
 
 public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDeletedDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
+    private readonly IEventBus _eventBus;
 
-    public IdentityDeletedDomainEventHandler(IRelationshipsRepository relationshipsRepository)
+    public IdentityDeletedDomainEventHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
         _relationshipsRepository = relationshipsRepository;
+        _eventBus = eventBus;
     }
 
     public async Task Handle(IdentityDeletedDomainEvent @event)
     {
         var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsAboutDeletedPeer(@event.IdentityAddress, relationships);
-
-        await _relationshipsRepository.Update(relationships);
+        await NotifyRelationshipsAboutDeletedPeer(@event.IdentityAddress, relationships);
     }
 
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
@@ -33,11 +34,11 @@ public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDel
         return relationships;
     }
 
-    private static void NotifyRelationshipsAboutDeletedPeer(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    private async Task NotifyRelationshipsAboutDeletedPeer(string identityToBeDeleted, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            relationship.DeletionOfParticipantStarted(identityToBeDeleted);
+            await _eventBus.Publish(new PeerDeletedDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted));
         }
     }
 }

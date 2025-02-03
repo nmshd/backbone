@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+        xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
 
         </xsd:element>
@@ -77,6 +79,12 @@
     </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
         <value>Il dispositivo di backup è stato utilizzato.</value>
+    </data>
+    <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
+        <value>Nuovi aggiornamenti sono disponibili nell'app.</value>
+    </data>
+    <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
+        <value>Aggiornamenti disponibili</value>
     </data>
     <data name="TokenLockedPushNotification.Title" xml:space="preserve">
         <value>Token bloccato</value>

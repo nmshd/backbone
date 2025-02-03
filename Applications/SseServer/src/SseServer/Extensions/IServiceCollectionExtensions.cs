@@ -65,6 +65,18 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         services.AddAuthentication().AddJwtBearer("default", options =>
         {
             var privateKeyBytes = Convert.FromBase64String(configuration.Authentication.JwtSigningCertificate);

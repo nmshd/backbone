@@ -16,7 +16,7 @@ public class AnnouncementsController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Created(response);

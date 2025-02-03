@@ -12,15 +12,17 @@ public class Announcement : Entity
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         Texts = null!;
+        Recipients = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt)
+    public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
     {
         Id = AnnouncementId.New();
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
         Severity = severity;
         Texts = texts;
+        Recipients = recipients.ToList();
 
         RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
@@ -31,6 +33,8 @@ public class Announcement : Entity
     public AnnouncementSeverity Severity { get; }
 
     public List<AnnouncementText> Texts { get; }
+
+    public List<AnnouncementRecipient> Recipients { get; }
 }
 
 public enum AnnouncementSeverity
