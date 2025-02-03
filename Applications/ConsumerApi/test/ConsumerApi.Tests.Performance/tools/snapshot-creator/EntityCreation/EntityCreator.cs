@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
@@ -190,7 +191,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Domain.Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -224,7 +225,7 @@ public class EntityCreator
                     var relationshipTemplateResponse = await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
                     {
                         Content = [],
-                        ExpiresAt = DateTime.Now.EndOfYear(),
+                        ExpiresAt = DateTime.UtcNow.EndOfYear(),
                         MaxNumberOfAllocations = 1000
                     });
 

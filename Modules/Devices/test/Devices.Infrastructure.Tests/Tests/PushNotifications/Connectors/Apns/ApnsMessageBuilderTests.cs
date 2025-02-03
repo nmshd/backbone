@@ -14,7 +14,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
     public void Built_message_has_all_properties_set()
     {
         // Act
-        var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt").Build();
+        var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt").SetNotificationId("testNotificationId").Build();
 
         // Assert
         request.RequestUri!.ToString().Should().Contain("https://api.development.push.apple.com/3/device/someDeviceId");
@@ -23,6 +23,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
         request.Headers.GetValues("apns-push-type").FirstOrDefault().Should().Be("alert");
         request.Headers.GetValues("apns-priority").FirstOrDefault().Should().Be("5");
         request.Headers.GetValues("Authorization").FirstOrDefault().Should().NotBeNull();
+        request.Headers.GetValues("apns-collapse-id").FirstOrDefault().Should().Be("testNotificationId");
     }
 
     [Fact]
@@ -36,7 +37,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
             .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
                 new TestPushNotification { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .SetNotificationId(1)
+            .SetNotificationId("testNotificationId")
             .Build();
         var actualContent = await request.Content!.ReadAsStringAsync();
 
@@ -44,7 +45,6 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
         actualContent.Should().BeEquivalentToJson(
             """
             {
-                'notId': 1,
                 'content': {
                     'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
                     'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',

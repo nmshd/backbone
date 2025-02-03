@@ -41,6 +41,15 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
     }
 
+    [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name)
+    {
+        var creator = _clientPool.FirstForIdentityName(participant1Name);
+        var peer = _clientPool.FirstForIdentityName(participant2Name);
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
+    }
+
     [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
     public async Task GivenARejectedRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
     {
@@ -85,6 +94,16 @@ internal class RelationshipsStepDefinitions
         var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant1, participant2);
+    }
+
+    [Given($"{RegexFor.SINGLE_THING} was accepted")]
+    public async Task GivenRWasAccepted(string relationshipName)
+    {
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+
+        var clientTo = _clientPool.FirstForIdentityAddress(relationship.To);
+
+        await clientTo.Relationships.AcceptRelationship(relationship.Id, new AcceptRelationshipRequest());
     }
 
     [Given($"{RegexFor.SINGLE_THING} was fully reactivated")]

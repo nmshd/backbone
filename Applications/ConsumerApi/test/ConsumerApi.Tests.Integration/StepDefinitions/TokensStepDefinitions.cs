@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Text;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -67,12 +69,29 @@ internal class TokensStepDefinitions
             var client = _clientPool.FirstForIdentityName(tokenProperties.TokenOwner);
             var forClient = tokenProperties.ForIdentity != "-" ? _clientPool.FirstForIdentityName(tokenProperties.ForIdentity).IdentityData!.Address : null;
             var password = tokenProperties.Password.Trim() != "-" ? Convert.FromBase64String(tokenProperties.Password.Trim()) : null;
+            var allocatedBy = tokenProperties.AllocatedBy.Trim() != "-" ? tokenProperties.AllocatedBy.Split(",").Select(s => s.Trim()).ToList() : [];
 
             var response = await client.Tokens
                 .CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = forClient, Password = password });
 
             _tokensContext.CreateTokenResponses[tokenProperties.TokenName] = response.Result!;
+
+            foreach (var allocatedIdentityName in allocatedBy)
+            {
+                var allocatedClient = _clientPool.FirstForIdentityName(allocatedIdentityName);
+                var allocatedResponse = password != null ? await allocatedClient.Tokens.GetToken(response.Result!.Id, password) : await allocatedClient.Tokens.GetToken(response.Result!.Id);
+                allocatedResponse.Status.Should().Be(HttpStatusCode.OK);
+            }
         }
+    }
+
+    private async Task SendInvalidPasswordsToToken(string tokenName, int numberOfInvalidRequests)
+    {
+        var client = _clientPool.Anonymous;
+        var token = _tokensContext.CreateTokenResponses[tokenName];
+
+        for (var i = 0; i < numberOfInvalidRequests; i++)
+            await client.Tokens.GetTokenUnauthenticated(token.Id);
     }
 
     #endregion
@@ -148,13 +167,7 @@ internal class TokensStepDefinitions
 
         var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-        var queryItems = getRequestPayloadSet.Select(payload =>
-        {
-            var tokenId = _tokensContext.CreateTokenResponses[payload.TokenName].Id;
-            var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
-
-            return new ListTokensQueryItem() { Id = tokenId, Password = password };
-        }).ToList();
+        var queryItems = getRequestPayloadSet.Select(payload => _tokensContext.CreateTokenResponses[payload.TokenName].Id);
 
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(queryItems);
     }
@@ -190,6 +203,7 @@ file class TokenProperties
     public required string TokenOwner { get; set; }
     public required string ForIdentity { get; set; }
     public required string Password { get; set; }
+    public required string AllocatedBy { get; set; }
 }
 
 // ReSharper disable once ClassNeverInstantiated.Local
@@ -197,5 +211,4 @@ file class TokenProperties
 file class GetRequestPayload
 {
     public required string TokenName { get; set; }
-    public required string PasswordOnGet { get; set; }
 }

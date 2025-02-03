@@ -20,6 +20,8 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
         <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.ConsumerApi\Announcements.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />

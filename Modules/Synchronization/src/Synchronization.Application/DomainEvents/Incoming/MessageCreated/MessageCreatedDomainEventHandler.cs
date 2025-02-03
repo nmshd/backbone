@@ -51,7 +51,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
 
         var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload, relationship.Id);
 
-        if (relationship.Status == RelationshipStatus.Terminated)
+        if (relationship.Status is RelationshipStatus.Pending or RelationshipStatus.Terminated)
             externalEvent.BlockDelivery();
 
         await _dbContext.CreateExternalEvent(externalEvent);

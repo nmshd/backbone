@@ -41,6 +41,6 @@ public class Handler : IRequestHandler<DeleteTierCommand>
 
         await _tiersRepository.Remove(tier);
 
-        _ = _eventBus.Publish(new TierDeletedDomainEvent(tier));
+        await _eventBus.Publish(new TierDeletedDomainEvent(tier));
     }
 }

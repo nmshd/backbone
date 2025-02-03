@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Extensions;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
@@ -8,14 +9,16 @@ namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 
 public class AnnouncementsRepository : IAnnouncementsRepository
 {
-    private readonly AnnouncementsDbContext _dbContext;
     private readonly DbSet<Announcement> _announcements;
+    private readonly DbSet<AnnouncementRecipient> _announcementRecipients;
+    private readonly AnnouncementsDbContext _dbContext;
     private readonly IQueryable<Announcement> _readOnlyAnnouncements;
 
     public AnnouncementsRepository(AnnouncementsDbContext dbContext)
     {
         _dbContext = dbContext;
         _announcements = dbContext.Announcements;
+        _announcementRecipients = dbContext.AnnouncementRecipients;
         _readOnlyAnnouncements = dbContext.Announcements.AsNoTracking();
     }
 
@@ -28,6 +31,13 @@ public class AnnouncementsRepository : IAnnouncementsRepository
 
     public Task<List<Announcement>> FindAll(CancellationToken cancellationToken)
     {
-        return _readOnlyAnnouncements.IncludeAll(_dbContext).ToListAsync(cancellationToken);
+        return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
+    }
+
+    public Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _announcementRecipients
+            .Where(filter)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

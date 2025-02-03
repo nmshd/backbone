@@ -11,9 +11,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class PnsRegistrationsRepository : IPnsRegistrationsRepository
 {
-    private readonly DbSet<PnsRegistration> _registrations;
-    private readonly IQueryable<PnsRegistration> _readonlyRegistrations;
     private readonly DevicesDbContext _dbContext;
+    private readonly IQueryable<PnsRegistration> _readonlyRegistrations;
+    private readonly DbSet<PnsRegistration> _registrations;
 
     public PnsRegistrationsRepository(DevicesDbContext dbContext)
     {

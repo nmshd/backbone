@@ -104,8 +104,12 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
-        return await _relationships.IncludeAll(_dbContext).AsSplitQuery().Where(filter).ToListAsync(cancellationToken);
+        return await (track ? _relationships : _readOnlyRelationships)
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
+            .Where(filter)
+            .ToListAsync(cancellationToken);
     }
 }

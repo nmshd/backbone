@@ -19,24 +19,17 @@ public class SseServerClient : ISseServerClient
 
     public async Task SendEvent(string recipient, string eventName)
     {
-        try
+        var request = new SseMessageBuilder(recipient, eventName).Build();
+        var response = await _client.SendAsync(request);
+
+        if (response.StatusCode != HttpStatusCode.OK)
         {
-            var request = new SseMessageBuilder(recipient, eventName).Build();
-            var response = await _client.SendAsync(request);
+            var errorPayload = await response.Content.ReadFromJsonAsync<ErrorPayload>();
 
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                var errorPayload = await response.Content.ReadFromJsonAsync<ErrorPayload>();
+            if (errorPayload is { Code: "error.platform.sseClientNotRegistered" })
+                throw new SseClientNotRegisteredException();
 
-                if (errorPayload is { Code: "error.platform.sseClientNotRegistered" })
-                    throw new SseClientNotRegisteredException();
-
-                throw new Exception("An unexpected error occurred while sending the event.");
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("An unexpected error occurred while sending the event.", ex);
+            throw new Exception("An unexpected error occurred while sending the event.");
         }
     }
 

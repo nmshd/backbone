@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
@@ -24,24 +23,13 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
-        var queryItemsList = queryItems.ToList();
-
-        Expression<Func<Token, bool>> idAndPasswordFilter = template => false;
-
-        foreach (var inputQuery in queryItemsList)
-        {
-            idAndPasswordFilter = idAndPasswordFilter
-                .Or(Token.HasId(TokenId.Parse(inputQuery.Id))
-                    .And(Token.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
-        }
-
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
-            .Where(Token.IsNotExpired)
-            .Where(Token.CanBeCollectedBy(activeIdentity))
-            .Where(idAndPasswordFilter);
+            .IncludeAll(_dbContext)
+            .Where(Token.HasAllocationFor(activeIdentity).Or(Token.WasCreatedBy(activeIdentity)))
+            .Where(t => ids.Contains(t.Id));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
@@ -65,34 +53,13 @@ public class TokensRepository : ITokensRepository
         return dbPaginationResult;
     }
 
-    public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
+    public async Task<Token?> Find(TokenId id, CancellationToken cancellationToken, bool track = false)
     {
-        var token = await _readonlyTokensDbSet
-            .Where(Token.IsNotExpired)
-            .Where(Token.CanBeCollectedBy(activeIdentity))
-            .Where(Token.HasId(id))
-            .FirstOrDefaultAsync(cancellationToken);
+        var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .IncludeAll(_dbContext)
+            .FirstOrDefaultAsync(Token.HasId(id), cancellationToken);
 
         return token;
-    }
-
-    public async Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress activeIdentity, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        if (paginationFilter == null)
-            throw new Exception("A pagination filter has to be provided.");
-
-        var query = _readonlyTokensDbSet.Where(Token.IsNotExpired);
-
-        var idsArray = ids as TokenId[] ?? ids.ToArray();
-
-        if (idsArray.Length != 0)
-            query = query.Where(t => idsArray.Contains(t.Id));
-
-        query = query.Where(Token.CanBeCollectedBy(activeIdentity));
-
-        var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        return dbPaginationResult;
     }
 
     #region Write
@@ -101,6 +68,12 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(Token token, CancellationToken cancellationToken)
+    {
+        _tokensDbSet.Update(token);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken)

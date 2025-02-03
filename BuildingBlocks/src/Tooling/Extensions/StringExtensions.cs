@@ -26,9 +26,4 @@ public static class StringExtensions
     {
         return Encoding.UTF8.GetBytes(text);
     }
-
-    public static bool IsEmpty<T>(this IEnumerable<T> items)
-    {
-        return !items.Any();
-    }
 }

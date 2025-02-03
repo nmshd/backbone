@@ -390,27 +390,6 @@ public class Relationship : Entity
                 auditLogEntry.AnonymizeIdentity(anonymousIdentity);
     }
 
-    public void ParticipantIsToBeDeleted(IdentityAddress identityToBeDeleted, DateTime gracePeriodEndsAt)
-    {
-        var peer = GetPeerOf(identityToBeDeleted);
-
-        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted, gracePeriodEndsAt));
-    }
-
-    public void DeletionOfParticipantCancelled(string identityWithDeletionCancelled)
-    {
-        var peer = GetPeerOf(identityWithDeletionCancelled);
-
-        RaiseDomainEvent(new PeerDeletionCancelledDomainEvent(peer, Id, identityWithDeletionCancelled));
-    }
-
-    public void DeletionOfParticipantStarted(string deletedIdentity)
-    {
-        var peer = GetPeerOf(deletedIdentity);
-
-        RaiseDomainEvent(new PeerDeletedDomainEvent(peer, Id, deletedIdentity));
-    }
-
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> IsBetween(string identity1, string identity2)
