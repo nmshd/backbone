@@ -48,6 +48,9 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
                 await _tokensRepository.Update(token, cancellationToken);
                 throw new ApplicationException(ApplicationErrors.TokenIsLocked());
 
+            case TokenAccessResult.ForIdentityDoesNotMatch or TokenAccessResult.Expired:
+                throw new NotFoundException(nameof(Token));
+
             case TokenAccessResult.Ok:
                 return token;
 
