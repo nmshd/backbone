@@ -1,11 +1,20 @@
-﻿using Backbone.Modules.Tokens.Domain.DomainEvents;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
+using Backbone.Tooling;
 
-namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
+namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
-public class TokenAccessTests : AbstractTestsBase
+public partial class TokenTryToAccessAccessTests : AbstractTestsBase
 {
+    private static readonly IdentityAddress IDENTITY_A = CreateRandomIdentityAddress();
+    private static readonly IdentityAddress IDENTITY_B = CreateRandomIdentityAddress();
+    private static readonly IdentityAddress IDENTITY_C = CreateRandomIdentityAddress();
+
+    private static readonly byte[] PASSWORD_X = [0x01];
+    private static readonly byte[] PASSWORD_Y = [0x02];
+
     [Fact]
     public void An_identity_with_correct_access_gets_an_allocation()
     {
@@ -179,11 +188,81 @@ public class TokenAccessTests : AbstractTestsBase
         result.Should().Be(TokenAccessResult.Locked);
     }
 
-    private static void LockToken(Token token) => SendInvalidAccessRequestsToToken(token, 100);
-
-    private static void SendInvalidAccessRequestsToToken(Token token, int numberOfRequests)
+    [Theory]
+    [ClassData(typeof(TokenAccessTestData))]
+    public void All_possible_scenarios(int _, TokenProperties properties)
     {
+        // Arrange
+        var createdBy = TranslateIdentity(properties.CreatedBy);
+        var forIdentity = TranslateIdentity(properties.ForIdentity);
+        var activeIdentity = TranslateIdentity(properties.ActiveIdentity)!;
+
+        var definedPassword = TranslatePassword(properties.DefinedPassword);
+        var passwordOnGet = TranslatePassword(properties.PasswordOnGet);
+
+        var token = TestData.CreateToken(createdBy!, forIdentity, definedPassword);
+
+        if (properties.HasAllocation)
+            token.TryToAccess(activeIdentity, CreateRandomDeviceId(), definedPassword);
+
+        if (properties.IsLocked && definedPassword != null)
+            LockToken(token, activeIdentity);
+
+        var numberOfAllocationsBeforeAct = token.Allocations.Count;
+
+        if (properties.IsExpired)
+            SystemTime.Set(token.ExpiresAt.AddDays(1));
+
+        // Act
+        var result = token.TryToAccess(activeIdentity, CreateRandomDeviceId(), passwordOnGet);
+
+        // Assert
+        result.Should().Be(properties.ExpectedResult);
+
+        var numberOfAllocationsAfterAct = token.Allocations.Count;
+
+        var numberOfAddedAllocations = numberOfAllocationsAfterAct - numberOfAllocationsBeforeAct;
+
+        if (result == TokenAccessResult.AllocationAdded)
+            numberOfAddedAllocations.Should().Be(1);
+        else
+            numberOfAddedAllocations.Should().Be(0);
+    }
+
+    private static IdentityAddress? TranslateIdentity(Identity identityName)
+    {
+        return identityName switch
+        {
+            Identity.Anonymous => null,
+            Identity.A => IDENTITY_A,
+            Identity.B => IDENTITY_B,
+            Identity.C => IDENTITY_C,
+            _ => throw new ArgumentOutOfRangeException(nameof(identityName), identityName, null)
+        };
+    }
+
+    private static byte[]? TranslatePassword(Password passwordName)
+    {
+        return passwordName switch
+        {
+            Password.Empty => null,
+            Password.X => PASSWORD_X,
+            Password.Y => PASSWORD_Y,
+            _ => throw new ArgumentOutOfRangeException(nameof(passwordName), passwordName, null)
+        };
+    }
+
+
+    private static void LockToken(Token token, IdentityAddress? addressUsedToLock = null)
+    {
+        SendInvalidAccessRequestsToToken(token, 100, addressUsedToLock);
+    }
+
+    private static void SendInvalidAccessRequestsToToken(Token token, int numberOfRequests, IdentityAddress? addressUsedToLock = null)
+    {
+        addressUsedToLock ??= CreateRandomIdentityAddress();
+
         for (var i = 0; i < numberOfRequests; i++)
-            token.TryToAccess(null, null, null);
+            token.TryToAccess(addressUsedToLock, null, [0x09]);
     }
 }

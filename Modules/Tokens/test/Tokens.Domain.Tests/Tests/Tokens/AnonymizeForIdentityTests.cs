@@ -3,7 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.UnitTestTools.Extensions;
 
-namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
+namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
 public class TokenAnonymizeForIdentityTests : AbstractTestsBase
 {
