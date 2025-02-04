@@ -1,5 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:admin_ui/home/announcements_overview/widgets/language_multi_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -43,6 +44,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
       _AnnouncementTextFormWidget(
         language: 'en',
         formKey: _formKey,
+        onRemove: _remove,
       ),
     );
   }
@@ -55,6 +57,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
@@ -119,10 +122,30 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   },
                 ),
                 Gaps.h16,
+                Row(
+                  children: [
+                    const Expanded(child: Text('Languages (default is English)')),
+                    IconButton.filled(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          _announcementTextWidgets.add(
+                            _AnnouncementTextFormWidget(
+                              formKey: _formKey,
+                              onRemove: _remove,
+                            ),
+                          );
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Gaps.h8,
                 SizedBox(
                   width: double.maxFinite,
-                  height: 200,
-                  child: ListView.builder(
+                  height: double.maxFinite,
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => Gaps.h16,
                     shrinkWrap: true,
                     itemBuilder: (context, index) => _announcementTextWidgets[index],
                     itemCount: _announcementTextWidgets.length,
@@ -162,7 +185,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   );
                 }
 
-                final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
+                await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
                   expiresAt: _selectedExpirationDate?.toIso8601String(),
                   severity: _selectedSeverity!,
                   announcementTexts: announcementTexts,
@@ -181,6 +204,14 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
         ),
       ],
     );
+  }
+
+  void _remove(_AnnouncementTextFormWidget announcementTextWidget) {
+    final index = _announcementTextWidgets.indexWhere((element) => element == announcementTextWidget);
+
+    setState(() {
+      _announcementTextWidgets.removeAt(index);
+    });
   }
 
   void _showSnackbar() {
@@ -206,8 +237,10 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
 class _AnnouncementTextFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final void Function(_AnnouncementTextFormWidget index) onRemove;
   _AnnouncementTextFormWidget({
     required this.formKey,
+    required this.onRemove,
     this.language,
   });
 
@@ -222,28 +255,42 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
 class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: widget._titleController,
-          validator: _validateRequiredField,
-          decoration: InputDecoration(
-            labelText: '${context.l10n.title}*',
-            border: const OutlineInputBorder(),
-          ),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.language == null || widget.language!.isEmpty) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(onPressed: () => widget.onRemove(widget), child: const Text('Remove')),
+                ],
+              ),
+              LanguageMultiSelect(selectedLanguages: const [], onSelectedLanguagesChanged: (languages) {}),
+              Gaps.h8,
+            ],
+            TextFormField(
+              controller: widget._titleController,
+              validator: _validateRequiredField,
+              decoration: InputDecoration(
+                labelText: '${context.l10n.title}*',
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            Gaps.h8,
+            TextFormField(
+              controller: widget._bodyController,
+              validator: _validateRequiredField,
+              decoration: InputDecoration(
+                labelText: '${context.l10n.body}*',
+                border: const OutlineInputBorder(),
+              ),
+            ),
+          ],
         ),
-        Gaps.h8,
-        TextFormField(
-          controller: widget._bodyController,
-          validator: _validateRequiredField,
-          decoration: InputDecoration(
-            labelText: '${context.l10n.body}*',
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        // LanguageMultiSelect(selectedLanguages: selectedLanguages, onSelectedLanguagesChanged: onSelectedLanguagesChanged)
-      ],
+      ),
     );
   }
 
@@ -253,8 +300,4 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
     }
     return null;
   }
-
-  // bool validate() {
-  //   return formKey.currentState!.validate();
-  // }
 }
