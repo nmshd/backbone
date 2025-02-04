@@ -30,4 +30,9 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).ToListAsync(cancellationToken);
     }
+
+    public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
+    {
+        return _readOnlyAnnouncements.IncludeAll(_dbContext).FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+    }
 }
