@@ -3,11 +3,11 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'modals/create_announcement_dialog.dart';
-import 'modals/show_announcement_details_dialog.dart';
 
 class AnnouncementsOverview extends StatefulWidget {
   const AnnouncementsOverview({super.key});
@@ -48,7 +48,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                     ),
                   IconButton.filled(
                     icon: const Icon(Icons.add),
-                    onPressed: () => showCreateAnnouncementDialog(context: context, onAnnouncementCreated: () {}),
+                    onPressed: () => showCreateAnnouncementDialog(context: context, onAnnouncementCreated: _reloadAnnouncements),
                   ),
                 ],
               ),
@@ -64,7 +64,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   rows: _announcements
                       .map(
                         (announcement) => DataRow2(
-                          onTap: () => showAnnouncementDetailsDialog(context: context, announcementTexts: announcement.texts),
+                          onTap: () => context.go('/announcements/${announcement.id}'),
                           cells: [
                             DataCell(Text(announcement.texts.firstWhere((t) => t.language == 'en').title)), // TODO: find a better way
                             DataCell(

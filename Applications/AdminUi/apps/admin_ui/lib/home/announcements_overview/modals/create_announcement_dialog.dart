@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import '../widgets/language_multi_select.dart';
 
 Future<void> showCreateAnnouncementDialog({
   required BuildContext context,
@@ -28,114 +27,65 @@ class _CreateAnnouncementDialog extends StatefulWidget {
 }
 
 class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
-  late String _errorMessage;
+  final _formKey = GlobalKey<FormState>();
 
-  bool _saving = false;
-  final bool _saveSucceeded = false;
-  bool _showRequiredFieldsError = false;
-
-  DateTime? _expiresAt;
-  String? _selectedImpact;
-
-  List<String> _selectedLanguages = [];
+  String? _selectedSeverity;
+  DateTime? _selectedExpirationDate;
   final List<SeverityType> _severityOptions = SeverityType.values;
 
-  final _englishTextController = _LanguageTextController(
-    titleController: TextEditingController(),
-    bodyController: TextEditingController(),
-  );
-  late List<_LanguageTextController> _languageTextControllers;
+  final _announcementTextWidgets = <_AnnouncementTextFormWidget>[];
 
   @override
   void initState() {
     super.initState();
 
-    _errorMessage = '';
-
-    _languageTextControllers = OptionalLanguageType.values.map((language) {
-      return _LanguageTextController(
-        titleController: TextEditingController(),
-        bodyController: TextEditingController(),
-      );
-    }).toList();
+    _announcementTextWidgets.add(
+      _AnnouncementTextFormWidget(
+        language: 'en',
+        formKey: _formKey,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _englishTextController.titleController.dispose();
-    _englishTextController.bodyController.dispose();
-
-    for (final controller in _languageTextControllers) {
-      controller.titleController.dispose();
-      controller.bodyController.dispose();
-    }
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: !_saving,
-      child: AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
-        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
-        content: SizedBox(
-          width: 500,
-          child: SingleChildScrollView(
+    return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
+      contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
+      content: SizedBox(
+        width: 500,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(context.l10n.createAnnouncementDialog_explanation),
                 Gaps.h32,
                 Text('*${context.l10n.required}'),
                 Gaps.h16,
-                if (_showRequiredFieldsError) ...[
-                  Text(
-                    context.l10n.createAnnouncement_pleaseFillAllRequiredFields,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                DropdownButtonFormField(
+                  validator: _validateRequiredField,
+                  decoration: InputDecoration(
+                    labelText: '${context.l10n.createAnnouncementDialog_impact}*',
+                    border: const OutlineInputBorder(),
                   ),
-                  Gaps.h16,
-                ],
-                if (_errorMessage != '') ...[
-                  Text(
-                    _errorMessage,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
-                  Gaps.h16,
-                ],
-                _AnnouncementField(
-                  label: '${context.l10n.title} (${context.l10n.createAnnouncement_english})*',
-                  controller: _englishTextController.titleController,
-                ),
-                _AnnouncementField(
-                  label: '${context.l10n.body} (${context.l10n.createAnnouncement_english})*',
-                  controller: _englishTextController.bodyController,
-                ),
-                LanguageMultiSelect(
-                  selectedLanguages: _selectedLanguages,
-                  onSelectedLanguagesChanged: (selectedLanguages) => setState(() => _selectedLanguages = selectedLanguages),
+                  items: _severityOptions.map((severity) {
+                    return DropdownMenuItem<String>(value: severity.name, child: Text(severity.name));
+                  }).toList(),
+                  onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
                 ),
                 Gaps.h16,
-                ...OptionalLanguageType.values.where((language) => _selectedLanguages.contains(language.name)).map(
-                      (language) => Column(
-                        children: [
-                          _AnnouncementField(
-                            label: '${context.l10n.title} (${_getLanguageLabel(language)})',
-                            controller: _languageTextControllers[language.index].titleController,
-                          ),
-                          _AnnouncementField(
-                            label: '${context.l10n.body} (${_getLanguageLabel(language)})',
-                            controller: _languageTextControllers[language.index].bodyController,
-                          ),
-                        ],
-                      ),
-                    ),
-                Gaps.h8,
                 TextFormField(
-                  readOnly: true,
+                  controller: TextEditingController(text: _selectedExpirationDate != null ? DateFormat.yMd().format(_selectedExpirationDate!) : ''),
                   decoration: InputDecoration(
                     labelText: context.l10n.expiresAt,
                     border: const OutlineInputBorder(),
@@ -146,116 +96,91 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
-                          lastDate: DateTime(2100),
+                          lastDate: DateTime.now().add(const Duration(days: 365)),
                         );
 
-                        if (selectedDate != null) setState(() => _expiresAt = selectedDate);
+                        if (selectedDate != null) {
+                          setState(() => _selectedExpirationDate = selectedDate);
+                        }
                       },
                     ),
                   ),
-                  controller: TextEditingController(text: _expiresAt != null ? DateFormat.yMd().format(_expiresAt!) : ''),
+                  onTap: () async {
+                    final selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 365)),
+                    );
+
+                    if (selectedDate != null) {
+                      setState(() => _selectedExpirationDate = selectedDate);
+                    }
+                  },
                 ),
                 Gaps.h16,
-                DropdownButtonFormField<String>(
-                  value: _selectedImpact,
-                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_impact, border: const OutlineInputBorder()),
-                  items: _severityOptions.map((value) {
-                    return DropdownMenuItem<String>(value: value.name, child: Text(value.name));
-                  }).toList(),
-                  onChanged: (newValue) => setState(() => _selectedImpact = newValue),
+                SizedBox(
+                  width: double.maxFinite,
+                  height: 200,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => _announcementTextWidgets[index],
+                    itemCount: _announcementTextWidgets.length,
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        actions: [
-          SizedBox(
-            height: 40,
-            child: OutlinedButton(
-              onPressed: _saving ? null : () => context.pop(),
-              child: Text(context.l10n.cancel),
-            ),
-          ),
-          if (!_saveSucceeded)
-            SizedBox(
-              height: 40,
-              child: FilledButton(
-                onPressed: !_saveSucceeded && !_saving ? _createAnnouncement : null,
-                child: Text(context.l10n.create),
-              ),
-            ),
-        ],
       ),
+      actions: [
+        SizedBox(
+          height: 40,
+          child: OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+        ),
+        SizedBox(
+          height: 40,
+          child: FilledButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final announcementTexts = <AnnouncementText>[];
+
+                for (final announcementTextWidget in _announcementTextWidgets) {
+                  final title = announcementTextWidget._titleController.text;
+                  final body = announcementTextWidget._bodyController.text;
+                  final language = announcementTextWidget.language;
+
+                  announcementTexts.add(
+                    AnnouncementText(
+                      title: title,
+                      body: body,
+                      language: language!,
+                    ),
+                  );
+                }
+
+                final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
+                  expiresAt: _selectedExpirationDate?.toIso8601String(),
+                  severity: _selectedSeverity!,
+                  announcementTexts: announcementTexts,
+                  recipients: [],
+                );
+
+                widget.onAnnouncementCreated();
+                _showSnackbar();
+                if (mounted) {
+                  context.pop();
+                }
+              }
+            },
+            child: Text(context.l10n.create),
+          ),
+        ),
+      ],
     );
-  }
-
-  Future<void> _createAnnouncement() async {
-    if (_expiresAt == null ||
-        _selectedImpact == null ||
-        _englishTextController.titleController.text == '' ||
-        _englishTextController.bodyController.text == '') {
-      setState(() {
-        _showRequiredFieldsError = true;
-      });
-
-      return;
-    }
-
-    setState(() {
-      _showRequiredFieldsError = false;
-      _saving = true;
-    });
-
-    final announcementTexts = <AnnouncementText>[
-      AnnouncementText(
-        language: 'en',
-        title: _englishTextController.titleController.text,
-        body: _englishTextController.bodyController.text,
-      ),
-    ];
-
-    for (final language in OptionalLanguageType.values) {
-      if (_selectedLanguages.contains(language.name)) {
-        announcementTexts.add(
-          AnnouncementText(
-            language: switch (language) {
-              OptionalLanguageType.german => 'de',
-              OptionalLanguageType.portuguese => 'pt',
-              OptionalLanguageType.italian => 'it',
-            }, // TODO: find a better way
-            title: _languageTextControllers[language.index].titleController.text,
-            body: _languageTextControllers[language.index].bodyController.text,
-          ),
-        );
-      }
-    }
-
-    final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
-          expiresAt: _expiresAt!.toIso8601String(),
-          severity: _selectedImpact!,
-          announcementTexts: announcementTexts,
-        );
-
-    if (response.hasError) {
-      _errorMessage = response.error.message;
-      return;
-    }
-
-    _showSnackbar();
-    widget.onAnnouncementCreated();
-    //setState(() => _saveSucceeded = true);
-    context.pop();
-  }
-
-  String _getLanguageLabel(OptionalLanguageType language) {
-    switch (language) {
-      case OptionalLanguageType.german:
-        return context.l10n.createAnnouncement_german;
-      case OptionalLanguageType.portuguese:
-        return context.l10n.createAnnouncement_portuguese;
-      case OptionalLanguageType.italian:
-        return context.l10n.createAnnouncement_italian;
-    }
   }
 
   void _showSnackbar() {
@@ -270,36 +195,66 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-}
 
-class _AnnouncementField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-
-  const _AnnouncementField({
-    required this.controller,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-      ),
-    );
+  String? _validateRequiredField(String? value) {
+    if (value == null || value.isEmpty) {
+      return context.l10n.createAnnouncementDialog_requiredField;
+    }
+    return null;
   }
 }
 
-class _LanguageTextController {
-  final TextEditingController titleController;
-  final TextEditingController bodyController;
+class _AnnouncementTextFormWidget extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
+  _AnnouncementTextFormWidget({
+    required this.formKey,
+    this.language,
+  });
 
-  _LanguageTextController({required this.titleController, required this.bodyController});
+  @override
+  State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
+
+  final String? language;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _bodyController = TextEditingController();
+}
+
+class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: widget._titleController,
+          validator: _validateRequiredField,
+          decoration: InputDecoration(
+            labelText: '${context.l10n.title}*',
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        Gaps.h8,
+        TextFormField(
+          controller: widget._bodyController,
+          validator: _validateRequiredField,
+          decoration: InputDecoration(
+            labelText: '${context.l10n.body}*',
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        // LanguageMultiSelect(selectedLanguages: selectedLanguages, onSelectedLanguagesChanged: onSelectedLanguagesChanged)
+      ],
+    );
+  }
+
+  String? _validateRequiredField(String? value) {
+    if (value == null || value.isEmpty) {
+      return context.l10n.createAnnouncementDialog_requiredField;
+    }
+    return null;
+  }
+
+  // bool validate() {
+  //   return formKey.currentState!.validate();
+  // }
 }

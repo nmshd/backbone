@@ -104,6 +104,7 @@
     "createAnnouncementDialog_impact": "Impact",
     "createAnnouncement_selectLanguage": "Select Language",
     "createAnnouncement_pleaseFillAllRequiredFields": "Please fill all required fields.",
+    "createAnnouncementDialog_requiredField": "This field is required.",
     "createAnnouncement_pleaseSelectImpact": "Please select impact.",
     "createAnnouncement_announcementSuccess": "Announcement created successfully.",
     "createAnnouncement_english": "English",
