@@ -9,12 +9,12 @@ class CreateAnnouncement {
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
-  final List<String> recipients;
+  final List<String>? recipients;
 
   CreateAnnouncement({
     required this.severity,
     required this.texts,
-    required this.recipients,
+    this.recipients,
     this.expiresAt,
   });
 

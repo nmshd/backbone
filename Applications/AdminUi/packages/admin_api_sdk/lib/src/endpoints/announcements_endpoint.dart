@@ -11,14 +11,20 @@ class AnnouncementsEndpoint extends Endpoint {
         transformer: (e) => (e as List).map(AnnouncementOverview.fromJson).toList(),
       );
 
+  Future<ApiResponse<AnnouncementOverview>> getAnnouncement(String announcementId) => get(
+        '/api/v1/Announcements/$announcementId',
+        transformer: AnnouncementOverview.fromJson,
+      );
+
   Future<ApiResponse<CreateAnnouncement>> createAnnouncement({
-    required String? expiresAt,
     required String severity,
     required List<AnnouncementText> announcementTexts,
+    String? expiresAt,
+    List<String>? recipients,
   }) =>
       post(
         '/api/v1/Announcements',
-        data: {'expiresAt': expiresAt, 'severity': severity, 'texts': announcementTexts},
+        data: {'expiresAt': expiresAt, 'severity': severity, 'texts': announcementTexts, 'recipients': recipients},
         transformer: CreateAnnouncement.fromJson,
       );
 }
