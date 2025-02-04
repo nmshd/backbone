@@ -10,7 +10,7 @@ public class DeviceDTO
         Username = device.User.UserName!;
         CreatedAt = device.CreatedAt;
         CreatedByDevice = device.CreatedByDevice;
-        LastLogin = new LastLoginInformation { Time = device.User.LastLoginAt };
+        LastLogin = device.User.LastLoginAt == null ? null : new LastLoginInformation { Time = device.User.LastLoginAt };
         CommunicationLanguage = device.CommunicationLanguage;
         IsBackupDevice = device.IsBackupDevice;
     }
@@ -19,7 +19,7 @@ public class DeviceDTO
     public string Username { get; set; }
     public DateTime CreatedAt { get; set; }
     public string CreatedByDevice { get; set; }
-    public LastLoginInformation LastLogin { get; set; }
+    public LastLoginInformation? LastLogin { get; set; }
     public string CommunicationLanguage { get; set; }
     public bool IsBackupDevice { get; set; }
 }
