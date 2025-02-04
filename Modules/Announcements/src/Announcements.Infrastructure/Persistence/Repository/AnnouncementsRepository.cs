@@ -43,6 +43,6 @@ public class AnnouncementsRepository : IAnnouncementsRepository
 
     public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
     {
-        return _readOnlyAnnouncements.IncludeAll(_dbContext).FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+        return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 }
