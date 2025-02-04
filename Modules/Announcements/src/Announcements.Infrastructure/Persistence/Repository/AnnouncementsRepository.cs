@@ -40,4 +40,9 @@ public class AnnouncementsRepository : IAnnouncementsRepository
             .Where(filter)
             .ExecuteDeleteAsync(cancellationToken);
     }
+
+    public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
+    {
+        return _readOnlyAnnouncements.IncludeAll(_dbContext).FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+    }
 }
