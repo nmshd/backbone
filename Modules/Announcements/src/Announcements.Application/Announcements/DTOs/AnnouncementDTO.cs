@@ -11,6 +11,7 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
             ExpiresAt = announcement.ExpiresAt;
             Severity = announcement.Severity;
             Texts = announcement.Texts.Select(t => new AnnouncementTextDTO(t));
+            Recipients = announcement.Recipients.Select(r => r.Address.ToString());
         }
 
         public string Id { get; set; }
@@ -18,5 +19,6 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
         public DateTime? ExpiresAt { get; set; }
         public AnnouncementSeverity Severity { get; set; }
         public IEnumerable<AnnouncementTextDTO> Texts { get; set; }
+        public IEnumerable<string> Recipients { get; set; }
     }
 }

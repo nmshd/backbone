@@ -1,5 +1,7 @@
 using Backbone.SseServer.Controllers;
 using Backbone.UnitTestTools.Extensions;
+using FakeItEasy;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.SseServerTests;
 
@@ -9,7 +11,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Cannot_register_if_already_registered()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
         queue.Register("testAddress");
 
         // Act
@@ -23,7 +25,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Can_deregister_even_if_not_registered()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
 
         // Act
         var acting = () => queue.Deregister("testAddress");
@@ -36,7 +38,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Cannot_enqueue_for_identity_that_is_not_registered()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
 
         // Act
         var acting = () => queue.EnqueueFor("testAddress", "testEventName", CancellationToken.None);
@@ -49,7 +51,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Cannot_dequeue_for_identity_that_is_not_registered()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
 
         // Act
         var acting = () => queue.DequeueFor("testAddress", CancellationToken.None);
@@ -62,7 +64,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Dequeue_returns_elements_from_the_queue()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
         queue.Register("testAddress");
 
         await queue.EnqueueFor("testAddress", "event1", CancellationToken.None);
@@ -81,7 +83,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Dequeue_only_returns_elements_for_the_given_identity()
     {
         // Arrange
-        var queue = new EventQueue();
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
         queue.Register("testAddress1");
         queue.Register("testAddress2");
 

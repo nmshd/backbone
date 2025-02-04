@@ -6,18 +6,12 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 
 public class ListTokensQuery : IRequest<ListTokensResponse>
 {
-    public ListTokensQuery(PaginationFilter paginationFilter, IEnumerable<ListTokensQueryItem>? queries)
+    public ListTokensQuery(PaginationFilter paginationFilter, IEnumerable<string>? ids)
     {
         PaginationFilter = paginationFilter;
-        QueryItems = queries == null ? [] : queries.ToList();
+        Ids = ids == null ? [] : ids.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }
-    public List<ListTokensQueryItem> QueryItems { get; set; }
-}
-
-public class ListTokensQueryItem
-{
-    public required string Id { get; set; }
-    public byte[]? Password { get; set; }
+    public List<string> Ids { get; set; }
 }

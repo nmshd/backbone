@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.ConsumerApi;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -93,6 +94,7 @@ public class Program
                 services.AddTransient(typeof(IHostedService), worker);
 
                 services
+                    .AddModule<AnnouncementsModule>(configuration)
                     .AddModule<DevicesModule>(configuration)
                     .AddModule<RelationshipsModule>(configuration)
                     .AddModule<ChallengesModule>(configuration)

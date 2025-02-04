@@ -8,7 +8,7 @@ namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
 public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
 {
     [Fact]
-    public void Throws_if_relationship_is_pending()
+    public void Does_not_throw_if_relationship_is_pending()
     {
         // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Pending);
@@ -17,7 +17,7 @@ public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
+        acting.Should().NotThrow<Exception>();
     }
 
     [Fact]
