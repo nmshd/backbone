@@ -1,7 +1,11 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
+
+import '/core/core.dart';
 
 class AnnouncementDetails extends StatefulWidget {
   final String announcementId;
@@ -34,12 +38,54 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
   Widget build(BuildContext context) {
     if (_announcmentDetails == null) return const Center(child: CircularProgressIndicator());
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AnnouncementsTextTable(announcementTexts: _announcmentDetails!.texts),
-        ],
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: _loadAnnouncement,
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text('Announcement Detail', style: Theme.of(context).textTheme.headlineLarge),
+                    const SizedBox(height: 32),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        CopyableEntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcmentDetails!.severity),
+                        EntityDetails(
+                          title: context.l10n.createdAt,
+                          value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.createdAt),
+                        ),
+                        if (_announcmentDetails!.expiresAt != null)
+                          EntityDetails(
+                            title: context.l10n.expiresAt,
+                            value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.expiresAt!),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _AnnouncementsTextTable(announcementTexts: _announcmentDetails!.texts),
+          ],
+        ),
       ),
     );
   }
@@ -55,33 +101,38 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
   }
 }
 
-class AnnouncementsTextTable extends StatelessWidget {
+class _AnnouncementsTextTable extends StatelessWidget {
   final List<AnnouncementText> announcementTexts;
 
-  const AnnouncementsTextTable({
+  const _AnnouncementsTextTable({
     required this.announcementTexts,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return DataTable(
-      columns: const <DataColumn>[
-        DataColumn(label: Text('Language')),
-        DataColumn(label: Text('Title')),
-        DataColumn(label: Text('Text')),
-      ],
-      rows: announcementTexts
-          .map(
-            (announcementText) => DataRow(
-              cells: [
-                DataCell(Text(announcementText.language)),
-                DataCell(Text(announcementText.title)),
-                DataCell(Text(announcementText.body)),
-              ],
-            ),
-          )
-          .toList(),
+    return Card(
+      child: SizedBox(
+        width: double.infinity,
+        height: 500,
+        child: DataTable2(
+          columns: const <DataColumn>[
+            DataColumn2(label: Text('Language')),
+            DataColumn2(label: Text('Title')),
+            DataColumn2(label: Text('Text')),
+          ],
+          rows: announcementTexts
+              .map(
+                (announcementText) => DataRow(
+                  cells: [
+                    DataCell(Text(announcementText.language)),
+                    DataCell(Text(announcementText.title)),
+                    DataCell(Text(announcementText.body)),
+                  ],
+                ),
+              )
+              .toList(),
+        ),
+      ),
     );
   }
 }
