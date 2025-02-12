@@ -4,5 +4,5 @@ namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 public interface IQueryParameterStorage
 {
-    public NameValueCollection ToQueryParameters();
+    NameValueCollection ToQueryParameters();
 }
