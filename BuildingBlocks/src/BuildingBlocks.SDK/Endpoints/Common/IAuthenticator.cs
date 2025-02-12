@@ -2,5 +2,5 @@
 
 public interface IAuthenticator
 {
-    public Task Authenticate(HttpRequestMessage request);
+    Task Authenticate(HttpRequestMessage request);
 }
