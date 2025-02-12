@@ -2,10 +2,10 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="8.2.0" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.413.1" />
+        <PackageReference Include="AWSSDK.S3" Version="3.7.414.2" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.3" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
-        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.20.0" />
+        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.21.0" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.10.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.1" />
@@ -17,7 +17,7 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
-        <PackageReference Include="Polly" Version="8.5.1" />
+        <PackageReference Include="Polly" Version="8.5.2" />
         <PackageReference Include="RabbitMQ.Client" Version="7.0.0" />
         <PackageReference Include="Serilog" Version="4.2.0" />
         <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
