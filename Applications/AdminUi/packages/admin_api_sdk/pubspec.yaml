@@ -2,7 +2,7 @@ name: admin_api_sdk
 version: 1.0.0
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: "^3.7.0"
 
 dependencies:
   admin_api_types: ^1.0.0
