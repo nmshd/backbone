@@ -38,12 +38,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (kIsDesktop)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: _reloadTiers,
-                      tooltip: context.l10n.reload,
-                    ),
+                  if (kIsDesktop) IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadTiers, tooltip: context.l10n.reload),
                   Gaps.w8,
                   IconButton.filled(
                     icon: const Icon(Icons.add),
@@ -62,18 +57,15 @@ class _TiersOverviewState extends State<TiersOverview> {
                     DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
                   ],
-                  rows: _tiers
-                      .map(
-                        (tier) => DataRow2(
-                          onTap: () => context.go('/tiers/${tier.id}'),
-                          cells: [
-                            DataCell(Text(tier.id)),
-                            DataCell(Text(tier.name)),
-                            DataCell(Text('${tier.numberOfIdentities}')),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                  rows:
+                      _tiers
+                          .map(
+                            (tier) => DataRow2(
+                              onTap: () => context.go('/tiers/${tier.id}'),
+                              cells: [DataCell(Text(tier.id)), DataCell(Text(tier.name)), DataCell(Text('${tier.numberOfIdentities}'))],
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
             ],

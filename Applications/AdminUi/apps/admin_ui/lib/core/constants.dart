@@ -19,7 +19,8 @@ class Gaps {
   static const SizedBox w40 = SizedBox(width: 40);
 }
 
-final kIsDesktop = !kIsWeb &&
+final kIsDesktop =
+    !kIsWeb &&
     (defaultTargetPlatform == TargetPlatform.linux ||
         defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.windows);

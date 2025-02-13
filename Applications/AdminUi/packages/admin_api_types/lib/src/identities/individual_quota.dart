@@ -11,12 +11,7 @@ class IndividualQuota {
   final int max;
   final String period;
 
-  IndividualQuota({
-    required this.id,
-    required this.metric,
-    required this.max,
-    required this.period,
-  });
+  IndividualQuota({required this.id, required this.metric, required this.max, required this.period});
 
   factory IndividualQuota.fromJson(dynamic json) => _$IndividualQuotaFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IndividualQuotaToJson(this);

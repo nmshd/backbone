@@ -11,7 +11,5 @@ Future<void> setup() async {
     setWindowMinSize(const Size(1200, 800));
   }
 
-  GetIt.I.registerSingleton<AppConfig>(
-    AppConfig(baseUrl: const String.fromEnvironment('base_url')),
-  );
+  GetIt.I.registerSingleton<AppConfig>(AppConfig(baseUrl: const String.fromEnvironment('base_url')));
 }

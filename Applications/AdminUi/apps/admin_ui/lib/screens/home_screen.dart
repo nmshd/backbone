@@ -56,14 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (index) {
-              context.go(
-                switch (index) {
-                  0 => '/identities',
-                  1 => '/tiers',
-                  2 => '/clients',
-                  _ => throw Exception(),
-                },
-              );
+              context.go(switch (index) {
+                0 => '/identities',
+                1 => '/tiers',
+                2 => '/clients',
+                _ => throw Exception(),
+              });
             },
           ),
           Expanded(child: widget.child),

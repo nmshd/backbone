@@ -15,13 +15,7 @@ class AdminApiClient {
   late final MetricsEndpoint metrics;
 
   AdminApiClient._(String baseUrl, String apiKey) {
-    final dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        headers: {'X-API-KEY': apiKey},
-        validateStatus: (_) => true,
-      ),
-    );
+    final dio = Dio(BaseOptions(baseUrl: baseUrl, headers: {'X-API-KEY': apiKey}, validateStatus: (_) => true));
     _dio = dio;
 
     clients = ClientsEndpoint(dio);
@@ -50,14 +44,8 @@ class AdminApiClient {
 
   static Future<bool> validateApiKey({required String baseUrl, required String apiKey}) async {
     final isValidResponse = await Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        validateStatus: (status) => status == 200,
-      ),
-    ).post<Map<String, dynamic>>(
-      '/api/v1/validateApiKey',
-      data: {'apiKey': apiKey},
-    );
+      BaseOptions(baseUrl: baseUrl, validateStatus: (status) => status == 200),
+    ).post<Map<String, dynamic>>('/api/v1/validateApiKey', data: {'apiKey': apiKey});
 
     final isValid = isValidResponse.data!['isValid'] as bool;
     return isValid;

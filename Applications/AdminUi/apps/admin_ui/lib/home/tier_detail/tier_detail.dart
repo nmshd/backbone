@@ -49,16 +49,7 @@ class _TierDetailState extends State<TierDetail> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (kIsDesktop)
-              Row(
-                children: [
-                  const BackButton(),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: _reload,
-                    tooltip: context.l10n.reload,
-                  ),
-                ],
-              ),
+              Row(children: [const BackButton(), IconButton(icon: const Icon(Icons.refresh), onPressed: _reload, tooltip: context.l10n.reload)]),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -115,19 +106,16 @@ class _QuotaListState extends State<_QuotaList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.quotas),
-        subtitle: isQueuedForDeletionTier
-            ? Text(context.l10n.tierDetails_quotaList_titleDescription_readOnly)
-            : Text(context.l10n.tierDetails_quotaList_titleDescription),
+        subtitle:
+            isQueuedForDeletionTier
+                ? Text(context.l10n.tierDetails_quotaList_titleDescription_readOnly)
+                : Text(context.l10n.tierDetails_quotaList_titleDescription),
         children: [
           Card(
             child: Column(
               children: [
                 if (!isQueuedForDeletionTier)
-                  QuotasButtonGroup(
-                    selectedQuotas: _selectedQuotas,
-                    onQuotasChanged: widget.onQuotasChanged,
-                    tierId: widget.tierDetails.id,
-                  ),
+                  QuotasButtonGroup(selectedQuotas: _selectedQuotas, onQuotasChanged: widget.onQuotasChanged, tierId: widget.tierDetails.id),
                 SizedBox(
                   width: double.infinity,
                   height: 500,
@@ -138,19 +126,16 @@ class _QuotaListState extends State<_QuotaList> {
                       DataColumn(label: Text(context.l10n.period)),
                     ],
                     empty: Text(context.l10n.tierDetails_quotaList_noQuotaForTier),
-                    rows: widget.tierDetails.quotas
-                        .map(
-                          (quota) => DataRow2(
-                            cells: [
-                              DataCell(Text(quota.metric.displayName)),
-                              DataCell(Text(quota.max.toString())),
-                              DataCell(Text(quota.period)),
-                            ],
-                            onSelectChanged: isQueuedForDeletionTier ? null : (_) => _toggleSelection(quota.id),
-                            selected: _selectedQuotas.contains(quota.id),
-                          ),
-                        )
-                        .toList(),
+                    rows:
+                        widget.tierDetails.quotas
+                            .map(
+                              (quota) => DataRow2(
+                                cells: [DataCell(Text(quota.metric.displayName)), DataCell(Text(quota.max.toString())), DataCell(Text(quota.period))],
+                                onSelectChanged: isQueuedForDeletionTier ? null : (_) => _toggleSelection(quota.id),
+                                selected: _selectedQuotas.contains(quota.id),
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
               ],

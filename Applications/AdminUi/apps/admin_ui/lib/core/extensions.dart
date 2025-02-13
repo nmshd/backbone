@@ -22,18 +22,10 @@ extension GetCustomColors on BuildContext {
 }
 
 extension SetClipboardDataWithSnack on BuildContext {
-  void setClipboardDataWithSuccessNotification({
-    required String clipboardText,
-    required String successMessage,
-  }) {
+  void setClipboardDataWithSuccessNotification({required String clipboardText, required String successMessage}) {
     Clipboard.setData(ClipboardData(text: clipboardText));
 
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(successMessage),
-        showCloseIcon: true,
-      ),
-    );
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(successMessage), showCloseIcon: true));
   }
 }
 

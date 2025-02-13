@@ -7,10 +7,7 @@ class CreateTierResponse {
   final String id;
   final String name;
 
-  CreateTierResponse({
-    required this.id,
-    required this.name,
-  });
+  CreateTierResponse({required this.id, required this.name});
 
   factory CreateTierResponse.fromJson(dynamic json) => _$CreateTierResponseFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$CreateTierResponseToJson(this);

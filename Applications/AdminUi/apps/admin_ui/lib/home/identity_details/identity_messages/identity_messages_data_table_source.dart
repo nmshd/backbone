@@ -17,11 +17,7 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
   final String participant;
   final MessageType type;
 
-  IdentityMessagesDataTableSource({
-    required this.participant,
-    required this.type,
-    required this.locale,
-  });
+  IdentityMessagesDataTableSource({required this.participant, required this.type, required this.locale});
 
   @override
   bool get isRowCountApproximate => false;
@@ -37,47 +33,47 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
     final pageNumber = startIndex ~/ count + 1;
     try {
       final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipant(
-            participant: participant,
-            type: type,
-            pageNumber: pageNumber,
-            pageSize: count,
-          );
+        participant: participant,
+        type: type,
+        pageNumber: pageNumber,
+        pageSize: count,
+      );
 
-      _pagination = response.isPaged
-          ? response.pagination
-          : Pagination(
-              pageNumber: pageNumber,
-              pageSize: count,
-              totalPages: _totalPages(count, response.data),
-              totalRecords: response.data.length,
-            );
+      _pagination =
+          response.isPaged
+              ? response.pagination
+              : Pagination(
+                pageNumber: pageNumber,
+                pageSize: count,
+                totalPages: _totalPages(count, response.data),
+                totalRecords: response.data.length,
+              );
 
-      final rows = response.data.indexed
-          .map(
-            (message) => DataRow2.byIndex(
-              index: pageNumber * count + message.$1,
-              specificRowHeight: message.$2.recipients.length > 3 && type == MessageType.outgoing
-                  ? 100.0
-                  : message.$2.recipients.length == 3 && type == MessageType.outgoing
-                      ? 65.0
-                      : null,
-              cells: [
-                if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
-                if (type == MessageType.incoming) ...[
-                  DataCell(Text(message.$2.senderAddress)),
-                  DataCell(Text(message.$2.senderDevice)),
-                ],
-                DataCell(Text(message.$2.numberOfAttachments.toString())),
-                DataCell(
-                  Tooltip(
-                    message: '${DateFormat.yMd(locale.languageCode).format(message.$2.sendDate)} ${DateFormat.Hms().format(message.$2.sendDate)}',
-                    child: Text(DateFormat.yMd(locale.languageCode).format(message.$2.sendDate)),
-                  ),
+      final rows =
+          response.data.indexed
+              .map(
+                (message) => DataRow2.byIndex(
+                  index: pageNumber * count + message.$1,
+                  specificRowHeight:
+                      message.$2.recipients.length > 3 && type == MessageType.outgoing
+                          ? 100.0
+                          : message.$2.recipients.length == 3 && type == MessageType.outgoing
+                          ? 65.0
+                          : null,
+                  cells: [
+                    if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
+                    if (type == MessageType.incoming) ...[DataCell(Text(message.$2.senderAddress)), DataCell(Text(message.$2.senderDevice))],
+                    DataCell(Text(message.$2.numberOfAttachments.toString())),
+                    DataCell(
+                      Tooltip(
+                        message: '${DateFormat.yMd(locale.languageCode).format(message.$2.sendDate)} ${DateFormat.Hms().format(message.$2.sendDate)}',
+                        child: Text(DateFormat.yMd(locale.languageCode).format(message.$2.sendDate)),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-          .toList();
+              )
+              .toList();
       return AsyncRowsResponse(response.isPaged ? response.pagination.totalPages : _pagination!.totalPages, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');
@@ -104,16 +100,10 @@ class _RecipientsCell extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...displayedRecipients.map(
-          (recipient) => InkWell(
-            onTap: () => context.push('/identities/${recipient.address}'),
-            child: Text(recipient.address),
-          ),
+          (recipient) => InkWell(onTap: () => context.push('/identities/${recipient.address}'), child: Text(recipient.address)),
         ),
         if (recipients.length > 3)
-          FilledButton(
-            onPressed: () => showAllRecipientsDialog(context: context, recipients: recipients),
-            child: Text(context.l10n.showAll),
-          ),
+          FilledButton(onPressed: () => showAllRecipientsDialog(context: context, recipients: recipients), child: Text(context.l10n.showAll)),
       ],
     );
   }

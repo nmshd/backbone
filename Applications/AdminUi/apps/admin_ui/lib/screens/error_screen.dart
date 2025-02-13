@@ -6,10 +6,7 @@ import '/core/core.dart';
 class ErrorScreen extends StatelessWidget {
   final String errorMessage;
 
-  const ErrorScreen({
-    required this.errorMessage,
-    super.key,
-  });
+  const ErrorScreen({required this.errorMessage, super.key});
 
   @override
   Widget build(BuildContext context) {

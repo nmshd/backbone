@@ -45,11 +45,7 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/error',
-      builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString()),
-    ),
+    GoRoute(parentNavigatorKey: _rootNavigatorKey, path: '/error', builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString())),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
@@ -68,19 +64,19 @@ final _router = GoRouter(
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-details/:deletionProcessId',
-                  pageBuilder: (context, state) => NoTransitionPage(
-                    child: DeletionProcessDetails(
-                      address: state.pathParameters['address']!,
-                      deletionProcessId: state.pathParameters['deletionProcessId']!,
-                    ),
-                  ),
+                  pageBuilder:
+                      (context, state) => NoTransitionPage(
+                        child: DeletionProcessDetails(
+                          address: state.pathParameters['address']!,
+                          deletionProcessId: state.pathParameters['deletionProcessId']!,
+                        ),
+                      ),
                 ),
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-audit-logs',
-                  pageBuilder: (context, state) => NoTransitionPage(
-                    child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
-                  ),
+                  pageBuilder:
+                      (context, state) => NoTransitionPage(child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!)),
                 ),
               ],
             ),
@@ -126,18 +122,8 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
     return MaterialApp.router(
       title: 'Admin UI',
       themeMode: themeMode,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: lightColorScheme,
-        cardTheme: cardThemeLight,
-        extensions: [lightCustomColors],
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: darkColorScheme,
-        cardTheme: cardThemeDark,
-        extensions: [darkCustomColors],
-      ),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme, cardTheme: cardThemeLight, extensions: [lightCustomColors]),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme, cardTheme: cardThemeDark, extensions: [darkCustomColors]),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

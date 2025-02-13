@@ -12,14 +12,9 @@ class QuotasButtonGroup extends StatefulWidget {
   final String? identityAddress;
   final String? tierId;
 
-  const QuotasButtonGroup({
-    required this.selectedQuotas,
-    required this.onQuotasChanged,
-    this.identityAddress,
-    this.tierId,
-    super.key,
-  })  : assert(identityAddress != null || tierId != null, 'Either identityAddress or tierId must be provided'),
-        assert(identityAddress == null || tierId == null, 'Only one of identityAddress or tierId can be provided');
+  const QuotasButtonGroup({required this.selectedQuotas, required this.onQuotasChanged, this.identityAddress, this.tierId, super.key})
+    : assert(identityAddress != null || tierId != null, 'Either identityAddress or tierId must be provided'),
+      assert(identityAddress == null || tierId == null, 'Only one of identityAddress or tierId can be provided');
 
   @override
   State<QuotasButtonGroup> createState() => _QuotasButtonGroupState();
@@ -34,10 +29,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-            ),
+            icon: Icon(Icons.delete, color: widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.resolveWith((states) {
                 return widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
@@ -48,12 +40,13 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
           Gaps.w8,
           IconButton.filled(
             icon: const Icon(Icons.add),
-            onPressed: () => showAddQuotaDialog(
-              context: context,
-              identityAddress: widget.identityAddress,
-              tierId: widget.tierId,
-              onQuotaAdded: widget.onQuotasChanged,
-            ),
+            onPressed:
+                () => showAddQuotaDialog(
+                  context: context,
+                  identityAddress: widget.identityAddress,
+                  tierId: widget.tierId,
+                  onQuotaAdded: widget.onQuotasChanged,
+                ),
           ),
         ],
       ),
@@ -74,12 +67,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     for (final quota in widget.selectedQuotas) {
       final result = await _deleteQuota(quota);
       if (result.hasError && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota),
-            showCloseIcon: true,
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota), showCloseIcon: true));
 
         return;
       }
@@ -88,12 +76,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     widget.onQuotasChanged();
     widget.selectedQuotas.clear();
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.quotaButtonGroup_selectedQuotaRemoved),
-          showCloseIcon: true,
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.quotaButtonGroup_selectedQuotaRemoved), showCloseIcon: true));
     }
   }
 

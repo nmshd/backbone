@@ -5,14 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-Future<void> showChangeClientSecretDialog({
-  required BuildContext context,
-  required String clientId,
-}) async {
-  await showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId),
-  );
+Future<void> showChangeClientSecretDialog({required BuildContext context, required String clientId}) async {
+  await showDialog<void>(context: context, builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId));
 }
 
 class _ChangeClientSecretDialog extends StatefulWidget {
@@ -95,18 +89,12 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
               if (_saveSucceeded)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    context.l10n.clientSecret_save_message,
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
+                  child: Text(context.l10n.clientSecret_save_message, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                 ),
               if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
+                  child: Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
             ],
           ),

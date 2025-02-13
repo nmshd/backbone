@@ -4,10 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '/core/extensions.dart';
 
-Future<void> showAllRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) => showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => _AllRecipientsDialog(recipients: recipients),
-    );
+Future<void> showAllRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) =>
+    showDialog<void>(context: context, builder: (BuildContext context) => _AllRecipientsDialog(recipients: recipients));
 
 class _AllRecipientsDialog extends StatefulWidget {
   final List<MessageRecipient> recipients;
@@ -28,28 +26,24 @@ class _AllRecipientsDialogState extends State<_AllRecipientsDialog> {
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: widget.recipients
-              .map(
-                (recipient) => Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: InkWell(
-                    onTap: () {
-                      context.push('/identities/${recipient.address}');
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(recipient.address),
-                  ),
-                ),
-              )
-              .toList(),
+          children:
+              widget.recipients
+                  .map(
+                    (recipient) => Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: InkWell(
+                        onTap: () {
+                          context.push('/identities/${recipient.address}');
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(recipient.address),
+                      ),
+                    ),
+                  )
+                  .toList(),
         ),
       ),
-      actions: [
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.close),
-        ),
-      ],
+      actions: [OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.close))],
     );
   }
 }

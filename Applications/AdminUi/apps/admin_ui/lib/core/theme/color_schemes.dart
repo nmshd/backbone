@@ -33,8 +33,4 @@ final darkColorScheme = SeedColorScheme.fromSeeds(
   tones: FlexTones.material(Brightness.dark),
 );
 
-final cardThemeDark = CardTheme(
-  color: darkColorScheme.surface,
-  shadowColor: darkColorScheme.shadow,
-  surfaceTintColor: darkColorScheme.surfaceTint,
-);
+final cardThemeDark = CardTheme(color: darkColorScheme.surface, shadowColor: darkColorScheme.shadow, surfaceTintColor: darkColorScheme.surfaceTint);

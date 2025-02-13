@@ -184,14 +184,15 @@ class _IdentityDetailsCard extends StatelessWidget {
                 EntityDetails(
                   title: context.l10n.tier,
                   value: currentTier.name,
-                  onIconPressed: currentTier.canBeManuallyAssigned
-                      ? () => showChangeTierDialog(
+                  onIconPressed:
+                      currentTier.canBeManuallyAssigned
+                          ? () => showChangeTierDialog(
                             context: context,
                             onTierUpdated: updateTierOfIdentity,
                             identityDetails: identityDetails,
                             availableTiers: availableTiers,
                           )
-                      : null,
+                          : null,
                   icon: Icons.edit,
                   tooltipMessage: context.l10n.changeTier,
                 ),

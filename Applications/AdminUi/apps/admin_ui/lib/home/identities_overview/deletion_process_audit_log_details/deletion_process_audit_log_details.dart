@@ -9,10 +9,7 @@ import '/core/core.dart';
 class DeletionProcessAuditLogDetails extends StatefulWidget {
   final String identityAddress;
 
-  const DeletionProcessAuditLogDetails({
-    required this.identityAddress,
-    super.key,
-  });
+  const DeletionProcessAuditLogDetails({required this.identityAddress, super.key});
 
   @override
   State<DeletionProcessAuditLogDetails> createState() => _DeletionProcessAuditLogDetailsState();
@@ -42,11 +39,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
           Row(
             children: [
               const BackButton(),
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: _reloadIdentityDeletionProcessAuditLogs,
-                tooltip: context.l10n.reload,
-              ),
+              IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadIdentityDeletionProcessAuditLogs, tooltip: context.l10n.reload),
             ],
           ),
         Card(
@@ -61,9 +54,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   }
 
   Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
-    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(
-          address: widget.identityAddress,
-        );
+    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(address: widget.identityAddress);
 
     if (!mounted) return;
 

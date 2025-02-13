@@ -10,11 +10,7 @@ class TierDetails {
   final String name;
   final List<TierQuotaDefinition> quotas;
 
-  TierDetails({
-    required this.id,
-    required this.name,
-    required this.quotas,
-  });
+  TierDetails({required this.id, required this.name, required this.quotas});
 
   factory TierDetails.fromJson(dynamic json) => _$TierDetailsFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$TierDetailsToJson(this);

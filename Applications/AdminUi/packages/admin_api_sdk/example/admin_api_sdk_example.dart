@@ -17,19 +17,13 @@ void main() async {
   final clients = await client.clients.getClients();
   print(clients.data.length);
 
-  final newClient = await client.clients.createClient(
-    defaultTier: basicTierId,
-  );
+  final newClient = await client.clients.createClient(defaultTier: basicTierId);
   print(newClient.data.clientId);
 
   final clientInfo = await client.clients.getClient(newClient.data.clientId);
   print(clientInfo.data.displayName);
 
-  final updatedClient = await client.clients.updateClient(
-    newClient.data.clientId,
-    defaultTier: basicTierId,
-    maxIdentities: 100,
-  );
+  final updatedClient = await client.clients.updateClient(newClient.data.clientId, defaultTier: basicTierId, maxIdentities: 100);
   print(updatedClient.data.maxIdentities);
 
   await client.clients.deleteClient(newClient.data.clientId);
