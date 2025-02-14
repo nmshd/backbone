@@ -21,9 +21,13 @@
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     </ItemGroup>
 
+    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
+    </Target>
+
     <ItemGroup>
-        <None Remove="appsettings.json" />
-        <Content Include="appsettings.json">
+        <Content Include="appsettings.override.json;appsettings.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
