@@ -28,7 +28,7 @@ public class SendAnnouncementCommand : AdminCliDbCommand
         var severity = new Option<string?>("--severity")
         {
             IsRequired = true,
-            Description = "The severity of the announcement."
+            Description = "The severity of the announcement. Possible values: Low, Medium, High"
         };
 
         AddOption(expiresAt);
@@ -43,7 +43,6 @@ public class SendAnnouncementCommand : AdminCliDbCommand
         {
             var severity = severityInput switch
             {
-                _ when string.IsNullOrWhiteSpace(severityInput) => AnnouncementSeverity.Low,
                 _ when Enum.TryParse<AnnouncementSeverity>(severityInput, ignoreCase: true, out var parsedSeverity) => parsedSeverity,
                 _ => throw new ArgumentException($@"Specified severity '{severityInput}' is not a valid severity.")
             };
@@ -62,6 +61,10 @@ public class SendAnnouncementCommand : AdminCliDbCommand
                 Console.WriteLine(@"No texts provided. Exiting...");
                 return;
             }
+
+            Console.WriteLine(@"You entered the following texts:");
+            Console.WriteLine(JsonSerializer.Serialize(texts, JSON_SERIALIZER_OPTIONS));
+            if (!PromptForConfirmation(@"Do you want to proceed? ([y]es/[N]o): ")) return;
 
             Console.WriteLine(@"Sending announcement...");
 
@@ -86,10 +89,22 @@ public class SendAnnouncementCommand : AdminCliDbCommand
     private static List<CreateAnnouncementCommandText> ReadTextsFromCommandLineInput()
     {
         var texts = new List<CreateAnnouncementCommandText>();
-        bool addAnotherLanguage;
-        do
+
+        var englishTitle = PromptForInput(@"Enter english title: ");
+        var englishBody = PromptForInput(@"Enter english body: ");
+
+        if (englishTitle == null || englishBody == null) return texts;
+
+        texts.Add(new CreateAnnouncementCommandText
         {
-            var language = PromptForInput(@"Enter language (e.g. en, de, it, nl). At least 1 must be in english: ");
+            Language = "en",
+            Title = englishTitle,
+            Body = englishBody
+        });
+
+        while (PromptForConfirmation(@"Do you want to add another language? ([y]es/[N]o): "))
+        {
+            var language = PromptForInput(@"Enter a two-letter language code (e.g. de, it, nl): ");
             var title = PromptForInput(@"Enter title: ");
             var body = PromptForInput(@"Enter body: ");
 
@@ -104,31 +119,34 @@ public class SendAnnouncementCommand : AdminCliDbCommand
                 Title = title,
                 Body = body
             });
-
-            var input = PromptForInput(@"Do you want to add another language? ([y]es/[n]o): ");
-            addAnotherLanguage = input?.Trim().ToLower() is "yes" or "y";
-        } while (addAnotherLanguage);
+        }
 
         return texts;
     }
 
-    private static string? PromptForInput(string prompt)
+    private static string? PromptForInput(string prompt, bool allowEmpty = false)
     {
         Console.Write(prompt);
         var input = Console.ReadLine();
 
-        while (string.IsNullOrWhiteSpace(input))
+        while (!allowEmpty && string.IsNullOrWhiteSpace(input))
         {
-            Console.WriteLine($@"Input cannot be empty. Press x to exit.");
+            Console.WriteLine(@"Input cannot be empty. Press x to exit.");
             Console.Write(prompt);
             input = Console.ReadLine();
 
-            if (input == null || !input.Trim().Equals("x", StringComparison.CurrentCultureIgnoreCase)) continue;
+            if (input == null) continue;
+            if (input.Trim().Equals("x", StringComparison.CurrentCultureIgnoreCase)) return null;
 
-            input = null;
             break;
         }
 
         return input;
+    }
+
+    private static bool PromptForConfirmation(string prompt)
+    {
+        var input = PromptForInput(prompt, true);
+        return input?.Trim().ToLower() is "yes" or "y";
     }
 }
