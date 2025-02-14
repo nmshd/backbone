@@ -1,29 +1,19 @@
 {
-  "profiles": {
-    "Start": {
-      "commandName": "Project",
-      "commandLineArgs": "tier list",
-      // enter an existing command here in order to debug it
-      //"commandLineArgs": "client list", // enter an existing command here in order to debug it
-      //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100", // enter an existing command here in order to debug it
-      //"commandLineArgs": "client delete test", // enter an existing command here in order to debug it
-      "environmentVariables": {
-        "Database__Provider": "Postgres",
-        //"Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;" //SqlServer
-          "Database__ConnectionString": "User ID=postgres;Password=admin;Server=host.docker.internal;Port=5432;Database=enmeshed;"
-        //Postgres
-      }
-    },
-      "announcement send": {
-          "commandName": "Project",
-          "commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium",
-          "environmentVariables": {
-              "Database__Provider": "Postgres",
-              "Database__ConnectionString": "User ID=postgres;Password=admin;Server=host.docker.internal;Port=5432;Database=enmeshed;"
-          }
-      }
-
-
-      
-  }
+    "profiles": {
+        "Start": {
+            "commandName": "Project",
+            //"commandLineArgs": "tier list",
+            // enter an existing command here in order to debug it
+            //"commandLineArgs": "client list", // enter an existing command here in order to debug it
+            //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100", // enter an existing command here in order to debug it
+            //"commandLineArgs": "client delete test", // enter an existing command here in order to debug it
+            "commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium",
+            "environmentVariables": {
+                "Database__Provider": "Postgres",
+                //"Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;" //SqlServer
+                "Database__ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
+                //Postgres
+            }
+        }
+    }
 }
