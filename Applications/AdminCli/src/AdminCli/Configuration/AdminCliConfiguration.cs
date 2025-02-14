@@ -20,6 +20,6 @@ public class AdminCliConfiguration
     public class ModulesConfiguration
     {
         [Required]
-        public DevicesCliConfiguration Devices { get; set; } = new();
+        public DevicesConfiguration Devices { get; set; } = new();
     }
 }

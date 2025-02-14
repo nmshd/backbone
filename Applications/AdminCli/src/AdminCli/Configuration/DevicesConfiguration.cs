@@ -3,7 +3,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 namespace Backbone.AdminCli.Configuration;
 
-public class DevicesCliConfiguration
+public class DevicesConfiguration
 {
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
