@@ -37,9 +37,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish/Backbone.AdminCli ./backbone
 
-# Ensure the appsettings.json file is copied to the correct location
-COPY appsettings.json /app/appsettings.json
-
 ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
