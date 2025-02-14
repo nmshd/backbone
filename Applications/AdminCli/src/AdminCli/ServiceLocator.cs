@@ -59,8 +59,8 @@ public class ServiceLocator
         });
 
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true)
             .Build();
         services.AddSingleton<IConfiguration>(configuration);
         services.ConfigureAndValidate<AdminCliConfiguration>(configuration.Bind);
