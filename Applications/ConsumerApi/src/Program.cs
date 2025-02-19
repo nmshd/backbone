@@ -35,6 +35,7 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
@@ -131,7 +132,65 @@ static WebApplication CreateApp(string[] args)
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
+
+    services.AddSwaggerGen(c =>
+    {
+        c.CustomSchemaIds(t =>
+        {
+            static string GetReadableName(Type type)
+            {
+                if (!type.IsGenericType)
+                {
+                    return type.Name
+                        .Replace("DTO", string.Empty)
+                        .Replace("Command", "Request")
+                        .Replace("Query", "Request");
+                }
+
+                var typeName = type.Name
+                    .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
+                    .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
+                var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
+                return name;
+            }
+
+            return GetReadableName(t);
+        });
+
+        c.AddServer(new OpenApiServer { Url = "https://nmshd-bkb.demo.meinbildungsraum.de" });
+        c.AddServer(new OpenApiServer { Url = "https://nmshd-bkb.meinbildungsraum.de" });
+        c.AddServer(new OpenApiServer { Url = "https://pilot.enmeshed.eu" });
+
+        c.AddSecurityDefinition(
+            "oauth2",
+            new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    Password = new OpenApiOAuthFlow
+                    {
+                        TokenUrl = new Uri("/connect/token", UriKind.Relative)
+                    }
+                }
+            });
+
+        c.AddSecurityRequirement(
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = "oauth2", //The name of the previously defined security scheme.
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },
+                    new List<string>()
+                }
+            });
+    });
 
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
