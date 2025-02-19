@@ -14,7 +14,6 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRu
 using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
-using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +38,7 @@ public class SyncRunsController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartSyncRunResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartSyncRunResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> StartSyncRun(StartSyncRunRequestBody requestBody,
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
@@ -47,21 +47,16 @@ public class SyncRunsController : ApiControllerBase
         var identityResponse = await _mediator.Send(new GetIdentityQuery(_userContext.GetAddress()), cancellationToken);
         EnsureIdentityIsNotToBeDeleted(identityResponse);
 
-        var response = await _mediator.Send(new StartSyncRunCommand(
-            requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
-            supportedDatawalletVersion), cancellationToken);
+        var response = await _mediator.Send(new StartSyncRunCommand(requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration, supportedDatawalletVersion), cancellationToken);
 
-        if (response.Status == StartSyncRunStatus.Created)
-            return Created(response);
-
-        return Ok(response);
+        return response.Status == StartSyncRunStatus.Created ? Created(response) : Ok(response);
     }
 
     [HttpPut("{id}/FinalizeExternalEventSync")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
-        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> FinalizeExternalEventSync([FromRoute] SyncRunId id,
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FinalizeExternalEventSync([FromRoute] string id,
         [FromBody] FinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id,
@@ -71,29 +66,27 @@ public class SyncRunsController : ApiControllerBase
     }
 
     [HttpPut("{id}/FinalizeDatawalletVersionUpgrade")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
-        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> FinalizeDatawalletVersionUpgrade([FromRoute] SyncRunId id,
-        [FromBody] FinalizeDatawalletVersionUpgradeRequest request, CancellationToken cancellationToken)
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FinalizeDatawalletVersionUpgrade([FromRoute] string id, [FromBody] FinalizeDatawalletVersionUpgradeRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id,
-            request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
+        var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id, request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
 
         return Ok(response);
     }
 
     [HttpGet("{id}/ExternalEvents")]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetExternalEventsOfSyncRunResponse>),
-        StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetExternalEventsOfSyncRun([FromRoute] SyncRunId id,
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetExternalEventsOfSyncRunResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExternalEventsOfSyncRun([FromRoute] string id,
         [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var response = await _mediator.Send(new GetExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
 
@@ -102,19 +95,19 @@ public class SyncRunsController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<SyncRunDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSyncRunById(SyncRunId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetSyncRunById(string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetSyncRunByIdQuery(id), cancellationToken);
         return Ok(response);
     }
 
     [HttpPut("{id}/RefreshExpirationTime")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RefreshExpirationTimeOfSyncRunResponse>),
-        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RefreshExpirationTimeOfSyncRunResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RefreshExpirationTimeOfSyncRun(SyncRunId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> RefreshExpirationTimeOfSyncRun(string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id), cancellationToken);
         return Ok(response);

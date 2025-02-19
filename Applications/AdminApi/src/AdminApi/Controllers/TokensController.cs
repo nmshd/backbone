@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Application;
@@ -17,7 +18,7 @@ namespace Backbone.AdminApi.Controllers;
 public class TokensController(IMediator mediator, IOptions<ApplicationOptions> options) : ApiControllerBase(mediator)
 {
     [HttpGet]
-    [ProducesResponseType(typeof(List<TokenDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TokenDTO>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokensByIdentity([FromQuery] PaginationFilter paginationFilter, [FromQuery] string createdBy, CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize != null)

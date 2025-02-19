@@ -43,6 +43,7 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetRelationship(string id, CancellationToken cancellationToken)
     {
@@ -52,23 +53,22 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipsResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListRelationships([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ListRelationships([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         var request = new ListRelationshipsQuery(paginationFilter, ids);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var relationships = await _mediator.Send(request, cancellationToken);
         return Paged(relationships);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)

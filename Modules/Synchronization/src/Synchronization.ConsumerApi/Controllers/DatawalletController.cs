@@ -31,6 +31,7 @@ public class DatawalletController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<DatawalletDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDatawalletQuery(), cancellationToken);
@@ -38,7 +39,8 @@ public class DatawalletController : ApiControllerBase
     }
 
     [HttpGet("Modifications")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetModificationsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetModificationsResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetModifications([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] int? localIndex,
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
@@ -58,9 +60,9 @@ public class DatawalletController : ApiControllerBase
     }
 
     [HttpPost("Modifications")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<PushDatawalletModificationsResponse>),
-        StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<PushDatawalletModificationsResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PushModifications(PushDatawalletModificationsRequestBody request,
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)

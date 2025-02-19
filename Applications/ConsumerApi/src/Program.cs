@@ -130,6 +130,9 @@ static WebApplication CreateApp(string[] args)
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
@@ -181,6 +184,9 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 static void Configure(WebApplication app)
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
     app.UseSerilogRequestLogging(opts =>
     {
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
@@ -200,8 +206,6 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
-
-    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;

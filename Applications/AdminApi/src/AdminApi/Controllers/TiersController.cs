@@ -37,7 +37,7 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpGet("{tierId}")]
-    [ProducesResponseType(typeof(TierDetailsDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TierDetailsDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
     {
@@ -46,7 +46,7 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CreateTierResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateTierResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> PostTiers([FromBody] CreateTierCommand command, CancellationToken cancellationToken)
     {
@@ -66,7 +66,7 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpPost("{tierId}/Quotas")]
-    [ProducesResponseType(typeof(TierQuotaDefinitionDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TierQuotaDefinitionDTO>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateQuotaForTierRequest request, CancellationToken cancellationToken)
