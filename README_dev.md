@@ -2,6 +2,11 @@
 
 1. Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 2. Download and install the latest version of the [.NET SDK](https://dotnet.microsoft.com/en-us/download)
+3. Use Docker Desktop to create Docker volumes for the database and the blob storage. You can do this via the Docker Desktop UI or by running the following commands:
+    ```bash
+    docker volume create --name=postgres-volume
+    docker volume create --name=azure-storage-emulator-volume
+    ```
 
 # How to run
 
