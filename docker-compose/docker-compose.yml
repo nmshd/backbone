@@ -34,7 +34,7 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
-  
+
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
