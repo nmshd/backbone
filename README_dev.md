@@ -7,7 +7,7 @@
 
 1. Start the infrastructure by running the following command from the root directory of the repository:
     ```bash
-    docker compose up -f ./docker-compose/docker-compose.yml -d
+    docker compose -f up ./docker-compose/docker-compose.yml -d
     ```
 2. Run the application by running the following commands from the root directory of the repository (each in its own terminal):
 
