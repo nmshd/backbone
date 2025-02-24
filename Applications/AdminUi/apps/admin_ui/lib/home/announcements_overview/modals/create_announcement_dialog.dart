@@ -42,7 +42,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
     _announcementTextWidgets.add(
       _AnnouncementTextFormWidget(
-        language: 'en',
+        defaultLanguage: 'en',
         formKey: _formKey,
         onRemove: _remove,
       ),
@@ -167,7 +167,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 for (final announcementTextWidget in _announcementTextWidgets) {
                   final title = announcementTextWidget._titleController.text;
                   final body = announcementTextWidget._bodyController.text;
-                  final language = announcementTextWidget.language;
+                  final language = announcementTextWidget.selectedLanguage ?? announcementTextWidget.defaultLanguage;
 
                   announcementTexts.add(
                     AnnouncementText(
@@ -227,13 +227,14 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   _AnnouncementTextFormWidget({
     required this.formKey,
     required this.onRemove,
-    this.language,
+    this.defaultLanguage,
   });
 
   @override
   State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
 
-  final String? language;
+  String? defaultLanguage;
+  String? selectedLanguage;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
 }
@@ -247,7 +248,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.language == null || widget.language!.isEmpty) ...[
+            if (widget.defaultLanguage == null) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -255,8 +256,11 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 ],
               ),
               LanguagePicker(
-                selectedLanguages: const [],
-                onSelectedLanguagesChanged: (languages) {},
+                onLanguageChanged: (String selectedLanguage) {
+                  setState(() {
+                    widget.selectedLanguage = selectedLanguage;
+                  });
+                },
                 validator: (value) => validateRequiredField(context, value),
               ),
               Gaps.h8,
