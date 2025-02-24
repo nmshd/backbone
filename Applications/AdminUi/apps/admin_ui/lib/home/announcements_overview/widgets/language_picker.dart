@@ -9,7 +9,11 @@ class LanguagePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const languageOptions = Languages.languages;
+    final languageOptions = Languages.languages
+      ..sort((a, b) {
+        if (a.isoCode == 'de') return -1;
+        return a.name.compareTo(b.name);
+      });
 
     return DropdownButtonFormField(
       validator: validator,

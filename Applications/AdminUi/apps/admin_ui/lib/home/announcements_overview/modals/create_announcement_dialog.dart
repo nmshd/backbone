@@ -178,18 +178,21 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   );
                 }
 
-                await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
+                final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
                   expiresAt: _selectedExpirationDate?.toIso8601String(),
                   severity: _selectedSeverity!,
                   announcementTexts: announcementTexts,
                   recipients: [],
                 );
+                if (!mounted) return;
+                context.pop();
 
-                widget.onAnnouncementCreated();
-                _showSnackbar();
-                if (mounted) {
-                  context.pop();
+                if (response.hasData) {
+                  widget.onAnnouncementCreated();
+                  _showSuccessSnackbar();
+                  return;
                 }
+                _showErrorSnackbar();
               }
             },
             child: Text(context.l10n.create),
@@ -207,7 +210,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     });
   }
 
-  void _showSnackbar() {
+  void _showSuccessSnackbar() {
     final snackBar = SnackBar(
       content: Text(
         context.l10n.createAnnouncement_announcementSuccess,
@@ -215,6 +218,19 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
       ),
       backgroundColor: Colors.green,
       duration: const Duration(seconds: 3),
+      showCloseIcon: true,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorSnackbar() {
+    const snackBar = SnackBar(
+      content: Text(
+        'An error occurred while creating the announcement',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 3),
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
