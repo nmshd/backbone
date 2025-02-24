@@ -60,7 +60,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Announcement Detail', style: Theme.of(context).textTheme.headlineLarge),
+                    Text(context.l10n.announcementsDetails, style: Theme.of(context).textTheme.headlineLarge),
                     const SizedBox(height: 32),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -115,10 +115,10 @@ class _AnnouncementsTextTable extends StatelessWidget {
         width: double.infinity,
         height: 500,
         child: DataTable2(
-          columns: const <DataColumn>[
-            DataColumn2(label: Text('Language')),
-            DataColumn2(label: Text('Title')),
-            DataColumn2(label: Text('Text')),
+          columns: <DataColumn>[
+            DataColumn2(label: Text(context.l10n.announcementsLanguage)),
+            DataColumn2(label: Text(context.l10n.title)),
+            DataColumn2(label: Text(context.l10n.body)),
           ],
           rows: announcementTexts
               .map(

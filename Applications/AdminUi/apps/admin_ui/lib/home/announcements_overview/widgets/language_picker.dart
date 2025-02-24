@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class LanguagePicker extends StatelessWidget {
   final FormFieldValidator<String>? validator;
+  final String labelText;
   final ValueChanged<String> onLanguageChanged;
 
-  const LanguagePicker({required this.onLanguageChanged, this.validator, super.key});
+  const LanguagePicker({required this.onLanguageChanged, required this.labelText, this.validator, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,9 @@ class LanguagePicker extends StatelessWidget {
 
     return DropdownButtonFormField(
       validator: validator,
-      decoration: const InputDecoration(
-        labelText: 'Language*',
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: const OutlineInputBorder(),
       ),
       items: languageOptions.map((language) {
         return DropdownMenuItem(

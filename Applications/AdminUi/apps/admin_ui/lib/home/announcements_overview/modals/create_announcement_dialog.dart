@@ -124,7 +124,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 Gaps.h16,
                 Row(
                   children: [
-                    const Expanded(child: Text('Languages (default is English)')),
+                    Expanded(child: Text(context.l10n.createAnnouncement_defaultLanguage)),
                     IconButton.filled(
                       icon: const Icon(Icons.add),
                       onPressed: () {
@@ -224,13 +224,13 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   }
 
   void _showErrorSnackbar() {
-    const snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Text(
-        'An error occurred while creating the announcement',
-        style: TextStyle(color: Colors.white),
+        context.l10n.createAnnouncement_announcementError,
+        style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.red,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -272,6 +272,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 ],
               ),
               LanguagePicker(
+                labelText: '${context.l10n.announcementsLanguage}*',
                 onLanguageChanged: (String selectedLanguage) {
                   setState(() {
                     widget.selectedLanguage = selectedLanguage;
