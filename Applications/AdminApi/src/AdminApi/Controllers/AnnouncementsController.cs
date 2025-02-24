@@ -14,13 +14,21 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class AnnouncementsController : ApiControllerBase
 {
-    public AnnouncementsController(IMediator mediator) : base(mediator)
+    private readonly ILogger<AnnouncementsController> _logger;
+
+    public AnnouncementsController(IMediator mediator, ILogger<AnnouncementsController> logger) : base(mediator)
     {
+        _logger = logger;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
+        foreach (var text in request.Texts)
+        {
+            _logger.LogCritical(text.Language);
+        }
+
         var response = await _mediator.Send(request, cancellationToken);
         return Created(response);
     }
