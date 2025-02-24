@@ -280,6 +280,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 ],
               ),
               LanguagePicker(
+                width: MediaQuery.of(context).size.width,
                 controller: widget._languageController,
                 labelText: '${context.l10n.announcementsLanguage}*',
                 onLanguageChanged: (String selectedLanguage) {
