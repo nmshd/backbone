@@ -4,5 +4,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Rel
 
 public interface IRelationshipDistributor
 {
-    public void Distribute(IList<PoolEntry> pools);
+    void Distribute(IList<PoolEntry> pools);
 }

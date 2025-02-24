@@ -196,7 +196,7 @@ public class Printer : IPrinter
 
 public interface IPrinter
 {
-    public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All);
+    void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All);
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
     void PrintStringToFile(string value, string filename);
