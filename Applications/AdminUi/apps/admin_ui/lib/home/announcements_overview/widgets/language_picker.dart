@@ -6,7 +6,6 @@ class LanguagePicker extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final String labelText;
   final ValueChanged<String> onLanguageChanged;
-  final TextEditingController? controller;
   final double? width;
 
   const LanguagePicker({
@@ -14,7 +13,6 @@ class LanguagePicker extends StatelessWidget {
     required this.onLanguageChanged,
     super.key,
     this.validator,
-    this.controller,
     this.width,
   });
 
@@ -38,7 +36,6 @@ class LanguagePicker extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
               label: Text(labelText),
-              controller: controller,
               requestFocusOnTap: true,
               enableFilter: true,
               dropdownMenuEntries: languageOptions.map((language) {

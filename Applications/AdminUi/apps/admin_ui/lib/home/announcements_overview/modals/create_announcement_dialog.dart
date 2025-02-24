@@ -260,7 +260,6 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   String? selectedLanguage;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
-  final TextEditingController _languageController = TextEditingController();
 }
 
 class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
@@ -281,7 +280,6 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
               ),
               LanguagePicker(
                 width: MediaQuery.of(context).size.width,
-                controller: widget._languageController,
                 labelText: '${context.l10n.announcementsLanguage}*',
                 onLanguageChanged: (String selectedLanguage) {
                   setState(() {
