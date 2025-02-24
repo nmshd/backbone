@@ -47,6 +47,13 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
         onRemove: _remove,
       ),
     );
+    // ..add(
+    //   _AnnouncementTextFormWidget(
+    //     defaultLanguage: 'aa',
+    //     formKey: _formKey,
+    //     onRemove: _remove,
+    //   ),
+    // );
   }
 
   @override
@@ -269,7 +276,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: () => widget.onRemove(widget), child: const Text('Remove')),
+                  TextButton(onPressed: () => widget.onRemove(widget), child: Text(context.l10n.remove)),
                 ],
               ),
               LanguagePicker(

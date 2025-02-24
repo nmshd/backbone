@@ -37,9 +37,10 @@ class LanguagePicker extends StatelessWidget {
           label: language.name,
         );
       }).toList(),
-      onSelected: (String? newValue) {
-        final selectedLanguage = languageOptions.firstWhere((language) => language.name == newValue);
-        onLanguageChanged(selectedLanguage.isoCode);
+      onSelected: (String? selectedLanguageIsoCode) {
+        if (selectedLanguageIsoCode != null) {
+          onLanguageChanged(selectedLanguageIsoCode);
+        }
       },
     );
   }
