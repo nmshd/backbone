@@ -31,7 +31,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
 
-        <Content Include="appsettings.override.json" Condition="$(Configuration) == Debug">
+        <Content Condition="$(Configuration) == Debug" Include="appsettings.override.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

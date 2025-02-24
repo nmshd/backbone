@@ -38,7 +38,7 @@ WORKDIR /app
 COPY --from=build /app/publish/Backbone.AdminCli ./backbone
 
 # Test
-COPY appsettings.json .
+COPY Applications/AdminCli/src/AdminCli/appsettings.json .
 
 ENV PATH="$PATH:/app"
 
