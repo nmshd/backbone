@@ -1,12 +1,12 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/home/announcements_overview/widgets/language_multi_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import '../widgets/language_picker.dart';
 
 Future<void> showCreateAnnouncementDialog({
   required BuildContext context,
@@ -268,7 +268,11 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                   TextButton(onPressed: () => widget.onRemove(widget), child: const Text('Remove')),
                 ],
               ),
-              LanguageMultiSelect(selectedLanguages: const [], onSelectedLanguagesChanged: (languages) {}),
+              LanguagePicker(
+                selectedLanguages: const [],
+                onSelectedLanguagesChanged: (languages) {},
+                validator: _validateRequiredField,
+              ),
               Gaps.h8,
             ],
             TextFormField(
