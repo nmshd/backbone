@@ -1,5 +1,4 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
 
 class LanguagePicker extends StatelessWidget {
@@ -28,14 +27,23 @@ class LanguagePicker extends StatelessWidget {
       validator: validator,
       builder: (fieldState) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DropdownMenu(
-              menuHeight: 300,
-              inputDecorationTheme: const InputDecorationTheme(
-                border: OutlineInputBorder(),
+              menuHeight: MediaQuery.of(context).size.height * 0.3,
+              expandedInsets: EdgeInsets.zero,
+              inputDecorationTheme: fieldState.hasError
+                  ? InputDecorationTheme(
+                      border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
+                    )
+                  : const InputDecorationTheme(
+                      border: OutlineInputBorder(),
+                    ),
+              label: Text(
+                labelText,
+                style: fieldState.hasError ? TextStyle(color: Theme.of(context).colorScheme.error) : null,
               ),
-              label: Text(labelText),
               requestFocusOnTap: true,
               enableFilter: true,
               dropdownMenuEntries: languageOptions.map((language) {
@@ -50,10 +58,12 @@ class LanguagePicker extends StatelessWidget {
                 }
               },
             ),
-            if (fieldState.hasError) ...[
-              Gaps.h4,
-              Text(fieldState.errorText!, style: const TextStyle(color: Colors.redAccent)),
-            ],
+            if (fieldState.hasError)
+              Padding(
+                padding: const EdgeInsets.only(left: 12, top: 4),
+                child:
+                    Text(fieldState.errorText!, style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error)),
+              ),
           ],
         );
       },
