@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Exec Command="pwd" />
         <Delete Files="$(ProjectDir)appsettings.override.json" />
         <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
     </Target>
@@ -31,9 +32,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
 
-        <Content Condition="$(Configuration) == Debug" Include="appsettings.override.json">
+        <!--<Content Include="appsettings.override.json" Condition="$(Configuration) == Debug">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        </Content>-->
     </ItemGroup>
 
 </Project>
