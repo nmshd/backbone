@@ -141,15 +141,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   ],
                 ),
                 Gaps.h8,
-                SizedBox(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => Gaps.h16,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => _announcementTextWidgets[index],
-                    itemCount: _announcementTextWidgets.length,
-                  ),
+                Column(
+                  children: _announcementTextWidgets,
                 ),
               ],
             ),
