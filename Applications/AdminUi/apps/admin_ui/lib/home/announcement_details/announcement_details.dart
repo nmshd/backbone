@@ -115,10 +115,10 @@ class _AnnouncementsTextTable extends StatelessWidget {
         width: double.infinity,
         height: 500,
         child: DataTable2(
-          columns: <DataColumn>[
-            const DataColumn2(label: Text('Language')),
-            DataColumn2(label: Text(context.l10n.announcementsOverview_title)),
-            const DataColumn2(label: Text('Text')),
+          columns: const <DataColumn>[
+            DataColumn2(label: Text('Language')),
+            DataColumn2(label: Text('Title')),
+            DataColumn2(label: Text('Text')),
           ],
           rows: announcementTexts
               .map(
