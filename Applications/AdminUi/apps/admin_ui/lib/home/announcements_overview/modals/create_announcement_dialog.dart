@@ -47,13 +47,6 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
         onRemove: _remove,
       ),
     );
-    // ..add(
-    //   _AnnouncementTextFormWidget(
-    //     defaultLanguage: 'aa',
-    //     formKey: _formKey,
-    //     onRemove: _remove,
-    //   ),
-    // );
   }
 
   @override
@@ -147,8 +140,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     ),
                   ],
                 ),
-                Gaps.h8,
+                Gaps.h16,
                 Column(
+                  spacing: 16,
                   children: _announcementTextWidgets,
                 ),
               ],
@@ -266,9 +260,11 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(12),
         child: Column(
+          spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.defaultLanguage == null) ...[
@@ -288,7 +284,6 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 },
                 validator: (value) => validateRequiredField(context, value),
               ),
-              Gaps.h8,
             ],
             TextFormField(
               controller: widget._titleController,
@@ -298,7 +293,6 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 border: const OutlineInputBorder(),
               ),
             ),
-            Gaps.h8,
             TextFormField(
               controller: widget._bodyController,
               validator: (value) => validateRequiredField(context, value),
