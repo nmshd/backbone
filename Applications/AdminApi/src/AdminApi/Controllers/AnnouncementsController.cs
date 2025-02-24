@@ -24,12 +24,6 @@ public class AnnouncementsController : ApiControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
-        foreach (var text in request.Texts)
-        {
-            _logger.LogCritical(text.Language);
-            _logger.LogCritical((text.Language == "aa").ToString());
-        }
-
         var response = await _mediator.Send(request, cancellationToken);
         return Created(response);
     }

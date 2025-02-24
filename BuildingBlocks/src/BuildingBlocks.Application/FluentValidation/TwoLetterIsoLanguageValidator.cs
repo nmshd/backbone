@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -9,12 +7,18 @@ namespace Backbone.BuildingBlocks.Application.FluentValidation;
 public class TwoLetterIsoLanguageValidator<T> : IPropertyValidator<T, string>
 {
     // ReSharper disable once StaticMemberInGenericType
-    private static readonly string[] VALID_LANGUAGES = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures).Select(c => c.TwoLetterISOLanguageName).Distinct().ToArray();
+    private static readonly string[] VALID_LANGUAGES =
+    [
+        "aa", "ab", "ae", "af", "ak", "am", "an", "ar", "as", "av", "ay", "az", "ba", "be", "bg", "bi", "bm", "bn", "bo", "br", "bs", "ca", "ce", "ch", "co", "cr", "cs", "cu", "cv", "cy", "da", "de",
+        "dv", "dz", "ee", "el", "en", "eo", "es", "et", "eu", "fa", "ff", "fi", "fj", "fo", "fr", "fy", "ga", "gd", "gl", "gn", "gu", "gv", "ha", "he", "hi", "ho", "hr", "ht", "hu", "hy", "hz", "ia",
+        "id", "ie", "ig", "ii", "ik", "io", "is", "it", "iu", "ja", "jv", "ka", "kg", "ki", "kj", "kk", "kl", "km", "kn", "ko", "kr", "ks", "ku", "kv", "kw", "ky", "la", "lb", "lg", "li", "ln", "lo",
+        "lt", "lu", "lv", "mg", "mh", "mi", "mk", "ml", "mn", "mr", "ms", "mt", "my", "na", "nb", "nd", "ne", "ng", "nl", "nn", "no", "nr", "nv", "ny", "oc", "oj", "om", "or", "os", "pa", "pi", "pl",
+        "ps", "pt", "qu", "rm", "rn", "ro", "ru", "rw", "sa", "sc", "sd", "se", "sg", "si", "sk", "sl", "sm", "sn", "so", "sq", "sr", "ss", "st", "su", "sv", "sw", "ta", "te", "tg", "th", "ti", "tk",
+        "tl", "tn", "to", "tr", "ts", "tt", "tw", "ty", "ug", "uk", "ur", "uz", "ve", "vi", "vo", "wa", "wo", "xh", "yi", "yo", "za", "zh", "zu",
+    ];
 
     public bool IsValid(ValidationContext<T> context, string value)
     {
-        Console.WriteLine("Number of valid languages: " + JsonSerializer.Serialize(VALID_LANGUAGES.Length));
-        Console.WriteLine("Valid languages: " + JsonSerializer.Serialize(VALID_LANGUAGES));
         return VALID_LANGUAGES.Contains(value);
     }
 
