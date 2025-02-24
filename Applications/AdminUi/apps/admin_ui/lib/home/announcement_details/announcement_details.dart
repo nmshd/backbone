@@ -67,7 +67,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        CopyableEntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcmentDetails!.severity),
+                        EntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcmentDetails!.severity),
                         EntityDetails(
                           title: context.l10n.createdAt,
                           value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.createdAt),
@@ -124,7 +124,7 @@ class _AnnouncementsTextTable extends StatelessWidget {
               .map(
                 (announcementText) => DataRow(
                   cells: [
-                    DataCell(Text(announcementText.language)),
+                    DataCell(Text(Languages.languages.firstWhere((language) => language.isoCode == announcementText.language).name)),
                     DataCell(Text(announcementText.title)),
                     DataCell(Text(announcementText.body)),
                   ],
