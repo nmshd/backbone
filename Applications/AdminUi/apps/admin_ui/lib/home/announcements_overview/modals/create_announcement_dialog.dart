@@ -76,7 +76,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 Text('*${context.l10n.required}'),
                 Gaps.h16,
                 DropdownButtonFormField(
-                  validator: _validateRequiredField,
+                  validator: (value) => validateRequiredField(context, value),
                   decoration: InputDecoration(
                     labelText: '${context.l10n.createAnnouncementDialog_impact}*',
                     border: const OutlineInputBorder(),
@@ -219,13 +219,6 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-  String? _validateRequiredField(String? value) {
-    if (value == null || value.isEmpty) {
-      return context.l10n.createAnnouncementDialog_requiredField;
-    }
-    return null;
-  }
 }
 
 class _AnnouncementTextFormWidget extends StatefulWidget {
@@ -250,7 +243,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -264,13 +257,13 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
               LanguagePicker(
                 selectedLanguages: const [],
                 onSelectedLanguagesChanged: (languages) {},
-                validator: _validateRequiredField,
+                validator: (value) => validateRequiredField(context, value),
               ),
               Gaps.h8,
             ],
             TextFormField(
               controller: widget._titleController,
-              validator: _validateRequiredField,
+              validator: (value) => validateRequiredField(context, value),
               decoration: InputDecoration(
                 labelText: '${context.l10n.title}*',
                 border: const OutlineInputBorder(),
@@ -279,7 +272,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
             Gaps.h8,
             TextFormField(
               controller: widget._bodyController,
-              validator: _validateRequiredField,
+              validator: (value) => validateRequiredField(context, value),
               decoration: InputDecoration(
                 labelText: '${context.l10n.body}*',
                 border: const OutlineInputBorder(),
@@ -290,11 +283,11 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
       ),
     );
   }
+}
 
-  String? _validateRequiredField(String? value) {
-    if (value == null || value.isEmpty) {
-      return context.l10n.createAnnouncementDialog_requiredField;
-    }
-    return null;
+String? validateRequiredField(BuildContext context, String? value) {
+  if (value == null || value.isEmpty) {
+    return context.l10n.createAnnouncementDialog_requiredField;
   }
+  return null;
 }
