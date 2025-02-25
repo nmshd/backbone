@@ -24,7 +24,7 @@ class AnnouncementsEndpoint extends Endpoint {
   }) =>
       post(
         '/api/v1/Announcements',
-        data: {'expiresAt': expiresAt, 'severity': severity, 'texts': announcementTexts, 'recipients': recipients},
+        data: {'expiresAt': expiresAt, 'severity': severity.name, 'texts': announcementTexts, 'recipients': recipients},
         transformer: CreateAnnouncementResponse.fromJson,
       );
 }
