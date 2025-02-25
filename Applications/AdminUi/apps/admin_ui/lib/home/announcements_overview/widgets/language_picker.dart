@@ -1,4 +1,4 @@
-import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 
 class LanguagePicker extends StatelessWidget {
@@ -17,7 +17,7 @@ class LanguagePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageOptions = Languages.languages.toList()
+    final languageOptions = AnnouncementLanguages.languages.toList()
       ..sort((a, b) {
         if (a.isoCode == 'de') return -1;
         if (b.isoCode == 'de') return 1;
