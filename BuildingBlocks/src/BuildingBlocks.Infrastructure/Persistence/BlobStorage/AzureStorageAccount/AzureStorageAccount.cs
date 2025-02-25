@@ -107,6 +107,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
             catch (RequestFailedException ex)
             {
                 if (ex.ErrorCode == "BlobAlreadyExists") throw new BlobAlreadyExistsException(cloudBlockBlob.Name);
+                throw;
             }
         }
 
