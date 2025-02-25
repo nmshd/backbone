@@ -30,7 +30,7 @@ class _CreateAnnouncementDialog extends StatefulWidget {
 class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _selectedSeverity;
+  AnnouncementSeverity? _selectedSeverity;
   DateTime? _selectedExpirationDate;
   final List<AnnouncementSeverity> _severityOptions = AnnouncementSeverity.values;
 
@@ -76,13 +76,13 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 Text('*${context.l10n.required}'),
                 Gaps.h16,
                 DropdownButtonFormField(
-                  validator: (value) => validateRequiredField(context, value),
+                  validator: (value) => validateRequiredField(context, value?.name),
                   decoration: InputDecoration(
                     labelText: '${context.l10n.createAnnouncementDialog_impact}*',
                     border: const OutlineInputBorder(),
                   ),
                   items: _severityOptions.map((severity) {
-                    return DropdownMenuItem<String>(value: severity.name, child: Text(severity.name));
+                    return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
                   }).toList(),
                   onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
                 ),
