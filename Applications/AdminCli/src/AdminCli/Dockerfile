@@ -24,7 +24,7 @@ COPY ["Modules/Announcements/src/Announcements.Domain/Announcements.Domain.cspro
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 
 
-RUN dotnet restore /p:ContinuousIntegrationBuild=true -c Release "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
 COPY . .
 
