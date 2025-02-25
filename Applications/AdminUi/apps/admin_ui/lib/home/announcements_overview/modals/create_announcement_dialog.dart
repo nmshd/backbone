@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -252,14 +253,14 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   @override
   State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
 
-  String? defaultLanguage;
-  String? selectedLanguage;
+  final String? defaultLanguage;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
   final TextEditingController _languageController = TextEditingController();
 }
 
 class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
+  String? selectedLanguage;
   @override
   void dispose() {
     widget._titleController.dispose();
@@ -286,9 +287,13 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 ],
               ),
               LanguagePicker(
-                controller: widget._languageController,
                 width: MediaQuery.of(context).size.width,
                 labelText: '${context.l10n.announcementsLanguage}*',
+                onLanguageChanged: (selectedLanguage) {
+                  setState(() {
+                    widget._languageController.text = selectedLanguage;
+                  });
+                },
                 validator: (value) => validateRequiredField(context, widget._languageController.text),
               ),
             ],
