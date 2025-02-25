@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -188,15 +187,16 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   announcementTexts: announcementTexts,
                   recipients: [],
                 );
-                if (!mounted) return;
+
+                if (!context.mounted) return;
                 context.pop();
 
-                if (response.hasData) {
-                  widget.onAnnouncementCreated();
-                  _showSuccessSnackbar();
+                if (response.hasError) {
+                  _showErrorSnackbar();
                   return;
                 }
-                _showErrorSnackbar();
+                widget.onAnnouncementCreated();
+                _showSuccessSnackbar();
               }
             },
             child: Text(context.l10n.create),

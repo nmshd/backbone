@@ -66,7 +66,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                         (announcement) => DataRow2(
                           onTap: () => context.go('/announcements/${announcement.id}'),
                           cells: [
-                            DataCell(Text(announcement.texts.firstWhere((t) => t.language == 'en').title)), // TODO: find a better way
+                            DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
                             DataCell(
                               Tooltip(
                                 message:
@@ -98,6 +98,10 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
         ),
       ),
     );
+  }
+
+  String _getAnnouncementTitle(AnnouncementOverview announcement, String language) {
+    return announcement.texts.firstWhere((t) => t.language == language).title;
   }
 
   Future<void> _reloadAnnouncements() async {
