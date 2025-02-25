@@ -1,5 +1,6 @@
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
@@ -42,7 +43,7 @@ class _AnnouncementTextDialog extends StatelessWidget {
             height: 40,
             child: OutlinedButton(
               child: Text(context.l10n.close),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => context.pop(),
             ),
           ),
         ],
