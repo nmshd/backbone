@@ -56,7 +56,7 @@ public class SendAnnouncementCommand : AdminCliDbCommand
 
             Console.WriteLine(@"You entered the following texts:");
             Console.WriteLine(JsonSerializer.Serialize(texts, JSON_SERIALIZER_OPTIONS));
-            if (!PromptForConfirmation(@"Do you want to proceed? ([y]es/[N]o): ")) return;
+            if (!PromptForConfirmation(@"Do you want to proceed?")) return;
 
             Console.WriteLine(@"Sending announcement...");
 
@@ -94,7 +94,7 @@ public class SendAnnouncementCommand : AdminCliDbCommand
             Body = englishBody
         });
 
-        while (PromptForConfirmation(@"Do you want to add another language? ([y]es/[N]o): "))
+        while (PromptForConfirmation(@"Do you want to add another language?"))
         {
             var language = PromptForInput(@"Enter a two-letter language code (e.g. de, it, nl): ");
             var title = PromptForInput(@"Enter title: ");
@@ -127,8 +127,10 @@ public class SendAnnouncementCommand : AdminCliDbCommand
             Console.Write(prompt);
             input = Console.ReadLine();
 
-            if (input == null) continue;
-            if (input.Trim().Equals("x", StringComparison.CurrentCultureIgnoreCase)) return null;
+            if (string.IsNullOrWhiteSpace(input))
+                continue;
+            if (input.Trim().Equals("x", StringComparison.CurrentCultureIgnoreCase))
+                return null;
 
             break;
         }
@@ -138,7 +140,7 @@ public class SendAnnouncementCommand : AdminCliDbCommand
 
     private static bool PromptForConfirmation(string prompt)
     {
-        var input = PromptForInput(prompt, true);
+        var input = PromptForInput($"{prompt} ([y]es/[N]o): ", true);
         return input?.Trim().ToLower() is "yes" or "y";
     }
 }
