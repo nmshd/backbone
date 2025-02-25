@@ -68,6 +68,10 @@ public class ContainsValidTagsAttribute : ValidationAttribute
         if (notImplementedLanguages.Count != 0)
             return new ValidationResult($"A display name for the language(s) \"{Enumerate(notImplementedLanguages)}\" is required.", [GetPathOfProperty(nameParts)]);
 
+        var tagName = nameParts.Last();
+        if (nameParts.Count() == 2 && tagName.Equals("x", StringComparison.OrdinalIgnoreCase))
+            return new ValidationResult("A first-level tag may not be equal to \"x\" or \"X\".", [GetPathOfProperty(nameParts)]);
+
         foreach (var (childName, child) in tag.Children)
         {
             var result = ValidateTag(nameParts.Append(childName), child);
