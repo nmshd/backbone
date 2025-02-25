@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" InitialTargets="PreBuild">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Version>1.5.0</Version>
@@ -21,8 +21,7 @@
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     </ItemGroup>
 
-    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
-        <Exec Command="pwd" />
+    <Target Name="PreBuild" BeforeTargets="BeforeBuild" Condition="$(Configuration) == Debug">
         <Delete Files="$(ProjectDir)appsettings.override.json" />
         <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
     </Target>
