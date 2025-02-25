@@ -34,7 +34,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   DateTime? _selectedExpirationDate;
   final List<SeverityType> _severityOptions = SeverityType.values;
 
-  final _announcementTextWidgets = <_AnnouncementTextFormWidget>[];
+  final List<_AnnouncementTextFormWidget> _announcementTextWidgets = [];
 
   @override
   void initState() {
@@ -168,7 +168,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 for (final announcementTextWidget in _announcementTextWidgets) {
                   final title = announcementTextWidget._titleController.text;
                   final body = announcementTextWidget._bodyController.text;
-                  final language = announcementTextWidget.selectedLanguage ?? announcementTextWidget.defaultLanguage;
+                  final language = announcementTextWidget._languageController.text == ''
+                      ? announcementTextWidget.defaultLanguage
+                      : announcementTextWidget._languageController.text;
 
                   announcementTexts.add(
                     AnnouncementText(
@@ -254,9 +256,18 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   String? selectedLanguage;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
+  final TextEditingController _languageController = TextEditingController();
 }
 
 class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
+  @override
+  void dispose() {
+    widget._titleController.dispose();
+    widget._bodyController.dispose();
+    widget._languageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -275,14 +286,10 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 ],
               ),
               LanguagePicker(
+                controller: widget._languageController,
                 width: MediaQuery.of(context).size.width,
                 labelText: '${context.l10n.announcementsLanguage}*',
-                onLanguageChanged: (String selectedLanguage) {
-                  setState(() {
-                    widget.selectedLanguage = selectedLanguage;
-                  });
-                },
-                validator: (value) => validateRequiredField(context, value),
+                validator: (value) => validateRequiredField(context, widget._languageController.text),
               ),
             ],
             TextFormField(
