@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'announcement_text.dart';
 
-export 'create_announcement.dart';
+export 'create_announcement_response.dart';
 
 part 'announcements_overview.g.dart';
 

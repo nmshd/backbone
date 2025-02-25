@@ -32,7 +32,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   String? _selectedSeverity;
   DateTime? _selectedExpirationDate;
-  final List<SeverityType> _severityOptions = SeverityType.values;
+  final List<AnnouncementSeverityType> _severityOptions = AnnouncementSeverityType.values;
 
   final List<_AnnouncementTextFormWidget> _announcementTextWidgets = [];
 

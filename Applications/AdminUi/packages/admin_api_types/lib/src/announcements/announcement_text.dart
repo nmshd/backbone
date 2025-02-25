@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-export 'create_announcement.dart';
+export 'create_announcement_response.dart';
 
 part 'announcement_text.g.dart';
 

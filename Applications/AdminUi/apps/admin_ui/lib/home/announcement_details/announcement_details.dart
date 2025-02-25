@@ -124,7 +124,7 @@ class _AnnouncementsTextTable extends StatelessWidget {
               .map(
                 (announcementText) => DataRow(
                   cells: [
-                    DataCell(Text(Languages.languages.firstWhere((language) => language.isoCode == announcementText.language).name)),
+                    DataCell(Text(AnnouncementLanguages.languages.firstWhere((language) => language.isoCode == announcementText.language).name)),
                     DataCell(Text(announcementText.title)),
                     DataCell(Text(announcementText.body)),
                   ],
