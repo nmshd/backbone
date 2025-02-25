@@ -17,7 +17,7 @@ class AnnouncementsOverview extends StatefulWidget {
 }
 
 class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
-  List<AnnouncementOverview> _announcements = [];
+  List<Announcement> _announcements = [];
 
   @override
   void initState() {
@@ -100,7 +100,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
     );
   }
 
-  String _getAnnouncementTitle(AnnouncementOverview announcement, String language) {
+  String _getAnnouncementTitle(Announcement announcement, String language) {
     return announcement.texts.firstWhere((t) => t.language == language).title;
   }
 

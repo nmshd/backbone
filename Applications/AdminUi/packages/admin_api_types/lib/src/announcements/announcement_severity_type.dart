@@ -1,8 +1,8 @@
-enum AnnouncementSeverityType {
+enum AnnouncementSeverity {
   low,
   medium,
   high;
 
   String get name =>
-      switch (this) { AnnouncementSeverityType.low => 'Low', AnnouncementSeverityType.medium => 'Medium', AnnouncementSeverityType.high => 'High' };
+      switch (this) { AnnouncementSeverity.low => 'Low', AnnouncementSeverity.medium => 'Medium', AnnouncementSeverity.high => 'High' };
 }

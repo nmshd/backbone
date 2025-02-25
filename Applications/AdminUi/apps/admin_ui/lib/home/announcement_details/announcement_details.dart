@@ -20,7 +20,7 @@ class AnnouncementDetails extends StatefulWidget {
 }
 
 class _AnnouncementDetailsState extends State<AnnouncementDetails> {
-  AnnouncementOverview? _announcmentDetails;
+  Announcement? _announcmentDetails;
 
   @override
   void initState() {

@@ -6,18 +6,18 @@ import 'endpoint.dart';
 class AnnouncementsEndpoint extends Endpoint {
   AnnouncementsEndpoint(super.dio);
 
-  Future<ApiResponse<List<AnnouncementOverview>>> getAnnouncements() => get(
+  Future<ApiResponse<List<Announcement>>> getAnnouncements() => get(
         '/api/v1/Announcements',
-        transformer: (e) => (e as List).map(AnnouncementOverview.fromJson).toList(),
+        transformer: (e) => (e as List).map(Announcement.fromJson).toList(),
       );
 
-  Future<ApiResponse<AnnouncementOverview>> getAnnouncement(String announcementId) => get(
+  Future<ApiResponse<Announcement>> getAnnouncement(String announcementId) => get(
         '/api/v1/Announcements/$announcementId',
-        transformer: AnnouncementOverview.fromJson,
+        transformer: Announcement.fromJson,
       );
 
   Future<ApiResponse<CreateAnnouncementResponse>> createAnnouncement({
-    required String severity,
+    required AnnouncementSeverity severity,
     required List<AnnouncementText> announcementTexts,
     String? expiresAt,
     List<String>? recipients,
