@@ -166,11 +166,11 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 final announcementTexts = <AnnouncementText>[];
 
                 for (final announcementTextWidget in _announcementTextWidgets) {
-                  final title = announcementTextWidget._titleController.text;
-                  final body = announcementTextWidget._bodyController.text;
-                  final language = announcementTextWidget._languageController.text == ''
+                  final title = announcementTextWidget.titleController.text;
+                  final body = announcementTextWidget.bodyController.text;
+                  final language = announcementTextWidget.languageController.text == ''
                       ? announcementTextWidget.defaultLanguage
-                      : announcementTextWidget._languageController.text;
+                      : announcementTextWidget.languageController.text;
 
                   announcementTexts.add(
                     AnnouncementText(
@@ -244,6 +244,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 class _AnnouncementTextFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final void Function(_AnnouncementTextFormWidget index) onRemove;
+
   _AnnouncementTextFormWidget({
     required this.formKey,
     required this.onRemove,
@@ -254,18 +255,18 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
 
   final String? defaultLanguage;
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _bodyController = TextEditingController();
-  final TextEditingController _languageController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController bodyController = TextEditingController();
+  final TextEditingController languageController = TextEditingController();
 }
 
 class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
   String? selectedLanguage;
   @override
   void dispose() {
-    widget._titleController.dispose();
-    widget._bodyController.dispose();
-    widget._languageController.dispose();
+    widget.titleController.dispose();
+    widget.bodyController.dispose();
+    widget.languageController.dispose();
     super.dispose();
   }
 
@@ -291,14 +292,14 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
                 labelText: '${context.l10n.announcementsLanguage}*',
                 onLanguageChanged: (selectedLanguage) {
                   setState(() {
-                    widget._languageController.text = selectedLanguage;
+                    widget.languageController.text = selectedLanguage;
                   });
                 },
-                validator: (value) => validateRequiredField(context, widget._languageController.text),
+                validator: (value) => validateRequiredField(context, widget.languageController.text),
               ),
             ],
             TextFormField(
-              controller: widget._titleController,
+              controller: widget.titleController,
               validator: (value) => validateRequiredField(context, value),
               decoration: InputDecoration(
                 labelText: '${context.l10n.title}*',
@@ -306,7 +307,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
               ),
             ),
             TextFormField(
-              controller: widget._bodyController,
+              controller: widget.bodyController,
               validator: (value) => validateRequiredField(context, value),
               decoration: InputDecoration(
                 labelText: '${context.l10n.body}*',
