@@ -1,3 +1,5 @@
+export 'announcement_details/announcement_details.dart';
+export 'announcements_overview/announcements_overview.dart';
 export 'client_details/client_details.dart';
 export 'clients_overview/clients_overview.dart';
 export 'identities_overview/deletion_process_audit_log_details/deletion_process_audit_log_details.dart';
