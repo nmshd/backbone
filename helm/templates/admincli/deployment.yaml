@@ -30,6 +30,10 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
       containers:
         - name: {{ .Values.admincli.name }}
           {{- with .Values.admincli.securityContext }}
@@ -40,10 +44,28 @@ spec:
             {{- toYaml .Values.admincli.resources | nindent 12 }}
           image: "{{ .Values.admincli.image.repository }}:{{- default .Chart.AppVersion .Values.admincli.image.tagOverride }}"
           imagePullPolicy: {{ .Values.admincli.image.pullPolicy }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
           env:
-            - name: Database__Provider
-              value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            {{- include "generateEnvVars" (list .Values.global.env .Values.admincli.env) | nindent 12 }}
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__rabbitMqEnableSsl
+              value: "false"
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.consumerapi.env) | nindent 12 }}
           tty: true
           command:
             - /bin/bash
