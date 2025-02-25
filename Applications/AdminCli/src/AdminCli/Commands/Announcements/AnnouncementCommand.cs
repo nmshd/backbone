@@ -135,7 +135,7 @@ public class SendAnnouncementCommand : AdminCliDbCommand
             Console.Write(prompt);
             input = Console.ReadLine();
 
-            if (input == null) continue;
+            if (string.IsNullOrWhiteSpace(input)) continue;
             if (input.Trim().Equals("x", StringComparison.CurrentCultureIgnoreCase)) return null;
 
             break;
