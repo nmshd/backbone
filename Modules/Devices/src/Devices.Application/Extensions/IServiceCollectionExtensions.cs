@@ -18,11 +18,6 @@ public static class IServiceCollectionExtensions
 
         applicationConfiguration.GetSection("IdentityDeletion").Bind(IdentityDeletionConfiguration.Instance);
 
-        services.AddApplicationWithoutIdentityDeletion();
-    }
-
-    public static void AddApplicationWithoutIdentityDeletion(this IServiceCollection services)
-    {
         services.AddMediatR(c => c
             .RegisterServicesFromAssemblyContaining<RegisterDeviceCommand>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
