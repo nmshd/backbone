@@ -58,23 +58,23 @@ public class ContainsValidTagsAttribute : ValidationAttribute
         return ValidationResult.Success;
     }
 
-    private ValidationResult? ValidateTag(IEnumerable<string> nameParts, TagInfo tag)
+    private ValidationResult? ValidateTag(IEnumerable<string> propertyPath, TagInfo tag)
     {
         var notSupportedLanguages = tag.DisplayNames.Keys.Except(_supportedLanguages).ToList();
         var notImplementedLanguages = _supportedLanguages.Except(tag.DisplayNames.Keys).ToList();
 
         if (notSupportedLanguages.Count != 0)
-            return new ValidationResult($"The languages \"{Enumerate(notSupportedLanguages)}\" are unsupported", [GetPathOfProperty(nameParts)]);
+            return new ValidationResult($"The languages \"{Enumerate(notSupportedLanguages)}\" are unsupported", [GetPathOfProperty(propertyPath)]);
         if (notImplementedLanguages.Count != 0)
-            return new ValidationResult($"A display name for the language(s) \"{Enumerate(notImplementedLanguages)}\" is required.", [GetPathOfProperty(nameParts)]);
+            return new ValidationResult($"A display name for the language(s) \"{Enumerate(notImplementedLanguages)}\" is required.", [GetPathOfProperty(propertyPath)]);
 
-        var tagName = nameParts.Last();
-        if (nameParts.Count() == 2 && tagName.Equals("x", StringComparison.OrdinalIgnoreCase))
-            return new ValidationResult("A first-level tag may not be equal to \"x\" or \"X\".", [GetPathOfProperty(nameParts)]);
+        var tagName = propertyPath.Last();
+        if (propertyPath.Count() == 2 && tagName.Equals("x", StringComparison.OrdinalIgnoreCase))
+            return new ValidationResult("A first-level tag may not be equal to \"x\" or \"X\".", [GetPathOfProperty(propertyPath)]);
 
         foreach (var (childName, child) in tag.Children)
         {
-            var result = ValidateTag(nameParts.Append(childName), child);
+            var result = ValidateTag(propertyPath.Append(childName), child);
             if (result != ValidationResult.Success) return result;
         }
 
