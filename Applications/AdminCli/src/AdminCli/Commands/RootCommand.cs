@@ -6,10 +6,10 @@ namespace Backbone.AdminCli.Commands;
 
 public class RootCommand : System.CommandLine.RootCommand
 {
-    public RootCommand(ServiceLocator serviceLocator)
+    public RootCommand(ClientCommand clientCommand, TierCommand tierCommand, AnnouncementCommand announcementCommand)
     {
-        AddCommand(new ClientCommand(serviceLocator));
-        AddCommand(new TierCommand(serviceLocator));
-        AddCommand(new AnnouncementCommand(serviceLocator));
+        AddCommand(clientCommand);
+        AddCommand(tierCommand);
+        AddCommand(announcementCommand);
     }
 }

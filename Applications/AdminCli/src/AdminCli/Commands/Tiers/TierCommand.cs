@@ -1,11 +1,11 @@
-using Backbone.AdminCli.Commands.BaseClasses;
+using System.CommandLine;
 
 namespace Backbone.AdminCli.Commands.Tiers;
 
-public class TierCommand : AdminCliCommand
+public class TierCommand : Command
 {
-    public TierCommand(ServiceLocator serviceLocator) : base("tier", serviceLocator)
+    public TierCommand(ListTiersCommand listTiersCommand) : base("tier")
     {
-        AddCommand(new ListTiersCommand(serviceLocator));
+        AddCommand(listTiersCommand);
     }
 }

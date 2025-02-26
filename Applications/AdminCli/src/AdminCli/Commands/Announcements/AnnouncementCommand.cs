@@ -1,11 +1,11 @@
-﻿using Backbone.AdminCli.Commands.BaseClasses;
+﻿using System.CommandLine;
 
 namespace Backbone.AdminCli.Commands.Announcements;
 
-public class AnnouncementCommand : AdminCliCommand
+public class AnnouncementCommand : Command
 {
-    public AnnouncementCommand(ServiceLocator serviceLocator) : base("announcement", serviceLocator)
+    public AnnouncementCommand(SendAnnouncementCommand sendAnnouncementCommand) : base("announcement")
     {
-        AddCommand(new SendAnnouncementCommand(serviceLocator));
+        AddCommand(sendAnnouncementCommand);
     }
 }

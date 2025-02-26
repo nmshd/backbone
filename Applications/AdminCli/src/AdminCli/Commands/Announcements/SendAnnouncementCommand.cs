@@ -7,9 +7,9 @@ using MediatR;
 
 namespace Backbone.AdminCli.Commands.Announcements;
 
-public class SendAnnouncementCommand : AdminCliDbCommand
+public class SendAnnouncementCommand : AdminCliCommand
 {
-    public SendAnnouncementCommand(ServiceLocator serviceLocator) : base("send", serviceLocator)
+    public SendAnnouncementCommand(IMediator mediator) : base(mediator, "send")
     {
         var expiresAt = new Option<string?>("--expiration")
         {
@@ -26,10 +26,10 @@ public class SendAnnouncementCommand : AdminCliDbCommand
         AddOption(expiresAt);
         AddOption(severity);
 
-        this.SetHandler(SendAnnouncement, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, severity, expiresAt);
+        this.SetHandler(SendAnnouncement, severity, expiresAt);
     }
 
-    private async Task SendAnnouncement(string dbProvider, string dbConnectionString, string? severityInput, string? expiresAtInput)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput)
     {
         try
         {
@@ -60,17 +60,23 @@ public class SendAnnouncementCommand : AdminCliDbCommand
 
             Console.WriteLine(@"Sending announcement...");
 
-            var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
-
-            var response = await mediator.Send(new CreateAnnouncementCommand
+            try
             {
-                Texts = texts,
-                Severity = severity,
-                ExpiresAt = expiresAt
-            }, CancellationToken.None);
+                var response = await _mediator.Send(new CreateAnnouncementCommand
+                {
+                    Texts = texts,
+                    Severity = severity,
+                    ExpiresAt = expiresAt
+                }, CancellationToken.None);
 
-            Console.WriteLine(@"Announcement sent successfully");
-            Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
+                Console.WriteLine(@"Announcement sent successfully");
+                Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         catch (Exception e)
         {
