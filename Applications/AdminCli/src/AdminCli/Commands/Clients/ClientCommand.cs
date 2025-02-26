@@ -1,13 +1,13 @@
-using Backbone.AdminCli.Commands.BaseClasses;
+using System.CommandLine;
 
 namespace Backbone.AdminCli.Commands.Clients;
 
-public class ClientCommand : AdminCliCommand
+public class ClientCommand : Command
 {
-    public ClientCommand(ServiceLocator serviceLocator) : base("client", serviceLocator)
+    public ClientCommand(CreateClientCommand createClientCommand, ListClientsCommand listClientsCommand, DeleteClientsCommand deleteClientsCommand) : base("client")
     {
-        AddCommand(new CreateClientCommand(serviceLocator));
-        AddCommand(new ListClientsCommand(serviceLocator));
-        AddCommand(new DeleteClientsCommand(serviceLocator));
+        AddCommand(createClientCommand);
+        AddCommand(listClientsCommand);
+        AddCommand(deleteClientsCommand);
     }
 }

@@ -26,6 +26,8 @@ services:
     command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/sql-scripts/setup.sql"
 
   admin-cli:
+    volumes:
+      - ./appsettings.override.sqlserver.docker.json:/app/appsettings.override.json
     environment:
       Database__Provider: SqlServer
       Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
