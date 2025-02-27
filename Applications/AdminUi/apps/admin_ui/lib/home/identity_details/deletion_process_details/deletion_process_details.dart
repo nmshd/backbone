@@ -41,17 +41,10 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             Row(
               children: [
                 BackButton(onPressed: () => context.pop(false)),
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: _reloadIdentityDeletionProcessAuditLogs,
-                  tooltip: context.l10n.reload,
-                ),
+                IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadIdentityDeletionProcessAuditLogs, tooltip: context.l10n.reload),
               ],
             ),
-          _DeletionProcessDetailsCard(
-            address: widget.address,
-            deletionProcessDetails: deletionProcessDetails,
-          ),
+          _DeletionProcessDetailsCard(address: widget.address, deletionProcessDetails: deletionProcessDetails),
           Gaps.h16,
           Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _deletionProcessesDetails!.auditLog)),
           Gaps.h8,
@@ -60,9 +53,10 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Tooltip(
-                message: deletionProcessDetails.status == DeletionProcessStatus.approved
-                    ? ''
-                    : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
+                message:
+                    deletionProcessDetails.status == DeletionProcessStatus.approved
+                        ? ''
+                        : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.error,
@@ -90,18 +84,16 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
     if (!confirmed) return;
 
-    final result =
-        await GetIt.I.get<AdminApiClient>().identities.cancelDeletionProcess(address: widget.address, deletionProcessId: widget.deletionProcessId);
+    final result = await GetIt.I.get<AdminApiClient>().identities.cancelDeletionProcess(
+      address: widget.address,
+      deletionProcessId: widget.deletionProcessId,
+    );
 
     if (result.hasError) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Theme.of(context).colorScheme.error,
-            content: Text(result.error.message),
-            showCloseIcon: true,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(backgroundColor: Theme.of(context).colorScheme.error, content: Text(result.error.message), showCloseIcon: true));
       }
       return;
     }
@@ -121,9 +113,9 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
   Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
     final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
-          address: widget.address,
-          deletionProcessId: widget.deletionProcessId,
-        );
+      address: widget.address,
+      deletionProcessId: widget.deletionProcessId,
+    );
 
     if (!mounted) return;
 
@@ -137,10 +129,7 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
   final String address;
   final IdentityDeletionProcessDetail deletionProcessDetails;
 
-  const _DeletionProcessDetailsCard({
-    required this.address,
-    required this.deletionProcessDetails,
-  });
+  const _DeletionProcessDetailsCard({required this.address, required this.deletionProcessDetails});
 
   @override
   Widget build(BuildContext context) {

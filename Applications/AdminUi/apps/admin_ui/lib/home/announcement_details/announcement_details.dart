@@ -10,10 +10,7 @@ import '/core/core.dart';
 class AnnouncementDetails extends StatefulWidget {
   final String announcementId;
 
-  const AnnouncementDetails({
-    required this.announcementId,
-    super.key,
-  });
+  const AnnouncementDetails({required this.announcementId, super.key});
 
   @override
   State<AnnouncementDetails> createState() => _AnnouncementDetailsState();
@@ -47,11 +44,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
               Row(
                 children: [
                   const BackButton(),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: _loadAnnouncement,
-                    tooltip: context.l10n.reload,
-                  ),
+                  IconButton(icon: const Icon(Icons.refresh), onPressed: _loadAnnouncement, tooltip: context.l10n.reload),
                 ],
               ),
             Card(
@@ -104,9 +97,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 class _AnnouncementsTextTable extends StatelessWidget {
   final List<AnnouncementText> announcementTexts;
 
-  const _AnnouncementsTextTable({
-    required this.announcementTexts,
-  });
+  const _AnnouncementsTextTable({required this.announcementTexts});
 
   @override
   Widget build(BuildContext context) {
@@ -120,17 +111,18 @@ class _AnnouncementsTextTable extends StatelessWidget {
             DataColumn2(label: Text(context.l10n.title)),
             DataColumn2(label: Text(context.l10n.body)),
           ],
-          rows: announcementTexts
-              .map(
-                (announcementText) => DataRow(
-                  cells: [
-                    DataCell(Text(AnnouncementLanguages.languages.firstWhere((language) => language.isoCode == announcementText.language).name)),
-                    DataCell(Text(announcementText.title)),
-                    DataCell(Text(announcementText.body)),
-                  ],
-                ),
-              )
-              .toList(),
+          rows:
+              announcementTexts
+                  .map(
+                    (announcementText) => DataRow(
+                      cells: [
+                        DataCell(Text(AnnouncementLanguages.languages.firstWhere((language) => language.isoCode == announcementText.language).name)),
+                        DataCell(Text(announcementText.title)),
+                        DataCell(Text(announcementText.body)),
+                      ],
+                    ),
+                  )
+                  .toList(),
         ),
       ),
     );

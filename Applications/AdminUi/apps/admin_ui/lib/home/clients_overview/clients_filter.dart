@@ -12,13 +12,7 @@ class ClientsFilter {
   final (FilterOperator, DateTime)? createdAt;
   final (FilterOperator, int)? numberOfIdentities;
 
-  const ClientsFilter({
-    this.clientId,
-    this.displayName,
-    this.tiers,
-    this.createdAt,
-    this.numberOfIdentities,
-  });
+  const ClientsFilter({this.clientId, this.displayName, this.tiers, this.createdAt, this.numberOfIdentities});
 
   static const empty = ClientsFilter();
 
@@ -83,10 +77,7 @@ class ClientsFilter {
 class ClientsFilterRow extends StatefulWidget {
   final void Function(ClientsFilter filter) onFilterChanged;
 
-  const ClientsFilterRow({
-    required this.onFilterChanged,
-    super.key,
-  });
+  const ClientsFilterRow({required this.onFilterChanged, super.key});
 
   @override
   State<ClientsFilterRow> createState() => _ClientsFilterRowState();
@@ -154,9 +145,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             DateFilter(
               label: context.l10n.createdAt,
               onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
-                filter = filter.copyWith(
-                  createdAt: selectedDate == null ? const Optional.absent() : Optional((operator, selectedDate)),
-                );
+                filter = filter.copyWith(createdAt: selectedDate == null ? const Optional.absent() : Optional((operator, selectedDate)));
 
                 widget.onFilterChanged(filter);
               },

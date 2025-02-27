@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../generated/l10n/app_localizations.dart';
 import 'theme/theme.dart';
 
 extension AppLocalizationsExtension on BuildContext {
@@ -22,18 +22,10 @@ extension GetCustomColors on BuildContext {
 }
 
 extension SetClipboardDataWithSnack on BuildContext {
-  void setClipboardDataWithSuccessNotification({
-    required String clipboardText,
-    required String successMessage,
-  }) {
+  void setClipboardDataWithSuccessNotification({required String clipboardText, required String successMessage}) {
     Clipboard.setData(ClipboardData(text: clipboardText));
 
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(successMessage),
-        showCloseIcon: true,
-      ),
-    );
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(successMessage), showCloseIcon: true));
   }
 }
 

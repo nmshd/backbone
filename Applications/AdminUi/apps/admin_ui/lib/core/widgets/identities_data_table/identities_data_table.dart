@@ -13,12 +13,7 @@ class IdentitiesDataTable extends StatefulWidget {
   final bool hideClientColumn;
   final bool hideTierColumn;
 
-  const IdentitiesDataTable({
-    required this.dataSource,
-    this.hideTierColumn = false,
-    this.hideClientColumn = false,
-    super.key,
-  });
+  const IdentitiesDataTable({required this.dataSource, this.hideTierColumn = false, this.hideClientColumn = false, super.key});
 
   @override
   State<IdentitiesDataTable> createState() => _IdentitiesDataTableState();
@@ -45,16 +40,17 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       availableRowsPerPage: const [5, 10, 25, 50, 100],
       wrapInCard: false,
       empty: Text(context.l10n.identitiesDataTable_noIdentitiesFound),
-      errorBuilder: (error) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(context.l10n.identitiesDataTable_failedToLoadData),
-            Gaps.h16,
-            FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
-          ],
-        ),
-      ),
+      errorBuilder:
+          (error) => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(context.l10n.identitiesDataTable_failedToLoadData),
+                Gaps.h16,
+                FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
+              ],
+            ),
+          ),
       columns: <DataColumn2>[
         DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
         if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),

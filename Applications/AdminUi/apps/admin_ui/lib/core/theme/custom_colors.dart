@@ -30,12 +30,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.onDecorative2Container,
   });
 
-  factory CustomColors.light(
-    Color successSeedColor,
-    Color warningSeedColor,
-    Color decorativeSeedColor,
-    Color decorative2SeedColor,
-  ) {
+  factory CustomColors.light(Color successSeedColor, Color warningSeedColor, Color decorativeSeedColor, Color decorative2SeedColor) {
     final colorScheme = SeedColorScheme.fromSeeds(
       primaryKey: successSeedColor,
       primary: successSeedColor,
@@ -51,12 +46,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     return CustomColors._fromColorScheme(colorScheme);
   }
 
-  factory CustomColors.dark(
-    Color successSeedColor,
-    Color warningSeedColor,
-    Color decorativeSeedColor,
-    Color decorative2SeedColor,
-  ) {
+  factory CustomColors.dark(Color successSeedColor, Color warningSeedColor, Color decorativeSeedColor, Color decorative2SeedColor) {
     final colorScheme = SeedColorScheme.fromSeeds(
       brightness: Brightness.dark,
       primaryKey: successSeedColor,

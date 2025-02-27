@@ -8,10 +8,7 @@ import '/core/core.dart';
 class DeletionProcessAuditLogsTable extends StatefulWidget {
   final List<IdentityDeletionProcessAuditLogEntry> auditLogs;
 
-  const DeletionProcessAuditLogsTable({
-    required this.auditLogs,
-    super.key,
-  });
+  const DeletionProcessAuditLogsTable({required this.auditLogs, super.key});
 
   @override
   State<DeletionProcessAuditLogsTable> createState() => _DeletionProcessAuditLogsTableState();
@@ -32,25 +29,22 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
             DataColumn2(label: Text('Old Status'), size: ColumnSize.S),
             DataColumn2(label: Text('New Status'), size: ColumnSize.S),
           ],
-          rows: widget.auditLogs.map((auditLog) {
-            return DataRow(
-              cells: [
-                DataCell(Text(auditLog.id)),
-                DataCell(
-                  Text(
-                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(auditLog.createdAt)} ${DateFormat.Hms().format(auditLog.createdAt)}',
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    _getMessageForDeletionProcessAuditLog(auditLog.messageKey, auditLog.additionalData),
-                  ),
-                ),
-                DataCell(auditLog.oldStatus == null ? const Text('') : Text(_getReformatedStatus(auditLog.oldStatus!))),
-                DataCell(Text(_getReformatedStatus(auditLog.newStatus))),
-              ],
-            );
-          }).toList(),
+          rows:
+              widget.auditLogs.map((auditLog) {
+                return DataRow(
+                  cells: [
+                    DataCell(Text(auditLog.id)),
+                    DataCell(
+                      Text(
+                        '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(auditLog.createdAt)} ${DateFormat.Hms().format(auditLog.createdAt)}',
+                      ),
+                    ),
+                    DataCell(Text(_getMessageForDeletionProcessAuditLog(auditLog.messageKey, auditLog.additionalData))),
+                    DataCell(auditLog.oldStatus == null ? const Text('') : Text(_getReformatedStatus(auditLog.oldStatus!))),
+                    DataCell(Text(_getReformatedStatus(auditLog.newStatus))),
+                  ],
+                );
+              }).toList(),
         ),
       ),
     );

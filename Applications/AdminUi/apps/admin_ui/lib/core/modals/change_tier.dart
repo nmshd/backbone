@@ -17,22 +17,23 @@ Future<void> showChangeTierDialog({
 
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ShowChangeTierDialog(
-      onTierUpdated: onTierUpdated,
-      currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
-      assignTier: ({required String tierId}) {
-        if (clientDetails != null) {
-          return GetIt.I.get<AdminApiClient>().clients.updateClient(
+    builder:
+        (BuildContext context) => _ShowChangeTierDialog(
+          onTierUpdated: onTierUpdated,
+          currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
+          assignTier: ({required String tierId}) {
+            if (clientDetails != null) {
+              return GetIt.I.get<AdminApiClient>().clients.updateClient(
                 clientDetails.clientId,
                 defaultTier: tierId,
                 maxIdentities: clientDetails.maxIdentities,
               );
-        }
+            }
 
-        return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
-      },
-      availableTiers: availableTiers,
-    ),
+            return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
+          },
+          availableTiers: availableTiers,
+        ),
   );
 }
 
@@ -42,12 +43,7 @@ class _ShowChangeTierDialog extends StatefulWidget {
   final List<TierOverview> availableTiers;
   final String currentTier;
 
-  const _ShowChangeTierDialog({
-    required this.onTierUpdated,
-    required this.availableTiers,
-    required this.assignTier,
-    required this.currentTier,
-  });
+  const _ShowChangeTierDialog({required this.onTierUpdated, required this.availableTiers, required this.assignTier, required this.currentTier});
 
   @override
   State<_ShowChangeTierDialog> createState() => _ShowChangeTierDialogState();
@@ -78,17 +74,15 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
             value: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue!),
-            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
-              return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
-            }).toList(),
+            items:
+                widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
+                  return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
+                }).toList(),
           ),
         ),
         actions: [
           OutlinedButton(onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.cancel)),
-          FilledButton(
-            onPressed: _saving || _selectedTier == widget.currentTier ? null : _changeTier,
-            child: Text(context.l10n.change),
-          ),
+          FilledButton(onPressed: _saving || _selectedTier == widget.currentTier ? null : _changeTier, child: Text(context.l10n.change)),
         ],
       ),
     );
@@ -102,18 +96,14 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     if (!mounted) return;
 
     if (response.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.changeTierDialog_error), duration: const Duration(seconds: 3)),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.changeTierDialog_error), duration: const Duration(seconds: 3)));
 
       setState(() => _saving = false);
 
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.changeTierDialog_success), duration: const Duration(seconds: 3)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.changeTierDialog_success), duration: const Duration(seconds: 3)));
 
     widget.onTierUpdated();
 

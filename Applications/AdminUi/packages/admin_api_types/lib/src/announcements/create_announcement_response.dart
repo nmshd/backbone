@@ -11,12 +11,7 @@ class CreateAnnouncementResponse {
   final List<AnnouncementText> texts;
   final List<String>? recipients;
 
-  CreateAnnouncementResponse({
-    required this.severity,
-    required this.texts,
-    this.recipients,
-    this.expiresAt,
-  });
+  CreateAnnouncementResponse({required this.severity, required this.texts, this.recipients, this.expiresAt});
 
   factory CreateAnnouncementResponse.fromJson(dynamic json) => _$CreateAnnouncementResponseFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$CreateAnnouncementResponseToJson(this);

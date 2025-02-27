@@ -4,14 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-Future<void> showAnnouncementDetailsDialog({
-  required BuildContext context,
-  required List<AnnouncementText> announcementTexts,
-}) async {
-  await showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => _AnnouncementTextDialog(announcementTexts: announcementTexts),
-  );
+Future<void> showAnnouncementDetailsDialog({required BuildContext context, required List<AnnouncementText> announcementTexts}) async {
+  await showDialog<void>(context: context, builder: (BuildContext context) => _AnnouncementTextDialog(announcementTexts: announcementTexts));
 }
 
 class _AnnouncementTextDialog extends StatelessWidget {
@@ -38,15 +32,7 @@ class _AnnouncementTextDialog extends StatelessWidget {
             ],
           ),
         ),
-        actions: [
-          SizedBox(
-            height: 40,
-            child: OutlinedButton(
-              child: Text(context.l10n.close),
-              onPressed: () => context.pop(),
-            ),
-          ),
-        ],
+        actions: [SizedBox(height: 40, child: OutlinedButton(child: Text(context.l10n.close), onPressed: () => context.pop()))],
       ),
     );
   }

@@ -8,10 +8,7 @@ import 'identity_relationship_data_table_source.dart';
 class IdentityRelationshipTable extends StatefulWidget {
   final IdentityRelationshipDataTableSource dataSource;
 
-  const IdentityRelationshipTable({
-    required this.dataSource,
-    super.key,
-  });
+  const IdentityRelationshipTable({required this.dataSource, super.key});
 
   @override
   State<IdentityRelationshipTable> createState() => _IdentityRelationshipTableState();
@@ -43,16 +40,17 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
                 wrapInCard: false,
                 empty: Text(context.l10n.identityRelationshipTable_emptyRelationshipTable),
-                errorBuilder: (error) => Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(context.l10n.identityRelationshipTable_errorLoadingData),
-                      Gaps.h16,
-                      FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
-                    ],
-                  ),
-                ),
+                errorBuilder:
+                    (error) => Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(context.l10n.identityRelationshipTable_errorLoadingData),
+                          Gaps.h16,
+                          FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
+                        ],
+                      ),
+                    ),
                 columns: <DataColumn2>[
                   DataColumn2(label: Text(context.l10n.identityRelationshipTable_peer), size: ColumnSize.L),
                   DataColumn2(label: Text(context.l10n.identityRelationshipTable_requestedBy), size: ColumnSize.S),

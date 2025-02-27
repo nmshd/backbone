@@ -31,11 +31,7 @@ class _IdentityMessagesState extends State<IdentityMessages> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityMessagesDataTableSource(
-      participant: widget.participant,
-      type: widget.type,
-      locale: Localizations.localeOf(context),
-    );
+    _dataSource = IdentityMessagesDataTableSource(participant: widget.participant, type: widget.type, locale: Localizations.localeOf(context));
   }
 
   @override
