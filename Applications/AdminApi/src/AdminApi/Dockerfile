@@ -106,16 +106,16 @@ FROM ghcr.io/cirruslabs/android-sdk:34 AS flutter-build-env
 
 USER root
 
-ENV FLUTTER_HOME=${HOME}/sdks/flutter
-ENV FLUTTER_VERSION=3.29.0
+ENV FLUTTER_HOME=/sdks/flutter
 ENV FLUTTER_ROOT=$FLUTTER_HOME
-ENV PATH ${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
+ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
 
-RUN git clone --depth 1 --branch ${FLUTTER_VERSION} https://github.com/flutter/flutter.git ${FLUTTER_HOME}
-
-RUN yes | flutter doctor --android-licenses \
-    && flutter doctor \
+RUN curl -sLO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz \
+    && mkdir -p ${FLUTTER_HOME} \
+    && tar -xf flutter_linux_3.29.0-stable.tar.xz -C /sdks/ \
     && chown -R root:root ${FLUTTER_HOME}
+
+RUN flutter doctor
 
 COPY Applications/AdminUi /src
 WORKDIR /src
