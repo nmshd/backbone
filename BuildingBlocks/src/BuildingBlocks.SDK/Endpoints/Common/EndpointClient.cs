@@ -148,7 +148,7 @@ public class EndpointClient
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
         deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
-        deserializedResponseContent.ETag = response.Headers.ETag!.Tag; //TODO: Timo (Is it safe to assume that the ETag is non-null?)
+        deserializedResponseContent.ETag = response.Headers.ETag!.Tag;
 
         return deserializedResponseContent;
     }
