@@ -1,13 +1,13 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'core/models/models.dart';
 import 'core/theme/theme.dart';
+import 'generated/l10n/app_localizations.dart';
 import 'home/home.dart';
 import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart' if (dart.library.js_interop) 'setup/setup_web.dart';
