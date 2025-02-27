@@ -1,7 +1,9 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+﻿using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.Modules.Tags.Application.Tags.Queries.ListTags;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.Modules.Tags.ConsumerApi.Controllers;
@@ -15,6 +17,7 @@ public class TagsController : ApiControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListTagsResponse>), StatusCodes.Status200OK)]
     [AllowAnonymous]
     public async Task<IActionResult> ListTags(CancellationToken cancellationToken)
     {

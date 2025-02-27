@@ -31,7 +31,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPost("{identityAddress}/Quotas")]
-    [ProducesResponseType(typeof(IndividualQuotaDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IndividualQuotaDTO>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateIndividualQuota([FromRoute] string identityAddress, [FromBody] CreateQuotaForIdentityRequest request, CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{address}")]
-    [ProducesResponseType(typeof(GetIdentityResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetIdentityResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
@@ -119,7 +119,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses")]
-    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsSupportResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
@@ -128,7 +128,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/AuditLogs")]
-    [ProducesResponseType(typeof(GetDeletionProcessesAuditLogsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAuditLogsResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
@@ -146,7 +146,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]
-    [ProducesResponseType(typeof(IdentityDeletionProcessDetailsDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IdentityDeletionProcessDetailsDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcessAsSupport([FromRoute] string identityAddress, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {

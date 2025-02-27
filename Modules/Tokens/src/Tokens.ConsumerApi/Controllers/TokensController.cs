@@ -39,6 +39,7 @@ public class TokensController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TokenDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
     public async Task<IActionResult> GetToken([FromRoute] string id, [FromQuery] byte[]? password, CancellationToken cancellationToken)
@@ -49,8 +50,9 @@ public class TokensController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListTokensQueryItem[]? tokens,
-        [FromQuery] List<string> ids, CancellationToken cancellationToken)
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListTokensQueryItem[]? tokens, [FromQuery] List<string> ids,
+        CancellationToken cancellationToken)
     {
         // We keep this code for backwards compatibility reasons. In a few months the `ids`
         // parameter will become required again, and the fallback to `tokens` will be removed.
@@ -61,8 +63,7 @@ public class TokensController : ApiControllerBase
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var response = await _mediator.Send(request, cancellationToken);
 
@@ -71,6 +72,7 @@ public class TokensController : ApiControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteToken([FromRoute] string id, CancellationToken cancellationToken)
     {

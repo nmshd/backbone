@@ -9,6 +9,7 @@ namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
 
 [Route("api/poc/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
+[ApiExplorerSettings(IgnoreApi = true)] // don't show this endpoints of this controller in the API docs as it's just a PoC
 public class PublicRelationshipTemplateReferencesController : ApiControllerBase
 {
     private readonly Configuration _options;

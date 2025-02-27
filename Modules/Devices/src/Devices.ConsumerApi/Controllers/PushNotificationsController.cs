@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
@@ -15,10 +16,12 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class PushNotificationsController : ApiControllerBase
 {
-    public PushNotificationsController(IMediator mediator) : base(mediator) { }
+    public PushNotificationsController(IMediator mediator) : base(mediator)
+    {
+    }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateDeviceRegistrationResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterForPushNotifications(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
@@ -35,6 +38,7 @@ public class PushNotificationsController : ApiControllerBase
     }
 
     [HttpPost("SendTestNotification")]
+    [ApiExplorerSettings(IgnoreApi = true)] // don't show this in the API docs as it's just for internal testing 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> SendTestPushNotification([FromBody] dynamic data, CancellationToken cancellationToken)
     {

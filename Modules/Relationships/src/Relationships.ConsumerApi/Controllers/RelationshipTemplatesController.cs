@@ -31,6 +31,7 @@ public class RelationshipTemplatesController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipTemplateDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(string id, [FromQuery] byte[]? password, CancellationToken cancellationToken)
     {
@@ -39,8 +40,8 @@ public class RelationshipTemplatesController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
-        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListRelationshipTemplatesQueryItem[]? templates,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
@@ -60,8 +61,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipTemplateResponse>),
-        StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipTemplateResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {
@@ -71,6 +71,7 @@ public class RelationshipTemplatesController : ApiControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
     {

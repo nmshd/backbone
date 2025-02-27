@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
-using Backbone.Modules.Challenges.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,8 +31,9 @@ public class ChallengesController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChallengeDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById([FromRoute] ChallengeId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetById([FromRoute] string id, CancellationToken cancellationToken)
     {
         var @event = await _mediator.Send(new GetChallengeByIdQuery { Id = id }, cancellationToken);
         return Ok(@event);
