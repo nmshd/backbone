@@ -121,6 +121,7 @@ COPY Applications/AdminUi /src
 WORKDIR /src
 RUN dart pub global activate melos
 RUN dart pub global run melos:melos bootstrap
+RUN dart pub global run melos:melos generate_translations
 WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
