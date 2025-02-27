@@ -68,7 +68,7 @@ public abstract class ApiControllerBase : ControllerBase
     {
         if (paginationData.TotalPages <= 1) return Ok(pagedData);
 
-        var response = new PagedHttpResponseEnvelope<T>(pagedData, new PagedHttpResponseEnvelopePaginationData
+        var response = new PagedHttpResponseEnvelope<T>(pagedData, new PagedHttpResponseEnvelope<T>.PaginationData
         {
             TotalRecords = paginationData.TotalRecords,
             PageNumber = paginationData.PageNumber,
