@@ -28,7 +28,8 @@ public class EventQueue : IEventQueue
 
     public async Task EnqueueFor(string address, string eventName, CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Enqueueing event '{EventName}'", eventName);
+        var sanitizedEventName = eventName.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        _logger.LogDebug("Enqueueing event '{EventName}'", sanitizedEventName);
 
         if (!_channels.TryGetValue(address, out var channel))
             throw new ClientNotFoundException();
