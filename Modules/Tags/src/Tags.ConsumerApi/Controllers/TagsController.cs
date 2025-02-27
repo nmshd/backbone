@@ -1,5 +1,6 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text.Json;
+using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.Modules.Tags.Application.Tags.Queries.ListTags;
 using MediatR;
@@ -22,6 +23,7 @@ public class TagsController : ApiControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListTagsResponse>), StatusCodes.Status200OK)]
     [AllowAnonymous]
     public async Task<IActionResult> ListTags([FromHeader(Name = "If-None-Match")] string? ifNoneMatch, CancellationToken cancellationToken)
     {
