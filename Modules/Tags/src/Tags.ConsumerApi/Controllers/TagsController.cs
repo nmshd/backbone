@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NeoSmart.Utils;
 
 namespace Backbone.Modules.Tags.ConsumerApi.Controllers;
 
@@ -27,11 +28,12 @@ public class TagsController : ApiControllerBase
         var response = await _mediator.Send(new ListTagsQuery(), cancellationToken);
         var json = JsonSerializer.SerializeToUtf8Bytes(response);
         var responseHash = _hasher.ComputeHash(json);
-        var hashString = Convert.ToBase64String(responseHash);
+        var hashString = UrlBase64.Encode(responseHash);
+        var etag = $"\"{hashString}\"";
 
-        Response.Headers.ETag = hashString;
+        Response.Headers.ETag = etag;
 
-        if (ifNoneMatch != null && ifNoneMatch.SequenceEqual(hashString))
+        if (ifNoneMatch != null && (ifNoneMatch.SequenceEqual(etag) || ifNoneMatch.SequenceEqual(hashString)))
             return StatusCode(StatusCodes.Status304NotModified);
 
         return Ok(response);
