@@ -40,11 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      appBar: AppBar(
-        title: const AppTitle(),
-        centerTitle: false,
-        leading: Gaps.w40,
-      ),
+      appBar: AppBar(title: const AppTitle(), centerTitle: false, leading: Gaps.w40),
       body: Center(
         child: SizedBox(
           width: 400,

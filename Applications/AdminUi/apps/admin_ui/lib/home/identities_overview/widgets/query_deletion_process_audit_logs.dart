@@ -57,22 +57,20 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                 ),
                 Gaps.w8,
                 ElevatedButton(
-                  onPressed: isButtonEnabled
-                      ? () {
-                          final address = textController.text.trim();
-                          textController.clear();
-                          context.push('/identities/$address/deletion-process-audit-logs');
-                        }
-                      : null,
+                  onPressed:
+                      isButtonEnabled
+                          ? () {
+                            final address = textController.text.trim();
+                            textController.clear();
+                            context.push('/identities/$address/deletion-process-audit-logs');
+                          }
+                          : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isButtonEnabled ? Theme.of(context).colorScheme.primary : Colors.grey,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   ),
-                  child: Text(
-                    context.l10n.find,
-                    style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.white),
-                  ),
+                  child: Text(context.l10n.find, style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.white)),
                 ),
               ],
             ),

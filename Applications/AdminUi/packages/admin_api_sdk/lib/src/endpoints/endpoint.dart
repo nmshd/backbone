@@ -20,11 +20,7 @@ abstract class Endpoint {
 
   @protected
   Future<ApiResponse<T>> get<T>(String path, {required T Function(dynamic) transformer, Map<String, dynamic>? query}) async {
-    final response = await _dio.get<Map<String, dynamic>>(
-      path,
-      queryParameters: query,
-      options: Options(headers: {'Accept': 'application/json'}),
-    );
+    final response = await _dio.get<Map<String, dynamic>>(path, queryParameters: query, options: Options(headers: {'Accept': 'application/json'}));
     return _makeResult(response, transformer);
   }
 
@@ -69,7 +65,10 @@ abstract class Endpoint {
     int? expectedStatus,
     bool allowEmptyResponse = false,
   }) {
-    expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) { 'POST' => 201, _ => 200 };
+    expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) {
+      'POST' => 201,
+      _ => 200,
+    };
 
     final payload = httpResponse.data;
 
@@ -109,13 +108,7 @@ abstract class Endpoint {
   }) async {
     final response = await _dio.get<Map<String, dynamic>>(
       path,
-      queryParameters: {
-        r'$top': '$pageSize',
-        r'$skip': '$pageNumber',
-        r'$count': 'true',
-        r'$orderBy': orderBy,
-        ...query ?? {},
-      },
+      queryParameters: {r'$top': '$pageSize', r'$skip': '$pageNumber', r'$count': 'true', r'$orderBy': orderBy, ...query ?? {}},
       options: Options(headers: {'Accept': 'application/json'}),
     );
     return _makeODataResult(response, transformer, pageNumber: pageNumber, pageSize: pageSize);

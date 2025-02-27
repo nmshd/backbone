@@ -42,12 +42,7 @@ class Pagination {
   final int totalPages;
   final int totalRecords;
 
-  Pagination({
-    required this.pageNumber,
-    required this.pageSize,
-    required this.totalPages,
-    required this.totalRecords,
-  });
+  Pagination({required this.pageNumber, required this.pageSize, required this.totalPages, required this.totalRecords});
 
   factory Pagination.fromJson(Map<String, dynamic> json) {
     return Pagination(

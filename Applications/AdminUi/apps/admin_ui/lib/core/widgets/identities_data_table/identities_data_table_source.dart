@@ -48,45 +48,46 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     final orderBy = _getODataOrderBy();
     try {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
-            pageNumber: pageNumber,
-            pageSize: count,
-            filter: _filter,
-            orderBy: orderBy,
-          );
+        pageNumber: pageNumber,
+        pageSize: count,
+        filter: _filter,
+        orderBy: orderBy,
+      );
       _pagination = response.pagination;
 
-      final rows = response.data.indexed
-          .map(
-            (identity) => DataRow2.byIndex(
-              index: pageNumber * count + identity.$1,
-              onTap: () => navigateToIdentity(address: identity.$2.address),
-              cells: [
-                DataCell(Text(identity.$2.address)),
-                if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
-                if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
-                DataCell(Text(identity.$2.numberOfDevices.toString())),
-                DataCell(
-                  Tooltip(
-                    message: '${DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)} ${DateFormat.Hms().format(identity.$2.createdAt)}',
-                    child: Text(DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)),
-                  ),
-                ),
-                DataCell(
-                  Tooltip(
-                    message: identity.$2.lastLoginAt != null
-                        ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
-                        : '',
-                    child: Text(
-                      identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : '',
+      final rows =
+          response.data.indexed
+              .map(
+                (identity) => DataRow2.byIndex(
+                  index: pageNumber * count + identity.$1,
+                  onTap: () => navigateToIdentity(address: identity.$2.address),
+                  cells: [
+                    DataCell(Text(identity.$2.address)),
+                    if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
+                    if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
+                    DataCell(Text(identity.$2.numberOfDevices.toString())),
+                    DataCell(
+                      Tooltip(
+                        message:
+                            '${DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)} ${DateFormat.Hms().format(identity.$2.createdAt)}',
+                        child: Text(DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)),
+                      ),
                     ),
-                  ),
+                    DataCell(
+                      Tooltip(
+                        message:
+                            identity.$2.lastLoginAt != null
+                                ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
+                                : '',
+                        child: Text(identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : ''),
+                      ),
+                    ),
+                    DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
+                    DataCell(Text(identity.$2.identityVersion.toString())),
+                  ],
                 ),
-                DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
-                DataCell(Text(identity.$2.identityVersion.toString())),
-              ],
-            ),
-          )
-          .toList();
+              )
+              .toList();
 
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {
@@ -102,13 +103,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   }
 
   String _getFieldNameByIndex(int index) => switch (index) {
-        0 => 'address',
-        2 => 'createdWithClient',
-        3 => 'numberOfDevices',
-        4 => 'createdAt',
-        5 => 'lastLoginAt',
-        6 => 'datawalletVersion',
-        7 => 'identityVersion',
-        _ => throw Exception('Invalid column index')
-      };
+    0 => 'address',
+    2 => 'createdWithClient',
+    3 => 'numberOfDevices',
+    4 => 'createdAt',
+    5 => 'lastLoginAt',
+    6 => 'datawalletVersion',
+    7 => 'identityVersion',
+    _ => throw Exception('Invalid column index'),
+  };
 }

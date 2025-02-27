@@ -4,8 +4,8 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: "^3.7.0"
+  flutter: ">=3.29.0"
 
 dependencies:
   admin_api_sdk: ^1.0.0
@@ -40,7 +40,6 @@ dev_dependencies:
   very_good_analysis: ^7.0.0
 
 flutter:
-  generate: true
   uses-material-design: true
   assets:
     - assets/logo.svg

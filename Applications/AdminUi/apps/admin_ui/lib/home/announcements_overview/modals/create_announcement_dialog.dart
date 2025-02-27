@@ -8,10 +8,7 @@ import 'package:intl/intl.dart';
 import '/core/core.dart';
 import '../widgets/language_picker.dart';
 
-Future<void> showCreateAnnouncementDialog({
-  required BuildContext context,
-  required VoidCallback onAnnouncementCreated,
-}) async {
+Future<void> showCreateAnnouncementDialog({required BuildContext context, required VoidCallback onAnnouncementCreated}) async {
   await showDialog<void>(
     context: context,
     builder: (BuildContext context) => _CreateAnnouncementDialog(onAnnouncementCreated: onAnnouncementCreated),
@@ -40,13 +37,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   void initState() {
     super.initState();
 
-    _announcementTextWidgets.add(
-      _AnnouncementTextFormWidget(
-        defaultLanguage: 'en',
-        formKey: _formKey,
-        onRemove: _remove,
-      ),
-    );
+    _announcementTextWidgets.add(_AnnouncementTextFormWidget(defaultLanguage: 'en', formKey: _formKey, onRemove: _remove));
   }
 
   @override
@@ -77,13 +68,11 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 Gaps.h16,
                 DropdownButtonFormField(
                   validator: (value) => validateRequiredField(context, value?.name),
-                  decoration: InputDecoration(
-                    labelText: '${context.l10n.createAnnouncementDialog_impact}*',
-                    border: const OutlineInputBorder(),
-                  ),
-                  items: _severityOptions.map((severity) {
-                    return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
-                  }).toList(),
+                  decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_impact}*', border: const OutlineInputBorder()),
+                  items:
+                      _severityOptions.map((severity) {
+                        return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
+                      }).toList(),
                   onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
                 ),
                 Gaps.h16,
@@ -129,35 +118,21 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                       icon: const Icon(Icons.add),
                       onPressed: () {
                         setState(() {
-                          _announcementTextWidgets.add(
-                            _AnnouncementTextFormWidget(
-                              formKey: _formKey,
-                              onRemove: _remove,
-                            ),
-                          );
+                          _announcementTextWidgets.add(_AnnouncementTextFormWidget(formKey: _formKey, onRemove: _remove));
                         });
                       },
                     ),
                   ],
                 ),
                 Gaps.h16,
-                Column(
-                  spacing: 16,
-                  children: _announcementTextWidgets,
-                ),
+                Column(spacing: 16, children: _announcementTextWidgets),
               ],
             ),
           ),
         ),
       ),
       actions: [
-        SizedBox(
-          height: 40,
-          child: OutlinedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.cancel),
-          ),
-        ),
+        SizedBox(height: 40, child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel))),
         SizedBox(
           height: 40,
           child: FilledButton(
@@ -168,17 +143,12 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 for (final announcementTextWidget in _announcementTextWidgets) {
                   final title = announcementTextWidget.titleController.text;
                   final body = announcementTextWidget.bodyController.text;
-                  final language = announcementTextWidget.languageController.text == ''
-                      ? announcementTextWidget.defaultLanguage
-                      : announcementTextWidget.languageController.text;
+                  final language =
+                      announcementTextWidget.languageController.text == ''
+                          ? announcementTextWidget.defaultLanguage
+                          : announcementTextWidget.languageController.text;
 
-                  announcementTexts.add(
-                    AnnouncementText(
-                      title: title,
-                      body: body,
-                      language: language!,
-                    ),
-                  );
+                  announcementTexts.add(AnnouncementText(title: title, body: body, language: language!));
                 }
 
                 final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
@@ -216,10 +186,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   void _showSuccessSnackbar() {
     final snackBar = SnackBar(
-      content: Text(
-        context.l10n.createAnnouncement_announcementSuccess,
-        style: const TextStyle(color: Colors.white),
-      ),
+      content: Text(context.l10n.createAnnouncement_announcementSuccess, style: const TextStyle(color: Colors.white)),
       backgroundColor: Colors.green,
       duration: const Duration(seconds: 3),
       showCloseIcon: true,
@@ -229,10 +196,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   void _showErrorSnackbar() {
     final snackBar = SnackBar(
-      content: Text(
-        context.l10n.createAnnouncement_announcementError,
-        style: const TextStyle(color: Colors.white),
-      ),
+      content: Text(context.l10n.createAnnouncement_announcementError, style: const TextStyle(color: Colors.white)),
       backgroundColor: Colors.red,
       duration: const Duration(seconds: 3),
       showCloseIcon: true,
@@ -245,11 +209,7 @@ class _AnnouncementTextFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final void Function(_AnnouncementTextFormWidget index) onRemove;
 
-  _AnnouncementTextFormWidget({
-    required this.formKey,
-    required this.onRemove,
-    this.defaultLanguage,
-  });
+  _AnnouncementTextFormWidget({required this.formKey, required this.onRemove, this.defaultLanguage});
 
   @override
   State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
@@ -283,9 +243,7 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
             if (widget.defaultLanguage == null) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(onPressed: () => widget.onRemove(widget), child: Text(context.l10n.remove)),
-                ],
+                children: [TextButton(onPressed: () => widget.onRemove(widget), child: Text(context.l10n.remove))],
               ),
               LanguagePicker(
                 width: MediaQuery.of(context).size.width,
@@ -301,18 +259,12 @@ class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget
             TextFormField(
               controller: widget.titleController,
               validator: (value) => validateRequiredField(context, value),
-              decoration: InputDecoration(
-                labelText: '${context.l10n.title}*',
-                border: const OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(labelText: '${context.l10n.title}*', border: const OutlineInputBorder()),
             ),
             TextFormField(
               controller: widget.bodyController,
               validator: (value) => validateRequiredField(context, value),
-              decoration: InputDecoration(
-                labelText: '${context.l10n.body}*',
-                border: const OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(labelText: '${context.l10n.body}*', border: const OutlineInputBorder()),
             ),
           ],
         ),

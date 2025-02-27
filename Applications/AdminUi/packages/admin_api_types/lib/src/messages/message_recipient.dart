@@ -6,9 +6,7 @@ part 'message_recipient.g.dart';
 class MessageRecipient {
   final String address;
 
-  MessageRecipient({
-    required this.address,
-  });
+  MessageRecipient({required this.address});
 
   factory MessageRecipient.fromJson(dynamic json) => _$MessageRecipientFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$MessageRecipientToJson(this);

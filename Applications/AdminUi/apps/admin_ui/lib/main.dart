@@ -1,13 +1,13 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'core/models/models.dart';
 import 'core/theme/theme.dart';
+import 'generated/l10n/app_localizations.dart';
 import 'home/home.dart';
 import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart' if (dart.library.js_interop) 'setup/setup_web.dart';
@@ -45,11 +45,7 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
-    GoRoute(
-      parentNavigatorKey: _rootNavigatorKey,
-      path: '/error',
-      builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString()),
-    ),
+    GoRoute(parentNavigatorKey: _rootNavigatorKey, path: '/error', builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString())),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
@@ -68,19 +64,19 @@ final _router = GoRouter(
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-details/:deletionProcessId',
-                  pageBuilder: (context, state) => NoTransitionPage(
-                    child: DeletionProcessDetails(
-                      address: state.pathParameters['address']!,
-                      deletionProcessId: state.pathParameters['deletionProcessId']!,
-                    ),
-                  ),
+                  pageBuilder:
+                      (context, state) => NoTransitionPage(
+                        child: DeletionProcessDetails(
+                          address: state.pathParameters['address']!,
+                          deletionProcessId: state.pathParameters['deletionProcessId']!,
+                        ),
+                      ),
                 ),
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-audit-logs',
-                  pageBuilder: (context, state) => NoTransitionPage(
-                    child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
-                  ),
+                  pageBuilder:
+                      (context, state) => NoTransitionPage(child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!)),
                 ),
               ],
             ),
@@ -138,18 +134,8 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
     return MaterialApp.router(
       title: 'Admin UI',
       themeMode: themeMode,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: lightColorScheme,
-        cardTheme: cardThemeLight,
-        extensions: [lightCustomColors],
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: darkColorScheme,
-        cardTheme: cardThemeDark,
-        extensions: [darkCustomColors],
-      ),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme, cardTheme: cardThemeLight, extensions: [lightCustomColors]),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme, cardTheme: cardThemeDark, extensions: [darkCustomColors]),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

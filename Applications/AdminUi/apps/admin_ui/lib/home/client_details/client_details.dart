@@ -66,12 +66,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                   ),
                 ],
               ),
-            _ClientDetailsCard(
-              clientDetails: clientDetails,
-              selectedTier: _selectedTier,
-              availableTiers: _tiers!,
-              updateClient: _reloadClient,
-            ),
+            _ClientDetailsCard(clientDetails: clientDetails, selectedTier: _selectedTier, availableTiers: _tiers!, updateClient: _reloadClient),
             Gaps.h16,
             IdentitiesTable(clientDetails: clientDetails),
           ],
@@ -105,12 +100,7 @@ class _ClientDetailsCard extends StatelessWidget {
   final List<TierOverview> availableTiers;
   final VoidCallback updateClient;
 
-  const _ClientDetailsCard({
-    required this.clientDetails,
-    required this.availableTiers,
-    required this.updateClient,
-    this.selectedTier,
-  });
+  const _ClientDetailsCard({required this.clientDetails, required this.availableTiers, required this.updateClient, this.selectedTier});
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +124,8 @@ class _ClientDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.maxIdentities,
                         value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
-                        onIconPressed: () => showChangeMaxIdentitiesDialog(
-                          context: context,
-                          clientDetails: clientDetails,
-                          onMaxIdentitiesUpdated: updateClient,
-                        ),
+                        onIconPressed:
+                            () => showChangeMaxIdentitiesDialog(context: context, clientDetails: clientDetails, onMaxIdentitiesUpdated: updateClient),
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
                       ),
@@ -150,14 +137,15 @@ class _ClientDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.clientDetails_card_defaultTier,
                         value: currentTier.name,
-                        onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
-                            ? () => showChangeTierDialog(
+                        onIconPressed:
+                            currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
+                                ? () => showChangeTierDialog(
                                   context: context,
                                   onTierUpdated: updateClient,
                                   clientDetails: clientDetails,
                                   availableTiers: availableTiers,
                                 )
-                            : null,
+                                : null,
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.changeTier,
                       ),

@@ -5,7 +5,7 @@ repository: https://github.com/nmshd/backbone
 homepage: https://enmeshed.eu
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: "^3.7.0"
 
 dev_dependencies:
   melos: ^6.1.0

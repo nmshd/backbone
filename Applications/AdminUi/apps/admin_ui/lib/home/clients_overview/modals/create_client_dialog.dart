@@ -111,10 +111,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               ),
               if (_saveSucceeded) ...[
                 Gaps.h16,
-                Text(
-                  context.l10n.clientSecret_save_message,
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                ),
+                Text(context.l10n.clientSecret_save_message, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
               ],
               Gaps.h24,
               TextField(
@@ -133,7 +130,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.maxIdentities,
-                  helperText: '${context.l10n.createClientDialog_maxIdentities_message}'
+                  helperText:
+                      '${context.l10n.createClientDialog_maxIdentities_message}'
                       '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -142,23 +140,15 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               Gaps.h24,
               DropdownButtonFormField<String>(
                 isExpanded: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.defaultTier}*',
-                ),
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.defaultTier}*'),
                 value: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
-                items: widget.defaultTiers.map((tier) {
-                  return DropdownMenuItem<String>(
-                    value: tier.id,
-                    child: Text(tier.name),
-                  );
-                }).toList(),
+                items:
+                    widget.defaultTiers.map((tier) {
+                      return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
+                    }).toList(),
               ),
-              if (_errorMessage != null) ...[
-                Gaps.h16,
-                Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-              ],
+              if (_errorMessage != null) ...[Gaps.h16, Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
             ],
           ),
         ),
@@ -182,12 +172,12 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     final maxNumberOfIdentities = _maxIdentitiesController.text.isNotEmpty ? int.parse(_maxIdentitiesController.text) : null;
 
     final response = await GetIt.I.get<AdminApiClient>().clients.createClient(
-          defaultTier: _chosenDefaultTier!,
-          clientId: _clientIdController.text.isNotEmpty ? _clientIdController.text : null,
-          clientSecret: _clientSecretController.text.isNotEmpty ? _clientSecretController.text : null,
-          displayName: _displayNameController.text.isNotEmpty ? _displayNameController.text : null,
-          maxIdentities: maxNumberOfIdentities,
-        );
+      defaultTier: _chosenDefaultTier!,
+      clientId: _clientIdController.text.isNotEmpty ? _clientIdController.text : null,
+      clientSecret: _clientSecretController.text.isNotEmpty ? _clientSecretController.text : null,
+      displayName: _displayNameController.text.isNotEmpty ? _displayNameController.text : null,
+      maxIdentities: maxNumberOfIdentities,
+    );
 
     setState(() => _saving = false);
 

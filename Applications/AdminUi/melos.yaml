@@ -11,7 +11,6 @@ ide:
 
 command:
   format:
-    lineLength: 150
     setExitIfChanged: true
 
 scripts:
@@ -27,3 +26,7 @@ scripts:
   outdated:
     run: melos exec -c 1 --no-flutter -- "dart pub outdated" && melos exec -c 1 --flutter -- "flutter pub outdated"
     description: Run `dart pub outdated` in all packages
+
+  generate_translations:
+    run: melos exec --dir-exists=lib/l10n --flutter -- "flutter gen-l10n && dart format lib/generated/l10n"
+    description: Generate translations in all packages

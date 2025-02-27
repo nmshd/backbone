@@ -9,11 +9,7 @@ class NumberFilter extends StatefulWidget {
   final void Function(FilterOperator operator, String enteredValue) onNumberSelected;
   final String label;
 
-  const NumberFilter({
-    required this.onNumberSelected,
-    required this.label,
-    super.key,
-  });
+  const NumberFilter({required this.onNumberSelected, required this.label, super.key});
 
   @override
   State<NumberFilter> createState() => _NumberFilterState();

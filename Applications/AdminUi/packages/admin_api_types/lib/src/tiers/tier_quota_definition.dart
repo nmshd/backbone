@@ -11,12 +11,7 @@ class TierQuotaDefinition {
   final int max;
   final String period;
 
-  TierQuotaDefinition({
-    required this.id,
-    required this.metric,
-    required this.max,
-    required this.period,
-  });
+  TierQuotaDefinition({required this.id, required this.metric, required this.max, required this.period});
 
   factory TierQuotaDefinition.fromJson(dynamic json) => _$TierQuotaDefinitionFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$TierQuotaDefinitionToJson(this);
