@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Backbone.AdminCli.Commands.Clients;
 
-public class CreateClientCommand : AdminCliDbCommand
+public class CreateClientCommand : AdminCliCommand
 {
-    public CreateClientCommand(ServiceLocator serviceLocator) : base("create", serviceLocator, "Create an OAuth client")
+    public CreateClientCommand(IMediator mediator) : base(mediator, "create", "Create an OAuth client")
     {
         var clientId = new Option<string>("--clientId")
         {
@@ -44,16 +44,13 @@ public class CreateClientCommand : AdminCliDbCommand
         AddOption(defaultTierId);
         AddOption(maxIdentities);
 
-        this.SetHandler(CreateClient, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientId, displayName, clientSecret,
-            defaultTierId, maxIdentities);
+        this.SetHandler(CreateClient, clientId, displayName, clientSecret, defaultTierId, maxIdentities);
     }
 
-    private async Task CreateClient(string dbProvider, string dbConnectionString, string? clientId,
+    private async Task CreateClient(string? clientId,
         string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
     {
-        var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
-
-        var response = await mediator.Send(new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities),
+        var response = await _mediator.Send(new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities),
             CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));

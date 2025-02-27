@@ -3,7 +3,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using static Backbone.Modules.Devices.Infrastructure.Tests.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 

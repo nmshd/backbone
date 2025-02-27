@@ -7,18 +7,16 @@ using MediatR;
 
 namespace Backbone.AdminCli.Commands.Tiers;
 
-public class ListTiersCommand : AdminCliDbCommand
+public class ListTiersCommand : AdminCliCommand
 {
-    public ListTiersCommand(ServiceLocator serviceLocator) : base("list", serviceLocator, "List all existing Tiers")
+    public ListTiersCommand(IMediator mediator) : base(mediator, "list", "List all existing Tiers")
     {
-        this.SetHandler(ListTiers, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION);
+        this.SetHandler(ListTiers);
     }
 
-    private async Task ListTiers(string dbProvider, string dbConnectionString)
+    private async Task ListTiers()
     {
-        var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
-
-        var response = await mediator.Send(new ListTiersQuery(new PaginationFilter()), CancellationToken.None);
+        var response = await _mediator.Send(new ListTiersQuery(new PaginationFilter()), CancellationToken.None);
 
         Console.WriteLine(@"The following tiers are configured:");
 

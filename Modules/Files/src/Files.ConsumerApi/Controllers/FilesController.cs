@@ -63,8 +63,8 @@ public class FilesController : ApiControllerBase
     }
 
     [HttpGet("{fileId}")]
-    [Produces(MediaTypeNames.Application.Octet)]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileContentResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType<byte[]>(StatusCodes.Status200OK, MediaTypeNames.Application.Octet)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DownloadFile(string fileId, CancellationToken cancellationToken)
     {
@@ -73,8 +73,9 @@ public class FilesController : ApiControllerBase
     }
 
 
-    [HttpGet("{fileId}/metadata")]
+    [HttpGet("{fileId}/Metadata")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileMetadataDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetFileMetadata(string fileId, CancellationToken cancellationToken)
     {
@@ -84,6 +85,7 @@ public class FilesController : ApiControllerBase
 
     [HttpDelete("{fileId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteFile(string fileId, CancellationToken cancellationToken)
     {
@@ -93,6 +95,7 @@ public class FilesController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListFileMetadataResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListFileMetadata([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {

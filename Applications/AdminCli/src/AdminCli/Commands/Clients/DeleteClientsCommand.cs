@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Backbone.AdminCli.Commands.Clients;
 
-public class DeleteClientsCommand : AdminCliDbCommand
+public class DeleteClientsCommand : AdminCliCommand
 {
-    public DeleteClientsCommand(ServiceLocator serviceLocator) : base("delete", serviceLocator, "Deletes the OAuth clients with the given clientId's")
+    public DeleteClientsCommand(IMediator mediator) : base(mediator, "delete", "Deletes the OAuth clients with the given clientId's")
     {
         var clientIds = new Argument<string[]>("clientIds")
         {
@@ -17,18 +17,16 @@ public class DeleteClientsCommand : AdminCliDbCommand
 
         AddArgument(clientIds);
 
-        this.SetHandler(DeleteClients, DB_PROVIDER_OPTION, DB_CONNECTION_STRING_OPTION, clientIds);
+        this.SetHandler(DeleteClients, clientIds);
     }
 
-    private async Task DeleteClients(string dbProvider, string dbConnectionString, string[] clientIds)
+    private async Task DeleteClients(string[] clientIds)
     {
-        var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
-
         foreach (var clientId in clientIds)
         {
             try
             {
-                await mediator.Send(new DeleteClientCommand(clientId), CancellationToken.None);
+                await _mediator.Send(new DeleteClientCommand(clientId), CancellationToken.None);
                 Console.WriteLine($@"Successfully deleted client '{clientId}'");
             }
             catch (Exception ex)

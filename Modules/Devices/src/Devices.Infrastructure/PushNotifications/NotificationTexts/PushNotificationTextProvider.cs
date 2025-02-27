@@ -2,7 +2,6 @@
 using System.Resources;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
