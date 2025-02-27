@@ -33,13 +33,17 @@ public class AuthorizationController : ApiControllerBase
         _userManager = userManager;
     }
 
-    [HttpPost("~/connect/token"), IgnoreAntiforgeryToken, Produces("application/json"),
-     Consumes("application/x-www-form-urlencoded")]
+    [HttpPost("~/connect/token")]
+    [IgnoreAntiforgeryToken]
+    [Produces("application/json")]
+    [Consumes("application/x-www-form-urlencoded")]
     [AllowAnonymous]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest() ?? throw new OperationFailedException(
             ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
+
         if (!request.IsPasswordGrantType())
             throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("the specified grant type is not implemented"));

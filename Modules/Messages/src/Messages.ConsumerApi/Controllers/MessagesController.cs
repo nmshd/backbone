@@ -30,6 +30,7 @@ public class MessagesController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListMessagesResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListMessages([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
@@ -47,6 +48,7 @@ public class MessagesController : ApiControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<MessageDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMessage(string id, [FromQuery] bool? noBody, CancellationToken cancellationToken)
     {

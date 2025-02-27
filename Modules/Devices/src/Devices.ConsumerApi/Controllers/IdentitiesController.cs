@@ -19,7 +19,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OpenIddict.Core;
 using OpenIddict.Validation.AspNetCore;
 
@@ -30,20 +29,18 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
-    private readonly ILogger<IdentitiesController> _logger;
 
     public IdentitiesController(
         IMediator mediator,
-        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager,
-        ILogger<IdentitiesController> logger) : base(mediator)
+        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
         _applicationManager = applicationManager;
-        _logger = logger;
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
     public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
     {
@@ -103,6 +100,7 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet("Self/DeletionProcesses/{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IdentityDeletionProcessOverviewDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
@@ -138,8 +136,8 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet("IsDeleted")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(IsIdentityOfUserDeletedResponse), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IsIdentityOfUserDeletedResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> IsIdentityOfUserDeleted([FromQuery(Name = "username")] string username, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new IsIdentityOfUserDeletedQuery { Username = username }, cancellationToken);

@@ -201,8 +201,6 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;
 
