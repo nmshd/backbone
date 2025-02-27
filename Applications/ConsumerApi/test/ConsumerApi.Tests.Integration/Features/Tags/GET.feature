@@ -10,6 +10,8 @@ User requests available Tags
         And the response attributes contain tags
 
     Scenario: Requesting the tags with the current hash
-        Given the most current hash h
-        When A GET request to the /Tags endpoint gets sent with hash h
+        Given a list of tags l with an ETag e
+        And I didn't change since the last fetch
+        When A GET request to the /Tags endpoint gets sent with the If-None-Match header set to e
         Then the response status code is 304 (Not modified)
+        And the response content is empty

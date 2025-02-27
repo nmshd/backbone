@@ -11,7 +11,6 @@ public class TagsStepDefinitions
 {
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
-    private readonly TagsContext _tagsContext;
 
     private CachedApiResponse<ListTagsResponse>? _listTagsResponse;
 
@@ -19,19 +18,21 @@ public class TagsStepDefinitions
     {
         _responseContext = responseContext;
         _clientPool = clientPool;
-        _tagsContext = new TagsContext();
     }
 
     #region Given
 
-    [Given($@"the most current hash {RegexFor.SINGLE_THING}")]
-    public async Task GivenTheMostCurrentHash(string hash)
+    [Given($@"a list of tags {RegexFor.SINGLE_THING} with an ETag {RegexFor.SINGLE_THING}")]
+    public async Task GivenAListOfTagsWithETag(string list, string hash)
     {
         await WhenAGETRequestToTheTagsEndpointGetsSent();
 
         _listTagsResponse!.Should().BeASuccess();
+    }
 
-        _tagsContext.TagHashes[hash] = _listTagsResponse!.ETag;
+    [Given("I didn't change since the last fetch")]
+    public void GivenIDidntChangeSinceLastFetch()
+    {
     }
 
     #endregion
@@ -46,11 +47,11 @@ public class TagsStepDefinitions
         _responseContext.WhenResponse = _listTagsResponse = await client.Tags.ListTags();
     }
 
-    [When($@"A GET request to the /Tags endpoint gets sent with hash {RegexFor.SINGLE_THING}")]
+    [When($@"A GET request to the /Tags endpoint gets sent with the If-None-Match header set to {RegexFor.SINGLE_THING}")]
     public async Task WhenAGETRequestToTheTagsEndpointGetsSentWithHash(string hash)
     {
         var client = _clientPool.Anonymous;
-        _responseContext.WhenResponse = _listTagsResponse = await client.Tags.ListTags(new CacheControl { ETag = _tagsContext.TagHashes[hash] });
+        _responseContext.WhenResponse = _listTagsResponse = await client.Tags.ListTags(new CacheControl { ETag = _listTagsResponse!.ETag });
     }
 
     #endregion
@@ -70,6 +71,13 @@ public class TagsStepDefinitions
         {
             attr.Should().NotBeEmpty();
         }
+    }
+
+    [Then("the response content is empty")]
+    public void ThenTheResponseContentIsEmpty()
+    {
+        _listTagsResponse!.NotModified.Should().BeTrue();
+        _listTagsResponse!.Result.Should().BeNull();
     }
 
     #endregion

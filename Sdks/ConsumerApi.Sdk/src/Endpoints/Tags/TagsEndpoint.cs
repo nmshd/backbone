@@ -8,6 +8,6 @@ public class TagsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<CachedApiResponse<ListTagsResponse>> ListTags(CacheControl? cacheControl = null)
     {
-        return await _client.GetCachedUnauthenticated<ListTagsResponse>($"api/{API_VERSION}/Tags", null, null, cacheControl);
+        return await _client.GetCachedUnauthenticated<ListTagsResponse>($"api/{API_VERSION}/Tags", cacheControl: cacheControl);
     }
 }
