@@ -10,11 +10,30 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="BeforeBuild" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
+    </Target>
+
+    <ItemGroup>
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+
+        <Content Include="appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>
