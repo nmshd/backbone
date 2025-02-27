@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print is's only an example file
 
 import 'dart:io';
 
