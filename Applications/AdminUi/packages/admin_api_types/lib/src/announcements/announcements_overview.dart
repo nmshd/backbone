@@ -14,13 +14,7 @@ class Announcement {
   final String severity;
   final List<AnnouncementText> texts;
 
-  Announcement({
-    required this.id,
-    required this.createdAt,
-    required this.expiresAt,
-    required this.severity,
-    required this.texts,
-  });
+  Announcement({required this.id, required this.createdAt, required this.expiresAt, required this.severity, required this.texts});
 
   factory Announcement.fromJson(dynamic json) => _$AnnouncementFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);

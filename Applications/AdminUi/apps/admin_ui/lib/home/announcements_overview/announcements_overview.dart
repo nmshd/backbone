@@ -41,11 +41,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (kIsDesktop)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async => _reloadAnnouncements(),
-                      tooltip: context.l10n.reload,
-                    ),
+                    IconButton(icon: const Icon(Icons.refresh), onPressed: () async => _reloadAnnouncements(), tooltip: context.l10n.reload),
                   IconButton.filled(
                     icon: const Icon(Icons.add),
                     onPressed: () => showCreateAnnouncementDialog(context: context, onAnnouncementCreated: _reloadAnnouncements),
@@ -61,36 +57,38 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                     DataColumn2(label: Text(context.l10n.expiresAt)),
                     DataColumn2(label: Text(context.l10n.announcementsOverview_severity)),
                   ],
-                  rows: _announcements
-                      .map(
-                        (announcement) => DataRow2(
-                          onTap: () => context.go('/announcements/${announcement.id}'),
-                          cells: [
-                            DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
-                            DataCell(
-                              Tooltip(
-                                message:
-                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)} ${DateFormat.Hms().format(announcement.createdAt)}',
-                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)),
-                              ),
-                            ),
-                            DataCell(
-                              Tooltip(
-                                message: announcement.expiresAt != null
-                                    ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)} ${DateFormat.Hms().format(announcement.expiresAt!)}'
-                                    : '',
-                                child: Text(
-                                  announcement.expiresAt != null
-                                      ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)
-                                      : '',
+                  rows:
+                      _announcements
+                          .map(
+                            (announcement) => DataRow2(
+                              onTap: () => context.go('/announcements/${announcement.id}'),
+                              cells: [
+                                DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
+                                DataCell(
+                                  Tooltip(
+                                    message:
+                                        '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)} ${DateFormat.Hms().format(announcement.createdAt)}',
+                                    child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)),
+                                  ),
                                 ),
-                              ),
+                                DataCell(
+                                  Tooltip(
+                                    message:
+                                        announcement.expiresAt != null
+                                            ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)} ${DateFormat.Hms().format(announcement.expiresAt!)}'
+                                            : '',
+                                    child: Text(
+                                      announcement.expiresAt != null
+                                          ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)
+                                          : '',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(Text(announcement.severity)),
+                              ],
                             ),
-                            DataCell(Text(announcement.severity)),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                          )
+                          .toList(),
                 ),
               ),
             ],
