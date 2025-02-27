@@ -6,8 +6,8 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Tags;
 
 public class TagsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListTagsResponse>> ListTags()
+    public async Task<CachedApiResponse<ListTagsResponse>> ListTags(CacheControl? cacheControl = null)
     {
-        return await _client.GetUnauthenticated<ListTagsResponse>($"api/{API_VERSION}/Tags");
+        return await _client.GetCachedUnauthenticated<ListTagsResponse>($"api/{API_VERSION}/Tags", null, null, cacheControl);
     }
 }

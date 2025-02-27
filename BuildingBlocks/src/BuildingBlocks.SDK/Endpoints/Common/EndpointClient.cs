@@ -17,6 +17,8 @@ public class EndpointClient
                                         }
                                         """;
 
+    private const string EMPTY_CACHED_RESULT = "{}";
+
     private const string EMPTY_VALUE = """
                                        {
                                            "value": {}
@@ -67,6 +69,18 @@ public class EndpointClient
             .Execute();
     }
 
+    public async Task<CachedApiResponse<T>> GetCachedUnauthenticated<T>(string url, NameValueCollection? queryParameters = null, PaginationFilter? pagination = null, CacheControl? cacheControl = null)
+    {
+        var builder = Request<T>(HttpMethod.Get, url)
+            .WithPagination(pagination)
+            .AddQueryParameters(queryParameters);
+
+        if (cacheControl != null)
+            builder.AddExtraHeader("If-None-Match", cacheControl.ETag);
+
+        return await builder.ExecuteCached();
+    }
+
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)
     {
         return await Request<T>(HttpMethod.Put, url)
@@ -113,6 +127,28 @@ public class EndpointClient
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
         deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
+
+        return deserializedResponseContent;
+    }
+
+    private async Task<CachedApiResponse<T>> ExecuteCached<T>(HttpRequestMessage request)
+    {
+        var response = await _httpClient.SendAsync(request);
+        var responseContent = await response.Content.ReadAsStreamAsync();
+        var statusCode = response.StatusCode;
+
+        if (statusCode == HttpStatusCode.NotModified || responseContent.Length == 0)
+        {
+            responseContent.Close();
+            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_CACHED_RESULT));
+        }
+
+        var deserializedResponseContent = JsonSerializer.Deserialize<CachedApiResponse<T>>(responseContent, _jsonSerializerOptions);
+
+        deserializedResponseContent!.Status = statusCode;
+        deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
+        deserializedResponseContent.ETag = response.Headers.ETag!.Tag; //TODO: Timo (Is it safe to assume that the ETag is non-null?)
 
         return deserializedResponseContent;
     }
@@ -277,6 +313,11 @@ public class EndpointClient
         public async Task<RawApiResponse> ExecuteRaw()
         {
             return await _client.ExecuteRaw(await CreateRequestMessage());
+        }
+
+        public async Task<CachedApiResponse<T>> ExecuteCached()
+        {
+            return await _client.ExecuteCached<T>(await CreateRequestMessage());
         }
 
         private async Task<HttpRequestMessage> CreateRequestMessage()
