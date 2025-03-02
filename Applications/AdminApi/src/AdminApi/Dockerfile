@@ -102,7 +102,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/android-sdk:34 AS flutter-build-env
+FROM ghcr.io/cirruslabs/android-sdk:35 AS flutter-build-env
 
 USER root
 
