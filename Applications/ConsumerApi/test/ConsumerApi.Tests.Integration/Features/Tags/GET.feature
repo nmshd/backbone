@@ -11,7 +11,7 @@ User requests available Tags
 
     Scenario: Requesting the tags with the current hash
         Given a list of tags l with an ETag e
-        And I didn't change since the last fetch
+        And l didn't change since the last fetch
         When A GET request to the /Tags endpoint gets sent with the If-None-Match header set to e
         Then the response status code is 304 (Not modified)
         And the response content is empty
