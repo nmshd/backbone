@@ -29,7 +29,7 @@ public class HandleHttpCachingAttribute : ResultFilterAttribute
         await next();
         memoryStream.Position = 0;
 
-        if (response.StatusCode == StatusCodes.Status200OK) //TODO: Timo (Is it safe to assume that cached responses always return 200?)
+        if (response.StatusCode == StatusCodes.Status200OK)
         {
             var requestHeaders = request.GetTypedHeaders();
             var responseHeaders = response.GetTypedHeaders();
