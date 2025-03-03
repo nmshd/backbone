@@ -30,8 +30,8 @@ public class TagsStepDefinitions
         _listTagsResponse!.Should().BeASuccess();
     }
 
-    [Given("I didn't change since the last fetch")]
-    public void GivenIDidntChangeSinceLastFetch()
+    [Given($@"{RegexFor.SINGLE_THING} didn't change since the last fetch")]
+    public void GivenListDidntChangeSinceLastFetch(string list)
     {
     }
 
