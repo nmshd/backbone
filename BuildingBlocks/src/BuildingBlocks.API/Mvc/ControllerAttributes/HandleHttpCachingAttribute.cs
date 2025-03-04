@@ -45,7 +45,7 @@ public class HandleHttpCachingAttribute : ResultFilterAttribute
             {
                 response.StatusCode = StatusCodes.Status304NotModified;
 
-                foreach (var header in response.Headers.Where(h => HEADERS_TO_KEEP_FOR304.Contains(h.Key)))
+                foreach (var header in response.Headers.Where(h => !HEADERS_TO_KEEP_FOR304.Contains(h.Key)))
                     response.Headers.Remove(header.Key);
 
                 return;
