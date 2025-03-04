@@ -9,7 +9,6 @@ public class ApiKeyValidationController : ControllerBase
 {
     [HttpPost]
     [AllowAnonymous]
-    [IgnoreAntiforgeryToken]
     public IActionResult ValidateApiKey([FromBody] ValidateApiKeyRequest? request, [FromServices] ApiKeyValidator apiKeyValidator)
     {
         var apiKeyIsValid = apiKeyValidator.IsApiKeyValid(request?.ApiKey);
