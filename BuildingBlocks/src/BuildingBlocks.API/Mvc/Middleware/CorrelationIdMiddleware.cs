@@ -20,6 +20,10 @@ public class CorrelationIdMiddleware
         {
             correlationId = CustomLogContext.GenerateCorrelationId();
         }
+        else
+        {
+            correlationId = correlationId.Trim();
+        }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
 
