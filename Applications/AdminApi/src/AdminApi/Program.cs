@@ -142,12 +142,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
-    if (env.IsDevelopment())
-    {
-        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
-    }
-
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
