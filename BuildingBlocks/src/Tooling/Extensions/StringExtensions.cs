@@ -22,6 +22,11 @@ public static class StringExtensions
         return regex.IsMatch(text);
     }
 
+    public static string TruncateToXChars(this string text, int maxLength)
+    {
+        return text[..Math.Min(text.Length, maxLength)];
+    }
+
     public static byte[] GetBytes(this string text)
     {
         return Encoding.UTF8.GetBytes(text);
