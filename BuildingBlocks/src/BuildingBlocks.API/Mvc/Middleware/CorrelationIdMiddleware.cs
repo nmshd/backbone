@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Http;
 
 namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -19,6 +20,10 @@ public class CorrelationIdMiddleware
         if (string.IsNullOrEmpty(correlationId))
         {
             correlationId = CustomLogContext.GenerateCorrelationId();
+        }
+        else
+        {
+            correlationId = correlationId.Trim().ReplaceLineEndings("").TruncateToXChars(100);
         }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;

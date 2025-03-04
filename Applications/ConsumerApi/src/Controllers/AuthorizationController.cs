@@ -34,7 +34,6 @@ public class AuthorizationController : ApiControllerBase
     }
 
     [HttpPost("~/connect/token")]
-    [IgnoreAntiforgeryToken]
     [Produces("application/json")]
     [Consumes("application/x-www-form-urlencoded")]
     [AllowAnonymous]
