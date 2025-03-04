@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -14,11 +13,8 @@ namespace Backbone.Modules.Tags.ConsumerApi.Controllers;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class TagsController : ApiControllerBase
 {
-    private readonly MD5 _hasher;
-
     public TagsController(IMediator mediator) : base(mediator)
     {
-        _hasher = MD5.Create();
     }
 
     [HttpGet]
