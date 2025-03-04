@@ -22,7 +22,7 @@ public class CorrelationIdMiddleware
         }
         else
         {
-            correlationId = correlationId.Trim();
+            correlationId = correlationId.Trim().ReplaceLineEndings("");
         }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
