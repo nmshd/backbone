@@ -6,6 +6,11 @@ using Microsoft.Net.Http.Headers;
 
 namespace Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 
+/**
+ * This filter handles Caching via the <c>If-None-Match</c> header in the request header
+ * and the <c>ETag</c> in the response header. This class is based on this StackOverflow answer:
+ * <see href="https://stackoverflow.com/a/76151167"></see>
+ */
 public class HandleHttpCachingAttribute : ResultFilterAttribute
 {
     private static readonly string[] HEADERS_TO_KEEP_FOR304 =
@@ -40,9 +45,8 @@ public class HandleHttpCachingAttribute : ResultFilterAttribute
             {
                 response.StatusCode = StatusCodes.Status304NotModified;
 
-                foreach (var header in response.Headers)
-                    if (!HEADERS_TO_KEEP_FOR304.Contains(header.Key))
-                        response.Headers.Remove(header.Key);
+                foreach (var header in response.Headers.Where(h => HEADERS_TO_KEEP_FOR304.Contains(h.Key)))
+                    response.Headers.Remove(header.Key);
 
                 return;
             }
