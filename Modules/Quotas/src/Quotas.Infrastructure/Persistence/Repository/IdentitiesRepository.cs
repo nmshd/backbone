@@ -55,6 +55,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(i => i.TierId == tierId)
             .ToListAsync(cancellationToken);
 
