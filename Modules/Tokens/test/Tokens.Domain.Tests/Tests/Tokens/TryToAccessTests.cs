@@ -1,5 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Domain.DomainEvents;
+using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
 using Backbone.Tooling;

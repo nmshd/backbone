@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Events;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Domain.DomainEvents.Out;
+namespace Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
 
 public class FileUploadedDomainEvent : DomainEvent
 {
