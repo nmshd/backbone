@@ -46,9 +46,7 @@ class AdminApiClient {
   }
 
   static Future<bool> validateApiKey({required String baseUrl, required String apiKey}) async {
-    final dio = Dio(
-      BaseOptions(baseUrl: baseUrl, validateStatus: (status) => status == 200),
-    );
+    final dio = Dio(BaseOptions(baseUrl: baseUrl, validateStatus: (status) => status == 200));
 
     await AdminApiClient._setupXsrf(dio);
 
