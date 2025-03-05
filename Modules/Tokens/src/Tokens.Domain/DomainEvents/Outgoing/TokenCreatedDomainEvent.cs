@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Tokens.Domain.Entities;
 
-namespace Backbone.Modules.Tokens.Domain.DomainEvents;
+namespace Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 
 public class TokenCreatedDomainEvent : DomainEvent
 {
