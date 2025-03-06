@@ -163,9 +163,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             return;
         }
 
-        if (!_persistentConnection.IsConnected)
-            await _persistentConnection.Connect();
-
         _logger.LogTrace("Trying to bind queue '{QueueName}' on RabbitMQ ...", _queueName);
 
         await EnsureExchangeExists();
