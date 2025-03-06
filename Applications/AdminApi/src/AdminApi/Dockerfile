@@ -102,20 +102,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/android-sdk:35 AS flutter-build-env
-
-USER root
-
-ENV FLUTTER_HOME=/sdks/flutter
-ENV FLUTTER_ROOT=$FLUTTER_HOME
-ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
-
-RUN curl -sLO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz \
-    && mkdir -p ${FLUTTER_HOME} \
-    && tar -xf flutter_linux_3.29.0-stable.tar.xz -C /sdks/ \
-    && chown -R root:root ${FLUTTER_HOME}
-
-RUN flutter doctor
+FROM ghcr.io/cirruslabs/flutter:3.29.0 AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
