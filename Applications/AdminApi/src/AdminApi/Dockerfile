@@ -106,16 +106,22 @@ FROM ghcr.io/cirruslabs/android-sdk:35 AS flutter-build-env
 
 USER root
 
-ENV FLUTTER_HOME=/sdks/flutter
-ENV FLUTTER_ROOT=$FLUTTER_HOME
-ENV PATH=${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
+ENV FLUTTER_ROOT=${HOME}/sdks/flutter
 
-RUN curl -sLO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.29.0-stable.tar.xz \
-    && mkdir -p ${FLUTTER_HOME} \
-    && tar -xf flutter_linux_3.29.0-stable.tar.xz -C /sdks/ \
-    && chown -R root:root ${FLUTTER_HOME}
+ENV PATH ${PATH}:${FLUTTER_ROOT}/bin:${FLUTTER_ROOT}/bin/cache/dart-sdk/bin
 
-RUN flutter doctor
+RUN git clone --depth 1 --branch 3.29.0 https://github.com/flutter/flutter.git ${FLUTTER_ROOT}
+
+# Temporary workaround for https://github.com/flutter/flutter/issues/163308#issuecomment-2676366371
+# It will be fixed in Flutter 3.29.1
+# Removing this triggers fetching the correct Flutter engine version 
+RUN cd ${FLUTTER_ROOT} && rm engine/src/.gn
+
+RUN yes | flutter doctor --android-licenses \
+    && flutter doctor \
+    && chown -R root:root ${FLUTTER_ROOT}
+
+RUN flutter precache --android
 
 COPY Applications/AdminUi /src
 WORKDIR /src
