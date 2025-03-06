@@ -12,30 +12,346 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-admin-ui:
-    name: Test Build of Admin UI Container Image
+  adminui-checks:
+    runs-on: ubuntu-latest
+    name: Run Admin UI Checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.18.0
+      - name: Run checks
+        run: ./.ci/aui/runChecks.sh
+
+  check-formatting:
+    runs-on: ubuntu-latest
+    name: Check Formatting
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.4.1
+          cache: "npm"
+          cache-dependency-path: "**/package.json"
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+      - name: Check formatting
+        run: ./.ci/checkFormatting.sh
+
+  unit-test:
+    runs-on: ubuntu-latest
+    name: Run Unit Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.4.1
+          cache: "npm"
+          cache-dependency-path: "**/package.json"
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+      - name: Run tests
+        run: ./.ci/test.sh
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
+
+  image-test-builds:
+    name: Build ${{matrix.image}} Image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: Applications/ConsumerApi/src/Dockerfile
+            image: consumer-api
+
+          - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
+            image: admin-ui
+
+          - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
+            image: admin-cli
+
+          - dockerfile: Applications/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
+            image: database-migrator
+
+          - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
+            image: event-handler
+
+          - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
+            image: identity-deletion-jobs
+
+          - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
+            image: sse-server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.4.1
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Cache Image
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-${{ matrix.image }}-cache
+          key: buildx-${{ matrix.image }}-cache-${{ hashFiles(matrix.dockerfile) }}
+          restore-keys: buildx-${{ matrix.image }}-cache-
+
+      - name: Build Image
+        uses: docker/build-push-action@v6
+        env:
+          DOCKER_BUILD_SUMMARY: false
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
+          outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
+          tags: ghcr.io/nmshd/backbone-${{ matrix.image }}:0.0.1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-${{ matrix.image }}
+          path: /tmp/${{ matrix.image }}.tar
+          retention-days: 1
+
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-${{ matrix.image }}-cache
+          mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
+
+  integration-test:
+    name: Run ${{matrix.test-project.display-name}} Integration Tests (on ${{matrix.database}})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlserver, postgres]
+        test-project:
+          - display-name: admin-api
+            path: Applications/AdminApi/test/AdminApi.Tests.Integration
+          - display-name: consumer-api
+            path: Applications/ConsumerApi/test/ConsumerApi.Tests.Integration
+          - display-name: identity-deletion-job
+            path: Applications/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration
+    needs: image-test-builds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.4.1
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images and build test code
+        run: |
+          {
+            ./.ci/loadDockerImages.sh
+          } &
+          {
+            # The following two lines are for the identity deletion job only
+            mv appsettings.override.json appsettings.override.json.bak
+            cp .ci/appsettings.override.${{matrix.database}}.local.json appsettings.override.json
+
+            dotnet restore ${{matrix.test-project.path}}
+            dotnet build --no-restore ${{matrix.test-project.path}}
+          }
+          wait
+
+      - name: Start compose stack
+        run: |
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
+
+      - name: Run integration tests
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
+        env:
+          ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
+          CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
+
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
+
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{matrix.test-project.display-name}}-${{matrix.database}}
+          path: logs.txt
+
+  transport-test:
+    name: Run transport Tests (on ${{matrix.database}})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlserver, postgres]
+    needs: image-test-builds
+    steps:
+      - name: Checkout backbone repository
+        uses: actions/checkout@v4
+        with:
+          path: backbone
+
+      - name: Checkout runtime repository
+        uses: actions/checkout@v4
+        with:
+          repository: nmshd/runtime
+          path: runtime
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.4.1
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./backbone/.ci/loadDockerImages.sh
+
+      - name: Start compose stack
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
+
+      - name: Install runtime dependencies
+        working-directory: ./runtime
+        run: npm ci
+
+      - name: Build
+        run: npm run build:node
+        working-directory: ./runtime
+
+      - name: Run transport Tests
+        working-directory: ./runtime/packages/transport
+        env:
+          NMSHD_TEST_BASEURL: http://localhost:5000
+          NMSHD_TEST_CLIENTID: test
+          NMSHD_TEST_CLIENTSECRET: test
+          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
+          NMSHD_TEST_ADMIN_API_KEY: test
+          APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/backbone/.ci/appsettings.override.${{matrix.database}}.docker.json
+          BACKBONE_VERSION: 0.0.1
+        run: npm run test:local:lokijs
+
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
+
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transport-test-${{matrix.database}}-docker-logs
+          path: logs.txt
+
+      - name: Stop compose stack
+        run: docker compose -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.yml down
+
+  build-helm-chart:
+    name: Build Helm Chart
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
-      - name: Docker Login
-        uses: docker/login-action@v3.3.0
+      - name: Build Helm Chart
+        run: ./.ci/helm/buildChart.js
+        env:
+          VERSION: 0.0.0
+
+  validate-licenses:
+    name: Validate Open Source Licenses
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Dotnet
+        uses: actions/setup-dotnet@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
-      - name: Build and Push Container Image
-        run: docker buildx build --file ./Applications/AdminApi/src/AdminApi/Dockerfile --tag ghcr.io/nmshd/backbone-admin-ui:7.0.0 --platform linux/arm64 --build-arg VERSION=7.0.0 .
+          dotnet-version: 9.x
+      - name: Install nuget-licenses tool
+        run: dotnet tool install --global nuget-license
+      - name: Show Allowed Licenses
+        run: cat ./.ci/allowedLicenses.json
+      - name: Show Ignored Packages
+        run: cat ./.ci/ignoredPackages.json
+      - name: Restore Solution
+        run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.sln
+      - name: Validate Licenses
+        run: nuget-license --input ./Backbone.sln --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
