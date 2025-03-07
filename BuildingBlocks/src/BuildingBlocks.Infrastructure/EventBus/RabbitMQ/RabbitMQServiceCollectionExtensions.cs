@@ -43,17 +43,14 @@ public static class RabbitMqServiceCollectionExtensions
             return new DefaultRabbitMqPersistentConnection(factory, logger, options.ConnectionRetryCount);
         });
 
-        services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
+        services.AddSingleton<IEventBus, NewEventBusRabbitMq>(sp =>
         {
-            var subscriptionClientName = options.SubscriptionClientName;
-
             var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
-            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var logger = sp.GetRequiredService<ILogger<NewEventBusRabbitMq>>();
 
-            return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubscriptionsManager,
-                options.HandlerRetryBehavior, options.ExchangeName, subscriptionClientName, options.ConnectionRetryCount);
+            return NewEventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, iLifetimeScope,
+                options.HandlerRetryBehavior, options.ExchangeName, options.ConnectionRetryCount).GetAwaiter().GetResult();
         });
     }
 }

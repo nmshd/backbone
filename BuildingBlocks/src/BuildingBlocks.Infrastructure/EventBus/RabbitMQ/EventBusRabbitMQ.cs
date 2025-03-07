@@ -140,9 +140,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         }
     }
 
-    public async Task Subscribe<T, TH>()
-        where T : DomainEvent
-        where TH : IDomainEventHandler<T>
+    public async Task Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
         await DoInternalSubscription(eventName);
@@ -167,9 +165,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         await EnsureExchangeExists();
 
-        await _consumerChannel!.QueueBindAsync(_queueName,
-            _exchangeName,
-            eventName);
+        await _consumerChannel!.QueueBindAsync(_queueName, _exchangeName, eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' on RabbitMQ.", _queueName);
     }
