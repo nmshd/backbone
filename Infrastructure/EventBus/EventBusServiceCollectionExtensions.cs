@@ -48,8 +48,7 @@ public static class EventBusServiceCollectionExtensions
             case "":
                 throw new NotSupportedException("No event bus vendor was specified.");
             default:
-                throw new NotSupportedException(
-                    $"{configuration.Vendor} is not a currently supported event bus vendor.");
+                throw new NotSupportedException($"{configuration.Vendor} is not a currently supported event bus vendor.");
         }
     }
 

@@ -23,15 +23,16 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     };
 
     private readonly ILogger<EventBusRabbitMq> _logger;
-
     private readonly IServiceProvider _serviceProvider;
-
     private readonly IRabbitMqPersistentConnection _persistentConnection;
     private readonly int _connectionRetryCount;
-    private readonly HandlerRetryBehavior _handlerRetryBehavior;
+    private readonly int _handlerRetryCount;
+
     private readonly ChannelPool _channelPool;
 
     private readonly string _exchangeName;
+    private readonly string _deadLetterExchangeName;
+    private readonly string _deadLetterQueueName;
     private readonly SubscriptionManager _subscriptionManager = new();
 
     private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
@@ -41,8 +42,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
         _exchangeName = exchangeName;
+        _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
+        _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
         _connectionRetryCount = connectionRetryCount;
-        _handlerRetryBehavior = handlerRetryBehavior;
+        _handlerRetryCount = handlerRetryBehavior.NumberOfRetries;
         _channelPool = new ChannelPool(persistentConnection);
     }
 
@@ -59,7 +62,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private async Task Init()
     {
         await ConnectToRabbitMq();
-        await EnsureExchangeExists();
+        await EnsureExchangeExists(_exchangeName);
+        await EnsureExchangeExists(_deadLetterExchangeName, "fanout");
+        await EnsureDeadLetterQueueExists();
     }
 
     private async Task ConnectToRabbitMq()
@@ -68,12 +73,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             await _persistentConnection.Connect();
     }
 
-    private async Task EnsureExchangeExists()
+    private async Task EnsureExchangeExists(string exchangeName, string exchangeType = "direct")
     {
         try
         {
             var channel = await _channelPool.Get();
-            await channel.ExchangeDeclarePassiveAsync(_exchangeName);
+            await channel.ExchangeDeclarePassiveAsync(exchangeName);
             _channelPool.Return(channel);
         }
         catch (OperationInterruptedException ex)
@@ -83,16 +88,37 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 try
                 {
                     var channel = await _channelPool.Get();
-                    await channel.ExchangeDeclareAsync(_exchangeName, "direct");
+                    await channel.ExchangeDeclareAsync(exchangeName, exchangeType);
                     _channelPool.Return(channel);
                 }
                 catch (Exception)
                 {
-                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", _exchangeName);
-                    throw new Exception($"The exchange '{_exchangeName}' does not exist and could not be created.");
+                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", exchangeName);
+                    throw new Exception($"The exchange '{exchangeName}' does not exist and could not be created.");
                 }
             }
         }
+    }
+
+    private async Task EnsureDeadLetterQueueExists()
+    {
+        var channel = await _channelPool.Get();
+
+        await channel.QueueDeclareAsync(_deadLetterQueueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: new Dictionary<string, object?>
+            {
+                { "x-queue-type", "quorum" },
+            }
+        );
+
+        await channel.QueueBindAsync(_deadLetterQueueName, _deadLetterExchangeName, "#");
+
+        _logger.LogTrace("Successfully bound dead letter queue.");
+
+        _channelPool.Return(channel);
     }
 
     public async Task Subscribe<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
@@ -108,6 +134,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private async Task CreateQueue<TEvent>(string queueName) where TEvent : DomainEvent
     {
+        var eventName = typeof(TEvent).GetEventName();
+
         var channel = await _channelPool.Get();
 
         await channel.QueueDeclareAsync(queueName,
@@ -116,11 +144,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             autoDelete: false,
             arguments: new Dictionary<string, object?>
             {
-                { "x-queue-type", "quorum" }
+                { "x-queue-type", "quorum" },
+                { "x-delivery-limit", _handlerRetryCount },
+                { "x-dead-letter-exchange", _deadLetterExchangeName },
+                { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
             }
         );
-
-        var eventName = typeof(TEvent).GetEventName();
 
         await channel.QueueBindAsync(queueName, _exchangeName, eventName);
 
@@ -153,7 +182,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
-                await channel.BasicRejectAsync(eventArgs.DeliveryTag, false);
+                await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
@@ -170,21 +199,17 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
         var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS);
-        var policy = EventBusRetryPolicyFactory.Create(_handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
         var handlerType = typeof(THandler);
 
-        await policy.ExecuteAsync(async () =>
-        {
-            await using var scope = _serviceProvider.CreateAsyncScope();
+        await using var scope = _serviceProvider.CreateAsyncScope();
 
-            if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
-                throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
+        if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
+            throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
-            var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
+        var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
-            await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
-        });
+        await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
     }
 
     public async Task Publish(DomainEvent @event)
