@@ -57,7 +57,6 @@ public class RabbitMqOptions : BasicBusOptions
 {
     public bool EnableSsl { get; set; } = true;
     public string ExchangeName { get; set; } = null!;
-    public string QueueName { get; set; } = null!;
     public string HostName { get; set; } = null!;
     public int Port { get; set; } = 5672;
     public string Username { get; set; } = null!;

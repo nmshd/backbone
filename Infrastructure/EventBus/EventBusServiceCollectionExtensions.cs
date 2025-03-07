@@ -42,7 +42,6 @@ public static class EventBusServiceCollectionExtensions
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
                     options.ExchangeName = configuration.RabbitMqExchangeName;
-                    options.QueueName = configuration.RabbitMqQueueName;
                     options.ConnectionRetryCount = configuration.ConnectionRetryCount;
                 });
                 break;
