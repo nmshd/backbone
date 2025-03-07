@@ -15,14 +15,14 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public class NewEventBusRabbitMq : IEventBus, IDisposable
+public class EventBusRabbitMq : IEventBus, IDisposable
 {
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
     {
         ContractResolver = new ContractResolverWithPrivates()
     };
 
-    private readonly ILogger<NewEventBusRabbitMq> _logger;
+    private readonly ILogger<EventBusRabbitMq> _logger;
 
     private readonly IServiceProvider _serviceProvider;
 
@@ -34,7 +34,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
     private readonly string _exchangeName;
     private readonly SubscriptionManager _subscriptionManager = new();
 
-    private NewEventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<NewEventBusRabbitMq> logger,
+    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -46,10 +46,10 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
         _channelPool = new ChannelPool(persistentConnection);
     }
 
-    public static async Task<NewEventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<NewEventBusRabbitMq> logger,
+    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
     {
-        var eventBus = new NewEventBusRabbitMq(persistentConnection, logger, serviceProvider, handlerRetryBehavior, exchangeName, connectionRetryCount);
+        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, handlerRetryBehavior, exchangeName, connectionRetryCount);
 
         await eventBus.Init();
 

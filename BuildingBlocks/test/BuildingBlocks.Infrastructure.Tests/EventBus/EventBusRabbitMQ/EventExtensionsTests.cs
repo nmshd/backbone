@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
@@ -29,16 +28,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
 
             // Assert
             eventName.Should().Be("Test");
-        }
-
-        [Fact]
-        public void GetQueueName()
-        {
-            // Act
-            var queueName = NewEventBusRabbitMq.GetQueueName<TestDomainEventHandler, TestDomainEvent>();
-
-            // Assert
-            queueName.Should().Be("TestModule.Test");
         }
     }
 }

@@ -10,6 +10,6 @@ public class Subscription
         QueueName = queueName;
     }
 
-    public AsyncEventingBasicConsumer Consumer { get; set; }
-    public string QueueName { get; set; }
+    public AsyncEventingBasicConsumer Consumer { get; }
+    public string QueueName { get; }
 }
