@@ -19,8 +19,6 @@ public class DefaultRabbitMqPersistentConnection
     private IConnection? _connection;
     private bool _disposed;
 
-    private readonly List<IChannel> _channels = [];
-
     public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory,
         ILogger<DefaultRabbitMqPersistentConnection> logger, int retryCount = 5)
     {
@@ -84,8 +82,6 @@ public class DefaultRabbitMqPersistentConnection
 
         _logger.CreatedChannel();
 
-        _channels.Add(channel);
-
         return channel;
     }
 
@@ -102,18 +98,6 @@ public class DefaultRabbitMqPersistentConnection
         catch (IOException ex)
         {
             _logger.LogCritical(ex, "There was an error while disposing the connection.");
-        }
-
-        foreach (var channel in _channels)
-        {
-            try
-            {
-                channel.Dispose();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "There was an error while disposing a channel.");
-            }
         }
     }
 
