@@ -42,15 +42,13 @@ public static class EventBusServiceCollectionExtensions
                     options.Username = configuration.RabbitMqUsername;
                     options.Password = configuration.RabbitMqPassword;
                     options.ExchangeName = configuration.RabbitMqExchangeName;
-                    options.QueueName = configuration.RabbitMqQueueName;
                     options.ConnectionRetryCount = configuration.ConnectionRetryCount;
                 });
                 break;
             case "":
                 throw new NotSupportedException("No event bus vendor was specified.");
             default:
-                throw new NotSupportedException(
-                    $"{configuration.Vendor} is not a currently supported event bus vendor.");
+                throw new NotSupportedException($"{configuration.Vendor} is not a currently supported event bus vendor.");
         }
     }
 
