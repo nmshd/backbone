@@ -1,14 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
 {
-    public class DomainEventNamingHelpersTests : AbstractTestsBase
+    public class DomainEventNamingExtensionsTests : AbstractTestsBase
     {
         [Fact]
-        public void GetEventName()
+        public void GetEventNameFromObject()
         {
             // Arrange
             var testEvent = new TestDomainEvent();
@@ -21,12 +22,20 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
         }
 
         [Fact]
+        public void GetEventNameFromType()
+        {
+            // Act
+            var eventName = typeof(TestDomainEvent).GetEventName();
+
+            // Assert
+            eventName.Should().Be("Test");
+        }
+
+        [Fact]
         public void GetQueueName()
         {
-            // Arrange
-
             // Act
-            var queueName = DomainEventNamingHelpers.GetQueueName<TestDomainEventHandler, TestDomainEvent>();
+            var queueName = NewEventBusRabbitMq.GetQueueName<TestDomainEventHandler, TestDomainEvent>();
 
             // Assert
             queueName.Should().Be("TestModule.Test");

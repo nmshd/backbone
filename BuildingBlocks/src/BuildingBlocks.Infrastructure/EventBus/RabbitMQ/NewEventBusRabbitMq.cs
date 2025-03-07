@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
@@ -33,7 +32,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
     private readonly ChannelPool _channelPool;
 
     private readonly string _exchangeName;
-    private readonly IList<Subscription> _subscriptions = [];
+    private readonly SubscriptionManager _subscriptionManager = new();
 
     private NewEventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<NewEventBusRabbitMq> logger,
         IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
@@ -98,13 +97,13 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     public async Task Subscribe<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var queueName = DomainEventNamingHelpers.GetQueueName<THandler, TEvent>();
+        var queueName = GetQueueName<THandler, TEvent>();
 
         await CreateQueue<TEvent>(queueName);
 
         var consumer = await CreateConsumer<TEvent, THandler>();
 
-        _subscriptions.Add(new Subscription(consumer, queueName));
+        _subscriptionManager.AddSubscription(consumer, queueName);
     }
 
     private async Task CreateQueue<TEvent>(string queueName) where TEvent : DomainEvent
@@ -121,7 +120,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             }
         );
 
-        var eventName = DomainEventNamingHelpers.GetEventName(typeof(TEvent));
+        var eventName = typeof(TEvent).GetEventName();
 
         await channel.QueueBindAsync(queueName, _exchangeName, eventName);
 
@@ -132,7 +131,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     private async Task<AsyncEventingBasicConsumer> CreateConsumer<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var channel = await _channelPool.Get();
+        var channel = await _persistentConnection.CreateChannel();
         var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
@@ -160,15 +159,13 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             }
         };
 
-        _channelPool.Return(channel);
-
         return consumer;
     }
 
     private async Task ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
         var eventType = typeof(TEvent);
-        var eventName = DomainEventNamingHelpers.GetEventName(eventType);
+        var eventName = eventType.GetEventName();
 
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
@@ -228,15 +225,15 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     public async Task StartConsuming(CancellationToken cancellationToken)
     {
-        foreach (var consumer in _subscriptions)
+        foreach (var subscription in _subscriptionManager.Subscriptions)
         {
-            await consumer.Consumer.Channel.BasicConsumeAsync(consumer.QueueName, autoAck: false, consumer.Consumer, cancellationToken);
+            await subscription.Consumer.Channel.BasicConsumeAsync(subscription.QueueName, autoAck: false, subscription.Consumer, cancellationToken);
         }
     }
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        foreach (var consumerData in _subscriptions)
+        foreach (var consumerData in _subscriptionManager.Subscriptions)
         {
             var channel = consumerData.Consumer.Channel;
             foreach (var tag in consumerData.Consumer.ConsumerTags)
@@ -250,19 +247,6 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
     {
         _channelPool.Dispose();
     }
-}
-
-public static class DomainEventNamingHelpers
-{
-    public static string GetEventName<T>(this T @event) where T : DomainEvent
-    {
-        return GetEventName(@event.GetType());
-    }
-
-    public static string GetEventName(Type eventType)
-    {
-        return eventType.Name.Replace("DomainEvent", string.Empty);
-    }
 
     public static string GetQueueName<THandler, TEvent>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
@@ -270,52 +254,44 @@ public static class DomainEventNamingHelpers
 
         var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
 
-        return $"{moduleName}.{GetEventName(typeof(TEvent))}";
+        return $"{moduleName}.{typeof(TEvent).GetEventName()}";
     }
 }
 
-public class Subscription
+internal static partial class EventBusRabbitMqLogs
 {
-    public Subscription(AsyncEventingBasicConsumer consumer, string queueName)
-    {
-        Consumer = consumer;
-        QueueName = queueName;
-    }
+    [LoggerMessage(
+        EventId = 411326,
+        EventName = "EventBusRabbitMQ.ErrorOnPublish",
+        Level = LogLevel.Warning,
+        Message = "There was an error while trying to publish an event.")]
+    public static partial void ErrorOnPublish(this ILogger logger, Exception exception);
 
-    public AsyncEventingBasicConsumer Consumer { get; set; }
-    public string QueueName { get; set; }
-}
+    [LoggerMessage(
+        EventId = 585231,
+        EventName = "EventBusRabbitMQ.PublishedDomainEvent",
+        Level = LogLevel.Debug,
+        Message = "Successfully published the event.")]
+    public static partial void PublishedDomainEvent(this ILogger logger);
 
-public abstract class ObjectPool<T>
-{
-    private readonly ConcurrentBag<T> _objects = [];
+    [LoggerMessage(
+        EventId = 702822,
+        EventName = "EventBusRabbitMQ.ErrorWhileProcessingDomainEvent",
+        Level = LogLevel.Error,
+        Message = "An error occurred while processing the domain event of type '{eventName}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string eventName, Exception exception);
 
-    public async Task<T> Get()
-    {
-        return _objects.TryTake(out var item) ? item : await CreateObject();
-    }
+    [LoggerMessage(
+        EventId = 980768,
+        EventName = "EventBusRabbitMQ.NoSubscriptionForEvent",
+        Level = LogLevel.Warning,
+        Message = "No subscription for event: '{eventName}'.")]
+    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
 
-    public void Return(T item) => _objects.Add(item);
-
-    protected abstract Task<T> CreateObject();
-}
-
-public class ChannelPool : ObjectPool<IChannel>, IDisposable
-{
-    private readonly IRabbitMqPersistentConnection _connection;
-
-    public ChannelPool(IRabbitMqPersistentConnection connection)
-    {
-        _connection = connection;
-    }
-
-    protected override async Task<IChannel> CreateObject()
-    {
-        return await _connection.CreateChannel();
-    }
-
-    public void Dispose()
-    {
-        _connection.Dispose();
-    }
+    [LoggerMessage(
+        EventId = 288394,
+        EventName = "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType",
+        Level = LogLevel.Warning,
+        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
+    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }
