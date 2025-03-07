@@ -5,7 +5,7 @@ using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
 {
-    public class DomainEventNamingHelpersTests
+    public class DomainEventNamingHelpersTests : AbstractTestsBase
     {
         [Fact]
         public void GetEventName()
