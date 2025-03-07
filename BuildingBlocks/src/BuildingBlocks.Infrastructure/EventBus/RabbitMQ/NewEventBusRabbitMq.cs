@@ -1,11 +1,12 @@
-﻿using System.Net.Sockets;
+﻿using System.Collections.Concurrent;
+using System.Net.Sockets;
 using System.Text;
-using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -17,33 +18,39 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class NewEventBusRabbitMq : IEventBus, IDisposable
 {
-    private const string AUTOFAC_SCOPE_NAME = "event_bus";
+    private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
+    {
+        ContractResolver = new ContractResolverWithPrivates()
+    };
 
-    private readonly ILifetimeScope _autofac;
     private readonly ILogger<NewEventBusRabbitMq> _logger;
+
+    private readonly IServiceProvider _serviceProvider;
 
     private readonly IRabbitMqPersistentConnection _persistentConnection;
     private readonly int _connectionRetryCount;
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
+    private readonly ChannelPool _channelPool;
 
     private readonly string _exchangeName;
-    private readonly IList<ConsumerMetadata> _consumersData = [];
+    private readonly IList<Subscription> _subscriptions = [];
 
     private NewEventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<NewEventBusRabbitMq> logger,
-        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
+        IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _serviceProvider = serviceProvider;
         _exchangeName = exchangeName;
-        _autofac = autofac;
         _connectionRetryCount = connectionRetryCount;
         _handlerRetryBehavior = handlerRetryBehavior;
+        _channelPool = new ChannelPool(persistentConnection);
     }
 
     public static async Task<NewEventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<NewEventBusRabbitMq> logger,
-        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
+        IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
     {
-        var eventBus = new NewEventBusRabbitMq(persistentConnection, logger, autofac, handlerRetryBehavior, exchangeName, connectionRetryCount);
+        var eventBus = new NewEventBusRabbitMq(persistentConnection, logger, serviceProvider, handlerRetryBehavior, exchangeName, connectionRetryCount);
 
         await eventBus.Init();
 
@@ -66,8 +73,9 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
     {
         try
         {
-            await using var channel = await _persistentConnection.CreateChannel();
+            var channel = await _channelPool.Get();
             await channel.ExchangeDeclarePassiveAsync(_exchangeName);
+            _channelPool.Return(channel);
         }
         catch (OperationInterruptedException ex)
         {
@@ -75,8 +83,9 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             {
                 try
                 {
-                    await using var channel = await _persistentConnection.CreateChannel();
+                    var channel = await _channelPool.Get();
                     await channel.ExchangeDeclareAsync(_exchangeName, "direct");
+                    _channelPool.Return(channel);
                 }
                 catch (Exception)
                 {
@@ -87,18 +96,20 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
         }
     }
 
-    public async Task Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
+    public async Task Subscribe<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var queueName = DomainEventNamingHelpers.GetQueueName<TH, T>();
+        var queueName = DomainEventNamingHelpers.GetQueueName<THandler, TEvent>();
 
-        await BindQueueToEvent<T>(queueName);
+        await CreateQueue<TEvent>(queueName);
 
-        await CreateConsumer<T, TH>(queueName);
+        var consumer = await CreateConsumer<TEvent, THandler>();
+
+        _subscriptions.Add(new Subscription(consumer, queueName));
     }
 
-    private async Task BindQueueToEvent<T>(string queueName) where T : DomainEvent
+    private async Task CreateQueue<TEvent>(string queueName) where TEvent : DomainEvent
     {
-        await using var channel = await _persistentConnection.CreateChannel();
+        var channel = await _channelPool.Get();
 
         await channel.QueueDeclareAsync(queueName,
             durable: true,
@@ -110,16 +121,18 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             }
         );
 
-        var eventName = DomainEventNamingHelpers.GetEventName(typeof(T));
+        var eventName = DomainEventNamingHelpers.GetEventName(typeof(TEvent));
 
         await channel.QueueBindAsync(queueName, _exchangeName, eventName);
 
         _logger.LogTrace("Successfully bound queue '{QueueName}' to event '{EventName}'.", queueName, eventName);
+
+        _channelPool.Return(channel);
     }
 
-    private async Task CreateConsumer<TEvent, THandler>(string queueName) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    private async Task<AsyncEventingBasicConsumer> CreateConsumer<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var channel = await _persistentConnection.CreateChannel();
+        var channel = await _channelPool.Get();
         var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
@@ -130,7 +143,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             try
             {
                 var correlationId = eventArgs.BasicProperties.CorrelationId;
-                correlationId = correlationId.IsNullOrEmpty() ? Guid.NewGuid().ToString() : correlationId;
+                correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
 
                 using (CustomLogContext.SetCorrelationId(correlationId))
                 {
@@ -147,7 +160,9 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             }
         };
 
-        _consumersData.Add(new ConsumerMetadata(consumer, queueName));
+        _channelPool.Return(channel);
+
+        return consumer;
     }
 
     private async Task ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
@@ -157,23 +172,17 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
-        var domainEvent = JsonConvert.DeserializeObject<TEvent>(message,
-            new JsonSerializerSettings
-            {
-                ContractResolver = new ContractResolverWithPrivates()
-            });
-        var policy = EventBusRetryPolicyFactory.Create(
-            _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
+        var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS);
+        var policy = EventBusRetryPolicyFactory.Create(_handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
 
         var handlerType = typeof(THandler);
 
         await policy.ExecuteAsync(async () =>
         {
-            await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+            await using var scope = _serviceProvider.CreateAsyncScope();
 
-            if (scope.ResolveOptional(handlerType) is not IDomainEventHandler handler)
-                throw new Exception(
-                    "Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
+            if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
+                throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
             var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
@@ -183,9 +192,6 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     public async Task Publish(DomainEvent @event)
     {
-        if (!_persistentConnection.IsConnected)
-            await _persistentConnection.Connect();
-
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
             .WaitAndRetryAsync(_connectionRetryCount,
@@ -196,10 +202,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
 
-        var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-        {
-            ContractResolver = new ContractResolverWithPrivates()
-        });
+        var message = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
 
         var body = Encoding.UTF8.GetBytes(message);
 
@@ -207,8 +210,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
         {
             _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
 
-            // TODO: reuse channel instead of recreate them; but be careful to not share between different threads
-            await using var channel = await _persistentConnection.CreateChannel();
+            var channel = await _channelPool.Get();
             var properties = new BasicProperties
             {
                 DeliveryMode = DeliveryModes.Persistent,
@@ -219,12 +221,14 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
             await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
 
             _logger.PublishedDomainEvent();
+
+            _channelPool.Return(channel);
         });
     }
 
     public async Task StartConsuming(CancellationToken cancellationToken)
     {
-        foreach (var consumer in _consumersData)
+        foreach (var consumer in _subscriptions)
         {
             await consumer.Consumer.Channel.BasicConsumeAsync(consumer.QueueName, autoAck: false, consumer.Consumer, cancellationToken);
         }
@@ -232,7 +236,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        foreach (var consumerData in _consumersData)
+        foreach (var consumerData in _subscriptions)
         {
             var channel = consumerData.Consumer.Channel;
             foreach (var tag in consumerData.Consumer.ConsumerTags)
@@ -244,8 +248,7 @@ public class NewEventBusRabbitMq : IEventBus, IDisposable
 
     public void Dispose()
     {
-        _autofac.Dispose();
-        _persistentConnection.Dispose();
+        _channelPool.Dispose();
     }
 }
 
@@ -271,21 +274,48 @@ public static class DomainEventNamingHelpers
     }
 }
 
-public class ConsumerMetadata
+public class Subscription
 {
-    public ConsumerMetadata(AsyncEventingBasicConsumer consumer, string queueName)
+    public Subscription(AsyncEventingBasicConsumer consumer, string queueName)
     {
         Consumer = consumer;
         QueueName = queueName;
     }
-    /*
-     * Consumer
-     * Queue
-     * EventName
-     * QueueName
-     *
-     */
 
     public AsyncEventingBasicConsumer Consumer { get; set; }
     public string QueueName { get; set; }
+}
+
+public abstract class ObjectPool<T>
+{
+    private readonly ConcurrentBag<T> _objects = [];
+
+    public async Task<T> Get()
+    {
+        return _objects.TryTake(out var item) ? item : await CreateObject();
+    }
+
+    public void Return(T item) => _objects.Add(item);
+
+    protected abstract Task<T> CreateObject();
+}
+
+public class ChannelPool : ObjectPool<IChannel>, IDisposable
+{
+    private readonly IRabbitMqPersistentConnection _connection;
+
+    public ChannelPool(IRabbitMqPersistentConnection connection)
+    {
+        _connection = connection;
+    }
+
+    protected override async Task<IChannel> CreateObject()
+    {
+        return await _connection.CreateChannel();
+    }
+
+    public void Dispose()
+    {
+        _connection.Dispose();
+    }
 }

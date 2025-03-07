@@ -1,4 +1,3 @@
-using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -46,10 +45,9 @@ public static class RabbitMqServiceCollectionExtensions
         services.AddSingleton<IEventBus, NewEventBusRabbitMq>(sp =>
         {
             var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
-            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<NewEventBusRabbitMq>>();
 
-            return NewEventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, iLifetimeScope,
+            return NewEventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp,
                 options.HandlerRetryBehavior, options.ExchangeName, options.ConnectionRetryCount).GetAwaiter().GetResult();
         });
     }
