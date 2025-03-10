@@ -12,8 +12,6 @@ public static class RabbitMqServiceCollectionExtensions
         var options = new RabbitMqOptions();
         setupOptions.Invoke(options);
 
-        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
         services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
