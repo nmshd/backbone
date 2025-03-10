@@ -42,7 +42,8 @@ namespace Backbone.Modules.TestModule.Application.DomainEvents
     {
         public Task Handle(TestDomainEvent domainEvent)
         {
-            throw new NotImplementedException();
+            // Do nothing
+            return Task.CompletedTask;
         }
     }
 }
