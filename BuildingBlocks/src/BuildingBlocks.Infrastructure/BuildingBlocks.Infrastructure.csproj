@@ -27,9 +27,4 @@
     <ItemGroup>
         <ProjectReference Include="..\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Compile Remove="EventBus\AzureServiceBus\DefaultServiceBusPersisterConnection.cs" />
-        <Compile Remove="EventBus\AzureServiceBus\IServiceBusPersisterConnection.cs" />
-    </ItemGroup>
 </Project>
