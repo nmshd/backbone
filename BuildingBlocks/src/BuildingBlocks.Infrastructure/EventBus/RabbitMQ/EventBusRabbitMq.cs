@@ -305,18 +305,4 @@ internal static partial class EventBusRabbitMqLogs
         Level = LogLevel.Error,
         Message = "An error occurred while processing the domain event of type '{eventName}'.")]
     public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string eventName, Exception exception);
-
-    [LoggerMessage(
-        EventId = 980768,
-        EventName = "EventBusRabbitMQ.NoSubscriptionForEvent",
-        Level = LogLevel.Warning,
-        Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
-
-    [LoggerMessage(
-        EventId = 288394,
-        EventName = "EventBusRabbitMQ.ErrorWhileExecutingEventHandlerType",
-        Level = LogLevel.Warning,
-        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }

@@ -20,18 +20,18 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     private readonly ServiceBusProcessorOptions _options = new()
     {
         AutoCompleteMessages = false,
-        MaxConcurrentCalls = 1, // TODO: check if it would be okay to increase this
-        PrefetchCount = 10 // TODO: find a good value
-    }; // TODO: have different options for different subscriptions? E.g. by using attributes on events or event handlers
+        MaxConcurrentCalls = 1,
+        PrefetchCount = 10
+    };
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ServiceBusClient _client;
     private readonly ServiceBusAdministrationClient _adminClient;
     private readonly ServiceBusSender _sender;
-
     private readonly ILogger<EventBusAzureServiceBus> _logger;
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
-    private readonly List<ServiceBusProcessor> _processors = new();
+
+    private readonly List<ServiceBusProcessor> _processors = [];
 
     public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient,
         ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior)
@@ -132,9 +132,9 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                 DefaultMessageTimeToLive = MESSAGE_TIME_TO_LIVE,
                 DeadLetteringOnMessageExpiration = true,
             });
-        }
 
-        _logger.LogInformation("Successfully created subscription on Service Bus.");
+            _logger.LogInformation("Successfully created subscription on Service Bus.");
+        }
 
         if (await _adminClient.RuleExistsAsync(TOPIC_NAME, subscriptionName, "$Default"))
         {
@@ -144,10 +144,10 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
     private async Task RegisterSubscriptionForEvent(string subscriptionName, string eventName)
     {
-        _logger.LogInformation("Creating rule on subscription...");
-
         if (!await _adminClient.RuleExistsAsync(TOPIC_NAME, subscriptionName, eventName))
         {
+            _logger.LogInformation("Creating rule on subscription...");
+
             await _adminClient.CreateRuleAsync(TOPIC_NAME, subscriptionName,
                 new CreateRuleOptions
                 {
@@ -199,7 +199,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             await using var scope = _serviceProvider.CreateAsyncScope();
 
             if (scope.ServiceProvider.GetService(typeof(THandler)) is not IDomainEventHandler handler)
-                throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
+                throw new Exception($"Domain event handler '{typeof(THandler).FullName}' could not be resolved from dependency container or it does not implement {nameof(IDomainEventHandler)}.");
 
             await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
         }
@@ -252,20 +252,6 @@ internal static partial class EventBusAzureServiceBusLogs
         Level = LogLevel.Error,
         Message = "Error handling message with context {exceptionContext}.")]
     public static partial void ErrorHandlingMessage(this ILogger logger, ServiceBusErrorSource exceptionContext, Exception exception);
-
-    [LoggerMessage(
-        EventId = 341537,
-        EventName = "EventBusAzureServiceBus.NoSubscriptionForEvent",
-        Level = LogLevel.Warning,
-        Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
-
-    [LoggerMessage(
-        EventId = 726744,
-        EventName = "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerCausingRetry",
-        Level = LogLevel.Warning,
-        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 
     [LoggerMessage(
         EventId = 146670,
