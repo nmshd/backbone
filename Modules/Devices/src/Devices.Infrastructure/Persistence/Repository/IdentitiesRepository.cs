@@ -182,6 +182,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(filter)
             .FirstOrDefaultAsync(cancellationToken);
     }
