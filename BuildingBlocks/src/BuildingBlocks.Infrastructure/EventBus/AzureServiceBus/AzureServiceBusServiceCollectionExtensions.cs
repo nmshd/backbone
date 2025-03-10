@@ -1,5 +1,7 @@
-using Autofac;
+using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -12,20 +14,22 @@ public static class AzureServiceBusServiceCollectionExtensions
         var options = new ServiceBusOptions();
         setupOptions.Invoke(options);
 
-        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
-        services.AddSingleton<IServiceBusPersisterConnection>(
-            new DefaultServiceBusPersisterConnection(options.ConnectionString));
+        services.AddAzureClients(azureBuilder =>
+        {
+            azureBuilder.AddServiceBusClient(options.ConnectionString);
+            azureBuilder.AddServiceBusAdministrationClient(options.ConnectionString);
+        });
 
         services.AddSingleton<IEventBus, EventBusAzureServiceBus>(sp =>
         {
-            var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
-            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<EventBusAzureServiceBus>>();
-            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-            return new EventBusAzureServiceBus(serviceBusPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior, options.SubscriptionClientName);
+            return new EventBusAzureServiceBus(
+                sp.GetRequiredService<ServiceBusClient>(),
+                sp.GetRequiredService<ServiceBusAdministrationClient>(),
+                logger,
+                sp,
+                options.HandlerRetryBehavior
+            );
         });
     }
 }

@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.Modules.TestModule.Application.DomainEvents;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.EventBusRabbitMQ
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq
 {
     public class DomainEventNamingExtensionsTests : AbstractTestsBase
     {
@@ -42,7 +42,8 @@ namespace Backbone.Modules.TestModule.Application.DomainEvents
     {
         public Task Handle(TestDomainEvent domainEvent)
         {
-            throw new NotImplementedException();
+            // Do nothing
+            return Task.CompletedTask;
         }
     }
 }
