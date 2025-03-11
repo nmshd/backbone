@@ -15,8 +15,11 @@ public static class IEventBusExtensions
 
     private static async Task SubscribeToIdentitiesEvents(IEventBus eventBus)
     {
-        await eventBus.Subscribe<IdentityToBeDeletedDomainEvent, IdentityToBeDeletedDomainEventHandler>();
-        await eventBus.Subscribe<IdentityDeletionCancelledDomainEvent, IdentityDeletionCancelledDomainEventHandler>();
-        await eventBus.Subscribe<IdentityDeletedDomainEvent, IdentityDeletedDomainEventHandler>();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.Subscribe<IdentityToBeDeletedDomainEvent, IdentityToBeDeletedDomainEventHandler>(),
+            eventBus.Subscribe<IdentityDeletionCancelledDomainEvent, IdentityDeletionCancelledDomainEventHandler>(),
+            eventBus.Subscribe<IdentityDeletedDomainEvent, IdentityDeletedDomainEventHandler>()
+        });
     }
 }

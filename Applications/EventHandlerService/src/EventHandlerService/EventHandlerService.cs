@@ -30,10 +30,10 @@ public class EventHandlerService : IHostedService
     private async Task SubscribeToEvents()
     {
         _logger.LogInformation("Subscribing to events...");
-        foreach (var module in _modules)
-        {
-            await module.ConfigureEventBus(_eventBus);
-        }
+
+        var configureEventBusTasks = _modules.Select(m => m.ConfigureEventBus(_eventBus));
+
+        await Task.WhenAll(configureEventBusTasks);
 
         _logger.LogInformation("Successfully subscribed to events.");
     }
