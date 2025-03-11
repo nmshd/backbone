@@ -42,7 +42,7 @@ public class BackboneConfiguration
     public class BackboneInfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public EventBusOptions EventBus { get; set; } = new();
     }
 }
 

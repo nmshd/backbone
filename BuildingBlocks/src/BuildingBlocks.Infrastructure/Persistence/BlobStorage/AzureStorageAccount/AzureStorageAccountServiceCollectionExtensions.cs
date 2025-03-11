@@ -22,6 +22,8 @@ public static class AzureStorageAccountServiceCollectionExtensions
 
 public class AzureStorageAccountOptions
 {
+    [Required]
+    [MinLength(2)]
     public required string ConnectionString { get; set; }
 
     [Required]

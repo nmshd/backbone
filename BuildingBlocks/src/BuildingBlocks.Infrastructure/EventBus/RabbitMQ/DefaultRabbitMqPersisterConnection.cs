@@ -11,20 +11,19 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 public class DefaultRabbitMqPersistentConnection
     : IRabbitMqPersistentConnection
 {
+    private const int CONNECTION_RETRY_COUNT = 5;
+
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<DefaultRabbitMqPersistentConnection> _logger;
-    private readonly int _retryCount;
 
     private IConnection? _connection;
     private bool _disposed;
 
-    public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory,
-        ILogger<DefaultRabbitMqPersistentConnection> logger, int retryCount = 5)
+    public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMqPersistentConnection> logger)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _retryCount = retryCount;
     }
 
     public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
@@ -55,7 +54,7 @@ public class DefaultRabbitMqPersistentConnection
 
         var policy = Policy.Handle<SocketException>()
             .Or<BrokerUnreachableException>()
-            .WaitAndRetryAsync(_retryCount,
+            .WaitAndRetryAsync(CONNECTION_RETRY_COUNT,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, _) => _logger.ConnectionError(ex));
 

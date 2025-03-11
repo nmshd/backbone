@@ -18,6 +18,9 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposable
 {
+    private const int SUBSCRIPTION_MINIMUM_BACKOFF = 2;
+    private const int SUBSCRIPTION_MAXIMUM_BACKOFF = 120;
+
     private static readonly TimeSpan MESSAGE_ACK_DEADLINE = 60.Seconds();
 
     private static class PubSubMessageAttributes
@@ -33,7 +36,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
-    private readonly HandlerRetryBehavior _handlerRetryBehavior;
     private readonly string _projectId;
     private readonly TopicName _topicName;
     private readonly SubscriberServiceApiClient _subscriberService;
@@ -45,14 +47,12 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private bool _disposed;
 
-    public EventBusGoogleCloudPubSub(ILogger<EventBusGoogleCloudPubSub> logger, IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string projectId, string topicId,
-        string connectionInfo)
+    public EventBusGoogleCloudPubSub(ILogger<EventBusGoogleCloudPubSub> logger, IServiceProvider serviceProvider, string projectId, string topicId, string connectionInfo)
     {
         _projectId = projectId;
         _topicName = TopicName.FromProjectTopic(projectId, topicId);
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
-        _handlerRetryBehavior = handlerRetryBehavior;
 
         _gcpCredentials = connectionInfo.IsEmpty() ? GoogleCredential.GetApplicationDefault() : GoogleCredential.FromJson(connectionInfo);
         _subscriberService = new SubscriberServiceApiClientBuilder { GoogleCredential = _gcpCredentials, EmulatorDetection = EmulatorDetection.EmulatorOrProduction }.Build();
@@ -128,8 +128,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
                 AckDeadlineSeconds = (int)MESSAGE_ACK_DEADLINE.TotalSeconds,
                 RetryPolicy = new RetryPolicy
                 {
-                    MinimumBackoff = Duration.FromTimeSpan(_handlerRetryBehavior.MinimumBackoff.Seconds()),
-                    MaximumBackoff = Duration.FromTimeSpan(_handlerRetryBehavior.MaximumBackoff.Seconds())
+                    MinimumBackoff = Duration.FromTimeSpan(SUBSCRIPTION_MINIMUM_BACKOFF.Seconds()),
+                    MaximumBackoff = Duration.FromTimeSpan(SUBSCRIPTION_MAXIMUM_BACKOFF.Seconds())
                 }
             };
 

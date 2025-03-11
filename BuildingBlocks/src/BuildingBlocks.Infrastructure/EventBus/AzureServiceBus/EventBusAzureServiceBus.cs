@@ -15,6 +15,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
+    public const int MAX_DELIVERY_COUNT = 5;
     private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 5.Minutes();
 
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
@@ -34,19 +35,16 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     private readonly ServiceBusAdministrationClient _adminClient;
     private readonly ServiceBusSender _sender;
     private readonly ILogger<EventBusAzureServiceBus> _logger;
-    private readonly HandlerRetryBehavior _handlerRetryBehavior;
 
     private readonly List<ServiceBusProcessor> _processors = [];
 
-    public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient,
-        ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior)
+    public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient, ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider)
     {
         _client = client;
         _adminClient = adminClient;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
         _sender = client.CreateSender(TOPIC_NAME);
-        _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
@@ -130,7 +128,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
             await _adminClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, subscriptionName)
             {
-                MaxDeliveryCount = _handlerRetryBehavior.NumberOfRetries,
+                MaxDeliveryCount = MAX_DELIVERY_COUNT,
                 DefaultMessageTimeToLive = MESSAGE_TIME_TO_LIVE,
                 DeadLetteringOnMessageExpiration = true,
             });
