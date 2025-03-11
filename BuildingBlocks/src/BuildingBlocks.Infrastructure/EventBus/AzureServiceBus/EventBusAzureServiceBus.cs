@@ -92,7 +92,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         var eventName = typeof(T).GetEventName();
         var subscriptionName = GetSubscriptionName<TH, T>();
 
-        await CreateSubscription(subscriptionName);
+        await EnsureSubscriptionExists(subscriptionName);
 
         await RegisterSubscriptionForEvent(subscriptionName, eventName);
 
@@ -122,7 +122,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _processors.Add(processor);
     }
 
-    private async Task CreateSubscription(string subscriptionName)
+    private async Task EnsureSubscriptionExists(string subscriptionName)
     {
         if (!await _adminClient.SubscriptionExistsAsync(TOPIC_NAME, subscriptionName))
         {

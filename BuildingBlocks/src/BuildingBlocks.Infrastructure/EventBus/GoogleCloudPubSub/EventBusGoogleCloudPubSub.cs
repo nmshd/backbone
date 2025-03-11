@@ -7,10 +7,12 @@ using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Type = System.Type;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
@@ -31,15 +33,16 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
-
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
-
     private readonly string _projectId;
     private readonly TopicName _topicName;
     private readonly SubscriberServiceApiClient _subscriberService;
+
     private readonly PublisherClient _publisherClient;
     private readonly GoogleCredential _gcpCredentials;
+
     private readonly List<Subscription> _subscriptions = [];
+
     private bool _disposed;
 
     public EventBusGoogleCloudPubSub(ILogger<EventBusGoogleCloudPubSub> logger, IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string projectId, string topicId,
@@ -62,50 +65,11 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         }.Build();
     }
 
-    public void Dispose()
-    {
-        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_disposed) return;
-
-        _disposed = true;
-
-        try
-        {
-            await _publisherClient.ShutdownAsync(CancellationToken.None);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while shutting down the publisher client.");
-        }
-
-        try
-        {
-            foreach (var subscription in _subscriptions)
-            {
-                await subscription.SubscriberClient.DisposeAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            if (ex.Message != "Can only stop a started instance.")
-                throw;
-
-            _logger.LogError(ex, "An error occurred while stopping the subscriber client.");
-        }
-    }
-
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
 
-        var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-        {
-            ContractResolver = new ContractResolverWithPrivates()
-        });
+        var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
 
         var message = new PubsubMessage
         {
@@ -118,7 +82,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         };
 
         var messageId = await _logger.TraceTime(
-            () => _publisherClient.PublishAsync(message), nameof(_publisherClient.PublishAsync));
+            () => _publisherClient.PublishAsync(message), nameof(_publisherClient.PublishAsync)
+        );
 
         _logger.EventWasNotProcessed(messageId);
     }
@@ -128,11 +93,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         where TH : IDomainEventHandler<T>
     {
         var eventName = typeof(T).GetEventName();
-
-        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
-
         var subscriptionName = GetSubscriptionName<TH, T>(_projectId);
-        await CreateSubscriptionIfNotExists(subscriptionName, eventName);
+
+        await EnsureSubscriptionExists(subscriptionName, eventName);
 
         var subscriberClient = await new SubscriberClientBuilder
         {
@@ -144,7 +107,16 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         _subscriptions.Add(new Subscription(subscriberClient, typeof(T), typeof(TH)));
     }
 
-    private async Task CreateSubscriptionIfNotExists(SubscriptionName subscriptionName, string eventName)
+    public static SubscriptionName GetSubscriptionName<THandler, TEvent>(string projectId) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var eventHandlerFullName = typeof(THandler).FullName!;
+
+        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
+
+        return new SubscriptionName(projectId, $"{moduleName}.{typeof(TEvent).GetEventName()}");
+    }
+
+    private async Task EnsureSubscriptionExists(SubscriptionName subscriptionName, string eventName)
     {
         try
         {
@@ -153,14 +125,27 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
                 SubscriptionName = subscriptionName,
                 TopicAsTopicName = _topicName,
                 Filter = $"attributes.{PubSubMessageAttributes.EVENT_NAME} = \"{eventName}\"",
-                AckDeadlineSeconds = (int)MESSAGE_ACK_DEADLINE.TotalSeconds
+                AckDeadlineSeconds = (int)MESSAGE_ACK_DEADLINE.TotalSeconds,
+                RetryPolicy = new RetryPolicy
+                {
+                    MinimumBackoff = Duration.FromTimeSpan(_handlerRetryBehavior.MinimumBackoff.Seconds()),
+                    MaximumBackoff = Duration.FromTimeSpan(_handlerRetryBehavior.MaximumBackoff.Seconds())
+                }
             };
+
+            _logger.LogInformation("Creating subscription '{SubscriptionName}' for event '{EventName}'...", subscriptionName, eventName);
+
             await _subscriberService.CreateSubscriptionAsync(subscriptionRequest);
+
+            _logger.LogInformation("Successfully created subscription '{SubscriptionName}' for event '{EventName}'.", subscriptionName, eventName);
         }
         catch (RpcException ex)
         {
             if (ex.StatusCode == StatusCode.AlreadyExists)
+            {
+                _logger.LogInformation("Subscription '{SubscriptionName}' for event '{EventName}' already exists.", subscriptionName, eventName);
                 return;
+            }
 
             throw;
         }
@@ -213,19 +198,45 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        foreach (var subscription in _subscriptions)
-        {
-            await subscription.SubscriberClient.StopAsync(CancellationToken.None);
-        }
+        var stopTasks = _subscriptions.Select(subscription => subscription.SubscriberClient.StopAsync(CancellationToken.None));
+
+        await Task.WhenAll(stopTasks);
     }
 
-    public static SubscriptionName GetSubscriptionName<THandler, TEvent>(string projectId) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    public void Dispose()
     {
-        var eventHandlerFullName = typeof(THandler).FullName!;
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
 
-        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed) return;
 
-        return new SubscriptionName(projectId, $"{moduleName}.{typeof(TEvent).GetEventName()}");
+        _disposed = true;
+
+        try
+        {
+            await _publisherClient.ShutdownAsync(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while shutting down the publisher client.");
+        }
+
+        try
+        {
+            foreach (var subscription in _subscriptions)
+            {
+                await subscription.SubscriberClient.DisposeAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message != "Can only stop a started instance.")
+                throw;
+
+            _logger.LogError(ex, "An error occurred while stopping the subscriber client.");
+        }
     }
 
     private record Subscription
@@ -264,18 +275,4 @@ internal static partial class EventBusGoogleCloudPubSubLogs
         Level = LogLevel.Error,
         Message = "Error handling message with context {exceptionSource}.")]
     public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionSource, Exception exception);
-
-    [LoggerMessage(
-        EventId = 590747,
-        EventName = "EventBusGoogleCloudPubSub.NoSubscriptionForEvent",
-        Level = LogLevel.Warning,
-        Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
-
-    [LoggerMessage(
-        EventId = 304842,
-        EventName = "EventBusGoogleCloudPubSub.ErrorWhileExecutingEventHandlerType",
-        Level = LogLevel.Warning,
-        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
 }
