@@ -1,4 +1,3 @@
-using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,21 +11,11 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
         var options = new GoogleCloudPubSubOptions();
         setupOptions.Invoke(options);
 
-        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
-        services.AddSingleton<IGoogleCloudPubSubPersisterConnection>(sp =>
-            new DefaultGoogleCloudPubSubPersisterConnection(sp.GetRequiredService<ILogger<DefaultGoogleCloudPubSubPersisterConnection>>(), options.ProjectId, options.TopicName,
-                options.SubscriptionClientName, options.ConnectionInfo));
-
         services.AddSingleton<IEventBus, EventBusGoogleCloudPubSub>(sp =>
         {
-            var googleCloudPubSubPersisterConnection = sp.GetRequiredService<IGoogleCloudPubSubPersisterConnection>();
-            var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<EventBusGoogleCloudPubSub>>();
-            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-            return new EventBusGoogleCloudPubSub(googleCloudPubSubPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior);
+            return new EventBusGoogleCloudPubSub(logger, sp, options.HandlerRetryBehavior, options.ProjectId, options.TopicName, options.ConnectionInfo);
         });
     }
 }

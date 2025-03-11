@@ -15,7 +15,12 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
-    private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 60.Seconds();
+    private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 5.Minutes();
+
+    private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
+    {
+        ContractResolver = new ContractResolverWithPrivates()
+    };
 
     private readonly ServiceBusProcessorOptions _options = new()
     {
@@ -60,10 +65,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
-        var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-        {
-            ContractResolver = new ContractResolverWithPrivates()
-        });
+        var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
         var message = new ServiceBusMessage
@@ -90,7 +92,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         var eventName = typeof(T).GetEventName();
         var subscriptionName = GetSubscriptionName<TH, T>();
 
-        await CreateSubscription(subscriptionName);
+        await EnsureSubscriptionExists(subscriptionName);
 
         await RegisterSubscriptionForEvent(subscriptionName, eventName);
 
@@ -120,7 +122,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _processors.Add(processor);
     }
 
-    private async Task CreateSubscription(string subscriptionName)
+    private async Task EnsureSubscriptionExists(string subscriptionName)
     {
         if (!await _adminClient.SubscriptionExistsAsync(TOPIC_NAME, subscriptionName))
         {
@@ -187,11 +189,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         var eventType = typeof(TEvent);
         var eventName = eventType.GetEventName();
 
-        var domainEvent = (DomainEvent)JsonConvert.DeserializeObject(message, eventType,
-            new JsonSerializerSettings
-            {
-                ContractResolver = new ContractResolverWithPrivates()
-            })!;
+        var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS)!;
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
         try

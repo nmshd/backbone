@@ -17,10 +17,13 @@ public static class IEventBusExtensions
 {
     public static async Task AddDevicesDomainEventSubscriptions(this IEventBus eventBus)
     {
-        await eventBus.SubscribeToAnnouncementsEvents();
-        await eventBus.SubscribeToDevicesEvents();
-        await eventBus.SubscribeToSynchronizationEvents();
-        await eventBus.SubscribeToTokensEvents();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.SubscribeToAnnouncementsEvents(),
+            eventBus.SubscribeToDevicesEvents(),
+            eventBus.SubscribeToSynchronizationEvents(),
+            eventBus.SubscribeToTokensEvents()
+        });
     }
 
     private static async Task SubscribeToAnnouncementsEvents(this IEventBus eventBus)
@@ -35,9 +38,12 @@ public static class IEventBusExtensions
 
     private static async Task SubscribeToSynchronizationEvents(this IEventBus eventBus)
     {
-        await eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>();
-        await eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>();
-        await eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>(),
+            eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>(),
+            eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>()
+        });
     }
 
     private static async Task SubscribeToTokensEvents(this IEventBus eventBus)

@@ -32,16 +32,19 @@ public static class IEventBusExtensions
 
     private static async Task SubscribeToSynchronizationEvents(IEventBus eventBus)
     {
-        await eventBus.Subscribe<IdentityCreatedDomainEvent, IdentityCreatedDomainEventHandler>();
-        await eventBus.Subscribe<TierCreatedDomainEvent, TierCreatedDomainEventHandler>();
-        await eventBus.Subscribe<TierDeletedDomainEvent, TierDeletedDomainEventHandler>();
-        await eventBus.Subscribe<TierQuotaDefinitionCreatedDomainEvent, TierQuotaDefinitionCreatedDomainEventHandler>();
-        await eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
-        await eventBus.Subscribe<TierQuotaDefinitionDeletedDomainEvent, TierQuotaDefinitionDeletedDomainEventHandler>();
-        await eventBus.Subscribe<FileUploadedDomainEvent, FileUploadedDomainEventHandler>();
-        await eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
-        await eventBus.Subscribe<RelationshipTemplateCreatedDomainEvent, RelationshipTemplateCreatedDomainEventHandler>();
-        await eventBus.Subscribe<TokenCreatedDomainEvent, TokenCreatedDomainEventHandler>();
-        await eventBus.Subscribe<TierOfIdentityChangedDomainEvent, TierOfIdentityChangedDomainEventHandler>();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.Subscribe<IdentityCreatedDomainEvent, IdentityCreatedDomainEventHandler>(),
+            eventBus.Subscribe<TierCreatedDomainEvent, TierCreatedDomainEventHandler>(),
+            eventBus.Subscribe<TierDeletedDomainEvent, TierDeletedDomainEventHandler>(),
+            eventBus.Subscribe<TierQuotaDefinitionCreatedDomainEvent, TierQuotaDefinitionCreatedDomainEventHandler>(),
+            eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>(),
+            eventBus.Subscribe<TierQuotaDefinitionDeletedDomainEvent, TierQuotaDefinitionDeletedDomainEventHandler>(),
+            eventBus.Subscribe<FileUploadedDomainEvent, FileUploadedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipTemplateCreatedDomainEvent, RelationshipTemplateCreatedDomainEventHandler>(),
+            eventBus.Subscribe<TokenCreatedDomainEvent, TokenCreatedDomainEventHandler>(),
+            eventBus.Subscribe<TierOfIdentityChangedDomainEvent, TierOfIdentityChangedDomainEventHandler>()
+        });
     }
 }

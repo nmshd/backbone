@@ -10,8 +10,11 @@ public static class IEventBusExtensions
 {
     public static async Task AddMessagesDomainEventSubscriptions(this IEventBus eventBus)
     {
-        await SubscribeToMessagesEvents(eventBus);
-        await SubscribeToRelationshipsEvents(eventBus);
+        await Task.WhenAll(new List<Task>
+        {
+            SubscribeToMessagesEvents(eventBus),
+            SubscribeToRelationshipsEvents(eventBus)
+        });
     }
 
     private static async Task SubscribeToMessagesEvents(IEventBus eventBus)

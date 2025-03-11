@@ -26,26 +26,35 @@ public static class IEventBusExtensions
 {
     public static async Task AddSynchronizationDomainEventSubscriptions(this IEventBus eventBus)
     {
-        await SubscribeToMessagesEvents(eventBus);
-        await SubscribeToRelationshipsEvents(eventBus);
-        await SubscribeToTokensEvents(eventBus);
+        await Task.WhenAll(new List<Task>
+        {
+            SubscribeToMessagesEvents(eventBus),
+            SubscribeToRelationshipsEvents(eventBus),
+            SubscribeToTokensEvents(eventBus)
+        });
     }
 
     private static async Task SubscribeToMessagesEvents(IEventBus eventBus)
     {
-        await eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
-        await eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
-        await eventBus.Subscribe<IdentityDeletionProcessStatusChangedDomainEvent, IdentityDeletionProcessStatusChangedDomainEventHandler>();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>(),
+            eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>(),
+            eventBus.Subscribe<IdentityDeletionProcessStatusChangedDomainEvent, IdentityDeletionProcessStatusChangedDomainEventHandler>()
+        });
     }
 
     private static async Task SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
-        await eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
-        await eventBus.Subscribe<RelationshipReactivationRequestedDomainEvent, RelationshipReactivationRequestedDomainEventHandler>();
-        await eventBus.Subscribe<RelationshipReactivationCompletedDomainEvent, RelationshipReactivationCompletedDomainEventHandler>();
-        await eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>();
-        await eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>();
-        await eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>();
+        await Task.WhenAll(new List<Task>
+        {
+            eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipReactivationRequestedDomainEvent, RelationshipReactivationRequestedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipReactivationCompletedDomainEvent, RelationshipReactivationCompletedDomainEventHandler>(),
+            eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>(),
+            eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>(),
+            eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>()
+        });
     }
 
     private static async Task SubscribeToTokensEvents(IEventBus eventBus)
