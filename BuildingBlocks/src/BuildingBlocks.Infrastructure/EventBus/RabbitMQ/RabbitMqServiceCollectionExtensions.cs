@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -7,11 +8,8 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public static class RabbitMqServiceCollectionExtensions
 {
-    public static void AddRabbitMq(this IServiceCollection services, Action<RabbitMqOptions> setupOptions)
+    public static void AddRabbitMq(this IServiceCollection services, RabbitMqOptions options)
     {
-        var options = new RabbitMqOptions();
-        setupOptions.Invoke(options);
-
         services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
@@ -37,7 +35,7 @@ public static class RabbitMqServiceCollectionExtensions
             if (!string.IsNullOrEmpty(options.Password))
                 factory.Password = options.Password;
 
-            return new DefaultRabbitMqPersistentConnection(factory, logger, options.ConnectionRetryCount);
+            return new DefaultRabbitMqPersistentConnection(factory, logger);
         });
 
         services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
@@ -45,19 +43,32 @@ public static class RabbitMqServiceCollectionExtensions
             var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
 
-            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp,
-                options.HandlerRetryBehavior, options.ExchangeName, options.ConnectionRetryCount).GetAwaiter().GetResult();
+            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, options.ExchangeName).GetAwaiter().GetResult();
         });
     }
 }
 
-public class RabbitMqOptions : BasicBusOptions
+public class RabbitMqOptions
 {
+    [Required]
     public bool EnableSsl { get; set; } = true;
-    public string ExchangeName { get; set; } = null!;
+
+    [Required]
+    [MinLength(1)]
+    public string ExchangeName { get; set; } = "enmeshed";
+
+    [Required]
+    [MinLength(1)]
     public string HostName { get; set; } = null!;
+
+    [Required]
     public int Port { get; set; } = 5672;
+
+    [Required]
+    [MinLength(1)]
     public string Username { get; set; } = null!;
+
+    [Required]
+    [MinLength(1)]
     public string Password { get; set; } = null!;
-    public int ConnectionRetryCount { get; set; } = 5;
 }

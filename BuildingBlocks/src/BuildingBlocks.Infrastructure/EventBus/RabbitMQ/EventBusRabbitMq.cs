@@ -17,6 +17,9 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
+    private const int PUBLISH_RETRY_COUNT = 5;
+    private const int HANDLER_RETRY_COUNT = 5;
+
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
     {
         ContractResolver = new ContractResolverWithPrivates()
@@ -25,8 +28,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly ILogger<EventBusRabbitMq> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IRabbitMqPersistentConnection _persistentConnection;
-    private readonly int _connectionRetryCount;
-    private readonly int _handlerRetryCount;
 
     private readonly ChannelPool _channelPool;
 
@@ -35,8 +36,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly string _deadLetterQueueName;
     private readonly SubscriptionManager _subscriptionManager = new();
 
-    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
+    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -44,15 +44,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _exchangeName = exchangeName;
         _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
         _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
-        _connectionRetryCount = connectionRetryCount;
-        _handlerRetryCount = handlerRetryBehavior.NumberOfRetries;
         _channelPool = new ChannelPool(persistentConnection);
     }
 
-    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        IServiceProvider serviceProvider, HandlerRetryBehavior handlerRetryBehavior, string exchangeName, int connectionRetryCount = 5)
+    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
     {
-        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, handlerRetryBehavior, exchangeName, connectionRetryCount);
+        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName);
 
         await eventBus.Init();
 
@@ -145,7 +142,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             arguments: new Dictionary<string, object?>
             {
                 { "x-queue-type", "quorum" },
-                { "x-delivery-limit", _handlerRetryCount },
+                { "x-delivery-limit", HANDLER_RETRY_COUNT },
                 { "x-dead-letter-exchange", _deadLetterExchangeName },
                 { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
             }
@@ -216,7 +213,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
-            .WaitAndRetryAsync(_connectionRetryCount,
+            .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, _) => _logger.ErrorOnPublish(ex));
 

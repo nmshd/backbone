@@ -31,7 +31,7 @@ public class AdminConfiguration
     public class AdminInfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public EventBusOptions EventBus { get; set; } = new();
 
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
     }

@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -32,15 +31,10 @@ public static class BlobStorageServiceCollectionExtensions
             case BlobStorageOptions.S3_BUCKET:
                 services.AddS3(options.S3Bucket!);
                 break;
-
+            case "":
+                throw new NotSupportedException("No blob storage product name was specified.");
             default:
-            {
-                if (options.ProductName.IsNullOrEmpty())
-                    throw new NotSupportedException("No cloud provider was specified.");
-
-                throw new NotSupportedException(
-                    $"{options.ProductName} is not a currently supported cloud provider.");
-            }
+                throw new NotSupportedException($"{options.ProductName} is not a currently supported blob storage product name.");
         }
 
         services.AddHealthChecks().Add(

@@ -573,30 +573,34 @@ global:
       exposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
     infrastructure:
       eventBus:
-        # vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
-        vendor: ""
-        # connectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
-        connectionInfo: ""
-        # subscriptionClientName - the name of the subscription that should be used to receive events
-        subscriptionClientName: "consumerapi"
-        # enableSsl - only applicable if Vendor is "RabbitMQ"; whether to use SSL to connect to the RabbitMQ service
-        rabbitMqEnableSsl: true
-        # rabbitMQPort - only applicable if Vendor is "RabbitMQ"; the port under which the RabbitMQ service is reachable
-        rabbitMqPort: 5672
-        # rabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMqUsername: ""
-        # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMqPassword: ""
-        # rabbitMqExchangeName - only applicable if Vendor is "RabbitMQ"; the name of the exchange that should be used
-        rabbitMqExchangeName: ""
-        # rabbitMqQueueName - only applicable if Vendor is "RabbitMQ"; the name of the queue the Consumer API should listen to
-        rabbitMqQueueName: ""
-        # connectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the Consumer API should retry to connect to the RabbitMQ service
-        connectionRetryCount: 5
-        # gcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
-        gcpPubSubProjectId: ""
-        # gcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
-        gcpPubSubTopicName: ""
+        # productName - possible values: "RabbitMQ"/"AzureServiceBus"/"GoogleCloudPubSub"
+        productName: ""
+        # # rabbitMq - only applicable if productName is "RabbitMQ"
+        # rabbitMq:
+        #   # enableSsl - whether to use SSL to connect to the RabbitMQ service
+        #   enableSsl: true
+        #   # hostName - the host name of the RabbitMQ service; 
+        #   hostName: ""
+        #   # port - the port under which the RabbitMQ service is reachable
+        #   port: 5672
+        #   # username - the username used to authenticate at the RabbitMQ instance
+        #   username: ""
+        #   # password - the password used to authenticate at the RabbitMQ instance
+        #   password: ""
+        #   # exchangeName - the name of the exchange that should be used
+        #   exchangeName: ""
+        # # azureServiceBus - only applicable if productName is "AzureServiceBus"
+        # azureServiceBus:
+        #   # connectionString - the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
+        #   connectionString: ""
+        # # googleCloudPubSub - only applicable if productName is "GoogleCloudPubSub"
+        # googleCloudPubSub:
+        #   # projectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
+        #   projectId: ""
+        #   # topicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
+        #   topicName: ""
+        #   # serviceAccountJson - the content of the service account json file that should be used to authenticate; if left empty, the default credentials are used
+        #   serviceAccountJson: ""
       sqlDatabase:
         # provider - possible values: "Postgres"/"SqlServer"
         provider: ""
@@ -686,19 +690,19 @@ global:
           blobStorage:
             # productName - possible values: "AzureStorageAccount"/"GoogleCloudStorage"
             productName: ""
-            # azureStorageAccount - only applicable if ProductName is "AzureStorageAccount"
+            # azureStorageAccount - only applicable if productName is "AzureStorageAccount"
             # azureStorageAccount:
               # containerName - the name of the container that should be used to store the files
               # containerName: ""
               # connectionString - should be set via environment variable
               # connectionString: ""
-            # googleCloudStorage - only applicable if ProductName is "GoogleCloudStorage"
+            # googleCloudStorage - only applicable if productName is "GoogleCloudStorage"
             # googleCloudStorage:
               # serviceAccountJson - the content of the service account json file that should be used to authenticate
               # serviceAccountJson: ""
               # bucketName - the name of the bucket that should be used to store the files
               # bucketName: ""
-            # s3Bucket - only applicable if ProductName is "S3Bucket"
+            # s3Bucket - only applicable if productName is "S3Bucket"
             # s3Bucket:
               # accessKeyId - the access key id that should be used to authenticate
               # accessKeyId: ""
