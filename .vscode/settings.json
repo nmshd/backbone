@@ -34,5 +34,6 @@
     "[dart]": {
         "editor.defaultFormatter": "Dart-Code.dart-code",
         "editor.rulers": [150]
-    }
+    },
+    "dotnet.defaultSolution": "Backbone.sln"
 }
