@@ -54,15 +54,15 @@ spec:
                 - ActualDeletionWorker
               env:
                 {{- if .Values.global.useBuiltInEventbus }}
-                - name: infrastructure__eventBus__vendor
+                - name: infrastructure__eventBus__productName
                   value: RabbitMQ
-                - name: infrastructure__eventBus__rabbitMqEnableSsl
+                - name: infrastructure__eventBus__rabbitMq__enableSsl
                   value: "false"
-                - name: infrastructure__eventBus__connectionInfo
+                - name: infrastructure__eventBus__rabbitMq__hostName
                   value: "rabbitmq"
-                - name: infrastructure__eventBus__rabbitMQUsername
+                - name: infrastructure__eventBus__rabbitMq__username
                   value: "admin"
-                - name: infrastructure__eventBus__rabbitMQPassword
+                - name: infrastructure__eventBus__rabbitMq__password
                   valueFrom:
                     secretKeyRef:
                       name: rabbitmq-password

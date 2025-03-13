@@ -67,15 +67,15 @@ spec:
               readOnly: true
           env:
             {{- if .Values.global.useBuiltInEventbus }}
-            - name: infrastructure__eventBus__vendor
-              value: RabbitMQ
-            - name: infrastructure__eventBus__rabbitMqEnableSsl
-              value: "false"
-            - name: infrastructure__eventBus__connectionInfo
-              value: "rabbitmq"
-            - name: infrastructure__eventBus__rabbitMQUsername
-              value: "admin"
-            - name: infrastructure__eventBus__rabbitMQPassword
+              - name: infrastructure__eventBus__productName
+                value: RabbitMQ
+              - name: infrastructure__eventBus__rabbitMq__enableSsl
+                value: "false"
+              - name: infrastructure__eventBus__rabbitMq__hostName
+                value: "rabbitmq"
+              - name: infrastructure__eventBus__rabbitMq__username
+                value: "admin"
+              - name: infrastructure__eventBus__rabbitMq__password
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-password
