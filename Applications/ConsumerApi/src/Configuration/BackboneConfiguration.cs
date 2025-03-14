@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
-using ChallengesConfiguration = Backbone.Modules.Challenges.ConsumerApi.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
-using FilesConfiguration = Backbone.Modules.Files.ConsumerApi.Configuration;
-using MessagesConfiguration = Backbone.Modules.Messages.ConsumerApi.Configuration;
-using QuotasConfiguration = Backbone.Modules.Quotas.ConsumerApi.Configuration;
-using RelationshipsConfiguration = Backbone.Modules.Relationships.ConsumerApi.Configuration;
-using SynchronizationConfiguration = Backbone.Modules.Synchronization.ConsumerApi.Configuration;
-using TokensConfiguration = Backbone.Modules.Tokens.ConsumerApi.Configuration;
+using ChallengesConfiguration = Backbone.Modules.Challenges.Module.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.Module.Configuration;
+using FilesConfiguration = Backbone.Modules.Files.Module.Configuration;
+using MessagesConfiguration = Backbone.Modules.Messages.Module.Configuration;
+using QuotasConfiguration = Backbone.Modules.Quotas.Module.Configuration;
+using RelationshipsConfiguration = Backbone.Modules.Relationships.Module.Configuration;
+using SynchronizationConfiguration = Backbone.Modules.Synchronization.Module.Configuration;
+using TokensConfiguration = Backbone.Modules.Tokens.Module.Configuration;
 
 namespace Backbone.ConsumerApi.Configuration;
 

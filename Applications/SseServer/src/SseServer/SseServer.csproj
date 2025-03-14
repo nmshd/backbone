@@ -21,7 +21,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Module\Devices.Module.csproj" />
     </ItemGroup>
 
     <ItemGroup>
