@@ -1,43 +1,50 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.Modules.TestModule.Application.DomainEvents;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq;
-
-public class DomainEventNamingExtensionsTests : AbstractTestsBase
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq
 {
-    [Fact]
-    public void GetEventNameFromObject()
+    public class DomainEventNamingExtensionsTests : AbstractTestsBase
     {
-        // Arrange
-        var testEvent = new TestDomainEvent();
+        [Fact]
+        public void GetEventNameFromObject()
+        {
+            // Arrange
+            var testEvent = new TestDomainEvent();
 
-        // Act
-        var eventName = testEvent.GetEventName();
+            // Act
+            var eventName = testEvent.GetEventName();
 
-        // Assert
-        eventName.Should().Be("Test");
+            // Assert
+            eventName.Should().Be("Test");
+        }
+
+        [Fact]
+        public void GetEventNameFromType()
+        {
+            // Act
+            var eventName = typeof(TestDomainEvent).GetEventName();
+
+            // Assert
+            eventName.Should().Be("Test");
+        }
     }
-
-    [Fact]
-    public void GetEventNameFromType()
-    {
-        // Act
-        var eventName = typeof(TestDomainEvent).GetEventName();
-
-        // Assert
-        eventName.Should().Be("Test");
-    }
-}
 
 #pragma warning disable IDE0130
-internal class TestDomainEvent : DomainEvent;
+}
 
-internal class TestDomainEventHandler : IDomainEventHandler<TestDomainEvent>
+namespace Backbone.Modules.TestModule.Application.DomainEvents
+#pragma warning restore IDE0130
 {
-    public Task Handle(TestDomainEvent domainEvent)
+    internal class TestDomainEvent : DomainEvent;
+
+    internal class TestDomainEventHandler : IDomainEventHandler<TestDomainEvent>
     {
-        // Do nothing
-        return Task.CompletedTask;
+        public Task Handle(TestDomainEvent domainEvent)
+        {
+            // Do nothing
+            return Task.CompletedTask;
+        }
     }
 }

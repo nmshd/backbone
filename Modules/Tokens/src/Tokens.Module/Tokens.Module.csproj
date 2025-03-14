@@ -14,7 +14,4 @@
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Controllers\" />
-    </ItemGroup>
 </Project>

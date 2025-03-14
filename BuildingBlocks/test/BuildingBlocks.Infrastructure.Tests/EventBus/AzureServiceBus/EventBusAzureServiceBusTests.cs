@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
-using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq;
+using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus;
 

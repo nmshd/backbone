@@ -1,5 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
-using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq;
+using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
