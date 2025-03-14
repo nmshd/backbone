@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
-using Backbone.Modules.TestModule.Application.DomainEvents;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq;
 

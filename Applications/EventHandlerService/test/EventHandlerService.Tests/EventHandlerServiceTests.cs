@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Module;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 

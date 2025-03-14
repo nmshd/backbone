@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.Module.Configuration;
 
 namespace Backbone.SseServer;
 
