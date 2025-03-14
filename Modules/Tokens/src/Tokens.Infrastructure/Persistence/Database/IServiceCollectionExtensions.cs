@@ -21,34 +21,33 @@ public static class IServiceCollectionExtensions
 
     public static void AddDatabase(this IServiceCollection services, DbOptions options)
     {
-        services
-            .AddDbContext<TokensDbContext>(dbContextOptions =>
+        services.AddDbContext<TokensDbContext>(dbContextOptions =>
+            {
+                switch (options.Provider)
                 {
-                    switch (options.Provider)
-                    {
-                        case SQLSERVER:
-                            dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
-                            {
-                                sqlOptions.CommandTimeout(options.CommandTimeout);
-                                sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                                sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
-                            });
-                            break;
-                        case POSTGRES:
-                            dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
-                            {
-                                sqlOptions.CommandTimeout(options.CommandTimeout);
-                                sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                                sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
-                            });
-                            break;
-                        default:
-                            throw new Exception($"Unsupported database provider: {options.Provider}");
-                    }
+                    case SQLSERVER:
+                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(options.CommandTimeout);
+                            sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
+                        });
+                        break;
+                    case POSTGRES:
+                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                        {
+                            sqlOptions.CommandTimeout(options.CommandTimeout);
+                            sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
+                            sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
+                        });
+                        break;
+                    default:
+                        throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
-            );
+            }
+        );
     }
 }
 

@@ -10,7 +10,7 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
-    private const int MAX_FAILED_ACCESS_ATTEMPTS = 100;
+    public const int MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK = 100;
 
     private readonly List<TokenAllocation> _allocations;
     private int _accessFailedCount;
@@ -62,19 +62,19 @@ public class Token : Entity
         get => _accessFailedCount;
         private set
         {
-            if (IsLocked) return;
+            var wasLockedBeforeChange = IsLocked;
 
             _accessFailedCount = value;
 
-            if (IsLocked)
-            {
+            // since the access failed count can become higher than the limit from which on the token is considered
+            // locked, we have to perform this check to avoid a TokenLockedDomainEvent being raised multiple times
+            if (IsLocked && !wasLockedBeforeChange)
                 RaiseDomainEvent(new TokenLockedDomainEvent(this));
-            }
         }
     }
 
     public IReadOnlyList<TokenAllocation> Allocations => _allocations;
-    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
+    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK;
     public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
 
     public TokenAccessResult TryToAccess(IdentityAddress? activeIdentity, DeviceId? device, byte[]? password)
@@ -191,6 +191,11 @@ public class Token : Entity
     }
 
     #endregion
+
+    public void ResetAccessFailedCount()
+    {
+        AccessFailedCount = 0;
+    }
 }
 
 public enum TokenAccessResult

@@ -33,6 +33,18 @@ public static class IServiceCollectionExtensions
         services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
     }
 
+    public static IServiceCollection AddAnnouncementsModule(this IServiceCollection services, IConfiguration configuration)
+    {
+        Modules.Announcements.Application.Extensions.IServiceCollectionExtensions.AddApplication(services);
+        Modules.Announcements.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
+        {
+            options.Provider = configuration["Modules:Announcements:Infrastructure:SqlDatabase:Provider"]!;
+            options.ConnectionString = configuration["Modules:Announcements:Infrastructure:SqlDatabase:ConnectionString"]!;
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddDevicesModule(this IServiceCollection services, IConfiguration configuration)
     {
         Modules.Devices.Application.Extensions.IServiceCollectionExtensions.AddApplication(services, configuration.GetSection("Modules:Devices:Application"));
@@ -45,13 +57,13 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddAnnouncementsModule(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddTokensModule(this IServiceCollection services, IConfiguration configuration)
     {
-        Modules.Announcements.Application.Extensions.IServiceCollectionExtensions.AddApplication(services);
-        Modules.Announcements.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
+        Modules.Tokens.Application.Extensions.IServiceCollectionExtensions.AddApplication(services, configuration.GetSection("Modules:Tokens:Application"));
+        Modules.Tokens.Infrastructure.Persistence.IServiceCollectionExtensions.AddPersistence(services, options =>
         {
-            options.Provider = configuration["Modules:Devices:Infrastructure:SqlDatabase:Provider"]!;
-            options.ConnectionString = configuration["Modules:Devices:Infrastructure:SqlDatabase:ConnectionString"]!;
+            options.DbOptions.Provider = configuration["Modules:Tokens:Infrastructure:SqlDatabase:Provider"]!;
+            options.DbOptions.DbConnectionString = configuration["Modules:Tokens:Infrastructure:SqlDatabase:ConnectionString"]!;
         });
 
         return services;

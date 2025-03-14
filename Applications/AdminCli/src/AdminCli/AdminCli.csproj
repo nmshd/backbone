@@ -19,6 +19,8 @@
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="BeforeBuild" Condition="$(Configuration) == Debug">

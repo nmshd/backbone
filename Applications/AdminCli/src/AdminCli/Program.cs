@@ -59,9 +59,12 @@ public class Program
 
         services.AddSingleton<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
+        services.AddCommonInfrastructure();
+
         services
             .AddAnnouncementsModule(configuration)
-            .AddDevicesModule(configuration);
+            .AddDevicesModule(configuration)
+            .AddTokensModule(configuration);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);
