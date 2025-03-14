@@ -77,26 +77,36 @@ COPY ["Modules/Announcements/src/Announcements.Application/Announcements.Applica
 COPY ["Modules/Announcements/src/Announcements.Domain/Announcements.Domain.csproj", "Modules/Announcements/src/Announcements.Domain/"]
 COPY ["Modules/Announcements/src/Announcements.Infrastructure/Announcements.Infrastructure.csproj", "Modules/Announcements/src/Announcements.Infrastructure/"]
 COPY ["Modules/Announcements/src/Announcements.Module/Announcements.Module.csproj", "Modules/Announcements/src/Announcements.Module/"]
+COPY ["Modules/Announcements/src/Announcements.Database.Postgres/Announcements.Database.Postgres.csproj", "Modules/Announcements/src/Announcements.Database.Postgres/"]
+COPY ["Modules/Announcements/src/Announcements.Database.SqlServer/Announcements.Database.SqlServer.csproj", "Modules/Announcements/src/Announcements.Database.SqlServer/"]
 
 COPY ["Modules/Challenges/src/Challenges.Application/Challenges.Application.csproj", "Modules/Challenges/src/Challenges.Application/"]
 COPY ["Modules/Challenges/src/Challenges.Domain/Challenges.Domain.csproj", "Modules/Challenges/src/Challenges.Domain/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure/Challenges.Infrastructure.csproj", "Modules/Challenges/src/Challenges.Infrastructure/"]
 COPY ["Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj", "Modules/Challenges/src/Challenges.Module/"]
+COPY ["Modules/Challenges/src/Challenges.Database.Postgres/Challenges.Database.Postgres.csproj", "Modules/Challenges/src/Challenges.Database.Postgres/"]
+COPY ["Modules/Challenges/src/Challenges.Database.SqlServer/Challenges.Database.SqlServer.csproj", "Modules/Challenges/src/Challenges.Database.SqlServer/"]
 
 COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Modules/Devices/src/Devices.Application/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["Modules/Devices/src/Devices.Module/Devices.Module.csproj", "Modules/Devices/src/Devices.Module/"]
+COPY ["Modules/Devices/src/Devices.Database.Postgres/Devices.Database.Postgres.csproj", "Modules/Devices/src/Devices.Database.Postgres/"]
+COPY ["Modules/Devices/src/Devices.Database.SqlServer/Devices.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Database.SqlServer/"]
 
 COPY ["Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj", "Modules/Quotas/src/Quotas.Application/"]
 COPY ["Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj", "Modules/Quotas/src/Quotas.Domain/"]
 COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "Modules/Quotas/src/Quotas.Infrastructure/"]
 COPY ["Modules/Quotas/src/Quotas.Module/Quotas.Module.csproj", "Modules/Quotas/src/Quotas.Module/"]
+COPY ["Modules/Quotas/src/Quotas.Database.Postgres/Quotas.Database.Postgres.csproj", "Modules/Quotas/src/Quotas.Database.Postgres/"]
+COPY ["Modules/Quotas/src/Quotas.Database.SqlServer/Quotas.Database.SqlServer.csproj", "Modules/Quotas/src/Quotas.Database.SqlServer/"]
 
 COPY ["Modules/Tokens/src/Tokens.Application/Tokens.Application.csproj", "Modules/Tokens/src/Tokens.Application/"]
 COPY ["Modules/Tokens/src/Tokens.Domain/Tokens.Domain.csproj", "Modules/Tokens/src/Tokens.Domain/"]
 COPY ["Modules/Tokens/src/Tokens.Infrastructure/Tokens.Infrastructure.csproj", "Modules/Tokens/src/Tokens.Infrastructure/"]
 COPY ["Modules/Tokens/src/Tokens.Module/Tokens.Module.csproj", "Modules/Tokens/src/Tokens.Module/"]
+COPY ["Modules/Tokens/src/Tokens.Database.Postgres/Tokens.Database.Postgres.csproj", "Modules/Tokens/src/Tokens.Database.Postgres/"]
+COPY ["Modules/Tokens/src/Tokens.Database.SqlServer/Tokens.Database.SqlServer.csproj", "Modules/Tokens/src/Tokens.Database.SqlServer/"]
 
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminApi/src/AdminApi/AdminApi.csproj"
 
