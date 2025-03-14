@@ -44,8 +44,10 @@ public static class IServiceCollectionExtensions
 
         if (options.Providers.Sse is { Enabled: true })
         {
-            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
             services.AddSse(options.Providers.Sse);
+
+            if (options.Providers.Sse.EnableHealthCheck)
+                services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
         }
     }
 

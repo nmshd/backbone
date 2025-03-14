@@ -91,36 +91,6 @@ public static class IServiceCollectionExtensions
             o.Cookie.HttpOnly = false;
         });
 
-        var modules = configuration.Modules.GetType().GetProperties();
-        foreach (var moduleProperty in modules)
-        {
-            var moduleName = moduleProperty.Name;
-            var module = configuration.Modules.GetType().GetProperty(moduleName)!.GetValue(configuration.Modules, null)!;
-            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString");
-            var enableHealthCheck = Convert.ToBoolean(GetPropertyValue(module, "Infrastructure.SqlDatabase.EnableHealthCheck"));
-
-            if (!enableHealthCheck)
-                continue;
-
-            switch (provider)
-            {
-                case "SqlServer":
-                    services.AddHealthChecks().AddSqlServer(
-                        connectionString,
-                        name: moduleName
-                    );
-                    break;
-                case "Postgres":
-                    services.AddHealthChecks().AddNpgSql(
-                        connectionString,
-                        name: moduleName);
-                    break;
-                default:
-                    throw new Exception($"Unsupported database provider: {provider}");
-            }
-        }
-
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AnonymousUserContext>();
@@ -152,14 +122,6 @@ public static class IServiceCollectionExtensions
 
         return new BadRequestObjectResult(responsePayload);
     };
-
-    private static object GetPropertyValue(object source, string propertyPath)
-    {
-        foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
-            source = property!.GetValue(source, null)!;
-
-        return source;
-    }
 
     public static IServiceCollection AddOData(this IServiceCollection services)
     {

@@ -7,6 +7,8 @@ public class SseOptions
     [Required]
     public required bool Enabled { get; set; }
 
+    public required bool EnableHealthCheck { get; set; } = false;
+
     [Url]
     [Required]
     public required string SseServerBaseAddress { get; set; }

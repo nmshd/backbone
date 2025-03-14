@@ -13,9 +13,6 @@ public class AdminConfiguration
     [Required]
     public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    [Required]
-    public ModulesConfiguration Modules { get; set; } = new();
-
     public class AuthenticationConfiguration
     {
         public string ApiKey { get; set; } = string.Empty;
@@ -34,20 +31,5 @@ public class AdminConfiguration
         public EventBusOptions EventBus { get; set; } = new();
 
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
-    }
-
-    public class ModulesConfiguration
-    {
-        [Required]
-        public AnnouncementsConfiguration Announcements { get; set; } = new();
-
-        [Required]
-        public DevicesConfiguration Devices { get; set; } = new();
-
-        [Required]
-        public QuotasConfiguration Quotas { get; set; } = new();
-
-        [Required]
-        public ChallengesConfiguration Challenges { get; set; } = new();
     }
 }
