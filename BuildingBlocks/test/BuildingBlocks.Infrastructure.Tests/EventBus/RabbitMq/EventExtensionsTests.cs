@@ -30,9 +30,10 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq
             eventName.Should().Be("Test");
         }
     }
-}
 
 #pragma warning disable IDE0130
+}
+
 namespace Backbone.Modules.TestModule.Application.DomainEvents
 #pragma warning restore IDE0130
 {

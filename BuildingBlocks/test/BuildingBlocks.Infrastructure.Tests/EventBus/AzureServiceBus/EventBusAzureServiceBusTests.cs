@@ -18,7 +18,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus
         }
 
         [Fact]
-        public void GetSubscriptionNameTruncatesNameAt50Characters()
+        public void GetSubscriptionName_truncates_name_at_50_characters()
         {
             // Act
             var queueName = EventBusAzureServiceBus.GetSubscriptionName<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler, VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>();

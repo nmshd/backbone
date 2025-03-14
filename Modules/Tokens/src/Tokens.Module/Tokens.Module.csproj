@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Module\BuildingBlocks.Module.csproj" />
+        <ProjectReference Include="..\Tokens.Application\Tokens.Application.csproj" />
+        <ProjectReference Include="..\Tokens.Domain\Tokens.Domain.csproj" />
+        <ProjectReference Include="..\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.3" />
+    </ItemGroup>
+
+</Project>
