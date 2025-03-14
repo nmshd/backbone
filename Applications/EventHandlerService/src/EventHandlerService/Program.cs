@@ -1,18 +1,17 @@
-﻿using System.Reflection;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.EventHandlerService;
 using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.ConsumerApi;
+using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Files.ConsumerApi;
-using Backbone.Modules.Messages.ConsumerApi;
-using Backbone.Modules.Quotas.ConsumerApi;
-using Backbone.Modules.Relationships.ConsumerApi;
-using Backbone.Modules.Synchronization.ConsumerApi;
-using Backbone.Modules.Tokens.ConsumerApi;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Files.Module;
+using Backbone.Modules.Messages.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Relationships.Module;
+using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
@@ -20,7 +19,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.Module.Configuration;
 
 
 Log.Logger = new LoggerConfiguration()

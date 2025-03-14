@@ -1,8 +1,8 @@
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,10 +38,6 @@ public static class ServiceCollectionExtensions
         where TApplicationConfiguration : class
         where TInfrastructureConfiguration : class
     {
-        // Register assembly in MVC so it can find controllers of the module
-        services.AddControllers().ConfigureApplicationPartManager(manager =>
-            manager.ApplicationParts.Add(new AssemblyPart(typeof(TModule).Assembly)));
-
         var module = new TModule();
 
         var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");

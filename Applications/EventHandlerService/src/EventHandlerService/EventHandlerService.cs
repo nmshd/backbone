@@ -1,5 +1,5 @@
-﻿using Backbone.BuildingBlocks.API;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Module;
 
 namespace Backbone.EventHandlerService;
 
