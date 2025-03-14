@@ -87,7 +87,7 @@ public class Program
                 var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
                              throw new ArgumentException("The specified worker could not be recognized, or no worker was set.");
                 services.AddTransient(typeof(IHostedService), worker);
-                
+
                 services
                     .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationOptions, Modules.Announcements.Module.Configuration.InfrastructureConfiguration>(configuration)
                     .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
@@ -100,7 +100,7 @@ public class Program
                     .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationOptions,
                         Modules.Synchronization.Module.Configuration.InfrastructureConfiguration>(configuration)
                     .AddModule<TokensModule, ApplicationOptions, Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
-                
+
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();

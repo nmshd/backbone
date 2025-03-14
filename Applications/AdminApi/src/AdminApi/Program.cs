@@ -123,7 +123,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
         .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
 
-    
+
     services
         .AddOpenIddict()
         .AddCore(options =>
