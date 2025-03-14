@@ -66,7 +66,8 @@ public class Token : Entity
 
             _accessFailedCount = value;
 
-            // if the token was already locked, there is no need to trigg
+            // since the access failed count can become higher than the limit from which on the token is considered
+            // locked, we have to perform this check to avoid a TokenLockedDomainEvent being raised multiple times
             if (IsLocked && !wasLockedBeforeChange)
                 RaiseDomainEvent(new TokenLockedDomainEvent(this));
         }
