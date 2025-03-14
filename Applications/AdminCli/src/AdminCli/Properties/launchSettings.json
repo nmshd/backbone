@@ -2,12 +2,14 @@
     "profiles": {
         "Start": {
             "commandName": "Project",
-            //"commandLineArgs": "tier list",
+            "commandLineArgs": "tier list",
             // enter an existing command here in order to debug it
             //"commandLineArgs": "client list", // enter an existing command here in order to debug it
             //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100", // enter an existing command here in order to debug it
             //"commandLineArgs": "client delete test", // enter an existing command here in order to debug it
-            "commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium",
+            //"commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf",
+            // enter an existing command here in order to debug it
+            //"commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium",
             "environmentVariables": {
                 "Database__Provider": "Postgres",
                 //"Database__ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True;" //SqlServer
