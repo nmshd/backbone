@@ -6,33 +6,27 @@ using Backbone.Modules.Announcements.Application.Extensions;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Announcements.ConsumerApi;
 
-public class AnnouncementsModule : AbstractModule
+public class AnnouncementsModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
 {
     public override string Name => "Announcements";
 
-    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-        services.ConfigureAndValidate<Configuration>(configuration.Bind);
-
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
-
         services.AddApplication();
 
         services.AddDatabase(dbOptions =>
         {
-            dbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            dbOptions.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            dbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
+            dbOptions.ConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
         });
 
-        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name,
-                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
-                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        // TODO: könnte auch in Oberklasse ausgelagert werden (dafür müsste es aber ein Interface geben, das jede InfrastructureConfiguration implementiert, und was die SqlDatabase Property enthält
+        // Einziges Problem: Tags hat keine SqlDatabase. Könnte etl. durch einen Overload dieser Methode gelöst werden
+        if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override Task ConfigureEventBus(IEventBus eventBus)

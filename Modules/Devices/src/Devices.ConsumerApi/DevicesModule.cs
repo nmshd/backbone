@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -14,30 +15,24 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.ConsumerApi;
 
-public class DevicesModule : AbstractModule
+public class DevicesModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
 {
     public override string Name => "Devices";
 
-    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawApplicationConfiguration)
     {
-        services.ConfigureAndValidate<Configuration>(configuration.Bind);
-
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
-
-        services.AddApplication(configuration.GetSection("Application"));
+        services.AddApplication(rawApplicationConfiguration);
 
         services.AddDatabase(options =>
         {
-            options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            options.Provider = infrastructureConfiguration.SqlDatabase.Provider;
+            options.ConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
-        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name,
-                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
-                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override async Task ConfigureEventBus(IEventBus eventBus)
@@ -47,7 +42,7 @@ public class DevicesModule : AbstractModule
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
-        var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>();
+        var configuration = serviceProvider.GetRequiredService<IOptions<Configuration.InfrastructureConfiguration>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
         var failingApnsBundleIds = new List<string>();
@@ -56,14 +51,14 @@ public class DevicesModule : AbstractModule
         var failingFcmAppIds = new List<string>();
         var supportedFcmAppIds = new List<string>();
 
-        if (configuration.Value.Infrastructure.PushNotifications.Providers.Apns is { Enabled: true })
+        if (configuration.PushNotifications.Providers.Apns is { Enabled: true })
         {
             var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsOptions>>().Value;
             supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
             failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds).GetAwaiter().GetResult();
         }
 
-        if (configuration.Value.Infrastructure.PushNotifications.Providers.Fcm is { Enabled: true })
+        if (configuration.PushNotifications.Providers.Fcm is { Enabled: true })
         {
             var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmOptions>>().Value;
             supportedFcmAppIds = fcmOptions.GetSupportedAppIds();

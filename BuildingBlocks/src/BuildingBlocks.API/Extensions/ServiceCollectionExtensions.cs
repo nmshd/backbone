@@ -33,8 +33,10 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : AbstractModule, new()
+    public static IServiceCollection AddModule<TModule, TApplicationConfiguration, TInfrastructureConfiguration>(this IServiceCollection services, IConfiguration configuration)
+        where TModule : AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>, new()
+        where TApplicationConfiguration : class
+        where TInfrastructureConfiguration : class
     {
         // Register assembly in MVC so it can find controllers of the module
         services.AddControllers().ConfigureApplicationPartManager(manager =>
@@ -44,9 +46,10 @@ public static class ServiceCollectionExtensions
 
         var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
 
-        module.ConfigureServices(services, moduleConfiguration);
+        module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
 
-        services.AddSingleton<AbstractModule>(module);
+        services.AddSingleton<IPostStartupValidator>(module);
+        services.AddSingleton<IEventBusConfigurator>(module);
 
         return services;
     }

@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
@@ -41,6 +40,8 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using ApplicationOptions = Backbone.Modules.Tokens.Application.ApplicationOptions;
+using Configuration = Backbone.Modules.Announcements.ConsumerApi.Configuration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -120,7 +121,7 @@ static WebApplication CreateApp(string[] args)
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
     {
         module.PostStartupValidation(app.Services);
     }
@@ -144,16 +145,18 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
-        .AddModule<AnnouncementsModule>(configuration)
-        .AddModule<ChallengesModule>(configuration)
-        .AddModule<DevicesModule>(configuration)
-        .AddModule<FilesModule>(configuration)
-        .AddModule<MessagesModule>(configuration)
-        .AddModule<QuotasModule>(configuration)
-        .AddModule<RelationshipsModule>(configuration)
-        .AddModule<SynchronizationModule>(configuration)
-        .AddModule<TagsModule>(configuration)
-        .AddModule<TokensModule>(configuration);
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
+            Backbone.Modules.Relationships.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
+            Backbone.Modules.Synchronization.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration);
 
     var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
     services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);

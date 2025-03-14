@@ -8,21 +8,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tags.ConsumerApi;
 
-public class TagsModule : AbstractModule
+public class TagsModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
 {
     public override string Name => "Tags";
 
-    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration _, IConfigurationSection __)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-
         services.AddApplication();
         services.AddPersistence();
     }
 
     public override Task ConfigureEventBus(IEventBus eventBus)
     {
-        // No Event bus needed here
         return Task.CompletedTask;
     }
 }
