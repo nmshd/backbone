@@ -3,39 +3,44 @@ using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Backbone.Modules.TestModule.Application.DomainEvents;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus;
-
-public class EventBusAzureServiceBusTests : AbstractTestsBase
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus
 {
-    [Fact]
-    public void GetSubscriptionName()
+    public class EventBusAzureServiceBusTests : AbstractTestsBase
     {
-        // Act
-        var queueName = EventBusAzureServiceBus.GetSubscriptionName<TestDomainEventHandler, TestDomainEvent>();
+        [Fact]
+        public void GetSubscriptionName()
+        {
+            // Act
+            var queueName = EventBusAzureServiceBus.GetSubscriptionName<TestDomainEventHandler, TestDomainEvent>();
 
-        // Assert
-        queueName.Should().Be("TestModule.Test");
-    }
+            // Assert
+            queueName.Should().Be("TestModule.Test");
+        }
 
-    [Fact]
-    public void GetSubscriptionNameTruncatesNameAt50Characters()
-    {
-        // Act
-        var queueName = EventBusAzureServiceBus.GetSubscriptionName<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler, VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>();
+        [Fact]
+        public void GetSubscriptionName_truncates_name_at_50_characters()
+        {
+            // Act
+            var queueName = EventBusAzureServiceBus.GetSubscriptionName<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler, VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>();
 
-        // Assert
-        queueName.Should().Be("TestModule.VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfT");
+            // Assert
+            queueName.Should().Be("TestModule.VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfT");
+        }
     }
 }
 
 #pragma warning disable IDE0130
-internal class VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent : DomainEvent;
-
-internal class VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler : IDomainEventHandler<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>
+namespace Backbone.Modules.TestModule.Application.DomainEvents
+#pragma warning restore IDE0130
 {
-    public Task Handle(VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent domainEvent)
+    internal class VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent : DomainEvent;
+
+    internal class VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler : IDomainEventHandler<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>
     {
-        // Do nothing
-        return Task.CompletedTask;
+        public Task Handle(VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent domainEvent)
+        {
+            // Do nothing
+            return Task.CompletedTask;
+        }
     }
 }
