@@ -6,7 +6,6 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Module;
@@ -111,10 +110,6 @@ public class Program
                 services.RegisterIdentityDeleters();
 
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-                var devicesConfiguration = new Configuration();
-                configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-                services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration

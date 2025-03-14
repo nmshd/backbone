@@ -43,7 +43,10 @@ public static class IServiceCollectionExtensions
             services.AddDummy();
 
         if (options.Providers.Sse is { Enabled: true })
+        {
+            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
             services.AddSse(options.Providers.Sse);
+        }
     }
 
     private static void AddFcm(this IServiceCollection services)

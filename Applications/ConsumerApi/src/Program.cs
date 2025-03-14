@@ -15,7 +15,6 @@ using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Module;
@@ -133,10 +132,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 {
     services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
 
-#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-#pragma warning restore ASP0000
-
     services.AddSingleton<VersionService>();
 
     services.AddSaveChangesTimeInterceptor();
@@ -158,16 +153,21 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.Module.Configuration.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
 
-    var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+    var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<QuotasInfrastructure>>().Value;
+#pragma warning restore ASP0000
+
+    var quotasSqlDatabaseConfiguration = parsedQuotasInfrastructureConfiguration.SqlDatabase;
     services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);
 
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services
-        .AddCustomAspNetCore(parsedConfiguration)
+        .AddCustomAspNetCore(parsedBackboneConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication);
+        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -177,9 +177,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
+    services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus);
 }
 
 static void Configure(WebApplication app)

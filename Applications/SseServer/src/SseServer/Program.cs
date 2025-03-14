@@ -6,7 +6,6 @@ using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;
 using Backbone.SseServer.Extensions;
@@ -117,8 +116,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     });
 
     services.AddCustomIdentity(environment);
-
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void Configure(WebApplication app)

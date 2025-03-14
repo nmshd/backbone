@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.EventHandlerService;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Module;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Module;
@@ -98,7 +97,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             var devicesConfiguration = new DevicesConfiguration();
             configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-            services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

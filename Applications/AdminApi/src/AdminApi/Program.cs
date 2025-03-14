@@ -14,7 +14,6 @@ using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Tokens.Application;
@@ -139,7 +138,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

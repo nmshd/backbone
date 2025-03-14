@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using Backbone.AdminCli.Configuration;
 using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -30,7 +29,6 @@ public static class IServiceCollectionExtensions
 #pragma warning restore ASP0000
 
         services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-        services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
     }
 
     public static IServiceCollection AddDevicesModule(this IServiceCollection services, IConfiguration configuration)

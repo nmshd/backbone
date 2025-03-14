@@ -7,6 +7,7 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,8 @@ public class DevicesModule : AbstractModule<ApplicationOptions, Configuration.In
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
+
+        services.AddPushNotifications(infrastructureConfiguration.PushNotifications);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
