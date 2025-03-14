@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;
@@ -78,7 +79,7 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
     {
         module.PostStartupValidation(app.Services);
     }
@@ -96,7 +97,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSaveChangesTimeInterceptor();
 
-    services.AddModule<DevicesModule>(configuration);
+    services.AddModule<DevicesModule, ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration);
 
     services.AddSingleton<IEventQueue, EventQueue>();
 

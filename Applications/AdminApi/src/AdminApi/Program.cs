@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
@@ -11,9 +10,15 @@ using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.Module;
+using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -23,6 +28,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using Configuration = Backbone.Modules.Announcements.Module.Configuration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -107,13 +113,17 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
-        .AddDevices(configuration.GetSection("Modules:Devices"))
-        .AddTokens(configuration.GetSection("Modules:Tokens"))
-        .AddQuotas(parsedConfiguration.Modules.Quotas)
-        .AddAnnouncements(parsedConfiguration.Modules.Announcements)
-        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
 
+
+    services
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
+        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
+
+    
     services
         .AddOpenIddict()
         .AddCore(options =>

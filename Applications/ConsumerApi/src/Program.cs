@@ -41,7 +41,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using ApplicationOptions = Backbone.Modules.Tokens.Application.ApplicationOptions;
-using Configuration = Backbone.Modules.Announcements.ConsumerApi.Configuration;
+using Configuration = Backbone.Modules.Announcements.Module.Configuration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -147,16 +147,16 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services
         .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
         .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.Configuration.InfrastructureConfiguration>(configuration)
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
-            Backbone.Modules.Relationships.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
+            Backbone.Modules.Relationships.Module.Configuration.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
-            Backbone.Modules.Synchronization.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.ConsumerApi.Configuration.InfrastructureConfiguration>(configuration);
+            Backbone.Modules.Synchronization.Module.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.Module.Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
 
     var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
     services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);

@@ -13,6 +13,7 @@ using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
@@ -86,18 +87,20 @@ public class Program
                 var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
                              throw new ArgumentException("The specified worker could not be recognized, or no worker was set.");
                 services.AddTransient(typeof(IHostedService), worker);
-
+                
                 services
-                    .AddModule<AnnouncementsModule>(configuration)
-                    .AddModule<DevicesModule>(configuration)
-                    .AddModule<RelationshipsModule>(configuration)
-                    .AddModule<ChallengesModule>(configuration)
-                    .AddModule<FilesModule>(configuration)
-                    .AddModule<MessagesModule>(configuration)
-                    .AddModule<QuotasModule>(configuration)
-                    .AddModule<SynchronizationModule>(configuration)
-                    .AddModule<TokensModule>(configuration);
-
+                    .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationOptions, Modules.Announcements.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
+                    .AddModule<DevicesModule, Modules.Devices.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<FilesModule, Modules.Files.Application.ApplicationOptions, Modules.Files.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<MessagesModule, Modules.Messages.Application.ApplicationOptions, Modules.Messages.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<QuotasModule, Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
+                    .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationOptions,
+                        Modules.Relationships.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationOptions,
+                        Modules.Synchronization.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    .AddModule<TokensModule, ApplicationOptions, Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
+                
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();

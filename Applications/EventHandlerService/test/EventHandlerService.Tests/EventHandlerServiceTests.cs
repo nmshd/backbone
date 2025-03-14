@@ -26,7 +26,7 @@ public class EventHandlerServiceTests : AbstractTestsBase
     {
         return new EventHandlerService(
             eventBus,
-            A.Dummy<IEnumerable<AbstractModule>>(),
+            A.Dummy<IEnumerable<IEventBusConfigurator>>(),
             A.Dummy<ILogger<EventHandlerService>>());
     }
 }

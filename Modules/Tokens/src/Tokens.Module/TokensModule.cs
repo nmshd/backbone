@@ -1,6 +1,6 @@
-using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Extensions;
 using Backbone.Modules.Tokens.Infrastructure.Persistence;
