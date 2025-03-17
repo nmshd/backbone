@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Application;
 
 namespace Backbone.Modules.Messages.Application;
 
@@ -8,7 +9,7 @@ public class ApplicationConfiguration
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 
     [Required]
-    public PaginationOptions Pagination { get; set; } = new();
+    public PaginationConfiguration Pagination { get; set; } = new();
 
     [Required]
     [MinLength(3)]
@@ -17,13 +18,4 @@ public class ApplicationConfiguration
 
     [Required]
     public int MaxNumberOfMessageRecipients { get; set; }
-}
-
-public class PaginationOptions
-{
-    [Range(1, 1000)]
-    public int MaxPageSize { get; set; }
-
-    [Range(1, 1000)]
-    public int DefaultPageSize { get; set; }
 }

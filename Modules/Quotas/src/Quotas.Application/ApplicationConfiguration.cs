@@ -1,20 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Application;
 
 namespace Backbone.Modules.Quotas.Application;
 
 public class ApplicationConfiguration
 {
     [Required]
-    public PaginationOptions Pagination { get; set; } = new();
-}
-
-public class PaginationOptions
-{
-    [Required]
-    [Range(1, 1000)]
-    public int MaxPageSize { get; set; }
-
-    [Required]
-    [Range(1, 1000)]
-    public int DefaultPageSize { get; set; }
+    public PaginationConfiguration Pagination { get; set; } = new();
 }
