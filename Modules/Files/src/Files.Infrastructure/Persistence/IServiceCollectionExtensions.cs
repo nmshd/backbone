@@ -9,26 +9,12 @@ namespace Backbone.Modules.Files.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
+    public static void AddPersistence(this IServiceCollection services, DbOptions dbOptions, BlobStorageOptions blobStorageOptions)
     {
-        var options = new PersistenceOptions();
-        setupOptions.Invoke(options);
+        services.AddDatabase(dbOptions);
+        services.AddBlobStorage(blobStorageOptions);
 
-        services.AddPersistence(options);
-    }
-
-    public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
-    {
-        services.AddDatabase(options.DbOptions);
-        services.AddBlobStorage(options.BlobStorageOptions);
-
-        services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = options.BlobStorageOptions.RootFolder);
+        services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = blobStorageOptions.RootFolder);
         services.AddTransient<IFilesRepository, FilesRepository>();
     }
-}
-
-public class PersistenceOptions
-{
-    public DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions BlobStorageOptions { get; set; } = new();
 }

@@ -6,22 +6,17 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
+    public static void AddPersistence(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
-        var options = new PersistenceOptions();
+        var options = new DbOptions();
         setupOptions.Invoke(options);
 
         services.AddPersistence(options);
     }
 
-    public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
+    public static void AddPersistence(this IServiceCollection services, DbOptions options)
     {
-        services.AddDatabase(options.DbOptions);
+        services.AddDatabase(options);
         services.AddRepositories();
     }
-}
-
-public class PersistenceOptions
-{
-    public DbOptions DbOptions { get; set; } = new();
 }

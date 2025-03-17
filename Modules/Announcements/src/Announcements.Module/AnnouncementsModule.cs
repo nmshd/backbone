@@ -17,14 +17,10 @@ public class AnnouncementsModule : AbstractModule<ApplicationOptions, Infrastruc
     {
         services.AddApplication();
 
-        services.AddDatabase(dbOptions =>
-        {
-            dbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            dbOptions.ConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-        });
+        services.AddDatabase(infrastructureConfiguration.SqlDatabase);
 
         // TODO: könnte auch in Oberklasse ausgelagert werden (dafür müsste es aber ein Interface geben, das jede InfrastructureConfiguration implementiert, und was die SqlDatabase Property enthält
-        // Einziges Problem: Tags hat keine SqlDatabase. Könnte etl. durch einen Overload dieser Methode gelöst werden
+        // Einziges Problem: Tags hat keine SqlDatabase. Könnte evtl. durch einen Overload dieser Methode gelöst werden
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }

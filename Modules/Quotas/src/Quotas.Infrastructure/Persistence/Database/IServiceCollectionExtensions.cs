@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
@@ -31,7 +32,7 @@ public static class IServiceCollectionExtensions
                 switch (options.Provider)
                 {
                     case SQLSERVER:
-                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                        dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
@@ -40,7 +41,7 @@ public static class IServiceCollectionExtensions
                         });
                         break;
                     case POSTGRES:
-                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                        dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
@@ -70,9 +71,20 @@ public static class IServiceCollectionExtensions
 
     public class DbOptions
     {
-        public string Provider { get; set; } = null!;
-        public string DbConnectionString { get; set; } = null!;
+        [Required]
+        [MinLength(1)]
+        [RegularExpression("SqlServer|Postgres")]
+        public string Provider { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(1)]
+        public string ConnectionString { get; set; } = string.Empty;
+
+        [Required]
+        public bool EnableHealthCheck { get; set; } = true;
+
         public int CommandTimeout { get; set; } = 20;
+
         public RetryOptions RetryOptions { get; set; } = new();
     }
 

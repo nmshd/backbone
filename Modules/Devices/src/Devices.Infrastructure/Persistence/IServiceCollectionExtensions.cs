@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -21,6 +22,11 @@ public static class IServiceCollectionExtensions
         var options = new DbOptions();
         setupOptions(options);
 
+        services.AddDatabase(options);
+    }
+
+    public static void AddDatabase(this IServiceCollection services, DbOptions options)
+    {
         services
             .AddDbContext<DevicesDbContext>(dbContextOptions =>
             {
@@ -71,9 +77,20 @@ public static class IServiceCollectionExtensions
 
     public class DbOptions
     {
-        public string Provider { get; set; } = null!;
-        public string ConnectionString { get; set; } = null!;
+        [Required]
+        [MinLength(1)]
+        [RegularExpression("SqlServer|Postgres")]
+        public string Provider { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(1)]
+        public string ConnectionString { get; set; } = string.Empty;
+
+        [Required]
+        public bool EnableHealthCheck { get; set; } = true;
+
         public int CommandTimeout { get; set; } = 20;
+
         public RetryOptions RetryOptions { get; set; } = new();
     }
 

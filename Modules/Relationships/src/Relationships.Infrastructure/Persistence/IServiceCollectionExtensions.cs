@@ -7,24 +7,19 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
+    public static void AddPersistence(this IServiceCollection services, Action<Database.IServiceCollectionExtensions.DbOptions> setupOptions)
     {
-        var options = new PersistenceOptions();
+        var options = new Database.IServiceCollectionExtensions.DbOptions();
         setupOptions.Invoke(options);
 
         services.AddPersistence(options);
     }
 
-    public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
+    public static void AddPersistence(this IServiceCollection services, Database.IServiceCollectionExtensions.DbOptions options)
     {
-        services.AddDatabase(options.DbOptions);
+        services.AddDatabase(options);
 
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
     }
-}
-
-public class PersistenceOptions
-{
-    public Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
 }

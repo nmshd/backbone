@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -56,9 +57,20 @@ public static class IServiceCollectionExtensions
 
     public class DbOptions
     {
-        public string Provider { get; set; } = null!;
-        public string ConnectionString { get; set; } = null!;
+        [Required]
+        [MinLength(1)]
+        [RegularExpression("SqlServer|Postgres")]
+        public string Provider { get; set; } = string.Empty;
+
+        [Required]
+        [MinLength(1)]
+        public string ConnectionString { get; set; } = string.Empty;
+
+        [Required]
+        public bool EnableHealthCheck { get; set; } = true;
+
         public int CommandTimeout { get; set; } = 20;
+
         public RetryOptions RetryOptions { get; set; } = new();
     }
 

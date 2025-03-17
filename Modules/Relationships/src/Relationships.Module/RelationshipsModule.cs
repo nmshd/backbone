@@ -17,11 +17,7 @@ public class RelationshipsModule : AbstractModule<ApplicationOptions, Infrastruc
     {
         services.AddApplication();
 
-        services.AddPersistence(options =>
-        {
-            options.DbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-        });
+        services.AddPersistence(infrastructureConfiguration.SqlDatabase);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);

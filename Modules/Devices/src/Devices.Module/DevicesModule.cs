@@ -24,11 +24,7 @@ public class DevicesModule : AbstractModule<ApplicationOptions, InfrastructureCo
     {
         services.AddApplication(rawModuleConfiguration.GetSection("Application"));
 
-        services.AddDatabase(options =>
-        {
-            options.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            options.ConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-        });
+        services.AddDatabase(infrastructureConfiguration.SqlDatabase);
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 

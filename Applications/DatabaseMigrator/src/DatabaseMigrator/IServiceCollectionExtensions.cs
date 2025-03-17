@@ -28,42 +28,42 @@ public static class IServiceCollectionExtensions
         Modules.Files.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 
         Modules.Messages.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 
         Modules.Quotas.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 
         Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 
         Modules.Synchronization.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 
         Modules.Tokens.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 

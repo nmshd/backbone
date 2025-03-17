@@ -15,11 +15,7 @@ public class SynchronizationModule : AbstractModule<ApplicationOptions, Infrastr
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
-        services.AddPersistence(options =>
-        {
-            options.DbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-        });
+        services.AddPersistence(infrastructureConfiguration.SqlDatabase);
 
         services.AddApplication();
 

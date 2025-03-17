@@ -17,13 +17,7 @@ public class FilesModule : AbstractModule<ApplicationOptions, InfrastructureConf
     {
         services.AddApplication();
 
-        services.AddPersistence(options =>
-        {
-            options.DbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
-
-            options.BlobStorageOptions = infrastructureConfiguration.BlobStorage;
-        });
+        services.AddPersistence(infrastructureConfiguration.SqlDatabase, infrastructureConfiguration.BlobStorage);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
