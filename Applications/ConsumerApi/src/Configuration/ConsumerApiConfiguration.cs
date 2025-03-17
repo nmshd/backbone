@@ -3,7 +3,7 @@ using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.ConsumerApi.Configuration;
 
-public class BackboneConfiguration
+public class ConsumerApiConfiguration
 {
     [Required]
     public AuthenticationConfiguration Authentication { get; set; } = new();
@@ -11,7 +11,7 @@ public class BackboneConfiguration
     public CorsConfiguration Cors { get; set; } = new();
 
     [Required]
-    public BackboneInfrastructureConfiguration Infrastructure { get; set; } = new();
+    public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
@@ -29,7 +29,7 @@ public class BackboneConfiguration
         public string ExposedHeaders { get; set; } = "";
     }
 
-    public class BackboneInfrastructureConfiguration
+    public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
         public EventBusOptions EventBus { get; set; } = new();

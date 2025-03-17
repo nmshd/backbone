@@ -20,7 +20,7 @@ namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, BackboneConfiguration configuration)
+    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, ConsumerApiConfiguration configuration)
     {
         services
             .AddControllers(
@@ -105,7 +105,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
-        BackboneConfiguration.AuthenticationConfiguration configuration)
+        ConsumerApiConfiguration.AuthenticationConfiguration configuration)
     {
         services.AddOpenIddict()
             .AddCore(options =>

@@ -130,7 +130,7 @@ static WebApplication CreateApp(string[] args)
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
-    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
+    services.ConfigureAndValidate<ConsumerApiConfiguration>(configuration.Bind);
 
     services.AddSingleton<VersionService>();
 
@@ -154,7 +154,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+    var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value;
     var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
 #pragma warning restore ASP0000
 
