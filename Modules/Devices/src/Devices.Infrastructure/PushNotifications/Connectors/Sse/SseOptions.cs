@@ -10,6 +10,6 @@ public class SseOptions
     public required bool EnableHealthCheck { get; set; } = false;
 
     [Url]
-    [Required]
+    [RequiredIf(nameof(Enabled), true)]
     public required string SseServerBaseAddress { get; set; }
 }

@@ -7,11 +7,11 @@ public class FcmOptions
     [Required]
     public bool Enabled { get; set; } = true;
 
-    [Required]
+    [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
     public required Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = [];
 
-    [Required]
+    [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
     public required Dictionary<string, ServiceAccountInformation> Apps { get; set; } = [];
 

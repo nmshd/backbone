@@ -7,11 +7,11 @@ public class ApnsOptions
 {
     public bool Enabled { get; set; } = true;
 
-    [Required]
+    [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
     public required Dictionary<string, Key> Keys { get; set; } = new();
 
-    [Required]
+    [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
     public required Dictionary<string, Bundle> Bundles { get; set; } = new();
 
