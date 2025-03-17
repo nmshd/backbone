@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Extensions;
+using Backbone.Modules.Synchronization.Infrastructure;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 
-namespace Backbone.Modules.Relationships.Module;
+namespace Backbone.Modules.Relationships.Infrastructure;
 
 public class InfrastructureConfiguration
 {

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
-namespace Backbone.Modules.Files.Module;
+namespace Backbone.Modules.Files.Infrastructure;
 
 public class InfrastructureConfiguration
 {

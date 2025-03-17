@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions;
 
-namespace Backbone.Modules.Devices.Module;
+namespace Backbone.Modules.Devices.Infrastructure;
 
 public class InfrastructureConfiguration
 {

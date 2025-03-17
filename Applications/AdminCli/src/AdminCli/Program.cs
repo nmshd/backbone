@@ -14,7 +14,7 @@ using Backbone.Modules.Tokens.Module;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using InfrastructureConfiguration = Backbone.Modules.Devices.Module.InfrastructureConfiguration;
+using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
 using RootCommand = Backbone.AdminCli.Commands.RootCommand;
 
 namespace Backbone.AdminCli;
@@ -68,9 +68,9 @@ public class Program
         services.AddCommonInfrastructure();
 
         services
-            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
+            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
             .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
-            .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
+            .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Challenges.Module;
+namespace Backbone.Modules.Challenges.Infrastructure;
 
 public class InfrastructureConfiguration
 {

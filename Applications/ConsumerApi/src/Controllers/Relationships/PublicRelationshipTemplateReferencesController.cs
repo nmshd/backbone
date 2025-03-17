@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Relationships.Module;
+using Backbone.Modules.Relationships.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

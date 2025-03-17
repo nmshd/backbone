@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 
-namespace Backbone.Modules.Messages.Module;
+namespace Backbone.Modules.Synchronization.Infrastructure;
 
 public class InfrastructureConfiguration
 {

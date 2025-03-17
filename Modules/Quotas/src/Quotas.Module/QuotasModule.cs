@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Quotas.Application;
 using Backbone.Modules.Quotas.Application.Extensions;
+using Backbone.Modules.Quotas.Infrastructure;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
