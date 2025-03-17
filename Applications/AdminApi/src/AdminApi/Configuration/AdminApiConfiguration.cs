@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 namespace Backbone.AdminApi.Configuration;
 
@@ -33,6 +33,6 @@ public class AdminApiConfiguration
         public EventBusConfiguration EventBus { get; set; } = new();
 
         [Required]
-        public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
+        public DatabaseConfiguration SqlDatabase { get; set; } = new();
     }
 }

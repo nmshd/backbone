@@ -20,6 +20,11 @@ public static class IServiceCollectionExtensions
         var options = new DatabaseConfiguration();
         setupOptions.Invoke(options);
 
+        services.AddDatabase(options);
+    }
+
+    public static void AddDatabase(this IServiceCollection services, DatabaseConfiguration options)
+    {
         services
             .AddDbContext<ChallengesDbContext>(dbContextOptions =>
             {
