@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 namespace Backbone.Modules.Announcements.Infrastructure;
 
 public class InfrastructureConfiguration
 {
     [Required]
-    public IServiceCollectionExtensions.DbOptions SqlDatabase { get; set; } = new();
+    public DatabaseConfiguration SqlDatabase { get; set; } = new();
 }

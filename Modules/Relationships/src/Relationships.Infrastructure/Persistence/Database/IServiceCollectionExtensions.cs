@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,15 +12,15 @@ public static class IServiceCollectionExtensions
     private const string POSTGRES = "Postgres";
     private const string POSTGRES_MIGRATIONS_ASSEMBLY = "Backbone.Modules.Relationships.Infrastructure.Database.Postgres";
 
-    public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
+    public static void AddDatabase(this IServiceCollection services, Action<DatabaseConfiguration> setupOptions)
     {
-        var options = new DbOptions();
+        var options = new DatabaseConfiguration();
         setupOptions.Invoke(options);
 
         services.AddDatabase(options);
     }
 
-    public static void AddDatabase(this IServiceCollection services, DbOptions options)
+    public static void AddDatabase(this IServiceCollection services, DatabaseConfiguration options)
     {
         services
             .AddDbContext<RelationshipsDbContext>(dbContextOptions =>
@@ -49,30 +49,5 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
             });
-    }
-
-    public class DbOptions
-    {
-        [Required]
-        [MinLength(1)]
-        [RegularExpression("SqlServer|Postgres")]
-        public string Provider { get; set; } = string.Empty;
-
-        [Required]
-        [MinLength(1)]
-        public string ConnectionString { get; set; } = string.Empty;
-
-        [Required]
-        public bool EnableHealthCheck { get; set; } = true;
-
-        public int CommandTimeout { get; set; } = 20;
-
-        public RetryOptions RetryOptions { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public byte MaxRetryCount { get; set; } = 15;
-        public int MaxRetryDelayInSeconds { get; set; } = 30;
     }
 }

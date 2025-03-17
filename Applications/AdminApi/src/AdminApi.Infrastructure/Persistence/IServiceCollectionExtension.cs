@@ -1,4 +1,5 @@
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +24,9 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
+    public static IServiceCollection AddDatabase(this IServiceCollection services, Action<DatabaseConfiguration> setupOptions)
     {
-        var options = new DbOptions();
+        var options = new DatabaseConfiguration();
         setupOptions.Invoke(options);
 
         services
@@ -57,19 +58,5 @@ public static class IServiceCollectionExtensions
             });
 
         return services;
-    }
-
-    public class DbOptions
-    {
-        public string Provider { get; set; } = null!;
-        public string ConnectionString { get; set; } = null!;
-        public int CommandTimeout { get; set; } = 20;
-        public RetryOptions RetryOptions { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public byte MaxRetryCount { get; set; } = 15;
-        public int MaxRetryDelayInSeconds { get; set; } = 30;
     }
 }

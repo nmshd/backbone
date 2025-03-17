@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
@@ -7,7 +8,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPersistence(this IServiceCollection services, DbOptions options)
+    public static void AddPersistence(this IServiceCollection services, DatabaseConfiguration options)
     {
         services.AddDatabase(options);
 

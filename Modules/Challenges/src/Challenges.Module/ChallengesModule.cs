@@ -21,7 +21,7 @@ public class ChallengesModule : AbstractModule<ApplicationConfiguration, Infrast
         services.AddDatabase(dbOptions =>
         {
             dbOptions.Provider = infrastructureConfigurationConfiguration.SqlDatabase.Provider;
-            dbOptions.DbConnectionString = infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString;
+            dbOptions.ConnectionString = infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString;
         });
 
         if (infrastructureConfigurationConfiguration.SqlDatabase.EnableHealthCheck)

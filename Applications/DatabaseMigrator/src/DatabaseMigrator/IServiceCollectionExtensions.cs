@@ -14,7 +14,7 @@ public static class IServiceCollectionExtensions
         Modules.Challenges.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
             options.Provider = databaseConfiguration.Provider;
-            options.DbConnectionString = databaseConfiguration.ConnectionString;
+            options.ConnectionString = databaseConfiguration.ConnectionString;
             options.CommandTimeout = databaseConfiguration.CommandTimeout;
         });
 

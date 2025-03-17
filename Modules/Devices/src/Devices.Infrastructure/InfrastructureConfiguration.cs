@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions;
 
 namespace Backbone.Modules.Devices.Infrastructure;
 
 public class InfrastructureConfiguration
 {
     [Required]
-    public IServiceCollectionExtensions.DbOptions SqlDatabase { get; set; } = new();
+    public DatabaseConfiguration SqlDatabase { get; set; } = new();
 
     [Required]
     public PushNotificationOptions PushNotifications { get; set; } = new();
