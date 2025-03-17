@@ -1,4 +1,3 @@
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -15,10 +14,6 @@ extension UnregisterIfRegistered on GetIt {
 
     await unregister<T>();
   }
-}
-
-extension GetCustomColors on BuildContext {
-  CustomColors get customColors => Theme.of(this).extension<CustomColors>()!;
 }
 
 extension SetClipboardDataWithSnack on BuildContext {
