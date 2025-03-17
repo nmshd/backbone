@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -16,13 +17,13 @@ public static class ServiceCollectionExtensions
     {
         switch (provider)
         {
-            case "SqlServer":
+            case IServiceCollectionExtensions.SQLSERVER:
                 services.AddHealthChecks().AddSqlServer(
                     connectionString,
                     name: $"{name}Database"
                 );
                 break;
-            case "Postgres":
+            case IServiceCollectionExtensions.POSTGRES:
                 services.AddHealthChecks().AddNpgSql(
                     connectionString: connectionString,
                     name: $"{name}Database"

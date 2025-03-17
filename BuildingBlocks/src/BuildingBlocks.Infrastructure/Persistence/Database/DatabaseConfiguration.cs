@@ -5,8 +5,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 public class DatabaseConfiguration
 {
     [Required]
-    [MinLength(1)]
-    [RegularExpression("SqlServer|Postgres")]
+    [RegularExpression($"{IServiceCollectionExtensions.SQLSERVER}|{IServiceCollectionExtensions.POSTGRES}")]
     public string Provider { get; set; } = string.Empty;
 
     [Required]
