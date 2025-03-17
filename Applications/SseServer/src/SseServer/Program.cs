@@ -96,7 +96,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSaveChangesTimeInterceptor();
 
-    services.AddModule<DevicesModule, ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration);
+    services.AddModule<DevicesModule, ApplicationOptions, InfrastructureConfiguration>(configuration);
 
     services.AddSingleton<IEventQueue, EventQueue>();
 

@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Module;
 
-public class FilesModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class FilesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Files";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddApplication();
 

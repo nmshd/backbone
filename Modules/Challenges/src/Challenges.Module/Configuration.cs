@@ -1,15 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Challenges.Application;
 
 namespace Backbone.Modules.Challenges.Module;
-
-public class Configuration
-{
-    public ApplicationOptions Application { get; set; } = new();
-
-    [Required]
-    public ChallengesInfrastructure Infrastructure { get; set; } = new();
-}
 
 public class ChallengesInfrastructure
 {

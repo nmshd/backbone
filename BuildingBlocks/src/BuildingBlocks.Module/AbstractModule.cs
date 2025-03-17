@@ -40,7 +40,7 @@ public abstract class AbstractModule<TApplicationConfiguration, TInfrastructureC
         ConfigureServices(services, infrastructureConfiguration, moduleConfig.GetSection("Application"));
     }
 
-    protected abstract void ConfigureServices(IServiceCollection services, TInfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawApplicationConfiguration);
+    protected abstract void ConfigureServices(IServiceCollection services, TInfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration);
 
     public virtual Task ConfigureEventBus(IEventBus eventBus)
     {

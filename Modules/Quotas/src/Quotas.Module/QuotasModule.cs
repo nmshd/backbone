@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Quotas.Module;
 
-public class QuotasModule : AbstractModule<ApplicationOptions, QuotasInfrastructure>
+public class QuotasModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Quotas";
 
-    protected override void ConfigureServices(IServiceCollection services, QuotasInfrastructure infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddApplication();
 

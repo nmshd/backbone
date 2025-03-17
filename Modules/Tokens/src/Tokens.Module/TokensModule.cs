@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tokens.Module;
 
-public class TokensModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class TokensModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Tokens";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddPersistence(options =>
         {

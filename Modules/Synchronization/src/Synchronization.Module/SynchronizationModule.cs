@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Synchronization.Module;
 
-public class SynchronizationModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class SynchronizationModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Synchronization";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddPersistence(options =>
         {

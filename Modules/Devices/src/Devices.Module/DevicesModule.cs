@@ -16,13 +16,13 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module;
 
-public class DevicesModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class DevicesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Devices";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawApplicationConfiguration)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration)
     {
-        services.AddApplication(rawApplicationConfiguration);
+        services.AddApplication(rawModuleConfiguration.GetSection("Application"));
 
         services.AddDatabase(options =>
         {
@@ -45,7 +45,7 @@ public class DevicesModule : AbstractModule<ApplicationOptions, Configuration.In
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
-        var configuration = serviceProvider.GetRequiredService<IOptions<Configuration.InfrastructureConfiguration>>().Value;
+        var configuration = serviceProvider.GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
         var failingApnsBundleIds = new List<string>();

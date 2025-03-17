@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Module;
 
-public class MessagesModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class MessagesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Messages";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddPersistence(options =>
         {

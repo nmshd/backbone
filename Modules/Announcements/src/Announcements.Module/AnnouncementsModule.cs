@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Announcements.Module;
 
-public class AnnouncementsModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class AnnouncementsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Announcements";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddApplication();
 

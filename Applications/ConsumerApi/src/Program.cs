@@ -40,7 +40,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using ApplicationOptions = Backbone.Modules.Tokens.Application.ApplicationOptions;
-using Configuration = Backbone.Modules.Announcements.Module.Configuration;
+using InfrastructureConfiguration = Backbone.Modules.Quotas.Module.InfrastructureConfiguration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -140,22 +140,22 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
         .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
-            Backbone.Modules.Relationships.Module.Configuration.InfrastructureConfiguration>(configuration)
+            Backbone.Modules.Relationships.Module.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
-            Backbone.Modules.Synchronization.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
+            Backbone.Modules.Synchronization.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-    var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<QuotasInfrastructure>>().Value;
+    var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
 #pragma warning restore ASP0000
 
     var quotasSqlDatabaseConfiguration = parsedQuotasInfrastructureConfiguration.SqlDatabase;

@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Module;
 
-public class RelationshipsModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class RelationshipsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Relationships";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration)
     {
         services.AddApplication();
 

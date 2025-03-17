@@ -8,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tags.Module;
 
-public class TagsModule : AbstractModule<ApplicationOptions, Configuration.InfrastructureConfiguration>
+public class TagsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
 {
     public override string Name => "Tags";
 
-    protected override void ConfigureServices(IServiceCollection services, Configuration.InfrastructureConfiguration _, IConfigurationSection __)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration _, IConfigurationSection __)
     {
         services.AddApplication();
         services.AddPersistence();

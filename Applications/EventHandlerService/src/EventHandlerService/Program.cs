@@ -19,8 +19,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using Configuration = Backbone.Modules.Tokens.Module.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.Module.Configuration;
+using InfrastructureConfiguration = Backbone.Modules.Quotas.Module.InfrastructureConfiguration;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -81,22 +80,19 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services
                 .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, DevicesConfiguration.InfrastructureConfiguration>(configuration)
-                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.Configuration.InfrastructureConfiguration>(configuration)
-                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.Configuration.InfrastructureConfiguration>(configuration)
-                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
+                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
                 .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
-                    Backbone.Modules.Relationships.Module.Configuration.InfrastructureConfiguration>(configuration)
+                    Backbone.Modules.Relationships.Module.InfrastructureConfiguration>(configuration)
                 .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
-                    Backbone.Modules.Synchronization.Module.Configuration.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration);
+                    Backbone.Modules.Synchronization.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-            var devicesConfiguration = new DevicesConfiguration();
-            configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

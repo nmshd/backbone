@@ -27,7 +27,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using Configuration = Backbone.Modules.Announcements.Module.Configuration;
+using InfrastructureConfiguration = Backbone.Modules.Devices.Module.InfrastructureConfiguration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -116,11 +116,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Configuration.InfrastructureConfiguration>(configuration)
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
         .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.Configuration.InfrastructureConfiguration>(configuration)
-        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, QuotasInfrastructure>(configuration)
-        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.Configuration.InfrastructureConfiguration>(configuration);
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, Backbone.Modules.Quotas.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
 
     services
