@@ -100,10 +100,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSingleton<ApiKeyValidator>();
 
-    services.ConfigureAndValidate<AdminConfiguration>(configuration.Bind);
+    services.ConfigureAndValidate<AdminApiConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
 #pragma warning restore ASP0000
 
@@ -171,7 +171,7 @@ static void Configure(WebApplication app)
         .UseMiddleware<TraceIdMiddleware>()
         .UseMiddleware<CorrelationIdMiddleware>();
 
-    var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var configuration = app.Services.GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
     app.UseSerilogRequestLogging(opts =>
     {

@@ -28,7 +28,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        AdminConfiguration configuration)
+        AdminApiConfiguration configuration)
     {
         services
             .AddControllersWithViews(options =>

@@ -4,17 +4,19 @@ using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.AdminApi.Configuration;
 
-public class AdminConfiguration
+public class AdminApiConfiguration
 {
+    [Required]
     public AuthenticationConfiguration Authentication { get; set; } = new();
 
     public CorsConfiguration Cors { get; set; } = new();
 
     [Required]
-    public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
+    public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
+        [Required]
         public string ApiKey { get; set; } = string.Empty;
     }
 
@@ -25,11 +27,12 @@ public class AdminConfiguration
         public bool AccessControlAllowCredentials { get; set; } = false;
     }
 
-    public class AdminInfrastructureConfiguration
+    public class InfrastructureConfiguration
     {
         [Required]
         public EventBusOptions EventBus { get; set; } = new();
 
+        [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
     }
 }
