@@ -1,8 +1,8 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.EventHandlerService;
-using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;

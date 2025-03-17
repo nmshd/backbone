@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.AdminCli.Configuration;
 

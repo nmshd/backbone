@@ -8,8 +8,8 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -28,7 +28,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

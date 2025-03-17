@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.Events;
 
-namespace Backbone.Infrastructure.Logging;
+namespace Backbone.BuildingBlocks.API.Logging;
 
 public static class LogHelper
 {

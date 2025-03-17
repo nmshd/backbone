@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-namespace Backbone.Infrastructure.EventBus;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public class EventBusOptions
 {

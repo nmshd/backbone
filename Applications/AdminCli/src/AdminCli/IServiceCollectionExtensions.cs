@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 using Backbone.AdminCli.Configuration;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

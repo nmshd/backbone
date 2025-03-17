@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Module;

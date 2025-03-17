@@ -2,9 +2,9 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Module;
@@ -19,7 +19,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using Configuration = Backbone.SseServer.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

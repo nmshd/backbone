@@ -3,13 +3,13 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
-using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
@@ -41,7 +41,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
