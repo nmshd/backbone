@@ -1,6 +1,5 @@
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
-
-import '/core/core.dart';
 
 class InputField extends StatelessWidget {
   final void Function(String enteredText) onEnteredText;

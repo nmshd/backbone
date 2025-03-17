@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 import '../generated/l10n/app_localizations.dart';
-import 'theme/theme.dart';
 
 extension AppLocalizationsExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;
@@ -15,10 +14,6 @@ extension UnregisterIfRegistered on GetIt {
 
     await unregister<T>();
   }
-}
-
-extension GetCustomColors on BuildContext {
-  CustomColors get customColors => Theme.of(this).extension<CustomColors>()!;
 }
 
 extension SetClipboardDataWithSnack on BuildContext {

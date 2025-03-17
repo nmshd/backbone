@@ -1,10 +1,10 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-import '../constants.dart';
 import '../extensions.dart';
 
 Future<void> showAddQuotaDialog({required BuildContext context, required VoidCallback onQuotaAdded, String? tierId, String? identityAddress}) async {

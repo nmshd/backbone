@@ -13,6 +13,11 @@ dependencies:
   collection: any
   data_table_2: ^2.5.15
   dropdown_button2: ^2.3.9
+  enmeshed_ui_kit:
+    git:
+      ref: main
+      url: https://github.com/nmshd/app
+      path: packages/enmeshed_ui_kit
   flex_seed_scheme: ^3.4.0
   flutter:
     sdk: flutter

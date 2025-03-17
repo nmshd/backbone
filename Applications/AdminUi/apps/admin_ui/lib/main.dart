@@ -134,8 +134,10 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
     return MaterialApp.router(
       title: 'Admin UI',
       themeMode: themeMode,
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme, cardTheme: cardThemeLight, extensions: [lightCustomColors]),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme, cardTheme: cardThemeDark, extensions: [darkCustomColors]),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      highContrastTheme: highContrastTheme,
+      highContrastDarkTheme: highContrastDarkTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
