@@ -53,14 +53,14 @@ public class DevicesModule : AbstractModule<ApplicationConfiguration, Infrastruc
 
         if (configuration.PushNotifications.Providers.Apns is { Enabled: true })
         {
-            var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsOptions>>().Value;
+            var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsConfiguration>>().Value;
             supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
             failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds).GetAwaiter().GetResult();
         }
 
         if (configuration.PushNotifications.Providers.Fcm is { Enabled: true })
         {
-            var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmOptions>>().Value;
+            var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmConfiguration>>().Value;
             supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
             failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds).GetAwaiter().GetResult();
         }

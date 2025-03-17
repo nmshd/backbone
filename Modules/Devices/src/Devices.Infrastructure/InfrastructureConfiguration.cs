@@ -10,5 +10,5 @@ public class InfrastructureConfiguration
     public DatabaseConfiguration SqlDatabase { get; set; } = new();
 
     [Required]
-    public PushNotificationOptions PushNotifications { get; set; } = new();
+    public PushNotificationConfiguration PushNotifications { get; set; } = new();
 }

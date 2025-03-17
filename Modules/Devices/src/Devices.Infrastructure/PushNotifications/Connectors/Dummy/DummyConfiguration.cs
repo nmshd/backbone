@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
 
-public class DummyOptions
+public class DummyConfiguration
 {
     [Required]
     public required bool Enabled { get; set; }

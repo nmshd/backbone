@@ -11,9 +11,9 @@ public class EventBusConfiguration
     [RegularExpression("AzureServiceBus|GoogleCloudPubSub|RabbitMQ")]
     public string ProductName { get; set; } = null!;
 
-    public RabbitMqOptions RabbitMq { get; set; } = null!;
+    public RabbitMqConfiguration RabbitMq { get; set; } = null!;
 
     public ServiceBusOptions AzureServiceBus { get; set; } = null!;
 
-    public GoogleCloudPubSubOptions GoogleCloudPubSub { get; set; } = null!;
+    public GoogleCloudPubSubConfiguration GoogleCloudPubSub { get; set; } = null!;
 }

@@ -32,7 +32,7 @@ public static class IServiceCollectionExtensions
                             {
                                 sqlOptions.CommandTimeout(options.CommandTimeout);
                                 sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                                sqlOptions.EnableRetryOnFailure(options.RetryConfiguration.MaxRetryCount, TimeSpan.FromSeconds(options.RetryConfiguration.MaxRetryDelayInSeconds), null);
                                 sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
                             });
                             break;
@@ -41,7 +41,7 @@ public static class IServiceCollectionExtensions
                             {
                                 sqlOptions.CommandTimeout(options.CommandTimeout);
                                 sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
-                                sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
+                                sqlOptions.EnableRetryOnFailure(options.RetryConfiguration.MaxRetryCount, TimeSpan.FromSeconds(options.RetryConfiguration.MaxRetryDelayInSeconds), null);
                                 sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Tokens");
                             });
                             break;

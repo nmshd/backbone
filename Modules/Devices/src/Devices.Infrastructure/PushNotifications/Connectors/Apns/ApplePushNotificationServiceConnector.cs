@@ -14,14 +14,15 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly IJwtGenerator _jwtGenerator;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
-    private readonly ApnsOptions _options;
+    private readonly ApnsConfiguration _configuration;
 
-    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsConfiguration> options, IJwtGenerator jwtGenerator,
+        ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
         _logger = logger;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
@@ -31,7 +32,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
-        var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId);
+        var keyInformation = _configuration.GetKeyInformationForBundleId(registration.AppId);
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
@@ -57,8 +58,8 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     public void ValidateRegistration(PnsRegistration registration)
     {
-        if (!_options.HasConfigForBundleId(registration.AppId))
-            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
+        if (!_configuration.HasConfigForBundleId(registration.AppId))
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_configuration.GetSupportedBundleIds()));
     }
 
     private static string BuildUrl(PushEnvironment environment, string handle)

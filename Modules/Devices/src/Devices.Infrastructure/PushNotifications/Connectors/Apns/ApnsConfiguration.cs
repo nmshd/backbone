@@ -3,7 +3,7 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 
-public class ApnsOptions
+public class ApnsConfiguration
 {
     public bool Enabled { get; set; } = true;
 

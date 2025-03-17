@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 
-public class SseOptions
+public class SseConfiguration
 {
     [Required]
     public required bool Enabled { get; set; }

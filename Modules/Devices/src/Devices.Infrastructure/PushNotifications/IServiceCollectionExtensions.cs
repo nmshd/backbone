@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
+    public static void AddPushNotifications(this IServiceCollection services, PushNotificationConfiguration configuration)
     {
         services.AddSingleton<PushNotificationResourceManager>();
 
@@ -25,28 +25,28 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IPushNotificationRegistrationService, PushService>();
         services.AddTransient<IPushNotificationSender, PushService>();
 
-        if (options.Providers.Fcm is { Enabled: true })
+        if (configuration.Providers.Fcm is { Enabled: true })
         {
             services.AddFcm();
-            services.AddSingleton<IOptions<FcmOptions>>(
-                new OptionsWrapper<FcmOptions>(options.Providers.Fcm));
+            services.AddSingleton<IOptions<FcmConfiguration>>(
+                new OptionsWrapper<FcmConfiguration>(configuration.Providers.Fcm));
         }
 
-        if (options.Providers.Apns is { Enabled: true })
+        if (configuration.Providers.Apns is { Enabled: true })
         {
             services.AddApns();
-            services.AddSingleton<IOptions<ApnsOptions>>(
-                new OptionsWrapper<ApnsOptions>(options.Providers.Apns));
+            services.AddSingleton<IOptions<ApnsConfiguration>>(
+                new OptionsWrapper<ApnsConfiguration>(configuration.Providers.Apns));
         }
 
-        if (options.Providers.Dummy is { Enabled: true })
+        if (configuration.Providers.Dummy is { Enabled: true })
             services.AddDummy();
 
-        if (options.Providers.Sse is { Enabled: true })
+        if (configuration.Providers.Sse is { Enabled: true })
         {
-            services.AddSse(options.Providers.Sse);
+            services.AddSse(configuration.Providers.Sse);
 
-            if (options.Providers.Sse.EnableHealthCheck)
+            if (configuration.Providers.Sse.EnableHealthCheck)
                 services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
         }
     }
@@ -70,29 +70,29 @@ public static class IServiceCollectionExtensions
         services.AddTransient<DummyConnector>();
     }
 
-    private static void AddSse(this IServiceCollection services, SseOptions options)
+    private static void AddSse(this IServiceCollection services, SseConfiguration configuration)
     {
         services.AddSingleton<ISseServerClient, SseServerClient>();
 
-        services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(options.SseServerBaseAddress));
+        services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(configuration.SseServerBaseAddress));
 
         services.AddScoped<ServerSentEventsConnector>();
     }
 }
 
-public class PushNotificationOptions
+public class PushNotificationConfiguration
 {
     [Required]
     public PushNotificationProviders Providers { get; set; } = null!;
 
     public class PushNotificationProviders
     {
-        public required FcmOptions? Fcm { get; set; } = null!;
+        public required FcmConfiguration? Fcm { get; set; } = null!;
 
-        public required ApnsOptions? Apns { get; set; } = null!;
+        public required ApnsConfiguration? Apns { get; set; } = null!;
 
-        public required DummyOptions? Dummy { get; set; } = null!;
+        public required DummyConfiguration? Dummy { get; set; } = null!;
 
-        public required SseOptions? Sse { get; set; } = null!;
+        public required SseConfiguration? Sse { get; set; } = null!;
     }
 }

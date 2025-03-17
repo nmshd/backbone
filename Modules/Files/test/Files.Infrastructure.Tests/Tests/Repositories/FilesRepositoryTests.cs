@@ -36,7 +36,7 @@ public class FilesRepositoryTests : AbstractTestsBase
 
     private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)
     {
-        var blobStorageOptions = Options.Create(new BlobOptions { RootFolder = "" });
+        var blobStorageOptions = Options.Create(new BlobConfiguration { RootFolder = "" });
 
         var (arrangeContext, actContext, _) = FakeDbContextFactory.CreateDbContexts<FilesDbContext>();
 

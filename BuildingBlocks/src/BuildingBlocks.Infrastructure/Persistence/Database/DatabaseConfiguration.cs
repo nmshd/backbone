@@ -18,10 +18,10 @@ public class DatabaseConfiguration
 
     public int CommandTimeout { get; set; } = 20;
 
-    public RetryOptions RetryOptions { get; set; } = new();
+    public RetryConfiguration RetryConfiguration { get; set; } = new();
 }
 
-public class RetryOptions
+public class RetryConfiguration
 {
     public byte MaxRetryCount { get; set; } = 15;
     public int MaxRetryDelayInSeconds { get; set; } = 30;

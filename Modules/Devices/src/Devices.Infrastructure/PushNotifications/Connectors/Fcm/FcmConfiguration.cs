@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 
-public class FcmOptions
+public class FcmConfiguration
 {
     [Required]
     public bool Enabled { get; set; } = true;

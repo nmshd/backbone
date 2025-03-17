@@ -15,7 +15,7 @@ public static class IServiceCollectionExtensions
         services.AddDatabase(dbOptions);
         services.AddBlobStorage(blobStorageOptions);
 
-        services.Configure<BlobOptions>(blobOptions => blobOptions.RootFolder = blobStorageOptions.RootFolder);
+        services.Configure<BlobConfiguration>(blobOptions => blobOptions.RootFolder = blobStorageOptions.RootFolder);
         services.AddTransient<IFilesRepository, FilesRepository>();
     }
 }
