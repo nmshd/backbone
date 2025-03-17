@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using Backbone.AdminCli.Configuration;
 using Backbone.Infrastructure.EventBus;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -29,29 +28,5 @@ public static class IServiceCollectionExtensions
 #pragma warning restore ASP0000
 
         services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-    }
-
-    public static IServiceCollection AddDevicesModule(this IServiceCollection services, IConfiguration configuration)
-    {
-        Modules.Devices.Application.Extensions.IServiceCollectionExtensions.AddApplication(services, configuration.GetSection("Modules:Devices:Application"));
-        Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
-        {
-            options.Provider = configuration["Modules:Devices:Infrastructure:SqlDatabase:Provider"]!;
-            options.ConnectionString = configuration["Modules:Devices:Infrastructure:SqlDatabase:ConnectionString"]!;
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddAnnouncementsModule(this IServiceCollection services, IConfiguration configuration)
-    {
-        Modules.Announcements.Application.Extensions.IServiceCollectionExtensions.AddApplication(services);
-        Modules.Announcements.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-        {
-            options.Provider = configuration["Modules:Devices:Infrastructure:SqlDatabase:Provider"]!;
-            options.ConnectionString = configuration["Modules:Devices:Infrastructure:SqlDatabase:ConnectionString"]!;
-        });
-
-        return services;
     }
 }
