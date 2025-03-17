@@ -1,6 +1,6 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Relationships.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,4 +27,16 @@ public class PublicRelationshipTemplateReferencesController : ApiControllerBase
 
         return Ok(response);
     }
+}
+
+public class PublicRelationshipTemplateReferenceDefinition
+{
+    [Required]
+    public string Title { get; set; } = string.Empty;
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+
+    [Required]
+    public string TruncatedReference { get; set; } = string.Empty;
 }
