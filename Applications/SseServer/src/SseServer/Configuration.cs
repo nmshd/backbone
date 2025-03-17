@@ -27,6 +27,6 @@ public class Configuration
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusOptions EventBus { get; set; } = new();
+        public EventBusConfiguration EventBus { get; set; } = new();
     }
 }

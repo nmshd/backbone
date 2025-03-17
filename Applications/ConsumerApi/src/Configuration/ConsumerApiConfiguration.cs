@@ -32,6 +32,6 @@ public class ConsumerApiConfiguration
     public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
-        public EventBusOptions EventBus { get; set; } = new();
+        public EventBusConfiguration EventBus { get; set; } = new();
     }
 }

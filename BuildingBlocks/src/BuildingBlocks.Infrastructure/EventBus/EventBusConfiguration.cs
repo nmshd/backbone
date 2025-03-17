@@ -5,7 +5,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
-public class EventBusOptions
+public class EventBusConfiguration
 {
     [Required]
     [RegularExpression("AzureServiceBus|GoogleCloudPubSub|RabbitMQ")]

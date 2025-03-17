@@ -11,23 +11,23 @@ public static class EventBusServiceCollectionExtensions
     public const string GOOGLE_CLOUD = "GoogleCloudPubSub";
     public const string RABBIT_MQ = "RabbitMQ";
 
-    public static void AddEventBus(this IServiceCollection services, EventBusOptions options)
+    public static void AddEventBus(this IServiceCollection services, EventBusConfiguration configuration)
     {
-        switch (options.ProductName)
+        switch (configuration.ProductName)
         {
             case AZURE:
-                services.AddAzureServiceBus(options.AzureServiceBus);
+                services.AddAzureServiceBus(configuration.AzureServiceBus);
                 break;
             case GOOGLE_CLOUD:
-                services.AddGoogleCloudPubSub(options.GoogleCloudPubSub);
+                services.AddGoogleCloudPubSub(configuration.GoogleCloudPubSub);
                 break;
             case RABBIT_MQ:
-                services.AddRabbitMq(options.RabbitMq);
+                services.AddRabbitMq(configuration.RabbitMq);
                 break;
             case "":
                 throw new NotSupportedException("No event bus product name was specified.");
             default:
-                throw new NotSupportedException($"{options.ProductName} is not a currently supported event bus product name.");
+                throw new NotSupportedException($"{configuration.ProductName} is not a currently supported event bus product name.");
         }
     }
 }

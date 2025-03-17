@@ -30,7 +30,7 @@ public class AdminApiConfiguration
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusOptions EventBus { get; set; } = new();
+        public EventBusConfiguration EventBus { get; set; } = new();
 
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();

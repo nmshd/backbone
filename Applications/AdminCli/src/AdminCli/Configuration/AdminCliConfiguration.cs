@@ -11,6 +11,6 @@ public class AdminCliConfiguration
     public class AdminInfrastructureConfiguration
     {
         [Required]
-        public EventBusOptions EventBus { get; set; } = new();
+        public EventBusConfiguration EventBus { get; set; } = new();
     }
 }
