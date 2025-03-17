@@ -1,8 +1,8 @@
 import 'package:admin_ui/core/extensions.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/constants.dart';
 import 'identity_relationship_data_table_source.dart';
 
 class IdentityRelationshipTable extends StatefulWidget {
