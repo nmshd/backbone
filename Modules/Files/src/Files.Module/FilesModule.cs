@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Module;
 
-public class FilesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class FilesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Files";
 

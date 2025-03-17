@@ -20,12 +20,12 @@ namespace Backbone.AdminApi.Controllers;
 public class MessagesController : ApiControllerBase
 {
     private readonly AdminApiDbContext _adminUiDbContext;
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public MessagesController(IMediator mediator, IOptions<ApplicationOptions> options, AdminApiDbContext adminUiDbContext) : base(mediator)
+    public MessagesController(IMediator mediator, IOptions<ApplicationConfiguration> options, AdminApiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpGet]
@@ -33,10 +33,10 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
+        paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+                GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         switch (type)
         {

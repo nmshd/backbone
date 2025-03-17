@@ -19,23 +19,23 @@ namespace Backbone.AdminApi.Controllers;
 public class RelationshipsController : ApiControllerBase
 {
     private readonly AdminApiDbContext _adminApiDbContext;
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
 
-    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options, AdminApiDbContext adminApiDbContext) : base(mediator)
+    public RelationshipsController(IMediator mediator, IOptions<ApplicationConfiguration> options, AdminApiDbContext adminApiDbContext) : base(mediator)
     {
         _adminApiDbContext = adminApiDbContext;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
+        paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+                GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
             .Where(r => r.To == participant || r.From == participant)

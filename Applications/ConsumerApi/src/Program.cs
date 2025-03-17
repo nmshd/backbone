@@ -27,6 +27,7 @@ using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tags.Module;
+using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
@@ -39,7 +40,6 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using ApplicationOptions = Backbone.Modules.Tokens.Application.ApplicationOptions;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Module.InfrastructureConfiguration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
@@ -140,18 +140,18 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
-        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, ChallengesInfrastructure>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
             Backbone.Modules.Relationships.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationOptions, Backbone.Modules.Tags.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
+        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationConfiguration, Backbone.Modules.Tags.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;

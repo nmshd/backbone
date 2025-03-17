@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Module;
 
-public class RelationshipsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class RelationshipsModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Relationships";
 

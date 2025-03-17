@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tokens.Module;
 
-public class TokensModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class TokensModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Tokens";
 

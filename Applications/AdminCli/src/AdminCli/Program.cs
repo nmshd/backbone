@@ -68,9 +68,9 @@ public class Program
         services.AddCommonInfrastructure();
 
         services
-            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationOptions, Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
-            .AddModule<DevicesModule, Modules.Devices.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
-            .AddModule<TokensModule, ApplicationOptions, Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
+            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
+            .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+            .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);

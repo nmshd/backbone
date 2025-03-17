@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Files.Application;
+namespace Backbone.Modules.Quotas.Application;
 
-public class ApplicationOptions
+public class ApplicationConfiguration
 {
     [Required]
     public PaginationOptions Pagination { get; set; } = new();

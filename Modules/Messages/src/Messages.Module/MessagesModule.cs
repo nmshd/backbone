@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Module;
 
-public class MessagesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class MessagesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Messages";
 

@@ -20,11 +20,11 @@ namespace Backbone.ConsumerApi.Controllers.Synchronization;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class DatawalletController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public DatawalletController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public DatawalletController(IMediator mediator, IOptions<ApplicationConfiguration> options) : base(mediator)
     {
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpGet]
@@ -46,11 +46,11 @@ public class DatawalletController : ApiControllerBase
         ushort supportedDatawalletVersion,
         CancellationToken cancellationToken)
     {
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+                GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
         var request = new GetModificationsQuery(paginationFilter, localIndex, supportedDatawalletVersion);
 

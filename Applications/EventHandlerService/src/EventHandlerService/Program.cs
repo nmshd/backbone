@@ -79,16 +79,16 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddTransient<IHostedService, EventHandlerService>();
 
             services
-                .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
-                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationOptions, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
-                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationOptions, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
-                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
-                .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationOptions,
+                .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, ChallengesInfrastructure>(configuration)
+                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Module.InfrastructureConfiguration>(configuration)
+                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+                .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
                     Backbone.Modules.Relationships.Module.InfrastructureConfiguration>(configuration)
-                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationOptions,
+                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
                     Backbone.Modules.Synchronization.Module.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
+                .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 

@@ -12,13 +12,13 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly IUserContext _userContext;
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public Handler(IUserContext userContext, IMessagesRepository messagesRepository, IOptions<ApplicationOptions> options)
+    public Handler(IUserContext userContext, IMessagesRepository messagesRepository, IOptions<ApplicationConfiguration> options)
     {
         _userContext = userContext;
         _messagesRepository = messagesRepository;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
         await _messagesRepository.Update(message);
 
-        var response = new MessageDTO(message, _userContext.GetAddress(), _options.DidDomainName);
+        var response = new MessageDTO(message, _userContext.GetAddress(), _configuration.DidDomainName);
 
         return response;
     }

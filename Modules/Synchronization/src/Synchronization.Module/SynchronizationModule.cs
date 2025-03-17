@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Synchronization.Module;
 
-public class SynchronizationModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class SynchronizationModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Synchronization";
 

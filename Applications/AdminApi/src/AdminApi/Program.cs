@@ -116,11 +116,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationOptions, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationOptions, ChallengesInfrastructure>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationOptions, InfrastructureConfiguration>(configuration)
-        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationOptions, Backbone.Modules.Quotas.Module.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationOptions, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, ChallengesInfrastructure>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, Backbone.Modules.Quotas.Module.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Module.InfrastructureConfiguration>(configuration);
 
 
     services

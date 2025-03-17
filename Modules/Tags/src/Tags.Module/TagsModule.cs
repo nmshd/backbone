@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tags.Module;
 
-public class TagsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class TagsModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Tags";
 

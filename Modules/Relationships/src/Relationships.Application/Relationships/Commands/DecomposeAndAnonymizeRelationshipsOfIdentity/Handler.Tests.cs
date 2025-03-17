@@ -12,7 +12,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockRelationshipTemplatesRepository = A.Fake<IRelationshipsRepository>();
-        var mockOptions = A.Dummy<IOptions<ApplicationOptions>>();
+        var mockOptions = A.Dummy<IOptions<ApplicationConfiguration>>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository, mockOptions);
         var request = new DecomposeAndAnonymizeRelationshipsOfIdentityCommand(CreateRandomIdentityAddress());

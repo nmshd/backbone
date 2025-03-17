@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module;
 
-public class DevicesModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class DevicesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Devices";
 

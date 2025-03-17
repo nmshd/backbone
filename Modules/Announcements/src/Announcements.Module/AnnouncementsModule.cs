@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Announcements.Module;
 
-public class AnnouncementsModule : AbstractModule<ApplicationOptions, InfrastructureConfiguration>
+public class AnnouncementsModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Announcements";
 

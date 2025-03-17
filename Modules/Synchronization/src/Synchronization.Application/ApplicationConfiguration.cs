@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Backbone.Modules.Synchronization.Application;
 
-public class ApplicationOptions
+public class ApplicationConfiguration
 {
     [Required]
     public PaginationOptions Pagination { get; set; } = new();

@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Challenges.Module;
 
-public class ChallengesModule : AbstractModule<ApplicationOptions, ChallengesInfrastructure>
+public class ChallengesModule : AbstractModule<ApplicationConfiguration, ChallengesInfrastructure>
 {
     public override string Name => "Challenges";
 

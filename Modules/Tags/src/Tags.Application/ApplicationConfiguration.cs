@@ -4,7 +4,7 @@ using Backbone.Modules.Tags.Domain;
 namespace Backbone.Modules.Tags.Application;
 
 [ContainsValidTags]
-public class ApplicationOptions
+public class ApplicationConfiguration
 {
     [Required]
     public List<string> SupportedLanguages { get; set; } = [];
@@ -29,7 +29,7 @@ public class ContainsValidTagsAttribute : ValidationAttribute
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (value is not ApplicationOptions applicationOptions) return new ValidationResult($"The attribute can only be used for {nameof(ApplicationOptions)}.");
+        if (value is not ApplicationConfiguration applicationOptions) return new ValidationResult($"The attribute can only be used for {nameof(ApplicationConfiguration)}.");
 
         _supportedLanguages = applicationOptions.SupportedLanguages;
         var result = ValidateLanguages();
@@ -49,11 +49,11 @@ public class ContainsValidTagsAttribute : ValidationAttribute
 
     private ValidationResult? ValidateLanguages()
     {
-        if (!_supportedLanguages.Contains("en")) return new ValidationResult("The tags have to support the English language.", [nameof(ApplicationOptions.SupportedLanguages)]);
+        if (!_supportedLanguages.Contains("en")) return new ValidationResult("The tags have to support the English language.", [nameof(ApplicationConfiguration.SupportedLanguages)]);
 
         var invalidLanguageEntries = _supportedLanguages.Where(value => !VALID_LANGUAGES.Contains(value)).ToList();
         if (invalidLanguageEntries.Count != 0)
-            return new ValidationResult($"The language entries \"{Enumerate(invalidLanguageEntries)}\" are not valid language codes.", [nameof(ApplicationOptions.SupportedLanguages)]);
+            return new ValidationResult($"The language entries \"{Enumerate(invalidLanguageEntries)}\" are not valid language codes.", [nameof(ApplicationConfiguration.SupportedLanguages)]);
 
         return ValidationResult.Success;
     }

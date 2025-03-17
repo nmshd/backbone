@@ -1,16 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Tokens.Application;
+namespace Backbone.Modules.Files.Application;
 
-public class ApplicationOptions
+public class ApplicationConfiguration
 {
     [Required]
     public PaginationOptions Pagination { get; set; } = new();
-
-    [Required]
-    [MinLength(3)]
-    [MaxLength(45)]
-    public string DidDomainName { get; set; } = null!;
 }
 
 public class PaginationOptions
