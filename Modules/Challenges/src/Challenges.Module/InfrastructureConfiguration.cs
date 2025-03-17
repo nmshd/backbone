@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Backbone.Modules.Challenges.Module;
 
-public class ChallengesInfrastructure
+public class InfrastructureConfiguration
 {
     [Required]
     public SqlDatabase SqlDatabase { get; set; } = new();

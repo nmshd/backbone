@@ -88,7 +88,7 @@ public class Program
 
                 services
                     .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Module.InfrastructureConfiguration>(configuration)
-                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, ChallengesInfrastructure>(configuration)
+                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, Modules.Challenges.Module.InfrastructureConfiguration>(configuration)
                     .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, Modules.Devices.Module.InfrastructureConfiguration>(configuration)
                     .AddModule<FilesModule, Modules.Files.Application.ApplicationConfiguration, Modules.Files.Module.InfrastructureConfiguration>(configuration)
                     .AddModule<MessagesModule, Modules.Messages.Application.ApplicationConfiguration, Modules.Messages.Module.InfrastructureConfiguration>(configuration)

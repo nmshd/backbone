@@ -9,22 +9,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Challenges.Module;
 
-public class ChallengesModule : AbstractModule<ApplicationConfiguration, ChallengesInfrastructure>
+public class ChallengesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Challenges";
 
-    protected override void ConfigureServices(IServiceCollection services, ChallengesInfrastructure infrastructureConfiguration, IConfigurationSection _)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfigurationConfiguration, IConfigurationSection _)
     {
         services.AddApplication();
 
         services.AddDatabase(dbOptions =>
         {
-            dbOptions.Provider = infrastructureConfiguration.SqlDatabase.Provider;
-            dbOptions.DbConnectionString = infrastructureConfiguration.SqlDatabase.ConnectionString;
+            dbOptions.Provider = infrastructureConfigurationConfiguration.SqlDatabase.Provider;
+            dbOptions.DbConnectionString = infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString;
         });
 
-        if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
+        if (infrastructureConfigurationConfiguration.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfigurationConfiguration.SqlDatabase.Provider, infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override Task ConfigureEventBus(IEventBus eventBus)
