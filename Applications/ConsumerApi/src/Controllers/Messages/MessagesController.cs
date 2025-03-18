@@ -20,11 +20,11 @@ namespace Backbone.ConsumerApi.Controllers.Messages;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class MessagesController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public MessagesController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public MessagesController(IMediator mediator, IOptions<ApplicationConfiguration> options) : base(mediator)
     {
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpGet]
@@ -35,11 +35,11 @@ public class MessagesController : ApiControllerBase
     {
         var command = new ListMessagesQuery(paginationFilter, ids);
 
-        command.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        command.PaginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        if (command.PaginationFilter.PageSize > _options.Pagination.MaxPageSize)
+        if (command.PaginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+                GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         var messages = await _mediator.Send(command, cancellationToken);
         return Paged(messages);

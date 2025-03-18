@@ -13,13 +13,13 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
-    private readonly FcmOptions _options;
+    private readonly FcmConfiguration _configuration;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<FcmOptions> options, ILogger<FirebaseCloudMessagingConnector> logger)
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<FcmConfiguration> options, ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
         _logger = logger;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
@@ -56,8 +56,8 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     public void ValidateRegistration(PnsRegistration registration)
     {
-        if (!_options.HasConfigForAppId(registration.AppId))
-            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedAppIds()));
+        if (!_configuration.HasConfigForAppId(registration.AppId))
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_configuration.GetSupportedAppIds()));
     }
 
     private static string? GetNotificationId(object pushNotification)

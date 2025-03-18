@@ -16,7 +16,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
     private readonly IList<RemovedBlob> _removedBlobs;
     private readonly ILogger<S3BlobStorage> _logger;
 
-    public S3BlobStorage(IOptions<S3BucketOptions> config, ILogger<S3BlobStorage> logger)
+    public S3BlobStorage(IOptions<S3BucketConfiguration> config, ILogger<S3BlobStorage> logger)
     {
         var s3Config = new AmazonS3Config
         {

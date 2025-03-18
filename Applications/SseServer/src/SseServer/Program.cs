@@ -2,10 +2,11 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;
 using Backbone.SseServer.Extensions;
@@ -18,7 +19,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using Configuration = Backbone.SseServer.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -78,7 +79,7 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
+    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
     {
         module.PostStartupValidation(app.Services);
     }
@@ -96,7 +97,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSaveChangesTimeInterceptor();
 
-    services.AddModule<DevicesModule>(configuration);
+    services.AddModule<DevicesModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
     services.AddSingleton<IEventQueue, EventQueue>();
 
@@ -116,8 +117,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     });
 
     services.AddCustomIdentity(environment);
-
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void Configure(WebApplication app)

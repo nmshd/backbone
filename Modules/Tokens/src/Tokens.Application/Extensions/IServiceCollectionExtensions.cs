@@ -1,17 +1,14 @@
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tokens.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddApplication(this IServiceCollection services, IConfigurationSection applicationConfiguration)
+    public static void AddApplication(this IServiceCollection services)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(applicationConfiguration.Bind);
-
         services.AddMediatR(c => c
             .RegisterServicesFromAssemblyContaining<CreateTokenCommand>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))

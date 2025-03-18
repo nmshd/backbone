@@ -12,21 +12,21 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly ILogger<Handler> _logger;
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
     private readonly IUserContext _userContext;
     private readonly IMessagesRepository _messagesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
 
     public Handler(
         IUserContext userContext,
-        IOptionsSnapshot<ApplicationOptions> options,
+        IOptionsSnapshot<ApplicationConfiguration> options,
         ILogger<Handler> logger,
         IMessagesRepository messagesRepository,
         IRelationshipsRepository relationshipsRepository)
     {
         _userContext = userContext;
         _logger = logger;
-        _options = options.Value;
+        _configuration = options.Value;
         _messagesRepository = messagesRepository;
         _relationshipsRepository = relationshipsRepository;
     }
@@ -70,7 +70,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
                 _userContext.GetAddress(),
                 numberOfUnreceivedMessagesFromActiveIdentity,
-                _options.MaxNumberOfUnreceivedMessagesFromOneSender);
+                _configuration.MaxNumberOfUnreceivedMessagesFromOneSender);
 
             var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 

@@ -8,12 +8,12 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Deco
 public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdentityCommand>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IOptions<ApplicationOptions> applicationOptions)
+    public Handler(IRelationshipsRepository relationshipsRepository, IOptions<ApplicationConfiguration> applicationOptions)
     {
         _relationshipsRepository = relationshipsRepository;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
     }
 
     public async Task Handle(DecomposeAndAnonymizeRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
         var relationships = (await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken, track: true)).ToList();
 
         foreach (var relationship in relationships)
-            relationship.DecomposeDueToIdentityDeletion(request.IdentityAddress, _applicationOptions.DidDomainName);
+            relationship.DecomposeDueToIdentityDeletion(request.IdentityAddress, _applicationConfiguration.DidDomainName);
 
         await _relationshipsRepository.Update(relationships);
     }

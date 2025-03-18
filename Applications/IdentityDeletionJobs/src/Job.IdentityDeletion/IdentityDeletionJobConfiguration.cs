@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.Job.IdentityDeletion;
 
@@ -15,5 +15,5 @@ public class IdentityDeletionJobConfiguration
 public class InfrastructureConfiguration
 {
     [Required]
-    public EventBusOptions EventBus { get; set; } = new();
+    public EventBusConfiguration EventBus { get; set; } = new();
 }

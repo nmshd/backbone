@@ -1,8 +1,6 @@
 ﻿using System.CommandLine;
 using Backbone.AdminCli.Configuration;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Microsoft.Extensions.Configuration;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -30,42 +28,5 @@ public static class IServiceCollectionExtensions
 #pragma warning restore ASP0000
 
         services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-        services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
-    }
-
-    public static IServiceCollection AddAnnouncementsModule(this IServiceCollection services, IConfiguration configuration)
-    {
-        Modules.Announcements.Application.Extensions.IServiceCollectionExtensions.AddApplication(services);
-        Modules.Announcements.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-        {
-            options.Provider = configuration["Modules:Announcements:Infrastructure:SqlDatabase:Provider"]!;
-            options.ConnectionString = configuration["Modules:Announcements:Infrastructure:SqlDatabase:ConnectionString"]!;
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddDevicesModule(this IServiceCollection services, IConfiguration configuration)
-    {
-        Modules.Devices.Application.Extensions.IServiceCollectionExtensions.AddApplication(services, configuration.GetSection("Modules:Devices:Application"));
-        Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
-        {
-            options.Provider = configuration["Modules:Devices:Infrastructure:SqlDatabase:Provider"]!;
-            options.ConnectionString = configuration["Modules:Devices:Infrastructure:SqlDatabase:ConnectionString"]!;
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddTokensModule(this IServiceCollection services, IConfiguration configuration)
-    {
-        Modules.Tokens.Application.Extensions.IServiceCollectionExtensions.AddApplication(services, configuration.GetSection("Modules:Tokens:Application"));
-        Modules.Tokens.Infrastructure.Persistence.IServiceCollectionExtensions.AddPersistence(services, options =>
-        {
-            options.DbOptions.Provider = configuration["Modules:Tokens:Infrastructure:SqlDatabase:Provider"]!;
-            options.DbOptions.DbConnectionString = configuration["Modules:Tokens:Infrastructure:SqlDatabase:ConnectionString"]!;
-        });
-
-        return services;
     }
 }

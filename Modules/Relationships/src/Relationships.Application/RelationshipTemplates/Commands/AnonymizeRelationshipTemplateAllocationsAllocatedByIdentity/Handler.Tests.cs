@@ -62,6 +62,6 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IRelationshipTemplatesRepository mockRepository)
     {
-        return new Handler(mockRepository, Options.Create(new ApplicationOptions { DidDomainName = "localhost" }));
+        return new Handler(mockRepository, Options.Create(new ApplicationConfiguration { DidDomainName = "localhost" }));
     }
 }

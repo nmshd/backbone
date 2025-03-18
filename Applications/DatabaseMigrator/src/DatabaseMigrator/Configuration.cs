@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 namespace Backbone.DatabaseMigrator;
 
@@ -11,17 +12,5 @@ public class Configuration
 public class InfrastructureConfiguration
 {
     [Required]
-    public SqlDatabaseConfiguration SqlDatabase { get; set; } = null!;
-}
-
-public class SqlDatabaseConfiguration
-{
-    [Required]
-    public string Provider { get; set; } = null!;
-
-    [Required]
-    public string ConnectionString { get; set; } = null!;
-
-    [Range(1, int.MaxValue)]
-    public int CommandTimeout { get; set; } = 300;
+    public DatabaseConfiguration SqlDatabase { get; set; } = null!;
 }

@@ -9,19 +9,19 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessa
 public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 {
     private readonly IMessagesRepository _messagesRepository;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public Handler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions)
+    public Handler(IMessagesRepository messagesRepository, IOptions<ApplicationConfiguration> applicationOptions)
     {
         _messagesRepository = messagesRepository;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
     }
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
         var messages = await _messagesRepository.Find(Message.HasParticipant(request.IdentityAddress), cancellationToken);
 
-        var newIdentityAddress = IdentityAddress.GetAnonymized(_applicationOptions.DidDomainName);
+        var newIdentityAddress = IdentityAddress.GetAnonymized(_applicationConfiguration.DidDomainName);
 
         foreach (var message in messages)
         {

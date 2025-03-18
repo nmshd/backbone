@@ -35,12 +35,12 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
     {
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
-        var options = new OptionsWrapper<ApnsOptions>(new ApnsOptions
+        var options = new OptionsWrapper<ApnsConfiguration>(new ApnsConfiguration
         {
-            Keys = new Dictionary<string, ApnsOptions.Key>
+            Keys = new Dictionary<string, ApnsConfiguration.Key>
             {
                 {
-                    "test-key-name", new ApnsOptions.Key
+                    "test-key-name", new ApnsConfiguration.Key
                     {
                         PrivateKey = "some-private-key",
                         TeamId = "some-team-id",
@@ -48,9 +48,9 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
                     }
                 }
             },
-            Bundles = new Dictionary<string, ApnsOptions.Bundle>
+            Bundles = new Dictionary<string, ApnsConfiguration.Bundle>
             {
-                { APP_ID, new ApnsOptions.Bundle { KeyName = "test-key-name" } }
+                { APP_ID, new ApnsConfiguration.Bundle { KeyName = "test-key-name" } }
             }
         });
         var jwtGenerator = A.Dummy<IJwtGenerator>();

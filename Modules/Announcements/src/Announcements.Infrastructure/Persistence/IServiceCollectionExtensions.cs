@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Announcements.Infrastructure.Persistence;
@@ -21,5 +22,5 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
+    public DatabaseConfiguration DbOptions { get; set; } = new();
 }

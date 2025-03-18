@@ -14,7 +14,7 @@ public static class IServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services, IConfiguration applicationConfiguration)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(applicationConfiguration.Bind);
+        services.ConfigureAndValidate<ApplicationConfiguration>(applicationConfiguration.Bind);
 
         applicationConfiguration.GetSection("IdentityDeletion").Bind(IdentityDeletionConfiguration.Instance);
 

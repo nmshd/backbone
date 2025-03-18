@@ -6,10 +6,10 @@ namespace Backbone.EventHandlerService;
 public class EventHandlerService : IHostedService
 {
     private readonly IEventBus _eventBus;
-    private readonly IEnumerable<AbstractModule> _modules;
+    private readonly IEnumerable<IEventBusConfigurator> _modules;
     private readonly ILogger<EventHandlerService> _logger;
 
-    public EventHandlerService(IEventBus eventBus, IEnumerable<AbstractModule> modules, ILogger<EventHandlerService> logger)
+    public EventHandlerService(IEventBus eventBus, IEnumerable<IEventBusConfigurator> modules, ILogger<EventHandlerService> logger)
     {
         _eventBus = eventBus;
         _modules = modules;

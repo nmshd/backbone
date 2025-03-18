@@ -1,16 +1,16 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.EventHandlerService;
-using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.Module;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -19,8 +19,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.Module.Configuration;
-
+using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -79,22 +78,20 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddTransient<IHostedService, EventHandlerService>();
 
             services
-                .AddModule<DevicesModule>(configuration)
-                .AddModule<RelationshipsModule>(configuration)
-                .AddModule<ChallengesModule>(configuration)
-                .AddModule<FilesModule>(configuration)
-                .AddModule<MessagesModule>(configuration)
-                .AddModule<QuotasModule>(configuration)
-                .AddModule<SynchronizationModule>(configuration)
-                .AddModule<TokensModule>(configuration);
+                .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+                .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+                    Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+                    Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-            var devicesConfiguration = new DevicesConfiguration();
-            configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-            services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

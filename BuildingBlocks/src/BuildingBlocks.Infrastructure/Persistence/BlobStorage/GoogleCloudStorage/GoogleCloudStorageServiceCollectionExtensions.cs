@@ -9,13 +9,13 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleC
 
 public static class GoogleCloudStorageServiceCollectionExtensions
 {
-    public static void AddGoogleCloudStorage(this IServiceCollection services, GoogleCloudStorageOptions options)
+    public static void AddGoogleCloudStorage(this IServiceCollection services, GoogleCloudStorageConfiguration configuration)
     {
         services.AddSingleton(_ =>
         {
-            var storageClient = options.ServiceAccountJson.IsNullOrEmpty()
+            var storageClient = configuration.ServiceAccountJson.IsNullOrEmpty()
                 ? StorageClient.Create()
-                : StorageClient.Create(GoogleCredential.FromJson(options.ServiceAccountJson));
+                : StorageClient.Create(GoogleCredential.FromJson(configuration.ServiceAccountJson));
             return storageClient;
         });
 
@@ -23,7 +23,7 @@ public static class GoogleCloudStorageServiceCollectionExtensions
     }
 }
 
-public class GoogleCloudStorageOptions
+public class GoogleCloudStorageConfiguration
 {
     public required string? ServiceAccountJson { get; set; }
 

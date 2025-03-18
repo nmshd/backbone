@@ -20,20 +20,20 @@ public class FilesRepository : IFilesRepository
     private readonly IQueryable<File> _readOnlyFiles;
     private readonly FilesDbContext _dbContext;
     private readonly IBlobStorage _blobStorage;
-    private readonly BlobOptions _blobOptions;
+    private readonly BlobConfiguration _blobConfiguration;
 
-    public FilesRepository(FilesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions)
+    public FilesRepository(FilesDbContext dbContext, IBlobStorage blobStorage, IOptions<BlobConfiguration> blobOptions)
     {
         _files = dbContext.FileMetadata;
         _readOnlyFiles = dbContext.FileMetadata.AsNoTracking();
         _dbContext = dbContext;
         _blobStorage = blobStorage;
-        _blobOptions = blobOptions.Value;
+        _blobConfiguration = blobOptions.Value;
     }
 
     public async Task Add(File file, CancellationToken cancellationToken)
     {
-        _blobStorage.Add(_blobOptions.RootFolder, file.Id, file.Content);
+        _blobStorage.Add(_blobConfiguration.RootFolder, file.Id, file.Content);
         await _files.AddAsync(file, cancellationToken);
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -41,7 +41,7 @@ public class FilesRepository : IFilesRepository
 
     public async Task Delete(File file, CancellationToken cancellationToken)
     {
-        _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
+        _blobStorage.Remove(_blobConfiguration.RootFolder, file.Id);
         _files.Remove(file);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -53,7 +53,7 @@ public class FilesRepository : IFilesRepository
         var files = _files.Where(filter);
         foreach (var file in files)
         {
-            _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
+            _blobStorage.Remove(_blobConfiguration.RootFolder, file.Id);
         }
 
         _files.RemoveRange(files);
@@ -76,7 +76,7 @@ public class FilesRepository : IFilesRepository
 
         if (fillContent)
         {
-            var fileContent = await _blobStorage.FindAsync(_blobOptions.RootFolder, fileId);
+            var fileContent = await _blobStorage.FindAsync(_blobConfiguration.RootFolder, fileId);
             file.LoadContent(fileContent);
         }
 

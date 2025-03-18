@@ -15,7 +15,7 @@ namespace Backbone.AdminApi.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize("ApiKey")]
-public class TokensController(IMediator mediator, IOptions<ApplicationOptions> options) : ApiControllerBase(mediator)
+public class TokensController(IMediator mediator, IOptions<ApplicationConfiguration> options) : ApiControllerBase(mediator)
 {
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TokenDTO>>), StatusCodes.Status200OK)]

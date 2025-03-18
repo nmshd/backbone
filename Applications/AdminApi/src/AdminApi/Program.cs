@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
@@ -9,11 +8,16 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.Module;
+using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -23,7 +27,8 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -95,10 +100,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSingleton<ApiKeyValidator>();
 
-    services.ConfigureAndValidate<AdminConfiguration>(configuration.Bind);
+    services.ConfigureAndValidate<AdminApiConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
 #pragma warning restore ASP0000
 
@@ -107,12 +112,16 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
-        .AddDevices(configuration.GetSection("Modules:Devices"))
-        .AddTokens(configuration.GetSection("Modules:Tokens"))
-        .AddQuotas(parsedConfiguration.Modules.Quotas)
-        .AddAnnouncements(parsedConfiguration.Modules.Announcements)
-        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
+
+
+    services
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+
 
     services
         .AddOpenIddict()
@@ -129,7 +138,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
@@ -163,7 +171,7 @@ static void Configure(WebApplication app)
         .UseMiddleware<TraceIdMiddleware>()
         .UseMiddleware<CorrelationIdMiddleware>();
 
-    var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var configuration = app.Services.GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
     app.UseSerilogRequestLogging(opts =>
     {

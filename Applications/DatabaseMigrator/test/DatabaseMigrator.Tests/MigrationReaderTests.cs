@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
@@ -52,7 +53,7 @@ public class MigrationReaderTests : AbstractTestsBase
         var services = new ServiceCollection();
 
         services.AddSingleton<IEventBus, DummyEventBus>();
-        services.AddAllDbContexts(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = dbConnectionString });
+        services.AddAllDbContexts(new DatabaseConfiguration { Provider = "Postgres", ConnectionString = dbConnectionString });
         services.AddSingleton<DbContextProvider>();
         services.AddSingleton<MigrationReader>();
 

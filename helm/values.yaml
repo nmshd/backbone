@@ -606,6 +606,21 @@ global:
         provider: ""
         # connectionString - should be set via environment variable
         connectionString: ""
+    # moduleDefaults - the default configuration for all modules; this is used if a module-specific configuration is not set
+    moduleDefaults:
+      application:
+        # didDomainName - the didDomainName that should be used when generating Identity Addresses
+        didDomainName: ""
+        # pagination - the following options describe the default and maximum page size for the different endpoints
+        pagination:
+          defaultPageSize: 50
+          maxPageSize: 200
+      infrastructure:
+        sqlDatabase:
+          # provider - possible values: "Postgres"/"SqlServer"
+          provider: ""
+          # connectionString - should be set via environment variable
+          connectionString: ""
     modules:
       announcements:
         application:

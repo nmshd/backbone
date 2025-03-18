@@ -33,11 +33,11 @@ namespace Backbone.ConsumerApi.Controllers.Relationships;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class RelationshipsController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public RelationshipsController(IMediator mediator, IOptions<ApplicationConfiguration> options) : base(mediator)
     {
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpGet("{id}")]
@@ -57,10 +57,10 @@ public class RelationshipsController : ApiControllerBase
     {
         var request = new ListRelationshipsQuery(paginationFilter, ids);
 
-        request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        request.PaginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         var relationships = await _mediator.Send(request, cancellationToken);
         return Paged(relationships);
