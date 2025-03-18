@@ -551,7 +551,7 @@ global:
   env: []
         
   # provider - possible values: "Azure"/"GoogleCloud"
-  provider: ""
+  # provider: ""
 
   serviceAccount:
     create: false
@@ -562,9 +562,7 @@ global:
   configuration:
     authentication:
       jwtLifetimeInSeconds: 300
-      # jwtSigningCertificateSource - possible values: "config"/"file"
-      jwtSigningCertificateSource: "config"
-      # jwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
+      # jwtSigningCertificate - a base64 string containing the certificate that is used to sign the JWTs
       jwtSigningCertificate: ""
     cors:
       # allowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
@@ -592,7 +590,7 @@ global:
         # # azureServiceBus - only applicable if productName is "AzureServiceBus"
         # azureServiceBus:
         #   # connectionString - the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
-        #   connectionString: ""
+        # connectionString: ""
         # # googleCloudPubSub - only applicable if productName is "GoogleCloudPubSub"
         # googleCloudPubSub:
         #   # projectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
@@ -610,7 +608,7 @@ global:
     moduleDefaults:
       application:
         # didDomainName - the didDomainName that should be used when generating Identity Addresses
-        didDomainName: ""
+        # didDomainName: ""
         # pagination - the following options describe the default and maximum page size for the different endpoints
         pagination:
           defaultPageSize: 50
@@ -622,39 +620,40 @@ global:
           # connectionString - should be set via environment variable
           connectionString: ""
     modules:
-      announcements:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+      # announcements:
+      #   application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      challenges:
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # challenges:
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
       devices:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
+        infrastructure:
           pushNotifications:
             providers:
               sse:
@@ -691,20 +690,20 @@ global:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
       files:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
+        # application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
         infrastructure:
-          sqlDatabase:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-          blobStorage:
+            # connectionString: ""
+          blobStorage: {}
             # productName - possible values: "AzureStorageAccount"/"GoogleCloudStorage"
-            productName: ""
+            # productName: ""
             # azureStorageAccount - only applicable if productName is "AzureStorageAccount"
             # azureStorageAccount:
               # containerName - the name of the container that should be used to store the files
@@ -730,71 +729,71 @@ global:
       messages:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
+          # didDomainName: ""
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
           maxNumberOfUnreceivedMessagesFromOneSender: 20
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      quotas:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # quotas:
+        # application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      relationships:
-        application:
+            # connectionString: ""
+      # relationships:
+      #   application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      synchronization:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # synchronization:
+      #   application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      tokens:
-        application:
+            # connectionString: ""
+      # tokens:
+      #   application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
     logging:
       minimumLevel:
         default: Error
