@@ -5,97 +5,28 @@
             "ConnectionInfo": "localhost"
         }
     },
+    "ModuleDefaults": {
+        "Application": {
+            "DidDomainName": "localhost",
+            "MaxNumberOfMessageRecipients": 5
+        },
+        "Infrastructure": {
+            "SqlDatabase": {
+                "Provider": "Postgres",
+                "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;" // postgres
+                // "ConnectionString": "Server=localhost;Database=enmeshed;User Id=sa;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
+            }
+        }
+    },
     "Modules": {
-        "Announcements": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;" // postgres
-                    // "ConnectionString": "Server=localhost;Database=enmeshed;User Id=sa;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
-                }
-            }
-        },
-        "Challenges": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
-        "Quotas": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
-        "Devices": {
-            "Application": {
-                "DidDomainName": "localhost"
-            },
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
         "Files": {
             "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                },
                 "BlobStorage": {
                     "ProductName": "AzureStorageAccount",
                     "AzureStorageAccount": {
                         "ContainerName": "files",
                         "ConnectionString": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1;"
                     }
-                }
-            }
-        },
-        "Messages": {
-            "Application": {
-                "DidDomainName": "localhost",
-                "MaxNumberOfMessageRecipients": 5
-            },
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
-        "Relationships": {
-            "Application": {
-                "DidDomainName": "localhost"
-            },
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
-        "Synchronization": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
-                }
-            }
-        },
-        "Tokens": {
-            "Application": {
-                "DidDomainName": "localhost"
-            },
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=postgres;Password=admin;Server=localhost;Port=5432;Database=enmeshed;"
                 }
             }
         }
