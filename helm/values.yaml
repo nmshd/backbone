@@ -562,9 +562,7 @@ global:
   configuration:
     authentication:
       jwtLifetimeInSeconds: 300
-      # jwtSigningCertificateSource - possible values: "config"/"file"
-      jwtSigningCertificateSource: "config"
-      # jwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
+      # jwtSigningCertificate - a base64 string containing the certificate that is used to sign the JWTs
       jwtSigningCertificate: ""
     cors:
       # allowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
