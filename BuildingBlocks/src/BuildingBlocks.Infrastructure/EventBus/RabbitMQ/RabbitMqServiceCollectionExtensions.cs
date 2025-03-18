@@ -8,7 +8,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public static class RabbitMqServiceCollectionExtensions
 {
-    public static void AddRabbitMq(this IServiceCollection services, RabbitMqOptions options)
+    public static void AddRabbitMq(this IServiceCollection services, RabbitMqConfiguration configuration)
     {
         services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         {
@@ -16,24 +16,24 @@ public static class RabbitMqServiceCollectionExtensions
 
             var factory = new ConnectionFactory
             {
-                HostName = options.HostName,
-                Port = options.Port,
+                HostName = configuration.HostName,
+                Port = configuration.Port,
             };
 
-            if (options.EnableSsl)
+            if (configuration.EnableSsl)
             {
                 factory.Ssl = new SslOption
                 {
                     Enabled = true,
-                    ServerName = options.HostName
+                    ServerName = configuration.HostName
                 };
             }
 
-            if (!string.IsNullOrEmpty(options.Username))
-                factory.UserName = options.Username;
+            if (!string.IsNullOrEmpty(configuration.Username))
+                factory.UserName = configuration.Username;
 
-            if (!string.IsNullOrEmpty(options.Password))
-                factory.Password = options.Password;
+            if (!string.IsNullOrEmpty(configuration.Password))
+                factory.Password = configuration.Password;
 
             return new DefaultRabbitMqPersistentConnection(factory, logger);
         });
@@ -43,12 +43,12 @@ public static class RabbitMqServiceCollectionExtensions
             var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
 
-            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, options.ExchangeName).GetAwaiter().GetResult();
+            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, configuration.ExchangeName).GetAwaiter().GetResult();
         });
     }
 }
 
-public class RabbitMqOptions
+public class RabbitMqConfiguration
 {
     [Required]
     public bool EnableSsl { get; set; } = true;

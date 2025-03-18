@@ -11,7 +11,7 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Validator : AbstractValidator<SendMessageCommand>
 {
-    public Validator(IOptions<ApplicationOptions> options)
+    public Validator(IOptions<ApplicationConfiguration> options)
     {
         RuleFor(m => m.Recipients)
             .DetailedNotNull()

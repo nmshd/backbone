@@ -7,29 +7,29 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 public static class S3ServiceCollectionExtensions
 {
     public static void AddS3(this IServiceCollection services,
-        Action<S3BucketOptions> setupOptions)
+        Action<S3BucketConfiguration> setupOptions)
     {
-        var options = new S3BucketOptions();
+        var options = new S3BucketConfiguration();
         setupOptions.Invoke(options);
 
         services.AddS3(options);
     }
 
-    public static void AddS3(this IServiceCollection services, S3BucketOptions options)
+    public static void AddS3(this IServiceCollection services, S3BucketConfiguration configuration)
     {
-        services.Configure<S3BucketOptions>(s3Options =>
+        services.Configure<S3BucketConfiguration>(s3Options =>
         {
-            s3Options.BucketName = options.BucketName;
-            s3Options.AccessKeyId = options.AccessKeyId;
-            s3Options.SecretAccessKey = options.SecretAccessKey;
-            s3Options.ServiceUrl = options.ServiceUrl;
+            s3Options.BucketName = configuration.BucketName;
+            s3Options.AccessKeyId = configuration.AccessKeyId;
+            s3Options.SecretAccessKey = configuration.SecretAccessKey;
+            s3Options.ServiceUrl = configuration.ServiceUrl;
         });
 
         services.AddScoped<IBlobStorage, S3BlobStorage>();
     }
 }
 
-public class S3BucketOptions
+public class S3BucketConfiguration
 {
     [Required]
     public string ServiceUrl { get; set; } = string.Empty;

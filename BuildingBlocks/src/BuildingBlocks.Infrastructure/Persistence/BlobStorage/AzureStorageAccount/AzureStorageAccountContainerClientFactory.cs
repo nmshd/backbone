@@ -9,13 +9,13 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureSt
 public class AzureStorageAccountContainerClientFactory
 {
     private readonly ILogger<AzureStorageAccountContainerClientFactory> _logger;
-    private readonly AzureStorageAccountOptions _options;
+    private readonly AzureStorageAccountConfiguration _configuration;
     private readonly Dictionary<string, BlobContainerClient> _containerClients = new();
 
-    public AzureStorageAccountContainerClientFactory(IOptions<AzureStorageAccountOptions> options, ILogger<AzureStorageAccountContainerClientFactory> logger)
+    public AzureStorageAccountContainerClientFactory(IOptions<AzureStorageAccountConfiguration> options, ILogger<AzureStorageAccountContainerClientFactory> logger)
     {
         _logger = logger;
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     public BlobContainerClient GetContainerClient(string containerName)
@@ -34,12 +34,11 @@ public class AzureStorageAccountContainerClientFactory
 
             return newContainer;
         }
-
     }
 
     private BlobContainerClient CreateContainerClient(string containerName)
     {
-        var newContainer = new BlobContainerClient(_options.ConnectionString, containerName);
+        var newContainer = new BlobContainerClient(_configuration.ConnectionString, containerName);
         newContainer.CreateIfNotExists();
 
         try

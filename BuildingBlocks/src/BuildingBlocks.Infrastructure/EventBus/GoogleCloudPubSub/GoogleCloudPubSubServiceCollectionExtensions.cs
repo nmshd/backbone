@@ -7,18 +7,18 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public static class GoogleCloudPubSubServiceCollectionExtensions
 {
-    public static void AddGoogleCloudPubSub(this IServiceCollection services, GoogleCloudPubSubOptions options)
+    public static void AddGoogleCloudPubSub(this IServiceCollection services, GoogleCloudPubSubConfiguration configuration)
     {
         services.AddSingleton<IEventBus, EventBusGoogleCloudPubSub>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<EventBusGoogleCloudPubSub>>();
 
-            return new EventBusGoogleCloudPubSub(logger, sp, options.ProjectId, options.TopicName, options.ServiceAccountJson);
+            return new EventBusGoogleCloudPubSub(logger, sp, configuration.ProjectId, configuration.TopicName, configuration.ServiceAccountJson);
         });
     }
 }
 
-public class GoogleCloudPubSubOptions
+public class GoogleCloudPubSubConfiguration
 {
     [Required]
     [Length(4, 30)]

@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -16,13 +17,13 @@ public static class ServiceCollectionExtensions
     {
         switch (provider)
         {
-            case "SqlServer":
+            case IServiceCollectionExtensions.SQLSERVER:
                 services.AddHealthChecks().AddSqlServer(
                     connectionString,
                     name: $"{name}Database"
                 );
                 break;
-            case "Postgres":
+            case IServiceCollectionExtensions.POSTGRES:
                 services.AddHealthChecks().AddNpgSql(
                     connectionString: connectionString,
                     name: $"{name}Database"
@@ -33,16 +34,19 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : AbstractModule, new()
+    public static IServiceCollection AddModule<TModule, TApplicationConfiguration, TInfrastructureConfiguration>(this IServiceCollection services, IConfiguration configuration)
+        where TModule : AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>, new()
+        where TApplicationConfiguration : class
+        where TInfrastructureConfiguration : class
     {
         var module = new TModule();
 
         var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
 
-        module.ConfigureServices(services, moduleConfiguration);
+        module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
 
-        services.AddSingleton<AbstractModule>(module);
+        services.AddSingleton<IPostStartupValidator>(module);
+        services.AddSingleton<IEventBusConfigurator>(module);
 
         return services;
     }

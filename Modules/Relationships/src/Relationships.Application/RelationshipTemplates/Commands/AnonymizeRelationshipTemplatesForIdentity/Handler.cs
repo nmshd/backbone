@@ -9,12 +9,12 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class Handler : IRequestHandler<AnonymizeRelationshipTemplatesForIdentityCommand>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IOptions<ApplicationOptions> options)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IOptions<ApplicationConfiguration> options)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
-        _applicationOptions = options.Value;
+        _applicationConfiguration = options.Value;
     }
 
     public async Task Handle(AnonymizeRelationshipTemplatesForIdentityCommand request, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplatesForIdentity
         var relationshipTemplates = (await _relationshipTemplatesRepository.FindTemplates(RelationshipTemplate.IsFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken)).ToList();
 
         foreach (var relationshipTemplate in relationshipTemplates)
-            relationshipTemplate.AnonymizeForIdentity(_applicationOptions.DidDomainName);
+            relationshipTemplate.AnonymizeForIdentity(_applicationConfiguration.DidDomainName);
 
         await _relationshipTemplatesRepository.Update(relationshipTemplates, cancellationToken);
     }

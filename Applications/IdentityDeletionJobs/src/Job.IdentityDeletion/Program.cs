@@ -3,16 +3,16 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
@@ -21,7 +21,6 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using Configuration = Backbone.Modules.Devices.Module.Configuration;
 
 namespace Backbone.Job.IdentityDeletion;
 
@@ -88,15 +87,17 @@ public class Program
                 services.AddTransient(typeof(IHostedService), worker);
 
                 services
-                    .AddModule<AnnouncementsModule>(configuration)
-                    .AddModule<DevicesModule>(configuration)
-                    .AddModule<RelationshipsModule>(configuration)
-                    .AddModule<ChallengesModule>(configuration)
-                    .AddModule<FilesModule>(configuration)
-                    .AddModule<MessagesModule>(configuration)
-                    .AddModule<QuotasModule>(configuration)
-                    .AddModule<SynchronizationModule>(configuration)
-                    .AddModule<TokensModule>(configuration);
+                    .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<FilesModule, Modules.Files.Application.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<MessagesModule, Modules.Messages.Application.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<QuotasModule, Modules.Quotas.Application.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration,
+                        Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
+                        Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
@@ -108,10 +109,6 @@ public class Program
                 services.RegisterIdentityDeleters();
 
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-                var devicesConfiguration = new Configuration();
-                configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-                services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration

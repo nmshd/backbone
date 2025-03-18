@@ -1,30 +1,42 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Controllers.Relationships;
 
 [Route("api/poc/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
-[ApiExplorerSettings(IgnoreApi = true)] // don't show this endpoints of this controller in the API docs as it's just a PoC
+[ApiExplorerSettings(IgnoreApi = true)] // don't show the endpoints of this controller in the API docs as it's just a PoC
 public class PublicRelationshipTemplateReferencesController : ApiControllerBase
 {
-    private readonly Modules.Relationships.Module.Configuration _options;
+    private readonly Dictionary<string, IEnumerable<PublicRelationshipTemplateReferenceDefinition>> _publicRelationshipTemplateReferenceDefinitions = [];
 
-    public PublicRelationshipTemplateReferencesController(IMediator mediator, IOptions<Modules.Relationships.Module.Configuration> options) : base(mediator)
+    public PublicRelationshipTemplateReferencesController(IMediator mediator, IConfiguration configuration) : base(mediator)
     {
-        _options = options.Value;
+        configuration.GetSection("Modules:Relationships:PublicRelationshipTemplateReferences").Bind(_publicRelationshipTemplateReferenceDefinitions);
     }
 
     [HttpGet]
     public IActionResult ListPublicRelationshipTemplateReferences(IUserContext userContext)
     {
         var clientId = userContext.GetClientId();
-        var response = _options.PublicRelationshipTemplateReferences.GetValueOrDefault(clientId) ?? [];
+        var response = _publicRelationshipTemplateReferenceDefinitions.GetValueOrDefault(clientId) ?? [];
 
         return Ok(response);
     }
+}
+
+public class PublicRelationshipTemplateReferenceDefinition
+{
+    [Required]
+    public string Title { get; set; } = string.Empty;
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+
+    [Required]
+    public string TruncatedReference { get; set; } = string.Empty;
 }

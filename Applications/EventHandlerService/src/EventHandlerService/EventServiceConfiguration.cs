@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.EventHandlerService;
 
@@ -12,5 +12,5 @@ public class EventServiceConfiguration
 public class InfrastructureConfiguration
 {
     [Required]
-    public EventBusOptions EventBus { get; set; } = new();
+    public EventBusConfiguration EventBus { get; set; } = new();
 }

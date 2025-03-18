@@ -9,12 +9,12 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.AnonymizeTokensFor
 public class Handler : IRequestHandler<AnonymizeTokensForIdentityCommand>
 {
     private readonly ITokensRepository _tokensRepository;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public Handler(ITokensRepository tokensRepository, IOptions<ApplicationOptions> applicationOptions)
+    public Handler(ITokensRepository tokensRepository, IOptions<ApplicationConfiguration> applicationOptions)
     {
         _tokensRepository = tokensRepository;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
     }
 
     public async Task Handle(AnonymizeTokensForIdentityCommand request, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<AnonymizeTokensForIdentityCommand>
         var tokens = (await _tokensRepository.FindTokens(Token.IsFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken)).ToList();
 
         foreach (var token in tokens)
-            token.AnonymizeForIdentity(_applicationOptions.DidDomainName);
+            token.AnonymizeForIdentity(_applicationConfiguration.DidDomainName);
 
         await _tokensRepository.Update(tokens, cancellationToken);
     }

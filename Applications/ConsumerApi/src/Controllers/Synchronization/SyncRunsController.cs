@@ -26,12 +26,12 @@ namespace Backbone.ConsumerApi.Controllers.Synchronization;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class SyncRunsController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
     private readonly IUserContext _userContext;
 
-    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options, IUserContext userContext) : base(mediator)
+    public SyncRunsController(IMediator mediator, IOptions<ApplicationConfiguration> options, IUserContext userContext) : base(mediator)
     {
-        _options = options.Value;
+        _configuration = options.Value;
         _userContext = userContext;
     }
 
@@ -82,10 +82,10 @@ public class SyncRunsController : ApiControllerBase
     public async Task<IActionResult> GetExternalEventsOfSyncRun([FromRoute] string id,
         [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         var response = await _mediator.Send(new GetExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
 

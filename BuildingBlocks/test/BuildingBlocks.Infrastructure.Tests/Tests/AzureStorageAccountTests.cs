@@ -63,7 +63,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
         var services = new ServiceCollection()
             .AddLogging();
 
-        services.AddAzureStorageAccount(new AzureStorageAccountOptions
+        services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
         {
             ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;",
             ContainerName = "test"

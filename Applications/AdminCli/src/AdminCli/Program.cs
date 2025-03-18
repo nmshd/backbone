@@ -2,13 +2,19 @@ using System.CommandLine;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminCli.Configuration;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
 using RootCommand = Backbone.AdminCli.Commands.RootCommand;
 
 namespace Backbone.AdminCli;
@@ -62,9 +68,9 @@ public class Program
         services.AddCommonInfrastructure();
 
         services
-            .AddAnnouncementsModule(configuration)
-            .AddDevicesModule(configuration)
-            .AddTokensModule(configuration);
+            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+            .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+            .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);

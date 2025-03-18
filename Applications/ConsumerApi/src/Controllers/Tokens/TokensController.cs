@@ -21,11 +21,11 @@ namespace Backbone.ConsumerApi.Controllers.Tokens;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class TokensController : ApiControllerBase
 {
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
 
-    public TokensController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public TokensController(IMediator mediator, IOptions<ApplicationConfiguration> options) : base(mediator)
     {
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     [HttpPost]
@@ -59,10 +59,10 @@ public class TokensController : ApiControllerBase
 
         var request = new ListTokensQuery(paginationFilter, ids);
 
-        paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+        paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+        if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
         var response = await _mediator.Send(request, cancellationToken);
 

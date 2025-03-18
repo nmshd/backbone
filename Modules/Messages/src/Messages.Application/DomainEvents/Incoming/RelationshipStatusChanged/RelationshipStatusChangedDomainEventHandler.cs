@@ -12,14 +12,14 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly ILogger<RelationshipStatusChangedDomainEventHandler> _logger;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions,
+    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationConfiguration> applicationOptions,
         ILogger<RelationshipStatusChangedDomainEventHandler> logger)
     {
         _messagesRepository = messagesRepository;
         _logger = logger;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
     }
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
@@ -30,7 +30,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
             return;
         }
 
-        var anonymizedIdentityAddress = IdentityAddress.GetAnonymized(_applicationOptions.DidDomainName);
+        var anonymizedIdentityAddress = IdentityAddress.GetAnonymized(_applicationConfiguration.DidDomainName);
         var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {

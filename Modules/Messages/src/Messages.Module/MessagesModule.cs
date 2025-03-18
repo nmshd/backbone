@@ -3,36 +3,25 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Extensions;
+using Backbone.Modules.Messages.Infrastructure;
 using Backbone.Modules.Messages.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Module;
 
-public class MessagesModule : AbstractModule
+public class MessagesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Messages";
 
-    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-        services.ConfigureAndValidate<Configuration>(configuration.Bind);
-
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
-
-        services.AddPersistence(options =>
-        {
-            options.DbOptions.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-        });
+        services.AddPersistence(infrastructureConfiguration.SqlDatabase);
 
         services.AddApplication();
 
-        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name,
-                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
-                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override async Task ConfigureEventBus(IEventBus eventBus)

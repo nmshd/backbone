@@ -3,9 +3,12 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
+using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Microsoft.Extensions.Configuration;
@@ -14,30 +17,22 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module;
 
-public class DevicesModule : AbstractModule
+public class DevicesModule : AbstractModule<ApplicationConfiguration, InfrastructureConfiguration>
 {
     public override string Name => "Devices";
 
-    public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration)
     {
-        services.ConfigureAndValidate<Configuration>(configuration.Bind);
+        services.AddApplication(rawModuleConfiguration.GetSection("Application"));
 
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
-
-        services.AddApplication(configuration.GetSection("Application"));
-
-        services.AddDatabase(options =>
-        {
-            options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-        });
+        services.AddDatabase(infrastructureConfiguration.SqlDatabase);
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
-        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name,
-                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
-                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddPushNotifications(infrastructureConfiguration.PushNotifications);
+
+        if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override async Task ConfigureEventBus(IEventBus eventBus)
@@ -47,7 +42,7 @@ public class DevicesModule : AbstractModule
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
-        var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>();
+        var configuration = serviceProvider.GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
         var failingApnsBundleIds = new List<string>();
@@ -56,16 +51,16 @@ public class DevicesModule : AbstractModule
         var failingFcmAppIds = new List<string>();
         var supportedFcmAppIds = new List<string>();
 
-        if (configuration.Value.Infrastructure.PushNotifications.Providers.Apns is { Enabled: true })
+        if (configuration.PushNotifications.Providers.Apns is { Enabled: true })
         {
-            var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsOptions>>().Value;
+            var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsConfiguration>>().Value;
             supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
             failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds).GetAwaiter().GetResult();
         }
 
-        if (configuration.Value.Infrastructure.PushNotifications.Providers.Fcm is { Enabled: true })
+        if (configuration.PushNotifications.Providers.Fcm is { Enabled: true })
         {
-            var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmOptions>>().Value;
+            var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmConfiguration>>().Value;
             supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
             failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds).GetAwaiter().GetResult();
         }
