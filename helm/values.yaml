@@ -653,6 +653,7 @@ global:
             # provider: ""
             # connectionString - should be set via environment variable
             # connectionString: ""
+        infrastructure:
           pushNotifications:
             providers:
               sse:
