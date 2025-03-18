@@ -9,4 +9,5 @@ public interface IAnnouncementsRepository
     Task<List<Announcement>> FindAll(CancellationToken cancellationToken);
     Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken);
     Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken);
+    Task Delete(AnnouncementId id, CancellationToken cancellationToken);
 }

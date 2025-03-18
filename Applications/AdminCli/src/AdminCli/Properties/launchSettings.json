@@ -2,8 +2,9 @@
     "profiles": {
         "Start": {
             "commandName": "Project",
-            "commandLineArgs": "tier list",
+            "commandLineArgs": "announcement list",
             // enter an existing command here in order to debug it
+            //"commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy",
             //"commandLineArgs": "client list", // enter an existing command here in order to debug it
             //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100", // enter an existing command here in order to debug it
             //"commandLineArgs": "client delete test", // enter an existing command here in order to debug it

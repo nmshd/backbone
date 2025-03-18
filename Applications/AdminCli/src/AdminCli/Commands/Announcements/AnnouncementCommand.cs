@@ -4,8 +4,9 @@ namespace Backbone.AdminCli.Commands.Announcements;
 
 public class AnnouncementCommand : Command
 {
-    public AnnouncementCommand(SendAnnouncementCommand sendAnnouncementCommand) : base("announcement")
+    public AnnouncementCommand(SendAnnouncementCommand sendAnnouncementCommand, DeleteAnnouncementCommand deleteAnnouncementCommand) : base("announcement")
     {
         AddCommand(sendAnnouncementCommand);
+        AddCommand(deleteAnnouncementCommand);
     }
 }

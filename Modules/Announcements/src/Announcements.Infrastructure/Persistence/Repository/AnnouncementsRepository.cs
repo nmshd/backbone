@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
@@ -44,5 +45,11 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+    }
+    
+    public async Task Delete(AnnouncementId id, CancellationToken cancellationToken)
+    {
+        var announcement = await _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken) ?? throw new NotFoundException(nameof(Announcement));
+        await _announcements.Where(a => a.Id == id).ExecuteDeleteAsync(cancellationToken);
     }
 }
