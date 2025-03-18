@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
@@ -9,8 +10,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 
 public class AnnouncementsRepository : IAnnouncementsRepository
 {
-    private readonly DbSet<Announcement> _announcements;
     private readonly DbSet<AnnouncementRecipient> _announcementRecipients;
+    private readonly DbSet<Announcement> _announcements;
     private readonly AnnouncementsDbContext _dbContext;
     private readonly IQueryable<Announcement> _readOnlyAnnouncements;
 
@@ -44,5 +45,12 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+    }
+
+    public async Task Delete(AnnouncementId id, CancellationToken cancellationToken)
+    {
+        var announcement = await _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken) ??
+                           throw new NotFoundException(nameof(Announcement));
+        await _announcements.Where(a => a.Id == id).ExecuteDeleteAsync(cancellationToken);
     }
 }
