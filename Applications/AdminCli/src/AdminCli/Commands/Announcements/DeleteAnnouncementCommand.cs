@@ -24,7 +24,7 @@ public class DeleteAnnouncementCommand : AdminCliCommand
     {
         try
         {
-            await _mediator.Send(new DeleteAnnouncementByIdCommand(announcementId), CancellationToken.None);
+            await _mediator.Send(new DeleteAnnouncementByIdCommand { Id = announcementId });
             Console.WriteLine($@"Successfully deleted announcement with id '{announcementId}'");
         }
         catch (Exception e)

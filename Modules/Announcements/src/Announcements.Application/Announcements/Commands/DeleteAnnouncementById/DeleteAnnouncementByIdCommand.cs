@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
 
-public class DeleteAnnouncementByIdCommand(string id) : IRequest
+public class DeleteAnnouncementByIdCommand : IRequest
 {
-    public string Id { get; } = id;
+    public required string Id { get; init; }
 }

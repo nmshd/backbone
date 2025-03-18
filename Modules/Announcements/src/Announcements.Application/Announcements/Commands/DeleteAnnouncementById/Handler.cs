@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
@@ -19,9 +20,9 @@ public class Handler : IRequestHandler<DeleteAnnouncementByIdCommand>
     public async Task Handle(DeleteAnnouncementByIdCommand request, CancellationToken cancellationToken)
     {
         var parsedIdentityAddress = AnnouncementId.Parse(request.Id);
-        await _announcementsRepository.Delete(parsedIdentityAddress, cancellationToken);
-
-        _logger.AnnouncementDeleted();
+        var linesDeleted = await _announcementsRepository.Delete(parsedIdentityAddress, cancellationToken);
+        if (linesDeleted > 0) _logger.AnnouncementDeleted();
+        else throw new NotFoundException(nameof(Announcement));
     }
 }
 
