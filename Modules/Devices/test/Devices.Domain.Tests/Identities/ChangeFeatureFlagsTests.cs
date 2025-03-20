@@ -49,10 +49,10 @@ public class ChangeFeatureFlagsTests : AbstractTestsBase
     }
 
     [Theory]
-    [InlineData(true,false)]
-    [InlineData(false,true)]
-    [InlineData(true,true)]
-    [InlineData(false,false)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
     public void Changes_Existing_Feature_Flag(bool oldValue, bool newValue)
     {
         // Arrange
@@ -73,6 +73,5 @@ public class ChangeFeatureFlagsTests : AbstractTestsBase
 
         // Assert
         identity.FeatureFlags.GetFeatureFlag(name).IsEnabled.Should().Be(newValue);
-    }   
-
+    }
 }
