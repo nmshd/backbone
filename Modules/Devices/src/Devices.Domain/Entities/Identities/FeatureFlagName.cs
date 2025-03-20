@@ -13,4 +13,9 @@ public record FeatureFlagName
     {
         return new FeatureFlagName(value);
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }
