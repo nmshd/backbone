@@ -325,6 +325,10 @@ public class Identity : Entity
 
     public void ChangeFeatureFlags(Dictionary<FeatureFlagName, bool> featureFlags)
     {
+        foreach (var keyValuePair in featureFlags)
+        {
+            FeatureFlags.Set(keyValuePair.Key, keyValuePair.Value);
+        }
         RaiseDomainEvent(new FeatureFlagsOfIdentityChangedDomainEvent(this));
     }
 
@@ -351,28 +355,6 @@ public class Identity : Entity
     }
 
     #endregion
-}
-
-public class FeatureFlagSet
-{
-    private readonly List<FeatureFlag> _featureFlags = [];
-
-    public bool Contains(FeatureFlagName name)
-    {
-        return _featureFlags.Any(f => f.Name == name);
-    }
-}
-
-public class FeatureFlag
-{
-    public FeatureFlag()
-    {
-        IsEnabled = true;
-        Name = FeatureFlagName.Parse("");
-    }
-
-    public bool IsEnabled { get; }
-    public FeatureFlagName Name { get; }
 }
 
 public enum DeletionProcessStatus
