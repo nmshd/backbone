@@ -96,6 +96,7 @@ public class Identity : Entity
     public IdentityStatus Status { get; private set; }
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+    public FeatureFlagSet FeatureFlags { get; set; }
 
     public bool IsNew()
     {
@@ -322,6 +323,11 @@ public class Identity : Entity
         return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
 
+    public void ChangeFeatureFlags(Dictionary<FeatureFlagName, bool> featureFlags)
+    {
+        RaiseDomainEvent(new FeatureFlagsOfIdentityChangedDomainEvent(this));
+    }
+
     #region Expressions
 
     public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
@@ -345,6 +351,24 @@ public class Identity : Entity
     }
 
     #endregion
+}
+
+public class FeatureFlagSet
+{
+    private List<FeatureFlag> _featureFlags = [];
+    
+}
+
+public class FeatureFlag
+{
+    public FeatureFlag()
+    {
+        IsEnabled = true;
+    }
+    
+    public bool IsEnabled { get; }
+    public FeatureFlagName Name { get; }
+    
 }
 
 public enum DeletionProcessStatus
