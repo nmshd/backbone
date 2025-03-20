@@ -1,5 +1,6 @@
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Domain.Tests.FluentAssertions.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -17,7 +18,7 @@ public class ChangeFeatureFlagTests : AbstractTestsBase
             { firstName, true },
             { secondName, false }
         };
-        
+
         // Act
         identity.ChangeFeatureFlags(featureFlags);
 
@@ -37,11 +38,11 @@ public class ChangeFeatureFlagTests : AbstractTestsBase
             { newName, true }
         };
 
-        
+
         // Act
         identity.ChangeFeatureFlags(featureFlags);
-        
+
         // Assert
-        identity.FeatureFlags.Should().ContainKey(newName);
+        identity.FeatureFlags.Should().Contain(newName);
     }
 }
