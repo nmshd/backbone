@@ -96,7 +96,7 @@ public class Identity : Entity
     public IdentityStatus Status { get; private set; }
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
-    public FeatureFlagSet FeatureFlags { get; set; } = new();
+    public FeatureFlagSet FeatureFlags { get; } = new();
 
     public bool IsNew()
     {
