@@ -61,6 +61,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
 
+    public DbSet<FeatureFlag> FeatureFlags { get; set; } = null!;
+
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
         return Set<T>().AsNoTracking();
@@ -209,6 +211,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(IdentityDeletionProcessAuditLogEntryId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<FeatureFlagName>().AreUnicode().AreFixedLength(false)
+            .HaveMaxLength(FeatureFlagName.MAX_LENGTH).HaveConversion<FeatureFlagNameEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();

@@ -1,6 +1,8 @@
+using System.Collections;
+
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class FeatureFlagSet
+public class FeatureFlagSet : IEnumerable<FeatureFlag>
 {
     private readonly List<FeatureFlag> _featureFlags = [];
 
@@ -24,5 +26,15 @@ public class FeatureFlagSet
     public FeatureFlag GetFeatureFlag(FeatureFlagName name)
     {
         return _featureFlags.First(f => f.Name == name);
+    }
+
+    public IEnumerator<FeatureFlag> GetEnumerator()
+    {
+        return _featureFlags.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
