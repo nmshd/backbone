@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class FeatureFlagSet : IEnumerable<FeatureFlag>
+public class FeatureFlagSet : ICollection<FeatureFlag>
 {
     private readonly List<FeatureFlag> _featureFlags = [];
 
@@ -37,4 +37,33 @@ public class FeatureFlagSet : IEnumerable<FeatureFlag>
     {
         return GetEnumerator();
     }
+
+    // TODO: try to make this pretty
+    public void Add(FeatureFlag item)
+    {
+        Set(item.Name, item.IsEnabled);
+    }
+
+    public void Clear()
+    {
+        _featureFlags.Clear();
+    }
+
+    public bool Contains(FeatureFlag item)
+    {
+        return _featureFlags.Contains(item);
+    }
+
+    public void CopyTo(FeatureFlag[] array, int arrayIndex)
+    {
+        _featureFlags.CopyTo(array, arrayIndex);
+    }
+
+    public bool Remove(FeatureFlag item)
+    {
+        return _featureFlags.Remove(item);
+    }
+
+    public int Count => _featureFlags.Count;
+    public bool IsReadOnly => false;
 }
