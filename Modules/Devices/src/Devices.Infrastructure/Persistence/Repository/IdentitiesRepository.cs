@@ -203,4 +203,10 @@ public class IdentitiesRepository : IIdentitiesRepository
         _identityDeletionProcessAuditLogs.UpdateRange(auditLogEntries);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<FeatureFlagSet> GetAllFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken)
+    {
+        var featureFlags = await _dbContext.FeatureFlags.Where(f => f.OwnerAddress == identity).ToListAsync(cancellationToken);
+        return FeatureFlagSet.Load(featureFlags);
+    }
 }
