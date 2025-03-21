@@ -5,6 +5,13 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class FeatureFlag : Entity
 {
+    // ReSharper disable once UnusedMember.Local
+    private FeatureFlag()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Name = null!;
+    }
+
     public FeatureFlag(FeatureFlagName name, bool isEnabled)
     {
         Name = name;
@@ -34,15 +41,19 @@ public record FeatureFlagName
 
     public static FeatureFlagName Parse(string value)
     {
-        if (!IsValid(value))
-            throw new ArgumentException($"Feature flag name cannot be longer than {MAX_LENGTH} characters.");
+        var validationResult = Validate(value);
+        if (validationResult != null)
+            throw new ArgumentException(validationResult);
 
         return new FeatureFlagName(value);
     }
 
-    public static bool IsValid(string value)
+    public static string? Validate(string value)
     {
-        return value.Length <= MAX_LENGTH;
+        if (value.Length > MAX_LENGTH)
+            return $"Feature flag name cannot be longer than {MAX_LENGTH} characters.";
+
+        return null;
     }
 
     public override string ToString()

@@ -7,7 +7,7 @@ public class ApiResponse<TResult> : IResponse
 {
     [MemberNotNullWhen(true, nameof(Result))]
     [MemberNotNullWhen(false, nameof(Error))]
-    public bool IsSuccess => Error == null;
+    public bool IsSuccess => (int)Status is >= 200 and < 300;
 
     [MemberNotNullWhen(false, nameof(Result))]
     [MemberNotNullWhen(true, nameof(Error))]

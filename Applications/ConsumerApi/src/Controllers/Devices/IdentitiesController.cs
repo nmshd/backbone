@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Commands.ChangeFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
@@ -141,6 +142,15 @@ public class IdentitiesController : ApiControllerBase
     {
         var response = await _mediator.Send(new IsIdentityOfUserDeletedQuery { Username = username }, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPatch("Self/FeatureFlags")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeFeatureFlags([FromBody] ChangeFeatureFlagsCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(request, cancellationToken);
+        return NoContent();
     }
 }
 

@@ -3,6 +3,8 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
@@ -105,6 +107,20 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = _isDeletedResponse = await _clientPool.Anonymous.Identities.IsDeleted(device.Result!.Username);
     }
 
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public async Task WhenISendsAPatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeature1EnabledAndFeature2Disabled(string identityName, string feature1State, string feature2State)
+    {
+        var featureFlags = new UpdateFeatureFlagsRequest
+        {
+            { "feature1", feature1State == "enabled" },
+            { "feature2", feature2State == "enabled" }
+        };
+
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+    }
+
     #endregion
 
     #region Then
@@ -119,6 +135,20 @@ internal class IdentitiesStepDefinitions
     public void ThenTheDeletionDateIsNotSet()
     {
         _isDeletedResponse!.Result!.DeletionDate.Should().BeNull();
+    }
+
+    [Then($@"the Backbone has persisted feature1 as (enabled|disabled) and feature2 as (enabled|disabled) for {RegexFor.SINGLE_THING}")]
+    public async Task ThenTheBackboneHasPersistedFeatureAsEnabledAndFeatureAsDisabled(string feature1State, string feature2State, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags();
+
+        response.IsSuccess.Should().BeTrue();
+
+        response.Result!.Should().HaveCount(2);
+        response.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "Enabled");
+        response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "Enabled");
     }
 
     #endregion
