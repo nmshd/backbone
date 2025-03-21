@@ -12,6 +12,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionPro
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -151,6 +152,17 @@ public class IdentitiesController : ApiControllerBase
     {
         await _mediator.Send(request, cancellationToken);
         return NoContent();
+    }
+
+    [HttpGet("{identityAddress}/FeatureFlags")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetFeatureFlagsResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetFeatureFlags([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    {
+        var request = new GetFeatureFlagsQuery { IdentityAddress = identityAddress };
+        var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
 }
 

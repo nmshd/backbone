@@ -11,8 +11,8 @@ public class FeatureFlagsEndpoint(EndpointClient client) : ConsumerApiEndpoint(c
         return await _client.Patch<EmptyResponse>($"api/{API_VERSION}/Identities/Self/FeatureFlags", request);
     }
 
-    public async Task<ApiResponse<GetFeatureFlagsResponse>> GetFeatureFlags()
+    public async Task<ApiResponse<GetFeatureFlagsResponse>> GetFeatureFlags(string identityAddress)
     {
-        return await _client.Get<GetFeatureFlagsResponse>($"api/{API_VERSION}/Identities/Self/FeatureFlags");
+        return await _client.Get<GetFeatureFlagsResponse>($"api/{API_VERSION}/Identities/{identityAddress}/FeatureFlags");
     }
 }

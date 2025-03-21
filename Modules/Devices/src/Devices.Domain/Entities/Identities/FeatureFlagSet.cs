@@ -6,6 +6,17 @@ public class FeatureFlagSet : ICollection<FeatureFlag>
 {
     private readonly List<FeatureFlag> _featureFlags = [];
 
+    public static FeatureFlagSet Load(List<FeatureFlag> featureFlags)
+    {
+        var featureFlagSet = new FeatureFlagSet();
+        foreach (var featureFlag in featureFlags)
+        {
+            featureFlagSet.Add(featureFlag);
+        }
+
+        return featureFlagSet;
+    }
+
     public bool Contains(FeatureFlagName name)
     {
         return _featureFlags.Any(f => f.Name == name);

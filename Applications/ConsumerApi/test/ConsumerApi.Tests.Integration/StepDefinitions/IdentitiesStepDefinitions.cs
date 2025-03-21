@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
@@ -142,13 +141,13 @@ internal class IdentitiesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var response = await client.FeatureFlags.GetFeatureFlags();
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
 
         response.IsSuccess.Should().BeTrue();
 
         response.Result!.Should().HaveCount(2);
-        response.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "Enabled");
-        response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "Enabled");
+        response.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "enabled");
+        response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
     }
 
     #endregion
