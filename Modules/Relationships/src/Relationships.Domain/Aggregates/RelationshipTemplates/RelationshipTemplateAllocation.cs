@@ -26,6 +26,7 @@ public class RelationshipTemplateAllocation : Entity
 
     public int Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public RelationshipTemplate RelationshipTemplate { get; } = null!;
     public IdentityAddress AllocatedBy { get; private set; }
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }
