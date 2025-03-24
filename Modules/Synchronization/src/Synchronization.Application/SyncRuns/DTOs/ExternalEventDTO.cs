@@ -37,6 +37,10 @@ public class ExternalEventDTO
             ExternalEventType.PeerDeletionCancelled => "PeerDeletionCancelled",
             ExternalEventType.PeerDeleted => "PeerDeleted",
 
+            ExternalEventType.TokenLocked => "TokenLocked",
+
+            ExternalEventType.PeerFeatureFlagsChanged => "PeerFeatureFlagsChanged",
+
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         };
     }
