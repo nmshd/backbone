@@ -20,7 +20,12 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
     {
         var allocations = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(a => a.RelationshipTemplate.CreatedBy == @event.IdentityAddress, CancellationToken.None);
 
-        var tasks = allocations.Select(allocation => _eventBus.Publish(new FeatureFlagsOfPeerChangedDomainEvent(allocation.AllocatedBy)));
+        var tasks = allocations.Select(allocation => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
+        {
+            PeerAddress = allocation.AllocatedBy,
+            NotifiedIdentityAddress = @event.IdentityAddress
+        }));
+
         await Task.WhenAll(tasks);
     }
 }
