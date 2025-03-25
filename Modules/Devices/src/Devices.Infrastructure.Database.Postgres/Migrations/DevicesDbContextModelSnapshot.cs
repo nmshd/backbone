@@ -68,6 +68,52 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("PnsRegistrations", "Devices");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RelationshipTemplates", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AllocatedBy")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipTemplateId");
+
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
                 {
                     b.Property<string>("Id")
@@ -786,6 +832,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("AspNetUserTokens", "Devices");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", "RelationshipTemplate")
+                        .WithMany("Allocations")
+                        .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Device", "Device")
@@ -916,6 +973,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Navigation("Allocations");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
