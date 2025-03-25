@@ -22,8 +22,8 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
 
         var tasks = allocations.Select(allocation => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
         {
-            PeerAddress = allocation.AllocatedBy,
-            NotifiedIdentityAddress = @event.IdentityAddress
+            PeerAddress = @event.IdentityAddress,
+            NotifiedIdentityAddress = allocation.AllocatedBy
         }));
 
         await Task.WhenAll(tasks);

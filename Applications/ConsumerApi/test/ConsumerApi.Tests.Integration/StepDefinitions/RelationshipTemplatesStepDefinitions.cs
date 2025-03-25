@@ -70,6 +70,13 @@ internal class RelationshipTemplatesStepDefinitions
         }
     }
 
+    [Given($@"Relationship Template {RegexFor.SINGLE_THING} was allocated by {RegexFor.SINGLE_THING}")]
+    public async Task GivenRelationshipTemplateWasAllocatedByIdentity(string templateName, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        await client.RelationshipTemplates.GetTemplate(_relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id);
+    }
+    
     #endregion
 
     #region When
