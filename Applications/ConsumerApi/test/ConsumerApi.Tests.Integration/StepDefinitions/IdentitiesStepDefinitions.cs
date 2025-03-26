@@ -31,6 +31,7 @@ internal class IdentitiesStepDefinitions
     private readonly ClientPool _clientPool;
 
     private ApiResponse<IsDeletedResponse>? _isDeletedResponse;
+    private ApiResponse<GetFeatureFlagsResponse>? _getFeatureFlagsResponse;
 
     public IdentitiesStepDefinitions(ResponseContext responseContext, ChallengesContext challengesContext, ClientPool clientPool, HttpClientFactory factory,
         IOptions<HttpConfiguration> httpConfiguration)
@@ -64,6 +65,20 @@ internal class IdentitiesStepDefinitions
         }
     }
 
+    [Given($@"{RegexFor.SINGLE_THING} has feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public async Task GivenIHasFeatureFlagsFeatureEnabledAndFeatureDisabled(string identityName, string feature1State, string feature2State)
+    {
+        var featureFlags = new UpdateFeatureFlagsRequest
+        {
+            { "feature1", feature1State == "enabled" },
+            { "feature2", feature2State == "enabled" }
+        };
+
+
+        var client = _clientPool.FirstForIdentityName(identityName);
+        await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+    }
+    
     #endregion
 
     #region When
@@ -120,6 +135,15 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
     }
 
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
+    public async Task WhenISendsAGETRequestToTheIdentitiesAddressFeatureFlagsEndpointWithAddressIAddress(string requestorName, string peerName)
+    {
+        var requestorClient = _clientPool.FirstForIdentityName(requestorName);
+
+        var peerAddress = _clientPool.FirstForIdentityName(peerName).IdentityData!.Address;
+        _responseContext.WhenResponse = _getFeatureFlagsResponse = await requestorClient.FeatureFlags.GetFeatureFlags(peerAddress);
+    }
+
     #endregion
 
     #region Then
@@ -150,5 +174,15 @@ internal class IdentitiesStepDefinitions
         response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
     }
 
+    [Then($@"the response contains the feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public void ThenTheResponseContainsTheFeatureFlagsFeatureEnabledAndFeatureDisabled(string feature1State, string feature2State)
+    {
+        _getFeatureFlagsResponse.Should().NotBeNull();
+
+        _getFeatureFlagsResponse!.Result!.Should().HaveCount(2);
+        _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "enabled");
+        _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
+    }
+    
     #endregion
 }

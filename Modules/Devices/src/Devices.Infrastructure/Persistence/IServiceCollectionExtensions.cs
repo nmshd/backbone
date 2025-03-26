@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -23,8 +22,6 @@ public static class IServiceCollectionExtensions
                 string>();
         });
 
-        services.AddScoped<IDevicesDbContext, DevicesDbContext>();
-
         services.AddRepositories();
     }
 
@@ -35,5 +32,6 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
         services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
+        services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
     }
 }
