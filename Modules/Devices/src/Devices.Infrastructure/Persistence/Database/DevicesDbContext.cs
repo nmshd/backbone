@@ -4,9 +4,9 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -22,7 +22,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
-public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
+public class DevicesDbContext : IdentityDbContext<ApplicationUser>
 {
     private const int MAX_RETRY_COUNT = 50000;
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -62,6 +62,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
 
     public DbSet<FeatureFlag> FeatureFlags { get; set; } = null!;
+
+    public DbSet<RelationshipTemplateAllocation> RelationshipTemplateAllocations { get; set; } = null!;
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
