@@ -868,7 +868,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
-                        .WithMany("FeatureFlags")
+                        .WithMany("_efCoreFeatureFlagSetDoNotUse")
                         .HasForeignKey("OwnerAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -992,7 +992,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Navigation("Devices");
 
-                    b.Navigation("FeatureFlags");
+                    b.Navigation("_efCoreFeatureFlagSetDoNotUse");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>

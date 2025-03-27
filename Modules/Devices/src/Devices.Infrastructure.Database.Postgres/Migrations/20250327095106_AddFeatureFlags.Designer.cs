@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20250325082606_AddFeatureFlags")]
+    [Migration("20250327095106_AddFeatureFlags")]
     partial class AddFeatureFlags
     {
         /// <inheritdoc />
@@ -871,7 +871,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
-                        .WithMany("FeatureFlags")
+                        .WithMany("_efCoreFeatureFlagSetDoNotUse")
                         .HasForeignKey("OwnerAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -995,7 +995,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Navigation("Devices");
 
-                    b.Navigation("FeatureFlags");
+                    b.Navigation("_efCoreFeatureFlagSetDoNotUse");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>

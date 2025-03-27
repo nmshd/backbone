@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20250325082604_AddFeatureFlags")]
+    [Migration("20250327095101_AddFeatureFlags")]
     partial class AddFeatureFlags
     {
         /// <inheritdoc />
@@ -873,7 +873,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
-                        .WithMany("FeatureFlags")
+                        .WithMany("_efCoreFeatureFlagSetDoNotUse")
                         .HasForeignKey("OwnerAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -997,7 +997,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Navigation("Devices");
 
-                    b.Navigation("FeatureFlags");
+                    b.Navigation("_efCoreFeatureFlagSetDoNotUse");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
