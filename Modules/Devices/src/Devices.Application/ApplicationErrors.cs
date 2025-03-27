@@ -68,5 +68,11 @@ public static class ApplicationErrors
             return new ApplicationError("error.platform.validation.device.onlyOneBackupDeviceCanExist",
                 "Only one backup device can be created per identity.");
         }
+
+        public static ApplicationError MaxNumberOfFeatureFlagsExceeded(int maxNumberOfFeatureFlagsPerIdentity)
+        {
+            return new ApplicationError("error.platform.validation.featureFlag.maxNumberOfFeatureFlagsExceeded",
+                $"Only {maxNumberOfFeatureFlagsPerIdentity} feature flags can be created.");
+        }
     }
 }

@@ -78,6 +78,20 @@ internal class IdentitiesStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
         await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
     }
+
+    [Given($@"{RegexFor.SINGLE_THING} has \d+ feature flags with name feature\[(\d+)\.\.\.(\d+)]")]
+    public async Task GivenIHasFeatureFlagsWithNameFeature(string identityName, int lowerBoundNamePostfix, int upperBoundNamePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var featureFlags = new UpdateFeatureFlagsRequest();
+        for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
+        {
+            featureFlags.Add($"feature{i}", true);
+        }
+
+        await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+    }
     
     #endregion
 
@@ -144,6 +158,32 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = _getFeatureFlagsResponse = await requestorClient.FeatureFlags.GetFeatureFlags(peerAddress);
     }
 
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with (\d*) features")]
+    public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatures(string identityName, int numberOfFeatureFlags)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var featureFlags = new UpdateFeatureFlagsRequest();
+
+        for (var i = 0; i < numberOfFeatureFlags; i++)
+        {
+            featureFlags.Add($"feature{i}", true);
+        }
+
+        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+    }
+
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with 1 feature flag with name feature(\d+)")]
+    public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatureFlagWithNameFeature(string identityName, int namePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var featureFlags = new UpdateFeatureFlagsRequest
+        {
+            { $"feature{namePostfix}", true }
+        };
+
+        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+    }
+    
     #endregion
 
     #region Then
@@ -182,6 +222,30 @@ internal class IdentitiesStepDefinitions
         _getFeatureFlagsResponse!.Result!.Should().HaveCount(2);
         _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "enabled");
         _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} has no feature flags")]
+    public async Task ThenIHasNoFeatureFlags(string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+
+        response.IsSuccess.Should().BeTrue();
+        response.Result!.Should().BeEmpty();
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} has \d+ feature flags with names feature\[(\d+)\.\.\.(\d+)]")]
+    public async Task ThenIHasFeatureFlagsWithNamesFeature(string identityName, int lowerBoundNamePostfix, int upperBoundNamePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+
+        response.IsSuccess.Should().BeTrue();
+
+        for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
+            response.Result!.Should().ContainKey($"feature{i}");
     }
     
     #endregion
