@@ -85,6 +85,6 @@ internal class SynchronizationStepDefinitions
             e.Type == "PeerFeatureFlagsChanged" &&
             e.Payload["peerAddress"].GetString() == peerAddress);
     }
-    
+
     #endregion
 }

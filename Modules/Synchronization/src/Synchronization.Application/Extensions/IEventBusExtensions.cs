@@ -64,5 +64,5 @@ public static class IEventBusExtensions
     {
         await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
-    
+
 }

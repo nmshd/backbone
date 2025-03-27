@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<GetFeatureFlagsQuery, GetFeatureFlagsResp
     {
         if (!await HasPermission(request.IdentityAddress, cancellationToken))
             throw new NotFoundException(nameof(Identity));
-        
+
         var featureFlags = await _identityRepository.GetAllFeatureFlagsOfIdentity(request.IdentityAddress, cancellationToken);
         return new GetFeatureFlagsResponse(featureFlags);
     }

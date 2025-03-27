@@ -92,7 +92,7 @@ internal class IdentitiesStepDefinitions
 
         await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
     }
-    
+
     #endregion
 
     #region When
@@ -183,7 +183,7 @@ internal class IdentitiesStepDefinitions
 
         _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
     }
-    
+
     #endregion
 
     #region Then
@@ -247,6 +247,6 @@ internal class IdentitiesStepDefinitions
         for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
             response.Result!.Should().ContainKey($"feature{i}");
     }
-    
+
     #endregion
 }

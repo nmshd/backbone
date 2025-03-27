@@ -76,7 +76,7 @@ internal class RelationshipTemplatesStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
         await client.RelationshipTemplates.GetTemplate(_relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id);
     }
-    
+
     #endregion
 
     #region When
