@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
+    private readonly EfCoreFeatureFlagSet _efCoreFeatureFlagSetDoNotUse = [];
     private TierId? _tierId;
 
     // ReSharper disable once UnusedMember.Local
@@ -96,7 +97,7 @@ public class Identity : Entity
     public IdentityStatus Status { get; private set; }
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
-    public FeatureFlagSet FeatureFlags { get; } = new();
+    public FeatureFlagSet FeatureFlags => _efCoreFeatureFlagSetDoNotUse;
 
     public bool IsNew()
     {
