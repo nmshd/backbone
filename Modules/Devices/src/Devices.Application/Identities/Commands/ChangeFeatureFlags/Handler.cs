@@ -26,13 +26,13 @@ public class Handler : IRequestHandler<ChangeFeatureFlagsCommand>
     {
         if (request.Count > _configuration.MaxNumberOfFeatureFlagsPerIdentity)
             throw new ApplicationException(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(_configuration.MaxNumberOfFeatureFlagsPerIdentity));
-        
+
         var identity = await _identitiesRepository.FindByAddress(_activeIdentity, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
         var combinedFeatureFlagNames = identity.FeatureFlags.Names.Select(n => n.Value).Concat(request.Keys).ToHashSet();
         if (combinedFeatureFlagNames.Count > _configuration.MaxNumberOfFeatureFlagsPerIdentity)
             throw new ApplicationException(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(_configuration.MaxNumberOfFeatureFlagsPerIdentity));
-        
+
         identity.ChangeFeatureFlags(request.ToDictionary(kv => FeatureFlagName.Parse(kv.Key), kv => kv.Value));
         await _identitiesRepository.Update(identity, cancellationToken);
     }
