@@ -2,9 +2,9 @@ using System.Collections;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class FeatureFlagSet : ICollection<FeatureFlag>
+public class FeatureFlagSet : IEnumerable<FeatureFlag>
 {
-    private readonly List<FeatureFlag> _featureFlags = [];
+    protected readonly HashSet<FeatureFlag> _featureFlags = [];
     public HashSet<FeatureFlagName> Names => [.. _featureFlags.Select(f => f.Name)];
 
     public static FeatureFlagSet Load(List<FeatureFlag> featureFlags)
@@ -12,7 +12,7 @@ public class FeatureFlagSet : ICollection<FeatureFlag>
         var featureFlagSet = new FeatureFlagSet();
         foreach (var featureFlag in featureFlags)
         {
-            featureFlagSet.Add(featureFlag);
+            featureFlagSet.Set(featureFlag.Name, featureFlag.IsEnabled);
         }
 
         return featureFlagSet;
@@ -26,20 +26,15 @@ public class FeatureFlagSet : ICollection<FeatureFlag>
     public void Set(FeatureFlagName name, bool value)
     {
         if (Contains(name))
-        {
             GetFeatureFlag(name).Set(value);
-        }
         else
-        {
             _featureFlags.Add(new FeatureFlag(name, value));
-        }
     }
 
     public FeatureFlag GetFeatureFlag(FeatureFlagName name)
     {
         return _featureFlags.First(f => f.Name == name);
     }
-
     public IEnumerator<FeatureFlag> GetEnumerator()
     {
         return _featureFlags.GetEnumerator();
@@ -49,8 +44,10 @@ public class FeatureFlagSet : ICollection<FeatureFlag>
     {
         return GetEnumerator();
     }
+}
 
-    // TODO: try to make this pretty
+public class EfCoreFeatureFlagSet : FeatureFlagSet, ICollection<FeatureFlag>
+{
     public void Add(FeatureFlag item)
     {
         Set(item.Name, item.IsEnabled);

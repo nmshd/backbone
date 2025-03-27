@@ -19,8 +19,10 @@ public class IdentityEntityTypeConfiguration : EntityEntityTypeConfiguration<Ide
         builder.Property(x => x.CreatedAt);
         builder.Property(x => x.PublicKey);
 
+        builder.Ignore(x => x.FeatureFlags);
+
         builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(x => x.FeatureFlags).WithOne().HasForeignKey(x => x.OwnerAddress).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany<FeatureFlag>("_efCoreFeatureFlagSetDoNotUse").WithOne().HasForeignKey(x => x.OwnerAddress).OnDelete(DeleteBehavior.Cascade);
     }
 }
