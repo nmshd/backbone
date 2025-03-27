@@ -5,7 +5,8 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class FeatureFlagSet : ICollection<FeatureFlag>
 {
     private readonly List<FeatureFlag> _featureFlags = [];
-
+    public HashSet<FeatureFlagName> Names => [.. _featureFlags.Select(f => f.Name)];
+    
     public static FeatureFlagSet Load(List<FeatureFlag> featureFlags)
     {
         var featureFlagSet = new FeatureFlagSet();
