@@ -1,15 +1,32 @@
 {
   "profiles": {
-    "Start": {
-      "commandName": "Project",
-      // enter an existing command here in order to debug it
-      "commandLineArgs": "tier list"
-      //"commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy"
-      //"commandLineArgs": "client list" 
-      //"commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100" 
-      //"commandLineArgs": "client delete test"
-      //"commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
-      //"commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium"
-    }
+      "Create Client": {
+          "commandName": "Project",
+          "commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100"
+      },
+      "List Clients": {
+          "commandName": "Project",
+          "commandLineArgs": "client list"
+      },
+      "Delete Client": {
+          "commandName": "Project",
+          "commandLineArgs": "client delete test"
+      },
+      "Create Announcement": {
+          "commandName": "Project",
+          "commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium"
+      },
+      "Delete Announcement": {
+          "commandName": "Project",
+          "commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy"
+      },
+      "List Tiers": {
+          "commandName": "Project",
+          "commandLineArgs": "tier list"
+      },
+      "Reset access-failed-count of Token": {
+          "commandName": "Project",
+          "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
+      }
   }
 }
