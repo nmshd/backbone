@@ -21,8 +21,8 @@ public static class SensitiveDataEnricherExtensions
 
     private static void RemoveMaskingOperator<T>(SensitiveDataEnricherOptions options) where T : IMaskingOperator
     {
-        var ibanMaskingOperator = options.MaskingOperators.FirstOrDefault(o => o.GetType() == typeof(T));
-        if (ibanMaskingOperator != null)
-            options.MaskingOperators.Remove(ibanMaskingOperator);
+        var maskingOperator = options.MaskingOperators.FirstOrDefault(o => o.GetType() == typeof(T));
+        if (maskingOperator != null)
+            options.MaskingOperators.Remove(maskingOperator);
     }
 }
