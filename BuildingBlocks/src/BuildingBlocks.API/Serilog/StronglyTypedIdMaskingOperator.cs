@@ -11,10 +11,13 @@ public class StronglyTypedIdMaskingOperator : RegexMaskingOperator
     private static string GetRegex(string prefix, int maxLength)
     {
         const string idCharacters = "a-zA-Z0-9";
+        const string forbiddenLeadingCharacters = $"(?<![{idCharacters}])";
+        const string forbiddenTrailingCharacters = $"(?![{idCharacters}])";
+
         var lengthWithoutPrefix = maxLength - prefix.Length;
 
         var id = $"{prefix}[{idCharacters}]{{{lengthWithoutPrefix}}}";
 
-        return $"(?<![{idCharacters}]){id}(?![{idCharacters}])";
+        return $"{forbiddenLeadingCharacters}{potentialId}{forbiddenTrailingCharacters}";
     }
 }
