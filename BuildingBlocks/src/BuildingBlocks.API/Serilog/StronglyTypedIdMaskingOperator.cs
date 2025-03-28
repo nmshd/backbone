@@ -16,7 +16,7 @@ public class StronglyTypedIdMaskingOperator : RegexMaskingOperator
 
         var lengthWithoutPrefix = maxLength - prefix.Length;
 
-        var id = $"{prefix}[{idCharacters}]{{{lengthWithoutPrefix}}}";
+        var potentialId = $"{prefix}[{idCharacters}]{{{lengthWithoutPrefix}}}";
 
         return $"{forbiddenLeadingCharacters}{potentialId}{forbiddenTrailingCharacters}";
     }
