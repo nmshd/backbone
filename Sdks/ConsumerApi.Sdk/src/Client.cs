@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
@@ -45,6 +46,7 @@ public class Client
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
         Files = new FilesEndpoint(endpointClient);
+        FeatureFlags = new FeatureFlagsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
         PushNotifications = new PushNotificationsEndpoint(endpointClient);
@@ -64,6 +66,7 @@ public class Client
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }
+    public FeatureFlagsEndpoint FeatureFlags { get; }
     public FilesEndpoint Files { get; }
     public IdentitiesEndpoint Identities { get; }
     public MessagesEndpoint Messages { get; }

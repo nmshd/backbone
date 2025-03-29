@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20241113085652_MakeCreatedByDeviceNullableInRelationshipAuditLogEntry")]
-    partial class MakeCreatedByDeviceNullableInRelationshipAuditLogEntry
+    [Migration("20250325083000_AddReferenceFromRelationshipTemplateAllocationsToRelationshipTemplateToSnapshot")]
+    partial class AddReferenceFromRelationshipTemplateAllocationsToRelationshipTemplateToSnapshot
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -223,11 +223,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", null)
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Allocations")
                         .HasForeignKey("RelationshipTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>

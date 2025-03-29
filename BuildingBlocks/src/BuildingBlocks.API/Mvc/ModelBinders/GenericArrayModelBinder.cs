@@ -68,6 +68,12 @@ public class GenericArrayModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
-        return context.Metadata is { IsEnumerableType: true, ElementMetadata.IsComplexType: true } ? new BinderTypeModelBinder(typeof(GenericArrayModelBinder)) : null;
+        return context.Metadata is
+        {
+            IsEnumerableType: true,
+            ElementMetadata.IsComplexType: true
+        } && !context.Metadata.ModelType.IsAssignableTo(typeof(IDictionary))
+            ? new BinderTypeModelBinder(typeof(GenericArrayModelBinder))
+            : null;
     }
 }

@@ -18,7 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -218,11 +218,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", null)
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Allocations")
                         .HasForeignKey("RelationshipTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>

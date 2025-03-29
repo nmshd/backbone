@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeCreatedByDeviceNullableInRelationshipAuditLogEntry : Migration
+    public partial class AddReferenceFromRelationshipTemplateAllocationsToRelationshipTemplateToSnapshot : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,13 +14,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                 name: "CreatedByDevice",
                 schema: "Relationships",
                 table: "RelationshipAuditLog",
-                type: "char(20)",
+                type: "character(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "char(20)",
+                oldType: "character(20)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 20);
@@ -33,14 +33,14 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                 name: "CreatedByDevice",
                 schema: "Relationships",
                 table: "RelationshipAuditLog",
-                type: "char(20)",
+                type: "character(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
                 nullable: false,
                 defaultValue: "",
                 oldClrType: typeof(string),
-                oldType: "char(20)",
+                oldType: "character(20)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 20,

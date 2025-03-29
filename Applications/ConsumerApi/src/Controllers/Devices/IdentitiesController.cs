@@ -6,11 +6,13 @@ using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Commands.ChangeFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -140,6 +142,26 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> IsIdentityOfUserDeleted([FromQuery(Name = "username")] string username, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new IsIdentityOfUserDeletedQuery { Username = username }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPatch("Self/FeatureFlags")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeFeatureFlags([FromBody] ChangeFeatureFlagsCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(request, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpGet("{identityAddress}/FeatureFlags")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetFeatureFlagsResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetFeatureFlags([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    {
+        var request = new GetFeatureFlagsQuery { IdentityAddress = identityAddress };
+        var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }
