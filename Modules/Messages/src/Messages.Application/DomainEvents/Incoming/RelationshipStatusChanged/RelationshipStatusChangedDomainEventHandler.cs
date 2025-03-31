@@ -32,6 +32,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         var anonymizedIdentityAddress = IdentityAddress.GetAnonymized(_applicationConfiguration.DidDomainName);
         var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
+
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
             message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
