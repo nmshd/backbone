@@ -6,7 +6,7 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
 
 public class FeatureFlagsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<EmptyResponse>> UpdateFeatureFlags(UpdateFeatureFlagsRequest request)
+    public async Task<ApiResponse<EmptyResponse>> ChangeFeatureFlags(ChangeFeatureFlagsRequest request)
     {
         return await _client.Patch<EmptyResponse>($"api/{API_VERSION}/Identities/Self/FeatureFlags", request);
     }

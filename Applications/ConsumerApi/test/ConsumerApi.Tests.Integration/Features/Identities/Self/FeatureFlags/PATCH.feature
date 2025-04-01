@@ -9,7 +9,7 @@ Identity changes feature flags
         Then the response status code is 204 (No Content)
         And the Backbone has persisted feature1 as enabled and feature2 as disabled for i
     
-    Scenario: Updating existing feature flags
+    Scenario: Changing existing feature flags
         Given Identity i
         And i has feature flags feature1 enabled and feature2 disabled
         When i sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 disabled and feature2 enabled

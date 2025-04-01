@@ -68,7 +68,7 @@ internal class IdentitiesStepDefinitions
     [Given($@"{RegexFor.SINGLE_THING} has feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
     public async Task GivenIHasFeatureFlagsFeatureEnabledAndFeatureDisabled(string identityName, string feature1State, string feature2State)
     {
-        var featureFlags = new UpdateFeatureFlagsRequest
+        var featureFlags = new ChangeFeatureFlagsRequest
         {
             { "feature1", feature1State == "enabled" },
             { "feature2", feature2State == "enabled" }
@@ -76,7 +76,7 @@ internal class IdentitiesStepDefinitions
 
 
         var client = _clientPool.FirstForIdentityName(identityName);
-        await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+        await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     [Given($@"{RegexFor.SINGLE_THING} has \d+ feature flags with name feature\[(\d+)\.\.\.(\d+)]")]
@@ -84,13 +84,13 @@ internal class IdentitiesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var featureFlags = new UpdateFeatureFlagsRequest();
+        var featureFlags = new ChangeFeatureFlagsRequest();
         for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
         {
             featureFlags.Add($"feature{i}", true);
         }
 
-        await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+        await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     #endregion
@@ -138,7 +138,7 @@ internal class IdentitiesStepDefinitions
     [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
     public async Task WhenISendsAPatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeature1EnabledAndFeature2Disabled(string identityName, string feature1State, string feature2State)
     {
-        var featureFlags = new UpdateFeatureFlagsRequest
+        var featureFlags = new ChangeFeatureFlagsRequest
         {
             { "feature1", feature1State == "enabled" },
             { "feature2", feature2State == "enabled" }
@@ -146,7 +146,7 @@ internal class IdentitiesStepDefinitions
 
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
@@ -162,26 +162,26 @@ internal class IdentitiesStepDefinitions
     public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatures(string identityName, int numberOfFeatureFlags)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        var featureFlags = new UpdateFeatureFlagsRequest();
+        var featureFlags = new ChangeFeatureFlagsRequest();
 
         for (var i = 0; i < numberOfFeatureFlags; i++)
         {
             featureFlags.Add($"feature{i}", true);
         }
 
-        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with 1 feature flag with name feature(\d+)")]
     public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatureFlagWithNameFeature(string identityName, int namePostfix)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        var featureFlags = new UpdateFeatureFlagsRequest
+        var featureFlags = new ChangeFeatureFlagsRequest
         {
             { $"feature{namePostfix}", true }
         };
 
-        _responseContext.WhenResponse = await client.FeatureFlags.UpdateFeatureFlags(featureFlags);
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     #endregion
