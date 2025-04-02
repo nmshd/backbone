@@ -13,8 +13,9 @@ public class Validator : AbstractValidator<ChangeFeatureFlagsCommand>
             .WithMessage("Invalid feature flag name. Check length and the used characters.")
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
-        RuleFor(command => command.Count).Must(count => (count <= configuration.Value.MaxNumberOfFeatureFlagsPerIdentity))
-            .WithErrorCode("error.platform.validation.featureFlag.maxNumberOfFeatureFlagsExceeded")
-            .WithMessage($"Only {configuration.Value.MaxNumberOfFeatureFlagsPerIdentity} feature flags can be created.");
+        RuleFor(c => c.Count).LessThanOrEqualTo(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity)
+            .WithMessage(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity).Message)
+            .WithErrorCode(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity).Code);
+        
     }
 }

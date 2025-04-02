@@ -33,7 +33,7 @@ Identity changes feature flags
 
     Scenario: Peer changes feature flags
         Given Identities i1 and i2
-		And a Relationship Template t created by i1
+        And a Relationship Template t created by i1
         And Relationship Template t was allocated by i2
         When i1 sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 enabled and feature2 disabled
         And 2 second(s) have passed
