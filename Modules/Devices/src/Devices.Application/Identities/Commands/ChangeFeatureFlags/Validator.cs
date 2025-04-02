@@ -16,6 +16,6 @@ public class Validator : AbstractValidator<ChangeFeatureFlagsCommand>
         RuleFor(c => c.Count).LessThanOrEqualTo(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity)
             .WithMessage(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity).Message)
             .WithErrorCode(ApplicationErrors.Devices.MaxNumberOfFeatureFlagsExceeded(configuration.Value.MaxNumberOfFeatureFlagsPerIdentity).Code);
-        
+
     }
 }
