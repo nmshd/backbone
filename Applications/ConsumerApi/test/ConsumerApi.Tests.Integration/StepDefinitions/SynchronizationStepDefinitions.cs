@@ -69,5 +69,22 @@ internal class SynchronizationStepDefinitions
         messageReceivedExternalEvent.Payload["id"].GetString().Should().Be(message.Id);
     }
 
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent {RegexFor.SINGLE_THING} of type PeerFeatureFlagsChanged which contains the address of {RegexFor.SINGLE_THING}")]
+    public async Task ThenIReceivesAnExternalEventEOfTypePeerFeatureFlagsChanged(string notifiedIdentityName, string externalEventName, string peerName)
+    {
+        var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
+        var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
+
+        syncRunResponse.Result.Should().NotBeNull();
+        syncRunResponse.Result!.Status.Should().Be("Created");
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunResponse.Result!.SyncRun.Id);
+
+        var peerAddress = _clientPool.FirstForIdentityName(peerName).IdentityData!.Address;
+
+        externalEvents.Result.Should().Contain(e =>
+            e.Type == "PeerFeatureFlagsChanged" &&
+            e.Payload["peerAddress"].GetString() == peerAddress);
+    }
+
     #endregion
 }

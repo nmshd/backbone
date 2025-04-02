@@ -91,5 +91,7 @@ public enum ExternalEventType
     PeerDeletionCancelled = 23,
     PeerDeleted = 24,
 
-    TokenLocked = 30
+    TokenLocked = 30,
+
+    PeerFeatureFlagsChanged = 40
 }

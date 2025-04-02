@@ -37,8 +37,4 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Features\SyncRuns\{id}\ExternalEvents\" />
-    </ItemGroup>
 </Project>

@@ -22,7 +22,7 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
 
         builder
             .HasMany(x => x.Allocations)
-            .WithOne()
+            .WithOne(x => x.RelationshipTemplate)
             .HasForeignKey(x => x.RelationshipTemplateId)
             .OnDelete(DeleteBehavior.Cascade);
 

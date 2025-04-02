@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
+    private readonly EfCoreFeatureFlagSet _efCoreFeatureFlagSetDoNotUse = [];
     private TierId? _tierId;
 
     // ReSharper disable once UnusedMember.Local
@@ -96,6 +97,7 @@ public class Identity : Entity
     public IdentityStatus Status { get; private set; }
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+    public FeatureFlagSet FeatureFlags => _efCoreFeatureFlagSetDoNotUse;
 
     public bool IsNew()
     {
@@ -320,6 +322,15 @@ public class Identity : Entity
     public static Identity CreateTestIdentity(IdentityAddress address, byte[] publicKey, TierId tierId, string username)
     {
         return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
+    }
+
+    public void ChangeFeatureFlags(Dictionary<FeatureFlagName, bool> featureFlags)
+    {
+        foreach (var keyValuePair in featureFlags)
+        {
+            FeatureFlags.Set(keyValuePair.Key, keyValuePair.Value);
+        }
+        RaiseDomainEvent(new FeatureFlagsOfIdentityChangedDomainEvent(this));
     }
 
     #region Expressions

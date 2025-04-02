@@ -46,4 +46,10 @@ public interface IIdentitiesRepository
     Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken);
 
     #endregion
+
+    #region Feature Flags
+
+    Task<FeatureFlagSet> GetAllFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken);
+
+    #endregion
 }

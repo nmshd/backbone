@@ -4,6 +4,7 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Identit
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCancelled;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerFeatureFlagsChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
@@ -14,6 +15,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerFeatureFlagsChangedEvent;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
@@ -53,7 +55,8 @@ public static class IEventBusExtensions
             eventBus.Subscribe<RelationshipReactivationCompletedDomainEvent, RelationshipReactivationCompletedDomainEventHandler>(),
             eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>(),
             eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>(),
-            eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>()
+            eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>(),
+            eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>()
         });
     }
 
@@ -61,4 +64,5 @@ public static class IEventBusExtensions
     {
         await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
+
 }

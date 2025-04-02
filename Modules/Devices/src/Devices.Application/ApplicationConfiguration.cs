@@ -12,4 +12,8 @@ public class ApplicationConfiguration
     [MinLength(3)]
     [MaxLength(45)]
     public string DidDomainName { get; set; } = null!;
+
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int MaxNumberOfFeatureFlagsPerIdentity { get; set; }
 }

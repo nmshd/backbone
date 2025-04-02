@@ -12,12 +12,17 @@ public class IdentityEntityTypeConfiguration : EntityEntityTypeConfiguration<Ide
         base.Configure(builder);
         builder.HasKey(x => x.Address);
 
-        builder.Property(x => x.ClientId).HasMaxLength(200);
-        builder.Property(x => x.CreatedAt);
-        builder.Property(x => x.PublicKey);
         builder.HasIndex(x => x.ClientId).HasMethod("hash");
         builder.HasIndex(x => x.TierId).HasMethod("hash");
 
+        builder.Property(x => x.ClientId).HasMaxLength(200);
+        builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.PublicKey);
+
+        builder.Ignore(x => x.FeatureFlags);
+
         builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany<FeatureFlag>("_efCoreFeatureFlagSetDoNotUse").WithOne().HasForeignKey(x => x.OwnerAddress).OnDelete(DeleteBehavior.Cascade);
     }
 }

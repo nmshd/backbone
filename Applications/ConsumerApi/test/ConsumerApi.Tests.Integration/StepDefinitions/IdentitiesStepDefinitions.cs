@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
@@ -30,6 +31,7 @@ internal class IdentitiesStepDefinitions
     private readonly ClientPool _clientPool;
 
     private ApiResponse<IsDeletedResponse>? _isDeletedResponse;
+    private ApiResponse<GetFeatureFlagsResponse>? _getFeatureFlagsResponse;
 
     public IdentitiesStepDefinitions(ResponseContext responseContext, ChallengesContext challengesContext, ClientPool clientPool, HttpClientFactory factory,
         IOptions<HttpConfiguration> httpConfiguration)
@@ -61,6 +63,34 @@ internal class IdentitiesStepDefinitions
             var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
             _clientPool.Add(client).ForIdentity(identityName);
         }
+    }
+
+    [Given($@"{RegexFor.SINGLE_THING} has feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public async Task GivenIHasFeatureFlagsFeatureEnabledAndFeatureDisabled(string identityName, string feature1State, string feature2State)
+    {
+        var featureFlags = new ChangeFeatureFlagsRequest
+        {
+            { "feature1", feature1State == "enabled" },
+            { "feature2", feature2State == "enabled" }
+        };
+
+
+        var client = _clientPool.FirstForIdentityName(identityName);
+        await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
+    }
+
+    [Given($@"{RegexFor.SINGLE_THING} has \d+ feature flags with name feature\[(\d+)\.\.\.(\d+)]")]
+    public async Task GivenIHasFeatureFlagsWithNameFeature(string identityName, int lowerBoundNamePostfix, int upperBoundNamePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var featureFlags = new ChangeFeatureFlagsRequest();
+        for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
+        {
+            featureFlags.Add($"feature{i}", true);
+        }
+
+        await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
     #endregion
@@ -105,6 +135,55 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = _isDeletedResponse = await _clientPool.Anonymous.Identities.IsDeleted(device.Result!.Username);
     }
 
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public async Task WhenISendsAPatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeature1EnabledAndFeature2Disabled(string identityName, string feature1State, string feature2State)
+    {
+        var featureFlags = new ChangeFeatureFlagsRequest
+        {
+            { "feature1", feature1State == "enabled" },
+            { "feature2", feature2State == "enabled" }
+        };
+
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
+    }
+
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
+    public async Task WhenISendsAGETRequestToTheIdentitiesAddressFeatureFlagsEndpointWithAddressIAddress(string requestorName, string peerName)
+    {
+        var requestorClient = _clientPool.FirstForIdentityName(requestorName);
+
+        var peerAddress = _clientPool.FirstForIdentityName(peerName).IdentityData!.Address;
+        _responseContext.WhenResponse = _getFeatureFlagsResponse = await requestorClient.FeatureFlags.GetFeatureFlags(peerAddress);
+    }
+
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with (\d*) features")]
+    public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatures(string identityName, int numberOfFeatureFlags)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var featureFlags = new ChangeFeatureFlagsRequest();
+
+        for (var i = 0; i < numberOfFeatureFlags; i++)
+        {
+            featureFlags.Add($"feature{i}", true);
+        }
+
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
+    }
+
+    [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with 1 feature flag with name feature(\d+)")]
+    public async Task WhenISendsApatchRequestToTheIdentitiesSelfFeatureFlagsEndpointWithFeatureFlagWithNameFeature(string identityName, int namePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var featureFlags = new ChangeFeatureFlagsRequest
+        {
+            { $"feature{namePostfix}", true }
+        };
+
+        _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
+    }
+
     #endregion
 
     #region Then
@@ -119,6 +198,54 @@ internal class IdentitiesStepDefinitions
     public void ThenTheDeletionDateIsNotSet()
     {
         _isDeletedResponse!.Result!.DeletionDate.Should().BeNull();
+    }
+
+    [Then($@"the Backbone has persisted feature1 as (enabled|disabled) and feature2 as (enabled|disabled) for {RegexFor.SINGLE_THING}")]
+    public async Task ThenTheBackboneHasPersistedFeatureAsEnabledAndFeatureAsDisabled(string feature1State, string feature2State, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+
+        response.IsSuccess.Should().BeTrue();
+
+        response.Result!.Should().HaveCount(2);
+        response.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "enabled");
+        response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
+    }
+
+    [Then($@"the response contains the feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    public void ThenTheResponseContainsTheFeatureFlagsFeatureEnabledAndFeatureDisabled(string feature1State, string feature2State)
+    {
+        _getFeatureFlagsResponse.Should().NotBeNull();
+
+        _getFeatureFlagsResponse!.Result!.Should().HaveCount(2);
+        _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature1").Value.Should().Be(feature1State == "enabled");
+        _getFeatureFlagsResponse!.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} has no feature flags")]
+    public async Task ThenIHasNoFeatureFlags(string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+
+        response.IsSuccess.Should().BeTrue();
+        response.Result!.Should().BeEmpty();
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} has \d+ feature flags with names feature\[(\d+)\.\.\.(\d+)]")]
+    public async Task ThenIHasFeatureFlagsWithNamesFeature(string identityName, int lowerBoundNamePostfix, int upperBoundNamePostfix)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+
+        response.IsSuccess.Should().BeTrue();
+
+        for (var i = lowerBoundNamePostfix; i <= upperBoundNamePostfix; i++)
+            response.Result!.Should().ContainKey($"feature{i}");
     }
 
     #endregion
