@@ -1,4 +1,6 @@
-﻿using System.Net.Sockets;
+﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Net.Sockets;
 using System.Text;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
@@ -14,6 +16,86 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+
+public class EventBusMetrics
+{
+    private readonly UpDownCounter<int> _activeHandlers;
+    private readonly Counter<long> _numberOfHandledEvents;
+    private readonly Histogram<double> _eventProcessingDuration;
+    private readonly Histogram<int> _messageSizeBytes;
+
+    public EventBusMetrics(Meter meter)
+    {
+        _numberOfHandledEvents = meter.CreateCounter<long>(name: "enmeshed_events_handled_total");
+        _eventProcessingDuration = meter.CreateHistogram(name: "enmeshed_events_processing_duration_seconds", unit: "s", advice: new InstrumentAdvice<double>
+        {
+            HistogramBucketBoundaries = [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, 30, 60, 180, 600]
+        });
+        _activeHandlers = meter.CreateUpDownCounter<int>(name: "enmeshed_events_active_handlers");
+        _messageSizeBytes = meter.CreateHistogram<int>(name: "enmeshed_events_message_size_bytes", unit: "By");
+    }
+
+    public void TrackEventProcessingDuration(EventProcessingDurationStage stage, long startedAt, string eventName, string queueName)
+    {
+        _eventProcessingDuration.Record(
+            Stopwatch.GetElapsedTime(startedAt).TotalSeconds,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName),
+            new KeyValuePair<string, object?>("stage", EventProcessingDurationStageToString(stage)));
+    }
+
+    public void IncrementNumberOfHandledEvents(string eventName, string queueName)
+    {
+        _numberOfHandledEvents.Add(
+            1,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName)
+        );
+    }
+
+    public void IncrementNumberOfActiveHandlers(string eventName, string queueName)
+    {
+        _activeHandlers.Add(
+            1,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName)
+        );
+    }
+
+    public void DecrementNumberOfActiveHandlers(string eventName, string queueName)
+    {
+        _activeHandlers.Add(
+            -1,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName)
+        );
+    }
+
+    public void TrackHandledMessageSize(int messageSize, string eventName)
+    {
+        _messageSizeBytes.Record(messageSize, new KeyValuePair<string, object?>("event_name", eventName));
+    }
+
+    private string EventProcessingDurationStageToString(EventProcessingDurationStage stage)
+    {
+        return stage switch
+        {
+            EventProcessingDurationStage.Deserialize => "deserialize",
+            EventProcessingDurationStage.Handle => "handle",
+            EventProcessingDurationStage.Reject => "reject",
+            EventProcessingDurationStage.Acknowledge => "acknowledge",
+            _ => "unknown"
+        };
+    }
+}
+
+public enum EventProcessingDurationStage
+{
+    Deserialize,
+    Handle,
+    Acknowledge,
+    Reject
+}
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
@@ -32,24 +114,27 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly ChannelPool _channelPool;
 
     private readonly string _exchangeName;
+    private readonly EventBusMetrics _metrics;
     private readonly string _deadLetterExchangeName;
     private readonly string _deadLetterQueueName;
     private readonly SubscriptionManager _subscriptionManager = new();
 
-    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
+    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName, EventBusMetrics metrics)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
         _exchangeName = exchangeName;
+        _metrics = metrics;
         _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
         _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
         _channelPool = new ChannelPool(persistentConnection);
     }
 
-    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
+    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName,
+        EventBusMetrics metrics)
     {
-        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName);
+        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName, metrics);
 
         await eventBus.Init();
 
@@ -163,6 +248,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
+
+            _metrics.IncrementNumberOfActiveHandlers(eventName, GetQueueName<THandler, TEvent>());
+
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
             try
@@ -174,15 +262,21 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 {
                     await ProcessEvent<TEvent, THandler>(message);
 
+                    var startedAt = Stopwatch.GetTimestamp();
                     await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
+                    _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Acknowledge, startedAt, eventName, GetQueueName<THandler, TEvent>());
                 }
             }
             catch (Exception ex)
             {
+                var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
+                _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Reject, startedAt, eventName, GetQueueName<THandler, TEvent>());
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
+
+            _metrics.DecrementNumberOfActiveHandlers(eventName, GetQueueName<THandler, TEvent>());
         };
 
         return consumer;
@@ -195,7 +289,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
+        var startedAt = Stopwatch.GetTimestamp();
         var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS);
+        _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Deserialize, startedAt, eventName, GetQueueName<THandler, TEvent>());
 
         var handlerType = typeof(THandler);
 
@@ -206,7 +302,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
+        startedAt = Stopwatch.GetTimestamp();
         await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+        _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Handle, startedAt, eventName, GetQueueName<THandler, TEvent>());
+
+        _metrics.IncrementNumberOfHandledEvents(eventName, GetQueueName<THandler, TEvent>());
     }
 
     public async Task Publish(DomainEvent @event)
@@ -224,6 +324,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var message = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
 
         var body = Encoding.UTF8.GetBytes(message);
+
+        _metrics.TrackHandledMessageSize(body.Length, eventName);
 
         await policy.ExecuteAsync(async () =>
         {

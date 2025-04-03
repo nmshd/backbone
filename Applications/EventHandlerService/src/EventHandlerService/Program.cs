@@ -13,12 +13,14 @@ using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using OpenTelemetrySdk = OpenTelemetry.Sdk;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
 
 Log.Logger = new LoggerConfiguration()
@@ -34,7 +36,14 @@ try
     Log.Information("App created.");
     Log.Information("Starting app...");
 
+    var meterProvider = OpenTelemetrySdk.CreateMeterProviderBuilder()
+        .AddMeter(METER_NAME)
+        .AddPrometheusHttpListener(options => options.UriPrefixes = ["http://localhost:9184/"])
+        .Build();
+
     await app.Build().RunAsync();
+
+    meterProvider.Dispose();
 
     return 0;
 }
@@ -91,7 +100,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
-            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
@@ -104,4 +113,9 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks())
         );
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.eventhandler";
 }

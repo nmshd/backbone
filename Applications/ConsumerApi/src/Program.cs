@@ -177,7 +177,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus);
+    services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
 }
 
 static void Configure(WebApplication app)
@@ -227,4 +227,9 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.consumerapi";
 }

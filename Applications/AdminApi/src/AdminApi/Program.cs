@@ -137,7 +137,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
@@ -204,4 +204,9 @@ static void Configure(WebApplication app)
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
     app.MapHealthChecks("/health");
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.adminapi";
 }
