@@ -93,5 +93,7 @@ public enum ExternalEventType
 
     TokenLocked = 30,
 
-    PeerFeatureFlagsChanged = 40
+    PeerFeatureFlagsChanged = 40,
+
+    RelationshipTemplateAllocationsExhausted = 50
 }

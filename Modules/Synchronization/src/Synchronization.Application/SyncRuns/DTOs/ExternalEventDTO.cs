@@ -41,6 +41,8 @@ public class ExternalEventDTO
 
             ExternalEventType.PeerFeatureFlagsChanged => "PeerFeatureFlagsChanged",
 
+            ExternalEventType.RelationshipTemplateAllocationsExhausted => "RelationshipTemplateAllocationsExhausted",
+
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         };
     }

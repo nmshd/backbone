@@ -67,6 +67,9 @@ public class RelationshipTemplate : Entity
             throw new DomainException(DomainErrors.MaxNumberOfAllocationsExhausted());
 
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
+
+        if (Allocations.Count == MaxNumberOfAllocations)
+            RaiseDomainEvent(new RelationshipTemplateAllocationsExhaustedDomainEvent(this));
     }
 
     public void AnonymizeForIdentity(string didDomainName)

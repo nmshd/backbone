@@ -9,6 +9,7 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToB
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
@@ -20,6 +21,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.TokenLocked;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
@@ -32,6 +34,7 @@ public static class IEventBusExtensions
         {
             SubscribeToMessagesEvents(eventBus),
             SubscribeToRelationshipsEvents(eventBus),
+            SubscribeToRelationshipTemplatesEvents(eventBus),
             SubscribeToTokensEvents(eventBus)
         });
     }
@@ -60,9 +63,13 @@ public static class IEventBusExtensions
         });
     }
 
+    private static async Task SubscribeToRelationshipTemplatesEvents(IEventBus eventBus)
+    {
+        await eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>();
+    }
+
     private static async Task SubscribeToTokensEvents(IEventBus eventBus)
     {
         await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
-
 }
