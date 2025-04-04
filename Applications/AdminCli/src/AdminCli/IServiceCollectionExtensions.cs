@@ -27,6 +27,6 @@ public static class IServiceCollectionExtensions
         var parsedConfiguration = serviceProvider.GetRequiredService<IOptions<AdminCliConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-        services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+        services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, Program.METER_NAME);
     }
 }

@@ -21,6 +21,8 @@ namespace Backbone.AdminCli;
 
 public class Program
 {
+    public const string METER_NAME = "enmeshed.backbone.admincli";
+
     private static async Task Main(string[] args)
     {
         var configuration = new ConfigurationBuilder()
