@@ -38,7 +38,7 @@ try
 
     var meterProvider = OpenTelemetrySdk.CreateMeterProviderBuilder()
         .AddMeter(METER_NAME)
-        .AddPrometheusHttpListener(options => options.UriPrefixes = ["http://localhost:9184/"])
+        .AddPrometheusHttpListener(options => options.UriPrefixes = ["http://localhost:9464/"])
         .Build();
 
     await app.Build().RunAsync();
