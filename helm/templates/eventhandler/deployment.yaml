@@ -61,7 +61,7 @@ spec:
               readOnly: true
           env:
             - name: METRICS_HOST
-              value: {{ .Values.eventhandler.name }}.{{ .Release.Namespace }}.svc.cluster.local
+              value: +
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__productName
               value: RabbitMQ
