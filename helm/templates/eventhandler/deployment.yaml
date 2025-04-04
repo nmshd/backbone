@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
           ports:
             - name: metrics
-              containerPort: 9464
+              containerPort: 9444
               protocol: TCP
           volumeMounts:
             - name: settings-override
@@ -60,6 +60,8 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
+            - name: METRICS_HOST
+              value: {{ .Values.eventhandler.name }}.{{ .Release.Namespace }}.svc.cluster.local
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__productName
               value: RabbitMQ
