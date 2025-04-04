@@ -50,6 +50,10 @@ spec:
             {{- toYaml .Values.eventhandler.resources | nindent 12 }}
           image: "{{ .Values.eventhandler.image.repository }}:{{- default .Chart.AppVersion .Values.eventhandler.image.tagOverride }}"
           imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 9464
+              protocol: TCP
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
