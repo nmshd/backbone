@@ -24,7 +24,7 @@ spec:
     - matches:
         - path:
             type: Exact
-            value: connect/token
+            value: /connect/token
       backendRefs:
         - name: {{ .Values.consumerapi.name }}
           port: 8080
