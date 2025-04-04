@@ -26,6 +26,8 @@ namespace Backbone.Job.IdentityDeletion;
 
 public class Program
 {
+    private const string METER_NAME = "enmeshed.backbone.jobs.identitydeletion";
+
     public static async Task<int> Main(params string[] args)
     {
         Log.Logger = new LoggerConfiguration()
@@ -108,7 +110,7 @@ public class Program
 
                 services.RegisterIdentityDeleters();
 
-                services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+                services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration

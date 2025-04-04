@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
@@ -15,7 +16,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
-    public const int MAX_DELIVERY_COUNT = 5;
+    private const int MAX_DELIVERY_COUNT = 5;
     private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 5.Minutes();
 
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
@@ -31,6 +32,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     };
 
     private readonly IServiceProvider _serviceProvider;
+    private readonly EventBusMetrics _metrics;
     private readonly ServiceBusClient _client;
     private readonly ServiceBusAdministrationClient _adminClient;
     private readonly ServiceBusSender _sender;
@@ -38,12 +40,14 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
     private readonly List<ServiceBusProcessor> _processors = [];
 
-    public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient, ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider)
+    public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient, ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider,
+        EventBusMetrics metrics)
     {
         _client = client;
         _adminClient = adminClient;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
+        _metrics = metrics;
         _sender = client.CreateSender(TOPIC_NAME);
     }
 
@@ -66,6 +70,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
+        _metrics.TrackHandledMessageSize(body.Length);
+
         var message = new ServiceBusMessage
         {
             MessageId = @event.DomainEventId,
@@ -76,11 +82,21 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
         _logger.SendingDomainEvent(message.MessageId);
 
-        await _logger.TraceTime(async () =>
-                await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync)
-        );
+        try
+        {
+            var startedAt = Stopwatch.GetTimestamp();
+            await _sender.SendMessageAsync(message);
+            _metrics.TrackEventPublishingDuration(startedAt);
 
-        _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
+            _metrics.IncrementNumberOfPublishedEvents(eventName);
+
+            _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
+        }
+        catch (Exception)
+        {
+            _metrics.IncrementNumberOfPublishingErrors(eventName);
+            throw;
+        }
     }
 
     public async Task Subscribe<T, TH>()
@@ -111,7 +127,10 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                     if (processedSuccessfully)
                         await args.CompleteMessageAsync(args.Message);
                     else
+                    {
+                        _metrics.IncrementNumberOfProcessingErrors(eventName, GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
+                    }
                 }
             };
 
@@ -197,11 +216,15 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             if (scope.ServiceProvider.GetService(typeof(THandler)) is not IDomainEventHandler handler)
                 throw new Exception($"Domain event handler '{typeof(THandler).FullName}' could not be resolved from dependency container or it does not implement {nameof(IDomainEventHandler)}.");
 
+            var startedAt = Stopwatch.GetTimestamp();
             await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+            _metrics.TrackEventProcessingDuration(startedAt, eventName, GetSubscriptionName<THandler, TEvent>());
+
+            _metrics.IncrementNumberOfHandledEvents(eventName, GetSubscriptionName<THandler, TEvent>());
         }
         catch (Exception ex)
         {
-            _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
+            _logger.ErrorWhileProcessingDomainEvent(domainEvent.DomainEventId, ex);
             return false;
         }
 
@@ -253,6 +276,6 @@ internal static partial class EventBusAzureServiceBusLogs
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the '{domainEventName}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventName, Exception ex);
+        Message = "An error occurred while processing the event with id '{domainEventId}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
 }

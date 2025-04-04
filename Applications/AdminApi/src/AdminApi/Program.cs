@@ -122,7 +122,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
-
     services
         .AddOpenIddict()
         .AddCore(options =>
@@ -135,9 +134,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
@@ -156,6 +157,8 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
 static void Configure(WebApplication app)
 {
+    app.MapPrometheusScrapingEndpoint();
+
     // the following headers are necessary to run the application in webassembly mode
     app.Use(async (context, next) =>
     {
@@ -204,4 +207,9 @@ static void Configure(WebApplication app)
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
     app.MapHealthChecks("/health");
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.adminapi";
 }

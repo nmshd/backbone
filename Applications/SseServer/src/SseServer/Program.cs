@@ -105,7 +105,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
 
     services.AddHealthChecks();
 
@@ -116,11 +116,15 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+
     services.AddCustomIdentity(environment);
 }
 
 static void Configure(WebApplication app)
 {
+    app.MapPrometheusScrapingEndpoint();
+
     app.UseSerilogRequestLogging(opts =>
     {
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
@@ -161,4 +165,9 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.sseserver";
 }
