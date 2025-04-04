@@ -183,8 +183,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             var eventName = eventArgs.RoutingKey;
 
-            _metrics.IncrementNumberOfActiveHandlers(eventName, queueName);
-
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
             try
@@ -196,22 +194,16 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 {
                     await ProcessEvent<TEvent, THandler>(message);
 
-                    var startedAt = Stopwatch.GetTimestamp();
                     await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
-                    _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Acknowledge, startedAt, eventName, queueName);
                 }
             }
             catch (Exception ex)
             {
-                var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
-                _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Reject, startedAt, eventName, queueName);
                 _metrics.IncrementNumberOfProcessingErrors(eventName, queueName);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
-
-            _metrics.DecrementNumberOfActiveHandlers(eventName, queueName);
         };
 
         return consumer;
@@ -224,9 +216,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
-        var startedAt = Stopwatch.GetTimestamp();
         var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS);
-        _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Deserialize, startedAt, eventName, GetQueueName<THandler, TEvent>());
 
         var handlerType = typeof(THandler);
 
@@ -237,9 +227,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
-        startedAt = Stopwatch.GetTimestamp();
+        var startedAt = Stopwatch.GetTimestamp();
         await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
-        _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Handle, startedAt, eventName, GetQueueName<THandler, TEvent>());
+        _metrics.TrackEventProcessingDuration(startedAt, eventName, GetQueueName<THandler, TEvent>());
 
         _metrics.IncrementNumberOfHandledEvents(eventName, GetQueueName<THandler, TEvent>());
     }
@@ -258,11 +248,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var startedAt = Stopwatch.GetTimestamp();
         var message = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
-        _metrics.TrackEventPublishingDuration(EventPublishingDurationStage.Serialize, startedAt, eventName);
+        _metrics.TrackEventPublishingDuration(startedAt);
 
         var body = Encoding.UTF8.GetBytes(message);
 
-        _metrics.TrackHandledMessageSize(body.Length, eventName);
+        _metrics.TrackHandledMessageSize(body.Length);
 
         try
         {
@@ -280,11 +270,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
                 startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
-                _metrics.TrackEventPublishingDuration(EventPublishingDurationStage.Publish, startedAt, eventName);
+                _metrics.TrackEventPublishingDuration(startedAt);
 
                 _logger.PublishedDomainEvent();
 
-                _metrics.IncrementNumberOfPublishedEvents(eventName, eventName);
+                _metrics.IncrementNumberOfPublishedEvents(eventName);
 
                 _channelPool.Return(channel);
             });
