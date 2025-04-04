@@ -19,10 +19,15 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusMetrics
 {
-    private readonly UpDownCounter<int> _activeHandlers;
+    private readonly UpDownCounter<int> _numberOfActiveHandlers;
     private readonly Counter<long> _numberOfHandledEvents;
     private readonly Histogram<double> _eventProcessingDuration;
+    private readonly Counter<long> _numberOfProcessingErrors;
+
+    private readonly Histogram<double> _eventPublishingDuration;
+    private readonly Counter<long> _numberOfPublishedEvents;
     private readonly Histogram<int> _messageSizeBytes;
+    private readonly Counter<long> _numberOfPublishingErrors;
 
     public EventBusMetrics(Meter meter)
     {
@@ -31,9 +36,19 @@ public class EventBusMetrics
         {
             HistogramBucketBoundaries = [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, 30, 60, 180, 600]
         });
-        _activeHandlers = meter.CreateUpDownCounter<int>(name: "enmeshed_events_active_handlers");
+        _numberOfActiveHandlers = meter.CreateUpDownCounter<int>(name: "enmeshed_events_active_handlers");
+        _numberOfProcessingErrors = meter.CreateCounter<long>(name: "enmeshed_events_processing_errors_total");
+
+        _numberOfPublishedEvents = meter.CreateCounter<long>(name: "enmeshed_events_published_total");
+        _eventPublishingDuration = meter.CreateHistogram(name: "enmeshed_events_publishing_duration_seconds", unit: "s", advice: new InstrumentAdvice<double>
+        {
+            HistogramBucketBoundaries = [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, 30, 60, 180, 600]
+        });
         _messageSizeBytes = meter.CreateHistogram<int>(name: "enmeshed_events_message_size_bytes", unit: "By");
+        _numberOfPublishingErrors = meter.CreateCounter<long>(name: "enmeshed_events_publishing_errors_total");
     }
+
+    #region processing
 
     public void TrackEventProcessingDuration(EventProcessingDurationStage stage, long startedAt, string eventName, string queueName)
     {
@@ -55,7 +70,7 @@ public class EventBusMetrics
 
     public void IncrementNumberOfActiveHandlers(string eventName, string queueName)
     {
-        _activeHandlers.Add(
+        _numberOfActiveHandlers.Add(
             1,
             new KeyValuePair<string, object?>("event_name", eventName),
             new KeyValuePair<string, object?>("queue_name", queueName)
@@ -64,16 +79,11 @@ public class EventBusMetrics
 
     public void DecrementNumberOfActiveHandlers(string eventName, string queueName)
     {
-        _activeHandlers.Add(
+        _numberOfActiveHandlers.Add(
             -1,
             new KeyValuePair<string, object?>("event_name", eventName),
             new KeyValuePair<string, object?>("queue_name", queueName)
         );
-    }
-
-    public void TrackHandledMessageSize(int messageSize, string eventName)
-    {
-        _messageSizeBytes.Record(messageSize, new KeyValuePair<string, object?>("event_name", eventName));
     }
 
     private string EventProcessingDurationStageToString(EventProcessingDurationStage stage)
@@ -87,6 +97,61 @@ public class EventBusMetrics
             _ => "unknown"
         };
     }
+
+    public void IncrementNumberOfProcessingErrors(string eventName, string queueName)
+    {
+        _numberOfProcessingErrors.Add(
+            1,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName)
+        );
+    }
+
+    #endregion
+
+    #region publishing
+
+    public void TrackEventPublishingDuration(EventPublishingDurationStage stage, long startedAt, string eventName)
+    {
+        _eventPublishingDuration.Record(
+            Stopwatch.GetElapsedTime(startedAt).TotalSeconds,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("stage", EventPublishingDurationStageToString(stage)));
+    }
+
+    public void IncrementNumberOfPublishedEvents(string eventName, string queueName)
+    {
+        _numberOfPublishedEvents.Add(
+            1,
+            new KeyValuePair<string, object?>("event_name", eventName),
+            new KeyValuePair<string, object?>("queue_name", queueName)
+        );
+    }
+
+    public void TrackHandledMessageSize(int messageSize, string eventName)
+    {
+        _messageSizeBytes.Record(messageSize, new KeyValuePair<string, object?>("event_name", eventName));
+    }
+
+    private string EventPublishingDurationStageToString(EventPublishingDurationStage stage)
+    {
+        return stage switch
+        {
+            EventPublishingDurationStage.Publish => "publish",
+            EventPublishingDurationStage.Serialize => "serialize",
+            _ => "unknown"
+        };
+    }
+
+    public void IncrementNumberOfPublishingErrors(string eventName)
+    {
+        _numberOfPublishingErrors.Add(
+            1,
+            new KeyValuePair<string, object?>("event_name", eventName)
+        );
+    }
+
+    #endregion
 }
 
 public enum EventProcessingDurationStage
@@ -95,6 +160,12 @@ public enum EventProcessingDurationStage
     Handle,
     Acknowledge,
     Reject
+}
+
+public enum EventPublishingDurationStage
+{
+    Serialize,
+    Publish
 }
 
 public class EventBusRabbitMq : IEventBus, IDisposable
@@ -244,12 +315,13 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         var channel = await _persistentConnection.CreateChannel();
         var consumer = new AsyncEventingBasicConsumer(channel);
+        var queueName = GetQueueName<THandler, TEvent>();
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
 
-            _metrics.IncrementNumberOfActiveHandlers(eventName, GetQueueName<THandler, TEvent>());
+            _metrics.IncrementNumberOfActiveHandlers(eventName, queueName);
 
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
@@ -264,19 +336,20 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
                     var startedAt = Stopwatch.GetTimestamp();
                     await channel.BasicAckAsync(eventArgs.DeliveryTag, false);
-                    _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Acknowledge, startedAt, eventName, GetQueueName<THandler, TEvent>());
+                    _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Acknowledge, startedAt, eventName, queueName);
                 }
             }
             catch (Exception ex)
             {
                 var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
-                _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Reject, startedAt, eventName, GetQueueName<THandler, TEvent>());
+                _metrics.TrackEventProcessingDuration(EventProcessingDurationStage.Reject, startedAt, eventName, queueName);
+                _metrics.IncrementNumberOfProcessingErrors(eventName, queueName);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
 
-            _metrics.DecrementNumberOfActiveHandlers(eventName, GetQueueName<THandler, TEvent>());
+            _metrics.DecrementNumberOfActiveHandlers(eventName, queueName);
         };
 
         return consumer;
@@ -321,30 +394,44 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
 
+        var startedAt = Stopwatch.GetTimestamp();
         var message = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
+        _metrics.TrackEventPublishingDuration(EventPublishingDurationStage.Serialize, startedAt, eventName);
 
         var body = Encoding.UTF8.GetBytes(message);
 
         _metrics.TrackHandledMessageSize(body.Length, eventName);
 
-        await policy.ExecuteAsync(async () =>
+        try
         {
-            _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
-
-            var channel = await _channelPool.Get();
-            var properties = new BasicProperties
+            await policy.ExecuteAsync(async () =>
             {
-                DeliveryMode = DeliveryModes.Persistent,
-                MessageId = @event.DomainEventId,
-                CorrelationId = CustomLogContext.GetCorrelationId()
-            };
+                _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
 
-            await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
+                var channel = await _channelPool.Get();
+                var properties = new BasicProperties
+                {
+                    DeliveryMode = DeliveryModes.Persistent,
+                    MessageId = @event.DomainEventId,
+                    CorrelationId = CustomLogContext.GetCorrelationId()
+                };
 
-            _logger.PublishedDomainEvent();
+                startedAt = Stopwatch.GetTimestamp();
+                await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
+                _metrics.TrackEventPublishingDuration(EventPublishingDurationStage.Publish, startedAt, eventName);
 
-            _channelPool.Return(channel);
-        });
+                _logger.PublishedDomainEvent();
+
+                _metrics.IncrementNumberOfPublishedEvents(eventName, eventName);
+
+                _channelPool.Return(channel);
+            });
+        }
+        catch (Exception)
+        {
+            _metrics.IncrementNumberOfPublishingErrors(eventName);
+            throw;
+        }
     }
 
     public async Task StartConsuming(CancellationToken cancellationToken)
