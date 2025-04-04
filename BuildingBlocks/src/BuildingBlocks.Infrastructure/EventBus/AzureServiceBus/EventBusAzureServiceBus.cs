@@ -103,7 +103,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
-        var queueName = GetSubscriptionName<TH, T>();
         var eventName = typeof(T).GetEventName();
         var subscriptionName = GetSubscriptionName<TH, T>();
 

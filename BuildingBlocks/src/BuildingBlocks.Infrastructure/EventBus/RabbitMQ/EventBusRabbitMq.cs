@@ -266,10 +266,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
-                _metrics.TrackEventPublishingDuration(startedAt);
-
                 _logger.PublishedDomainEvent();
-
+                
+                _metrics.TrackEventPublishingDuration(startedAt);
                 _metrics.IncrementNumberOfPublishedEvents(eventName);
             }
             catch (Exception)
