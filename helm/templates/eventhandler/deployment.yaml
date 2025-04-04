@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
           ports:
             - name: metrics
-              containerPort: 9464
+              containerPort: 9444
               protocol: TCP
           volumeMounts:
             - name: settings-override
