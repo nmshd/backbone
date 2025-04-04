@@ -20,8 +20,8 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using OpenTelemetrySdk = OpenTelemetry.Sdk;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
+using OpenTelemetrySdk = OpenTelemetry.Sdk;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
