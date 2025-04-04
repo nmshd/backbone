@@ -177,11 +177,15 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
 }
 
 static void Configure(WebApplication app)
 {
+    app.MapPrometheusScrapingEndpoint();
+
     app.UseSerilogRequestLogging(opts =>
     {
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;

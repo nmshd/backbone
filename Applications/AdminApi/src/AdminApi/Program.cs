@@ -122,7 +122,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
-
     services
         .AddOpenIddict()
         .AddCore(options =>
@@ -134,6 +133,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
                     CustomOpenIddictEntityFrameworkCoreToken, string>();
             options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
+
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
@@ -156,6 +157,8 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
 static void Configure(WebApplication app)
 {
+    app.MapPrometheusScrapingEndpoint();
+
     // the following headers are necessary to run the application in webassembly mode
     app.Use(async (context, next) =>
     {
