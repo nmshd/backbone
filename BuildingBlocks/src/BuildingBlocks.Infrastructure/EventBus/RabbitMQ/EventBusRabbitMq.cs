@@ -199,7 +199,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             catch (Exception ex)
             {
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
-                _metrics.IncrementNumberOfProcessingErrors(eventName, GetQueueName<THandler, TEvent>());
+                _metrics.IncrementNumberOfProcessingErrors(GetQueueName<THandler, TEvent>());
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
@@ -228,9 +228,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var startedAt = Stopwatch.GetTimestamp();
         await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
-        _metrics.TrackEventProcessingDuration(startedAt, eventName, GetQueueName<THandler, TEvent>());
+        _metrics.TrackEventProcessingDuration(startedAt, GetQueueName<THandler, TEvent>());
 
-        _metrics.IncrementNumberOfHandledEvents(eventName, GetQueueName<THandler, TEvent>());
+        _metrics.IncrementNumberOfHandledEvents(GetQueueName<THandler, TEvent>());
     }
 
     public async Task Publish(DomainEvent @event)
