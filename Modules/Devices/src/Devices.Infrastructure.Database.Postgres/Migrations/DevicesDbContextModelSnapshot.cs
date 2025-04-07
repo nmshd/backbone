@@ -68,6 +68,33 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("PnsRegistrations", "Devices");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
                 {
                     b.Property<string>("Id")

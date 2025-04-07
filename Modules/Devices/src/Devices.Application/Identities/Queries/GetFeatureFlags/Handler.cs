@@ -13,12 +13,15 @@ public class Handler : IRequestHandler<GetFeatureFlagsQuery, GetFeatureFlagsResp
 {
     private readonly IIdentitiesRepository _identityRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
+    private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
 
-    public Handler(IIdentitiesRepository identityRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext)
+    public Handler(IIdentitiesRepository identityRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext,
+        IRelationshipsRepository relationshipsRepository)
     {
         _identityRepository = identityRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
+        _relationshipsRepository = relationshipsRepository;
         _activeIdentity = userContext.GetAddress();
     }
 
@@ -31,14 +34,17 @@ public class Handler : IRequestHandler<GetFeatureFlagsQuery, GetFeatureFlagsResp
         return new GetFeatureFlagsResponse(featureFlags);
     }
 
-    private async Task<bool> HasPermission(IdentityAddress peerAddress, CancellationToken cancellationToken)
+    private async Task<bool> HasPermission(IdentityAddress address, CancellationToken cancellationToken)
     {
-        if (_activeIdentity == peerAddress)
+        if (_activeIdentity == address)
             return true;
 
+        if (await _relationshipsRepository.RelationshipExistsBetween(address, _activeIdentity))
+            return true;
+            
         return await _relationshipTemplatesRepository.AllocationExists(
             RelationshipTemplateAllocation.IsAllocatedBy(_activeIdentity)
-                .And(RelationshipTemplateAllocation.BelongsToTemplateOf(peerAddress)),
+                .And(RelationshipTemplateAllocation.BelongsToTemplateOf(address)),
             cancellationToken);
     }
 }
