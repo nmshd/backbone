@@ -98,11 +98,11 @@ public static class ServiceCollectionExtensions
             .WithMetrics(metrics =>
             {
                 metrics
-                    // .AddAspNetCoreInstrumentation()
-                    // .AddHttpClientInstrumentation()
-                    // .AddRuntimeInstrumentation()
                     .AddPrometheusExporter()
-                    .AddMeter(name);
+                    .AddMeter(name)
+                    .AddMeter("Microsoft.AspNetCore.Hosting")
+                    .AddMeter("Microsoft.AspNetCore.Diagnostics")
+                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
             });
 
         return services;

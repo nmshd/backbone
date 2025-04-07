@@ -181,7 +181,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         }
         catch (Exception ex)
         {
-            _metrics.IncrementNumberOfProcessingErrors(eventType.GetEventName(), GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId);
+            _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId);
             _logger.ErrorHandlingMessage(ex.StackTrace!, ex);
             return SubscriberClient.Reply.Nack;
         }
@@ -191,7 +191,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
-        var eventName = eventType.GetEventName();
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
         var domainEvent = JsonConvert.DeserializeObject(message, eventType, JSON_SERIALIZER_SETTINGS)!;
 
@@ -204,9 +203,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
         var startedAt = Stopwatch.GetTimestamp();
         await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
-        _metrics.TrackEventProcessingDuration(startedAt, eventName, subscriptionName);
+        _metrics.TrackEventProcessingDuration(startedAt, subscriptionName);
 
-        _metrics.IncrementNumberOfHandledEvents(eventName, subscriptionName);
+        _metrics.IncrementNumberOfHandledEvents(subscriptionName);
     }
 
     public async Task StopConsuming(CancellationToken cancellationToken)

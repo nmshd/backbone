@@ -128,7 +128,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                         await args.CompleteMessageAsync(args.Message);
                     else
                     {
-                        _metrics.IncrementNumberOfProcessingErrors(eventName, GetSubscriptionName<TH, T>());
+                        _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
                     }
                 }
@@ -218,9 +218,9 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
             var startedAt = Stopwatch.GetTimestamp();
             await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
-            _metrics.TrackEventProcessingDuration(startedAt, eventName, GetSubscriptionName<THandler, TEvent>());
+            _metrics.TrackEventProcessingDuration(startedAt, GetSubscriptionName<THandler, TEvent>());
 
-            _metrics.IncrementNumberOfHandledEvents(eventName, GetSubscriptionName<THandler, TEvent>());
+            _metrics.IncrementNumberOfHandledEvents(GetSubscriptionName<THandler, TEvent>());
         }
         catch (Exception ex)
         {
