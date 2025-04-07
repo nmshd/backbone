@@ -98,9 +98,7 @@ public static class ServiceCollectionExtensions
             .WithMetrics(metrics =>
             {
                 metrics
-                    // .AddAspNetCoreInstrumentation()
-                    // .AddHttpClientInstrumentation()
-                    // .AddRuntimeInstrumentation()
+                    .AddAspNetCoreInstrumentation()
                     .AddPrometheusExporter()
                     .AddMeter(name);
             });

@@ -191,7 +191,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
-        var eventName = eventType.GetEventName();
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
         var domainEvent = JsonConvert.DeserializeObject(message, eventType, JSON_SERIALIZER_SETTINGS)!;
 
