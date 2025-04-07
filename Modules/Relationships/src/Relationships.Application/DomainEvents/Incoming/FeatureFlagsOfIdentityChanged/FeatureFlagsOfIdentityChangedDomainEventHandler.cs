@@ -53,7 +53,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
                 identitiesToBeNotified.Add(relationship.From);
             }
         }
-        
+
         var allocations = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(a => a.RelationshipTemplate.CreatedBy == @event.IdentityAddress, CancellationToken.None);
 
         foreach (var relationshipTemplateAllocation in allocations)

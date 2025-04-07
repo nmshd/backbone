@@ -41,7 +41,7 @@ public class Handler : IRequestHandler<GetFeatureFlagsQuery, GetFeatureFlagsResp
 
         if (await _relationshipsRepository.RelationshipExistsBetween(address, _activeIdentity))
             return true;
-            
+
         return await _relationshipTemplatesRepository.AllocationExists(
             RelationshipTemplateAllocation.IsAllocatedBy(_activeIdentity)
                 .And(RelationshipTemplateAllocation.BelongsToTemplateOf(address)),
