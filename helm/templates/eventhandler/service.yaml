@@ -8,7 +8,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 9444
+    - name: metrics
+      port: 9444
       targetPort: 9444
   selector:
     app: {{ .Values.eventhandler.name }}
