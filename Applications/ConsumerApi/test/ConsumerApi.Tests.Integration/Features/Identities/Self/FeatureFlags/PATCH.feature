@@ -31,11 +31,25 @@ Identity changes feature flags
         And the response content contains an error with the error code "error.platform.validation.featureFlag.maxNumberOfFeatureFlagsExceeded"
         And i has 200 feature flags with names feature[1...200]
 
-    Scenario: Peer changes feature flags
+    Scenario: Peer changes feature flags and an external event is send due to a relationship template allocation
         Given Identities i1 and i2
         And a Relationship Template t created by i1
         And Relationship Template t was allocated by i2
         When i1 sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 enabled and feature2 disabled
         And 2 second(s) have passed
         Then i2 receives an ExternalEvent e of type PeerFeatureFlagsChanged which contains the address of i1
-    
+ 
+    Scenario: Peer changes feature flags and an external event is send based due to an acive relationship
+        Given Identities i1 and i2
+        And a Relationship Template t created by i1
+        And an active Relationship r1 between i1 and i2 with template t
+        When i2 sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 enabled and feature2 disabled
+        And 2 second(s) have passed
+        Then i1 receives an ExternalEvent e of type PeerFeatureFlagsChanged which contains the address of i2
+ 
+    Scenario: Peer changes feature flags and an external event is send due to a pending relationship
+        Given Identities i1 and i2
+        And a pending Relationship r1 between i2 and i1
+        When i2 sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with feature1 enabled and feature2 disabled
+        And 2 second(s) have passed
+        Then i1 receives an ExternalEvent e of type PeerFeatureFlagsChanged which contains the address of i2
