@@ -5,7 +5,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public class EventBusMetrics
 {
-    private readonly Counter<long> _numberOfHandledEvents;
+    private readonly Counter<long> _numberOfProcessedEvents;
     private readonly Histogram<double> _eventProcessingDuration;
     private readonly Counter<long> _numberOfProcessingErrors;
 
@@ -16,7 +16,7 @@ public class EventBusMetrics
 
     public EventBusMetrics(Meter meter)
     {
-        _numberOfHandledEvents = meter.CreateCounter<long>(name: "enmeshed_events_handled_total");
+        _numberOfProcessedEvents = meter.CreateCounter<long>(name: "enmeshed_events_handled_total");
         _eventProcessingDuration = meter.CreateHistogram(name: "enmeshed_events_processing_duration_seconds", unit: "s", advice: new InstrumentAdvice<double>
         {
             HistogramBucketBoundaries = [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, 30, 60, 180, 600]
@@ -37,28 +37,25 @@ public class EventBusMetrics
 
     #region processing
 
-    public void TrackEventProcessingDuration(long startedAt, string eventName, string queueName)
+    public void TrackEventProcessingDuration(long startedAt, string queueName)
     {
         _eventProcessingDuration.Record(
             Stopwatch.GetElapsedTime(startedAt).TotalSeconds,
-            new KeyValuePair<string, object?>("event_name", eventName),
             new KeyValuePair<string, object?>("queue_name", queueName));
     }
 
-    public void IncrementNumberOfHandledEvents(string eventName, string queueName)
+    public void IncrementNumberOfHandledEvents(string queueName)
     {
-        _numberOfHandledEvents.Add(
+        _numberOfProcessedEvents.Add(
             1,
-            new KeyValuePair<string, object?>("event_name", eventName),
             new KeyValuePair<string, object?>("queue_name", queueName)
         );
     }
 
-    public void IncrementNumberOfProcessingErrors(string eventName, string queueName)
+    public void IncrementNumberOfProcessingErrors(string queueName)
     {
         _numberOfProcessingErrors.Add(
             1,
-            new KeyValuePair<string, object?>("event_name", eventName),
             new KeyValuePair<string, object?>("queue_name", queueName)
         );
     }
