@@ -17,7 +17,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
     private const int MAX_DELIVERY_COUNT = 5;
-    private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 5.Minutes();
 
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
     {
