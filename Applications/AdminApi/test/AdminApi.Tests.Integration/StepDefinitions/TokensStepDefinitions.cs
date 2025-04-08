@@ -53,7 +53,7 @@ internal class TokensStepDefinitions : BaseStepDefinitions
         _whenResponse.Should().NotBeNull();
         ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
-    
+
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {

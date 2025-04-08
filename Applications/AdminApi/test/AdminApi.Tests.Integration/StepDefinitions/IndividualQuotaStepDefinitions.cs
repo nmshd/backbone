@@ -18,7 +18,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     private ApiResponse<IndividualQuota>? _createQuotaResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
     private IResponse? _whenResponse;
-    
+
     public IndividualQuotaStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
         _identityAddress = string.Empty;
