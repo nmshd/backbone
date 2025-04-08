@@ -100,6 +100,7 @@ public static class ServiceCollectionExtensions
                 metrics
                     .AddPrometheusExporter()
                     .AddMeter(name)
+                    .AddMeter("Microsoft.EntityFrameworkCore")
                     .AddMeter("Microsoft.AspNetCore.Hosting")
                     .AddMeter("Microsoft.AspNetCore.Diagnostics")
                     .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
