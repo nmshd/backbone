@@ -34,17 +34,17 @@ public class Handler : IRequestHandler<GetFeatureFlagsQuery, GetFeatureFlagsResp
         return new GetFeatureFlagsResponse(featureFlags);
     }
 
-    private async Task<bool> HasPermission(IdentityAddress address, CancellationToken cancellationToken)
+    private async Task<bool> HasPermission(IdentityAddress peerAddress, CancellationToken cancellationToken)
     {
-        if (_activeIdentity == address)
+        if (_activeIdentity == peerAddress)
             return true;
 
-        if (await _relationshipsRepository.RelationshipExistsBetween(address, _activeIdentity))
+        if (await _relationshipsRepository.RelationshipExists(Relationship.IsBetween(peerAddress, _activeIdentity), cancellationToken))
             return true;
 
         return await _relationshipTemplatesRepository.AllocationExists(
             RelationshipTemplateAllocation.IsAllocatedBy(_activeIdentity)
-                .And(RelationshipTemplateAllocation.BelongsToTemplateOf(address)),
+                .And(RelationshipTemplateAllocation.BelongsToTemplateOf(peerAddress)),
             cancellationToken);
     }
 }

@@ -1,8 +1,9 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+using System.Linq.Expressions;
+using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 
 public interface IRelationshipsRepository
 {
-    Task<bool> RelationshipExistsBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2);
+    Task<bool> RelationshipExists(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
 }

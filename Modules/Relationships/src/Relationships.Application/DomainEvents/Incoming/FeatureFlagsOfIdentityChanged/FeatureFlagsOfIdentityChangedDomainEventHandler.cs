@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
@@ -23,18 +24,18 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
     {
         var identitiesToBeNotified = await FindAllIdentitiesToBeNotified(@event);
 
-        var publishEventTasks = identitiesToBeNotified.Select(notifiedAddress => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
+        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
         {
             PeerAddress = @event.IdentityAddress,
-            NotifiedIdentityAddress = notifiedAddress
+            NotifiedIdentityAddress = i
         }));
 
         await Task.WhenAll(publishEventTasks);
     }
 
-    private async Task<HashSet<string>> FindAllIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
+    private async Task<HashSet<IdentityAddress>> FindAllIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
     {
-        var identitiesToBeNotified = new HashSet<string>();
+        var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
         var activeAndPendingRelationships = await
             _relationshipsRepository.FindRelationships(

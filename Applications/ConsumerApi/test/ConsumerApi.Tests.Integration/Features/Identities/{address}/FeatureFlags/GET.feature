@@ -18,11 +18,11 @@ Identity tries to access feature flags of other identity with given address
         And the response contains the feature flags feature1 enabled and feature2 disabled
 
     Scenario: Accessing feature flags with permission based on any existing Relationship
-        Given Identities templateCreatorName and partnerName
-        And a Relationship Template t created by templateCreatorName
-        And an active Relationship r1 between templateCreatorName and partnerName with template t
-        And partnerName has feature flags feature1 enabled and feature2 disabled
-        When templateCreatorName sends a GET request to the /Identities/{address}/FeatureFlags endpoint with address=partnerName.address
+        Given Identities i1 and i2
+        And a Relationship Template t created by i1
+        And an active Relationship r1 between i1 and i2 with template t
+        And i2 has feature flags feature1 enabled and feature2 disabled
+        When i1 sends a GET request to the /Identities/{address}/FeatureFlags endpoint with address=i2.address
         Then the response status code is 200 (OK)
         And the response contains the feature flags feature1 enabled and feature2 disabled
 

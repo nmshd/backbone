@@ -1,4 +1,4 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+using System.Linq.Expressions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -8,18 +8,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 
 public class RelationshipsRepository : IRelationshipsRepository
 {
-    private readonly IQueryable<Relationship> _readRelationships;
+    private readonly IQueryable<Relationship> _readonlyRelationships;
 
     public RelationshipsRepository(DevicesDbContext dbContext)
     {
-        _readRelationships = dbContext.Relationships.AsNoTracking();
+        _readonlyRelationships = dbContext.Relationships.AsNoTracking();
     }
 
-    public async Task<bool> RelationshipExistsBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
+    public Task<bool> RelationshipExists(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        var identitiesSet = new HashSet<string> { identityAddress1, identityAddress2 };
-
-        return await _readRelationships
-            .AnyAsync(r => identitiesSet.Contains(r.From) && identitiesSet.Contains(r.To));
+        return _readonlyRelationships.AnyAsync(filter, cancellationToken);
     }
 }

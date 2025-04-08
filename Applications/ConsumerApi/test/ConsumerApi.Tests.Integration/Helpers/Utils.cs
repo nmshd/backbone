@@ -28,17 +28,17 @@ public static class Utils
         return new SignedChallenge(serializedChallenge, challengeSignature);
     }
 
-    public static async Task<Relationship> CreatePendingRelationshipBetween(Client client1, Client client2)
+    public static async Task<Relationship> CreatePendingRelationshipBetween(Client templator, Client requestor)
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
             Content = TestData.SOME_BYTES
         };
 
-        var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
+        var relationshipTemplateResponse = await templator.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
         relationshipTemplateResponse.Should().BeASuccess();
 
-        return await CreatePendingRelationshipUsingTemplate(client2, relationshipTemplateResponse.Result!.Id);
+        return await CreatePendingRelationshipUsingTemplate(requestor, relationshipTemplateResponse.Result!.Id);
     }
 
     public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client client2, string templateId)

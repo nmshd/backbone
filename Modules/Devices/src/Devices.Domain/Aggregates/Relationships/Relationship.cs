@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
@@ -15,4 +16,9 @@ public class Relationship : Entity
 
     public IdentityAddress From { get; } = null!;
     public IdentityAddress To { get; } = null!;
+
+    public static Expression<Func<Relationship, bool>> IsBetween(IdentityAddress address1, IdentityAddress address2)
+    {
+        return r => (r.From == address1 && r.To == address2) || (r.From == address2 && r.To == address1);
+    }
 }

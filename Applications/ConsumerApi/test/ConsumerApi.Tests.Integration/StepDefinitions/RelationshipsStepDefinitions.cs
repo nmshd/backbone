@@ -47,7 +47,7 @@ internal class RelationshipsStepDefinitions
         var creator = _clientPool.FirstForIdentityName(participant1Name);
         var peer = _clientPool.FirstForIdentityName(participant2Name);
 
-        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(creator, peer);
     }
 
     [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
