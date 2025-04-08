@@ -88,7 +88,7 @@ internal class SynchronizationStepDefinitions
             e.Payload["peerAddress"].GetString() == peerAddress);
     }
 
-    [Then($@"{RegexFor.SINGLE_THING} recieves an ExternalEvent of type RelationshipTemplateAllocationsExhausted which contains the Relationship Template {RegexFor.SINGLE_THING}")]
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type RelationshipTemplateAllocationsExhausted which contains the id of Relationship Template {RegexFor.SINGLE_THING}")]
     public async Task ThenIRecievesAnExternalEventOfTypeRelationshipTemplateAllocationsExhausted(string notifiedIdentityName, string relationshipTemplateName)
     {
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
