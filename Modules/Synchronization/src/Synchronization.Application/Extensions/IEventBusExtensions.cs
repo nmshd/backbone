@@ -9,6 +9,7 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToB
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
@@ -20,6 +21,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.TokenLocked;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
@@ -56,7 +58,8 @@ public static class IEventBusExtensions
             eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>(),
             eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>(),
             eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>(),
-            eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>()
+            eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>()
         });
     }
 
@@ -64,5 +67,4 @@ public static class IEventBusExtensions
     {
         await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
     }
-
 }

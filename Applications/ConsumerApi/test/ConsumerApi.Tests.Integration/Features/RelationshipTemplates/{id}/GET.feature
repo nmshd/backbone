@@ -26,3 +26,11 @@ User requests a Relationship Template
           | i1 and i2       | i1            | i2          | password | i2             | password      | 200 (OK)           | non-owner is forIdentity and tries to get with correct password   |
           | i1 and i2       | i1            | i2          | password | i2             | wordpass      | 404 (Not Found)    | non-owner is forIdentity and tries to get with incorrect password |
           | i1, i2 and i3   | i1            | i2          | password | i3             | password      | 404 (Not Found)    | non-owner is forIdentity, and thirdParty tries to get             |
+
+    Scenario: Request exhausts maximum number of allocations
+        Given Identities i1 and i2
+        And a Relationship Template rt created by i1 with 1 max allocations
+        When i2 sends a GET request to the /RelationshipTemplates/rt.Id endpoint
+        And 2 second(s) have passed
+        Then the response status code is 200 (OK)
+        And i1 receives an ExternalEvent of type RelationshipTemplateAllocationsExhausted which contains the id of Relationship Template rt
