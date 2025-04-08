@@ -1,10 +1,13 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokensByIdentity;
+using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +38,14 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
         var pagedResult = await _mediator.Send(request, cancellationToken);
 
         return Paged(pagedResult);
+    }
+
+    [HttpPatch("{id}/ResetAccessFailedCount"), ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var request = new ResetAccessFailedCountOfTokenCommand(TokenId.Parse(id));
+        await _mediator.Send(request, cancellationToken);
+        return Ok();
     }
 }
