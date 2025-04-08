@@ -149,7 +149,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             await _adminClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, subscriptionName)
             {
                 MaxDeliveryCount = MAX_DELIVERY_COUNT,
-                DefaultMessageTimeToLive = MESSAGE_TIME_TO_LIVE,
                 DeadLetteringOnMessageExpiration = true,
             });
 
