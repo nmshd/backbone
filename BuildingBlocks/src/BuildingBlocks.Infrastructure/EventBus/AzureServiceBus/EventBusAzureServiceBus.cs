@@ -128,6 +128,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                         await args.CompleteMessageAsync(args.Message);
                     else
                     {
+                        await args.AbandonMessageAsync(args.Message);
                         _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
                     }
@@ -204,7 +205,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     private async Task<bool> ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
         var eventType = typeof(TEvent);
-        var eventName = eventType.GetEventName();
 
         var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS)!;
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
