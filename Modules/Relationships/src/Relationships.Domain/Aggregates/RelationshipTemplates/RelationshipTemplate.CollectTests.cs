@@ -16,7 +16,6 @@ public class RelationshipTemplateCollectTests : AbstractTestsBase
         template.AllocateFor(CreateRandomIdentityAddress(), CreateRandomDeviceId());
 
         // Assert
-        template.DomainEvents.Should().HaveCount(1);
         template.Should().HaveASingleDomainEvent<RelationshipTemplateAllocationsExhaustedDomainEvent>();
     }
 }
