@@ -128,6 +128,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                         await args.CompleteMessageAsync(args.Message);
                     else
                     {
+                        await args.AbandonMessageAsync(args.Message);
                         _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
                     }
