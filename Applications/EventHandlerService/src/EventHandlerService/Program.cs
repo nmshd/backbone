@@ -38,6 +38,7 @@ try
 
     var meterProvider = OpenTelemetrySdk.CreateMeterProviderBuilder()
         .AddMeter(METER_NAME)
+        .AddMeter("Microsoft.EntityFrameworkCore")
         .AddPrometheusHttpListener(options =>
         {
             var host = Environment.GetEnvironmentVariable("METRICS_HOST") ?? "localhost";
