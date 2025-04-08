@@ -39,6 +39,15 @@ internal class RelationshipTemplatesStepDefinitions
             (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
     }
 
+    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with {RegexFor.SINGLE_THING} max allocations")]
+    public async Task GivenARelationshipTemplateCreatedByIdentityWithMaxAllocations(string templateName, string identityName, string maxAllocations)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var allocations = int.Parse(maxAllocations);
+        _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName] =
+            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, MaxNumberOfAllocations = allocations })).Result!;
+    }
+
     [Given($@"Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password ""([^""]*)"" and forIdentity {RegexFor.OPTIONAL_SINGLE_THING}")]
     public async Task GivenRelationshipTemplateCreatedByTokenOwnerWithPasswordAndForIdentity(string relationshipTemplateName, string identityName, string passwordString, string forIdentityName)
     {
