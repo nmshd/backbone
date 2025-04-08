@@ -42,8 +42,9 @@ public static class RabbitMqServiceCollectionExtensions
         {
             var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
+            var metrics = sp.GetRequiredService<EventBusMetrics>();
 
-            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, configuration.ExchangeName).GetAwaiter().GetResult();
+            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, configuration.ExchangeName, metrics).GetAwaiter().GetResult();
         });
     }
 }

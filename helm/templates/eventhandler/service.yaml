@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.eventhandler.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.eventhandler.name }}
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 9444
+      targetPort: 9444
+  selector:
+    app: {{ .Values.eventhandler.name }}

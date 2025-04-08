@@ -12,8 +12,9 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
         services.AddSingleton<IEventBus, EventBusGoogleCloudPubSub>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<EventBusGoogleCloudPubSub>>();
+            var metrics = sp.GetRequiredService<EventBusMetrics>();
 
-            return new EventBusGoogleCloudPubSub(logger, sp, configuration.ProjectId, configuration.TopicName, configuration.ServiceAccountJson);
+            return new EventBusGoogleCloudPubSub(logger, sp, configuration.ProjectId, configuration.TopicName, configuration.ServiceAccountJson, metrics);
         });
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
@@ -14,6 +15,20 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+
+public enum EventProcessingDurationStage
+{
+    Deserialize,
+    Handle,
+    Acknowledge,
+    Reject
+}
+
+public enum EventPublishingDurationStage
+{
+    Serialize,
+    Publish
+}
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
@@ -32,24 +47,27 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly ChannelPool _channelPool;
 
     private readonly string _exchangeName;
+    private readonly EventBusMetrics _metrics;
     private readonly string _deadLetterExchangeName;
     private readonly string _deadLetterQueueName;
     private readonly SubscriptionManager _subscriptionManager = new();
 
-    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
+    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName, EventBusMetrics metrics)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
         _exchangeName = exchangeName;
+        _metrics = metrics;
         _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
         _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
         _channelPool = new ChannelPool(persistentConnection);
     }
 
-    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName)
+    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName,
+        EventBusMetrics metrics)
     {
-        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName);
+        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName, metrics);
 
         await eventBus.Init();
 
@@ -163,6 +181,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
             var eventName = eventArgs.RoutingKey;
+
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
             try
@@ -180,6 +199,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             catch (Exception ex)
             {
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
+                _metrics.IncrementNumberOfProcessingErrors(GetQueueName<THandler, TEvent>());
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
@@ -206,7 +226,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
+        var startedAt = Stopwatch.GetTimestamp();
         await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+        _metrics.TrackEventProcessingDuration(startedAt, GetQueueName<THandler, TEvent>());
+
+        _metrics.IncrementNumberOfHandledEvents(GetQueueName<THandler, TEvent>());
     }
 
     public async Task Publish(DomainEvent @event)
@@ -225,6 +249,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var body = Encoding.UTF8.GetBytes(message);
 
+        _metrics.TrackHandledMessageSize(body.Length);
+
         await policy.ExecuteAsync(async () =>
         {
             _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
@@ -236,10 +262,20 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 MessageId = @event.DomainEventId,
                 CorrelationId = CustomLogContext.GetCorrelationId()
             };
+            try
+            {
+                var startedAt = Stopwatch.GetTimestamp();
+                await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
+                _logger.PublishedDomainEvent();
 
-            await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
-
-            _logger.PublishedDomainEvent();
+                _metrics.TrackEventPublishingDuration(startedAt);
+                _metrics.IncrementNumberOfPublishedEvents(eventName);
+            }
+            catch (Exception)
+            {
+                _metrics.IncrementNumberOfPublishingErrors(eventName);
+                throw;
+            }
 
             _channelPool.Return(channel);
         });

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
@@ -37,6 +38,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
     private readonly string _projectId;
+    private readonly EventBusMetrics _metrics;
     private readonly TopicName _topicName;
     private readonly SubscriberServiceApiClient _subscriberService;
 
@@ -47,9 +49,10 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private bool _disposed;
 
-    public EventBusGoogleCloudPubSub(ILogger<EventBusGoogleCloudPubSub> logger, IServiceProvider serviceProvider, string projectId, string topicId, string connectionInfo)
+    public EventBusGoogleCloudPubSub(ILogger<EventBusGoogleCloudPubSub> logger, IServiceProvider serviceProvider, string projectId, string topicId, string connectionInfo, EventBusMetrics metrics)
     {
         _projectId = projectId;
+        _metrics = metrics;
         _topicName = TopicName.FromProjectTopic(projectId, topicId);
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
@@ -70,10 +73,13 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         var eventName = @event.GetEventName();
 
         var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
+        var messageBytes = ByteString.CopyFromUtf8(jsonMessage);
+
+        _metrics.TrackHandledMessageSize(messageBytes.Length);
 
         var message = new PubsubMessage
         {
-            Data = ByteString.CopyFromUtf8(jsonMessage),
+            Data = messageBytes,
             Attributes =
             {
                 { PubSubMessageAttributes.EVENT_NAME, eventName },
@@ -81,11 +87,20 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
             }
         };
 
-        var messageId = await _logger.TraceTime(
-            () => _publisherClient.PublishAsync(message), nameof(_publisherClient.PublishAsync)
-        );
+        try
+        {
+            var startedAt = Stopwatch.GetTimestamp();
+            var messageId = await _publisherClient.PublishAsync(message);
+            _logger.SuccessfullySentDomainEvent(messageId);
 
-        _logger.EventWasNotProcessed(messageId);
+            _metrics.TrackEventPublishingDuration(startedAt);
+            _metrics.IncrementNumberOfPublishedEvents(eventName);
+        }
+        catch (Exception)
+        {
+            _metrics.IncrementNumberOfPublishingErrors(eventName);
+            throw;
+        }
     }
 
     public async Task Subscribe<T, TH>()
@@ -105,15 +120,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         }.BuildAsync();
 
         _subscriptions.Add(new Subscription(subscriberClient, typeof(T), typeof(TH)));
-    }
-
-    public static SubscriptionName GetSubscriptionName<THandler, TEvent>(string projectId) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
-    {
-        var eventHandlerFullName = typeof(THandler).FullName!;
-
-        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
-
-        return new SubscriptionName(projectId, $"{moduleName}.{typeof(TEvent).GetEventName()}");
     }
 
     private async Task EnsureSubscriptionExists(SubscriptionName subscriptionName, string eventName)
@@ -175,6 +181,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         }
         catch (Exception ex)
         {
+            _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId);
             _logger.ErrorHandlingMessage(ex.StackTrace!, ex);
             return SubscriberClient.Reply.Nack;
         }
@@ -184,6 +191,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
+        var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
         var domainEvent = JsonConvert.DeserializeObject(message, eventType, JSON_SERIALIZER_SETTINGS)!;
 
         await using var scope = _serviceProvider.CreateAsyncScope();
@@ -193,7 +201,11 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
         var handleMethod = handler.GetType().GetMethod("Handle");
 
+        var startedAt = Stopwatch.GetTimestamp();
         await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+        _metrics.TrackEventProcessingDuration(startedAt, subscriptionName);
+
+        _metrics.IncrementNumberOfHandledEvents(subscriptionName);
     }
 
     public async Task StopConsuming(CancellationToken cancellationToken)
@@ -239,6 +251,20 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         }
     }
 
+    public static SubscriptionName GetSubscriptionName<THandler, TEvent>(string projectId) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        return GetSubscriptionName(projectId, typeof(THandler), typeof(TEvent));
+    }
+
+    private static SubscriptionName GetSubscriptionName(string projectId, Type handlerType, Type eventType)
+    {
+        var eventHandlerFullName = handlerType.FullName!;
+
+        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
+
+        return new SubscriptionName(projectId, $"{moduleName}.{eventType.GetEventName()}");
+    }
+
     private record Subscription
     {
         public Subscription(SubscriberClient subscriberClient, Type eventType, Type handlerType)
@@ -264,10 +290,10 @@ internal static partial class EventBusGoogleCloudPubSubLogs
 {
     [LoggerMessage(
         EventId = 830408,
-        EventName = "EventBusGoogleCloudPubSub.SendingDomainEvent",
+        EventName = "EventBusGoogleCloudPubSub.SuccessfullySentDomainEvent",
         Level = LogLevel.Debug,
         Message = "Successfully sent domain event with id '{messageId}'.")]
-    public static partial void EventWasNotProcessed(this ILogger logger, string messageId);
+    public static partial void SuccessfullySentDomainEvent(this ILogger logger, string messageId);
 
     [LoggerMessage(
         EventId = 712382,

@@ -13,13 +13,15 @@ internal class SynchronizationStepDefinitions
     private readonly Dictionary<string, StartSyncRunResponse> _startSyncRunResponses = new();
     private readonly ResponseContext _responseContext;
     private readonly MessagesContext _messagesContext;
+    private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
     private ApiResponse<ListExternalEventsResponse>? _listExternalEventsOfSyncRunResponse;
 
-    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool)
+    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool, RelationshipTemplatesContext relationshipTemplatesContext)
     {
         _responseContext = responseContext;
         _messagesContext = messagesContext;
         _clientPool = clientPool;
+        _relationshipTemplatesContext = relationshipTemplatesContext;
     }
 
     #region Given
@@ -84,6 +86,23 @@ internal class SynchronizationStepDefinitions
         externalEvents.Result.Should().Contain(e =>
             e.Type == "PeerFeatureFlagsChanged" &&
             e.Payload["peerAddress"].GetString() == peerAddress);
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type RelationshipTemplateAllocationsExhausted which contains the id of Relationship Template {RegexFor.SINGLE_THING}")]
+    public async Task ThenIRecievesAnExternalEventOfTypeRelationshipTemplateAllocationsExhausted(string notifiedIdentityName, string relationshipTemplateName)
+    {
+        var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
+        var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
+
+        syncRunResponse.Result.Should().NotBeNull();
+        syncRunResponse.Result!.Status.Should().Be("Created");
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunResponse.Result!.SyncRun.Id);
+
+        var templateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
+
+        externalEvents.Result.Should().Contain(e =>
+            e.Type == "RelationshipTemplateAllocationsExhausted" &&
+            e.Payload["relationshipTemplateId"].GetString() == templateId);
     }
 
     #endregion

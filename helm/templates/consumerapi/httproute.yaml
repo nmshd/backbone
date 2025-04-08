@@ -20,7 +20,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /api
+        - path:
+            type: Exact
+            value: /connect/token
+        - path:
+            type: Exact
+            value: /health
       backendRefs:
         - name: {{ .Values.consumerapi.name }}
           port: 8080

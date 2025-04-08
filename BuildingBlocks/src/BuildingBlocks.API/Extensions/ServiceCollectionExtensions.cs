@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Metrics;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
 
@@ -87,6 +88,23 @@ public static class ServiceCollectionExtensions
             .AddUserStore<CustomUserStore>();
 
         services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddOpenTelemetryWithPrometheusExporter(this IServiceCollection services, string name)
+    {
+        services.AddOpenTelemetry()
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .AddPrometheusExporter()
+                    .AddMeter(name)
+                    .AddMeter("Microsoft.EntityFrameworkCore")
+                    .AddMeter("Microsoft.AspNetCore.Hosting")
+                    .AddMeter("Microsoft.AspNetCore.Diagnostics")
+                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+            });
 
         return services;
     }

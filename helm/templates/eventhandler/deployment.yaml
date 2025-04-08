@@ -50,12 +50,18 @@ spec:
             {{- toYaml .Values.eventhandler.resources | nindent 12 }}
           image: "{{ .Values.eventhandler.image.repository }}:{{- default .Chart.AppVersion .Values.eventhandler.image.tagOverride }}"
           imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 9444
+              protocol: TCP
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
               subPath: appsettings.override.json
               readOnly: true
           env:
+            - name: METRICS_HOST
+              value: +
             {{- if .Values.global.useBuiltInEventbus }}
             - name: infrastructure__eventBus__productName
               value: RabbitMQ
