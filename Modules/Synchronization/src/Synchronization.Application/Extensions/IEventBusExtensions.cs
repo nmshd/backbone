@@ -34,7 +34,6 @@ public static class IEventBusExtensions
         {
             SubscribeToMessagesEvents(eventBus),
             SubscribeToRelationshipsEvents(eventBus),
-            SubscribeToRelationshipTemplatesEvents(eventBus),
             SubscribeToTokensEvents(eventBus)
         });
     }
@@ -59,13 +58,9 @@ public static class IEventBusExtensions
             eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>(),
             eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>(),
             eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>(),
-            eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>()
+            eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>(),
+            eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>()
         });
-    }
-
-    private static async Task SubscribeToRelationshipTemplatesEvents(IEventBus eventBus)
-    {
-        await eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>();
     }
 
     private static async Task SubscribeToTokensEvents(IEventBus eventBus)
