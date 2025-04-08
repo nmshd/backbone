@@ -12,6 +12,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "DELETE TierQuota")]
 internal class TierQuotaStepDefinitions : BaseStepDefinitions
 {
+    private IResponse? _whenResponse;
     private ApiResponse<TierQuotaDefinition>? _createTierQuotaResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
     private string _tierId;
@@ -57,7 +58,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpoint()
     {
-        _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
+        _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -68,7 +69,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Tiers/{t.id}/Quotas endpoint with an invalid metric key")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointWithAnInvalidMetricKey()
     {
-        _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
+        _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
         {
             MetricKey = "SomeInvalidMetricKey",
             Max = 2,
@@ -79,7 +80,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
     {
-        _createTierQuotaResponse = await _client.Tiers.AddTierQuota("inexistentTierId", new CreateQuotaForTierRequest
+        _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota("inexistentTierId", new CreateQuotaForTierRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -90,29 +91,26 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [When("a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpoint()
     {
-        _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, _tierQuotaDefinitionId);
+        _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, _tierQuotaDefinitionId);
     }
 
     [When("a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
     {
-        _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, "inexistentQuotaId");
+        _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, "inexistentQuotaId");
     }
 
     [When("a DELETE request is sent to the /Tiers/{nonExistentTier}/Quotas/{q.id}")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointWithANonExistentTierId()
     {
-        _deleteResponse = await _client.Tiers.DeleteTierQuota("nonExistentTierId", _tierQuotaDefinitionId);
+        _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota("nonExistentTierId", _tierQuotaDefinitionId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_createTierQuotaResponse != null)
-            ((int)_createTierQuotaResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_deleteResponse != null)
-            ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.Should().NotBeNull();
+        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then("the response contains a TierQuota")]
@@ -126,16 +124,8 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_createTierQuotaResponse != null)
-        {
-            _createTierQuotaResponse!.Error.Should().NotBeNull();
-            _createTierQuotaResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_deleteResponse != null)
-        {
-            _deleteResponse!.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.Should().NotBeNull();
+        _whenResponse!.Error.Should().NotBeNull();
+        _whenResponse.Error!.Code.Should().Be(errorCode);
     }
 }

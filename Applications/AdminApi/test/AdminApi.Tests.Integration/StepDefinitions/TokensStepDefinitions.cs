@@ -11,10 +11,18 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET /Tokens?createdBy={identity-address}")]
-internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
+[Scope(Feature = "PATCH /Tokens/{id}/ResetAccessFailedCount")]
+internal class TokensStepDefinitions : BaseStepDefinitions
 {
+    private IResponse? _whenResponse = null;
     private ApiResponse<ListTokensTestResponse> _listTokensResponse = null!;
-    private string _newIdentityAddress = string.Empty;
+    private ApiResponse<EmptyResponse> _resetAccesesFailedCountResponse = null!;
+    private string _newIdentityAddress;
+
+    public TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
+    {
+        _newIdentityAddress = string.Empty;
+    }
 
     [Given(@"an identity with no tokens")]
     public async Task GivenAnIdentityWithNoTokens()
@@ -26,23 +34,30 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
         _newIdentityAddress = createIdentityResponse.Result!.Address;
     }
 
-
     [When(@"a GET request is sent to the /Tokens endpoint with the identity's address")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithTheIdentitysAddress()
     {
-        _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
+        _whenResponse = _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
+    }
+
+    [When(@"a PATCH request is sent to the reset AccessFailedCountEndpoint of a randomID")]
+    public async Task WhenAPatchRequestIsSentToTheTokensIdResetAccessFailedCount()
+    {
+        var tokenId = Guid.NewGuid().ToString();
+        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount(tokenId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_listTokensResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.Should().NotBeNull();
+        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
-
-
+    
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        _listTokensResponse.Result!.Count.Should().Be(0);
+        _listTokensResponse.Should().NotBeNull();
+        _listTokensResponse.Result!.Count().Should().Be(0);
     }
 }
