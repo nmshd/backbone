@@ -43,7 +43,7 @@ internal class RelationshipTemplatesStepDefinitions
     public async Task GivenARelationshipTemplateCreatedByIdentityWithMaxAllocations(string templateName, string identityName, string maxAllocations)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        int? allocations = maxAllocations == "-" ? null : int.Parse(maxAllocations);
+        var allocations = int.Parse(maxAllocations);
         _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName] =
             (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, MaxNumberOfAllocations = allocations })).Result!;
     }
