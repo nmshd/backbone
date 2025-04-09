@@ -113,7 +113,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<T>> FindRelationshipsAndSelect<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+    public async Task<IEnumerable<T>> FindRelationships<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)

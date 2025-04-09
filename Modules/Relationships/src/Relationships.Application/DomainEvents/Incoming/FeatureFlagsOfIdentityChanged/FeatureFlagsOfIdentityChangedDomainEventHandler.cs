@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
@@ -38,43 +40,21 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
         var activeAndPendingRelationshipAddressPairs = await
-            _relationshipsRepository.FindRelationshipsAndSelect(
-                r => (r.From == @event.IdentityAddress || r.To == @event.IdentityAddress)
-                     && (r.Status == RelationshipStatus.Active || r.Status == RelationshipStatus.Pending),
-                r => new IdentityAddressesOfRelationship(r.From, r.To),
+            _relationshipsRepository.FindRelationships(
+                Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()),
+                r => new { r.From, r.To },
                 CancellationToken.None);
 
         foreach (var addressPair in activeAndPendingRelationshipAddressPairs)
-        {
-            if (addressPair.From == @event.IdentityAddress)
-            {
-                identitiesToBeNotified.Add(addressPair.To);
-            }
-            else
-            {
-                identitiesToBeNotified.Add(addressPair.From);
-            }
-        }
-
+            identitiesToBeNotified.Add(addressPair.From == @event.IdentityAddress ? addressPair.To : addressPair.From);
+        
         var allocatorAddresses = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocationsAndSelect(
-            a => a.RelationshipTemplate.CreatedBy == @event.IdentityAddress,
+            RelationshipTemplateAllocation.BelongsToTemplateCreatedBy(@event.IdentityAddress),
             a => a.AllocatedBy, CancellationToken.None);
 
         identitiesToBeNotified.UnionWith(allocatorAddresses);
 
         return identitiesToBeNotified;
-    }
-
-    private class IdentityAddressesOfRelationship
-    {
-        public IdentityAddress From { get; }
-        public IdentityAddress To { get; }
-
-        public IdentityAddressesOfRelationship(IdentityAddress from, IdentityAddress to)
-        {
-            From = from;
-            To = to;
-        }
     }
 }
 
