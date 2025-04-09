@@ -50,7 +50,7 @@ public class AuthorizationController : ApiControllerBase
             throw new OperationFailedException(ApplicationErrors.Authentication.InvalidOAuthRequest("missing username"));
 
         var user = await _userManager.FindByNameAsync(request.Username!);
-        if (user == null) // || user.Device.Identity.IsGracePeriodOver)
+        if (user == null)
             return InvalidUserCredentials();
 
         if (request.Password.IsNullOrEmpty())
