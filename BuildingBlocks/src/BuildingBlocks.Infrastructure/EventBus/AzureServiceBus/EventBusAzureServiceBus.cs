@@ -17,7 +17,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
     private const int MAX_DELIVERY_COUNT = 5;
-    private static readonly TimeSpan MESSAGE_TIME_TO_LIVE = 5.Minutes();
 
     private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
     {
@@ -128,6 +127,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
                         await args.CompleteMessageAsync(args.Message);
                     else
                     {
+                        await args.AbandonMessageAsync(args.Message);
                         _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
                     }
@@ -148,7 +148,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
             await _adminClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, subscriptionName)
             {
                 MaxDeliveryCount = MAX_DELIVERY_COUNT,
-                DefaultMessageTimeToLive = MESSAGE_TIME_TO_LIVE,
                 DeadLetteringOnMessageExpiration = true,
             });
 
@@ -204,7 +203,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     private async Task<bool> ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
         var eventType = typeof(TEvent);
-        var eventName = eventType.GetEventName();
 
         var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS)!;
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
