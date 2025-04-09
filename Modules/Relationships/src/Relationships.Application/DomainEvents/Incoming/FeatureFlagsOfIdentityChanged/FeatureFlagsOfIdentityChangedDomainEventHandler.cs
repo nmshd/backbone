@@ -41,12 +41,12 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
 
         var activeAndPendingRelationshipAddressPairs = await
             _relationshipsRepository.FindRelationships(
-                Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()),
+                Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutFeatureFlagsChange()),
                 r => new { r.From, r.To },
                 CancellationToken.None);
 
-        foreach (var addressPair in activeAndPendingRelationshipAddressPairs)
-            identitiesToBeNotified.Add(addressPair.From == @event.IdentityAddress ? addressPair.To : addressPair.From);
+        foreach (var relationshipParticipant in activeAndPendingRelationshipAddressPairs)
+            identitiesToBeNotified.Add(@event.IdentityAddress == relationshipParticipant.From ? relationshipParticipant.To : relationshipParticipant.From);
 
         var allocatorAddresses = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(
             RelationshipTemplateAllocation.BelongsToTemplateCreatedBy(@event.IdentityAddress),

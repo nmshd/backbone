@@ -123,15 +123,4 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Select(selector)
             .ToListAsync(cancellationToken);
     }
-
-    public async Task<IEnumerable<Tuple<IdentityAddress, IdentityAddress>>> FindRelationshipsAndLoadAddresses(Expression<Func<Relationship, bool>> filter,
-        CancellationToken cancellationToken, bool track = false)
-    {
-        return await (track ? _relationships : _readOnlyRelationships)
-            .IncludeAll(_dbContext)
-            .AsSplitQuery()
-            .Where(filter)
-            .Select(r => new Tuple<IdentityAddress, IdentityAddress>(r.From, r.To))
-            .ToListAsync(cancellationToken);
-    }
 }
