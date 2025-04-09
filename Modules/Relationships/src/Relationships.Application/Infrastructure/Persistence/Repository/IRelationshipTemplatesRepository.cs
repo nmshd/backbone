@@ -25,7 +25,7 @@ public interface IRelationshipTemplatesRepository
 
     Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken);
 
-    Task<IEnumerable<TResult>> FindRelationshipTemplateAllocationsAndSelect<TResult>(
+    Task<IEnumerable<TResult>> FindRelationshipTemplateAllocations<TResult>(
         Expression<Func<RelationshipTemplateAllocation, bool>> filter, Expression<Func<RelationshipTemplateAllocation, TResult>> selector, CancellationToken cancellationToken);
     Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken);
 

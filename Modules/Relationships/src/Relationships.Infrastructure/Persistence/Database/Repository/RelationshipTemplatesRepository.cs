@@ -102,7 +102,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TResult>> FindRelationshipTemplateAllocationsAndSelect<TResult>(
+    public async Task<IEnumerable<TResult>> FindRelationshipTemplateAllocations<TResult>(
         Expression<Func<RelationshipTemplateAllocation, bool>> filter, Expression<Func<RelationshipTemplateAllocation, TResult>> selector, CancellationToken cancellationToken)
     {
         return await _relationshipTemplateAllocations.Where(filter).Select(selector).ToListAsync(cancellationToken);
