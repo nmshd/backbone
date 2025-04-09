@@ -47,7 +47,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
 
         foreach (var addressPair in activeAndPendingRelationshipAddressPairs)
             identitiesToBeNotified.Add(addressPair.From == @event.IdentityAddress ? addressPair.To : addressPair.From);
-        
+
         var allocatorAddresses = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocationsAndSelect(
             RelationshipTemplateAllocation.BelongsToTemplateCreatedBy(@event.IdentityAddress),
             a => a.AllocatedBy, CancellationToken.None);
