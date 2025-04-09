@@ -33,21 +33,21 @@ internal class RelationshipsStepDefinitions
     #region Given
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
-    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string requestorName, string templatorName, string creatorName)
     {
         var creator = _clientPool.FirstForIdentityName(creatorName);
-        var peer = _clientPool.FirstForIdentityName(creatorName == participant1Name ? participant2Name : participant1Name);
+        var peer = _clientPool.FirstForIdentityName(creatorName == requestorName ? templatorName : requestorName);
 
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
     }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
-    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name)
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string requestorName, string templatorName)
     {
-        var creator = _clientPool.FirstForIdentityName(participant1Name);
-        var peer = _clientPool.FirstForIdentityName(participant2Name);
+        var templator = _clientPool.FirstForIdentityName(requestorName);
+        var requestor = _clientPool.FirstForIdentityName(templatorName);
 
-        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(creator, peer);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(templator, requestor);
     }
 
     [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]

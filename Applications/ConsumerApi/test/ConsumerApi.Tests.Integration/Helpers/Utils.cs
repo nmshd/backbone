@@ -41,7 +41,7 @@ public static class Utils
         return await CreatePendingRelationshipUsingTemplate(requestor, relationshipTemplateResponse.Result!.Id);
     }
 
-    public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client client2, string templateId)
+    public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client requestor, string templateId)
     {
         var createRelationshipRequest = new CreateRelationshipRequest
         {
@@ -49,10 +49,10 @@ public static class Utils
             Content = TestData.SOME_BYTES
         };
 
-        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
+        var createRelationshipResponse = await requestor.Relationships.CreateRelationship(createRelationshipRequest);
         createRelationshipResponse.Should().BeASuccess();
 
-        var getRelationshipResponse = await client2.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
+        var getRelationshipResponse = await requestor.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
         getRelationshipResponse.Should().BeASuccess();
 
         return getRelationshipResponse.Result!;
