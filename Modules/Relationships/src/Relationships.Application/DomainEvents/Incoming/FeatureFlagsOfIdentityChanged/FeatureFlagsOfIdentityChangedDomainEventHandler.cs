@@ -37,31 +37,45 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
     {
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
-        var activeAndPendingRelationships = await
-            _relationshipsRepository.FindRelationships(
+        var activeAndPendingRelationshipAddressPairs = await
+            _relationshipsRepository.FindRelationshipsAndSelect(
                 r => (r.From == @event.IdentityAddress || r.To == @event.IdentityAddress)
                      && (r.Status == RelationshipStatus.Active || r.Status == RelationshipStatus.Pending),
+                r => new IdentityAddressesOfRelationship(r.From, r.To),
                 CancellationToken.None);
 
-        foreach (var relationship in activeAndPendingRelationships)
+        foreach (var addressPair in activeAndPendingRelationshipAddressPairs)
         {
-            if (relationship.From == @event.IdentityAddress)
+            if (addressPair.From == @event.IdentityAddress)
             {
-                identitiesToBeNotified.Add(relationship.To);
+                identitiesToBeNotified.Add(addressPair.To);
             }
             else
             {
-                identitiesToBeNotified.Add(relationship.From);
+                identitiesToBeNotified.Add(addressPair.From);
             }
         }
 
-        var allocations = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(a => a.RelationshipTemplate.CreatedBy == @event.IdentityAddress, CancellationToken.None);
+        var allocatorAddresses = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocationsAndSelect(
+            a => a.RelationshipTemplate.CreatedBy == @event.IdentityAddress,
+            a => a.AllocatedBy, CancellationToken.None);
 
-        foreach (var relationshipTemplateAllocation in allocations)
-        {
-            identitiesToBeNotified.Add(relationshipTemplateAllocation.AllocatedBy);
-        }
+        identitiesToBeNotified.UnionWith(allocatorAddresses);
 
         return identitiesToBeNotified;
     }
+
+    private class IdentityAddressesOfRelationship
+    {
+        public IdentityAddress From { get; }
+        public IdentityAddress To { get; }
+
+        public IdentityAddressesOfRelationship(IdentityAddress from, IdentityAddress to)
+        {
+            From = from;
+            To = to;
+        }
+    }
 }
+
+
