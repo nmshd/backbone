@@ -45,14 +45,14 @@ internal class TokensStepDefinitions : BaseStepDefinitions
     {
         _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKcHu2SfxmqMtSd00OB", CancellationToken.None);
     }
-    
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         _whenResponse.Should().NotBeNull();
         ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
-    
+
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
