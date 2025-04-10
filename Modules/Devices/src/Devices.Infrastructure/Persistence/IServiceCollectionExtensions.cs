@@ -33,5 +33,6 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
         services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
+        services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
     }
 }
