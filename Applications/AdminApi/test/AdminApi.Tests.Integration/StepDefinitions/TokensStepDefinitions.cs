@@ -43,7 +43,7 @@ internal class TokensStepDefinitions : BaseStepDefinitions
     [When("a PATCH request is sent to the /Tokens/id/ResetAccessFailedCount")]
     public async Task WhenAPatchRequestIsSentToTheTokensIdResetAccessFailedCount()
     {
-        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKcHu2SfxmqMtSd00OB", CancellationToken.None);
+        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKXXXXXXXXXXXXXXXXX", CancellationToken.None);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

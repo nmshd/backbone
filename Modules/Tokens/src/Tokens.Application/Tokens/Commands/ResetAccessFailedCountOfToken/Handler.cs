@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
@@ -16,7 +15,10 @@ public class Handler : IRequestHandler<ResetAccessFailedCountOfTokenCommand>
 
     public async Task Handle(ResetAccessFailedCountOfTokenCommand request, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Find(TokenId.Parse(request.TokenId), cancellationToken) ?? throw new NotFoundException(nameof(Token));
+        var token = await _tokensRepository.Find(TokenId.Parse(request.TokenId), cancellationToken);
+        if (token == null)
+            return;
+        
         token.ResetAccessFailedCount();
         await _tokensRepository.Update(token, cancellationToken);
     }
