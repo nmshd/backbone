@@ -417,5 +417,11 @@ public class Relationship : Entity
                     r.Status == RelationshipStatus.Terminated;
     }
 
+    public static Expression<Func<Relationship, bool>> HasStatusInWhichPeerShouldBeNotifiedAboutFeatureFlagsChange()
+    {
+        return r => r.Status == RelationshipStatus.Pending ||
+                    r.Status == RelationshipStatus.Active;
+    }
+
     #endregion
 }
