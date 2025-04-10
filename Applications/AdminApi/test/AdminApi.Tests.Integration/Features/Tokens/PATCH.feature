@@ -1,7 +1,7 @@
 @Integration
 Feature: PATCH /Tokens/{id}/ResetAccessFailedCount
 
-Listing all tokens of an identity that doesn't have any tokens
+Resetting the failed counter of a token that does not exist
     
     Scenario: Reset a token with failed counter 0
         Given an identity with no tokens

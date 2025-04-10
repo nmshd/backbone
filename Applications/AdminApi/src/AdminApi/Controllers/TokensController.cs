@@ -41,7 +41,6 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
     }
 
     [HttpPatch("{id}/ResetAccessFailedCount"), ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string id, CancellationToken cancellationToken)
     {
         var request = new ResetAccessFailedCountOfTokenCommand(TokenId.Parse(id));
