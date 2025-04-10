@@ -18,6 +18,9 @@ public interface IRelationshipsRepository
     Task Update(Relationship relationship);
     Task Update(IEnumerable<Relationship> relationships);
     Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false);
+
+    Task<IEnumerable<T>> FindRelationships<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+        bool track = false);
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
 }

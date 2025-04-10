@@ -65,6 +65,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<RelationshipTemplateAllocation> RelationshipTemplateAllocations { get; set; } = null!;
 
+    public DbSet<Relationship> Relationships { get; set; } = null!;
+
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
         return Set<T>().AsNoTracking();

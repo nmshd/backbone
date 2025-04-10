@@ -112,4 +112,15 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Where(filter)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<T>> FindRelationships<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+        bool track = false)
+    {
+        return await (track ? _relationships : _readOnlyRelationships)
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
+            .Where(filter)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
+    }
 }

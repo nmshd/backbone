@@ -43,4 +43,9 @@ public class RelationshipTemplateAllocation : Entity
     {
         return x => x.AllocatedBy == allocatedBy.ToString();
     }
+
+    public static Expression<Func<RelationshipTemplateAllocation, bool>> BelongsToTemplateCreatedBy(string identity)
+    {
+        return a => a.RelationshipTemplate.CreatedBy == identity;
+    }
 }
