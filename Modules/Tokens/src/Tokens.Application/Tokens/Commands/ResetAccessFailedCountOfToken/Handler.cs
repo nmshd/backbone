@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<ResetAccessFailedCountOfTokenCommand>
         var token = await _tokensRepository.Find(TokenId.Parse(request.TokenId), cancellationToken);
         if (token == null)
             return;
-        
+
         token.ResetAccessFailedCount();
         await _tokensRepository.Update(token, cancellationToken);
     }
