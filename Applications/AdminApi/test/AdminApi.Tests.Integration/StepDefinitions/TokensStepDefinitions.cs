@@ -12,17 +12,13 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET /Tokens?createdBy={identity-address}")]
 [Scope(Feature = "PATCH /Tokens/{id}/ResetAccessFailedCount")]
-internal class TokensStepDefinitions : BaseStepDefinitions
+internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
     private IResponse? _whenResponse = null;
     private ApiResponse<ListTokensTestResponse> _listTokensResponse = null!;
     private ApiResponse<EmptyResponse> _resetAccesesFailedCountResponse = null!;
-    private string _newIdentityAddress;
+    private string _newIdentityAddress = string.Empty;
 
-    public TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
-    {
-        _newIdentityAddress = string.Empty;
-    }
 
     [Given(@"an identity with no tokens")]
     public async Task GivenAnIdentityWithNoTokens()
@@ -41,7 +37,7 @@ internal class TokensStepDefinitions : BaseStepDefinitions
     }
 
     [When("a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint")]
-    public async Task WhenApatchRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
+    public async Task WhenAPATCHRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
     {
         _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);
     }

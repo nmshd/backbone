@@ -40,11 +40,14 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
         return Paged(pagedResult);
     }
 
-    [HttpPatch("{id}/ResetAccessFailedCount"), ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string id, CancellationToken cancellationToken)
+    [HttpPatch("{tokenId}/ResetAccessFailedCount")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string tokenId, CancellationToken cancellationToken)
     {
-        var request = new ResetAccessFailedCountOfTokenCommand(TokenId.Parse(id));
+        var request = new ResetAccessFailedCountOfTokenCommand(tokenId);
         await _mediator.Send(request, cancellationToken);
-        return Ok();
+        return NoContent();
     }
 }
