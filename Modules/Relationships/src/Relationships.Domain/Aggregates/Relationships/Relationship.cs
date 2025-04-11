@@ -318,6 +318,9 @@ public class Relationship : Entity
             DecomposeAsFirstParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
 
         AnonymizeParticipant(identityToBeDeleted, didDomainName);
+
+        // CAUTION: do NOT call the constructor with the single parameter of type Relationship. Because this would fill the initiator
+        // with the anonymized address.
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(Id, Status.ToString(), identityToBeDeleted, peer));
     }
 
