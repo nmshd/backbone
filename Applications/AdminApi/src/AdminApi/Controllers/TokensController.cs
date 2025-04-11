@@ -42,7 +42,7 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
 
     [HttpPatch("{tokenId}/ResetAccessFailedCount")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string tokenId, CancellationToken cancellationToken)
     {
