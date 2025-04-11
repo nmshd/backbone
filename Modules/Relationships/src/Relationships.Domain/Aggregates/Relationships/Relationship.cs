@@ -307,6 +307,8 @@ public class Relationship : Entity
     {
         EnsureHasParticipant(identityToBeDeleted);
 
+        var peer = GetPeerOf(identityToBeDeleted);
+
         if (From == identityToBeDeleted && FromHasDecomposed || To == identityToBeDeleted && ToHasDecomposed)
             return;
 
@@ -316,7 +318,7 @@ public class Relationship : Entity
             DecomposeAsFirstParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
 
         AnonymizeParticipant(identityToBeDeleted, didDomainName);
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(Id, Status.ToString(), identityToBeDeleted, peer));
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)

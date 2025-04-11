@@ -15,6 +15,14 @@ public class RelationshipStatusChangedDomainEvent : DomainEvent
         Peer = relationship.GetPeerOf(relationship.LastModifiedBy);
     }
 
+    public RelationshipStatusChangedDomainEvent(string relationshipId, string newStatus, string initiator, string peer)
+    {
+        RelationshipId = relationshipId;
+        NewStatus = newStatus;
+        Initiator = initiator;
+        Peer = peer;
+    }
+
     public string RelationshipId { get; set; }
     public string NewStatus { get; set; }
     public string Initiator { get; set; }
