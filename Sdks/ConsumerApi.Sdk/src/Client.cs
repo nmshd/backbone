@@ -13,6 +13,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
+using Backbone.ConsumerApi.Sdk.Endpoints.Onboarding;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
@@ -56,6 +57,7 @@ public class Client
         SyncRuns = new SyncRunsEndpoint(endpointClient);
         Tags = new TagsEndpoint(endpointClient);
         Tokens = new TokensEndpoint(endpointClient);
+        Onboarding = new OnboardingEndpoint(endpointClient);
     }
 
     public DeviceData? DeviceData { get; }
@@ -77,6 +79,8 @@ public class Client
     public SyncRunsEndpoint SyncRuns { get; }
     public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
+
+    public OnboardingEndpoint Onboarding { get; }
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
     public static Client CreateUnauthenticated(string baseUrl, ClientCredentials clientCredentials)
