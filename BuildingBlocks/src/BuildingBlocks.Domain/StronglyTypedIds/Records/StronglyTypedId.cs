@@ -74,6 +74,34 @@ public abstract record StronglyTypedId(string Value)
         '9'
     ];
 
+    protected static readonly char[] SPECIAL_CHARACTERS =
+    [
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        '_',
+        '-',
+        '+',
+        '=',
+        '<',
+        '>',
+        '?',
+        '/',
+        '{',
+        '}',
+        '[',
+        ']',
+        '|',
+        '~'
+    ];
+
     public sealed override string ToString()
     {
         return Value;

@@ -12,7 +12,7 @@ public class FileDeleteTests : AbstractTestsBase
     public void File_can_be_deleted_by_its_owner()
     {
         var identity = CreateRandomIdentityAddress();
-        var file = CreateFile(identity);
+        var file = FileCreationHelper.CreateFile(identity);
 
         var acting = () => file.EnsureCanBeDeletedBy(identity);
 
@@ -24,7 +24,7 @@ public class FileDeleteTests : AbstractTestsBase
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
-        var file = CreateFile(creatorIdentity);
+        var file = FileCreationHelper.CreateFile(creatorIdentity);
 
         var acting = () => file.EnsureCanBeDeletedBy(otherIdentity);
 

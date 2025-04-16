@@ -23,6 +23,7 @@ public class File : Entity
         CipherHash = null!;
         Content = null!;
         EncryptedProperties = null!;
+        OwnershipToken = null!;
     }
 
     public File(IdentityAddress createdBy, DeviceId createdByDevice, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
@@ -35,6 +36,8 @@ public class File : Entity
         CreatedByDevice = ModifiedByDevice = createdByDevice;
 
         OwnerSignature = ownerSignature;
+
+        OwnershipToken = FileOwnershipToken.New();
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
@@ -84,6 +87,8 @@ public class File : Entity
 
     public byte[] EncryptedProperties { get; set; }
 
+    public FileOwnershipToken OwnershipToken { get; set; }
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
@@ -104,5 +109,10 @@ public class File : Entity
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public void GenerateNewOwnershipToken()
+    {
+        OwnershipToken = FileOwnershipToken.New();
     }
 }
