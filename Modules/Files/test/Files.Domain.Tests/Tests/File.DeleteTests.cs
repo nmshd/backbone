@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Files.Domain.Tests.Helpers;
 using Backbone.Tooling.Extensions;
 using NeoSmart.Utils;
 using File = Backbone.Modules.Files.Domain.Entities.File;
@@ -12,7 +13,7 @@ public class FileDeleteTests : AbstractTestsBase
     public void File_can_be_deleted_by_its_owner()
     {
         var identity = CreateRandomIdentityAddress();
-        var file = CreateFile(identity);
+        var file = FileCreationHelper.CreateFile(identity);
 
         var acting = () => file.EnsureCanBeDeletedBy(identity);
 
@@ -24,21 +25,10 @@ public class FileDeleteTests : AbstractTestsBase
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
-        var file = CreateFile(creatorIdentity);
+        var file = FileCreationHelper.CreateFile(creatorIdentity);
 
         var acting = () => file.EnsureCanBeDeletedBy(otherIdentity);
 
         acting.Should().Throw<DomainActionForbiddenException>();
-    }
-
-    private static File CreateFile(IdentityAddress identityAddress)
-    {
-        var deviceId = CreateRandomDeviceId();
-        var cipherHash = UrlBase64.Decode("AAAA");
-        var ownerSignature = cipherHash;
-        var encryptedProperties = cipherHash;
-        var content = "Hello World!".GetBytes();
-
-        return new File(identityAddress, deviceId, identityAddress, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
     }
 }
