@@ -15,4 +15,9 @@ public class TokensEndpoint(EndpointClient client) : AdminApiEndpoint(client)
         };
         return await _client.Get<ListTokensTestResponse>($"api/{API_VERSION}/Tokens", queryParameters, paginationFilter);
     }
+
+    public async Task<ApiResponse<EmptyResponse>> ResetAccessFailedCount(string tokenId, CancellationToken cancellationToken)
+    {
+        return await _client.Patch<EmptyResponse>($"api/{API_VERSION}/Tokens/{tokenId}/ResetAccessFailedCount");
+    }
 }
