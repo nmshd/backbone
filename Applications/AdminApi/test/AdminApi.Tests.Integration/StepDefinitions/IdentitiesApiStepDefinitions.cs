@@ -19,6 +19,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
     private ApiResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
     private ApiResponse<ListIdentityDeletionProcessAuditLogsResponse>? _identityDeletionProcessAuditLogsResponse;
+    private IResponse? _whenResponse;
     private string _existingIdentity;
 
     public IdentitiesApiStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
@@ -44,31 +45,31 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
     {
-        _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
+        _whenResponse = _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        _identityOverviewsResponse = await _client.Identities.ListIdentities();
+        _whenResponse = _identityOverviewsResponse = await _client.Identities.ListIdentities();
     }
 
     [When("a GET request is sent to the /Identities/{i.address}/DeletionProcesses/AuditLogs endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesDeletionProcessesAuditLogsEndpoint()
     {
-        _identityDeletionProcessAuditLogsResponse = await _client.Identities.ListIdentityDeletionProcessAuditLogs(_existingIdentity);
+        _whenResponse = _identityDeletionProcessAuditLogsResponse = await _client.Identities.ListIdentityDeletionProcessAuditLogs(_existingIdentity);
     }
 
     [When("a GET request is sent to the /Identities/{i.address} endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpoint()
     {
-        _identityResponse = await _client.Identities.GetIdentity(_existingIdentity);
+        _whenResponse = _identityResponse = await _client.Identities.GetIdentity(_existingIdentity);
     }
 
     [When("a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
-        _identityResponse = await _client.Identities.GetIdentity(CreateRandomIdentityAddress());
+        _whenResponse = _identityResponse = await _client.Identities.GetIdentity(CreateRandomIdentityAddress());
     }
 
     [Then("the response contains a list of Identities")]
@@ -106,32 +107,15 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_identityResponse != null)
-            ((int)_identityResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_identityOverviewsResponse != null)
-            ((int)_identityOverviewsResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_identityDeletionProcessResponse != null)
-            ((int)_identityDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_identityDeletionProcessAuditLogsResponse != null)
-            ((int)_identityDeletionProcessAuditLogsResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.Should().NotBeNull();
+        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_identityResponse != null)
-        {
-            _identityResponse!.Error!.Should().NotBeNull();
-            _identityResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_identityDeletionProcessResponse != null)
-        {
-            _identityDeletionProcessResponse!.Error.Should().NotBeNull();
-            _identityDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.Should().NotBeNull();
+        _whenResponse!.Error.Should().NotBeNull();
+        _whenResponse.Error!.Code.Should().Be(errorCode);
     }
 }

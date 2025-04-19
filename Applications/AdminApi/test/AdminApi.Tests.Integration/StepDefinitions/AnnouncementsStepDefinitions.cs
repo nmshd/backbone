@@ -16,6 +16,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Announcement>? _announcementResponse;
     private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
 
     public AnnouncementsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
@@ -46,13 +47,13 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Announcements endpoint")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
-        _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
+        _whenResponse = _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
     }
 
     [When(@"a POST request is sent to the /Announcements endpoint with a valid content")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
-        _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
@@ -71,7 +72,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When(@"a POST request is sent to the /Announcements endpoint without an English translation")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
     {
-        _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
@@ -90,11 +91,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_announcementResponse != null)
-            ((int)_announcementResponse.Status).Should().Be(expectedStatusCode);
-
-        if (_announcementsResponse != null)
-            ((int)_announcementsResponse.Status).Should().Be(expectedStatusCode);
+        _whenResponse.Should().NotBeNull();
+        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response contains an Announcement")]
@@ -120,16 +118,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_announcementResponse != null)
-        {
-            _announcementResponse!.Error.Should().NotBeNull();
-            _announcementResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_announcementsResponse != null)
-        {
-            _announcementsResponse.Error.Should().NotBeNull();
-            _announcementsResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.Should().NotBeNull();
+        _whenResponse!.Error.Should().NotBeNull();
+        _whenResponse.Error!.Code.Should().Be(errorCode);
     }
 }

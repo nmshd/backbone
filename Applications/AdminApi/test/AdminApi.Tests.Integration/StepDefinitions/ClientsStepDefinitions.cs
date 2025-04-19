@@ -21,6 +21,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     private string _updatedTierId;
     private int? _maxIdentities;
     private int? _updatedMaxIdentities;
+    private IResponse? _whenResponse;
     private ApiResponse<ListClientsResponse>? _getClientsResponse;
     private ApiResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
     private ApiResponse<UpdateClientResponse>? _updateClientResponse;
@@ -84,32 +85,32 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("a DELETE request is sent to the /Clients endpoint")]
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
-        _deleteResponse = await _client.Clients.DeleteClient(_clientId);
+        _whenResponse = _deleteResponse = await _client.Clients.DeleteClient(_clientId);
     }
 
     [When("a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
-        _getClientsResponse = await _client.Clients.GetAllClients();
+        _whenResponse = _getClientsResponse = await _client.Clients.GetAllClients();
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
-        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = _clientSecret });
+        _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = _clientSecret });
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithoutASecret()
     {
-        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = string.Empty });
+        _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = string.Empty });
     }
 
     [When("a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointForAnInexistentClient()
     {
-        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret("inexistentClientId", new ChangeClientSecretRequest { NewSecret = "new-client-secret" });
+        _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret("inexistentClientId", new ChangeClientSecretRequest { NewSecret = "new-client-secret" });
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
@@ -118,7 +119,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updatedTierId = await CreateTier();
         _updatedMaxIdentities = 150;
 
-        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
+        _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = _updatedTierId,
             MaxIdentities = _updatedMaxIdentities
@@ -128,7 +129,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
-        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
+        _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = _tierId,
             MaxIdentities = null
@@ -138,7 +139,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
-        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
+        _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = "inexistent-tier-id",
             MaxIdentities = _maxIdentities
@@ -148,7 +149,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
-        _updateClientResponse = await _client.Clients.UpdateClient("inexistentClientId", new UpdateClientRequest
+        _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient("inexistentClientId", new UpdateClientRequest
         {
             DefaultTier = "new-tier-id",
             MaxIdentities = _maxIdentities
@@ -209,44 +210,15 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_getClientsResponse != null)
-            ((int)_getClientsResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_changeClientSecretResponse != null)
-            ((int)_changeClientSecretResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_deleteResponse != null)
-            ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_updateClientResponse != null)
-            ((int)_updateClientResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.Should().NotBeNull();
+        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_getClientsResponse != null)
-        {
-            _getClientsResponse!.Error.Should().NotBeNull();
-            _getClientsResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_changeClientSecretResponse != null)
-        {
-            _changeClientSecretResponse!.Error.Should().NotBeNull();
-            _changeClientSecretResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_deleteResponse != null)
-        {
-            _deleteResponse.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_updateClientResponse != null)
-        {
-            _updateClientResponse.Error.Should().NotBeNull();
-            _updateClientResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.Should().NotBeNull();
+        _whenResponse!.Error.Should().NotBeNull();
+        _whenResponse!.Error!.Code.Should().Be(errorCode);
     }
 }
