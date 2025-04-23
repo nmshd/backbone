@@ -37,4 +37,25 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Features\Files\{id}\GET.feature.cs">
+            <DependentUpon>GET.feature</DependentUpon>
+            <AutoGen>true</AutoGen>
+            <DesignTime>true</DesignTime>
+            <Visible>true</Visible>
+        </Compile>
+        <Compile Update="Features\Files\{id}\RegenerateOwnershipToken\PATCH.feature.cs">
+            <DependentUpon>PATCH.feature</DependentUpon>
+            <AutoGen>true</AutoGen>
+            <DesignTime>true</DesignTime>
+            <Visible>true</Visible>
+        </Compile>
+        <Compile Update="Features\Files\{id}\ClaimFileOwnership\PATCH.feature.cs">
+            <DependentUpon>PATCH.feature</DependentUpon>
+            <AutoGen>true</AutoGen>
+            <DesignTime>true</DesignTime>
+            <Visible>true</Visible>
+        </Compile>
+    </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ public class File_OwnershipTokenTests
 
         var oldToken = file.OwnershipToken;
 
-        file.GenerateNewOwnershipToken();
+        file.RegenerateOwnershipToken();
 
         file.OwnershipToken.Should().NotBeEquivalentTo(oldToken);
     }

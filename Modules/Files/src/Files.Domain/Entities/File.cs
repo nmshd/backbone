@@ -88,6 +88,7 @@ public class File : Entity
     public byte[] EncryptedProperties { get; set; }
 
     public FileOwnershipToken OwnershipToken { get; set; }
+    public bool IsAllowOwnershipClaims { get; set; } = true;
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
@@ -111,8 +112,9 @@ public class File : Entity
         return i => i.CreatedBy == identityAddress.ToString();
     }
 
-    public void GenerateNewOwnershipToken()
+    public void RegenerateOwnershipToken()
     {
         OwnershipToken = FileOwnershipToken.New();
+        IsAllowOwnershipClaims = true;
     }
 }

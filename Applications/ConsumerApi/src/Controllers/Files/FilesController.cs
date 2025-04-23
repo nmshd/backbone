@@ -81,6 +81,18 @@ public class FilesController : ApiControllerBase
         return Ok(metadata);
     }
 
+    [HttpPatch("{fileId}/RegenerateOwnershipToken")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileOwnershipTokenDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status403Forbidden)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RegenerateFileOwnershipToken(string fileId, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        return NoContent();
+    }
+
+
     [HttpDelete("{fileId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
