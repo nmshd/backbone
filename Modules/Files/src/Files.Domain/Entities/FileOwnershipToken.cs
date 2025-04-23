@@ -1,19 +1,129 @@
+using System.ComponentModel;
+using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
-public record FileOwnershipToken(string Value) : StronglyTypedId(Value)
+[Serializable]
+[TypeConverter(typeof(FileOwnershipToken))]
+public record FileOwnershipToken(string Value)
 {
+    public static readonly int DEFAULT_MAX_LENGTH = 20;
+
+    protected static readonly char[] ALLOWED_CHARACTERS =
+    [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '!',
+        '@',
+        '#',
+        '$',
+        '%',
+        '^',
+        '&',
+        '*',
+        '(',
+        ')',
+        '_',
+        '-',
+        '+',
+        '=',
+        '<',
+        '>',
+        '?',
+        '/',
+        '{',
+        '}',
+        '[',
+        ']',
+        '|',
+        '~'
+    ];
+
     public static FileOwnershipToken New()
     {
-        //TODO: refactor this please
-        var allCharactersList = new List<char>();
-        allCharactersList.AddRange(DEFAULT_VALID_CHARS);
-        allCharactersList.AddRange(SPECIAL_CHARACTERS);
-        var allChars = allCharactersList.ToArray();
-
-        var stringValue = StringUtils.Generate(allChars, DEFAULT_MAX_LENGTH);
+        var stringValue = StringUtils.Generate(ALLOWED_CHARACTERS, DEFAULT_MAX_LENGTH);
         return new FileOwnershipToken(stringValue);
+    }
+
+    public class FileOwnershipTokenConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+        {
+            var stringValue = value as string;
+
+            return !string.IsNullOrEmpty(stringValue) ? new FileOwnershipToken(stringValue) : base.ConvertFrom(context, culture, value);
+        }
+    }
+
+    public static FileOwnershipToken Parse(string value)
+    {
+        return new FileOwnershipToken(value);
     }
 }

@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -10,6 +12,7 @@ internal class FilesStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly FilesContext _filesContext;
     private readonly ClientPool _clientPool;
+    private ApiResponse<OwnershipToken> _resetOwnershipTokenResponse = null!;
 
     public FilesStepDefinitions(ResponseContext responseContext, FilesContext filesContext, ClientPool clientPool)
     {
@@ -66,6 +69,35 @@ internal class FilesStepDefinitions
         var file = _filesContext.Files[fileName];
 
         _responseContext.WhenResponse = await identity.Files.GetFileMetadata(file.Id);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimFileOwnership/{RegexFor.SINGLE_THING}.OwnershipToken endpoint")]
+    public async void WhenISendsAPatchRequestToTheFilesFIdClaimFileOwnershipFOwnershipTokenEndpoint(string identityName, string fileName, string fileName2)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var file = _filesContext.Files[fileName];
+
+        _responseContext.WhenResponse = await identity.Files.ClaimFileOwnership(file.Id, file.OwnershipToken);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/RegenerateOwnershipToken endpoint")]
+    public void WhenISendsAPatchRequestToTheFilesFIdRegenerateOwnershipTokenEndpoint(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var file = _filesContext.Files[fileName];
+        _responseContext.WhenResponse = _resetOwnershipTokenResponse = identity.Files.RegenerateFileOwnershipToken(file.Id).Result;
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then("the response contains a new OwnershipToken")]
+    public void ThenTheResponseContainsANewOwnershipToken()
+    {
+        Assert.NotNull(_resetOwnershipTokenResponse);
+        Assert.NotNull(_resetOwnershipTokenResponse.Result);
+        Assert.NotNull(_resetOwnershipTokenResponse.Result.Token);
     }
 
     #endregion
