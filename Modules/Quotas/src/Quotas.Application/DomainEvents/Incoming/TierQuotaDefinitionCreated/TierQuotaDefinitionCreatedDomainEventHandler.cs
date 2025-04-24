@@ -1,7 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Microsoft.Extensions.Logging;
@@ -13,15 +11,13 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<TierQuotaDefinitionCreatedDomainEventHandler> _logger;
-    private readonly IMetricStatusesService _metricStatusesService;
 
     public TierQuotaDefinitionCreatedDomainEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionCreatedDomainEventHandler> logger, IMetricStatusesService metricStatusesService)
+        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionCreatedDomainEventHandler> logger)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
         _logger = logger;
-        _metricStatusesService = metricStatusesService;
     }
 
     public async Task Handle(TierQuotaDefinitionCreatedDomainEvent @event)
@@ -45,10 +41,10 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
 
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
-        var identityAddresses = identitiesWithTier.Select(i => i.Address).ToList();
-        var metrics = new List<MetricKey> { tierQuotaDefinition.MetricKey };
-        await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
-
         _logger.LogInformation("Successfully created quotas for Identities.");
+
+        // var identityAddresses = identitiesWithTier.Select(i => i.Address).ToList();
+        // var metrics = new List<MetricKey> { tierQuotaDefinition.MetricKey };
+        // await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
     }
 }
