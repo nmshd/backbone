@@ -43,6 +43,12 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
 
         _logger.LogInformation("Successfully created quotas for Identities.");
 
+        // This is commented out because it takes several minutes to recalculate the metric statuses.
+        // We rather wait for the recalculation to be triggered next time the identity is doing
+        // something with the metric. While this means that the metrics status will not be exhausted
+        // CAUTION: Remember to comment in the test in TierQuotaDefinitionCreatedDomainEventHandlerTests
+        //          in case this gets commented in one day.
+        // even if a quota is exhausted, we rather take this risk than having a long-running event handler.
         // var identityAddresses = identitiesWithTier.Select(i => i.Address).ToList();
         // var metrics = new List<MetricKey> { tierQuotaDefinition.MetricKey };
         // await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
