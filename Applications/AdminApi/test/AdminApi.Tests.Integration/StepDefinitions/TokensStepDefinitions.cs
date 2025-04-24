@@ -12,17 +12,13 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET /Tokens?createdBy={identity-address}")]
 [Scope(Feature = "PATCH /Tokens/{id}/ResetAccessFailedCount")]
-internal class TokensStepDefinitions : BaseStepDefinitions
+internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
     private IResponse? _whenResponse = null;
     private ApiResponse<ListTokensTestResponse> _listTokensResponse = null!;
     private ApiResponse<EmptyResponse> _resetAccesesFailedCountResponse = null!;
-    private string _newIdentityAddress;
+    private string _newIdentityAddress = string.Empty;
 
-    public TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
-    {
-        _newIdentityAddress = string.Empty;
-    }
 
     [Given(@"an identity with no tokens")]
     public async Task GivenAnIdentityWithNoTokens()
@@ -40,11 +36,10 @@ internal class TokensStepDefinitions : BaseStepDefinitions
         _whenResponse = _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
     }
 
-    [When(@"a PATCH request is sent to the reset AccessFailedCountEndpoint of a randomID")]
-    public async Task WhenAPatchRequestIsSentToTheTokensIdResetAccessFailedCount()
+    [When("a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint")]
+    public async Task WhenAPATCHRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
     {
-        var tokenId = Guid.NewGuid().ToString();
-        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount(tokenId);
+        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

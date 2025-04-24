@@ -89,20 +89,19 @@ public class Identity : Entity
         _tierQuotas.Remove(tierQuota);
     }
 
-    public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory,
-        CancellationToken cancellationToken)
+    public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
         {
             var metricCalculator = factory.CreateFor(metric);
-            await UpdateMetricStatus(metric, metricCalculator, cancellationToken);
+            await UpdateMetricStatus(metric, metricCalculator, updateType, cancellationToken);
         }
     }
 
-    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, CancellationToken cancellationToken)
+    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
         var metricKeys = _tierQuotas.Select(q => q.MetricKey).Union(_individualQuotas.Select(q => q.MetricKey)).Distinct();
-        await UpdateMetricStatuses(metricKeys, factory, cancellationToken);
+        await UpdateMetricStatuses(metricKeys, factory, updateType, cancellationToken);
     }
 
     private bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
@@ -110,9 +109,13 @@ public class Identity : Entity
         return _individualQuotas.Any(q => q.MetricKey == metricKey && q.Period == period);
     }
 
-    private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator,
-        CancellationToken cancellationToken)
+    private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
+        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metric);
+
+        if (updateType == MetricUpdateType.OnlyExhausted && metricStatus is { IsExhausted: false })
+            return;
+
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
 
         var latestExhaustionDate = ExhaustionDate.UNEXHAUSTED;
@@ -136,7 +139,6 @@ public class Identity : Entity
             }
         });
 
-        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metric);
         if (metricStatus != null)
             metricStatus.Update(latestExhaustionDate);
         else
@@ -169,7 +171,7 @@ public class Identity : Entity
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
 
-        await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
+        await UpdateAllMetricStatuses(metricCalculatorFactory, MetricUpdateType.All, cancellationToken);
     }
 
     #region Selectors
@@ -180,4 +182,10 @@ public class Identity : Entity
     }
 
     #endregion
+}
+
+public enum MetricUpdateType
+{
+    All,
+    OnlyExhausted
 }
