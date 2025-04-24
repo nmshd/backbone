@@ -38,7 +38,7 @@ public class IdentityCreatedDomainEventHandler : IDomainEventHandler<IdentityCre
             identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
 
-        await identity.UpdateMetricStatuses(tier.Quotas.Select(q => q.MetricKey), _metricCalculatorFactory, CancellationToken.None);
+        await identity.UpdateMetricStatuses(tier.Quotas.Select(q => q.MetricKey), _metricCalculatorFactory, MetricUpdateType.All, CancellationToken.None);
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 

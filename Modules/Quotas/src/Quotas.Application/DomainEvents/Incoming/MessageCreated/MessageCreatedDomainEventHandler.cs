@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.MessageCreated;
 
@@ -19,6 +20,6 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         var identities = new List<string> { domainEvent.CreatedBy };
         var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_SENT_MESSAGES };
 
-        await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
+        await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, MetricUpdateType.All, CancellationToken.None);
     }
 }
