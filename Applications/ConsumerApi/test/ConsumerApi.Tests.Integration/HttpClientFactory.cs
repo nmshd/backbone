@@ -1,4 +1,5 @@
 using Backbone.Tooling.Extensions;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Backbone.ConsumerApi.Tests.Integration;
 
@@ -15,5 +16,11 @@ internal class HttpClientFactory
     {
         var baseAddress = Environment.GetEnvironmentVariable("CONSUMER_API_BASE_ADDRESS");
         return baseAddress.IsNullOrEmpty() ? _factory.CreateClient() : new HttpClient() { BaseAddress = new Uri(baseAddress) };
+    }
+
+    internal HttpClient CreateClientWithoutRedirect()
+    {
+        var baseAddress = Environment.GetEnvironmentVariable("CONSUMER_API_BASE_ADDRESS");
+        return baseAddress.IsNullOrEmpty() ? _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }) : new HttpClient { BaseAddress = new Uri(baseAddress) };
     }
 }

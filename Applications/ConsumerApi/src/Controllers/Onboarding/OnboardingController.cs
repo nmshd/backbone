@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
-[ApiController]
 [Route("[controller]")]
 public class OnboardingController : ApiControllerBase
 {
@@ -22,21 +21,70 @@ public class OnboardingController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status302Found)]
     [AllowAnonymous]
-    public async Task<IActionResult> Get()
+    public IActionResult Get()
     {
-        // Pretend to be async to fit framework
-        await Task.Yield();
+        return Get(null);
+    }
 
+    [HttpGet("{appname}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status302Found)]
+    [AllowAnonymous]
+    public IActionResult Get([FromRoute] string? appname)
+    {
         var userAgentOfRequest = Request.Headers["User-Agent"].ToString();
 
-        if (IndicatesMacOs(userAgentOfRequest)) return Redirect(_configuration.Onboarding.IosAppUrl);
+        var pickedOnboardingConfiguration = PickConfiguration(appname);
 
-        if (IndicatesAndroid(userAgentOfRequest)) return Redirect(_configuration.Onboarding.AndroidAppUrl);
+        if (pickedOnboardingConfiguration != null)
+        {
+            if (IndicatesMacOs(userAgentOfRequest))
+                return Redirect(pickedOnboardingConfiguration.IosAppUrl);
 
-        const string htmlContent =
-            "<h1>Onboarding</h1><p>Welcome to the onboarding page!</p><a href=https://play.google.com/store/apps/details?id=eu.enmeshed.app&hl=de>Enmeshed Playstore</a><a href=https://apps.apple.com/us/app/enmeshed/id1576693742?platform=iphone>Enmeshed Appstore</a>";
+            if (IndicatesAndroid(userAgentOfRequest))
+                return Redirect(pickedOnboardingConfiguration.AndroidAppUrl);
 
-        return base.Content(htmlContent, "text/html");
+            var htmlContent =
+                $"<h1>Onboarding</h1><p>Welcome to the onboarding page!</p><a href={pickedOnboardingConfiguration.AndroidAppUrl}>{pickedOnboardingConfiguration.AppNameIdentifier} Playstore</a><br><a href={pickedOnboardingConfiguration.IosAppUrl}>{pickedOnboardingConfiguration.AppNameIdentifier} Appstore</a>";
+
+            return base.Content(htmlContent, "text/html");
+        }
+
+        // if we have received null we could not automatically determine the onboarding configuration
+        // hence we return a html page with the links to the different onboarding configurations
+
+        var appChooserHtml = "<h1>Onboarding</h1><p>Welcome to the onboarding page!</p><br>";
+
+        foreach (var onboardingConfiguration in _configuration.Onboarding)
+            appChooserHtml += $"<a href=http://localhost:8081/Onboarding/{onboardingConfiguration.AppNameIdentifier}>Install app {onboardingConfiguration.AppNameIdentifier}</a><br>";
+
+        return base.Content(appChooserHtml, "text/html");
+    }
+
+    private ConsumerApiConfiguration.OnboardingConfiguration? PickConfiguration(string? appname)
+    {
+        var onboardingConfigurations = _configuration.Onboarding;
+
+        // first case - we have no onboarding configuration
+        // error should be thrown
+        if (onboardingConfigurations.Length == 0)
+            throw new ApplicationException("No onboarding configuration found");
+
+        // second case we have only one onboarding configuration
+        // use it directly and return the redirect
+        if (onboardingConfigurations.Length == 1)
+            return onboardingConfigurations[0];
+
+        // third case we have multiple onboarding configurations
+        // we need to check is the app name has been specified
+        if (appname == null)
+            return null;
+        else
+            foreach (var appconfig in onboardingConfigurations)
+                if (appconfig.AppNameIdentifier.Equals(appname!))
+                    return appconfig;
+
+        return null;
     }
 
     private bool IndicatesAndroid(string userAgentContent)

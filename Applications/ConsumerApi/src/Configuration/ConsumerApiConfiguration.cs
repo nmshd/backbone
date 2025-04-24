@@ -13,7 +13,7 @@ public class ConsumerApiConfiguration
     [Required]
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    public OnboardingConfiguration Onboarding { get; set; } = new();
+    public OnboardingConfiguration[] Onboarding { get; set; } = [];
 
     public class AuthenticationConfiguration
     {
@@ -39,8 +39,13 @@ public class ConsumerApiConfiguration
 
     public class OnboardingConfiguration
     {
+        [Required]
+        public string AppNameIdentifier { get; set; } = null!;
+
+        [Required]
         public string AndroidAppUrl { get; set; } = null!;
 
+        [Required]
         public string IosAppUrl { get; set; } = null!;
     }
 }
