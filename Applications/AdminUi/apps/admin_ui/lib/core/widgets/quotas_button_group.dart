@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sn_progress_dialog/enums/progress_types.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 import '../extensions.dart';
 import '../modals/modals.dart';
@@ -64,14 +68,32 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
 
     if (!confirmed) return;
 
-    for (final quota in widget.selectedQuotas) {
-      final result = await _deleteQuota(quota);
+    ProgressDialog? progressDialog;
+
+    if (mounted) {
+      progressDialog = ProgressDialog(context: context);
+
+      unawaited(
+        progressDialog.show(
+          max: widget.selectedQuotas.length,
+          msg: context.l10n.quotaButtonGroup_deletingMessage,
+          progressType: ProgressType.determinate,
+        ),
+      );
+    }
+
+    for (final quota in widget.selectedQuotas.indexed) {
+      final result = await _deleteQuota(quota.$2);
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota), showCloseIcon: true));
 
         return;
       }
+
+      progressDialog?.update(value: quota.$1 + 1);
     }
+
+    progressDialog?.close();
 
     widget.onQuotasChanged();
     widget.selectedQuotas.clear();

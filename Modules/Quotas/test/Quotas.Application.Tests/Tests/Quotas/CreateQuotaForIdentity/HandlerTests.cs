@@ -34,7 +34,8 @@ public class HandlerTests : AbstractTestsBase
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
             A<List<string>>.That.Matches(x => x.Contains(identity.Address)),
-            A<List<MetricKey>>.That.Contains(metricKey),
+            A<List<MetricKey>>.That.Contains(metricKey)
+            , MetricUpdateType.All,
             A<CancellationToken>._)
         ).MustHaveHappened();
     }
