@@ -67,7 +67,7 @@
     "total": "Total",
     "copyToClipboard_tooltip": "Copy to clipboard",
     "copyToClipboard_success": "Successfully copied the '{entityName}' to clipboard.",
-    "@copiedToClipboard_success": {
+    "@copyToClipboard_success": {
         "placeholders": {
             "entityName": {
                 "type": "String"
