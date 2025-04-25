@@ -30,6 +30,6 @@ public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
             throw new ValidationException(new ApplicationError(failures.First().ErrorCode,
                 failures.First().ErrorMessage));
 
-        return next();
+        return next(cancellationToken);
     }
 }

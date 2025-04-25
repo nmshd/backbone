@@ -68,6 +68,6 @@ public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         if (failures.Count != 0)
             throw new ValidationException(new ApplicationError(failures.First().ErrorCode, failures.First().ErrorMessage));
 
-        return next();
+        return next(cancellationToken);
     }
 }
