@@ -64,6 +64,7 @@
     "update": "Update",
     "week": "Week",
     "year": "Year",
+    "total": "Total",
     "copyToClipboard_tooltip": "Copy to clipboard",
     "copyToClipboard_success": "Successfully copied the '{entityName}' to clipboard.",
     "@copiedToClipboard_success": {

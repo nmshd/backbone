@@ -117,6 +117,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
                   DropdownMenuItem(value: 'Week', child: Text(context.l10n.week)),
                   DropdownMenuItem(value: 'Month', child: Text(context.l10n.month)),
                   DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
+                  DropdownMenuItem(value: 'Total', child: Text(context.l10n.total)),
                 ],
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.period}*'),
