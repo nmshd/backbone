@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
-[Route("[controller]")]
+[Route("Tokens")]
 public class OnboardingController : ApiControllerBase
 {
     private readonly ConsumerApiConfiguration _configuration;
@@ -17,20 +17,20 @@ public class OnboardingController : ApiControllerBase
         _configuration = configuration.Value;
     }
 
-    [HttpGet]
+    [HttpGet("{tokenId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status302Found)]
     [AllowAnonymous]
-    public IActionResult Get()
+    public IActionResult Get([FromRoute] string? tokenId)
     {
-        return Get(null);
+        return Get(tokenId, null);
     }
 
-    [HttpGet("{appname}")]
+    [HttpGet("{tokenId}/{appname}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status302Found)]
     [AllowAnonymous]
-    public IActionResult Get([FromRoute] string? appname)
+    public IActionResult Get([FromRoute] string? tokenId, [FromRoute] string? appname)
     {
         var userAgentOfRequest = Request.Headers["User-Agent"].ToString();
 
@@ -55,8 +55,11 @@ public class OnboardingController : ApiControllerBase
 
         var appChooserHtml = "<h1>Onboarding</h1><p>Welcome to the onboarding page!</p><br>";
 
+        var baseUrl = HttpContext.Request.PathBase.ToString();
+
         foreach (var onboardingConfiguration in _configuration.Onboarding)
-            appChooserHtml += $"<a href=http://localhost:8081/Onboarding/{onboardingConfiguration.AppNameIdentifier}>Install app {onboardingConfiguration.AppNameIdentifier}</a><br>";
+            appChooserHtml +=
+                $"<a href={baseUrl}/Tokens/{tokenId}/{onboardingConfiguration.AppNameIdentifier}>Install app {onboardingConfiguration.AppNameIdentifier}</a><br>";
 
         return base.Content(appChooserHtml, "text/html");
     }

@@ -33,10 +33,10 @@ internal class OnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /Onboarding endpoint")]
+    [When($"a call is made to the /Tokens endpoint")]
     public async Task WhenACallIsMadeToTheOnboardingEndpoint()
     {
-        const string requestUrl = "Onboarding";
+        const string requestUrl = "Tokens/tok12345";
         _onboardingResponse = await _client.GetAsync(requestUrl, CancellationToken.None);
     }
 
