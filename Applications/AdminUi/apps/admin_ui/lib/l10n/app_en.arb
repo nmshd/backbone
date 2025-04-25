@@ -208,6 +208,7 @@
     "maxIdentities_error_message_maxIdentitiesLowerThanNumberOfIdentities": "Entered maximum number of identities is lower or equal to actual number of identities.",
     "quotaButtonGroup_removeQuotas_title": "Remove Quotas",
     "quotaButtonGroup_deletionMessage": "Are you sure you want to remove the selected quotas from",
+    "quotaButtonGroup_deletingMessage": "Deleting...",
     "quotaButtonGroup_theIdentity": "the Identity",
     "quotaButtonGroup_theTier": "the Tier",
     "quotaButtonGroup_errorDeletingQuota": "An error occurred while deleting the quota(s). Please try again.",
