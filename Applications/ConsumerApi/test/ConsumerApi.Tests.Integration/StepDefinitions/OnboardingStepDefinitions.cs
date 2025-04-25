@@ -25,7 +25,7 @@ internal class OnboardingStepDefinitions
     [Given($"a http client with user agent {RegexFor.SINGLE_THING}")]
     public void GivenAHttpClient(string userAgentContent)
     {
-        _client = _httpClientFactory.CreateClientWithoutRedirect();
+        _client = _httpClientFactory.CreateClient();
         _client.DefaultRequestHeaders.Add("User-Agent", userAgentContent);
     }
 
