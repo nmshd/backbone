@@ -87,17 +87,10 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     }
   }
 
-  Future<ApiResponse<void>> _deleteQuota(String quota) async {
+  Future<ApiResponse<void>> _deleteQuota(String quota) {
     final client = GetIt.I.get<AdminApiClient>();
 
-    ApiResponse<void> response;
-
-    if (widget.identityAddress != null) {
-      response = await client.identities.deleteIndividualQuota(address: widget.identityAddress!, individualQuotaId: quota);
-    } else {
-      response = await client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
-    }
-
-    return response;
+    if (widget.identityAddress != null) return client.identities.deleteIndividualQuota(address: widget.identityAddress!, individualQuotaId: quota);
+    return client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
   }
 }
