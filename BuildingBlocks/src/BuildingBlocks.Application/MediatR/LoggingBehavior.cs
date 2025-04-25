@@ -19,7 +19,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         CancellationToken cancellationToken)
     {
         Before();
-        var response = await next();
+        var response = await next(cancellationToken);
         After();
         return response;
     }
@@ -47,5 +47,4 @@ internal static partial class LoggingBehaviorLogs
         EventName = "LoggingBehavior.HandledRequest",
         Message = "Handled '{requestName}' ('{timeElapsed}' ms).")]
     public static partial void HandledMediatorRequest(this ILogger logger, LogLevel level, string requestName, long timeElapsed);
-
 }
