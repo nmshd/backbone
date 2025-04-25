@@ -63,7 +63,7 @@ Converts a map of environment variables back to a list
 {{- range $item := $mergedEnvMap }}
 - name: {{ $item.name }}
   {{- if $item.value }}
-  value: {{ $item.value }}
+  value: {{ $item.value | quote }}
   {{- else if $item.valueFrom }}
   valueFrom:
     secretKeyRef:

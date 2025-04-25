@@ -17,10 +17,10 @@ public class ResetAccessFailedCountOfTokenCommand : AdminCliCommand
 
         AddOption(tokenId);
 
-        this.SetHandler(CreateClient, tokenId);
+        this.SetHandler(ResetAccessFailedCount, tokenId);
     }
 
-    private async Task CreateClient(string tokenId)
+    private async Task ResetAccessFailedCount(string tokenId)
     {
         await _mediator.Send(new Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken.ResetAccessFailedCountOfTokenCommand(tokenId), CancellationToken.None);
 
