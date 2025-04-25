@@ -82,16 +82,15 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       );
     }
 
-    var i = 0;
-    for (final quota in widget.selectedQuotas) {
-      final result = await _deleteQuota(quota);
+    for (final quota in widget.selectedQuotas.indexed) {
+      final result = await _deleteQuota(quota.$2);
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota), showCloseIcon: true));
 
         return;
       }
 
-      progressDialog?.update(value: ++i);
+      progressDialog?.update(value: quota.$1 + 1);
     }
     progressDialog?.close();
 
