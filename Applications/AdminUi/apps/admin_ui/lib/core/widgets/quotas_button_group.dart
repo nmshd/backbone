@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:admin_ui/core/dialogs.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -66,6 +67,8 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
 
     if (!confirmed) return;
 
+    if (mounted) unawaited(showLoadingDialog(context, context.l10n.quotaButtonGroup_deletingMessage(widget.selectedQuotas.length)));
+
     for (final quota in widget.selectedQuotas) {
       final result = await _deleteQuota(quota);
       if (result.hasError && mounted) {
@@ -74,6 +77,8 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
         return;
       }
     }
+
+    if (mounted) Navigator.of(context, rootNavigator: true).pop();
 
     widget.onQuotasChanged();
     widget.selectedQuotas.clear();
@@ -85,16 +90,6 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   Future<ApiResponse<void>> _deleteQuota(String quota) async {
     final client = GetIt.I.get<AdminApiClient>();
 
-    unawaited(
-      showDialog<void>(
-        barrierDismissible: false,
-        builder: (ctx) {
-          return const Center(child: CircularProgressIndicator());
-        },
-        context: context,
-      ),
-    );
-
     ApiResponse<void> response;
 
     if (widget.identityAddress != null) {
@@ -102,8 +97,6 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     } else {
       response = await client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
     }
-
-    if (mounted) Navigator.of(context, rootNavigator: true).pop();
 
     return response;
   }
