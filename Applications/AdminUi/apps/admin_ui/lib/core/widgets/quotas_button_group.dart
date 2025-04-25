@@ -92,6 +92,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
 
       progressDialog?.update(value: quota.$1 + 1);
     }
+
     progressDialog?.close();
 
     widget.onQuotasChanged();
