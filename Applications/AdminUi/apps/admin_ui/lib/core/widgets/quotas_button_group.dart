@@ -93,6 +93,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
 
       progressDialog?.update(value: ++i);
     }
+
     progressDialog?.close();
 
     widget.onQuotasChanged();
