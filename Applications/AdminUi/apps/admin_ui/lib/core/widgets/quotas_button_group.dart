@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -80,10 +82,29 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     }
   }
 
-  Future<ApiResponse<void>> _deleteQuota(String quota) {
+  Future<ApiResponse<void>> _deleteQuota(String quota) async {
     final client = GetIt.I.get<AdminApiClient>();
 
-    if (widget.identityAddress != null) return client.identities.deleteIndividualQuota(address: widget.identityAddress!, individualQuotaId: quota);
-    return client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
+    unawaited(
+      showDialog<void>(
+        barrierDismissible: false,
+        builder: (ctx) {
+          return const Center(child: CircularProgressIndicator());
+        },
+        context: context,
+      ),
+    );
+
+    ApiResponse<void> response;
+
+    if (widget.identityAddress != null) {
+      response = await client.identities.deleteIndividualQuota(address: widget.identityAddress!, individualQuotaId: quota);
+    } else {
+      response = await client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
+    }
+
+    if (mounted) Navigator.of(context, rootNavigator: true).pop();
+
+    return response;
   }
 }
