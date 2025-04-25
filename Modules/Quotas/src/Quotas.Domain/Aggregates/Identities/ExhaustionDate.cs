@@ -33,6 +33,16 @@ public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
         return left.Value > right.Value;
     }
 
+    public static bool operator <(ExhaustionDate left, DateTime right)
+    {
+        return left.Value < right;
+    }
+
+    public static bool operator >(ExhaustionDate left, DateTime right)
+    {
+        return left.Value > right;
+    }
+
     public int CompareTo(ExhaustionDate? other)
     {
         if (ReferenceEquals(this, other)) return 0;
