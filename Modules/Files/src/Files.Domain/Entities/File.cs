@@ -25,16 +25,15 @@ public class File : Entity
         EncryptedProperties = null!;
     }
 
-    public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
+    public File(IdentityAddress createdBy, DeviceId createdByDevice, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
         byte[] encryptedProperties)
     {
         Id = FileId.New();
 
         CreatedAt = ModifiedAt = SystemTime.UtcNow;
-        CreatedBy = ModifiedBy = createdBy;
+        Owner = CreatedBy = ModifiedBy = createdBy;
         CreatedByDevice = ModifiedByDevice = createdByDevice;
 
-        Owner = owner;
         OwnerSignature = ownerSignature;
 
         CipherHash = cipherHash;
