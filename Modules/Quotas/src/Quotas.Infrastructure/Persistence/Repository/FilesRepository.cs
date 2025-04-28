@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+
 public class FilesRepository : IFilesRepository
 {
     private readonly IQueryable<FileMetadata> _readOnlyFiles;
@@ -14,19 +15,19 @@ public class FilesRepository : IFilesRepository
         _readOnlyFiles = dbContext.Files.AsNoTracking();
     }
 
-    public async Task<uint> Count(string uploader, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
+    public async Task<uint> Count(string owner, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
         var count = await _readOnlyFiles
             .CreatedInInterval(createdAtFrom, createdAtTo)
-            .CountAsync(f => f.CreatedBy == uploader, cancellationToken);
+            .CountAsync(f => f.CreatedBy == owner, cancellationToken);
         return (uint)count;
     }
 
-    public async Task<long> AggregateUsedSpace(string uploader, DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<long> AggregateUsedSpace(string owner, DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         var totalSpace = await _readOnlyFiles
             .CreatedInInterval(from, to)
-            .Where(f => f.CreatedBy == uploader).SumAsync(f => f.CipherSize, cancellationToken);
+            .Where(f => f.CreatedBy == owner).SumAsync(f => f.CipherSize, cancellationToken);
         return totalSpace;
     }
 }
