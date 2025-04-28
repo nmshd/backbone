@@ -31,7 +31,7 @@ public class FilesRepositoryTests : AbstractTestsBase
 
     private static File GenerateFile(IdentityAddress identityAddress)
     {
-        return new File(identityAddress, CreateRandomDeviceId(), identityAddress, [], [], [], 0, DateTime.Now, []);
+        return new File(identityAddress, CreateRandomDeviceId(), [], [], [], 0, DateTime.Now, []);
     }
 
     private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)
