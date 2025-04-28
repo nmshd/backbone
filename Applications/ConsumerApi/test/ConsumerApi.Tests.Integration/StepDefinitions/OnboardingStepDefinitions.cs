@@ -1,4 +1,4 @@
-using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Microsoft.Extensions.Options;
 
@@ -12,10 +12,12 @@ internal class OnboardingStepDefinitions
     private HttpClient _client = null!;
     private HttpResponseMessage _onboardingResponse = null!;
     private readonly HttpClientFactory _httpClientFactory;
+    private readonly ConsumerApiConfiguration _apiConfiguration;
 
-    public OnboardingStepDefinitions(IOptions<HttpConfiguration> configuration, HttpClientFactory httpClientFactory)
+    public OnboardingStepDefinitions(HttpClientFactory httpClientFactory, IOptions<ConsumerApiConfiguration> apiConfiguration)
     {
         _httpClientFactory = httpClientFactory;
+        _apiConfiguration = apiConfiguration.Value;
     }
 
     #endregion
@@ -61,4 +63,10 @@ internal class OnboardingStepDefinitions
     }
 
     #endregion
+
+    [Given("the configuration contains a single onboarding configuration")]
+    public void GivenTheConfigurationContainsASingleOnboardingConfiguration()
+    {
+        ScenarioContext.StepIsPending();
+    }
 }

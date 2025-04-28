@@ -47,5 +47,9 @@ public class ConsumerApiConfiguration
 
         [Required]
         public string IosAppUrl { get; set; } = null!;
+
+        public string PrimaryColor { get; set; } = null!;
+        public string SecondaryColor { get; set; } = null!;
+        public string AppIconUrl { get; set; } = null!;
     }
 }
