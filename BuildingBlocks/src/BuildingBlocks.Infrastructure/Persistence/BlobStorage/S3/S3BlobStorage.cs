@@ -103,7 +103,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             }
 
             request.ContinuationToken = response.NextContinuationToken;
-        } while (response.IsTruncated);
+        } while (response.IsTruncated == true);
 
         _logger.LogTrace("Found all blobs.");
     }
