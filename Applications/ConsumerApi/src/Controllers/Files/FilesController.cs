@@ -52,7 +52,6 @@ public class FilesController : ApiControllerBase
             FileContent = inputStream.ToArray(),
             ExpiresAt = dto.ExpiresAt,
             CipherHash = UrlBase64.Decode(dto.CipherHash),
-            Owner = dto.Owner,
             OwnerSignature = UrlBase64.Decode(dto.OwnerSignature),
             EncryptedProperties = UrlBase64.Decode(dto.EncryptedProperties)
         };
