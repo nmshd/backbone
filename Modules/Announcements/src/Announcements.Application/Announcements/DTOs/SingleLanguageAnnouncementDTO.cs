@@ -18,12 +18,14 @@ public class SingleLanguageAnnouncementDTO
         var textInLanguage = announcement.Texts.SingleOrDefault(t => t.Language == language) ??
                              announcement.Texts.Single(t => t.Language == AnnouncementLanguage.DEFAULT_LANGUAGE);
 
-        Text = new AnnouncementTextDTO(textInLanguage);
+        Title = textInLanguage.Title;
+        Body = textInLanguage.Body;
     }
 
     public string Id { get; }
     public DateTime CreatedAt { get; }
     public DateTime? ExpiresAt { get; }
     public AnnouncementSeverity Severity { get; }
-    public AnnouncementTextDTO Text { get; }
+    public string Title { get; set; }
+    public string Body { get; set; }
 }
