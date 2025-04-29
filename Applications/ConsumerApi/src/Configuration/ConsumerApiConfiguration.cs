@@ -13,6 +13,7 @@ public class ConsumerApiConfiguration
     [Required]
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
+    [MinLength(1)]
     public OnboardingConfiguration[] Onboarding { get; set; } = [];
 
     public class AuthenticationConfiguration
