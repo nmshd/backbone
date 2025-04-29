@@ -1,6 +1,5 @@
-using Backbone.ConsumerApi.Configuration;
+using System.Text.RegularExpressions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -12,12 +11,10 @@ internal class OnboardingStepDefinitions
     private HttpClient _client = null!;
     private HttpResponseMessage _onboardingResponse = null!;
     private readonly HttpClientFactory _httpClientFactory;
-    private readonly ConsumerApiConfiguration _apiConfiguration;
 
-    public OnboardingStepDefinitions(HttpClientFactory httpClientFactory, IOptions<ConsumerApiConfiguration> apiConfiguration)
+    public OnboardingStepDefinitions(HttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        _apiConfiguration = apiConfiguration.Value;
     }
 
     #endregion
@@ -35,10 +32,10 @@ internal class OnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /Tokens endpoint")]
-    public async Task WhenACallIsMadeToTheOnboardingEndpoint()
+    [When($"a call is made to the /resource/resourceId endpoint for the {RegexFor.SINGLE_THING} app")]
+    public async Task WhenACallIsMadeToTheRessourceResourceIdEndpointForTheEnmeshedApp(string appName)
     {
-        const string requestUrl = "Tokens/tok12345";
+        var requestUrl = $"reference/tok12345?appName={appName}";
         _onboardingResponse = await _client.GetAsync(requestUrl, CancellationToken.None);
     }
 
@@ -46,27 +43,33 @@ internal class OnboardingStepDefinitions
 
     #region Then
 
-    [Then(@$"the response type is {"([a-zA-Z0-9/]+)"}")]
-    public void ThenTheResponseTypeIs(string contentType)
+    [Then($"the response contains a link containing {RegexFor.URL}")]
+    public void ThenTheResponseContainsALinkContainingAppsAppleCom(string url)
     {
         _onboardingResponse.Should().NotBeNull();
-        _onboardingResponse.Content.Headers.ContentType.Should().NotBeNull();
-        _onboardingResponse.Content.Headers.ContentType!.MediaType.Should().BeEquivalentTo(contentType);
+
+        var responseContent = _onboardingResponse.Content.ReadAsStringAsync().Result;
+        const string pattern = @"<a\s+(?:[^>]*?\s+)?href\s*=\s*[""']?(?<href>[^'"" >]+)[""']?";
+
+        var matches = Regex.Matches(responseContent, pattern, RegexOptions.IgnoreCase);
+
+        matches.Should().NotBeEmpty();
+        matches.Should().Contain(link => link.Value.Contains(url));
     }
 
-    [Then(@$"the redirection location contains {RegexFor.URL}")]
-    public void ThenTheRedirectionLocationContains(string redirectionUrl)
+    [Then($"the response does not contain a link containing {RegexFor.URL}")]
+    public void ThenTheResponseDoesNotContainALinkContainingPlayGoogleCom(string url)
     {
         _onboardingResponse.Should().NotBeNull();
-        _onboardingResponse.Headers.Location.Should().NotBeNull();
-        _onboardingResponse.Headers.Location!.ToString().Should().Contain(redirectionUrl);
+
+        var responseContent = _onboardingResponse.Content.ReadAsStringAsync().Result;
+        const string pattern = @"<a\s+(?:[^>]*?\s+)?href\s*=\s*[""']?(?<href>[^'"" >]+)[""']?";
+
+        var matches = Regex.Matches(responseContent, pattern, RegexOptions.IgnoreCase);
+
+        matches.Should().NotBeEmpty();
+        matches.Should().NotContain(link => link.Value.Contains(url));
     }
 
     #endregion
-
-    [Given("the configuration contains a single onboarding configuration")]
-    public void GivenTheConfigurationContainsASingleOnboardingConfiguration()
-    {
-        ScenarioContext.StepIsPending();
-    }
 }
