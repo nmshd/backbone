@@ -72,9 +72,9 @@ public class OnboardingController : ApiControllerBase
         if (onboardingConfigurations.Length == 1)
             return onboardingConfigurations[0];
 
-        foreach (var appconfig in onboardingConfigurations)
-            if (appconfig.AppNameIdentifier.Equals(appname!))
-                return appconfig;
+        foreach (var appConfig in onboardingConfigurations)
+            if (appConfig.AppNameIdentifier.Equals(appname))
+                return appConfig;
 
         return null;
     }
@@ -101,9 +101,6 @@ public class OnboardingController : ApiControllerBase
 
     private string AppendDeviceHint(string url, string deviceHint)
     {
-        if (url.Contains("?"))
-            return url + "&platform=" + deviceHint;
-
-        return url + "?platform=" + deviceHint;
+        return url.Contains("?") ? $"{url}&platform={deviceHint}" : $"{url}?platform={deviceHint}";
     }
 }
