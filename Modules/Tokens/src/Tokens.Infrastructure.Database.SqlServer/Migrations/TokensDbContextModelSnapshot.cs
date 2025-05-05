@@ -70,7 +70,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 

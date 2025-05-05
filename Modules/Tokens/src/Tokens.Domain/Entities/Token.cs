@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
@@ -25,7 +24,6 @@ public class Token : Entity
         CreatedByDevice = null!;
         Content = null!;
         _allocations = null!;
-        Version = null!;
     }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
@@ -44,8 +42,6 @@ public class Token : Entity
 
         _allocations = [];
 
-        Version = null!; // This property is handled and initialized by the database
-
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
 
@@ -60,9 +56,6 @@ public class Token : Entity
     public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
-
-    [Timestamp]
-    public object Version { get; set; }
 
     public int AccessFailedCount
     {

@@ -15,9 +15,9 @@ public static class IMutableModelExtensions
         model.AddAnnotation(PROVIDER_ANNOTATION, database.IsNpgsql() ? PROVIDER_POSTGRES : PROVIDER_SQLSERVER);
     }
 
-    private static string? GetDbProvider(this IMutableModel model)
+    public static string? GetDbProvider(this IMutableModel model)
     {
-        return model.GetAnnotation(PROVIDER_ANNOTATION).Value as string;
+        return model.FindAnnotation(PROVIDER_ANNOTATION)?.Value as string;
     }
 
     public static bool IsNpgsql(this IMutableModel model)
