@@ -6,7 +6,7 @@ namespace Backbone.BuildingBlocks.Application.MediatR;
 public class DbConcurrencyBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly Random _random = new();
+    private static readonly Random RANDOM = new();
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
@@ -21,7 +21,7 @@ public class DbConcurrencyBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             {
                 if (retryCount == 10) throw;
 
-                await Task.Delay(TimeSpan.FromMilliseconds(_random.Next(2, 10)), cancellationToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(RANDOM.Next(2, 10)), cancellationToken);
                 retryCount++;
             }
         }
