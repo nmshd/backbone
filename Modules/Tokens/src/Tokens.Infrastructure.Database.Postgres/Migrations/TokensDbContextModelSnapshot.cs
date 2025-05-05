@@ -18,7 +18,8 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Tokens")
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("DbProvider", "Npgsql")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -66,6 +67,12 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                     b.Property<byte[]>("Password")
                         .HasMaxLength(200)
                         .HasColumnType("bytea");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id");
 
