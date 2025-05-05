@@ -1,6 +1,4 @@
-using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.ConsumerApi.Configuration;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -8,8 +6,26 @@ using Microsoft.Extensions.Options;
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
 [Route("")]
-public class OnboardingController : ApiControllerBase
+public class OnboardingController : Controller
 {
+    // TODO: read from configuration
+    private readonly AppSelectionModel _appSelectionModel = new()
+    {
+        Apps =
+        [
+            new App
+            {
+                Identifier = "enmeshed",
+                DisplayName = "enmeshed",
+            },
+            new App
+            {
+                Identifier = "bird",
+                DisplayName = "BIRD",
+            }
+        ]
+    };
+
     private const string IPHONE_IDENTIFIER = "iphone";
     private const string ANDROID_IDENTIFIER = "android";
     private const string MACINTOSH_IDENTIFIER = "macintosh";
@@ -19,9 +35,8 @@ public class OnboardingController : ApiControllerBase
     private const string MAC_OS_DEVICE_HINT = "ipad";
 
     private readonly ConsumerApiConfiguration _configuration;
-    private readonly OnboardingHtmlFactory _onboardingHtmlFactory = new();
 
-    public OnboardingController(IMediator mediator, IOptions<ConsumerApiConfiguration> configuration) : base(mediator)
+    public OnboardingController(IOptions<ConsumerApiConfiguration> configuration)
     {
         _configuration = configuration.Value;
     }
@@ -37,30 +52,38 @@ public class OnboardingController : ApiControllerBase
 
         if (pickedOnboardingConfiguration != null)
         {
-            var appStoreList = new List<Tuple<string, string>>();
+            var appStoreLinks = new List<AppStoreLink>();
             var userAgentOfRequest = Request.Headers["User-Agent"].ToString();
 
             // Note: this order is important as iPhoneRequest will match with MacOsRequest also.
             if (IndicatesIPhone(userAgentOfRequest))
-                appStoreList.Add(new Tuple<string, string>("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, I_PHONE_DEVICE_HINT)));
+                appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, I_PHONE_DEVICE_HINT)));
             else if (IndicatesMacOs(userAgentOfRequest))
-                appStoreList.Add(new Tuple<string, string>("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, MAC_OS_DEVICE_HINT)));
+                appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, MAC_OS_DEVICE_HINT)));
 
             if (IndicatesAndroid(userAgentOfRequest))
-                appStoreList.Add(new Tuple<string, string>("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
+                appStoreLinks.Add(new AppStoreLink("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
 
-            if (appStoreList.Count == 0)
+            if (appStoreLinks.Count == 0)
             {
-                appStoreList.Add(new Tuple<string, string>("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
-                appStoreList.Add(new Tuple<string, string>("Apple App Store", pickedOnboardingConfiguration.IosAppUrl));
+                appStoreLinks.Add(new AppStoreLink("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
+                appStoreLinks.Add(new AppStoreLink("Apple App Store", pickedOnboardingConfiguration.IosAppUrl));
             }
 
             if (string.IsNullOrEmpty(Request.Path.Value)) return BadRequest("Invalid request path");
 
-            return _onboardingHtmlFactory.GenerateOnboardingPage(pickedOnboardingConfiguration, appStoreList);
+
+            var onboardingModel = new OnboardingModel
+            {
+                // TODO: read from configuration
+                AppDisplayName = _appSelectionModel.Apps.First(a => a.Identifier == appName).DisplayName,
+                Links = appStoreLinks
+            };
+
+            return View("Onboarding", onboardingModel);
         }
 
-        return _onboardingHtmlFactory.GenerateAppSelectionPage(_configuration, Request);
+        return View("AppSelection", _appSelectionModel);
     }
 
     private ConsumerApiConfiguration.OnboardingConfiguration? PickAppSpecificConfiguration(string? appname)
@@ -101,6 +124,35 @@ public class OnboardingController : ApiControllerBase
 
     private string AppendDeviceHint(string url, string deviceHint)
     {
-        return url.Contains("?") ? $"{url}&platform={deviceHint}" : $"{url}?platform={deviceHint}";
+        return url.Contains('?') ? $"{url}&platform={deviceHint}" : $"{url}?platform={deviceHint}";
     }
+}
+
+public class AppSelectionModel
+{
+    public required List<App> Apps { get; set; }
+}
+
+public class App
+{
+    public required string Identifier { get; set; }
+    public required string DisplayName { get; set; }
+}
+
+public class OnboardingModel
+{
+    public required string AppDisplayName { get; set; }
+    public required List<AppStoreLink> Links { get; set; }
+}
+
+public record AppStoreLink
+{
+    public AppStoreLink(string storeName, string link)
+    {
+        StoreName = storeName;
+        Link = link;
+    }
+
+    public string StoreName { get; set; }
+    public string Link { get; set; }
 }
