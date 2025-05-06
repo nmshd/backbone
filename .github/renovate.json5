@@ -7,7 +7,7 @@
     rangeStrategy: "pin",
     packageRules: [
         {
-            // do not upgrade the dart sdk as it will not be compatible with the version that flutter ships
+            // dart seems to have problems when pinning to a specific version, so we use the "auto" strategy for dart packages
             matchDatasources: ["dart"],
             rangeStrategy: "auto"
         },
