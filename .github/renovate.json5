@@ -8,6 +8,12 @@
     packageRules: [
         {
             // do not upgrade the dart sdk as it will not be compatible with the version that flutter ships
+            matchDatasources: ["dart"],
+            rangeStrategy: "auto"
+        },
+
+        {
+            // do not upgrade the dart sdk as it will not be compatible with the version that flutter ships
             matchDatasources: ["dart-version"],
             enabled: false
         },
