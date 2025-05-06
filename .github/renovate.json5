@@ -46,9 +46,9 @@
             enabled: false
         },
         {
-            // the dart packages in this list is fetched directly from git and therefore doesn't have a version
+            // the dart packages in this list are fetched directly from git and therefore don't have a version
             matchDatasources: ["dart"],
-            packageNames: ["window_size"],
+            packageNames: ["window_size", "enmeshed_ui_kit"],
             enabled: false
         },
 
