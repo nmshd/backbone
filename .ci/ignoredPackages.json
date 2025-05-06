@@ -1,1 +1,1 @@
-﻿["Serilog.Enrichers.Demystifier", "SpecFlow.NUnit", "Testcontainers.PostgreSql"]
+﻿["SpecFlow.NUnit", "MyCSharp.HttpUserAgentParser","MyCSharp.HttpUserAgentParser.AspNetCore"]
