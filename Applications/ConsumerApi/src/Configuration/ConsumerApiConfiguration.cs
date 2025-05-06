@@ -13,8 +13,8 @@ public class ConsumerApiConfiguration
     [Required]
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    [MinLength(1)]
-    public OnboardingConfiguration[] Onboarding { get; set; } = [];
+    [Required]
+    public OnboardingConfiguration Onboarding { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
@@ -40,17 +40,32 @@ public class ConsumerApiConfiguration
 
     public class OnboardingConfiguration
     {
+        public App[] Apps { get; set; } = [];
+    }
+
+    public class App
+    {
         [Required]
-        public string AppNameIdentifier { get; set; } = null!;
+        public string Identifier { get; set; } = null!;
 
         [Required]
-        public string AndroidAppUrl { get; set; } = null!;
+        public string DisplayName { get; set; } = null!;
 
-        [Required]
-        public string IosAppUrl { get; set; } = null!;
+        public Platform Ios { get; set; } = new();
 
-        public string PrimaryColor { get; set; } = null!;
-        public string SecondaryColor { get; set; } = null!;
-        public string AppIconUrl { get; set; } = null!;
+        public Platform Android { get; set; } = new();
+
+        [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+        public string? PrimaryColor { get; set; }
+
+        [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+        public string? SecondaryColor { get; set; }
+
+        public string? IconUrl { get; set; }
+    }
+
+    public class Platform
+    {
+        public string Url { get; set; } = null!;
     }
 }

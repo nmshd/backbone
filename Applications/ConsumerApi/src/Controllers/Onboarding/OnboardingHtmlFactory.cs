@@ -5,7 +5,7 @@ namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
 public class OnboardingHtmlFactory : Controller
 {
-    public IActionResult GenerateOnboardingPage(ConsumerApiConfiguration.OnboardingConfiguration appConfiguration, List<Tuple<string, string>> appStoreLinksToDisplay)
+    public IActionResult GenerateOnboardingPage(ConsumerApiConfiguration.App appConfiguration, List<Tuple<string, string>> appStoreLinksToDisplay)
     {
         const string header = "<head><title>Onboarding Page</title></head>";
 
@@ -14,7 +14,7 @@ public class OnboardingHtmlFactory : Controller
         // Hence, we set the correct link only on the user's device, with the help of this js-code.
         const string jsCodeToSetInAppLink =
             "<script>document.addEventListener('DOMContentLoaded', function () {var link = document.getElementById('inAppLink');link.href = window.location;console.log(link.href);});</script>";
-        var inAppLink = $"<br><a href=\" \" id=\"inAppLink\">Open {appConfiguration.AppNameIdentifier} App</a><br>";
+        var inAppLink = $"<br><a href=\" \" id=\"inAppLink\">Open {appConfiguration.Identifier} App</a><br>";
 
         const string onboardingText = "<p>You have opened an object with respect to tokenXX ...  to complete this process do either of the following:</p>";
         const string appAlreadyInstalled = "<p>App already installed?</p> Then please click the link below to open the app directly:<br>";
@@ -30,17 +30,17 @@ public class OnboardingHtmlFactory : Controller
     {
         const string header = "<!DOCTYPE html><head><title>Onboarding Page</title></head>";
         var body = "<p>Please pick the application specified by your provider and install it.</p><br>";
-        var countAvailableApps = configuration.Onboarding.Length;
+        var countAvailableApps = configuration.Onboarding.Apps.Length;
 
         var functionsToAddHashValuesToAllLinks = "<script>";
         for (var i = 0; i < countAvailableApps; i++)
         {
-            var onboardingConfiguration = configuration.Onboarding[i];
+            var appConfiguration = configuration.Onboarding.Apps[i];
 
             // The correct url will look something like this: BASE_URL/resource/RESOURCE_ID?appName=name#SECRET_KEY
             // The value after the hash is needed to open the resource within the app. However, this value is - by design - not available for the backbone.
             // Hence, we set the correct link only on the user's device, with the help of this js-code.
-            body += $"<a href=\"{request.Path.Value!}?appName={onboardingConfiguration.AppNameIdentifier}\" id=\"inAppLink{i}\">Install app {onboardingConfiguration.AppNameIdentifier}</a><br>";
+            body += $"<a href=\"{request.Path.Value!}?appName={appConfiguration.Identifier}\" id=\"inAppLink{i}\">Install app {appConfiguration.Identifier}</a><br>";
             functionsToAddHashValuesToAllLinks +=
                 $"document.addEventListener('DOMContentLoaded', function () {{var link = document.getElementById('inAppLink{i}');link.href += window.location.hash;console.log(link.href);}});";
         }

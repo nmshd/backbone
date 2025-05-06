@@ -21,7 +21,7 @@ internal class OnboardingStepDefinitions
 
     #region Given
 
-    [Given($"a http client with user agent {RegexFor.SINGLE_THING}")]
+    [Given($"an http client with user agent \"{RegexFor.SINGLE_THING}\"")]
     public void GivenAHttpClient(string userAgentContent)
     {
         _client = _httpClientFactory.CreateClient();
@@ -32,8 +32,8 @@ internal class OnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /resource/resourceId endpoint for the {RegexFor.SINGLE_THING} app")]
-    public async Task WhenACallIsMadeToTheRessourceResourceIdEndpointForTheEnmeshedApp(string appName)
+    [When($"a call is made to the /resource/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
+    public async Task WhenACallIsMadeToTheRessourceResourceIdEndpointFor(string appName)
     {
         var requestUrl = $"reference/tok12345?appName={appName}";
         _onboardingResponse = await _client.GetAsync(requestUrl, CancellationToken.None);
@@ -43,8 +43,8 @@ internal class OnboardingStepDefinitions
 
     #region Then
 
-    [Then($"the response contains a link containing {RegexFor.URL}")]
-    public void ThenTheResponseContainsALinkContainingAppsAppleCom(string url)
+    [Then($"the response contains a link with the domain name \"{RegexFor.URL}\"")]
+    public void ThenTheResponseContainsALinkContaining(string url)
     {
         _onboardingResponse.Should().NotBeNull();
 
@@ -57,8 +57,8 @@ internal class OnboardingStepDefinitions
         matches.Should().Contain(link => link.Value.Contains(url));
     }
 
-    [Then($"the response does not contain a link containing {RegexFor.URL}")]
-    public void ThenTheResponseDoesNotContainALinkContainingPlayGoogleCom(string url)
+    [Then($"the response does not contains a link with the domain name \"{RegexFor.URL}\"")]
+    public void ThenTheResponseDoesNotContainALinkContaining(string url)
     {
         _onboardingResponse.Should().NotBeNull();
 

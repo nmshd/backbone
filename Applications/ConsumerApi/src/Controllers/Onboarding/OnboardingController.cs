@@ -1,44 +1,26 @@
 using Backbone.ConsumerApi.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using MyCSharp.HttpUserAgentParser;
+using MyCSharp.HttpUserAgentParser.Providers;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
 [Route("")]
 public class OnboardingController : Controller
 {
-    // TODO: read from configuration
-    private readonly AppSelectionModel _appSelectionModel = new()
-    {
-        Apps =
-        [
-            new App
-            {
-                Identifier = "enmeshed",
-                DisplayName = "enmeshed",
-            },
-            new App
-            {
-                Identifier = "bird",
-                DisplayName = "BIRD",
-            }
-        ]
-    };
-
-    private const string IPHONE_IDENTIFIER = "iphone";
-    private const string ANDROID_IDENTIFIER = "android";
-    private const string MACINTOSH_IDENTIFIER = "macintosh";
-    private const string IOS_IDENTIFIER = "mac os";
-
-    private const string I_PHONE_DEVICE_HINT = "iphone";
+    private const string IPHONE_DEVICE_HINT = "iphone";
     private const string MAC_OS_DEVICE_HINT = "ipad";
 
     private readonly ConsumerApiConfiguration _configuration;
+    private readonly IHttpUserAgentParserProvider _parser;
 
-    public OnboardingController(IOptions<ConsumerApiConfiguration> configuration)
+    public OnboardingController(IOptions<ConsumerApiConfiguration> configuration, IHttpUserAgentParserProvider parser)
     {
         _configuration = configuration.Value;
+        _parser = parser;
     }
 
     [HttpGet("/reference/{referenceId}")]
@@ -53,78 +35,83 @@ public class OnboardingController : Controller
         if (pickedOnboardingConfiguration != null)
         {
             var appStoreLinks = new List<AppStoreLink>();
-            var userAgentOfRequest = Request.Headers["User-Agent"].ToString();
+            var userAgentInformation = _parser.Parse(Request.Headers.UserAgent.ToString());
 
-            // Note: this order is important as iPhoneRequest will match with MacOsRequest also.
-            if (IndicatesIPhone(userAgentOfRequest))
-                appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, I_PHONE_DEVICE_HINT)));
-            else if (IndicatesMacOs(userAgentOfRequest))
-                appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(pickedOnboardingConfiguration.IosAppUrl, MAC_OS_DEVICE_HINT)));
+            var androidAppUrl = pickedOnboardingConfiguration.Android.Url;
+            var iosAppUrl = pickedOnboardingConfiguration.Ios.Url;
 
-            if (IndicatesAndroid(userAgentOfRequest))
-                appStoreLinks.Add(new AppStoreLink("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
+            if (userAgentInformation.Platform != null)
+                switch (userAgentInformation.Platform!.Value.PlatformType)
+                {
+                    case HttpUserAgentPlatformType.Android:
+                        appStoreLinks.Add(new AppStoreLink("Google Play Store", androidAppUrl));
+                        break;
+                    case HttpUserAgentPlatformType.IOS:
+                        appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(iosAppUrl, IPHONE_DEVICE_HINT)));
+                        break;
+                    case HttpUserAgentPlatformType.MacOS:
+                        appStoreLinks.Add(new AppStoreLink("Apple App Store", AppendDeviceHint(iosAppUrl, MAC_OS_DEVICE_HINT)));
+                        break;
+                }
 
             if (appStoreLinks.Count == 0)
             {
-                appStoreLinks.Add(new AppStoreLink("Google Play Store", pickedOnboardingConfiguration.AndroidAppUrl));
-                appStoreLinks.Add(new AppStoreLink("Apple App Store", pickedOnboardingConfiguration.IosAppUrl));
+                appStoreLinks.Add(new AppStoreLink("Google Play Store", androidAppUrl));
+                appStoreLinks.Add(new AppStoreLink("Apple App Store", iosAppUrl));
             }
 
             if (string.IsNullOrEmpty(Request.Path.Value)) return BadRequest("Invalid request path");
 
 
-            var onboardingModel = new OnboardingModel
-            {
-                // TODO: read from configuration
-                AppDisplayName = _appSelectionModel.Apps.First(a => a.Identifier == appName).DisplayName,
-                Links = appStoreLinks
-            };
+            var onboardingModel = CreateOnbordingModel(pickedOnboardingConfiguration, appStoreLinks);
 
             return View("Onboarding", onboardingModel);
         }
 
-        return View("AppSelection", _appSelectionModel);
+        return View("AppSelection", CreateAppSelectionModel());
     }
 
-    private ConsumerApiConfiguration.OnboardingConfiguration? PickAppSpecificConfiguration(string? appname)
+    private ConsumerApiConfiguration.App? PickAppSpecificConfiguration(string? appName)
     {
-        var onboardingConfigurations = _configuration.Onboarding;
+        var appConfigurations = _configuration.Onboarding.Apps;
 
-        // the length can't be null, as it is required by the configuration
+        if (appConfigurations.Length == 1)
+            return appConfigurations[0];
 
-        if (onboardingConfigurations.Length == 1)
-            return onboardingConfigurations[0];
-
-        foreach (var appConfig in onboardingConfigurations)
-            if (appConfig.AppNameIdentifier.Equals(appname))
-                return appConfig;
-
-        return null;
-    }
-
-    private bool IndicatesAndroid(string userAgentContent)
-    {
-        return userAgentContent.ToLower().Contains(ANDROID_IDENTIFIER);
-    }
-
-    private bool IndicatesMacOs(string userAgentContent)
-    {
-        if (userAgentContent.ToLower().Contains(IOS_IDENTIFIER))
-            return true;
-        if (userAgentContent.ToLower().Contains(MACINTOSH_IDENTIFIER))
-            return true;
-
-        return false;
-    }
-
-    private bool IndicatesIPhone(string userAgentContent)
-    {
-        return userAgentContent.ToLower().Contains(IPHONE_IDENTIFIER);
+        return appConfigurations.FirstOrDefault(c => c.Identifier.Equals(appName));
     }
 
     private string AppendDeviceHint(string url, string deviceHint)
     {
-        return url.Contains('?') ? $"{url}&platform={deviceHint}" : $"{url}?platform={deviceHint}";
+        return QueryHelpers.AddQueryString(url, "platform", deviceHint);
+    }
+
+    private AppSelectionModel CreateAppSelectionModel()
+    {
+        var apps = new List<App>();
+        foreach (var appConfig in _configuration.Onboarding.Apps)
+        {
+            var app = new App
+            {
+                Identifier = appConfig.Identifier,
+                DisplayName = appConfig.DisplayName
+            };
+            apps.Add(app);
+        }
+
+        return new AppSelectionModel
+        {
+            Apps = apps
+        };
+    }
+
+    private OnboardingModel CreateOnbordingModel(ConsumerApiConfiguration.App appConfig, List<AppStoreLink> appStoreLinks)
+    {
+        return new OnboardingModel
+        {
+            AppDisplayName = appConfig.DisplayName,
+            Links = appStoreLinks
+        };
     }
 }
 
