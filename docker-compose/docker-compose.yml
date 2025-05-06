@@ -4,7 +4,7 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite
+    image: mcr.microsoft.com/azure-storage/azurite@sha256:0a47e12e3693483cef5c71f35468b91d751611f172d2f97414e9c69113b106d9
     command: azurite-blob -l /data --blobHost "0.0.0.0"
     ports:
       - "10000:10000"
@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres
+    image: postgres@sha256:304ab813518754228f9f792f79d6da36359b82d8ecf418096c636725f8c930ad
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.1-management-alpine
+    image: rabbitmq:4.1-management-alpine@sha256:34488e5790ffdc619009e64df775da3fa8478bc60c9aa9ce77f4197f5f118ec5
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:latest@sha256:f0153b02f284d067d724bae79e415fc39055a73f1bc23f7ee2f6c519623b64c3
     container_name: seq
     ports:
       - "8085:80"

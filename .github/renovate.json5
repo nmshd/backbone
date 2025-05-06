@@ -7,7 +7,7 @@
     rangeStrategy: "pin",
     packageRules: [
         {
-            // do not upgrade the dart sdk as it will not be compatible with the version that flutter ships
+            // dart seems to have problems when pinning to a specific version, so we use the "auto" strategy for dart packages
             matchDatasources: ["dart"],
             rangeStrategy: "auto"
         },
@@ -21,21 +21,21 @@
         {
             // we don't want to update ArchUnitNET currently, because there is a bug in the latest version (see https://github.com/TNG/ArchUnitNET/issues/320)
             matchDatasources: ["nuget"],
-            packageNames: ["TngTech.ArchUnitNET.xUnit", "FluentAssertions", "FluentAssertions.Json"],
+            matchPackageNames: ["TngTech.ArchUnitNET.xUnit", "FluentAssertions", "FluentAssertions.Json"],
             enabled: false
         },
 
         {
             // we don't want to update eslint currently, because there is a breaking change in its config
             matchDatasources: ["npm"],
-            packageNames: ["eslint"],
+            matchPackageNames: ["eslint"],
             enabled: false
         },
 
         {
             // the docker images in this list are created and used by our pipelines and can therefore not to be updated by renovate
             matchDatasources: ["docker"],
-            packageNames: [
+            matchPackageNames: [
                 "ghcr.io/nmshd/backbone-consumer-api",
                 "ghcr.io/nmshd/backbone-admin-ui",
                 "ghcr.io/nmshd/backbone-event-handler",
@@ -46,16 +46,16 @@
             enabled: false
         },
         {
-            // the dart packages in this list is fetched directly from git and therefore doesn't have a version
+            // the dart packages in this list are fetched directly from git and therefore don't have a version
             matchDatasources: ["dart"],
-            packageNames: ["window_size"],
+            matchPackageNames: ["window_size", "enmeshed_ui_kit"],
             enabled: false
         },
 
         {
             // these packages are from our Admin UI monorepo and can therefore not be updated by renovate
             matchDatasources: ["dart"],
-            packageNames: ["admin_api_sdk", "admin_api_types"],
+            matchPackageNames: ["admin_api_sdk", "admin_api_types"],
             enabled: false
         },
 
