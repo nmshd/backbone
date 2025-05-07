@@ -20,14 +20,14 @@ public class AppOnboardingController : Controller
         _parser = parser;
     }
 
-    [HttpGet("/References/{referenceId}")]
+    [HttpGet("/r/{referenceId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status302Found)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
-    public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? appId)
+    public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? app)
     {
-        var selectedAppConfiguration = _configuration.GetApp(appId);
+        var selectedAppConfiguration = _configuration.GetApp(app);
 
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));

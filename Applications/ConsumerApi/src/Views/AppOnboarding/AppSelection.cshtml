@@ -13,7 +13,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const link = document.getElementById('linkTo@(app.Id)');
                 const queryString = new URLSearchParams(window.location.search);
-                queryString.set('appId', '@app.Id');
+                queryString.set('app', '@app.Id');
                 link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
             });
         </script>

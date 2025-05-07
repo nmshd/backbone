@@ -32,10 +32,10 @@ internal class AppOnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /References/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
-    public async Task WhenACallIsMadeToTheReferenceResourceIdEndpointFor(string appId)
+    [When($"a call is made to the /r/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
+    public async Task WhenACallIsMadeToTheRResourceIdEndpointFor(string appId)
     {
-        var requestUrl = $"References/tok12345?appId={appId}";
+        var requestUrl = $"r/tok12345?app={appId}";
         _onboardingResponse = await _client.GetAsync(requestUrl, CancellationToken.None);
     }
 
