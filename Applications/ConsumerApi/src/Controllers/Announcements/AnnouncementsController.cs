@@ -21,7 +21,7 @@ public class AnnouncementsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetAllAnnouncements([FromQuery] string language)
     {
-        var announcements = await _mediator.Send(new GetAllAnnouncementsInLanguageQuery { Language = language });
+        var announcements = await _mediator.Send(new GetAllAnnouncementsForActiveIdentityInLanguageQuery { Language = language });
         return Ok(announcements);
     }
 }
