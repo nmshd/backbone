@@ -1,4 +1,6 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
@@ -35,6 +37,8 @@ public class Announcement : Entity
     public List<AnnouncementText> Texts { get; }
 
     public List<AnnouncementRecipient> Recipients { get; }
+
+    public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }
 
 public enum AnnouncementSeverity
