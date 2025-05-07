@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Backbone.ConsumerApi.Configuration;
 
@@ -14,7 +15,7 @@ public class ConsumerApiConfiguration
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
     [Required]
-    public OnboardingConfiguration Onboarding { get; set; } = new();
+    public AppOnboardingConfiguration AppOnboarding { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
@@ -38,30 +39,68 @@ public class ConsumerApiConfiguration
         public EventBusConfiguration EventBus { get; set; } = new();
     }
 
-    public class OnboardingConfiguration
+    public class AppOnboardingConfiguration
     {
         public App[] Apps { get; set; } = [];
-    }
 
-    public class App
-    {
-        [Required]
-        public string Identifier { get; set; } = null!;
+        public App? GetApp(string? appId)
+        {
+            var appConfigurations = Apps;
 
-        [Required]
-        public string DisplayName { get; set; } = null!;
+            if (appConfigurations.Length == 1)
+                return appConfigurations[0];
 
-        public Platform Ios { get; set; } = new();
+            return appConfigurations.FirstOrDefault(c => c.Id.Equals(appId));
+        }
 
-        public Platform Android { get; set; } = new();
+        public class App
+        {
+            private const string IPHONE_DEVICE_HINT = "iphone";
+            private const string MAC_OS_DEVICE_HINT = "ipad";
 
-        [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-        public string? PrimaryColor { get; set; }
+            [Required]
+            public string Id { get; set; } = null!;
 
-        [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-        public string? SecondaryColor { get; set; }
+            [Required]
+            public string DisplayName { get; set; } = null!;
 
-        public string? IconUrl { get; set; }
+            public Platform? Ios { get; set; } = new();
+
+            public Platform? Android { get; set; } = new();
+
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string? PrimaryColor { get; set; }
+
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string? SecondaryColor { get; set; }
+
+            public string? IconUrl { get; set; }
+
+            public Dictionary<PlatformType, string> GetAllAppLinks()
+            {
+                var appStoreLinks = new Dictionary<PlatformType, string>();
+
+                if (Ios != null)
+                {
+                    appStoreLinks.Add(PlatformType.Ios, QueryHelpers.AddQueryString(Ios.Url, "platform", IPHONE_DEVICE_HINT));
+                    appStoreLinks.Add(PlatformType.Macos, QueryHelpers.AddQueryString(Ios.Url, "platform", MAC_OS_DEVICE_HINT));
+                }
+
+                if (Android != null)
+                    appStoreLinks.Add(PlatformType.Android, Android.Url);
+
+                return appStoreLinks;
+            }
+
+
+            public enum PlatformType
+            {
+                Android,
+                Ios,
+                Macos,
+                Unknown
+            }
+        }
     }
 
     public class Platform

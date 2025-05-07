@@ -11,9 +11,9 @@
     {
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const link = document.getElementById('linkTo@(app.Identifier)');
+                const link = document.getElementById('linkTo@(app.Id)');
                 const queryString = new URLSearchParams(window.location.search);
-                queryString.set('appName', '@app.Identifier');
+                queryString.set('appId', '@app.Id');
                 link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
             });
         </script>
@@ -24,7 +24,7 @@
 <br />
 @foreach (var app in Model.Apps)
 {
-    <a href="" id="linkTo@(app.Identifier)">Install app @app.DisplayName</a>
+    <a href="" id="linkTo@(app.Id)">Install app @app.DisplayName</a>
     <br />
 }
 </body>

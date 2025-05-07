@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Tests.Integration.Helpers;
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-internal class OnboardingStepDefinitions
+internal class AppOnboardingStepDefinitions
 {
     #region Constructor, Fields, Properties
 
@@ -12,7 +12,7 @@ internal class OnboardingStepDefinitions
     private HttpResponseMessage _onboardingResponse = null!;
     private readonly HttpClientFactory _httpClientFactory;
 
-    public OnboardingStepDefinitions(HttpClientFactory httpClientFactory)
+    public AppOnboardingStepDefinitions(HttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }
@@ -32,10 +32,10 @@ internal class OnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /resource/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
-    public async Task WhenACallIsMadeToTheRessourceResourceIdEndpointFor(string appName)
+    [When($"a call is made to the /References/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
+    public async Task WhenACallIsMadeToTheReferenceResourceIdEndpointFor(string appId)
     {
-        var requestUrl = $"reference/tok12345?appName={appName}";
+        var requestUrl = $"References/tok12345?appId={appId}";
         _onboardingResponse = await _client.GetAsync(requestUrl, CancellationToken.None);
     }
 
