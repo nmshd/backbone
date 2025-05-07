@@ -120,12 +120,12 @@ public class AppOnboardingModel
 
         private static AppStoreLink Ios(string link)
         {
-            return new AppStoreLink("Apple App Store", link);
+            return new AppStoreLink("Apple App Store - iPhone", link);
         }
 
         private static AppStoreLink MacOs(string link)
         {
-            return new AppStoreLink("Apple App Store", link);
+            return new AppStoreLink("Apple App Store - macOS", link);
         }
 
         public string StoreName { get; }
