@@ -8,7 +8,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="[9.3.0]" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="[6.2.1]" />
-        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.0.0]" />
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.1.0]" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.4]" />
         <PackageReference Include="Serilog" Version="[4.2.0]" />
         <PackageReference Include="Serilog.AspNetCore" Version="[9.0.0]" />
