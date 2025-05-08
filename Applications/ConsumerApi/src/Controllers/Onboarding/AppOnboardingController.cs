@@ -38,7 +38,7 @@ public class AppOnboardingController : Controller
 
         var appStoreLinks = GetAppStoreLinksForCurrentUserAgent(selectedAppConfiguration);
 
-        return View("Onboarding", new AppOnboardingModel(selectedAppConfiguration.DisplayName, appStoreLinks));
+        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration.Id, selectedAppConfiguration.DisplayName, appStoreLinks));
     }
 
     private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
@@ -89,12 +89,14 @@ public class AppSelectionModel
 
 public class AppOnboardingModel
 {
-    public AppOnboardingModel(string appDisplayName, List<AppStoreLink> links)
+    public AppOnboardingModel(string appId, string appDisplayName, List<AppStoreLink> links)
     {
+        AppId = appId;
         AppDisplayName = appDisplayName;
         Links = links;
     }
 
+    public string AppId { get; }
     public string AppDisplayName { get; }
     public List<AppStoreLink> Links { get; }
 
