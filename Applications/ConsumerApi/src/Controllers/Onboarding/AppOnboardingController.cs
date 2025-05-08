@@ -11,7 +11,7 @@ namespace Backbone.ConsumerApi.Controllers.Onboarding;
 [Route("")]
 public class AppOnboardingController : Controller
 {
-    private readonly ConsumerApiConfiguration.AppOnboardingConfiguration _configuration;
+    private readonly ConsumerApiConfiguration.AppOnboardingConfiguration? _configuration;
     private readonly IHttpUserAgentParserProvider _parser;
 
     public AppOnboardingController(IOptions<ConsumerApiConfiguration> configuration, IHttpUserAgentParserProvider parser)
@@ -27,6 +27,9 @@ public class AppOnboardingController : Controller
     [AllowAnonymous]
     public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? app)
     {
+        if (_configuration == null)
+            return NotFound();
+
         app ??= _configuration.DefaultAppId;
         var selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == app);
 
