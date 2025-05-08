@@ -27,8 +27,8 @@ public class AppOnboardingController : Controller
     [AllowAnonymous]
     public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? app)
     {
-        var selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == _configuration.DefaultAppId);
-        selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == app) ?? selectedAppConfiguration;
+        app ??= _configuration.DefaultAppId;
+        var selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == app);
 
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
