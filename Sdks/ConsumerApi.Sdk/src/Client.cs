@@ -77,6 +77,7 @@ public class Client
     public SyncRunsEndpoint SyncRuns { get; }
     public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
+
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
     public static Client CreateUnauthenticated(string baseUrl, ClientCredentials clientCredentials)

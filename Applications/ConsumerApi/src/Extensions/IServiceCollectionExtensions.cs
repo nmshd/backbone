@@ -23,7 +23,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, ConsumerApiConfiguration configuration)
     {
         services
-            .AddControllers(
+            .AddControllersWithViews(
                 options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));

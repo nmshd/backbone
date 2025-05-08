@@ -1,0 +1,31 @@
+﻿@model Backbone.ConsumerApi.Controllers.Onboarding.AppSelectionModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Onboarding</title>
+    @foreach (var app in Model.Apps)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const link = document.getElementById('linkTo@(app.Id)');
+                const queryString = new URLSearchParams(window.location.search);
+                queryString.set('app', '@app.Id');
+                link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
+            });
+        </script>
+    }
+</head>
+<body>
+<p>Please pick the application specified by your provider and install it.</p>
+<br />
+@foreach (var app in Model.Apps)
+{
+    <a href="" id="linkTo@(app.Id)">Install app @app.DisplayName</a>
+    <br />
+}
+</body>
+
