@@ -32,17 +32,17 @@ public class AppOnboardingController : Controller
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
 
-        var appStoreLinks = GetAppStoreLinks(selectedAppConfiguration);
+        var appStoreLinks = GetAppStoreLinksForCurrentUserAgent(selectedAppConfiguration);
 
         return View("Onboarding", new AppOnboardingModel(selectedAppConfiguration.DisplayName, appStoreLinks));
     }
 
-    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinks(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
     {
         var appStoreLinks = new List<AppOnboardingModel.AppStoreLink>();
 
-        var platform = GetPlatform();
-        var allLinks = appConfiguration.GetAllAppLinks();
+        var platform = GetPlatformFromUserAgent();
+        var allLinks = appConfiguration.GetAllConfiguredAppStoreLinks();
 
         if (allLinks.TryGetValue(platform, out var link))
             appStoreLinks.Add(AppOnboardingModel.AppStoreLink.From(platform, link));
@@ -52,7 +52,7 @@ public class AppOnboardingController : Controller
         return appStoreLinks;
     }
 
-    private PlatformType GetPlatform()
+    private PlatformType GetPlatformFromUserAgent()
     {
         var userAgent = _parser.Parse(Request.Headers.UserAgent.ToString());
         var platform = userAgent.Platform?.PlatformType;

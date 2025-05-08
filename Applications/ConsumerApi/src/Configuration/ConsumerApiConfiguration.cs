@@ -66,7 +66,7 @@ public class ConsumerApiConfiguration
 
             public string? IconUrl { get; set; }
 
-            public Dictionary<PlatformType, string> GetAllAppLinks()
+            public Dictionary<PlatformType, string> GetAllConfiguredAppStoreLinks()
             {
                 var appStoreLinks = new Dictionary<PlatformType, string>();
 
