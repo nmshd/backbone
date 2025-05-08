@@ -39,9 +39,11 @@ public class ConsumerApiConfiguration
         public EventBusConfiguration EventBus { get; set; } = new();
     }
 
-    public class AppOnboardingConfiguration
+    public class AppOnboardingConfiguration : IValidatableObject
     {
         public App[] Apps { get; set; } = [];
+
+        public string? DefaultAppId { get; set; }
 
         public class App
         {
@@ -90,6 +92,13 @@ public class ConsumerApiConfiguration
                 Macos,
                 Unknown
             }
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId!))
+                yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps in the {nameof(AppOnboardingConfiguration)}.",
+                    [nameof(AppOnboardingConfiguration), nameof(DefaultAppId)]);
         }
     }
 
