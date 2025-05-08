@@ -10,7 +10,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const link = document.getElementById('inAppLink');
-            link.href = window.location;
+            link.href = window.location.toString().replace(/(https)|(http):\/\//, "@Model.AppId://")
         });
     </script>
 </head>
