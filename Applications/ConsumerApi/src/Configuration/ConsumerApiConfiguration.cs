@@ -43,16 +43,6 @@ public class ConsumerApiConfiguration
     {
         public App[] Apps { get; set; } = [];
 
-        public App? GetApp(string? appId)
-        {
-            var appConfigurations = Apps;
-
-            if (appConfigurations.Length == 1)
-                return appConfigurations[0];
-
-            return appConfigurations.FirstOrDefault(c => c.Id.Equals(appId));
-        }
-
         public class App
         {
             private const string IPHONE_DEVICE_HINT = "iphone";
