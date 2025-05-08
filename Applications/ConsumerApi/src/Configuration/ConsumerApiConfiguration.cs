@@ -14,8 +14,7 @@ public class ConsumerApiConfiguration
     [Required]
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    [Required]
-    public AppOnboardingConfiguration AppOnboarding { get; set; } = new();
+    public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
