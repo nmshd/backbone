@@ -96,7 +96,7 @@ public class ConsumerApiConfiguration
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId!))
+            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
                 yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
                     [nameof(Apps), nameof(DefaultAppId)]);
         }
