@@ -16,6 +16,21 @@ public class ConsumerApiConfiguration
 
     public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
+    public WellKnownPreviewConfiguration WellKnownPreview { get; set; } = new();
+
+    public class WellKnownPreviewConfiguration
+    {
+        public string[] AppleApps { get; set; } = [];
+
+        public AndroidApp[] AndroidApps { get; set; } = [];
+
+        public class AndroidApp
+        {
+            public string PackageName { get; set; } = "";
+            public string[] Sha256CertFingerprints { get; set; } = [];
+        }
+    }
+
     public class AuthenticationConfiguration
     {
         [Required]
