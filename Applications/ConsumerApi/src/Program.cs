@@ -192,6 +192,8 @@ static void Configure(WebApplication app)
         opts.GetLevel = LogHelper.GetLevel;
     });
 
+    app.UseStaticFiles();
+
     app.UseForwardedHeaders();
 
     app.UseMiddleware<RequestResponseTimeMiddleware>()
@@ -212,7 +214,6 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
-
     app.MapControllers();
     app.MapHealthChecks("/health");
 
