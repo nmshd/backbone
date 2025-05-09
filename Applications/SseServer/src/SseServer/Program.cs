@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Module;
@@ -78,11 +77,6 @@ static WebApplication CreateApp(string[] args)
 
     var app = builder.Build();
     Configure(app);
-
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
-    {
-        module.PostStartupValidation(app.Services);
-    }
 
     return app;
 }
