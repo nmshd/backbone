@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Backbone.BuildingBlocks.Application.MediatR;
 
 public class DbConcurrencyBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
     private static readonly Random RANDOM = new();
 
@@ -21,7 +21,7 @@ public class DbConcurrencyBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
             {
                 if (retryCount == 10) throw;
 
-                await Task.Delay(TimeSpan.FromMilliseconds(RANDOM.Next(2, 10)), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(RANDOM.Next(5, 10)), cancellationToken);
                 retryCount++;
             }
         }
