@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(TokensDbContext))]
-    [Migration("20250505144324_AddConcurrency")]
+    [Migration("20250509095310_AddConcurrency")]
     partial class AddConcurrency
     {
         /// <inheritdoc />
@@ -73,6 +73,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 

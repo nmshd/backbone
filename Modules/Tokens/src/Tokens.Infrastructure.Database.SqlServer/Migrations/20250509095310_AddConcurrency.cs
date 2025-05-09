@@ -16,7 +16,8 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                 table: "Tokens",
                 type: "rowversion",
                 rowVersion: true,
-                nullable: true);
+                nullable: false,
+                defaultValue: new byte[0]);
         }
 
         /// <inheritdoc />

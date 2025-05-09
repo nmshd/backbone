@@ -18,6 +18,6 @@ public class TokenEntityTypeConfiguration : EntityEntityTypeConfiguration<Token>
 
         builder.HasMany(x => x.Allocations).WithOne().OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasVersion();
+        builder.HasVersion(x => x.Version);
     }
 }

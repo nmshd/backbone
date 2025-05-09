@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(TokensDbContext))]
-    [Migration("20250505144329_AddConcurrency")]
+    [Migration("20250509095314_AddConcurrency")]
     partial class AddConcurrency
     {
         /// <inheritdoc />
