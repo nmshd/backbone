@@ -14,7 +14,6 @@ using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -104,7 +103,6 @@ public class Program
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
-                services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
                 services.AddCustomIdentity(hostContext.HostingEnvironment);
 

@@ -1,0 +1,33 @@
+﻿@model Backbone.ConsumerApi.Controllers.Onboarding.AppOnboardingModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Onboarding</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const link = document.getElementById('inAppLink');
+            link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+        });
+    </script>
+</head>
+<body>
+<p>You have opened an object with respect to tokenXX ... to complete this process do either of the following:</p>
+<br />
+<p>App already installed?</p>
+<p>Then please click the link below to open the app directly:</p>
+<br />
+<br />
+<a href="" id="inAppLink">Open @Model.AppDisplayName App</a><br />
+<p>App not yet installed?</p>
+<p>Then please click the link below to install the app:</p>
+<br />
+@foreach (var link in Model.Links)
+{
+    <a href="@link.Link" target="_blank">Install via @link.StoreName</a>
+    <br />
+}
+</body>

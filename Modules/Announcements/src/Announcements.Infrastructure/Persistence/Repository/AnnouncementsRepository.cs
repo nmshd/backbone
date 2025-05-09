@@ -34,6 +34,15 @@ public class AnnouncementsRepository : IAnnouncementsRepository
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 
+    public Task<List<Announcement>> FindAll(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _readOnlyAnnouncements
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
+            .Where(filter)
+            .ToListAsync(cancellationToken);
+    }
+
     public Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken)
     {
         return _announcementRecipients

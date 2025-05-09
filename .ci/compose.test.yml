@@ -80,7 +80,7 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator-test
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite
+    image: mcr.microsoft.com/azure-storage/azurite@sha256:0a47e12e3693483cef5c71f35468b91d751611f172d2f97414e9c69113b106d9
     command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
     ports:
       - "10000:10000"
@@ -88,7 +88,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq-test
     hostname: rabbitmq
-    image: rabbitmq:4.1-management-alpine
+    image: rabbitmq:4.1-management-alpine@sha256:34488e5790ffdc619009e64df775da3fa8478bc60c9aa9ce77f4197f5f118ec5
     ports:
       - "5672:5672"
 

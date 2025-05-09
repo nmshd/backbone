@@ -34,6 +34,7 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
@@ -180,6 +181,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
+    services.AddHttpUserAgentParser();
 }
 
 static void Configure(WebApplication app)
@@ -191,6 +193,8 @@ static void Configure(WebApplication app)
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
         opts.GetLevel = LogHelper.GetLevel;
     });
+
+    app.UseStaticFiles();
 
     app.UseForwardedHeaders();
 
@@ -212,7 +216,6 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
-
     app.MapControllers();
     app.MapHealthChecks("/health");
 
