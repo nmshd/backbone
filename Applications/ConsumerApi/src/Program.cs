@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Module;
 using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
@@ -120,11 +119,6 @@ static WebApplication CreateApp(string[] args)
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
-
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
-    {
-        module.PostStartupValidation(app.Services);
-    }
 
     return app;
 }

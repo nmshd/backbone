@@ -46,7 +46,6 @@ public static class ServiceCollectionExtensions
 
         module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
 
-        services.AddSingleton<IPostStartupValidator>(module);
         services.AddSingleton<IEventBusConfigurator>(module);
 
         return services;

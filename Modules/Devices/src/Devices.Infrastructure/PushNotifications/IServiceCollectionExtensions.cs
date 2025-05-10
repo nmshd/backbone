@@ -7,8 +7,8 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
@@ -26,18 +26,10 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IPushNotificationSender, PushService>();
 
         if (configuration.Providers.Fcm is { Enabled: true })
-        {
-            services.AddFcm();
-            services.AddSingleton<IOptions<FcmConfiguration>>(
-                new OptionsWrapper<FcmConfiguration>(configuration.Providers.Fcm));
-        }
+            services.AddFcm(configuration.Providers.Fcm);
 
         if (configuration.Providers.Apns is { Enabled: true })
-        {
-            services.AddApns();
-            services.AddSingleton<IOptions<ApnsConfiguration>>(
-                new OptionsWrapper<ApnsConfiguration>(configuration.Providers.Apns));
-        }
+            services.AddApns(configuration.Providers.Apns);
 
         if (configuration.Providers.Dummy is { Enabled: true })
             services.AddDummy();
@@ -45,24 +37,23 @@ public static class IServiceCollectionExtensions
         if (configuration.Providers.Sse is { Enabled: true })
         {
             services.AddSse(configuration.Providers.Sse);
-
-            if (configuration.Providers.Sse.EnableHealthCheck)
-                services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
         }
     }
 
-    private static void AddFcm(this IServiceCollection services)
+    private static void AddFcm(this IServiceCollection services, FcmConfiguration configuration)
     {
         services.AddSingleton<FirebaseMessagingFactory>();
         services.AddTransient<FirebaseCloudMessagingConnector>();
+        services.Configure<FcmConfiguration, FcmConfigurationValidator>(configuration);
     }
 
-    private static void AddApns(this IServiceCollection services)
+    private static void AddApns(this IServiceCollection services, ApnsConfiguration configuration)
     {
         services.AddHttpClient();
         services.AddTransient<ApplePushNotificationServiceConnector>();
         services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<ApnsJwtCache>();
+        services.Configure<ApnsConfiguration, ApnsConfigurationValidator>(configuration);
     }
 
     private static void AddDummy(this IServiceCollection services)
@@ -77,6 +68,9 @@ public static class IServiceCollectionExtensions
         services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(configuration.SseServerBaseAddress));
 
         services.AddScoped<ServerSentEventsConnector>();
+
+        if (configuration.EnableHealthCheck)
+            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
     }
 }
 
