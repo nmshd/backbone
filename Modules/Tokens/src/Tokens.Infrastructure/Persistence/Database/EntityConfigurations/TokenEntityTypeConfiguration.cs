@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -16,5 +17,7 @@ public class TokenEntityTypeConfiguration : EntityEntityTypeConfiguration<Token>
         builder.Property(x => x.Password).HasMaxLength(Token.MAX_PASSWORD_LENGTH);
 
         builder.HasMany(x => x.Allocations).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasVersion(x => x.Version);
     }
 }
