@@ -31,6 +31,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<bool>("BlockOwnershipClaims")
+                        .HasColumnType("boolean");
+
                     b.Property<byte[]>("CipherHash")
                         .IsRequired()
                         .HasColumnType("bytea");
@@ -104,6 +107,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
                         .HasColumnType("bytea");
+
+                    b.Property<string>("OwnershipToken")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 
