@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Contexts;
 
