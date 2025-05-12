@@ -1,7 +1,5 @@
 using System.ComponentModel;
-using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
@@ -107,23 +105,23 @@ public record FileOwnershipToken(string Value)
         return new FileOwnershipToken(stringValue);
     }
 
-    public class FileOwnershipTokenConverter : TypeConverter
-    {
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
-
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
-        {
-            var stringValue = value as string;
-
-            return !string.IsNullOrEmpty(stringValue) ? new FileOwnershipToken(stringValue) : base.ConvertFrom(context, culture, value);
-        }
-    }
-
     public static FileOwnershipToken Parse(string value)
     {
         return new FileOwnershipToken(value);
+    }
+
+    public static bool IsValid(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return false;
+
+        if (value.Length > DEFAULT_MAX_LENGTH)
+            return false;
+
+        foreach (var c in value)
+            if (!ALLOWED_CHARACTERS.Contains(c))
+                return false;
+
+        return true;
     }
 }

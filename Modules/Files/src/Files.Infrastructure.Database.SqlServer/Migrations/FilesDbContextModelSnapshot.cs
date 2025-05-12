@@ -31,6 +31,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<bool>("BlockOwnershipClaims")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("CipherHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -104,6 +107,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("OwnershipToken")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 

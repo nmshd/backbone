@@ -88,7 +88,7 @@ public class File : Entity
     public byte[] EncryptedProperties { get; set; }
 
     public FileOwnershipToken OwnershipToken { get; set; }
-    public bool IsAllowOwnershipClaims { get; set; } = true;
+    public bool BlockOwnershipClaims { get; set; } = false;
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
@@ -112,9 +112,27 @@ public class File : Entity
         return i => i.CreatedBy == identityAddress.ToString();
     }
 
-    public void RegenerateOwnershipToken()
+    public string RegenerateOwnershipToken()
     {
         OwnershipToken = FileOwnershipToken.New();
-        IsAllowOwnershipClaims = true;
+        BlockOwnershipClaims = false;
+        return OwnershipToken.Value;
+    }
+
+    public string ClaimOwnership(string ownershipToken, string newOwnerAdress)
+    {
+        if (BlockOwnershipClaims) throw new DomainActionForbiddenException();
+
+        if (OwnershipToken.Value != ownershipToken)
+        {
+            BlockOwnershipClaims = true;
+            throw new DomainActionForbiddenException();
+        }
+
+        if (!IdentityAddress.IsValid(newOwnerAdress))
+            throw new ApplicationException($"The new owner address is not valid.");
+
+        Owner = IdentityAddress.Parse(newOwnerAdress);
+        return RegenerateOwnershipToken();
     }
 }
