@@ -9,6 +9,7 @@ User tries to claim the ownership of a file
         When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership/f.OwnershipToken endpoint
         Then the response status code is 200 (OK)
         And the response contains a new OwnershipToken
+        And i2 is the new owner of f
 
     Scenario: A user tries to claim a file with a non-conforming FileId
         Given Identity i
