@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
         var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken, true, false) ?? throw new NotFoundException(nameof(File));
 
         var newOwnershipToken = file.ClaimOwnership(request.OwnershipToken!, _activeUserAdress);
-        await _filesRepository.UpdateAndStore(file, CancellationToken.None);
+        await _filesRepository.Update(file, CancellationToken.None);
 
         return new ClaimFileOwnershipResponse(newOwnershipToken);
     }
