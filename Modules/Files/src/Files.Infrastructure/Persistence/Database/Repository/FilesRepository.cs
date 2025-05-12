@@ -61,9 +61,10 @@ public class FilesRepository : IFilesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void Update(File file, CancellationToken cancellationToken)
+    public async Task Update(File file, CancellationToken cancellationToken)
     {
         _files.Update(file);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<File?> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
