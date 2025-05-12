@@ -10,19 +10,19 @@ services:
       - "10000:10000"
     volumes:
       - azure-storage-emulator-volume:/data
-
-  # ms-sql-server:
-  #   container_name: bkb-mssql_server
-  #   hostname: ms-sql-server
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   environment:
-  #     - MSSQL_SA_PASSWORD=Passw0rd
-  #     - ACCEPT_EULA=Y
-  #     - MSSQL_PID=Express
-  #   volumes:
-  #     - mssql-server-volume:/var/opt/mssql
-  #   ports:
-  #     - 1433:1433
+  
+  #  ms-sql-server:
+  #    container_name: bkb-mssql_server
+  #    hostname: ms-sql-server
+  #    image: mcr.microsoft.com/mssql/server:2022-latest
+  #    environment:
+  #      - MSSQL_SA_PASSWORD=Passw0rd
+  #      - ACCEPT_EULA=Y
+  #      - MSSQL_PID=Express
+  #    volumes:
+  #      - mssql-server-volume:/var/opt/mssql
+  #    ports:
+  #      - 1433:1433
 
   postgres:
     container_name: bkb-postgres
