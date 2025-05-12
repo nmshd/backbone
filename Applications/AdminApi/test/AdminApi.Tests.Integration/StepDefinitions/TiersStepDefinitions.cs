@@ -50,43 +50,43 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = basicTier.Id;
     }
 
-    [When("a GET request is sent to the /Tiers endpoint")]
+    [When("^a GET request is sent to the /Tiers endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
         _whenResponse = _tiersResponse = await _client.Tiers.ListTiers();
     }
 
-    [When("a GET request is sent to the /Tiers/{t.id} endpoint")]
+    [When("^a GET request is sent to the /Tiers/{t.id} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersByIdEndpoint()
     {
         _whenResponse = _getTierResponse = await _client.Tiers.GetTier(_existingTierId);
     }
 
-    [When("a GET request is sent to the /Tiers/{nonExistentTierId} endpoint")]
+    [When("^a GET request is sent to the /Tiers/{nonExistentTierId} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersByIdEndpointWithANonExistentId()
     {
         _whenResponse = _getTierResponse = await _client.Tiers.GetTier("TIRNonExistentId1231");
     }
 
-    [When("a POST request is sent to the /Tiers endpoint")]
+    [When("^a POST request is sent to the /Tiers endpoint$")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpoint()
     {
         _whenResponse = _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
     }
 
-    [When("a POST request is sent to the /Tiers endpoint with the name t.Name")]
+    [When("^a POST request is sent to the /Tiers endpoint with the name t.Name$")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpointWithAnAlreadyExistingName()
     {
         _whenResponse = _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = _existingTierName });
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
+    [When(@"a DELETE request is sent to the \/Tiers\/\{t.Id\} endpoint")]
     public async Task WhenADeleteRequestIsSentToTheTiersTierIdEndpoint()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier(_existingTierId);
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint with an inexistent id")]
+    [When(@"a DELETE request is sent to the \/Tiers\/\{t.Id\} endpoint with an inexistent id")]
     public async Task WhenADeleteRequestIsSentToTheTiersT_IdEndpointWithAnInexistentId()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier("TIR00000000000000000");

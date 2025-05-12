@@ -149,7 +149,7 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
+    [When($@"^{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}.address$")]
     public async Task WhenISendsAGETRequestToTheIdentitiesAddressFeatureFlagsEndpointWithAddressIAddress(string requestorName, string peerName)
     {
         var requestorClient = _clientPool.FirstForIdentityName(requestorName);
@@ -214,7 +214,7 @@ internal class IdentitiesStepDefinitions
         response.Result!.First(kv => kv.Key == "feature2").Value.Should().Be(feature2State == "enabled");
     }
 
-    [Then($@"the response contains the feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
+    [Then(@"^the response contains the feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)$")]
     public void ThenTheResponseContainsTheFeatureFlagsFeatureEnabledAndFeatureDisabled(string feature1State, string feature2State)
     {
         _getFeatureFlagsResponse.Should().NotBeNull();

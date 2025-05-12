@@ -18,7 +18,7 @@ internal class ResponseStepDefinitions
 
     #endregion
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
+    [Then(@"^the response status code is (\d\d\d) \(.+\)$")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         ThrowIfNull(_responseContext.WhenResponse);
