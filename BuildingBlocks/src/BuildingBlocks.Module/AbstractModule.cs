@@ -5,18 +5,12 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.BuildingBlocks.Module;
 
-public interface IPostStartupValidator
-{
-    void PostStartupValidation(IServiceProvider serviceProvider);
-}
-
 public interface IEventBusConfigurator
 {
     Task ConfigureEventBus(IEventBus eventBus);
 }
 
-public abstract class AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>
-    : IPostStartupValidator, IEventBusConfigurator
+public abstract class AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration> : IEventBusConfigurator
     where TApplicationConfiguration : class
     where TInfrastructureConfiguration : class
 {
@@ -45,9 +39,5 @@ public abstract class AbstractModule<TApplicationConfiguration, TInfrastructureC
     public virtual Task ConfigureEventBus(IEventBus eventBus)
     {
         return Task.CompletedTask;
-    }
-
-    public virtual void PostStartupValidation(IServiceProvider serviceProvider)
-    {
     }
 }
