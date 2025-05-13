@@ -16,6 +16,21 @@ public class ConsumerApiConfiguration
 
     public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
+    public WellKnownEndpointsConfiguration WellKnownEndpoints { get; set; } = new();
+
+    public class WellKnownEndpointsConfiguration
+    {
+        public string[] AppleAppSiteAssociations { get; set; } = [];
+
+        public AndroidAssetLink[] AndroidAssetLinks { get; set; } = [];
+
+        public class AndroidAssetLink
+        {
+            public string PackageName { get; set; } = "";
+            public string[] Sha256CertFingerprints { get; set; } = [];
+        }
+    }
+
     public class AuthenticationConfiguration
     {
         [Required]
