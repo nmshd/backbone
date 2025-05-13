@@ -95,5 +95,7 @@ public enum ExternalEventType
 
     PeerFeatureFlagsChanged = 40,
 
-    RelationshipTemplateAllocationsExhausted = 50
+    RelationshipTemplateAllocationsExhausted = 50,
+
+    FileOwnershipIsLockedEvent = 60
 }
