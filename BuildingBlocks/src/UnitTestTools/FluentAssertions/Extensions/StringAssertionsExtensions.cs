@@ -11,6 +11,6 @@ public static class StringAssertionsExtensions
         var actualContent = JToken.Parse(actual.Subject);
         var expectedContent = JToken.Parse(expected);
 
-        expectedContent.Should().BeEquivalentTo(actualContent);
+        actualContent.Should().BeEquivalentTo(expectedContent);
     }
 }
