@@ -14,6 +14,8 @@ using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Module;
@@ -152,6 +154,53 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value;
     var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
 #pragma warning restore ASP0000
+
+
+    services.AddDevicesModule(c =>
+    {
+        configuration.GetSection("Modules:Devices").Bind(c);
+        configuration.GetSection("ModuleDefaults").Bind(c);
+
+        foreach (var app in parsedBackboneConfiguration.Apps)
+        {
+            if (app.Android != null)
+            {
+                var androidApp = app.Android;
+
+                c.Infrastructure.PushNotifications.Providers.Fcm!.ServiceAccounts.Add(androidApp.Identifier,
+                    new FcmConfiguration.ServiceAccount
+                    {
+                        ServiceAccountJson = androidApp.PushNotifications.ServiceAccountJson
+                    });
+
+                c.Infrastructure.PushNotifications.Providers.Fcm!.Apps.Add(androidApp.Identifier,
+                    new FcmConfiguration.ServiceAccountInformation
+                    {
+                        ServiceAccountName = androidApp.Identifier
+                    });
+            }
+
+            if (app.Ios != null)
+            {
+                var iosApp = app.Ios;
+
+                c.Infrastructure.PushNotifications.Providers.Apns!.Keys.Add(iosApp.BundleId,
+                    new ApnsConfiguration.Key
+                    {
+                        KeyId = iosApp.PushNotifications.KeyId,
+                        TeamId = iosApp.TeamId,
+                        PrivateKey = iosApp.PushNotifications.PrivateKey
+                    });
+
+                c.Infrastructure.PushNotifications.Providers.Apns!.Bundles.Add(iosApp.BundleId,
+                    new ApnsConfiguration.Bundle
+                    {
+                        KeyName = iosApp.BundleId
+                    });
+            }
+        }
+    });
+
 
     var quotasSqlDatabaseConfiguration = parsedQuotasInfrastructureConfiguration.SqlDatabase;
     services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);

@@ -1,22 +1,22 @@
 using Backbone.ConsumerApi.Configuration;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyCSharp.HttpUserAgentParser;
 using MyCSharp.HttpUserAgentParser.Providers;
-using PlatformType = Backbone.ConsumerApi.Configuration.ConsumerApiConfiguration.AppOnboardingConfiguration.App.PlatformType;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
 [Route("")]
 public class AppOnboardingController : Controller
 {
-    private readonly ConsumerApiConfiguration.AppOnboardingConfiguration? _configuration;
+    private readonly ConsumerApiConfiguration _configuration;
     private readonly IHttpUserAgentParserProvider _parser;
 
     public AppOnboardingController(IOptions<ConsumerApiConfiguration> configuration, IHttpUserAgentParserProvider parser)
     {
-        _configuration = configuration.Value.AppOnboarding;
+        _configuration = configuration.Value;
         _parser = parser;
     }
 
@@ -27,7 +27,7 @@ public class AppOnboardingController : Controller
     [AllowAnonymous]
     public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? app)
     {
-        if (_configuration == null)
+        if (_configuration.Apps.IsEmpty())
             return NotFound();
 
         app ??= _configuration.DefaultAppId;
@@ -41,7 +41,7 @@ public class AppOnboardingController : Controller
         return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration.Id, selectedAppConfiguration.DisplayName, appStoreLinks));
     }
 
-    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(AppConfig appConfiguration)
     {
         var appStoreLinks = new List<AppOnboardingModel.AppStoreLink>();
 
@@ -56,24 +56,24 @@ public class AppOnboardingController : Controller
         return appStoreLinks;
     }
 
-    private PlatformType GetPlatformFromUserAgent()
+    private AppConfig.PlatformType GetPlatformFromUserAgent()
     {
         var userAgent = _parser.Parse(Request.Headers.UserAgent.ToString());
         var platform = userAgent.Platform?.PlatformType;
 
         return platform switch
         {
-            HttpUserAgentPlatformType.Android => PlatformType.Android,
-            HttpUserAgentPlatformType.IOS => PlatformType.Ios,
-            HttpUserAgentPlatformType.MacOS => PlatformType.Macos,
-            _ => PlatformType.Unknown
+            HttpUserAgentPlatformType.Android => AppConfig.PlatformType.Android,
+            HttpUserAgentPlatformType.IOS => AppConfig.PlatformType.Ios,
+            HttpUserAgentPlatformType.MacOS => AppConfig.PlatformType.Macos,
+            _ => AppConfig.PlatformType.Unknown
         };
     }
 }
 
 public class AppSelectionModel
 {
-    public AppSelectionModel(ConsumerApiConfiguration.AppOnboardingConfiguration.App[] apps)
+    public AppSelectionModel(List<AppConfig> apps)
     {
         Apps = apps.Select(c => new App { Id = c.Id, DisplayName = c.DisplayName }).ToList();
     }
@@ -108,13 +108,13 @@ public class AppOnboardingModel
             Link = link;
         }
 
-        public static AppStoreLink From(PlatformType platformType, string link)
+        public static AppStoreLink From(AppConfig.PlatformType platformType, string link)
         {
             return platformType switch
             {
-                PlatformType.Android => Android(link),
-                PlatformType.Ios => Ios(link),
-                PlatformType.Macos => MacOs(link),
+                AppConfig.PlatformType.Android => Android(link),
+                AppConfig.PlatformType.Ios => Ios(link),
+                AppConfig.PlatformType.Macos => MacOs(link),
                 _ => throw new ArgumentOutOfRangeException(nameof(platformType), platformType, null)
             };
         }

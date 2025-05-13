@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Backbone.ConsumerApi.Configuration;
 
-public class ConsumerApiConfiguration
+public class ConsumerApiConfiguration : IValidatableObject
 {
     [Required]
     public AuthenticationConfiguration Authentication { get; set; } = new();
@@ -14,7 +14,9 @@ public class ConsumerApiConfiguration
     [Required]
     public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
+    public string? DefaultAppId { get; set; }
+
+    public List<AppConfig> Apps { get; set; } = [];
 
     public class AuthenticationConfiguration
     {
@@ -38,71 +40,106 @@ public class ConsumerApiConfiguration
         public EventBusConfiguration EventBus { get; set; } = new();
     }
 
-    public class AppOnboardingConfiguration : IValidatableObject
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        public App[] Apps { get; set; } = [];
+        if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
+            yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
+                [nameof(Apps), nameof(DefaultAppId)]);
+    }
+}
 
-        public string? DefaultAppId { get; set; }
+public class AppConfig
+{
+    [Required]
+    public string Id { get; set; } = null!;
 
-        public class App
+    [Required]
+    public string DisplayName { get; set; } = null!;
+
+    [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+    public string? PrimaryColor { get; set; }
+
+    [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+    public string? SecondaryColor { get; set; }
+
+    public string? IconUrl { get; set; }
+
+    public AndroidConfig? Android { get; set; }
+    public IosConfig? Ios { get; set; }
+
+    public Dictionary<PlatformType, string> GetAllConfiguredAppStoreLinks()
+    {
+        const string iphoneDeviceHint = "iphone";
+        const string macOsDeviceHint = "ipad";
+
+        var appStoreLinks = new Dictionary<PlatformType, string>();
+
+        if (Ios != null)
         {
-            private const string IPHONE_DEVICE_HINT = "iphone";
-            private const string MAC_OS_DEVICE_HINT = "ipad";
-
-            [Required]
-            public string Id { get; set; } = null!;
-
-            [Required]
-            public string DisplayName { get; set; } = null!;
-
-            public Platform? Ios { get; set; } = new();
-
-            public Platform? Android { get; set; } = new();
-
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? PrimaryColor { get; set; }
-
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? SecondaryColor { get; set; }
-
-            public string? IconUrl { get; set; }
-
-            public Dictionary<PlatformType, string> GetAllConfiguredAppStoreLinks()
-            {
-                var appStoreLinks = new Dictionary<PlatformType, string>();
-
-                if (Ios != null)
-                {
-                    appStoreLinks.Add(PlatformType.Ios, QueryHelpers.AddQueryString(Ios.Url, "platform", IPHONE_DEVICE_HINT));
-                    appStoreLinks.Add(PlatformType.Macos, QueryHelpers.AddQueryString(Ios.Url, "platform", MAC_OS_DEVICE_HINT));
-                }
-
-                if (Android != null)
-                    appStoreLinks.Add(PlatformType.Android, Android.Url);
-
-                return appStoreLinks;
-            }
-
-
-            public enum PlatformType
-            {
-                Android,
-                Ios,
-                Macos,
-                Unknown
-            }
+            appStoreLinks.Add(PlatformType.Ios, QueryHelpers.AddQueryString(Ios.AppStoreUrl, "platform", iphoneDeviceHint));
+            appStoreLinks.Add(PlatformType.Macos, QueryHelpers.AddQueryString(Ios.AppStoreUrl, "platform", macOsDeviceHint));
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        if (Android != null)
+            appStoreLinks.Add(PlatformType.Android, Android.PlayStoreUrl);
+
+        return appStoreLinks;
+    }
+
+
+    public enum PlatformType
+    {
+        Android,
+        Ios,
+        Macos,
+        Unknown
+    }
+
+    public class AndroidConfig
+    {
+        [Required]
+        public string Identifier { get; set; } = null!;
+
+        [Required]
+        public List<string> Sha256CertFingerprints { get; set; } = null!;
+
+        [Required]
+        public string PlayStoreUrl { get; set; } = null!;
+
+        [Required]
+        public PushNotificationsConfig PushNotifications { get; set; } = null!;
+
+        public class PushNotificationsConfig
         {
-            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
-                yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
-                    [nameof(Apps), nameof(DefaultAppId)]);
+            [Required]
+            public string ServiceAccountJson { get; set; } = null!;
         }
     }
 
-    public class Platform
+    public class IosConfig
     {
-        public string Url { get; set; } = null!;
+        [Required]
+        public string TeamId { get; set; } = null!;
+
+        [Required]
+        public PushNotificationsConfig PushNotifications { get; set; } = null!;
+
+        [Required]
+        public string ApplicationIdentifierPrefix { get; set; } = null!;
+
+        [Required]
+        public string BundleId { get; set; } = null!;
+
+        [Required]
+        public string AppStoreUrl { get; set; } = null!;
+
+        public class PushNotificationsConfig
+        {
+            [Required]
+            public string KeyId { get; set; } = null!;
+
+            [Required]
+            public string PrivateKey { get; set; } = null!;
+        }
     }
 }
