@@ -119,20 +119,23 @@ public class File : Entity
         return OwnershipToken.Value;
     }
 
-    public string ClaimOwnership(string ownershipToken, string newOwnerAdress)
+    public string ClaimOwnership(string ownershipToken, string newOwnerAddress)
     {
         if (BlockOwnershipClaims) throw new DomainActionForbiddenException();
 
         if (OwnershipToken.Value != ownershipToken)
         {
             BlockOwnershipClaims = true;
-            throw new DomainActionForbiddenException();
+            RaiseDomainEvent(new FileOwnershipIsLockedEvent(Id.Value, Owner.Value));
+            throw new InvalidFileOwnershipTokenException();
         }
 
-        if (!IdentityAddress.IsValid(newOwnerAdress))
+        if (!IdentityAddress.IsValid(newOwnerAddress))
             throw new ApplicationException($"The new owner address is not valid.");
 
-        Owner = IdentityAddress.Parse(newOwnerAdress);
+        Owner = IdentityAddress.Parse(newOwnerAddress);
         return RegenerateOwnershipToken();
     }
+
+    public class InvalidFileOwnershipTokenException : Exception;
 }
