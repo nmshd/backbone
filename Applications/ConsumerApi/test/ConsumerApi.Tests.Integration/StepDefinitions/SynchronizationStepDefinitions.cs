@@ -108,7 +108,7 @@ internal class SynchronizationStepDefinitions
             e.Payload["relationshipTemplateId"].GetString() == templateId);
     }
 
-    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent {RegexFor.SINGLE_THING} of type FileBlockedForOwnershipClaims which contains the address of {RegexFor.SINGLE_THING}")]
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent {RegexFor.SINGLE_THING} of type FileOwnershipIsLockedEvent which contains the address of {RegexFor.SINGLE_THING}")]
     public async Task ThenIReceivesAnExternalEventOfTypeFileBlockedForOwnershipClaims(string notifiedIdentityName, string externalEventName, string fileName)
     {
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
@@ -121,8 +121,8 @@ internal class SynchronizationStepDefinitions
         var fileId = _filesContext.Files[fileName].Id;
 
         externalEvents.Result.Should().Contain(e =>
-            e.Type == "FileBlockedForOwnershipClaims" &&
-            e.Payload["file"].GetString() == fileId);
+            e.Type == "FileOwnershipIsLocked" &&
+            e.Payload["fileAddress"].GetString() == fileId);
     }
 
     #endregion
