@@ -15,6 +15,6 @@ public class FileCreationHelper
         var encryptedProperties = cipherHash;
         var content = "Hello World!".GetBytes();
 
-        return new File(identityAddress, deviceId, identityAddress, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
+        return new File(identityAddress, deviceId, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
     }
 }
