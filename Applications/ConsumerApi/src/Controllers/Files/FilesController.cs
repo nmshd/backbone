@@ -7,12 +7,15 @@ using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.ConsumerApi.Controllers.Files.DTOs;
 using Backbone.ConsumerApi.Controllers.Files.DTOs.Validators;
 using Backbone.Modules.Files.Application;
+using Backbone.Modules.Files.Application.Files.Commands.ClaimFileOwnership;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using Backbone.Modules.Files.Application.Files.Commands.DeleteFile;
+using Backbone.Modules.Files.Application.Files.Commands.RegenerateFileOwnershipToken;
 using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
+using Backbone.Modules.Files.Application.Files.Queries.ValidateFileOwnershipToken;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -82,14 +85,37 @@ public class FilesController : ApiControllerBase
     }
 
     [HttpPatch("{fileId}/RegenerateOwnershipToken")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileOwnershipTokenDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<bool>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RegenerateFileOwnershipToken(string fileId, CancellationToken cancellationToken)
     {
-        await Task.Yield();
-        return NoContent();
+        var regenerationResult = await _mediator.Send(new RegenerateFileOwnershipTokenCommand { Id = fileId }, cancellationToken);
+        return Ok(regenerationResult.NewOwnershipToken);
+    }
+
+
+    [HttpPatch("{fileId}/ClaimFileOwnership")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileOwnershipTokenDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status403Forbidden)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ClaimFileOwnership(string fileId, [FromBody] FileOwnershipTokenDTO ownershipToken, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new ClaimFileOwnershipCommand(ownershipToken, fileId), cancellationToken);
+        return Ok(response.NewOwnershipToken);
+    }
+
+    [HttpPost("{fileId}/ValidateOwnershipToken")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<bool>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status403Forbidden)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] FileOwnershipTokenDTO ownershipToken, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(ownershipToken, fileId), cancellationToken);
+        return Ok(response.IsValid);
     }
 
 
