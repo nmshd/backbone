@@ -8,23 +8,23 @@ namespace Backbone.ConsumerApi.Controllers.Onboarding;
 [Route(".well-known")]
 public class WellKnownController : Controller
 {
-    private readonly ConsumerApiConfiguration.WellKnownPreviewConfiguration _configuration;
+    private readonly ConsumerApiConfiguration.WellKnownEndpointsConfiguration _configuration;
 
     public WellKnownController(IOptions<ConsumerApiConfiguration> configuration)
     {
-        _configuration = configuration.Value.WellKnownPreview;
+        _configuration = configuration.Value.WellKnownEndpoints;
     }
 
     [HttpGet("apple-app-site-association")]
     public IActionResult AppleAppSiteAssociation()
     {
-        return Json(new AppleAppSiteAssociation(_configuration.AppleApps));
+        return Json(new AppleAppSiteAssociation(_configuration.AppleAppSiteAssociations));
     }
 
     [HttpGet("assetlinks.json")]
     public IActionResult Apple()
     {
-        return Json(_configuration.AndroidApps.Select(a => new AndroidAssetLink(
+        return Json(_configuration.AndroidAssetLinks.Select(a => new AndroidAssetLink(
             new AndroidAssetLink.TargetModel
             {
                 PackageName = a.PackageName,

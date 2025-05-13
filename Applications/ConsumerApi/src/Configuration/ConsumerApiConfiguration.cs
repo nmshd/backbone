@@ -16,15 +16,15 @@ public class ConsumerApiConfiguration
 
     public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
-    public WellKnownPreviewConfiguration WellKnownPreview { get; set; } = new();
+    public WellKnownEndpointsConfiguration WellKnownEndpoints { get; set; } = new();
 
-    public class WellKnownPreviewConfiguration
+    public class WellKnownEndpointsConfiguration
     {
-        public string[] AppleApps { get; set; } = [];
+        public string[] AppleAppSiteAssociations { get; set; } = [];
 
-        public AndroidApp[] AndroidApps { get; set; } = [];
+        public AndroidAssetLink[] AndroidAssetLinks { get; set; } = [];
 
-        public class AndroidApp
+        public class AndroidAssetLink
         {
             public string PackageName { get; set; } = "";
             public string[] Sha256CertFingerprints { get; set; } = [];
