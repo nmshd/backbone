@@ -6,18 +6,33 @@ User tries to claim the ownership of a file
     Scenario: A user tries to claim a file using the correct ownershiptoken
         Given Identities i1, i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership/f.OwnershipToken endpoint
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token f.OwnershipToken
         Then the response status code is 200 (OK)
         And the response contains a new OwnershipToken
         And i2 is the new owner of f
 
-    Scenario: A user tries to claim a file with a non-conforming FileId
-        Given Identity i
-        When i sends a PATCH request to the /Files/nonExistingFile.Id/ClaimFileOwnership/nonExistingFile.OwnershipToken endpoint
-        Then the response status code is 400 (Invalid Request)
-
-    Scenario: A user tries to claim a file with a false OwnerShipToken
+    Scenario: A user tries to claim a file with a non confomring fileId
         Given Identities i1, i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership/nonExistingFile.OwnershipToken endpoint
+        When i2 sends a PATCH request to the /Files/NonConforming.Id/ClaimFileOwnership with token NonConforming.OwnershipToken
+        Then the response status code is 400 (Bad Request)
+
+    Scenario: A user tries to claim a file using the correct ownershiptoken but the file is blocked
+        Given Identities i1, i2
+        And File f created by i1
+        And i2 tries to claim f with a wrong token
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token f.OwnershipToken
         Then the response status code is 403 (Action Forbidden)
+        And the file f becomes blocked for OwnershipClaims
+        Then i2 receives an ExternalEvent e of type PeerFeatureFlagsChanged which contains the address of i1
+
+    Scenario: A user tries to claim an exsting file with the token ownershiptoken
+        Given Identities i1, i2
+        And File f created by i1
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        Then the response status code is 403 (Action Forbidden)
+
+    Scenario: A user tries to claim a file with a non-conforming FileId
+        Given Identity i
+        When i sends a PATCH request to the /Files/FILNonExistingXXXXXX.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        Then the response status code is 404 (Not Found)
