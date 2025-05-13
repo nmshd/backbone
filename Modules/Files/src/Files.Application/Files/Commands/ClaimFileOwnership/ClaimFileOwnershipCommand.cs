@@ -1,13 +1,13 @@
-using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.Modules.Files.Application.Files.DTOs;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.ClaimFileOwnership;
 
 public class ClaimFileOwnershipCommand : IRequest<ClaimFileOwnershipResponse>
 {
-    public ClaimFileOwnershipCommand(ClaimFileOwnershipRequest ownershipToken, string fileId)
+    public ClaimFileOwnershipCommand(FileOwnershipTokenDTO ownershipToken, string fileId)
     {
-        OwnershipToken = ownershipToken.Values.FirstOrDefault();
+        OwnershipToken = ownershipToken.Value;
         FileId = fileId;
     }
 

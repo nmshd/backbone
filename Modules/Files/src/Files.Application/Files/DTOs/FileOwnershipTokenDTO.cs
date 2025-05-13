@@ -1,13 +1,15 @@
-using File = Backbone.Modules.Files.Domain.Entities.File;
+using System.Text.Json.Serialization;
 
 namespace Backbone.Modules.Files.Application.Files.DTOs;
 
 public class FileOwnershipTokenDTO
 {
-    public FileOwnershipTokenDTO(File file)
+    [JsonConstructor]
+    public FileOwnershipTokenDTO(string value)
     {
-        TokenContent = file.OwnershipToken.Value;
+        Value = value;
     }
 
-    public string TokenContent { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; }
 }
