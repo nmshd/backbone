@@ -1,7 +1,7 @@
 @Integration
 Feature: Patch /Files/{id}/RegenerateOwnershipToken
 
-User tries to regenerate the ownership token
+User tries to regenerate the OwnershipToken of a file
 
     Scenario: The owner of a file tries to regenerate its ownership token
         Given Identity i
@@ -12,7 +12,7 @@ User tries to regenerate the ownership token
 
     Scenario: A user tries to regenerate the ownershipToken of a non-conforming FileId
         Given Identity i
-        When i sends a PATCH request to the /Files/NonConformingId/RegenerateOwnershipToken endpoint
+        When i sends a PATCH request to the /Files/NonConforming.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 400 (Invalid Request)
 
     Scenario: The user not owning the file tries to regenerate its ownership token
@@ -23,5 +23,5 @@ User tries to regenerate the ownership token
 
     Scenario: A user tries to regenerate the ownershipToken of a non existing File
         Given Identity i
-        When i sends a PATCH request to the /Files/FILNonExistingXXXXXX/RegenerateOwnershipToken endpoint
+        When i sends a PATCH request to the /Files/FILNonExistingXXXXXX.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 404 (Invalid Request)
