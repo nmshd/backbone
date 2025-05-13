@@ -11,6 +11,14 @@ User tries to claim the ownership of a file
         And the response contains a new OwnershipToken
         And i2 is the new owner of f
 
+    Scenario: A user tries to claim a file using the wrong ownershiptoken
+        Given Identities i1, i2
+        And File f created by i1
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        Then the response status code is 403 (Action Forbidden)
+        And the file f becomes blocked for OwnershipClaims
+        Then i1 receives an ExternalEvent e of type FileOwnershipIsLockedEvent which contains the address of f
+
     Scenario: A user tries to claim a file with a non confomring fileId
         Given Identities i1, i2
         And File f created by i1
@@ -23,8 +31,6 @@ User tries to claim the ownership of a file
         And i2 tries to claim f with a wrong token
         When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token f.OwnershipToken
         Then the response status code is 403 (Action Forbidden)
-        And the file f becomes blocked for OwnershipClaims
-        Then i2 receives an ExternalEvent e of type PeerFeatureFlagsChanged which contains the address of i1
 
     Scenario: A user tries to claim an exsting file with the token ownershiptoken
         Given Identities i1, i2
