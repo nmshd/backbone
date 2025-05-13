@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Module;
 using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
@@ -34,6 +33,7 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
@@ -120,11 +120,6 @@ static WebApplication CreateApp(string[] args)
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<IPostStartupValidator>>())
-    {
-        module.PostStartupValidation(app.Services);
-    }
-
     return app;
 }
 
@@ -180,6 +175,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
+    services.AddHttpUserAgentParser();
 }
 
 static void Configure(WebApplication app)
@@ -191,6 +187,8 @@ static void Configure(WebApplication app)
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
         opts.GetLevel = LogHelper.GetLevel;
     });
+
+    app.UseStaticFiles();
 
     app.UseForwardedHeaders();
 
@@ -212,7 +210,6 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
-
     app.MapControllers();
     app.MapHealthChecks("/health");
 

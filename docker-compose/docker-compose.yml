@@ -10,24 +10,24 @@ services:
       - "10000:10000"
     volumes:
       - azure-storage-emulator-volume:/data
-
-  # ms-sql-server:
-  #   container_name: bkb-mssql_server
-  #   hostname: ms-sql-server
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   environment:
-  #     - MSSQL_SA_PASSWORD=Passw0rd
-  #     - ACCEPT_EULA=Y
-  #     - MSSQL_PID=Express
-  #   volumes:
-  #     - mssql-server-volume:/var/opt/mssql
-  #   ports:
-  #     - 1433:1433
+  
+  #  ms-sql-server:
+  #    container_name: bkb-mssql_server
+  #    hostname: ms-sql-server
+  #    image: mcr.microsoft.com/mssql/server:2022-latest
+  #    environment:
+  #      - MSSQL_SA_PASSWORD=Passw0rd
+  #      - ACCEPT_EULA=Y
+  #      - MSSQL_PID=Express
+  #    volumes:
+  #      - mssql-server-volume:/var/opt/mssql
+  #    ports:
+  #      - 1433:1433
 
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres@sha256:304ab813518754228f9f792f79d6da36359b82d8ecf418096c636725f8c930ad
+    image: postgres@sha256:864831322bf2520e7d03d899b01b542de6de9ece6fe29c89f19dc5e1d5568ccf
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.1-management-alpine@sha256:34488e5790ffdc619009e64df775da3fa8478bc60c9aa9ce77f4197f5f118ec5
+    image: rabbitmq:4.1-management-alpine@sha256:f545092f6cba538283053e69fca072a5acbc0fdad5c8419d6a860fb124572aa6
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"

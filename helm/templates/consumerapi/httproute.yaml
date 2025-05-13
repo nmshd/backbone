@@ -27,6 +27,12 @@ spec:
         - path:
             type: Exact
             value: /health
+        - path:
+            type: PathPrefix
+            value: /.well-known
+        - path:
+            type: PathPrefix
+            value: /r
       backendRefs:
         - name: {{ .Values.consumerapi.name }}
           port: 8080

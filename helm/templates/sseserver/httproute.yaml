@@ -12,8 +12,8 @@ spec:
       namespace: {{ .Values.sseserver.httpRoute.parentRefNamespace }}
       sectionName: {{ .Values.sseserver.httpRoute.parentRefSectionName }}
   hostnames:
-  {{- if .Values.consumerapi.httpRoute.hostnamesOverride }}
-    {{- toYaml .Values.consumerapi.httpRoute.hostnamesOverride | nindent 4 }}
+  {{- if .Values.sseserver.httpRoute.hostnamesOverride }}
+    {{- toYaml .Values.sseserver.httpRoute.hostnamesOverride | nindent 4 }}
   {{- else }}
     - {{ .Values.global.defaultHostname }}
   {{- end }}
