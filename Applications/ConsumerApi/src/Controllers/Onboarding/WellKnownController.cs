@@ -22,7 +22,7 @@ public class WellKnownController : Controller
     }
 
     [HttpGet("assetlinks.json")]
-    public IActionResult Apple()
+    public IActionResult AndroidAssetLinks()
     {
         return Json(_configuration.AndroidAssetLinks.Select(a => new AndroidAssetLink(
             new AndroidAssetLink.TargetModel
