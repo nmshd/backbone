@@ -73,7 +73,7 @@ internal class IdentitiesStepDefinitions
             { "feature1", feature1State == "enabled" },
             { "feature2", feature2State == "enabled" }
         };
-        
+
         var client = _clientPool.FirstForIdentityName(identityName);
         await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
