@@ -5,40 +5,40 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 internal class WellKnownStepDefinitions
 {
-    private readonly HttpClientFactory _httpClientFactory;
-    private string? _response;
+  private readonly HttpClientFactory _httpClientFactory;
+  private string? _response;
 
-    public WellKnownStepDefinitions(HttpClientFactory httpClientFactory)
-    {
-        _httpClientFactory = httpClientFactory;
-    }
+  public WellKnownStepDefinitions(HttpClientFactory httpClientFactory)
+  {
+    _httpClientFactory = httpClientFactory;
+  }
 
-    #region When
+  #region When
 
-    [When("the user sends a GET request to the /.well-known/assetlinks.json endpoint")]
-    public async Task WhenTheUserSendsAGETRequestToTheWellKnownAssetlinksJsonEndpoint()
-    {
-        var httpClient = _httpClientFactory.CreateClient();
+  [When("the user sends a GET request to the /.well-known/assetlinks.json endpoint")]
+  public async Task WhenTheUserSendsAGETRequestToTheWellKnownAssetlinksJsonEndpoint()
+  {
+    var httpClient = _httpClientFactory.CreateClient();
 
-        _response = await httpClient.GetStringAsync(".well-known/assetlinks.json");
-    }
+    _response = await httpClient.GetStringAsync(".well-known/assetlinks.json");
+  }
 
-    [When("the user sends a GET request to the /.well-known/apple-app-site-association endpoint")]
-    public async Task WhenTheUserSendsAGETRequestToTheWellKnownAppleAppSiteAssociationEndpoint()
-    {
-        var httpClient = _httpClientFactory.CreateClient();
+  [When("the user sends a GET request to the /.well-known/apple-app-site-association endpoint")]
+  public async Task WhenTheUserSendsAGETRequestToTheWellKnownAppleAppSiteAssociationEndpoint()
+  {
+    var httpClient = _httpClientFactory.CreateClient();
 
-        _response = await httpClient.GetStringAsync(".well-known/apple-app-site-association");
-    }
+    _response = await httpClient.GetStringAsync(".well-known/apple-app-site-association");
+  }
 
-    #endregion
+  #endregion
 
-    #region Then
+  #region Then
 
-    [Then("the response contains the package name and the SHA256 fingerprint for the configured Android app")]
-    public void WhenTheResponseContainsThePackageNameAndTheSha256FingerprintForTheConfiguredAndroidApp()
-    {
-        _response.Should().BeEquivalentToJson("""
+  [Then("the response contains the package name and the SHA256 fingerprint for the configured Android app")]
+  public void WhenTheResponseContainsThePackageNameAndTheSha256FingerprintForTheConfiguredAndroidApp()
+  {
+    _response.Should().BeEquivalentToJson("""
                                               [
                                                 {
                                                   "relation": [
@@ -54,18 +54,18 @@ internal class WellKnownStepDefinitions
                                                 }
                                               ]
                                               """);
-    }
+  }
 
-    [Then("the response contains the app ID for the configured iOS app")]
-    public void WhenTheResponseContainsTheAppIdForTheConfiguredIosApp()
-    {
-        _response.Should().BeEquivalentToJson("""
+  [Then("the response contains the app ID for the configured iOS app")]
+  public void WhenTheResponseContainsTheAppIdForTheConfiguredIosApp()
+  {
+    _response.Should().BeEquivalentToJson("""
                                               {
                                                 "applinks": {
                                                   "details": [
                                                     {
                                                       "appIDs": [
-                                                        "1576693742.eu.enmeshed.app"
+                                                        "R7Y6NESEQW.eu.enmeshed.app"
                                                       ],
                                                       "components": [
                                                         {
@@ -78,7 +78,7 @@ internal class WellKnownStepDefinitions
                                                 }
                                               }
                                               """);
-    }
+  }
 
-    #endregion
+  #endregion
 }
