@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Domain.Entities;
@@ -22,10 +23,16 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
     public async Task<ClaimFileOwnershipResponse> Handle(ClaimFileOwnershipCommand request, CancellationToken cancellationToken)
     {
         var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken, true, false) ?? throw new NotFoundException(nameof(File));
-
-        var newOwnershipToken = file.ClaimOwnership(request.OwnershipToken!, _activeUserAdress);
-        await _filesRepository.Update(file, CancellationToken.None);
-
-        return new ClaimFileOwnershipResponse(newOwnershipToken);
+        try
+        {
+            var newOwnershipToken = file.ClaimOwnership(request.OwnershipToken!, _activeUserAdress);
+            await _filesRepository.Update(file, CancellationToken.None);
+            return new ClaimFileOwnershipResponse(newOwnershipToken);
+        }
+        catch (File.InvalidFileOwnershipTokenException)
+        {
+            await _filesRepository.Update(file, CancellationToken.None);
+            throw new DomainActionForbiddenException();
+        }
     }
 }

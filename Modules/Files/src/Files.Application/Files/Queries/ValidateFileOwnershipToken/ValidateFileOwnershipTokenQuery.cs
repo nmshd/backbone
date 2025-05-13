@@ -1,12 +1,13 @@
+using Backbone.Modules.Files.Application.Files.DTOs;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ValidateFileOwnershipToken;
 
 public class ValidateFileOwnershipTokenQuery : IRequest<ValidateFileOwnershipTokenResponse>
 {
-    public ValidateFileOwnershipTokenQuery(string ownershipToken, string fileId)
+    public ValidateFileOwnershipTokenQuery(FileOwnershipTokenDTO ownershipToken, string fileId)
     {
-        OwnershipToken = ownershipToken;
+        OwnershipToken = ownershipToken.Value;
         FileId = fileId;
     }
 
