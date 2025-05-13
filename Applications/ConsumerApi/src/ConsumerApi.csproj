@@ -43,6 +43,7 @@
 
     <ItemGroup>
         <Folder Include="Controllers\Synchronization\" />
+        <Folder Include="wwwroot\" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
