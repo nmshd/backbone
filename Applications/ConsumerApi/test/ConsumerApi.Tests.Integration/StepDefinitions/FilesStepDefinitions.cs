@@ -177,7 +177,7 @@ internal class FilesStepDefinitions
     }
 
     [Then($"it is (true|false), that the file {RegexFor.SINGLE_THING} has a locked ownership")]
-    public void ThenTheFileFIsBlockedForOwnershipClaimsIsTrue(string fileName, string expected)
+    public void ThenTheFileFIsBlockedForOwnershipClaimsIsTrue(string expected, string fileName)
     {
         var file = _filesContext.Files[fileName] ?? null;
         file.Should().NotBeNull();

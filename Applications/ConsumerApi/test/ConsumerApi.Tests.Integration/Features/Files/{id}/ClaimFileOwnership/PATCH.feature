@@ -16,7 +16,7 @@ User tries to claim the ownership of a file
         And File f created by i1
         When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
         Then the response status code is 403 (Action Forbidden)
-        And the file f is blocked for OwnershipClaims is true
+        And it is true, that the file f has a locked ownership
         Then i1 receives an ExternalEvent e of type FileOwnershipIsLockedEvent which contains the address of f
 
     Scenario: A user tries to claim a file with a non confomring fileId

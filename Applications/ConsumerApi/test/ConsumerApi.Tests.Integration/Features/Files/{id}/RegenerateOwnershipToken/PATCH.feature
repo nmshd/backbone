@@ -10,7 +10,7 @@ User tries to regenerate the OwnershipToken of a file
         When i1 sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 200 (OK)
         And the response contains the new OwnershipToken of f
-        And the file f is blocked for OwnershipClaims is false
+        And it is false, that the file f has a locked ownership
 
     Scenario: A user tries to regenerate the ownershipToken of a non-conforming FileId
         Given Identity i
