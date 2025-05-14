@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyCSharp.HttpUserAgentParser;
 using MyCSharp.HttpUserAgentParser.Providers;
-using PlatformType = Backbone.ConsumerApi.Configuration.ConsumerApiConfiguration.AppOnboardingConfiguration.App.PlatformType;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
@@ -31,42 +30,53 @@ public class AppOnboardingController : Controller
             return NotFound();
 
         app ??= _configuration.DefaultAppId;
+
         var selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == app);
 
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
 
-        var appStoreLinks = GetAppStoreLinksForCurrentUserAgent(selectedAppConfiguration);
+        var stores = GetStoresForUserAgent(selectedAppConfiguration);
 
-        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration.Id, selectedAppConfiguration.DisplayName, appStoreLinks));
+        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration, stores));
     }
 
-    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStore> GetStoresForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
     {
-        var appStoreLinks = new List<AppOnboardingModel.AppStoreLink>();
+        var stores = new List<AppOnboardingModel.AppStore>();
 
-        var platform = GetPlatformFromUserAgent();
-        var allLinks = appConfiguration.GetAllConfiguredAppStoreLinks();
+        var storeTypeForUserAgent = GetStoreTypeForUserAgent();
 
-        if (allLinks.TryGetValue(platform, out var link))
-            appStoreLinks.Add(AppOnboardingModel.AppStoreLink.From(platform, link));
-        else
-            appStoreLinks.AddRange(allLinks.Select(kv => AppOnboardingModel.AppStoreLink.From(kv.Key, kv.Value)));
+        switch (storeTypeForUserAgent)
+        {
+            case StoreType.GooglePlayStore:
+                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
+                break;
+            case StoreType.AppleAppStore:
+                stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
+                break;
+            case StoreType.Unknown:
+                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
+                stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
+                break;
+            default:
+                throw new Exception($"The store type {storeTypeForUserAgent} is not supported.");
+        }
 
-        return appStoreLinks;
+        return stores;
     }
 
-    private PlatformType GetPlatformFromUserAgent()
+    private StoreType GetStoreTypeForUserAgent()
     {
         var userAgent = _parser.Parse(Request.Headers.UserAgent.ToString());
         var platform = userAgent.Platform?.PlatformType;
 
         return platform switch
         {
-            HttpUserAgentPlatformType.Android => PlatformType.Android,
-            HttpUserAgentPlatformType.IOS => PlatformType.Ios,
-            HttpUserAgentPlatformType.MacOS => PlatformType.Macos,
-            _ => PlatformType.Unknown
+            HttpUserAgentPlatformType.Android => StoreType.GooglePlayStore,
+            HttpUserAgentPlatformType.IOS => StoreType.AppleAppStore,
+            HttpUserAgentPlatformType.MacOS => StoreType.AppleAppStore,
+            _ => StoreType.Unknown
         };
     }
 }
@@ -75,66 +85,65 @@ public class AppSelectionModel
 {
     public AppSelectionModel(ConsumerApiConfiguration.AppOnboardingConfiguration.App[] apps)
     {
-        Apps = apps.Select(c => new App { Id = c.Id, DisplayName = c.DisplayName }).ToList();
+        Apps = apps.Select(c => new App(c)).ToList();
     }
 
     public List<App> Apps { get; }
 
     public class App
     {
-        public required string Id { get; init; }
-        public required string DisplayName { get; init; }
+        public App(ConsumerApiConfiguration.AppOnboardingConfiguration.App app)
+        {
+            Id = app.Id;
+            DisplayName = app.DisplayName;
+        }
+
+        public string Id { get; }
+        public string DisplayName { get; }
     }
 }
 
 public class AppOnboardingModel
 {
-    public AppOnboardingModel(string appId, string appDisplayName, List<AppStoreLink> links)
+    public AppOnboardingModel(ConsumerApiConfiguration.AppOnboardingConfiguration.App config, List<AppStore> links)
     {
-        AppId = appId;
-        AppDisplayName = appDisplayName;
+        AppId = config.Id;
+        AppDisplayName = config.DisplayName;
         Links = links;
     }
 
     public string AppId { get; }
     public string AppDisplayName { get; }
-    public List<AppStoreLink> Links { get; }
+    public List<AppStore> Links { get; }
 
-    public record AppStoreLink
+    public record AppStore
     {
-        private AppStoreLink(string storeName, string link)
+        private AppStore(string storeName, string? link, string noLinkText)
         {
             StoreName = storeName;
             Link = link;
+            NoLinkText = noLinkText;
         }
 
-        public static AppStoreLink From(PlatformType platformType, string link)
+        public static AppStore GooglePlayStore(ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreConfig config)
         {
-            return platformType switch
-            {
-                PlatformType.Android => Android(link),
-                PlatformType.Ios => Ios(link),
-                PlatformType.Macos => MacOs(link),
-                _ => throw new ArgumentOutOfRangeException(nameof(platformType), platformType, null)
-            };
+            return new AppStore("Google Play Store", config.AppLink, config.NoLinkText);
         }
 
-        private static AppStoreLink Android(string link)
+        public static AppStore AppleAppStore(ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreConfig config)
         {
-            return new AppStoreLink("Google Play Store", link);
-        }
-
-        private static AppStoreLink Ios(string link)
-        {
-            return new AppStoreLink("Apple App Store - iPhone", link);
-        }
-
-        private static AppStoreLink MacOs(string link)
-        {
-            return new AppStoreLink("Apple App Store - macOS", link);
+            return new AppStore("Apple App Store", config.AppLink, config.NoLinkText);
         }
 
         public string StoreName { get; }
-        public string Link { get; }
+        public string? Link { get; }
+        public string NoLinkText { get; }
     }
+}
+
+public enum StoreType
+{
+    GooglePlayStore,
+    AppleAppStore,
+    Unknown
 }
