@@ -66,9 +66,11 @@ public class ConsumerApiConfiguration
             [Required]
             public string DisplayName { get; set; } = null!;
 
-            public StoreConfig? AppleAppStore { get; set; }
+            [Required]
+            public StoreConfig AppleAppStore { get; set; } = new();
 
-            public StoreConfig? GooglePlayStore { get; set; }
+            [Required]
+            public StoreConfig GooglePlayStore { get; set; } = new();
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string? PrimaryColor { get; set; }
@@ -78,25 +80,11 @@ public class ConsumerApiConfiguration
 
             public string? IconUrl { get; set; }
 
-            public Dictionary<StoreType, string> GetAllConfiguredStoreLinks()
+            public class StoreConfig
             {
-                var storeLinks = new Dictionary<StoreType, string>();
+                public string? AppLink { get; set; } = null!;
 
-                if (AppleAppStore != null)
-                    storeLinks.Add(StoreType.AppleAppStore, AppleAppStore.AppUrl);
-
-                if (GooglePlayStore != null)
-                    storeLinks.Add(StoreType.GooglePlayStore, GooglePlayStore.AppUrl);
-
-                return storeLinks;
-            }
-
-
-            public enum StoreType
-            {
-                GooglePlayStore,
-                AppleAppStore,
-                Unknown
+                public string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
 
@@ -106,11 +94,5 @@ public class ConsumerApiConfiguration
                 yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
                     [nameof(Apps), nameof(DefaultAppId)]);
         }
-    }
-
-    public class StoreConfig
-    {
-        [Required]
-        public string AppUrl { get; set; } = null!;
     }
 }
