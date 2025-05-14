@@ -70,9 +70,9 @@ public class ConsumerApiConfiguration
             [Required]
             public string DisplayName { get; set; } = null!;
 
-            public Platform? Ios { get; set; } = new();
+            public Platform? Ios { get; set; }
 
-            public Platform? Android { get; set; } = new();
+            public Platform? Android { get; set; }
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string? PrimaryColor { get; set; }
