@@ -13,7 +13,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[9.0.5]" />
         <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.11.0]" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[9.0.5]" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.4.0]" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.5.0]" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[9.0.5]" />
         <PackageReference Include="Newtonsoft.Json" Version="[13.0.3]" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="[9.0.5]" />
