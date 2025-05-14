@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyCSharp.HttpUserAgentParser;
 using MyCSharp.HttpUserAgentParser.Providers;
-using PlatformType = Backbone.ConsumerApi.Configuration.ConsumerApiConfiguration.AppOnboardingConfiguration.App.PlatformType;
 
 namespace Backbone.ConsumerApi.Controllers.Onboarding;
 
@@ -31,42 +30,43 @@ public class AppOnboardingController : Controller
             return NotFound();
 
         app ??= _configuration.DefaultAppId;
+
         var selectedAppConfiguration = _configuration.Apps.FirstOrDefault(a => a.Id == app);
 
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
 
-        var appStoreLinks = GetAppStoreLinksForCurrentUserAgent(selectedAppConfiguration);
+        var appStoreLinks = GetStoreLinksForCurrentUserAgent(selectedAppConfiguration);
 
         return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration.Id, selectedAppConfiguration.DisplayName, appStoreLinks));
     }
 
-    private List<AppOnboardingModel.AppStoreLink> GetAppStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStoreLink> GetStoreLinksForCurrentUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
     {
-        var appStoreLinks = new List<AppOnboardingModel.AppStoreLink>();
+        var storeLinks = new List<AppOnboardingModel.AppStoreLink>();
 
-        var platform = GetPlatformFromUserAgent();
-        var allLinks = appConfiguration.GetAllConfiguredAppStoreLinks();
+        var platform = GetStoreTypeForUserAgent();
+        var allLinks = appConfiguration.GetAllConfiguredStoreLinks();
 
         if (allLinks.TryGetValue(platform, out var link))
-            appStoreLinks.Add(AppOnboardingModel.AppStoreLink.From(platform, link));
+            storeLinks.Add(AppOnboardingModel.AppStoreLink.From(platform, link));
         else
-            appStoreLinks.AddRange(allLinks.Select(kv => AppOnboardingModel.AppStoreLink.From(kv.Key, kv.Value)));
+            storeLinks.AddRange(allLinks.Select(kv => AppOnboardingModel.AppStoreLink.From(kv.Key, kv.Value)));
 
-        return appStoreLinks;
+        return storeLinks;
     }
 
-    private PlatformType GetPlatformFromUserAgent()
+    private ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType GetStoreTypeForUserAgent()
     {
         var userAgent = _parser.Parse(Request.Headers.UserAgent.ToString());
         var platform = userAgent.Platform?.PlatformType;
 
         return platform switch
         {
-            HttpUserAgentPlatformType.Android => PlatformType.Android,
-            HttpUserAgentPlatformType.IOS => PlatformType.Ios,
-            HttpUserAgentPlatformType.MacOS => PlatformType.Macos,
-            _ => PlatformType.Unknown
+            HttpUserAgentPlatformType.Android => ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.GooglePlayStore,
+            HttpUserAgentPlatformType.IOS => ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.AppleAppStore,
+            HttpUserAgentPlatformType.MacOS => ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.AppleAppStore,
+            _ => ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.Unknown
         };
     }
 }
@@ -108,30 +108,24 @@ public class AppOnboardingModel
             Link = link;
         }
 
-        public static AppStoreLink From(PlatformType platformType, string link)
+        public static AppStoreLink From(ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType storeType, string link)
         {
-            return platformType switch
+            return storeType switch
             {
-                PlatformType.Android => Android(link),
-                PlatformType.Ios => Ios(link),
-                PlatformType.Macos => MacOs(link),
-                _ => throw new ArgumentOutOfRangeException(nameof(platformType), platformType, null)
+                ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.GooglePlayStore => GooglePlayStore(link),
+                ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreType.AppleAppStore => AppleAppStore(link),
+                _ => throw new ArgumentOutOfRangeException(nameof(storeType), storeType, null)
             };
         }
 
-        private static AppStoreLink Android(string link)
+        private static AppStoreLink GooglePlayStore(string link)
         {
             return new AppStoreLink("Google Play Store", link);
         }
 
-        private static AppStoreLink Ios(string link)
+        private static AppStoreLink AppleAppStore(string link)
         {
-            return new AppStoreLink("Apple App Store - iPhone", link);
-        }
-
-        private static AppStoreLink MacOs(string link)
-        {
-            return new AppStoreLink("Apple App Store - macOS", link);
+            return new AppStoreLink("Apple App Store", link);
         }
 
         public string StoreName { get; }

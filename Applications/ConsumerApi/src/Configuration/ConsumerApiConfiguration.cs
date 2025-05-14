@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace Backbone.ConsumerApi.Configuration;
 
@@ -61,18 +60,15 @@ public class ConsumerApiConfiguration
 
         public class App
         {
-            private const string IPHONE_DEVICE_HINT = "iphone";
-            private const string MAC_OS_DEVICE_HINT = "ipad";
-
             [Required]
             public string Id { get; set; } = null!;
 
             [Required]
             public string DisplayName { get; set; } = null!;
 
-            public Platform? Ios { get; set; }
+            public StoreConfig? AppleAppStore { get; set; }
 
-            public Platform? Android { get; set; }
+            public StoreConfig? GooglePlayStore { get; set; }
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string? PrimaryColor { get; set; }
@@ -82,28 +78,24 @@ public class ConsumerApiConfiguration
 
             public string? IconUrl { get; set; }
 
-            public Dictionary<PlatformType, string> GetAllConfiguredAppStoreLinks()
+            public Dictionary<StoreType, string> GetAllConfiguredStoreLinks()
             {
-                var appStoreLinks = new Dictionary<PlatformType, string>();
+                var storeLinks = new Dictionary<StoreType, string>();
 
-                if (Ios != null)
-                {
-                    appStoreLinks.Add(PlatformType.Ios, QueryHelpers.AddQueryString(Ios.Url, "platform", IPHONE_DEVICE_HINT));
-                    appStoreLinks.Add(PlatformType.Macos, QueryHelpers.AddQueryString(Ios.Url, "platform", MAC_OS_DEVICE_HINT));
-                }
+                if (AppleAppStore != null)
+                    storeLinks.Add(StoreType.AppleAppStore, AppleAppStore.AppUrl);
 
-                if (Android != null)
-                    appStoreLinks.Add(PlatformType.Android, Android.Url);
+                if (GooglePlayStore != null)
+                    storeLinks.Add(StoreType.GooglePlayStore, GooglePlayStore.AppUrl);
 
-                return appStoreLinks;
+                return storeLinks;
             }
 
 
-            public enum PlatformType
+            public enum StoreType
             {
-                Android,
-                Ios,
-                Macos,
+                GooglePlayStore,
+                AppleAppStore,
                 Unknown
             }
         }
@@ -116,9 +108,9 @@ public class ConsumerApiConfiguration
         }
     }
 
-    public class Platform
+    public class StoreConfig
     {
         [Required]
-        public string Url { get; set; } = null!;
+        public string AppUrl { get; set; } = null!;
     }
 }
