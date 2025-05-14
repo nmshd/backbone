@@ -80,13 +80,13 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _whenResponse = _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = _existingTierName });
     }
 
-    [When(@"a DELETE request is sent to the \/Tiers\/\{t.Id\} endpoint")]
+    [When("^a DELETE request is sent to the /Tiers/{t.Id} endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheTiersTierIdEndpoint()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier(_existingTierId);
     }
 
-    [When(@"a DELETE request is sent to the \/Tiers\/\{t.Id\} endpoint with an inexistent id")]
+    [When("^a DELETE request is sent to the /Tiers/{t.Id} endpoint with an inexistent id$")]
     public async Task WhenADeleteRequestIsSentToTheTiersT_IdEndpointWithAnInexistentId()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier("TIR00000000000000000");

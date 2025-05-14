@@ -89,7 +89,7 @@ internal class DevicesStepDefinitions
 
     #region When
 
-    [When(@"{word} sends a POST request to the \/Devices endpoint with a valid signature on {word}")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING}$")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -103,7 +103,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When(@"{word} sends a POST request to the \/Devices endpoint with a valid signature on {word} as a backup Device")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING} as a backup Device$")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallengeAsABackupDevice(string identityName, string challengeName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -127,7 +127,7 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
-    [When(@"{word} sends a PUT request to the \/Devices\/Self endpoint with a non-existent language code")]
+    [When($"^{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with a non-existent language code$")]
     public async Task WhenDeviceSendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string deviceName)
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
@@ -156,7 +156,7 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await client.Devices.DeleteDevice(deviceId);
     }
 
-    [When(@"{word} sends a DELETE request to the \/Devices\/\{id\} endpoint with a non existent id")]
+    [When($"^{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with a non existent id$")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
         var client = _clientPool.GetForDeviceName(deviceName);

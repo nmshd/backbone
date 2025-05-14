@@ -96,14 +96,14 @@ internal class TokensStepDefinitions
 
     #region When
 
-    [When(@"{word} sends a POST request to the \/Tokens endpoint")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint$")]
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
-    [When(@"an anonymous user sends a POST request to the \/Tokens endpoint")]
+    [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });

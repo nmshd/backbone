@@ -40,7 +40,7 @@ public class TagsStepDefinitions
 
     #region When
 
-    [When(@"A GET request to the \/Tags endpoint gets sent")]
+    [When("^A GET request to the /Tags endpoint gets sent$")]
     public async Task WhenAGETRequestToTheTagsEndpointGetsSent()
     {
         var client = _clientPool.Anonymous;
