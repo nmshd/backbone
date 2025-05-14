@@ -16,6 +16,21 @@ public class ConsumerApiConfiguration
 
     public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
+    public WellKnownEndpointsConfiguration WellKnownEndpoints { get; set; } = new();
+
+    public class WellKnownEndpointsConfiguration
+    {
+        public string[] AppleAppSiteAssociations { get; set; } = [];
+
+        public AndroidAssetLink[] AndroidAssetLinks { get; set; } = [];
+
+        public class AndroidAssetLink
+        {
+            public string PackageName { get; set; } = "";
+            public string[] Sha256CertFingerprints { get; set; } = [];
+        }
+    }
+
     public class AuthenticationConfiguration
     {
         [Required]
@@ -55,9 +70,9 @@ public class ConsumerApiConfiguration
             [Required]
             public string DisplayName { get; set; } = null!;
 
-            public Platform? Ios { get; set; } = new();
+            public Platform? Ios { get; set; }
 
-            public Platform? Android { get; set; } = new();
+            public Platform? Android { get; set; }
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string? PrimaryColor { get; set; }
@@ -103,6 +118,7 @@ public class ConsumerApiConfiguration
 
     public class Platform
     {
+        [Required]
         public string Url { get; set; } = null!;
     }
 }
