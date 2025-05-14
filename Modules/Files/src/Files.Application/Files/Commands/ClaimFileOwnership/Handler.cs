@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
             await _filesRepository.Update(file, CancellationToken.None);
             return new ClaimFileOwnershipResponse(newOwnershipToken);
         }
-        catch (File.InvalidFileOwnershipTokenException)
+        catch (DomainException)
         {
             await _filesRepository.Update(file, CancellationToken.None);
             throw new DomainActionForbiddenException();

@@ -118,10 +118,6 @@ public record FileOwnershipToken(string Value)
         if (value.Length > DEFAULT_MAX_LENGTH)
             return false;
 
-        foreach (var c in value)
-            if (!ALLOWED_CHARACTERS.Contains(c))
-                return false;
-
-        return true;
+        return value.All(c => ALLOWED_CHARACTERS.Contains(c));
     }
 }

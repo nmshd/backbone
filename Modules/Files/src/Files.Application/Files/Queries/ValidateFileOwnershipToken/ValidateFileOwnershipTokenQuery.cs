@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ValidateFileOwnershipToken;
 
-public class ValidateFileOwnershipTokenQuery : IRequest<ValidateFileOwnershipTokenResponse>
+public class ValidateFileOwnershipTokenQuery : IRequest<bool>
 {
     public ValidateFileOwnershipTokenQuery(FileOwnershipTokenDTO ownershipToken, string fileId)
     {
-        OwnershipToken = ownershipToken.Value;
+        OwnershipToken = ownershipToken.FileOwnershipToken;
         FileId = fileId;
     }
 

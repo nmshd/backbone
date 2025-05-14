@@ -4,11 +4,13 @@ Feature: Patch /Files/{id}/RegenerateOwnershipToken
 User tries to regenerate the OwnershipToken of a file
 
     Scenario: The owner of a file tries to regenerate its ownership token
-        Given Identity i
-        And File f created by i
-        When i sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
+        Given Identities i1, i2
+        And File f created by i1
+        And i2 tries to claim f with a wrong token
+        When i1 sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 200 (OK)
-        And the response contains a new OwnershipToken
+        And the response contains the new OwnershipToken of f
+        And the file f is blocked for OwnershipClaims is false
 
     Scenario: A user tries to regenerate the ownershipToken of a non-conforming FileId
         Given Identity i

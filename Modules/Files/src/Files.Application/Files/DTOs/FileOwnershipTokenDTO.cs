@@ -5,11 +5,11 @@ namespace Backbone.Modules.Files.Application.Files.DTOs;
 public class FileOwnershipTokenDTO
 {
     [JsonConstructor]
-    public FileOwnershipTokenDTO(string value)
+    public FileOwnershipTokenDTO(string fileOwnershipToken)
     {
-        Value = value;
+        FileOwnershipToken = fileOwnershipToken;
     }
 
-    [JsonPropertyName("value")]
-    public string Value { get; set; }
+    [JsonPropertyName("fileOwnershipToken")]
+    public string FileOwnershipToken { get; set; }
 }

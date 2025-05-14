@@ -8,7 +8,7 @@ using File = System.IO.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.RegenerateFileOwnershipToken;
 
-public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, RegenerateFileOwnershipTokenResponse>
+public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, string>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -19,9 +19,9 @@ public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, Rege
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<RegenerateFileOwnershipTokenResponse> Handle(RegenerateFileOwnershipTokenCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(RegenerateFileOwnershipTokenCommand request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Find(FileId.Parse(request.FileAddress), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 
         if (file.Owner != _activeIdentity)
             throw new ActionForbiddenException();
@@ -29,6 +29,6 @@ public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, Rege
         file!.RegenerateOwnershipToken();
         await _filesRepository.Update(file, cancellationToken);
 
-        return new RegenerateFileOwnershipTokenResponse(file.OwnershipToken.Value);
+        return file.OwnershipToken.Value;
     }
 }

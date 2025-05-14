@@ -1,5 +1,4 @@
 using Backbone.Modules.Files.Domain.Tests.Helpers;
-using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Domain.Tests.Tests;
 

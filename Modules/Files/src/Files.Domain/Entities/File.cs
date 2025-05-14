@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
@@ -119,7 +120,7 @@ public class File : Entity
         return OwnershipToken.Value;
     }
 
-    public string ClaimOwnership(string ownershipToken, string newOwnerAddress)
+    public string ClaimOwnership(string ownershipToken, IdentityAddress newOwnerAddress)
     {
         if (BlockOwnershipClaims) throw new DomainActionForbiddenException();
 
@@ -127,15 +128,10 @@ public class File : Entity
         {
             BlockOwnershipClaims = true;
             RaiseDomainEvent(new FileOwnershipIsLockedEvent(Id.Value, Owner.Value));
-            throw new InvalidFileOwnershipTokenException();
+            throw new DomainException(new DomainError("error.module.files.invalidFileOwnershipToken", "The file ownership token is invalid."));
         }
-
-        if (!IdentityAddress.IsValid(newOwnerAddress))
-            throw new ApplicationException($"The new owner address is not valid.");
 
         Owner = IdentityAddress.Parse(newOwnerAddress);
         return RegenerateOwnershipToken();
     }
-
-    public class InvalidFileOwnershipTokenException : Exception;
 }

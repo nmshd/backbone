@@ -7,7 +7,7 @@ public class ClaimFileOwnershipCommand : IRequest<ClaimFileOwnershipResponse>
 {
     public ClaimFileOwnershipCommand(FileOwnershipTokenDTO ownershipToken, string fileId)
     {
-        OwnershipToken = ownershipToken.Value;
+        OwnershipToken = ownershipToken.FileOwnershipToken;
         FileId = fileId;
     }
 

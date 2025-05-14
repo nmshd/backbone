@@ -91,8 +91,8 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RegenerateFileOwnershipToken(string fileId, CancellationToken cancellationToken)
     {
-        var regenerationResult = await _mediator.Send(new RegenerateFileOwnershipTokenCommand { Id = fileId }, cancellationToken);
-        return Ok(regenerationResult.NewOwnershipToken);
+        var regenerationResult = await _mediator.Send(new RegenerateFileOwnershipTokenCommand { FileAddress = fileId }, cancellationToken);
+        return Ok(regenerationResult);
     }
 
 
@@ -115,7 +115,7 @@ public class FilesController : ApiControllerBase
     public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] FileOwnershipTokenDTO ownershipToken, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(ownershipToken, fileId), cancellationToken);
-        return Ok(response.IsValid);
+        return Ok(response);
     }
 
 
