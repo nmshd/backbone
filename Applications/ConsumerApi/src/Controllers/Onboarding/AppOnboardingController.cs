@@ -36,34 +36,34 @@ public class AppOnboardingController : Controller
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
 
-        var appStoreLinks = GetStoreLinksForUserAgent(selectedAppConfiguration);
+        var stores = GetStoresForUserAgent(selectedAppConfiguration);
 
-        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration, appStoreLinks));
+        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration, stores));
     }
 
-    private List<AppOnboardingModel.AppStore> GetStoreLinksForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStore> GetStoresForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
     {
-        var appStores = new List<AppOnboardingModel.AppStore>();
+        var stores = new List<AppOnboardingModel.AppStore>();
 
         var storeTypeForUserAgent = GetStoreTypeForUserAgent();
 
         switch (storeTypeForUserAgent)
         {
             case StoreType.GooglePlayStore:
-                appStores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
+                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
                 break;
             case StoreType.AppleAppStore:
-                appStores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
+                stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
                 break;
             case StoreType.Unknown:
-                appStores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
-                appStores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
+                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
+                stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
                 break;
             default:
                 throw new Exception($"The store type {storeTypeForUserAgent} is not supported.");
         }
 
-        return appStores;
+        return stores;
     }
 
     private StoreType GetStoreTypeForUserAgent()
