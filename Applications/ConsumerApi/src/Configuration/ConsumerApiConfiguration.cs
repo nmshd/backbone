@@ -118,6 +118,7 @@ public class ConsumerApiConfiguration
 
     public class Platform
     {
+        [Required]
         public string Url { get; set; } = null!;
     }
 }
