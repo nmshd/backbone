@@ -20,12 +20,11 @@
     }
 </head>
 <body>
+
 <p>Please pick the application specified by your provider and install it.</p>
-<br />
 @foreach (var app in Model.Apps)
 {
-    <a href="" id="linkTo@(app.Id)">Install app @app.DisplayName</a>
-    <br />
+    <p><a href="" id="linkTo@(app.Id)">Install @app.DisplayName</a></p>
 }
 </body>
 
