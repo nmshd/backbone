@@ -149,7 +149,7 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = await client.FeatureFlags.ChangeFeatureFlags(featureFlags);
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/\{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Identities/{{address}}/FeatureFlags endpoint with address={RegexFor.SINGLE_THING}\.address")]
     public async Task WhenISendsAGETRequestToTheIdentitiesAddressFeatureFlagsEndpointWithAddressIAddress(string requestorName, string peerName)
     {
         var requestorClient = _clientPool.FirstForIdentityName(requestorName);
