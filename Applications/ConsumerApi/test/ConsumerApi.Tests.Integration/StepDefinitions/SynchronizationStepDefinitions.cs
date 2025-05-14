@@ -109,7 +109,7 @@ internal class SynchronizationStepDefinitions
     }
 
     [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent {RegexFor.SINGLE_THING} of type FileOwnershipIsLockedEvent which contains the address of {RegexFor.SINGLE_THING}")]
-    public async Task ThenIReceivesAnExternalEventOfTypeFileBlockedForOwnershipClaims(string notifiedIdentityName, string externalEventName, string fileName)
+    public async Task ThenIReceivesAnExternalEventOfTypeFileOwnershipIsLocked(string notifiedIdentityName, string externalEventName, string fileName)
     {
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
         var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);

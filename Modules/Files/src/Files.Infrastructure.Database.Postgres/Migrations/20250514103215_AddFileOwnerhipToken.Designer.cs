@@ -3,6 +3,7 @@ using System;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(FilesDbContext))]
-    partial class FilesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514103215_AddFileOwnerhipToken")]
+    partial class AddFileOwnerhipToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

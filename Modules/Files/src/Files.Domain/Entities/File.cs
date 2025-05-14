@@ -89,7 +89,7 @@ public class File : Entity
     public byte[] EncryptedProperties { get; set; }
 
     public FileOwnershipToken OwnershipToken { get; set; }
-    public bool BlockOwnershipClaims { get; set; } = false;
+    public bool FileOwnershipIsLocked { get; set; } = false;
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
@@ -116,17 +116,17 @@ public class File : Entity
     public string RegenerateOwnershipToken()
     {
         OwnershipToken = FileOwnershipToken.New();
-        BlockOwnershipClaims = false;
+        FileOwnershipIsLocked = false;
         return OwnershipToken.Value;
     }
 
     public string ClaimOwnership(string ownershipToken, IdentityAddress newOwnerAddress)
     {
-        if (BlockOwnershipClaims) throw new DomainActionForbiddenException();
+        if (FileOwnershipIsLocked) throw new DomainActionForbiddenException();
 
         if (OwnershipToken.Value != ownershipToken)
         {
-            BlockOwnershipClaims = true;
+            FileOwnershipIsLocked = true;
             RaiseDomainEvent(new FileOwnershipIsLockedEvent(Id.Value, Owner.Value));
             throw new DomainException(new DomainError("error.module.files.invalidFileOwnershipToken", "The file ownership token is invalid."));
         }

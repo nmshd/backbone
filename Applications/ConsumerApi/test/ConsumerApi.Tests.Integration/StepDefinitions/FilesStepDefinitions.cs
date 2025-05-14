@@ -176,12 +176,12 @@ internal class FilesStepDefinitions
         identity.IdentityData!.Address.Should().Be(_filesContext.Files[fileName].Owner);
     }
 
-    [Then($"the file {RegexFor.SINGLE_THING} is blocked for OwnershipClaims is (true|false)")]
+    [Then($"it is (true|false), that the file {RegexFor.SINGLE_THING} has a locked ownership")]
     public void ThenTheFileFIsBlockedForOwnershipClaimsIsTrue(string fileName, string expected)
     {
         var file = _filesContext.Files[fileName] ?? null;
         file.Should().NotBeNull();
-        file!.BlockOwnershipClaims.Should().Be(expected == "true");
+        file!.FileOwnershipIsLocked.Should().Be(expected == "true");
     }
 
     #endregion

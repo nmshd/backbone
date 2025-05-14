@@ -19,7 +19,7 @@ public class FileMetadata
     public required string Owner { get; set; }
     public required byte[] OwnerSignature { get; set; }
 
-    public required bool BlockOwnershipClaims { get; set; }
+    public required bool FileOwnershipIsLocked { get; set; }
 
     public required long CipherSize { get; set; }
     public required byte[] CipherHash { get; set; }

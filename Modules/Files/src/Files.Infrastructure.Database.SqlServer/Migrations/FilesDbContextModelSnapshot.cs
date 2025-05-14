@@ -18,6 +18,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Files")
+                .HasAnnotation("DbProvider", "SqlServer")
                 .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -30,9 +31,6 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
-
-                    b.Property<bool>("BlockOwnershipClaims")
-                        .HasColumnType("bit");
 
                     b.Property<byte[]>("CipherHash")
                         .IsRequired()
@@ -79,6 +77,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("FileOwnershipIsLocked")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");

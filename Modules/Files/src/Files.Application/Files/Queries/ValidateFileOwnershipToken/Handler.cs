@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<ValidateFileOwnershipTokenQuery, bool>
 
         if (_activeIdentity != file.Owner) throw new ActionForbiddenException();
 
-        if (file.BlockOwnershipClaims)
+        if (file.FileOwnershipIsLocked)
             return false;
 
         return request.OwnershipToken.Equals(file.OwnershipToken.Value);
