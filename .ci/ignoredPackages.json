@@ -1,1 +1,1 @@
-﻿["SpecFlow.NUnit", "MyCSharp.HttpUserAgentParser", "MyCSharp.HttpUserAgentParser.AspNetCore"]
+﻿["MyCSharp.HttpUserAgentParser", "MyCSharp.HttpUserAgentParser.AspNetCore"]

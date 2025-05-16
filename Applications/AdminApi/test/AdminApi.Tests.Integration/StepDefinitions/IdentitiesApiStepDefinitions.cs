@@ -42,31 +42,31 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
-    [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
+    [When("^a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint$")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
     {
         _whenResponse = _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
-    [When("a GET request is sent to the /Identities endpoint")]
+    [When("^a GET request is sent to the /Identities endpoint$")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
         _whenResponse = _identityOverviewsResponse = await _client.Identities.ListIdentities();
     }
 
-    [When("a GET request is sent to the /Identities/{i.address}/DeletionProcesses/AuditLogs endpoint")]
+    [When("^a GET request is sent to the /Identities/{i.address}/DeletionProcesses/AuditLogs endpoint$")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesDeletionProcessesAuditLogsEndpoint()
     {
         _whenResponse = _identityDeletionProcessAuditLogsResponse = await _client.Identities.ListIdentityDeletionProcessAuditLogs(_existingIdentity);
     }
 
-    [When("a GET request is sent to the /Identities/{i.address} endpoint")]
+    [When("^a GET request is sent to the /Identities/{i.address} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpoint()
     {
         _whenResponse = _identityResponse = await _client.Identities.GetIdentity(_existingIdentity);
     }
 
-    [When("a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
+    [When("^a GET request is sent to the /Identities/{address} endpoint with an inexistent address$")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
         _whenResponse = _identityResponse = await _client.Identities.GetIdentity(CreateRandomIdentityAddress());

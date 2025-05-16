@@ -44,13 +44,13 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _givenAnnouncement = response.Result;
     }
 
-    [When(@"a GET request is sent to the /Announcements endpoint")]
+    [When("^a GET request is sent to the /Announcements endpoint$")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
         _whenResponse = _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint with a valid content")]
+    [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
@@ -69,7 +69,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint without an English translation")]
+    [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
     {
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest

@@ -30,7 +30,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [When("a GET request is sent to the /Tiers/{t.id} endpoint")]
+    [When("^a GET request is sent to the /Tiers/{t.id} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersIdEndpoint()
     {
         _tierDetailsResponse = await _client.Tiers.GetTier(_tierId);

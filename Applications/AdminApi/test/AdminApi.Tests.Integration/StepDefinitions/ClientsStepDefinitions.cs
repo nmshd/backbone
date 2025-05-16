@@ -82,38 +82,38 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _clientId = "some-non-existent-client-id";
     }
 
-    [When("a DELETE request is sent to the /Clients endpoint")]
+    [When("^a DELETE request is sent to the /Clients endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
         _whenResponse = _deleteResponse = await _client.Clients.DeleteClient(_clientId);
     }
 
-    [When("a GET request is sent to the /Clients endpoint")]
+    [When("^a GET request is sent to the /Clients endpoint$")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
         _whenResponse = _getClientsResponse = await _client.Clients.GetAllClients();
     }
 
-    [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
+    [When("^a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret$")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
         _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = _clientSecret });
     }
 
-    [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
+    [When("^a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret$")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithoutASecret()
     {
         _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = string.Empty });
     }
 
-    [When("a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
+    [When("^a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint$")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointForAnInexistentClient()
     {
         _whenResponse = _changeClientSecretResponse = await _client.Clients.ChangeClientSecret("inexistentClientId", new ChangeClientSecretRequest { NewSecret = "new-client-secret" });
     }
 
-    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
+    [When("^a PUT request is sent to the /Clients/{c.ClientId} endpoint$")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpoint()
     {
         _updatedTierId = await CreateTier();
@@ -126,7 +126,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
+    [When("^a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities$")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
         _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
@@ -136,7 +136,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
+    [When("^a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id$")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
         _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
@@ -146,7 +146,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
+    [When("^a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId$")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
         _whenResponse = _updateClientResponse = await _client.Clients.UpdateClient("inexistentClientId", new UpdateClientRequest
