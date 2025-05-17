@@ -37,6 +37,21 @@ public class FilesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Get<FileMetadata>($"api/{API_VERSION}/Files/{id}/metadata");
     }
 
+    public async Task<ApiResponse<string>> RegenerateFileOwnershipToken(string id)
+    {
+        return await _client.Patch<string>($"api/{API_VERSION}/Files/{id}/RegenerateOwnershipToken");
+    }
+
+    public async Task<ApiResponse<bool>> ValidateFileOwnershipToken(string fileId, ValidateFileOwnershipTokenRequest request)
+    {
+        return await _client.Post<bool>($"api/{API_VERSION}/Files/{fileId}/ValidateOwnershipToken", request);
+    }
+
+    public async Task<ApiResponse<string>> ClaimFileOwnership(string fileId, ClaimFileOwnershipRequest request)
+    {
+        return await _client.Patch<string>($"api/{API_VERSION}/Files/{fileId}/ClaimFileOwnership", request);
+    }
+
     public async Task<RawApiResponse> DownloadFile(string id)
     {
         return await _client

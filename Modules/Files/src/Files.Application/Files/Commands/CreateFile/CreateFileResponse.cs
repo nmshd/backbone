@@ -16,6 +16,8 @@ public class CreateFileResponse
         DeletedBy = file.DeletedBy?.Value;
         Owner = file.Owner;
         OwnerSignature = file.OwnerSignature;
+        OwnershipToken = file.OwnershipToken.Value;
+        FileOwnershipIsLocked = file.FileOwnershipIsLocked;
         CipherSize = file.CipherSize;
         CipherHash = file.CipherHash;
         ExpiresAt = file.ExpiresAt;
@@ -34,6 +36,9 @@ public class CreateFileResponse
 
     public string Owner { get; set; }
     public byte[] OwnerSignature { get; set; }
+
+    public string? OwnershipToken { get; set; }
+    public bool FileOwnershipIsLocked { get; set; }
 
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }
