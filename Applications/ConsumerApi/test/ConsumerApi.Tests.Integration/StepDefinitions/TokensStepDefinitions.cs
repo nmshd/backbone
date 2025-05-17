@@ -6,7 +6,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -97,14 +96,14 @@ internal class TokensStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint$")]
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
-    [When("an anonymous user sends a POST request to the /Tokens endpoint")]
+    [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });

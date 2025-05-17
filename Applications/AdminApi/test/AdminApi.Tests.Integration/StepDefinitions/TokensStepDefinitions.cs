@@ -30,13 +30,13 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
         _newIdentityAddress = createIdentityResponse.Result!.Address;
     }
 
-    [When(@"a GET request is sent to the /Tokens endpoint with the identity's address")]
+    [When("^a GET request is sent to the /Tokens endpoint with the identity's address$")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithTheIdentitysAddress()
     {
         _whenResponse = _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
     }
 
-    [When("a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint")]
+    [When("^a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint$")]
     public async Task WhenAPATCHRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
     {
         _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);

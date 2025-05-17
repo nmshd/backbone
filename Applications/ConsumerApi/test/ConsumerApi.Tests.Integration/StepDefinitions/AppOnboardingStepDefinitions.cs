@@ -32,7 +32,7 @@ internal class AppOnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /r/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
+    [When($"^a call is made to the /r/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"$")]
     public async Task WhenACallIsMadeToTheRResourceIdEndpointFor(string appId)
     {
         var requestUrl = $"r/tok12345?app={appId}";

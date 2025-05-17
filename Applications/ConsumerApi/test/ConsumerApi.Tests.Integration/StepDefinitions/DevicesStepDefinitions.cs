@@ -89,7 +89,7 @@ internal class DevicesStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING}")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING}$")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -103,7 +103,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING} as a backup Device")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING} as a backup Device$")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallengeAsABackupDevice(string identityName, string challengeName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -117,7 +117,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with the communication language '([a-z]{{2}})'")]
+    [When($"^{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with the communication language '([a-z]{{2}})'$")]
     public async Task WhenDeviceSendsAPutRequestToTheDevicesSelfEndpointWithTheCommunicationLanguage(string deviceName, string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;
@@ -127,7 +127,7 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with a non-existent language code")]
+    [When($"^{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with a non-existent language code$")]
     public async Task WhenDeviceSendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string deviceName)
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
@@ -146,7 +146,7 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await client.Devices.ChangePassword(request);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
+    [When($"^{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id$")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithTheDeviceId(string senderDeviceName, string deviceName)
     {
         var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
@@ -156,7 +156,7 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await client.Devices.DeleteDevice(deviceId);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with a non existent id")]
+    [When($"^{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with a non existent id$")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
         var client = _clientPool.GetForDeviceName(deviceName);
@@ -192,7 +192,7 @@ internal class DevicesStepDefinitions
         response.Result!.Where(d => d.Id == deviceId).Should().NotBeEmpty();
     }
 
-    [Then($"the Backbone has persisted '([a-z]{{2}})' as the new communication language of {RegexFor.SINGLE_THING}.")]
+    [Then($"^the Backbone has persisted '([a-z]{{2}})' as the new communication language of {RegexFor.SINGLE_THING}.$")]
     public async Task ThenTheBackboneHasPersistedAsTheNewCommunicationLanguageOfDevice(string communicationLanguage, string deviceName)
     {
         var client = _clientPool.GetForDeviceName(deviceName);

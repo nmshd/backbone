@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SolidToken.SpecFlow.DependencyInjection;
+using Reqnroll.Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Support;
 

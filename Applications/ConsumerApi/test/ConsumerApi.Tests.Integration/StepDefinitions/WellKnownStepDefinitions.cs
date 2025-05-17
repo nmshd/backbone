@@ -15,7 +15,7 @@ internal class WellKnownStepDefinitions
 
     #region When
 
-    [When("the user sends a GET request to the /.well-known/assetlinks.json endpoint")]
+    [When("^the user sends a GET request to the /.well-known/assetlinks.json endpoint$")]
     public async Task WhenTheUserSendsAGETRequestToTheWellKnownAssetlinksJsonEndpoint()
     {
         var httpClient = _httpClientFactory.CreateClient();
@@ -23,7 +23,7 @@ internal class WellKnownStepDefinitions
         _response = await httpClient.GetStringAsync(".well-known/assetlinks.json");
     }
 
-    [When("the user sends a GET request to the /.well-known/apple-app-site-association endpoint")]
+    [When("^the user sends a GET request to the /.well-known/apple-app-site-association endpoint$")]
     public async Task WhenTheUserSendsAGETRequestToTheWellKnownAppleAppSiteAssociationEndpoint()
     {
         var httpClient = _httpClientFactory.CreateClient();

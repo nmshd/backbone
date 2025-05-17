@@ -43,7 +43,7 @@ internal class SynchronizationStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /SyncRuns/{RegexFor.SINGLE_THING}.id/ExternalEvents endpoint")]
+    [When($"^{RegexFor.SINGLE_THING} sends a GET request to the /SyncRuns/{RegexFor.SINGLE_THING}.id/ExternalEvents endpoint$")]
     public async Task WhenISendsAGETRequestToTheSyncRunsSrIdExternalEventsEndpoint(string identityName, string syncRunName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

@@ -55,7 +55,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _clientId = response.Result!.ClientId;
     }
 
-    [When("a GET request is sent to the /Clients/{c.clientId} endpoint")]
+    [When("^a GET request is sent to the /Clients/{c.clientId} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheClientsIdEndpoint()
     {
         _response = await _client.Clients.GetClient(_clientId);

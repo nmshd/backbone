@@ -55,7 +55,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         Thread.Sleep(2000);
     }
 
-    [When("a POST request is sent to the /Tiers/{t.id}/Quotas endpoint")]
+    [When("^a POST request is sent to the /Tiers/{t.id}/Quotas endpoint$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpoint()
     {
         _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
@@ -66,7 +66,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a POST request is sent to the /Tiers/{t.id}/Quotas endpoint with an invalid metric key")]
+    [When("^a POST request is sent to the /Tiers/{t.id}/Quotas endpoint with an invalid metric key$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointWithAnInvalidMetricKey()
     {
         _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
@@ -77,7 +77,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id")]
+    [When("^a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
     {
         _whenResponse = _createTierQuotaResponse = await _client.Tiers.AddTierQuota("inexistentTierId", new CreateQuotaForTierRequest
@@ -88,19 +88,19 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint")]
+    [When("^a DELETE request is sent to the /Tiers/{t.id}/Quotas/{q.id} endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpoint()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, _tierQuotaDefinitionId);
     }
 
-    [When("a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id")]
+    [When("^a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, "inexistentQuotaId");
     }
 
-    [When("a DELETE request is sent to the /Tiers/{nonExistentTier}/Quotas/{q.id}")]
+    [When("^a DELETE request is sent to the /Tiers/{nonExistentTier}/Quotas/{q.id}$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointWithANonExistentTierId()
     {
         _whenResponse = _deleteResponse = await _client.Tiers.DeleteTierQuota("nonExistentTierId", _tierQuotaDefinitionId);
