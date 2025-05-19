@@ -1,0 +1,116 @@
+body {
+    background-color: #f4f6fc;
+    margin: 0;
+    padding: 0 16px;
+    font-family: 'Roboto Flex', sans-serif;
+}
+
+
+.info-box {
+    background-color: #efefef;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #333;
+}
+
+.info-text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+}
+
+.step-box {
+    background-color: #e6f0ff;
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.step-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    max-width: 70%;
+}
+
+.step-text {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+}
+
+.store-button,
+.app-icon {
+    max-width: 120px;
+    height: auto;
+    border-radius: 0.75rem;
+}
+
+.container {
+    max-width: 430px;
+    margin: 0 auto;
+}
+
+.logo img {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+
+.step-box {
+    background-color: #dcecff;
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    color: #222;
+    position: relative;
+}
+
+.store-button {
+    display: block;
+    width: 140px;
+    margin: 0.5rem auto 0;
+}
+
+.app-icon {
+    display: block;
+    width: 60px;
+    margin: 0.5rem auto 0;
+    border-radius: 20%;
+}
+
+.logo-box {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem
+}
+
+.step-box.horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem; /* Optional: spacing between text and image */
+}
+
+a.fill-div {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+.upper-spacer {
+    height: 3rem;
+}
+
+.app-store-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}

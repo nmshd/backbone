@@ -10,28 +10,80 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const link = document.getElementById('inAppLink');
-            link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+            let clickString = "location.href='" + window.location.toString().replace(/^(https)|(http)/, "@Model.AppId") + "';";
+            console.log(clickString);
+            link.setAttribute('onclick', clickString);
         });
     </script>
+    <link rel="stylesheet" href="~/Style/Style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400&display=swap"
+          rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<p>App already installed?</p>
-<p>Then please click the link below to open the app directly:</p>
-<br />
-<br />
-<a href="" id="inAppLink">Open @Model.AppDisplayName App</a><br />
-<p>App not yet installed?</p>
-<p>Then please click the link below to install the app:</p>
-<br />
-@foreach (var link in Model.Links)
-{
-    if (link.Link != null)
-    {
-        <p>@link.StoreName: <a href="@link.Link" target="_blank">@link.Link</a></p>
-    }
-    else
-    {
-        <p>@link.StoreName: @link.NoLinkText</p>
-    }
-}
+<div class="upper-spacer"></div>
+<div class="container">
+    <div class="logo-box">
+        <div class="logo">
+            <img
+                src="data:image/svg+xml;base64,@Model.BannerSvgBase64Encoded"
+                alt="@Model.AppDisplayName Logo" />
+        </div>
+    </div>
+
+    <div class="info-box">
+        <p class="info-text">
+            Sie haben einen QR-Code der @Model.AppDisplayName-Plattform gescannt.
+            Um fortfahren zu können laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
+        </p>
+    </div>
+
+    <div class="step-box" id="app-install-step">
+        <div class="step-row">
+            <p class="step-text">1.</p>
+            <p class="step-description">Laden Sie die @Model.AppDisplayName-App aus DEM GOOGLE PLAY STORE.</p>
+        </div>
+        <div
+            class="app-store-buttons @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "multi-button" : "")">
+            @foreach (var appStore in Model.Links)
+            {
+                if (string.IsNullOrEmpty(appStore.Link))
+                {
+                    <p>@appStore.NoLinkText</p>
+                }
+                else
+                {
+                    if (@appStore.Link.Contains("play.google.com"))
+                    {
+                        <a href="@appStore.Link" target="_blank">
+                            <img src="data:image/svg+xml;base64,@Model.GooglePlaySvgBase64Encoded"
+                                 alt="Mein Bildungsraum Logo"
+                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='#efefef';" />
+                        </a>
+                    }
+                    else if (@appStore.Link.Contains("apps.apple.com"))
+                    {
+                        <a href="@appStore.Link" target="_blank">
+                            <img src="data:image/svg+xml;base64,@Model.AppleAppStoreSvgBase64Encoded"
+                                 alt="Mein Bildungsraum Logo"
+                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='#efefef';" />
+                        </a>
+                    }
+                }
+            }
+
+
+        </div>
+    </div>
+
+    <div class="step-box" id="inAppLink" onclick="" style="cursor: pointer;">
+        <div class="step-content">
+            <p class="step-text">2.</p>
+            <p class="step-text">Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
+        </div>
+        <img
+            src="https://play-lh.googleusercontent.com/odMq3flTg2f_Pz0wJ8ESty0BhMTtOJo4bmfnCiA1PyYGjs0j6-0H-uaa26KY6bWcj5uu=w240-h480"
+            alt="App starten" class="app-icon" />
+    </div>
+</div>
 </body>
