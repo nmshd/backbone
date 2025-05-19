@@ -5,27 +5,27 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershi
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipIsLocked;
+namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipLocked;
 
-public class FileOwnershipIsLockedEventHandler : IDomainEventHandler<FileOwnershipIsLockedEvent>
+public class FileOwnershipLockedEventHandler : IDomainEventHandler<FileOwnershipLockedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly ILogger<FileOwnershipIsLockedEventHandler> _logger;
+    private readonly ILogger<FileOwnershipLockedEventHandler> _logger;
 
-    public FileOwnershipIsLockedEventHandler(ILogger<FileOwnershipIsLockedEventHandler> logger, ISynchronizationDbContext dbContext)
+    public FileOwnershipLockedEventHandler(ILogger<FileOwnershipLockedEventHandler> logger, ISynchronizationDbContext dbContext)
     {
         _logger = logger;
         _dbContext = dbContext;
     }
 
 
-    public async Task Handle(FileOwnershipIsLockedEvent @event)
+    public async Task Handle(FileOwnershipLockedDomainEvent domainEvent)
     {
         try
         {
-            var payload = new FileOwnershipIsLockedExternalEvent.EventPayload { FileAddress = @event.FileAddress };
+            var payload = new FileOwnershipLockedExternalEvent.EventPayload { FileId = domainEvent.FileId };
 
-            var externalEvent = new FileOwnershipIsLockedExternalEvent(IdentityAddress.Parse(@event.OwnerAddress), payload);
+            var externalEvent = new FileOwnershipLockedExternalEvent(IdentityAddress.Parse(domainEvent.OwnerAddress), payload);
 
             await _dbContext.CreateExternalEvent(externalEvent);
         }

@@ -97,5 +97,5 @@ public enum ExternalEventType
 
     RelationshipTemplateAllocationsExhausted = 50,
 
-    FileOwnershipIsLockedEvent = 60
+    FileOwnershipLocked = 60
 }

@@ -43,7 +43,7 @@ public class ExternalEventDTO
 
             ExternalEventType.RelationshipTemplateAllocationsExhausted => "RelationshipTemplateAllocationsExhausted",
 
-            ExternalEventType.FileOwnershipIsLockedEvent => "FileOwnershipIsLocked",
+            ExternalEventType.FileOwnershipLocked => "FileOwnershipLocked",
 
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         };

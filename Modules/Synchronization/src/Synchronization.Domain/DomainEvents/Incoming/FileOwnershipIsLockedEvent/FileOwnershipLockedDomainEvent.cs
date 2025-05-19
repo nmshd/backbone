@@ -2,14 +2,14 @@ using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershipIsLockedEvent;
 
-public class FileOwnershipIsLockedEvent : DomainEvent
+public class FileOwnershipLockedDomainEvent : DomainEvent
 {
-    public string FileAddress { get; set; }
+    public string FileId { get; set; }
     public string OwnerAddress { get; set; }
 
-    public FileOwnershipIsLockedEvent(string fileAddress, string ownerAddress)
+    public FileOwnershipLockedDomainEvent(string fileId, string ownerAddress)
     {
-        FileAddress = fileAddress;
+        FileId = fileId;
         OwnerAddress = ownerAddress;
     }
 }

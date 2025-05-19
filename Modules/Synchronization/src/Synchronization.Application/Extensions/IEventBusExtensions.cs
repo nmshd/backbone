@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipIsLocked;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipLocked;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
@@ -62,7 +62,7 @@ public static class IEventBusExtensions
             eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>(),
             eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>(),
             eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>(),
-            eventBus.Subscribe<FileOwnershipIsLockedEvent, FileOwnershipIsLockedEventHandler>()
+            eventBus.Subscribe<FileOwnershipLockedDomainEvent, FileOwnershipLockedEventHandler>()
         });
     }
 
