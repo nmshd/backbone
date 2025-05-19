@@ -37,19 +37,19 @@ public class FilesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Get<FileMetadata>($"api/{API_VERSION}/Files/{id}/metadata");
     }
 
-    public async Task<ApiResponse<string>> RegenerateFileOwnershipToken(string id)
+    public async Task<ApiResponse<RegenerateFileOwnershipResponse>> RegenerateFileOwnershipToken(string id)
     {
-        return await _client.Patch<string>($"api/{API_VERSION}/Files/{id}/RegenerateOwnershipToken");
+        return await _client.Patch<RegenerateFileOwnershipResponse>($"api/{API_VERSION}/Files/{id}/RegenerateOwnershipToken");
     }
 
-    public async Task<ApiResponse<bool>> ValidateFileOwnershipToken(string fileId, ValidateFileOwnershipTokenRequest request)
+    public async Task<ApiResponse<ValidateFileOwnershipTokenResponse>> ValidateFileOwnershipToken(string fileId, ValidateFileOwnershipTokenRequest request)
     {
-        return await _client.Post<bool>($"api/{API_VERSION}/Files/{fileId}/ValidateOwnershipToken", request);
+        return await _client.Post<ValidateFileOwnershipTokenResponse>($"api/{API_VERSION}/Files/{fileId}/ValidateOwnershipToken", request);
     }
 
-    public async Task<ApiResponse<string>> ClaimFileOwnership(string fileId, ClaimFileOwnershipRequest request)
+    public async Task<ApiResponse<ClaimFileOwnershipResponse>> ClaimFileOwnership(string fileId, ClaimFileOwnershipRequest request)
     {
-        return await _client.Patch<string>($"api/{API_VERSION}/Files/{fileId}/ClaimFileOwnership", request);
+        return await _client.Patch<ClaimFileOwnershipResponse>($"api/{API_VERSION}/Files/{fileId}/ClaimFileOwnership", request);
     }
 
     public async Task<RawApiResponse> DownloadFile(string id)
