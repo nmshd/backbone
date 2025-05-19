@@ -85,36 +85,42 @@ public class FilesController : ApiControllerBase
     }
 
     [HttpPatch("{fileId}/RegenerateOwnershipToken")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RegenerateFileOwnershipTokenResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RegenerateFileOwnershipToken(string fileId, CancellationToken cancellationToken)
     {
-        var regenerationResult = await _mediator.Send(new RegenerateFileOwnershipTokenCommand { FileAddress = fileId }, cancellationToken);
+        var regenerationResult = await _mediator.Send(new RegenerateFileOwnershipTokenCommand { FileId = fileId }, cancellationToken);
         return Ok(regenerationResult);
     }
 
 
     [HttpPatch("{fileId}/ClaimFileOwnership")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileOwnershipTokenDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClaimFileOwnershipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ClaimFileOwnership(string fileId, [FromBody] FileOwnershipTokenDTO ownershipToken, CancellationToken cancellationToken)
+    public async Task<IActionResult> ClaimFileOwnership(string fileId, [FromBody] ClaimFileDTO claimRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ClaimFileOwnershipCommand(ownershipToken, fileId), cancellationToken);
-        return Ok(response.NewOwnershipToken);
+        var response = await _mediator.Send(
+            new ClaimFileOwnershipCommand(fileId, claimRequest.FileOwnershipToken)
+            {
+                FileId = fileId,
+                OwnershipToken = claimRequest.FileOwnershipToken
+            },
+            cancellationToken);
+        return Ok(response);
     }
 
     [HttpPost("{fileId}/ValidateOwnershipToken")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<bool>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ValidateFileOwnershipTokenResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] FileOwnershipTokenDTO ownershipToken, CancellationToken cancellationToken)
+    public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] ValidateFileTokenDTO validateRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(ownershipToken, fileId), cancellationToken);
+        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(validateRequest.FileOwnershipToken, fileId), cancellationToken);
         return Ok(response);
     }
 
