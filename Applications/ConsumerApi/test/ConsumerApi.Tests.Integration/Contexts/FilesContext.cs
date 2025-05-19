@@ -5,4 +5,5 @@ namespace Backbone.ConsumerApi.Tests.Integration.Contexts;
 public class FilesContext
 {
     public readonly Dictionary<string, FileMetadata> Files = [];
+    public readonly Dictionary<string, string> FileNameToOwnershipToken = [];
 }

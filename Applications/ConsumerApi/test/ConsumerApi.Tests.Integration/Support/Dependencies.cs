@@ -30,7 +30,6 @@ public static class Dependencies
 
         services.AddScoped<ChallengesContext>();
         services.AddScoped<FilesContext>();
-        services.AddScoped<OwnershipTokensContext>();
         services.AddScoped<IdentitiesContext>();
         services.AddScoped<MessagesContext>();
         services.AddScoped<RelationshipsContext>();
