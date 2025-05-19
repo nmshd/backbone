@@ -8,6 +8,6 @@ public class Validator : AbstractValidator<RegenerateFileOwnershipTokenCommand>
 {
     public Validator()
     {
-        RuleFor(x => x.FileAddress).ValidId<RegenerateFileOwnershipTokenCommand, FileId>();
+        RuleFor(x => x.FileId).ValidId<RegenerateFileOwnershipTokenCommand, FileId>();
     }
 }

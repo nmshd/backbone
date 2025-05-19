@@ -1,11 +1,13 @@
+using File = Backbone.Modules.Files.Domain.Entities.File;
+
 namespace Backbone.Modules.Files.Application.Files.Commands.ClaimFileOwnership;
 
 public class ClaimFileOwnershipResponse
 {
-    public string NewOwnershipToken { get; set; }
-
-    public ClaimFileOwnershipResponse(string newOwnershipToken)
+    public ClaimFileOwnershipResponse(File file)
     {
-        NewOwnershipToken = newOwnershipToken;
+        NewOwnershipToken = file.OwnershipToken.Value;
     }
+
+    public string NewOwnershipToken { get; init; }
 }

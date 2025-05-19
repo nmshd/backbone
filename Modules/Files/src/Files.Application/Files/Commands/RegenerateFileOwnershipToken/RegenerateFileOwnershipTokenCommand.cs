@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.RegenerateFileOwnershipToken;
 
-public class RegenerateFileOwnershipTokenCommand : IRequest<string>
+public class RegenerateFileOwnershipTokenCommand : IRequest<RegenerateFileOwnershipTokenResponse>
 {
-    public required string FileAddress { get; init; }
+    public required string FileId { get; init; }
 }
