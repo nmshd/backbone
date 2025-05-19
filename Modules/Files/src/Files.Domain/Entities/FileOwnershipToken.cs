@@ -7,7 +7,7 @@ namespace Backbone.Modules.Files.Domain.Entities;
 [TypeConverter(typeof(FileOwnershipToken))]
 public record FileOwnershipToken(string Value)
 {
-    public static readonly int DEFAULT_MAX_LENGTH = 20;
+    public static readonly int MAX_LENGTH = 20;
 
     protected static readonly char[] ALLOWED_CHARACTERS =
     [
@@ -101,7 +101,7 @@ public record FileOwnershipToken(string Value)
 
     public static FileOwnershipToken New()
     {
-        var stringValue = StringUtils.Generate(ALLOWED_CHARACTERS, DEFAULT_MAX_LENGTH);
+        var stringValue = StringUtils.Generate(ALLOWED_CHARACTERS, MAX_LENGTH);
         return new FileOwnershipToken(stringValue);
     }
 
@@ -115,7 +115,7 @@ public record FileOwnershipToken(string Value)
         if (string.IsNullOrEmpty(value))
             return false;
 
-        if (value.Length > DEFAULT_MAX_LENGTH)
+        if (value.Length > MAX_LENGTH)
             return false;
 
         return value.All(c => ALLOWED_CHARACTERS.Contains(c));

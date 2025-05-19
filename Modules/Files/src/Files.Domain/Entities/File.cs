@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
@@ -38,7 +37,7 @@ public class File : Entity
 
         OwnerSignature = ownerSignature;
 
-        OwnershipToken = FileOwnershipToken.New();
+        OwnershipToken = RegenerateOwnershipToken();
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
@@ -88,8 +87,10 @@ public class File : Entity
 
     public byte[] EncryptedProperties { get; set; }
 
-    public FileOwnershipToken OwnershipToken { get; set; }
-    public bool FileOwnershipIsLocked { get; set; } = false;
+    public FileOwnershipToken OwnershipToken { get; private set; }
+    public bool OwnershipIsLocked { get; private set; }
+
+    public DateTime? LastOwnershipClaimAt { get; private set; }
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
@@ -113,25 +114,44 @@ public class File : Entity
         return i => i.CreatedBy == identityAddress.ToString();
     }
 
-    public string RegenerateOwnershipToken()
+    public FileOwnershipToken RegenerateOwnershipToken()
     {
         OwnershipToken = FileOwnershipToken.New();
-        FileOwnershipIsLocked = false;
-        return OwnershipToken.Value;
+        OwnershipIsLocked = false;
+        return OwnershipToken;
     }
 
-    public string ClaimOwnership(string ownershipToken, IdentityAddress newOwnerAddress)
+    public ClaimFileOwnershipResult ClaimOwnership(FileOwnershipToken ownershipToken, IdentityAddress newOwnerAddress)
     {
-        if (FileOwnershipIsLocked) throw new DomainActionForbiddenException();
+        if (OwnershipIsLocked)
+            return ClaimFileOwnershipResult.Locked;
 
-        if (OwnershipToken.Value != ownershipToken)
+
+        if (OwnershipToken != ownershipToken)
         {
-            FileOwnershipIsLocked = true;
-            RaiseDomainEvent(new FileOwnershipIsLockedEvent(Id.Value, Owner.Value));
-            throw new DomainException(new DomainError("error.module.files.invalidFileOwnershipToken", "The file ownership token is invalid."));
+            OwnershipIsLocked = true;
+            RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+            return ClaimFileOwnershipResult.WrongToken;
         }
 
+        LastOwnershipClaimAt = SystemTime.UtcNow;
         Owner = IdentityAddress.Parse(newOwnerAddress);
-        return RegenerateOwnershipToken();
+        OwnershipToken = RegenerateOwnershipToken();
+        return ClaimFileOwnershipResult.Ok;
+    }
+
+    public bool ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken ownershipToken)
+    {
+        if (OwnershipIsLocked)
+            return false;
+
+        return OwnershipToken == ownershipToken;
+    }
+
+    public enum ClaimFileOwnershipResult
+    {
+        Ok,
+        WrongToken,
+        Locked
     }
 }

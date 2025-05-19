@@ -18,7 +18,7 @@ public class FileMetadataDTO
         DeletedByDevice = file.DeletedByDevice?.Value;
         Owner = file.Owner;
         OwnerSignature = file.OwnerSignature;
-        FileOwnershipIsLocked = file.FileOwnershipIsLocked;
+        OwnershipIsLocked = file.OwnershipIsLocked;
         CipherSize = file.CipherSize;
         CipherHash = file.CipherHash;
         ExpiresAt = file.ExpiresAt;
@@ -42,7 +42,7 @@ public class FileMetadataDTO
     public string Owner { get; set; }
     public byte[] OwnerSignature { get; set; }
 
-    public bool FileOwnershipIsLocked { get; set; }
+    public bool OwnershipIsLocked { get; set; }
 
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }

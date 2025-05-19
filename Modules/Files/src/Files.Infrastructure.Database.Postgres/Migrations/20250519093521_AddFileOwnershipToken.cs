@@ -1,20 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class AddFileOwnerhipToken : Migration
+    public partial class AddFileOwnershipToken : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "FileOwnershipIsLocked",
+            migrationBuilder.AddColumn<DateTime>(
+                name: "LastOwnershipClaimAt",
                 schema: "Files",
                 table: "FileMetadata",
-                type: "bit",
+                type: "timestamp with time zone",
+                nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "OwnershipIsLocked",
+                schema: "Files",
+                table: "FileMetadata",
+                type: "boolean",
                 nullable: false,
                 defaultValue: false);
 
@@ -22,7 +30,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                 name: "OwnershipToken",
                 schema: "Files",
                 table: "FileMetadata",
-                type: "char(20)",
+                type: "character(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
@@ -34,7 +42,12 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FileOwnershipIsLocked",
+                name: "LastOwnershipClaimAt",
+                schema: "Files",
+                table: "FileMetadata");
+
+            migrationBuilder.DropColumn(
+                name: "OwnershipIsLocked",
                 schema: "Files",
                 table: "FileMetadata");
 

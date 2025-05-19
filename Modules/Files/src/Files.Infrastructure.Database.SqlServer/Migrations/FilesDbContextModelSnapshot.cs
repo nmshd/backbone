@@ -19,7 +19,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
             modelBuilder
                 .HasDefaultSchema("Files")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -78,8 +78,8 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("FileOwnershipIsLocked")
-                        .HasColumnType("bit");
+                    b.Property<DateTime?>("LastOwnershipClaimAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -108,6 +108,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("OwnershipIsLocked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OwnershipToken")
                         .IsRequired()

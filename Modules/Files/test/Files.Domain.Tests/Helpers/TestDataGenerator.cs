@@ -5,9 +5,9 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Domain.Tests.Helpers;
 
-public class FileCreationHelper
+public static class TestDataGenerator
 {
-    public static File CreateFile(IdentityAddress identityAddress)
+    public static File CreateFile(IdentityAddress owner)
     {
         var deviceId = CreateRandomDeviceId();
         var cipherHash = UrlBase64.Decode("AAAA");
@@ -15,6 +15,6 @@ public class FileCreationHelper
         var encryptedProperties = cipherHash;
         var content = "Hello World!".GetBytes();
 
-        return new File(identityAddress, deviceId, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
+        return new File(owner, deviceId, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
     }
 }

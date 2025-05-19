@@ -29,7 +29,7 @@ public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
         base.ConfigureConventions(configurationBuilder);
 
         configurationBuilder.Properties<FileId>().AreUnicode(false).AreFixedLength().HaveMaxLength(FileId.MAX_LENGTH).HaveConversion<FileIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<FileOwnershipToken>().AreUnicode(false).AreFixedLength().HaveMaxLength(FileOwnershipToken.DEFAULT_MAX_LENGTH)
+        configurationBuilder.Properties<FileOwnershipToken>().AreUnicode(false).AreFixedLength().HaveMaxLength(FileOwnershipToken.MAX_LENGTH)
             .HaveConversion<FileOwnershipTokenEntityFrameworkValueConverter>();
     }
 
