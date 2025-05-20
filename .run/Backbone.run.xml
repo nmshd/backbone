@@ -10,7 +10,7 @@
         <option name="disableDebugging" value="true" />
         <option name="executable">
           <ExecutableSnapshot>
-            <option name="id" value="runConfig:Docker.docker-compose: Compose Deployment" />
+              <option name="id" value="runConfig:Docker.docker-compose (with Postgres)" />
           </ExecutableSnapshot>
         </option>
       </ExecutableRowSnapshot>
@@ -53,12 +53,12 @@
       <ExecutableRowSnapshot>
         <option name="condition">
           <ConditionSnapshot>
-              <option name="type" value="immediately"/>
+              <option name="type" value="immediately" />
           </ConditionSnapshot>
         </option>
         <option name="executable">
           <ExecutableSnapshot>
-              <option name="id" value="runConfig:.NET Launch Settings Profile.SSE Server"/>
+              <option name="id" value="runConfig:.NET Launch Settings Profile.SSE Server" />
           </ExecutableSnapshot>
         </option>
       </ExecutableRowSnapshot>
