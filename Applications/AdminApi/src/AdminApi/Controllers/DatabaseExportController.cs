@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +48,7 @@ public class DatabaseExportController : ApiControllerBase
 
         await ExportDevices();
         await ExportRelationshipTemplates();
-        // await ExportRelationships();
+        await ExportRelationships();
         // await ExportFiles();
         // await ExportMessages();
         // await ExportDatawalletModifications();
@@ -95,7 +96,7 @@ public class DatabaseExportController : ApiControllerBase
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(devices, "devices.csv", d => { d.ClientName = _addressToClientDisplayName[d.IdentityAddress]; });
+        await StreamToCSV(devices, "devices.csv", d => { d.ClientName = GetClientName(d.IdentityAddress); });
     }
 
     public async Task ExportRelationshipTemplates()
@@ -114,7 +115,32 @@ public class DatabaseExportController : ApiControllerBase
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(templates, "relationshipTemplates.csv", t => t.CreatedByClientName = _addressToClientDisplayName[t.CreatedBy]);
+        await StreamToCSV(templates, "relationshipTemplates.csv", t => t.CreatedByClientName = GetClientName(t.CreatedBy));
+    }
+
+    public async Task ExportRelationships()
+    {
+        var relationships = _relationshipsDbContext
+            .Relationships
+            .Select(r => new RelationshipExport
+            {
+                RelationshipId = r.Id,
+                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.Value,
+                From = r.From,
+                To = r.To,
+                CreatedAt = r.CreatedAt,
+                Status = r.Status,
+                FromHasDecomposed = r.FromHasDecomposed,
+                ToHasDecomposed = r.ToHasDecomposed,
+                TemplateCreatedAt = r.RelationshipTemplate == null ? null : r.RelationshipTemplate.CreatedAt
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(relationships, "relationships.csv", r =>
+        {
+            r.FromClientName = GetClientName(r.From);
+            r.ToClientName = GetClientName(r.To);
+        });
     }
 
     private async Task ExportDeletionAuditLogItems()
@@ -147,16 +173,17 @@ public class DatabaseExportController : ApiControllerBase
         throw new NotImplementedException();
     }
 
-    private async Task ExportRelationships()
+    private string? GetClientName(string address)
     {
-        throw new NotImplementedException();
+        return _addressToClientDisplayName.TryGetValue(address, out var clientName) ? clientName : null;
     }
 
     private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename, Action<T> enricher) where T : notnull
     {
-        await using var outputFileStream = new StreamWriter(Path.Join(_pathToExportDirectory, filename), append: true);
+        await using var outputFileStream = new StreamWriter(Path.Join(_pathToExportDirectory, filename), append: false);
 
-        await outputFileStream.WriteLineAsync(string.Join(",", typeof(T).GetProperties().Select(p => p.Name)));
+        var header = string.Join(",", typeof(T).GetProperties().Select(p => p.Name));
+        await outputFileStream.WriteLineAsync(header);
 
         await foreach (var obj in objects)
         {
@@ -195,6 +222,21 @@ public class RelationshipTemplateExport
     public string? CreatedByClientName { get; set; }
     public required DateTime CreatedAt { get; set; }
     public required DateTime? AllocatedAt { get; set; }
+}
+
+public class RelationshipExport
+{
+    public required string RelationshipId { get; set; }
+    public required string? TemplateId { get; set; }
+    public required string From { get; set; }
+    public string? FromClientName { get; set; }
+    public required string To { get; set; }
+    public string? ToClientName { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required RelationshipStatus Status { get; set; }
+    public required bool FromHasDecomposed { get; set; }
+    public required bool ToHasDecomposed { get; set; }
+    public required DateTime? TemplateCreatedAt { get; set; }
 }
 
 public static class Extensions
