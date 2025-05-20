@@ -11,18 +11,18 @@ services:
     volumes:
       - azure-storage-emulator-volume:/data
   
-  #  ms-sql-server:
-  #    container_name: bkb-mssql_server
-  #    hostname: ms-sql-server
-  #    image: mcr.microsoft.com/mssql/server:2022-latest
-  #    environment:
-  #      - MSSQL_SA_PASSWORD=Passw0rd
-  #      - ACCEPT_EULA=Y
-  #      - MSSQL_PID=Express
-  #    volumes:
-  #      - mssql-server-volume:/var/opt/mssql
-  #    ports:
-  #      - 1433:1433
+  ms-sql-server:
+    container_name: bkb-mssql_server
+    hostname: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:3bbdb7bde2126135d845868dc524008b85599993d6f262b8d9c62e82c6ef1139
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    volumes:
+      - mssql-server-volume:/var/opt/mssql
+    ports:
+      - 1433:1433
 
   postgres:
     container_name: bkb-postgres
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:latest@sha256:f0153b02f284d067d724bae79e415fc39055a73f1bc23f7ee2f6c519623b64c3
+    image: datalust/seq:latest@sha256:81e4cd0cae31cf4bac52145f7c8fb5745580007cfa37adc30aaae752f5fb60eb
     container_name: seq
     ports:
       - "8085:80"
