@@ -9,6 +9,7 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Tooling;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +22,8 @@ public class ExportDatabaseCommand : AdminCliCommand
     private readonly FilesDbContext _filesDbContext;
     private readonly MessagesDbContext _messagesDbContext;
     private readonly SynchronizationDbContext _synchronizationDbContext;
-    private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "enmeshed", "Backbone", "export");
-    private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "enmeshed", "Backbone", "export.zip");
+    private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", "export");
+    private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", $"export-{SystemTime.UtcNow:yyyyMMdd_HHmmss}.zip");
     private Dictionary<string, string?> _addressToClientDisplayName = null!;
     private readonly TokensDbContext _tokensDbContext;
 
@@ -39,12 +40,12 @@ public class ExportDatabaseCommand : AdminCliCommand
 
         this.SetHandler(ExportDatabase);
 
-        DeleteExportDirectoryIfExists();
-        DeleteOldExportZipFileIfExists();
+        DeleteExportDirectory();
+        DeleteOldZipFiles();
         CreateExportDirectory();
     }
 
-    private void DeleteExportDirectoryIfExists()
+    private void DeleteExportDirectory()
     {
         if (Directory.Exists(_pathToExportDirectory))
         {
@@ -52,11 +53,17 @@ public class ExportDatabaseCommand : AdminCliCommand
         }
     }
 
-    private void DeleteOldExportZipFileIfExists()
+    private void DeleteOldZipFiles()
     {
-        if (File.Exists(_pathToZipFile))
+        var directory = Path.GetDirectoryName(_pathToZipFile)!;
+
+        if (!Directory.Exists(directory))
+            return;
+
+        var oldExportZipFiles = Directory.GetFiles(directory, "export-*.zip", SearchOption.TopDirectoryOnly);
+        foreach (var file in oldExportZipFiles)
         {
-            File.Delete(_pathToZipFile);
+            File.Delete(file);
         }
     }
 
@@ -302,13 +309,5 @@ public class ExportDatabaseCommand : AdminCliCommand
             File.Delete(_pathToZipFile);
 
         ZipFile.CreateFromDirectory(_pathToExportDirectory, _pathToZipFile);
-    }
-
-    private void DeleteExportDirectory()
-    {
-        if (Directory.Exists(_pathToExportDirectory))
-        {
-            Directory.Delete(_pathToExportDirectory, true);
-        }
     }
 }
