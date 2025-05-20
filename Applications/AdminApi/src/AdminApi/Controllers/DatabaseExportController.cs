@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using MediatR;
@@ -21,14 +22,16 @@ public class DatabaseExportController : ApiControllerBase
 {
     private readonly DevicesDbContext _devicesDbContext;
     private readonly RelationshipsDbContext _relationshipsDbContext;
+    private readonly FilesDbContext _filesDbContext;
     private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport");
     private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport.zip");
     private Dictionary<string, string?> _addressToClientDisplayName = null!;
 
-    public DatabaseExportController(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext) : base(mediator)
+    public DatabaseExportController(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext) : base(mediator)
     {
         _devicesDbContext = devicesDbContext;
         _relationshipsDbContext = relationshipsDbContext;
+        _filesDbContext = filesDbContext;
         CreateExportDirectoryIfNotExists();
     }
 
@@ -49,7 +52,7 @@ public class DatabaseExportController : ApiControllerBase
         await ExportDevices();
         await ExportRelationshipTemplates();
         await ExportRelationships();
-        // await ExportFiles();
+        await ExportFiles();
         // await ExportMessages();
         // await ExportDatawalletModifications();
         // await ExportTokens();
@@ -82,11 +85,11 @@ public class DatabaseExportController : ApiControllerBase
             .Devices
             .Select(d => new DeviceExport
             {
-                DeviceId = d.Id,
+                DeviceId = d.Id.Value,
                 LastLoginAt = d.User.LastLoginAt,
-                IdentityAddress = d.Identity.Address,
+                IdentityAddress = d.Identity.Address.Value,
                 CreatedAt = d.CreatedAt,
-                Tier = _devicesDbContext.Tiers.FirstOrDefault(t => t.Id == d.Identity.TierId)!.Name,
+                Tier = _devicesDbContext.Tiers.FirstOrDefault(t => t.Id == d.Identity.TierId)!.Name.Value,
                 IdentityStatus = d.Identity.Status,
                 IdentityDeletionGracePeriodEndsAt = d.Identity.DeletionGracePeriodEndsAt,
                 Platform = _devicesDbContext.PnsRegistrations.Any(r => r.DeviceId == d.Id)
@@ -105,8 +108,8 @@ public class DatabaseExportController : ApiControllerBase
             .RelationshipTemplates
             .Select(t => new RelationshipTemplateExport
             {
-                TemplateId = t.Id,
-                CreatedBy = t.CreatedBy,
+                TemplateId = t.Id.Value,
+                CreatedBy = t.CreatedBy.Value,
                 CreatedAt = t.CreatedAt,
                 AllocatedAt = t.Allocations.Any()
                     ? t.Allocations.First()
@@ -124,10 +127,10 @@ public class DatabaseExportController : ApiControllerBase
             .Relationships
             .Select(r => new RelationshipExport
             {
-                RelationshipId = r.Id,
+                RelationshipId = r.Id.Value,
                 TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.Value,
-                From = r.From,
-                To = r.To,
+                From = r.From.Value,
+                To = r.To.Value,
                 CreatedAt = r.CreatedAt,
                 Status = r.Status,
                 FromHasDecomposed = r.FromHasDecomposed,
@@ -143,32 +146,49 @@ public class DatabaseExportController : ApiControllerBase
         });
     }
 
-    private async Task ExportDeletionAuditLogItems()
+    public async Task ExportFiles()
+    {
+        var files = _filesDbContext
+            .FileMetadata
+            .Select(f => new FileExport
+            {
+                FileId = f.Id,
+                CreatedBy = f.CreatedBy.Value,
+                CreatedAt = f.CreatedAt,
+                Owner = f.Owner.Value,
+                CipherSize = f.CipherSize,
+                ExpiresAt = f.ExpiresAt,
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(files, "files.csv", f =>
+        {
+            f.CreatedByClientName = GetClientName(f.CreatedBy);
+            f.OwnerClientName = GetClientName(f.Owner);
+        });
+    }
+
+    public async Task ExportDeletionAuditLogItems()
     {
         throw new NotImplementedException();
     }
 
-    private async Task ExportSyncErrors()
+    public async Task ExportSyncErrors()
     {
         throw new NotImplementedException();
     }
 
-    private async Task ExportTokens()
+    public async Task ExportTokens()
     {
         throw new NotImplementedException();
     }
 
-    private async Task ExportDatawalletModifications()
+    public async Task ExportDatawalletModifications()
     {
         throw new NotImplementedException();
     }
 
-    private async Task ExportMessages()
-    {
-        throw new NotImplementedException();
-    }
-
-    private async Task ExportFiles()
+    public async Task ExportMessages()
     {
         throw new NotImplementedException();
     }
@@ -237,6 +257,18 @@ public class RelationshipExport
     public required bool FromHasDecomposed { get; set; }
     public required bool ToHasDecomposed { get; set; }
     public required DateTime? TemplateCreatedAt { get; set; }
+}
+
+public class FileExport
+{
+    public required string FileId { get; set; }
+    public required string CreatedBy { get; set; }
+    public string? CreatedByClientName { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required string Owner { get; set; }
+    public string? OwnerClientName { get; set; }
+    public required long CipherSize { get; set; }
+    public required DateTime ExpiresAt { get; set; }
 }
 
 public static class Extensions
