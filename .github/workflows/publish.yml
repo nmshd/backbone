@@ -244,7 +244,7 @@ jobs:
         run: npm install --prefix ./.ci
       - name: Install helm
         uses: azure/setup-helm@v4
-      - run: echo "$PASSWORD" | helm registry login -u $USER --password-stdin https://ghcr.io
+      - run: echo "$PASSWORD" | helm registry login -u $USER --password-stdin ghcr.io
         env:
           USER: ${{ github.actor }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
