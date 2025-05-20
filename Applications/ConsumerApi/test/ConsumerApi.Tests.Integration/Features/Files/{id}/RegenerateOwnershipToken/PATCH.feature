@@ -4,26 +4,26 @@ Feature: Patch /Files/{id}/RegenerateOwnershipToken
 Identity tries to regenerate the OwnershipToken of a file
 
     Scenario: The owner of a file tries to regenerate its ownership token
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
         And i2 tries to claim f with a wrong token
         When i1 sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 200 (OK)
         And the response contains the new OwnershipToken of f
-        And it is false, that the file f has a locked ownership
+        And the ownership of f is not locked
 
-    Scenario: An identity tries to regenerate the ownershipToken of a non-conforming FileId
+    Scenario: An identity tries to regenerate the ownershipToken of an invalid FileId
         Given Identity i
-        When i sends a PATCH request to the /Files/NonConforming.Id/RegenerateOwnershipToken endpoint
-        Then the response status code is 400 (Invalid Request)
+        When i tries to regenerate the OwnershipToken for an invalid FileId
+        Then the response status code is 400 (Bad Request)
 
     Scenario: An identity not owning the file tries to regenerate its ownership token
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
         When i2 sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 403 (Action Forbidden)
 
     Scenario: An identity tries to regenerate the ownershipToken of a non existing File
         Given Identity i
-        When i sends a PATCH request to the /Files/FILNonExistingXXXXXX.Id/RegenerateOwnershipToken endpoint
-        Then the response status code is 404 (Invalid Request)
+        When i tries to regenerate the OwnershipToken of a non-existing FileId
+        Then the response status code is 404 (Not Found)

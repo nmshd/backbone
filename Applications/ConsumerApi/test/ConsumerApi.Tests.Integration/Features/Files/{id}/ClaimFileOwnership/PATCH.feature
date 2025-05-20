@@ -4,47 +4,47 @@ Feature: Patch /Files/{id}/ClaimFileOwnership
 Identity tries to claim the ownership of a file
 
     Scenario: An identity tries to claim a file using the correct ownershiptoken
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token f.OwnershipToken
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with the files ownership token
         Then the response status code is 200 (OK)
-        And the response contains the new OwnershipToken of f
         And i2 is the new owner of f
+        And the response contains the new OwnershipToken of f
 
     Scenario: An identity tries to claim a file using the wrong ownershiptoken
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with an incorrect ownership token
         Then the response status code is 403 (Action Forbidden)
-        And it is true, that the file f has a locked ownership
-        Then i1 receives an ExternalEvent e of type FileOwnershipLockedEvent which contains the address of f
+        And the ownership of f is locked
+        And i1 receives an ExternalEvent of type FileOwnershipLockedEvent which contains the id of f
 
-    Scenario: An identity tries to claim a file with a non confomring fileId
-        Given Identities i1, i2
+    Scenario: An identity tries to claim a file with a non conforming fileId
+        Given Identities i1 and i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/NonConforming.Id/ClaimFileOwnership with token NonConforming.OwnershipToken
+        When i2 tries to claim a file with a invalid FileId
         Then the response status code is 400 (Bad Request)
 
-    Scenario: An identity tries to claim a file with malformed FileOwnershipToken
-        Given Identities i1, i2
+    Scenario: An identity tries to claim a file with an invalid FileOwnershipToken
+        Given Identities i1 and i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with a malformed token
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with an invalid ownership token
         Then the response status code is 400 (Bad Request)
 
     Scenario: An identity tries to claim a file using the correct ownershiptoken but the file is blocked
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
         And i2 tries to claim f with a wrong token
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token f.OwnershipToken
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with the files ownership token
         Then the response status code is 403 (Action Forbidden)
 
     Scenario: An identity tries to claim an exsting file with the token ownershiptoken
-        Given Identities i1, i2
+        Given Identities i1 and i2
         And File f created by i1
-        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with an incorrect ownership token
         Then the response status code is 403 (Action Forbidden)
 
-    Scenario: An identity tries to claim a file with a non existing FileId
+    Scenario: An identity tries to claim a file with a non-existing FileId
         Given Identity i
-        When i sends a PATCH request to the /Files/FILNonExistingXXXXXX.Id/ClaimFileOwnership with token FILNonExistingXXXXXX.OwnershipToken
+        When i tries to claim a non-existing file
         Then the response status code is 404 (Not Found)

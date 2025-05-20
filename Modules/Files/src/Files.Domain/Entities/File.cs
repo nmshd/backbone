@@ -133,7 +133,7 @@ public class File : Entity
         {
             OwnershipIsLocked = true;
             RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
-            return ClaimFileOwnershipResult.WrongToken;
+            return ClaimFileOwnershipResult.IncorrectToken;
         }
 
         LastOwnershipClaimAt = SystemTime.UtcNow;
@@ -156,7 +156,7 @@ public class File : Entity
     public enum ClaimFileOwnershipResult
     {
         Ok,
-        WrongToken,
+        IncorrectToken,
         Locked
     }
 }

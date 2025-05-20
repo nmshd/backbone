@@ -33,7 +33,7 @@ public class ClaimOwnershipTests
         var claimingIdentity = CreateRandomIdentityAddress();
         var result = file.ClaimOwnership(FileOwnershipToken.New(), claimingIdentity);
 
-        result.Should().Be(File.ClaimFileOwnershipResult.WrongToken);
+        result.Should().Be(File.ClaimFileOwnershipResult.IncorrectToken);
 
         file.LastOwnershipClaimAt.Should().BeNull();
         file.Owner.Should().NotBe(claimingIdentity);

@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
             case File.ClaimFileOwnershipResult.Ok:
                 await _filesRepository.Update(file, cancellationToken);
                 break;
-            case File.ClaimFileOwnershipResult.WrongToken:
+            case File.ClaimFileOwnershipResult.IncorrectToken:
                 await _filesRepository.Update(file, cancellationToken);
                 throw new ActionForbiddenException();
             case File.ClaimFileOwnershipResult.Locked:
