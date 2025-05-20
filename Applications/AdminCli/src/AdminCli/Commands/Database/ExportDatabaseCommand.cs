@@ -22,10 +22,13 @@ public class ExportDatabaseCommand : AdminCliCommand
     private readonly FilesDbContext _filesDbContext;
     private readonly MessagesDbContext _messagesDbContext;
     private readonly SynchronizationDbContext _synchronizationDbContext;
+    private readonly TokensDbContext _tokensDbContext;
+
     private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", "export");
     private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", $"export-{SystemTime.UtcNow:yyyyMMdd_HHmmss}.zip");
+
     private Dictionary<string, string?> _addressToClientDisplayName = null!;
-    private readonly TokensDbContext _tokensDbContext;
+
 
     public ExportDatabaseCommand(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext,
         MessagesDbContext messagesDbContext, SynchronizationDbContext synchronizationDbContext, TokensDbContext tokensDbContext)
