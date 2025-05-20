@@ -1,12 +1,17 @@
 ﻿using System.IO.Compression;
+using System.Net.Mime;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,15 +28,22 @@ public class DatabaseExportController : ApiControllerBase
     private readonly DevicesDbContext _devicesDbContext;
     private readonly RelationshipsDbContext _relationshipsDbContext;
     private readonly FilesDbContext _filesDbContext;
+    private readonly MessagesDbContext _messagesDbContext;
+    private readonly SynchronizationDbContext _synchronizationDbContext;
     private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport");
     private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport.zip");
     private Dictionary<string, string?> _addressToClientDisplayName = null!;
+    private readonly TokensDbContext _tokensDbContext;
 
-    public DatabaseExportController(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext) : base(mediator)
+    public DatabaseExportController(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext,
+        MessagesDbContext messagesDbContext, SynchronizationDbContext synchronizationDbContext, TokensDbContext tokensDbContext) : base(mediator)
     {
         _devicesDbContext = devicesDbContext;
         _relationshipsDbContext = relationshipsDbContext;
         _filesDbContext = filesDbContext;
+        _messagesDbContext = messagesDbContext;
+        _synchronizationDbContext = synchronizationDbContext;
+        _tokensDbContext = tokensDbContext;
         CreateExportDirectoryIfNotExists();
     }
 
@@ -53,17 +65,16 @@ public class DatabaseExportController : ApiControllerBase
         await ExportRelationshipTemplates();
         await ExportRelationships();
         await ExportFiles();
-        // await ExportMessages();
-        // await ExportDatawalletModifications();
-        // await ExportTokens();
-        // await ExportSyncErrors();
-        // await ExportDeletionAuditLogItems();
+        await ExportMessages();
+        await ExportDatawalletModifications();
+        await ExportTokens();
+        await ExportSyncErrors();
+        await ExportDeletionAuditLogItems();
 
         ZipExportDirectory();
 
         var fileStream = new FileStream(_pathToZipFile, FileMode.Open, FileAccess.Read);
-        var result = new FileStreamResult(fileStream, "application/zip");
-        return result;
+        return File(fileStream, MediaTypeNames.Application.Octet);
     }
 
     [HttpGet("{what}")]
@@ -100,6 +111,23 @@ public class DatabaseExportController : ApiControllerBase
             .ToAsyncEnumerable();
 
         await StreamToCSV(devices, "devices.csv", d => { d.ClientName = GetClientName(d.IdentityAddress); });
+    }
+
+    public async Task ExportDeletionAuditLogItems()
+    {
+        var deletionAuditLogItems = _devicesDbContext
+            .IdentityDeletionProcessAuditLogs
+            .Select(i => new DeletionAuditLogItemExport
+            {
+                OldStatus = i.OldStatus,
+                CreatedAt = i.CreatedAt,
+                NewStatus = i.NewStatus,
+                IdentityAddressHash = i.IdentityAddressHash,
+                MessageKey = i.MessageKey
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", _ => { });
     }
 
     public async Task ExportRelationshipTemplates()
@@ -168,29 +196,79 @@ public class DatabaseExportController : ApiControllerBase
         });
     }
 
-    public async Task ExportDeletionAuditLogItems()
+    public async Task ExportMessages()
     {
-        throw new NotImplementedException();
-    }
+        var messages = _messagesDbContext
+            .Messages
+            .Select(m => new MessageExport
+            {
+                MessageId = m.Id.Value,
+                CreatedBy = m.CreatedBy.Value,
+                RelationshipId = m.Recipients.First().RelationshipId,
+                Recipient = m.Recipients.First().Address.Value,
+                CreatedAt = m.CreatedAt,
+                ReceivedAt = m.Recipients.First().ReceivedAt,
+                CipherSize = m.Body.Length,
+            })
+            .ToAsyncEnumerable();
 
-    public async Task ExportSyncErrors()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task ExportTokens()
-    {
-        throw new NotImplementedException();
+        await StreamToCSV(messages, "messages.csv", m =>
+        {
+            m.CreatedByClientName = GetClientName(m.CreatedBy);
+            m.RecipientClientName = GetClientName(m.Recipient);
+        });
     }
 
     public async Task ExportDatawalletModifications()
     {
-        throw new NotImplementedException();
+        var modifications = _synchronizationDbContext
+            .DatawalletModifications
+            .Select(m => new DatawalletModificationExport
+            {
+                DatawalletModificationId = m.Id,
+                CreatedAt = m.CreatedAt,
+                CreatedBy = m.CreatedBy.Value,
+                ObjectIdentifier = m.ObjectIdentifier,
+                Collection = m.Collection,
+                Type = m.Type,
+                PayloadCategory = m.PayloadCategory,
+                PayloadSize = m.EncryptedPayload == null ? null : m.EncryptedPayload.Length
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(modifications, "datawalletModifications.csv", m => { m.CreatedByClientName = GetClientName(m.CreatedBy); });
     }
 
-    public async Task ExportMessages()
+    public async Task ExportSyncErrors()
     {
-        throw new NotImplementedException();
+        var syncErrors = _synchronizationDbContext
+            .SyncErrors
+            .Select(e => new SyncErrorExport
+            {
+                SyncItemOwner = e.ExternalEvent.Owner,
+                CreatedAt = e.SyncRun.FinalizedAt!.Value,
+                ErrorCode = e.ErrorCode
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(syncErrors, "syncErrors.csv", m => { m.SyncItemOwnerClientName = GetClientName(m.SyncItemOwner); });
+    }
+
+    public async Task ExportTokens()
+    {
+        var modifications = _tokensDbContext
+            .Tokens
+            .Select(t => new TokenExport
+            {
+                TokenId = t.Id,
+                CreatedAt = t.CreatedAt,
+                CreatedBy = t.CreatedBy.Value,
+                CipherSize = t.Content.Length,
+                ExpiresAt = t.ExpiresAt
+            })
+            .ToAsyncEnumerable();
+
+        await StreamToCSV(modifications, "tokens.csv", m => { m.CreatedByClientName = GetClientName(m.CreatedBy); });
     }
 
     private string? GetClientName(string address)
@@ -202,8 +280,8 @@ public class DatabaseExportController : ApiControllerBase
     {
         await using var outputFileStream = new StreamWriter(Path.Join(_pathToExportDirectory, filename), append: false);
 
-        var header = string.Join(",", typeof(T).GetProperties().Select(p => p.Name));
-        await outputFileStream.WriteLineAsync(header);
+        var headerLine = string.Join(",", typeof(T).GetProperties().Select(p => p.Name));
+        await outputFileStream.WriteLineAsync(headerLine);
 
         await foreach (var obj in objects)
         {
@@ -233,6 +311,15 @@ public class DeviceExport
 
     public string? ClientName { get; set; }
     public required PushNotificationPlatform? Platform { get; set; } = null!;
+}
+
+public class DeletionAuditLogItemExport
+{
+    public required DeletionProcessStatus? OldStatus { get; set; }
+    public required DeletionProcessStatus? NewStatus { get; set; }
+    public required byte[] IdentityAddressHash { get; set; }
+    public required MessageKey MessageKey { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }
 
 public class RelationshipTemplateExport
@@ -271,12 +358,64 @@ public class FileExport
     public required DateTime ExpiresAt { get; set; }
 }
 
+public class MessageExport
+{
+    public required string MessageId { get; set; }
+    public required string CreatedBy { get; set; }
+    public string? CreatedByClientName { get; set; }
+    public required string RelationshipId { get; set; }
+    public required string Recipient { get; set; }
+    public string? RecipientClientName { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required DateTime? ReceivedAt { get; set; }
+    public required long CipherSize { get; set; }
+}
+
+public class DatawalletModificationExport
+{
+    public required string DatawalletModificationId { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required string CreatedBy { get; set; }
+    public string? CreatedByClientName { get; set; }
+    public required string ObjectIdentifier { get; set; }
+    public required string Collection { get; set; }
+    public required DatawalletModificationType Type { get; set; }
+    public required string? PayloadCategory { get; set; }
+    public required long? PayloadSize { get; set; }
+}
+
+public class SyncErrorExport
+{
+    public required string SyncItemOwner { get; set; }
+    public string? SyncItemOwnerClientName { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required string ErrorCode { get; set; }
+}
+
+public class TokenExport
+{
+    public required string TokenId { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required string CreatedBy { get; set; }
+    public string? CreatedByClientName { get; set; }
+    public required long CipherSize { get; set; }
+    public required DateTime ExpiresAt { get; set; }
+}
+
 public static class Extensions
 {
     public static string ToCsv(this object obj)
     {
+        static string? ObjToString(object? obj)
+        {
+            if (obj?.GetType() == typeof(byte[]))
+                return Convert.ToBase64String((byte[])obj);
+
+            return obj?.ToString();
+        }
+
         var properties = obj.GetType().GetProperties();
-        var values = properties.Select(p => p.GetValue(obj)?.ToString() ?? string.Empty);
+        var values = properties.Select(p => ObjToString(p.GetValue(obj)) ?? string.Empty);
         return string.Join(",", values);
     }
 }
