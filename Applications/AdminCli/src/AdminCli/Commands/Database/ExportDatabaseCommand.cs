@@ -1,42 +1,34 @@
-﻿using System.IO.Compression;
-using System.Net.Mime;
-using Backbone.BuildingBlocks.API.Mvc;
-using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using System.CommandLine;
+using System.IO.Compression;
+using Backbone.AdminCli.Commands.BaseClasses;
+using Backbone.AdminCli.Commands.Database.Types;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+namespace Backbone.AdminCli.Commands.Database;
 
-namespace Backbone.AdminApi.Controllers;
-
-[Route("api/v1/[controller]")]
-[Authorize("ApiKey")]
-public class DatabaseExportController : ApiControllerBase
+public class ExportDatabaseCommand : AdminCliCommand
 {
     private readonly DevicesDbContext _devicesDbContext;
     private readonly RelationshipsDbContext _relationshipsDbContext;
     private readonly FilesDbContext _filesDbContext;
     private readonly MessagesDbContext _messagesDbContext;
     private readonly SynchronizationDbContext _synchronizationDbContext;
-    private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport");
-    private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "Backbone", "DatabaseExport.zip");
+    private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "enmeshed", "Backbone", "export");
+    private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "enmeshed", "Backbone", "export.zip");
     private Dictionary<string, string?> _addressToClientDisplayName = null!;
     private readonly TokensDbContext _tokensDbContext;
 
-    public DatabaseExportController(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext,
-        MessagesDbContext messagesDbContext, SynchronizationDbContext synchronizationDbContext, TokensDbContext tokensDbContext) : base(mediator)
+    public ExportDatabaseCommand(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext,
+        MessagesDbContext messagesDbContext, SynchronizationDbContext synchronizationDbContext, TokensDbContext tokensDbContext)
+        : base(mediator, "export", "Create a zip file with the most important database tables exported as csv.")
     {
         _devicesDbContext = devicesDbContext;
         _relationshipsDbContext = relationshipsDbContext;
@@ -44,10 +36,31 @@ public class DatabaseExportController : ApiControllerBase
         _messagesDbContext = messagesDbContext;
         _synchronizationDbContext = synchronizationDbContext;
         _tokensDbContext = tokensDbContext;
-        CreateExportDirectoryIfNotExists();
+
+        this.SetHandler(ExportDatabase);
+
+        DeleteExportDirectoryIfExists();
+        DeleteOldExportZipFileIfExists();
+        CreateExportDirectory();
     }
 
-    private void CreateExportDirectoryIfNotExists()
+    private void DeleteExportDirectoryIfExists()
+    {
+        if (Directory.Exists(_pathToExportDirectory))
+        {
+            Directory.Delete(_pathToExportDirectory, true);
+        }
+    }
+
+    private void DeleteOldExportZipFileIfExists()
+    {
+        if (File.Exists(_pathToZipFile))
+        {
+            File.Delete(_pathToZipFile);
+        }
+    }
+
+    private void CreateExportDirectory()
     {
         if (!Directory.Exists(_pathToExportDirectory))
         {
@@ -55,11 +68,12 @@ public class DatabaseExportController : ApiControllerBase
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> ExportDatabase()
+    private async Task ExportDatabase()
     {
-        _addressToClientDisplayName = await _devicesDbContext.Identities.ToDictionaryAsync(i => i.Address.ToString(),
-            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().First(c => c.ClientId == i.ClientId).DisplayName);
+        _addressToClientDisplayName = await _devicesDbContext.Identities.ToDictionaryAsync(
+            i => i.Address.ToString(),
+            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().First(c => c.ClientId == i.ClientId).DisplayName
+        );
 
         await ExportDevices();
         await ExportRelationshipTemplates();
@@ -73,24 +87,16 @@ public class DatabaseExportController : ApiControllerBase
 
         ZipExportDirectory();
 
-        var fileStream = new FileStream(_pathToZipFile, FileMode.Open, FileAccess.Read);
-        return File(fileStream, MediaTypeNames.Application.Octet);
+        DeleteExportDirectory();
+
+        Console.WriteLine(
+            $"""
+             Export completed. The zip file was saved at the following location: {_pathToZipFile}. If you ran this command from Kubernetes, you can copy it to your local system by running the following command:
+             kubectl cp <namespace-name><pod-name>:{_pathToZipFile} <local-destination-path>
+             """);
     }
 
-    [HttpGet("{what}")]
-    public async Task<IActionResult> ExportOnlyDevices(string what)
-    {
-        _addressToClientDisplayName = await _devicesDbContext.Identities.ToDictionaryAsync(i => i.Address.ToString(),
-            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().First(c => c.ClientId == i.ClientId).DisplayName);
-
-        await (Task)GetType().GetMethod($"Export{what}")?.Invoke(this, [])!;
-
-        var fileStream = new FileStream(Path.Join(_pathToExportDirectory, $"{what}.csv"), FileMode.Open, FileAccess.Read);
-        var result = new FileStreamResult(fileStream, "text/csv");
-        return result;
-    }
-
-    public async Task ExportDevices()
+    private async Task ExportDevices()
     {
         var devices = _devicesDbContext
             .Devices
@@ -113,7 +119,7 @@ public class DatabaseExportController : ApiControllerBase
         await StreamToCSV(devices, "devices.csv", d => { d.ClientName = GetClientName(d.IdentityAddress); });
     }
 
-    public async Task ExportDeletionAuditLogItems()
+    private async Task ExportDeletionAuditLogItems()
     {
         var deletionAuditLogItems = _devicesDbContext
             .IdentityDeletionProcessAuditLogs
@@ -130,7 +136,7 @@ public class DatabaseExportController : ApiControllerBase
         await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", _ => { });
     }
 
-    public async Task ExportRelationshipTemplates()
+    private async Task ExportRelationshipTemplates()
     {
         var templates = _relationshipsDbContext
             .RelationshipTemplates
@@ -149,7 +155,7 @@ public class DatabaseExportController : ApiControllerBase
         await StreamToCSV(templates, "relationshipTemplates.csv", t => t.CreatedByClientName = GetClientName(t.CreatedBy));
     }
 
-    public async Task ExportRelationships()
+    private async Task ExportRelationships()
     {
         var relationships = _relationshipsDbContext
             .Relationships
@@ -174,7 +180,7 @@ public class DatabaseExportController : ApiControllerBase
         });
     }
 
-    public async Task ExportFiles()
+    private async Task ExportFiles()
     {
         var files = _filesDbContext
             .FileMetadata
@@ -196,7 +202,7 @@ public class DatabaseExportController : ApiControllerBase
         });
     }
 
-    public async Task ExportMessages()
+    private async Task ExportMessages()
     {
         var messages = _messagesDbContext
             .Messages
@@ -219,7 +225,7 @@ public class DatabaseExportController : ApiControllerBase
         });
     }
 
-    public async Task ExportDatawalletModifications()
+    private async Task ExportDatawalletModifications()
     {
         var modifications = _synchronizationDbContext
             .DatawalletModifications
@@ -239,7 +245,7 @@ public class DatabaseExportController : ApiControllerBase
         await StreamToCSV(modifications, "datawalletModifications.csv", m => { m.CreatedByClientName = GetClientName(m.CreatedBy); });
     }
 
-    public async Task ExportSyncErrors()
+    private async Task ExportSyncErrors()
     {
         var syncErrors = _synchronizationDbContext
             .SyncErrors
@@ -254,7 +260,7 @@ public class DatabaseExportController : ApiControllerBase
         await StreamToCSV(syncErrors, "syncErrors.csv", m => { m.SyncItemOwnerClientName = GetClientName(m.SyncItemOwner); });
     }
 
-    public async Task ExportTokens()
+    private async Task ExportTokens()
     {
         var modifications = _tokensDbContext
             .Tokens
@@ -292,130 +298,17 @@ public class DatabaseExportController : ApiControllerBase
 
     private void ZipExportDirectory()
     {
-        if (System.IO.File.Exists(_pathToZipFile))
-            System.IO.File.Delete(_pathToZipFile);
+        if (File.Exists(_pathToZipFile))
+            File.Delete(_pathToZipFile);
 
         ZipFile.CreateFromDirectory(_pathToExportDirectory, _pathToZipFile);
     }
-}
 
-public class DeviceExport
-{
-    public required string DeviceId { get; set; } = null!;
-    public required DateTime? LastLoginAt { get; set; }
-    public required string IdentityAddress { get; set; } = null!;
-    public required DateTime CreatedAt { get; set; }
-    public required string Tier { get; set; } = null!;
-    public required IdentityStatus IdentityStatus { get; set; }
-    public required DateTime? IdentityDeletionGracePeriodEndsAt { get; set; }
-
-    public string? ClientName { get; set; }
-    public required PushNotificationPlatform? Platform { get; set; } = null!;
-}
-
-public class DeletionAuditLogItemExport
-{
-    public required DeletionProcessStatus? OldStatus { get; set; }
-    public required DeletionProcessStatus? NewStatus { get; set; }
-    public required byte[] IdentityAddressHash { get; set; }
-    public required MessageKey MessageKey { get; set; }
-    public required DateTime CreatedAt { get; set; }
-}
-
-public class RelationshipTemplateExport
-{
-    public required string TemplateId { get; set; }
-    public required string CreatedBy { get; set; }
-    public string? CreatedByClientName { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DateTime? AllocatedAt { get; set; }
-}
-
-public class RelationshipExport
-{
-    public required string RelationshipId { get; set; }
-    public required string? TemplateId { get; set; }
-    public required string From { get; set; }
-    public string? FromClientName { get; set; }
-    public required string To { get; set; }
-    public string? ToClientName { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required RelationshipStatus Status { get; set; }
-    public required bool FromHasDecomposed { get; set; }
-    public required bool ToHasDecomposed { get; set; }
-    public required DateTime? TemplateCreatedAt { get; set; }
-}
-
-public class FileExport
-{
-    public required string FileId { get; set; }
-    public required string CreatedBy { get; set; }
-    public string? CreatedByClientName { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required string Owner { get; set; }
-    public string? OwnerClientName { get; set; }
-    public required long CipherSize { get; set; }
-    public required DateTime ExpiresAt { get; set; }
-}
-
-public class MessageExport
-{
-    public required string MessageId { get; set; }
-    public required string CreatedBy { get; set; }
-    public string? CreatedByClientName { get; set; }
-    public required string RelationshipId { get; set; }
-    public required string Recipient { get; set; }
-    public string? RecipientClientName { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DateTime? ReceivedAt { get; set; }
-    public required long CipherSize { get; set; }
-}
-
-public class DatawalletModificationExport
-{
-    public required string DatawalletModificationId { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required string CreatedBy { get; set; }
-    public string? CreatedByClientName { get; set; }
-    public required string ObjectIdentifier { get; set; }
-    public required string Collection { get; set; }
-    public required DatawalletModificationType Type { get; set; }
-    public required string? PayloadCategory { get; set; }
-    public required long? PayloadSize { get; set; }
-}
-
-public class SyncErrorExport
-{
-    public required string SyncItemOwner { get; set; }
-    public string? SyncItemOwnerClientName { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required string ErrorCode { get; set; }
-}
-
-public class TokenExport
-{
-    public required string TokenId { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required string CreatedBy { get; set; }
-    public string? CreatedByClientName { get; set; }
-    public required long CipherSize { get; set; }
-    public required DateTime ExpiresAt { get; set; }
-}
-
-public static class Extensions
-{
-    public static string ToCsv(this object obj)
+    private void DeleteExportDirectory()
     {
-        static string? ObjToString(object? obj)
+        if (Directory.Exists(_pathToExportDirectory))
         {
-            if (obj?.GetType() == typeof(byte[]))
-                return Convert.ToBase64String((byte[])obj);
-
-            return obj?.ToString();
+            Directory.Delete(_pathToExportDirectory, true);
         }
-
-        var properties = obj.GetType().GetProperties();
-        var values = properties.Select(p => ObjToString(p.GetValue(obj)) ?? string.Empty);
-        return string.Join(",", values);
     }
 }
