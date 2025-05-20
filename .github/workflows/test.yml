@@ -330,6 +330,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.17.3
       - name: Build Helm Chart
         run: ./.ci/helm/buildChart.js
         env:
