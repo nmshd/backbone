@@ -17,7 +17,6 @@ public class CreateFileResponse
         Owner = file.Owner;
         OwnerSignature = file.OwnerSignature;
         OwnershipToken = file.OwnershipToken.Value;
-        OwnershipIsLocked = file.OwnershipIsLocked;
         CipherSize = file.CipherSize;
         CipherHash = file.CipherHash;
         ExpiresAt = file.ExpiresAt;
@@ -38,7 +37,6 @@ public class CreateFileResponse
     public byte[] OwnerSignature { get; set; }
 
     public string OwnershipToken { get; set; }
-    public bool OwnershipIsLocked { get; set; }
 
     public long CipherSize { get; set; }
     public byte[] CipherHash { get; set; }

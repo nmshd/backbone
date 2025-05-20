@@ -1,7 +1,7 @@
 @Integration
 Feature: Get /Files/{id}/metadata
 
-User catches the file metadata
+Identity gets the file metadata
 
     Scenario: Getting the file metadata returns the file metadata
         Given Identity i

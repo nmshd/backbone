@@ -101,15 +101,9 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ClaimFileOwnership(string fileId, [FromBody] ClaimFileDTO claimRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> ClaimFileOwnership(string fileId, [FromBody] ClaimFileRequest claimRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(
-            new ClaimFileOwnershipCommand(fileId, claimRequest.FileOwnershipToken)
-            {
-                FileId = fileId,
-                OwnershipToken = claimRequest.FileOwnershipToken
-            },
-            cancellationToken);
+        var response = await _mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = claimRequest.FileOwnershipToken }, cancellationToken);
         return Ok(response);
     }
 
@@ -118,7 +112,7 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status403Forbidden)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] ValidateFileTokenDTO validateRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] ValidateFileTokenRequest validateRequest, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(validateRequest.FileOwnershipToken, fileId), cancellationToken);
         return Ok(response);

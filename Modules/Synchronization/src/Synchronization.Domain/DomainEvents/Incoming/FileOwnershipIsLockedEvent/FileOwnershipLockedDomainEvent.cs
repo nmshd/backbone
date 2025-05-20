@@ -4,12 +4,6 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwne
 
 public class FileOwnershipLockedDomainEvent : DomainEvent
 {
-    public string FileId { get; set; }
-    public string OwnerAddress { get; set; }
-
-    public FileOwnershipLockedDomainEvent(string fileId, string ownerAddress)
-    {
-        FileId = fileId;
-        OwnerAddress = ownerAddress;
-    }
+    public required string FileId { get; set; }
+    public required string OwnerAddress { get; set; }
 }

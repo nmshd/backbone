@@ -110,7 +110,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("bytea");
 
                     b.Property<bool>("OwnershipIsLocked")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("OwnershipToken")
                         .IsRequired()

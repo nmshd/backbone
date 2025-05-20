@@ -24,7 +24,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                 table: "FileMetadata",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "OwnershipToken",

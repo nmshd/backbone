@@ -24,7 +24,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                 table: "FileMetadata",
                 type: "bit",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "OwnershipToken",

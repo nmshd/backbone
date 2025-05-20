@@ -23,10 +23,7 @@ public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, Rege
     {
         var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 
-        if (file.Owner != _activeIdentity)
-            throw new ActionForbiddenException();
-
-        file.RegenerateOwnershipToken();
+        file.RegenerateOwnershipToken(_activeIdentity);
         await _filesRepository.Update(file, cancellationToken);
 
         return new RegenerateFileOwnershipTokenResponse(file);

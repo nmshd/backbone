@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Files.Domain.Tests.Helpers;
 
-namespace Backbone.Modules.Files.Domain.Tests.Tests;
+namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
 
-public class FileDeleteTests : AbstractTestsBase
+public class DeleteTests : AbstractTestsBase
 {
     [Fact]
     public void File_can_be_deleted_by_its_owner()

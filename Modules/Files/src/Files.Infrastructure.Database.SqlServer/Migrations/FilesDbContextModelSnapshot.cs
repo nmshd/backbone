@@ -110,7 +110,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("OwnershipIsLocked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("OwnershipToken")
                         .IsRequired()

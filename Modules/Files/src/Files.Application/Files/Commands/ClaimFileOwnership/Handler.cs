@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Domain.Entities;
@@ -34,9 +33,9 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
                 break;
             case File.ClaimFileOwnershipResult.WrongToken:
                 await _filesRepository.Update(file, cancellationToken);
-                throw new DomainActionForbiddenException();
+                throw new ActionForbiddenException();
             case File.ClaimFileOwnershipResult.Locked:
-                throw new DomainActionForbiddenException();
+                throw new ActionForbiddenException();
             default:
                 throw new UnreachableException();
         }

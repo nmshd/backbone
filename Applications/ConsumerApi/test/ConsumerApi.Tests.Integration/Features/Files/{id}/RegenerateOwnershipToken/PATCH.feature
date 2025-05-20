@@ -1,7 +1,7 @@
 @Integration
 Feature: Patch /Files/{id}/RegenerateOwnershipToken
 
-User tries to regenerate the OwnershipToken of a file
+Identity tries to regenerate the OwnershipToken of a file
 
     Scenario: The owner of a file tries to regenerate its ownership token
         Given Identities i1, i2

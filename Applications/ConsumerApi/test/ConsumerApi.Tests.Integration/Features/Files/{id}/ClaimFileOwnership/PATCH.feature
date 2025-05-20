@@ -1,7 +1,7 @@
 @Integration
 Feature: Patch /Files/{id}/ClaimFileOwnership
 
-User tries to claim the ownership of a file
+Identity tries to claim the ownership of a file
 
     Scenario: An identity tries to claim a file using the correct ownershiptoken
         Given Identities i1, i2

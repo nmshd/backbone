@@ -37,7 +37,7 @@ public class File : Entity
 
         OwnerSignature = ownerSignature;
 
-        OwnershipToken = RegenerateOwnershipToken();
+        OwnershipToken = RegenerateOwnershipToken(Owner);
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
@@ -114,8 +114,11 @@ public class File : Entity
         return i => i.CreatedBy == identityAddress.ToString();
     }
 
-    public FileOwnershipToken RegenerateOwnershipToken()
+    public FileOwnershipToken RegenerateOwnershipToken(IdentityAddress activeIdentity)
     {
+        if (Owner != activeIdentity)
+            throw new DomainActionForbiddenException();
+
         OwnershipToken = FileOwnershipToken.New();
         OwnershipIsLocked = false;
         return OwnershipToken;
@@ -126,7 +129,6 @@ public class File : Entity
         if (OwnershipIsLocked)
             return ClaimFileOwnershipResult.Locked;
 
-
         if (OwnershipToken != ownershipToken)
         {
             OwnershipIsLocked = true;
@@ -135,13 +137,16 @@ public class File : Entity
         }
 
         LastOwnershipClaimAt = SystemTime.UtcNow;
-        Owner = IdentityAddress.Parse(newOwnerAddress);
-        OwnershipToken = RegenerateOwnershipToken();
+        Owner = newOwnerAddress;
+        OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
         return ClaimFileOwnershipResult.Ok;
     }
 
-    public bool ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken ownershipToken)
+    public bool ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
     {
+        if (Owner != activeIdentity)
+            throw new DomainActionForbiddenException();
+
         if (OwnershipIsLocked)
             return false;
 

@@ -38,9 +38,9 @@ internal class FilesStepDefinitions
     }
 
     [Given($"{RegexFor.SINGLE_THING} tries to claim {RegexFor.SINGLE_THING} with a wrong token")]
-    public void GivenITriesToClaimFWithAWrongToken(string userName, string fileName)
+    public void GivenITriesToClaimFWithAWrongToken(string identityName, string fileName)
     {
-        var client = _clientPool.FirstForIdentityName(userName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         var file = _filesContext.Files[fileName];
         var request = new ClaimFileOwnershipRequest { FileOwnershipToken = "wrongTokenXXXXXXXXXX" };
         _responseContext.WhenResponse = client.Files.ClaimFileOwnership(file.Id, request).Result;
