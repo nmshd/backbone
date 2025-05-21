@@ -7,6 +7,12 @@ namespace Backbone.Modules.Files.Domain.Tests.Helpers;
 
 public static class TestDataGenerator
 {
+    public static File CreateFile()
+    {
+        var owner = CreateRandomIdentityAddress();
+        return CreateFile(owner);
+    }
+
     public static File CreateFile(IdentityAddress owner)
     {
         var deviceId = CreateRandomDeviceId();

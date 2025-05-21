@@ -142,7 +142,7 @@ public class File : Entity
         return ClaimFileOwnershipResult.Ok;
     }
 
-    public bool ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
+    public bool ValidateFileOwnershipToken(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
     {
         if (Owner != activeIdentity)
             throw new DomainActionForbiddenException();

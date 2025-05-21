@@ -1,6 +1,6 @@
 namespace Backbone.ConsumerApi.Controllers.Files.DTOs;
 
-public class ValidateFileTokenRequest
+public class ValidateFileOwnershipTokenRequest
 {
     public required string FileOwnershipToken { get; init; }
 }

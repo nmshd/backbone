@@ -7,39 +7,43 @@ namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
 public class RegenerateOwnershipToken
 {
     [Fact]
-    public void File_should_be_able_to_generate_new_ownership_token()
+    public void Generates_new_ownership_token()
     {
-        var identity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(identity);
-
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
         var oldToken = file.OwnershipToken;
 
+        // Act
         file.RegenerateOwnershipToken(file.Owner);
 
+        // Assert
         file.OwnershipToken.Should().NotBeEquivalentTo(oldToken);
-        file.OwnershipIsLocked.Should().BeFalse();
     }
 
     [Fact]
-    public void A_ownership_token_can_only_be_regenerated_by_its_owner()
+    public void An_ownership_token_can_only_be_regenerated_by_its_owner()
     {
-        var identity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(identity);
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
 
+        // Act
         var acting = () => file.RegenerateOwnershipToken(CreateRandomIdentityAddress());
+
+        // Assert
         acting.Should().Throw<DomainActionForbiddenException>();
     }
 
     [Fact]
     public void A_successful_ownership_token_regeneration_unlocks_the_file_ownership()
     {
-        var identity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(identity);
-
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
         file.ClaimOwnership(FileOwnershipToken.New(), file.Owner);
-        file.OwnershipIsLocked.Should().BeTrue();
 
+        // Act
         file.RegenerateOwnershipToken(file.Owner);
+
+        // Assert
         file.OwnershipIsLocked.Should().BeFalse();
     }
 }

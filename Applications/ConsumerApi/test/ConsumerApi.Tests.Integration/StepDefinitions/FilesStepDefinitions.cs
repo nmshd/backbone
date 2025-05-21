@@ -86,7 +86,7 @@ internal class FilesStepDefinitions
         _responseContext.WhenResponse = await identity.Files.GetFileMetadata(file.Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimFileOwnership with the files ownership token")]
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimFileOwnership with the file's ownership token")]
     public async Task WhenISendsAPatchRequestToTheFilesFIdClaimFileOwnershipWithTheOwnershipTokenFOwnershipToken(string identityName, string fileName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -97,7 +97,6 @@ internal class FilesStepDefinitions
 
         _responseContext.WhenResponse = _claimFileOwnershipResponse = await identity.Files.ClaimFileOwnership(fileId, request);
 
-        // Update the context objects
         if (!_claimFileOwnershipResponse.IsError)
             _filesContext.FileNameToOwnershipToken[fileName] = _claimFileOwnershipResponse.Result!.NewOwnershipToken;
         var getFileResponse = await identity.Files.GetFileMetadata(fileId);
@@ -123,12 +122,12 @@ internal class FilesStepDefinitions
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
         var fileId = _filesContext.Files.FirstOrDefault(f => f.Key == fileName).Value?.Id ?? fileName;
-        // More than 20 characters
+
         var request = new ClaimFileOwnershipRequest { FileOwnershipToken = "ownershipTokenWithMoreThan20Characters" };
         _responseContext.WhenResponse = _claimFileOwnershipResponse = identity.Files.ClaimFileOwnership(fileId, request).Result;
     }
 
-    [When($"{RegexFor.SINGLE_THING} tries to claim a file with a invalid FileId")]
+    [When($"{RegexFor.SINGLE_THING} tries to claim a file with an invalid FileId")]
     public void WhenITriesToClaimAFileWithAInvalidFileId(string identityName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -169,7 +168,7 @@ internal class FilesStepDefinitions
         _responseContext.WhenResponse = _resetOwnershipTokenResponse = identity.Files.RegenerateFileOwnershipToken(FileId.New()).Result;
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a Post request to the /Files/{RegexFor.SINGLE_THING}.Id/ValidateOwnershipToken with the files ownership token")]
+    [When($"{RegexFor.SINGLE_THING} sends a Post request to the /Files/{RegexFor.SINGLE_THING}.Id/ValidateOwnershipToken with the file's ownership token")]
     public async Task WhenISendsAPostRequestToTheFilesFIdValidateOwnershipTokenWithTheFilesOwnershipToken(string identityName, string fileName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);

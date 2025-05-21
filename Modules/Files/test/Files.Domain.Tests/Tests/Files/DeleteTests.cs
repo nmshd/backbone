@@ -8,23 +8,28 @@ public class DeleteTests : AbstractTestsBase
     [Fact]
     public void File_can_be_deleted_by_its_owner()
     {
+        // Arrange
         var identity = CreateRandomIdentityAddress();
         var file = TestDataGenerator.CreateFile(identity);
 
+        // Act
         var acting = () => file.EnsureCanBeDeletedBy(identity);
 
+        // Assert
         acting.Should().NotThrow();
     }
 
     [Fact]
     public void File_can_not_be_deleted_by_others()
     {
-        var creatorIdentity = CreateRandomIdentityAddress();
-        var otherIdentity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(creatorIdentity);
+        // Arrange
+        var nonCreatingIdentity = CreateRandomIdentityAddress();
+        var file = TestDataGenerator.CreateFile();
 
-        var acting = () => file.EnsureCanBeDeletedBy(otherIdentity);
+        // Act
+        var acting = () => file.EnsureCanBeDeletedBy(nonCreatingIdentity);
 
+        // Assert
         acting.Should().Throw<DomainActionForbiddenException>();
     }
 }

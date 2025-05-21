@@ -7,18 +7,20 @@ public class CreationTests
     [Fact]
     public void A_files_ownership_is_not_locked_after_creation()
     {
-        var identity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(identity);
+        // Act
+        var file = TestDataGenerator.CreateFile();
 
+        // Assert
         file.OwnershipIsLocked.Should().BeFalse();
     }
 
     [Fact]
     public void A_file_is_always_created_with_an_ownership_token()
     {
-        var identity = CreateRandomIdentityAddress();
-        var file = TestDataGenerator.CreateFile(identity);
+        // Act
+        var file = TestDataGenerator.CreateFile();
 
+        // Assert
         file.OwnershipToken.Should().NotBeNull();
         file.OwnershipToken.Value.Length.Should().Be(20);
     }
