@@ -22,6 +22,7 @@ Identity validates the ownership token of the specified file
         Given Identity i
         When i tries to validate an OwnershipToken of an invalid FileId
         Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
 
     Scenario: Identity tries to validate the ownership token a file it does not own
         Given Identities i1 and i2

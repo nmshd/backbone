@@ -16,6 +16,7 @@ Identity tries to regenerate the OwnershipToken of a file
         Given Identity i
         When i tries to regenerate the OwnershipToken for an invalid FileId
         Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
 
     Scenario: An identity not owning the file tries to regenerate its ownership token
         Given Identities i1 and i2

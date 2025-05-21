@@ -24,12 +24,14 @@ Identity tries to claim the ownership of a file
         And File f created by i1
         When i2 tries to claim a file with a invalid FileId
         Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
 
     Scenario: An identity tries to claim a file with an invalid FileOwnershipToken
         Given Identities i1 and i2
         And File f created by i1
         When i2 sends a PATCH request to the /Files/f.Id/ClaimFileOwnership with an invalid ownership token
         Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
 
     Scenario: An identity tries to claim a file using the correct ownershiptoken but the file is blocked
         Given Identities i1 and i2
