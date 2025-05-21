@@ -15,8 +15,8 @@ public class ValidateOwnershipTokenTest
         var resultCorrectToken = file.ValidateFileOwnershipTokenForCorrectness(file.OwnershipToken, file.Owner);
         resultCorrectToken.Should().BeTrue();
 
-        var wrongCorrectToken = file.ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken.New(), file.Owner);
-        wrongCorrectToken.Should().BeTrue();
+        var resultWrongToken = file.ValidateFileOwnershipTokenForCorrectness(FileOwnershipToken.New(), file.Owner);
+        resultWrongToken.Should().BeFalse();
     }
 
     [Fact]
