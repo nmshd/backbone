@@ -33,48 +33,41 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
         pageSize: count,
       );
 
-      _pagination =
-          response.isPaged
-              ? response.pagination
-              : Pagination(
-                pageNumber: pageNumber,
-                pageSize: count,
-                totalPages: _totalPages(count, response.data),
-                totalRecords: response.data.length,
-              );
+      _pagination = response.isPaged
+          ? response.pagination
+          : Pagination(pageNumber: pageNumber, pageSize: count, totalPages: _totalPages(count, response.data), totalRecords: response.data.length);
 
-      final rows =
-          response.data.indexed
-              .map(
-                (relationship) => DataRow2.byIndex(
-                  index: pageNumber * count + relationship.$1,
-                  cells: [
-                    DataCell(Text(relationship.$2.peer)),
-                    DataCell(Text(relationship.$2.requestedBy)),
-                    DataCell(Text(relationship.$2.templateId)),
-                    DataCell(Text(relationship.$2.status)),
-                    DataCell(
-                      Tooltip(
-                        message:
-                            '${DateFormat.yMd(locale.languageCode).format(relationship.$2.creationDate)} ${DateFormat.Hms().format(relationship.$2.creationDate)}',
-                        child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.creationDate)),
-                      ),
-                    ),
-                    DataCell(
-                      relationship.$2.answeredAt == null
-                          ? const Text('-')
-                          : Tooltip(
-                            message:
-                                '${DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)} ${DateFormat.Hms().format(relationship.$2.answeredAt!)}',
-                            child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)),
-                          ),
-                    ),
-                    DataCell(Text(relationship.$2.createdByDevice)),
-                    DataCell(Text(relationship.$2.answeredByDevice ?? '-')),
-                  ],
+      final rows = response.data.indexed
+          .map(
+            (relationship) => DataRow2.byIndex(
+              index: pageNumber * count + relationship.$1,
+              cells: [
+                DataCell(Text(relationship.$2.peer)),
+                DataCell(Text(relationship.$2.requestedBy)),
+                DataCell(Text(relationship.$2.templateId)),
+                DataCell(Text(relationship.$2.status)),
+                DataCell(
+                  Tooltip(
+                    message:
+                        '${DateFormat.yMd(locale.languageCode).format(relationship.$2.creationDate)} ${DateFormat.Hms().format(relationship.$2.creationDate)}',
+                    child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.creationDate)),
+                  ),
                 ),
-              )
-              .toList();
+                DataCell(
+                  relationship.$2.answeredAt == null
+                      ? const Text('-')
+                      : Tooltip(
+                          message:
+                              '${DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)} ${DateFormat.Hms().format(relationship.$2.answeredAt!)}',
+                          child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)),
+                        ),
+                ),
+                DataCell(Text(relationship.$2.createdByDevice)),
+                DataCell(Text(relationship.$2.answeredByDevice ?? '-')),
+              ],
+            ),
+          )
+          .toList();
       return AsyncRowsResponse(response.isPaged ? response.pagination.totalPages : _pagination!.totalPages, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');

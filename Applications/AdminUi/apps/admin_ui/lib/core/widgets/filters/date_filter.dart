@@ -62,8 +62,9 @@ class _DateFilterState extends State<DateFilter> {
                 controller: _controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  suffixIcon:
-                      _selectedDate == null ? const Icon(Icons.calendar_today) : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
+                  suffixIcon: _selectedDate == null
+                      ? const Icon(Icons.calendar_today)
+                      : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
                 ),
               ),
             ),
