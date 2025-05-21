@@ -45,13 +45,6 @@ dev_dependencies:
   translations_cleaner: ^0.0.5
   very_good_analysis: ^7.0.0
 
-dependency_overrides:
-  enmeshed_types:
-    git:
-      ref: main
-      url: https://github.com/nmshd/app
-      path: packages/enmeshed_types
-
 flutter:
   generate: true
   uses-material-design: true
