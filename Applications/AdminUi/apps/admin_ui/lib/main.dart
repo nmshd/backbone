@@ -45,7 +45,11 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
-    GoRoute(parentNavigatorKey: _rootNavigatorKey, path: '/error', builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString())),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/error',
+      builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString()),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
@@ -64,19 +68,18 @@ final _router = GoRouter(
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-details/:deletionProcessId',
-                  pageBuilder:
-                      (context, state) => NoTransitionPage(
-                        child: DeletionProcessDetails(
-                          address: state.pathParameters['address']!,
-                          deletionProcessId: state.pathParameters['deletionProcessId']!,
-                        ),
-                      ),
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: DeletionProcessDetails(
+                      address: state.pathParameters['address']!,
+                      deletionProcessId: state.pathParameters['deletionProcessId']!,
+                    ),
+                  ),
                 ),
                 GoRoute(
                   parentNavigatorKey: _shellNavigatorKey,
                   path: 'deletion-process-audit-logs',
-                  pageBuilder:
-                      (context, state) => NoTransitionPage(child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!)),
+                  pageBuilder: (context, state) =>
+                      NoTransitionPage(child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!)),
                 ),
               ],
             ),
