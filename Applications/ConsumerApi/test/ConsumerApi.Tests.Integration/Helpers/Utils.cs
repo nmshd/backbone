@@ -3,6 +3,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
@@ -138,7 +139,7 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
-    public static async Task<FileMetadata> CreateFile(Client client)
+    public static async Task<CreateFileResponse> CreateFile(Client client)
     {
         var createFileRequest = new CreateFileRequest
         {
@@ -153,12 +154,7 @@ public static class Utils
         var createFileResponse = await client.Files.UploadFile(createFileRequest);
 
         createFileResponse.Should().BeASuccess();
-
-        var getFileMetadataResponse = await client.Files.GetFileMetadata(createFileResponse.Result!.Id);
-
-        getFileMetadataResponse.Should().BeASuccess();
-
-        return getFileMetadataResponse.Result!;
+        return createFileResponse.Result!;
     }
 
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
