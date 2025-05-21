@@ -29,10 +29,7 @@ public class Program
 
     private static async Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false)
-            .Build();
+        var configuration = LoadConfiguration(args);
 
         var serviceProvider = BuildServiceProvider(configuration);
 
@@ -85,5 +82,20 @@ public class Program
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);
         return new AutofacServiceProvider(containerBuilder.Build());
+    }
+
+    private static IConfigurationRoot LoadConfiguration(string[] strings)
+    {
+        var configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.Sources.Clear();
+
+        configurationBuilder
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+
+        configurationBuilder.AddEnvironmentVariables();
+        configurationBuilder.AddCommandLine(strings);
+
+        return configurationBuilder.Build();
     }
 }
