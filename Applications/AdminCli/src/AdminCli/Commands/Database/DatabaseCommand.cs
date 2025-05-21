@@ -14,16 +14,18 @@ public static class Extensions
 {
     public static string ToCsv(this object obj)
     {
-        static string? ObjToString(object? obj)
+        static string ObjToString(object? obj)
         {
             if (obj?.GetType() == typeof(byte[]))
                 return Convert.ToBase64String((byte[])obj);
 
-            return obj?.ToString();
+            return obj?.ToString() ?? string.Empty;
         }
 
-        var properties = obj.GetType().GetProperties();
-        var values = properties.Select(p => ObjToString(p.GetValue(obj)) ?? string.Empty);
-        return string.Join(",", values);
+        var propertyValuesAsStrings = obj.GetType().GetProperties()
+            .Select(propertyInfo => propertyInfo.GetValue(obj))
+            .Select(ObjToString);
+
+        return string.Join(",", propertyValuesAsStrings);
     }
 }

@@ -82,7 +82,7 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         _addressToClientDisplayName = await _devicesDbContext.Identities.ToDictionaryAsync(
             i => i.Address.ToString(),
-            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().First(c => c.ClientId == i.ClientId).DisplayName
+            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().FirstOrDefault(c => c.ClientId == i.ClientId)?.DisplayName
         );
 
         await ExportDevices();
