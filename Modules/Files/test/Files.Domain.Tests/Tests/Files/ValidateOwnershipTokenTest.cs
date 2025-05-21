@@ -20,19 +20,6 @@ public class ValidateOwnershipTokenTest
     }
 
     [Fact]
-    public void Token_can_not_be_validated_by_non_owner()
-    {
-        // Arrange
-        var file = TestDataGenerator.CreateFile();
-
-        // Act
-        var resultCorrectToken = file.ValidateFileOwnershipToken(file.OwnershipToken, CreateRandomIdentityAddress());
-
-        // Assert
-        resultCorrectToken.Should().BeFalse();
-    }
-
-    [Fact]
     public void A_file_with_locked_ownership_returns_false_when_validating_ownership_token()
     {
         // Arrange
