@@ -261,8 +261,9 @@ public class ExportDatabaseCommand : AdminCliCommand
             .SyncErrors
             .Select(e => new SyncErrorExport
             {
-                SyncItemOwner = e.ExternalEvent.Owner,
-                CreatedAt = e.SyncRun.FinalizedAt!.Value,
+                ErrorId = e.Id.Value,
+                SyncItemOwner = e.ExternalEvent.Owner.Value,
+                CreatedAt = e.SyncRun.FinalizedAt,
                 ErrorCode = e.ErrorCode
             })
             .ToAsyncEnumerable();
