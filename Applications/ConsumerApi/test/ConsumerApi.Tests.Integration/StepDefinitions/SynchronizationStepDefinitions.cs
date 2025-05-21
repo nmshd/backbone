@@ -14,14 +14,17 @@ internal class SynchronizationStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly MessagesContext _messagesContext;
     private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
+    private readonly FilesContext _filesContext;
     private ApiResponse<ListExternalEventsResponse>? _listExternalEventsOfSyncRunResponse;
 
-    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool, RelationshipTemplatesContext relationshipTemplatesContext)
+    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool, RelationshipTemplatesContext relationshipTemplatesContext,
+        FilesContext filesContext)
     {
         _responseContext = responseContext;
         _messagesContext = messagesContext;
         _clientPool = clientPool;
         _relationshipTemplatesContext = relationshipTemplatesContext;
+        _filesContext = filesContext;
     }
 
     #region Given
@@ -103,6 +106,23 @@ internal class SynchronizationStepDefinitions
         externalEvents.Result.Should().Contain(e =>
             e.Type == "RelationshipTemplateAllocationsExhausted" &&
             e.Payload["relationshipTemplateId"].GetString() == templateId);
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipLockedEvent which contains the id of {RegexFor.SINGLE_THING}")]
+    public async Task ThenIReceivesAnExternalEventOfTypeFileOwnershipLocked(string notifiedIdentityName, string fileName)
+    {
+        var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
+        var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
+
+        syncRunResponse.Result.Should().NotBeNull();
+        syncRunResponse.Result!.Status.Should().Be("Created");
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunResponse.Result!.SyncRun.Id);
+
+        var fileId = _filesContext.Files[fileName].Id;
+
+        externalEvents.Result.Should().Contain(e =>
+            e.Type == "FileOwnershipLocked" &&
+            e.Payload["fileId"].GetString() == fileId);
     }
 
     #endregion
