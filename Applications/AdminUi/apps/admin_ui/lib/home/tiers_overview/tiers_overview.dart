@@ -58,15 +58,14 @@ class _TiersOverviewState extends State<TiersOverview> {
                     DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
                   ],
-                  rows:
-                      _tiers
-                          .map(
-                            (tier) => DataRow2(
-                              onTap: () => context.go('/tiers/${tier.id}'),
-                              cells: [DataCell(Text(tier.id)), DataCell(Text(tier.name)), DataCell(Text('${tier.numberOfIdentities}'))],
-                            ),
-                          )
-                          .toList(),
+                  rows: _tiers
+                      .map(
+                        (tier) => DataRow2(
+                          onTap: () => context.go('/tiers/${tier.id}'),
+                          cells: [DataCell(Text(tier.id)), DataCell(Text(tier.name)), DataCell(Text('${tier.numberOfIdentities}'))],
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],

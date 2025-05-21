@@ -54,10 +54,9 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Tooltip(
-                message:
-                    deletionProcessDetails.status == DeletionProcessStatus.approved
-                        ? ''
-                        : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
+                message: deletionProcessDetails.status == DeletionProcessStatus.approved
+                    ? ''
+                    : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.error,

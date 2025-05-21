@@ -144,10 +144,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.defaultTier}*'),
                 value: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
-                items:
-                    widget.defaultTiers.map((tier) {
-                      return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
-                    }).toList(),
+                items: widget.defaultTiers.map((tier) {
+                  return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
+                }).toList(),
               ),
               if (_errorMessage != null) ...[Gaps.h16, Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
             ],

@@ -57,38 +57,36 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                     DataColumn2(label: Text(context.l10n.expiresAt)),
                     DataColumn2(label: Text(context.l10n.announcementsOverview_severity)),
                   ],
-                  rows:
-                      _announcements
-                          .map(
-                            (announcement) => DataRow2(
-                              onTap: () => context.go('/announcements/${announcement.id}'),
-                              cells: [
-                                DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
-                                DataCell(
-                                  Tooltip(
-                                    message:
-                                        '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)} ${DateFormat.Hms().format(announcement.createdAt)}',
-                                    child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)),
-                                  ),
-                                ),
-                                DataCell(
-                                  Tooltip(
-                                    message:
-                                        announcement.expiresAt != null
-                                            ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)} ${DateFormat.Hms().format(announcement.expiresAt!)}'
-                                            : '',
-                                    child: Text(
-                                      announcement.expiresAt != null
-                                          ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)
-                                          : '',
-                                    ),
-                                  ),
-                                ),
-                                DataCell(Text(announcement.severity)),
-                              ],
+                  rows: _announcements
+                      .map(
+                        (announcement) => DataRow2(
+                          onTap: () => context.go('/announcements/${announcement.id}'),
+                          cells: [
+                            DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
+                            DataCell(
+                              Tooltip(
+                                message:
+                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)} ${DateFormat.Hms().format(announcement.createdAt)}',
+                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)),
+                              ),
                             ),
-                          )
-                          .toList(),
+                            DataCell(
+                              Tooltip(
+                                message: announcement.expiresAt != null
+                                    ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)} ${DateFormat.Hms().format(announcement.expiresAt!)}'
+                                    : '',
+                                child: Text(
+                                  announcement.expiresAt != null
+                                      ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)
+                                      : '',
+                                ),
+                              ),
+                            ),
+                            DataCell(Text(announcement.severity)),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],

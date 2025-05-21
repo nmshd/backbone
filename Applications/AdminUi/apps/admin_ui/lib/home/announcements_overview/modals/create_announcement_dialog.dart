@@ -70,10 +70,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 DropdownButtonFormField(
                   validator: (value) => validateRequiredField(context, value?.name),
                   decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_impact}*', border: const OutlineInputBorder()),
-                  items:
-                      _severityOptions.map((severity) {
-                        return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
-                      }).toList(),
+                  items: _severityOptions.map((severity) {
+                    return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
+                  }).toList(),
                   onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
                 ),
                 Gaps.h16,
@@ -133,7 +132,10 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
         ),
       ),
       actions: [
-        SizedBox(height: 40, child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel))),
+        SizedBox(
+          height: 40,
+          child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
+        ),
         SizedBox(
           height: 40,
           child: FilledButton(
@@ -144,10 +146,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 for (final announcementTextWidget in _announcementTextWidgets) {
                   final title = announcementTextWidget.titleController.text;
                   final body = announcementTextWidget.bodyController.text;
-                  final language =
-                      announcementTextWidget.languageController.text == ''
-                          ? announcementTextWidget.defaultLanguage
-                          : announcementTextWidget.languageController.text;
+                  final language = announcementTextWidget.languageController.text == ''
+                      ? announcementTextWidget.defaultLanguage
+                      : announcementTextWidget.languageController.text;
 
                   announcementTexts.add(AnnouncementText(title: title, body: body, language: language!));
                 }
