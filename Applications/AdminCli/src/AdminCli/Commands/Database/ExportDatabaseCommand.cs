@@ -1,45 +1,30 @@
 ﻿using System.CommandLine;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
+using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.AdminCli.Commands.Database.Types;
-using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Files.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+
+// ReSharper disable MergeConditionalExpression
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace Backbone.AdminCli.Commands.Database;
 
+[SuppressMessage("Style", "IDE0029:Use coalesce expression")]
 public class ExportDatabaseCommand : AdminCliCommand
 {
-    private readonly DevicesDbContext _devicesDbContext;
-    private readonly RelationshipsDbContext _relationshipsDbContext;
-    private readonly FilesDbContext _filesDbContext;
-    private readonly MessagesDbContext _messagesDbContext;
-    private readonly SynchronizationDbContext _synchronizationDbContext;
-    private readonly TokensDbContext _tokensDbContext;
+    private readonly AdminApiDbContext _adminApiDbContext;
 
     private readonly string _pathToExportDirectory = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", "export");
     private readonly string _pathToZipFile = Path.Combine(Path.GetTempPath(), "enmeshed", "backbone", $"export-{SystemTime.UtcNow:yyyyMMdd_HHmmss}.zip");
 
-    private Dictionary<string, string?> _addressToClientDisplayName = null!;
-
-
-    public ExportDatabaseCommand(IMediator mediator, DevicesDbContext devicesDbContext, RelationshipsDbContext relationshipsDbContext, FilesDbContext filesDbContext,
-        MessagesDbContext messagesDbContext, SynchronizationDbContext synchronizationDbContext, TokensDbContext tokensDbContext)
+    public ExportDatabaseCommand(IMediator mediator, AdminApiDbContext adminApiDbContext)
         : base(mediator, "export", "Create a zip file with the most important database tables exported as csv.")
     {
-        _devicesDbContext = devicesDbContext;
-        _relationshipsDbContext = relationshipsDbContext;
-        _filesDbContext = filesDbContext;
-        _messagesDbContext = messagesDbContext;
-        _synchronizationDbContext = synchronizationDbContext;
-        _tokensDbContext = tokensDbContext;
+        _adminApiDbContext = adminApiDbContext;
 
         this.SetHandler(ExportDatabase);
 
@@ -80,12 +65,8 @@ public class ExportDatabaseCommand : AdminCliCommand
 
     private async Task ExportDatabase()
     {
-        _addressToClientDisplayName = await _devicesDbContext.Identities.ToDictionaryAsync(
-            i => i.Address.ToString(),
-            i => _devicesDbContext.Set<CustomOpenIddictEntityFrameworkCoreApplication>().FirstOrDefault(c => c.ClientId == i.ClientId)?.DisplayName
-        );
-
         await ExportDevices();
+        await ExportDeletionAuditLogItems();
         await ExportRelationshipTemplates();
         await ExportRelationships();
         await ExportFiles();
@@ -93,7 +74,6 @@ public class ExportDatabaseCommand : AdminCliCommand
         await ExportDatawalletModifications();
         await ExportTokens();
         await ExportSyncErrors();
-        await ExportDeletionAuditLogItems();
 
         ZipExportDirectory();
 
@@ -108,30 +88,33 @@ public class ExportDatabaseCommand : AdminCliCommand
 
     private async Task ExportDevices()
     {
-        var devices = _devicesDbContext
+        var devices = _adminApiDbContext
             .Devices
             .Select(d => new DeviceExport
             {
-                DeviceId = d.Id.Value,
+                DeviceId = d.Id,
                 LastLoginAt = d.User.LastLoginAt,
-                IdentityAddress = d.Identity.Address.Value,
+                IdentityAddress = d.Identity.Address,
                 CreatedAt = d.CreatedAt,
-                Tier = _devicesDbContext.Tiers.FirstOrDefault(t => t.Id == d.Identity.TierId)!.Name.Value,
+                Tier = _adminApiDbContext.Tiers.FirstOrDefault(t => t.Id == d.Identity.TierId)!.Name,
                 IdentityStatus = d.Identity.Status,
                 IdentityDeletionGracePeriodEndsAt = d.Identity.DeletionGracePeriodEndsAt,
-                Platform = _devicesDbContext.PnsRegistrations.Any(r => r.DeviceId == d.Id)
-                    ? _devicesDbContext.PnsRegistrations.First(r => r.DeviceId == d.Id)
+                Platform = _adminApiDbContext.PnsRegistrations.Any(r => r.DeviceId == d.Id)
+                    ? _adminApiDbContext.PnsRegistrations.First(r => r.DeviceId == d.Id)
                         .Handle.Platform
-                    : null
+                    : null,
+                ClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId) == null
+                    ? null
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(devices, "devices.csv", d => { d.ClientName = GetClientName(d.IdentityAddress); });
+        await StreamToCSV(devices, "devices.csv");
     }
 
     private async Task ExportDeletionAuditLogItems()
     {
-        var deletionAuditLogItems = _devicesDbContext
+        var deletionAuditLogItems = _adminApiDbContext
             .IdentityDeletionProcessAuditLogs
             .Select(i => new DeletionAuditLogItemExport
             {
@@ -143,168 +126,200 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", _ => { });
+        await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv");
     }
 
     private async Task ExportRelationshipTemplates()
     {
-        var templates = _relationshipsDbContext
+        var templates = _adminApiDbContext
             .RelationshipTemplates
             .Select(t => new RelationshipTemplateExport
             {
-                TemplateId = t.Id.Value,
-                CreatedBy = t.CreatedBy.Value,
+                TemplateId = t.Id,
+                CreatedBy = t.CreatedBy,
                 CreatedAt = t.CreatedAt,
                 AllocatedAt = t.Allocations.Any()
                     ? t.Allocations.First()
                         .AllocatedAt
-                    : null
+                    : null,
+                CreatedByClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
+                            .DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(templates, "relationshipTemplates.csv", t => t.CreatedByClientName = GetClientName(t.CreatedBy));
+        await StreamToCSV(templates, "relationshipTemplates.csv");
     }
 
     private async Task ExportRelationships()
     {
-        var relationships = _relationshipsDbContext
+        var relationships = _adminApiDbContext
             .Relationships
             .Select(r => new RelationshipExport
             {
-                RelationshipId = r.Id.Value,
-                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.Value,
-                From = r.From.Value,
-                To = r.To.Value,
+                RelationshipId = r.Id,
+                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId,
+                From = r.From,
+                To = r.To,
                 CreatedAt = r.CreatedAt,
                 Status = r.Status,
                 FromHasDecomposed = r.FromHasDecomposed,
                 ToHasDecomposed = r.ToHasDecomposed,
-                TemplateCreatedAt = r.RelationshipTemplate == null ? null : r.RelationshipTemplate.CreatedAt
+                TemplateCreatedAt = r.RelationshipTemplate == null ? null : r.RelationshipTemplate.CreatedAt,
+                FromClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId) == null
+                    ? null
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId)!.DisplayName,
+                ToClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId) == null
+                    ? null
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(relationships, "relationships.csv", r =>
-        {
-            r.FromClientName = GetClientName(r.From);
-            r.ToClientName = GetClientName(r.To);
-        });
+        await StreamToCSV(relationships, "relationships.csv");
     }
 
     private async Task ExportFiles()
     {
-        var files = _filesDbContext
+        var files = _adminApiDbContext
             .FileMetadata
             .Select(f => new FileExport
             {
                 FileId = f.Id,
-                CreatedBy = f.CreatedBy.Value,
+                CreatedBy = f.CreatedBy,
                 CreatedAt = f.CreatedAt,
-                Owner = f.Owner.Value,
+                Owner = f.Owner,
                 CipherSize = f.CipherSize,
                 ExpiresAt = f.ExpiresAt,
+                CreatedByClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId)!
+                            .DisplayName,
+                OwnerClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId) == null
+                    ? null
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(files, "files.csv", f =>
-        {
-            f.CreatedByClientName = GetClientName(f.CreatedBy);
-            f.OwnerClientName = GetClientName(f.Owner);
-        });
+        await StreamToCSV(files, "files.csv");
     }
 
     private async Task ExportMessages()
     {
-        var messages = _messagesDbContext
+        var messages = _adminApiDbContext
             .Messages
             .Select(m => new MessageExport
             {
-                MessageId = m.Id.Value,
-                CreatedBy = m.CreatedBy.Value,
+                MessageId = m.Id,
+                CreatedBy = m.CreatedBy,
                 RelationshipId = m.Recipients.First().RelationshipId,
-                Recipient = m.Recipients.First().Address.Value,
+                Recipient = m.Recipients.First().Address,
                 CreatedAt = m.CreatedAt,
                 ReceivedAt = m.Recipients.First().ReceivedAt,
                 CipherSize = m.Body.Length,
+                CreatedByClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
+                            .DisplayName,
+                RecipientClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
+                        a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
+                            a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(messages, "messages.csv", m =>
-        {
-            m.CreatedByClientName = GetClientName(m.CreatedBy);
-            m.RecipientClientName = GetClientName(m.Recipient);
-        });
+        await StreamToCSV(messages, "messages.csv");
     }
 
     private async Task ExportDatawalletModifications()
     {
-        var modifications = _synchronizationDbContext
+        var modifications = _adminApiDbContext
             .DatawalletModifications
             .Select(m => new DatawalletModificationExport
             {
                 DatawalletModificationId = m.Id,
                 CreatedAt = m.CreatedAt,
-                CreatedBy = m.CreatedBy.Value,
+                CreatedBy = m.CreatedBy,
                 ObjectIdentifier = m.ObjectIdentifier,
                 Collection = m.Collection,
                 Type = m.Type,
                 PayloadCategory = m.PayloadCategory,
-                PayloadSize = m.EncryptedPayload == null ? null : m.EncryptedPayload.Length
+                PayloadSize = m.EncryptedPayload == null ? null : m.EncryptedPayload.Length,
+                CreatedByClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
+                            .DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(modifications, "datawalletModifications.csv", m => { m.CreatedByClientName = GetClientName(m.CreatedBy); });
+        await StreamToCSV(modifications, "datawalletModifications.csv");
     }
 
     private async Task ExportSyncErrors()
     {
-        var syncErrors = _synchronizationDbContext
+        var syncErrors = _adminApiDbContext
             .SyncErrors
             .Select(e => new SyncErrorExport
             {
-                ErrorId = e.Id.Value,
-                SyncItemOwner = e.ExternalEvent.Owner.Value,
+                ErrorId = e.Id,
+                SyncItemOwner = e.ExternalEvent.Owner,
                 CreatedAt = e.SyncRun.FinalizedAt,
-                ErrorCode = e.ErrorCode
+                ErrorCode = e.ErrorCode,
+                SyncItemOwnerClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId)!
+                            .DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(syncErrors, "syncErrors.csv", m => { m.SyncItemOwnerClientName = GetClientName(m.SyncItemOwner); });
+        await StreamToCSV(syncErrors, "syncErrors.csv");
     }
 
     private async Task ExportTokens()
     {
-        var modifications = _tokensDbContext
+        var modifications = _adminApiDbContext
             .Tokens
             .Select(t => new TokenExport
             {
                 TokenId = t.Id,
                 CreatedAt = t.CreatedAt,
-                CreatedBy = t.CreatedBy.Value,
+                CreatedBy = t.CreatedBy,
                 CipherSize = t.Content.Length,
-                ExpiresAt = t.ExpiresAt
+                ExpiresAt = t.ExpiresAt,
+                CreatedByClientName =
+                    _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
+                        ? null
+                        : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
+                            .DisplayName
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(modifications, "tokens.csv", m => { m.CreatedByClientName = GetClientName(m.CreatedBy); });
+        await StreamToCSV(modifications, "tokens.csv");
     }
 
-    private string? GetClientName(string address)
-    {
-        return _addressToClientDisplayName.TryGetValue(address, out var clientName) ? clientName : null;
-    }
-
-    private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename, Action<T> enricher) where T : notnull
+    private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename) where T : notnull
     {
         await using var outputFileStream = new StreamWriter(Path.Join(_pathToExportDirectory, filename), append: false);
 
         var headerLine = string.Join(",", typeof(T).GetProperties().Select(p => p.Name));
         await outputFileStream.WriteLineAsync(headerLine);
 
+        var numberOfItems = 0;
+
         await foreach (var obj in objects)
         {
-            enricher(obj);
             await outputFileStream.WriteLineAsync(obj.ToCsv());
+            numberOfItems++;
         }
+
+        Console.WriteLine($@"Successfully exported {numberOfItems} items to {Path.GetFileName(filename)}.");
     }
 
     private void ZipExportDirectory()

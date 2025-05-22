@@ -33,6 +33,7 @@
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
+        <ProjectReference Include="..\..\..\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="BeforeBuild" Condition="$(Configuration) == Debug">

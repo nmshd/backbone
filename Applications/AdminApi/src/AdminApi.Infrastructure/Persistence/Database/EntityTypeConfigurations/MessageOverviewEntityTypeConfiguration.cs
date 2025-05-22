@@ -12,7 +12,6 @@ public class MessageOverviewEntityTypeConfiguration : IEntityTypeConfiguration<M
         builder
             .HasMany(m => m.Recipients)
             .WithOne()
-            .HasForeignKey(r => r.MessageId)
             .IsRequired();
 
         builder.HasKey(m => m.MessageId);

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
+﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 
-namespace Backbone.AdminCli.Commands.Database.Types;
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 
 public class DatawalletModificationExport
 {

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+﻿using Backbone.AdminApi.Infrastructure.DTOs;
 
-namespace Backbone.AdminCli.Commands.Database.Types;
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 
 public class RelationshipExport
 {

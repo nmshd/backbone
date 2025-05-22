@@ -1,6 +1,7 @@
 using System.CommandLine;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.AdminCli.Configuration;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
@@ -18,6 +19,7 @@ using Backbone.Modules.Tokens.Module;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
 using RootCommand = Backbone.AdminCli.Commands.RootCommand;
 
@@ -78,6 +80,12 @@ public class Program
             .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration, Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
             .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration, Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
             .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+
+#pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
+        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminCliConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+        services.AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);

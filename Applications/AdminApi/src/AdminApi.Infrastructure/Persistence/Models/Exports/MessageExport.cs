@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminCli.Commands.Database.Types;
+﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 
 public class MessageExport
 {

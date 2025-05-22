@@ -1,7 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
-namespace Backbone.AdminCli.Commands.Database.Types;
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 
 public class DeviceExport
 {

@@ -1,4 +1,6 @@
-﻿namespace Backbone.AdminApi.Infrastructure.DTOs;
+﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
+
+namespace Backbone.AdminApi.Infrastructure.DTOs;
 
 public class MessageOverview
 {
