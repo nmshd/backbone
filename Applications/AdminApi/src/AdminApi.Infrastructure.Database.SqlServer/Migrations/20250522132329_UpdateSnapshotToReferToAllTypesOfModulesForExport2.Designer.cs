@@ -4,16 +4,19 @@ using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminApiDbContext))]
-    partial class AdminUiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250522132329_UpdateSnapshotToReferToAllTypesOfModulesForExport2")]
+    partial class UpdateSnapshotToReferToAllTypesOfModulesForExport2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
