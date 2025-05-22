@@ -102,7 +102,7 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ClaimOwnership(string fileId, [FromBody] ClaimFileRequest claimRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = claimRequest.FileOwnershipToken }, cancellationToken);
+        var response = await _mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = claimRequest.OwnershipToken }, cancellationToken);
         return Ok(response);
     }
 
@@ -113,7 +113,7 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] ValidateFileOwnershipTokenRequest validateRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(validateRequest.FileOwnershipToken, fileId), cancellationToken);
+        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(validateRequest.OwnershipToken, fileId), cancellationToken);
         return Ok(response);
     }
 
