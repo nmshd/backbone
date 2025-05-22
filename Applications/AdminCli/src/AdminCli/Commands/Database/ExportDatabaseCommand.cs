@@ -6,6 +6,8 @@ using Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.Tooling;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Spectre.Console;
 
 // ReSharper disable MergeConditionalExpression
 
@@ -65,20 +67,51 @@ public class ExportDatabaseCommand : AdminCliCommand
 
     private async Task ExportDatabase()
     {
-        await ExportDevices();
-        await ExportDeletionAuditLogItems();
-        await ExportRelationshipTemplates();
-        await ExportRelationships();
-        await ExportFiles();
-        await ExportMessages();
-        await ExportDatawalletModifications();
-        await ExportTokens();
-        await ExportSyncErrors();
+        await AnsiConsole.Progress()
+            .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new SpinnerColumn(), new PercentageColumn())
+            .StartAsync(async ctx =>
+            {
+                var exportDevicesTask = ctx.AddTask("Devices", autoStart: false);
+                var exportDeletionAuditLogItemsTask = ctx.AddTask("Deletion audit log items", autoStart: false);
+                var exportRelationshipTemplatesTask = ctx.AddTask("Relationship templates", autoStart: false);
+                var exportRelationshipsTask = ctx.AddTask("Relationships", autoStart: false);
+                var exportFilesTask = ctx.AddTask("Files", autoStart: false);
+                var exportMessagesTask = ctx.AddTask("Messages", autoStart: false);
+                var exportDatawalletModificationsTask = ctx.AddTask("Datawallet modifications", autoStart: false);
+                var exportTokensTask = ctx.AddTask("Tokens", autoStart: false);
+                var exportSyncErrorsTask = ctx.AddTask("Sync errors", autoStart: false);
+
+                exportDevicesTask.StartTask();
+                await ExportDevices(exportDevicesTask);
+
+                exportDeletionAuditLogItemsTask.StartTask();
+                await ExportDeletionAuditLogItems(exportDeletionAuditLogItemsTask);
+
+                exportRelationshipTemplatesTask.StartTask();
+                await ExportRelationshipTemplates(exportRelationshipTemplatesTask);
+
+                exportRelationshipsTask.StartTask();
+                await ExportRelationships(exportRelationshipsTask);
+
+                exportFilesTask.StartTask();
+                await ExportFiles(exportFilesTask);
+
+                exportMessagesTask.StartTask();
+                await ExportMessages(exportMessagesTask);
+
+                exportDatawalletModificationsTask.StartTask();
+                await ExportDatawalletModifications(exportDatawalletModificationsTask);
+
+                exportTokensTask.StartTask();
+                await ExportTokens(exportTokensTask);
+
+                exportSyncErrorsTask.StartTask();
+                await ExportSyncErrors(exportSyncErrorsTask);
+            });
 
         ZipExportDirectory();
 
         DeleteExportDirectory();
-
         Console.WriteLine(
             $"""
              Export completed. The zip file was saved at the following location: {_pathToZipFile}. If you ran this command from Kubernetes, you can copy it to your local system by running the following command:
@@ -86,7 +119,7 @@ public class ExportDatabaseCommand : AdminCliCommand
              """);
     }
 
-    private async Task ExportDevices()
+    private async Task ExportDevices(ProgressTask progressReporter)
     {
         var devices = _adminApiDbContext
             .Devices
@@ -110,10 +143,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(devices, "devices.csv");
+        await StreamToCSV(devices, "devices.csv", progressReporter);
     }
 
-    private async Task ExportDeletionAuditLogItems()
+    private async Task ExportDeletionAuditLogItems(ProgressTask progressReporter)
     {
         var deletionAuditLogItems = _adminApiDbContext
             .IdentityDeletionProcessAuditLogs
@@ -128,10 +161,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv");
+        await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", progressReporter);
     }
 
-    private async Task ExportRelationshipTemplates()
+    private async Task ExportRelationshipTemplates(ProgressTask progressReporter)
     {
         var templates = _adminApiDbContext
             .RelationshipTemplates
@@ -153,10 +186,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(templates, "relationshipTemplates.csv");
+        await StreamToCSV(templates, "relationshipTemplates.csv", progressReporter);
     }
 
-    private async Task ExportRelationships()
+    private async Task ExportRelationships(ProgressTask progressReporter)
     {
         var relationships = _adminApiDbContext
             .Relationships
@@ -181,10 +214,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(relationships, "relationships.csv");
+        await StreamToCSV(relationships, "relationships.csv", progressReporter);
     }
 
-    private async Task ExportFiles()
+    private async Task ExportFiles(ProgressTask progressReporter)
     {
         var files = _adminApiDbContext
             .FileMetadata
@@ -208,10 +241,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(files, "files.csv");
+        await StreamToCSV(files, "files.csv", progressReporter);
     }
 
-    private async Task ExportMessages()
+    private async Task ExportMessages(ProgressTask progressReporter)
     {
         var messages = _adminApiDbContext
             .Messages
@@ -239,10 +272,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(messages, "messages.csv");
+        await StreamToCSV(messages, "messages.csv", progressReporter);
     }
 
-    private async Task ExportDatawalletModifications()
+    private async Task ExportDatawalletModifications(ProgressTask progressReporter)
     {
         var modifications = _adminApiDbContext
             .DatawalletModifications
@@ -265,10 +298,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(modifications, "datawalletModifications.csv");
+        await StreamToCSV(modifications, "datawalletModifications.csv", progressReporter);
     }
 
-    private async Task ExportSyncErrors()
+    private async Task ExportSyncErrors(ProgressTask progressReporter)
     {
         var syncErrors = _adminApiDbContext
             .SyncErrors
@@ -287,10 +320,10 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(syncErrors, "syncErrors.csv");
+        await StreamToCSV(syncErrors, "syncErrors.csv", progressReporter);
     }
 
-    private async Task ExportTokens()
+    private async Task ExportTokens(ProgressTask progressReporter)
     {
         var modifications = _adminApiDbContext
             .Tokens
@@ -310,25 +343,27 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(modifications, "tokens.csv");
+        await StreamToCSV(modifications, "tokens.csv", progressReporter);
     }
 
-    private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename) where T : notnull
+    private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename, ProgressTask progressReporter) where T : notnull
     {
         await using var outputFileStream = new StreamWriter(Path.Join(_pathToExportDirectory, filename), append: false);
 
         var headerLine = string.Join(",", typeof(T).GetProperties().Select(p => p.Name));
         await outputFileStream.WriteLineAsync(headerLine);
 
-        var numberOfItems = 0;
+        var total = await objects.CountAsync();
 
+        var current = 0;
         await foreach (var obj in objects)
         {
             await outputFileStream.WriteLineAsync(obj.ToCsv());
-            numberOfItems++;
+            current++;
+            progressReporter.Value = (double)current / total * 100;
         }
 
-        Console.WriteLine($@"Successfully exported {numberOfItems} items to {Path.GetFileName(filename)}.");
+        progressReporter.Value = 100;
     }
 
     private void ZipExportDirectory()
