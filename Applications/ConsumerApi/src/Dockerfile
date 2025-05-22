@@ -4,7 +4,7 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.24@sha256:86b4cff66e04d41821a17cea30c1031ed53e2635e2be99ae0b4a7d69336b5063 AS chisel
+FROM golang:1.24@sha256:1bcf8844d2464a6485c87646f9da684610758eb1a2df63c8a6e7ca47c64f8655 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
