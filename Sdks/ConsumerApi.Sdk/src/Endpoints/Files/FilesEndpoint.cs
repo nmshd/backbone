@@ -49,7 +49,7 @@ public class FilesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 
     public async Task<ApiResponse<ClaimFileOwnershipResponse>> ClaimFileOwnership(string fileId, ClaimFileOwnershipRequest request)
     {
-        return await _client.Patch<ClaimFileOwnershipResponse>($"api/{API_VERSION}/Files/{fileId}/ClaimFileOwnership", request);
+        return await _client.Patch<ClaimFileOwnershipResponse>($"api/{API_VERSION}/Files/{fileId}/ClaimOwnership", request);
     }
 
     public async Task<RawApiResponse> DownloadFile(string id)
