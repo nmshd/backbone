@@ -16,6 +16,8 @@ public class CreateFileResponse
     public required string Owner { get; set; }
     public required byte[] OwnerSignature { get; set; }
 
+    public required string OwnershipToken { get; set; }
+
     public required long CipherSize { get; set; }
     public required byte[] CipherHash { get; set; }
 

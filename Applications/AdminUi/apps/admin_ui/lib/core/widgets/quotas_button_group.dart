@@ -44,13 +44,12 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
           Gaps.w8,
           IconButton.filled(
             icon: const Icon(Icons.add),
-            onPressed:
-                () => showAddQuotaDialog(
-                  context: context,
-                  identityAddress: widget.identityAddress,
-                  tierId: widget.tierId,
-                  onQuotaAdded: widget.onQuotasChanged,
-                ),
+            onPressed: () => showAddQuotaDialog(
+              context: context,
+              identityAddress: widget.identityAddress,
+              tierId: widget.tierId,
+              onQuotaAdded: widget.onQuotasChanged,
+            ),
           ),
         ],
       ),

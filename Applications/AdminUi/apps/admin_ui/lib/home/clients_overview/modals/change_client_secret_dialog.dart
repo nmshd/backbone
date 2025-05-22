@@ -7,7 +7,10 @@ import 'package:go_router/go_router.dart';
 import '/core/core.dart';
 
 Future<void> showChangeClientSecretDialog({required BuildContext context, required String clientId}) async {
-  await showDialog<void>(context: context, builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId));
+  await showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId),
+  );
 }
 
 class _ChangeClientSecretDialog extends StatefulWidget {

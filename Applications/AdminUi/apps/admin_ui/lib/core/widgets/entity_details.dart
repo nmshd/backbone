@@ -16,8 +16,8 @@ class CopyableEntityDetails extends StatelessWidget {
       value: value,
       icon: Icons.copy,
       tooltipMessage: context.l10n.copyToClipboard_tooltip,
-      onIconPressed:
-          () => context.setClipboardDataWithSuccessNotification(clipboardText: value, successMessage: context.l10n.copyToClipboard_success(title)),
+      onIconPressed: () =>
+          context.setClipboardDataWithSuccessNotification(clipboardText: value, successMessage: context.l10n.copyToClipboard_success(title)),
       ellipsize: ellipsize,
     );
   }
@@ -44,7 +44,10 @@ class EntityDetails extends StatelessWidget {
       label: Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+            TextSpan(
+              text: '$title ',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+            ),
             TextSpan(text: ellipsize != null ? value.ellipsize(ellipsize!) : value, style: Theme.of(context).textTheme.bodyLarge),
           ],
         ),

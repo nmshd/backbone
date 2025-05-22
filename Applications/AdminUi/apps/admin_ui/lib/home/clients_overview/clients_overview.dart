@@ -96,50 +96,49 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     const DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
-                  rows:
-                      _originalClients
-                          .where((e) => _filter.matches(e))
-                          .map(
-                            (client) => DataRow2(
-                              onTap: () => context.go('/clients/${client.clientId}'),
-                              selected: _selectedClients.contains(client.clientId),
-                              onSelectChanged: (selected) {
-                                if (selected == null) return;
+                  rows: _originalClients
+                      .where((e) => _filter.matches(e))
+                      .map(
+                        (client) => DataRow2(
+                          onTap: () => context.go('/clients/${client.clientId}'),
+                          selected: _selectedClients.contains(client.clientId),
+                          onSelectChanged: (selected) {
+                            if (selected == null) return;
 
-                                setState(() {
-                                  if (selected) {
-                                    _selectedClients.add(client.clientId);
-                                  } else {
-                                    _selectedClients.remove(client.clientId);
-                                  }
-                                });
-                              },
-                              cells: [
-                                DataCell(Text(client.clientId)),
-                                DataCell(Text(client.displayName)),
-                                DataCell(Text(client.defaultTier.name)),
-                                DataCell(Text('${client.numberOfIdentities}')),
-                                DataCell(
-                                  Tooltip(
-                                    message:
-                                        '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)} ${DateFormat.Hms().format(client.createdAt)}',
-                                    child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)),
-                                  ),
-                                ),
-                                DataCell(
-                                  FilledButton(
-                                    onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
-                                    child: Text(
-                                      context.l10n.changeClientSecret,
-                                      style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            setState(() {
+                              if (selected) {
+                                _selectedClients.add(client.clientId);
+                              } else {
+                                _selectedClients.remove(client.clientId);
+                              }
+                            });
+                          },
+                          cells: [
+                            DataCell(Text(client.clientId)),
+                            DataCell(Text(client.displayName)),
+                            DataCell(Text(client.defaultTier.name)),
+                            DataCell(Text('${client.numberOfIdentities}')),
+                            DataCell(
+                              Tooltip(
+                                message:
+                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)} ${DateFormat.Hms().format(client.createdAt)}',
+                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)),
+                              ),
                             ),
-                          )
-                          .toList(),
+                            DataCell(
+                              FilledButton(
+                                onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
+                                child: Text(
+                                  context.l10n.changeClientSecret,
+                                  style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],

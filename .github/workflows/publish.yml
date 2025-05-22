@@ -242,7 +242,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
-      - run: echo "$PASSWORD" | helm registry login -u $USER --password-stdin https://ghcr.io
+      - name: Install helm
+        uses: azure/setup-helm@v4
+      - run: echo "$PASSWORD" | helm registry login -u $USER --password-stdin ghcr.io
         env:
           USER: ${{ github.actor }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}

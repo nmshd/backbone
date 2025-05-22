@@ -14,7 +14,13 @@ class InputField extends StatelessWidget {
       children: [
         Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
         Gaps.h8,
-        SizedBox(width: 180, child: TextField(onChanged: onEnteredText, decoration: const InputDecoration(border: OutlineInputBorder()))),
+        SizedBox(
+          width: 180,
+          child: TextField(
+            onChanged: onEnteredText,
+            decoration: const InputDecoration(border: OutlineInputBorder()),
+          ),
+        ),
       ],
     );
   }
