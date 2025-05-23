@@ -215,7 +215,7 @@ public class ExportDatabaseCommand : AdminCliCommand
     private async Task ExportFiles(ProgressTask progressReporter)
     {
         var files = _adminApiDbContext
-            .FileMetadata
+            .Files
             .Select(f => new FileExport
             {
                 FileId = f.Id,

@@ -34,7 +34,7 @@ public class AdminApiDbContext : AbstractDbContextBase
     public DbSet<Relationship> Relationships { get; set; } = null!;
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
-    public DbSet<File> FileMetadata { get; set; } = null!;
+    public DbSet<File> Files { get; set; } = null!;
 
     public DbSet<Message> Messages { get; set; } = null!;
 
