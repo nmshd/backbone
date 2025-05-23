@@ -6,7 +6,6 @@ using Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.Tooling;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
 
 // ReSharper disable MergeConditionalExpression
@@ -123,7 +122,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var devices = _adminApiDbContext
             .Devices
-            .AsNoTracking()
             .Select(d => new DeviceExport
             {
                 DeviceId = d.Id,
@@ -150,7 +148,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var deletionAuditLogItems = _adminApiDbContext
             .IdentityDeletionProcessAuditLogs
-            .AsNoTracking()
             .Select(i => new DeletionAuditLogItemExport
             {
                 OldStatus = i.OldStatus,
@@ -168,7 +165,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var templates = _adminApiDbContext
             .RelationshipTemplates
-            .AsNoTracking()
             .Select(t => new RelationshipTemplateExport
             {
                 TemplateId = t.Id,
@@ -193,7 +189,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var relationships = _adminApiDbContext
             .Relationships
-            .AsNoTracking()
             .Select(r => new RelationshipExport
             {
                 RelationshipId = r.Id,
@@ -221,7 +216,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var files = _adminApiDbContext
             .FileMetadata
-            .AsNoTracking()
             .Select(f => new FileExport
             {
                 FileId = f.Id,
@@ -248,7 +242,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var messages = _adminApiDbContext
             .Messages
-            .AsNoTracking()
             .Select(m => new MessageExport
             {
                 MessageId = m.Id,
@@ -279,7 +272,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var modifications = _adminApiDbContext
             .DatawalletModifications
-            .AsNoTracking()
             .Select(m => new DatawalletModificationExport
             {
                 DatawalletModificationId = m.Id,
@@ -305,7 +297,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var syncErrors = _adminApiDbContext
             .SyncErrors
-            .AsNoTracking()
             .Select(e => new SyncErrorExport
             {
                 ErrorId = e.Id,
@@ -327,7 +318,6 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         var modifications = _adminApiDbContext
             .Tokens
-            .AsNoTracking()
             .Select(t => new TokenExport
             {
                 TokenId = t.Id,
