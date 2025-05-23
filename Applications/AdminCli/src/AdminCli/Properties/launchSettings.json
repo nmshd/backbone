@@ -24,9 +24,9 @@
           "commandName": "Project",
           "commandLineArgs": "tier list"
       },
-      "Reset access-failed-count of Token": {
+      "Export database": {
           "commandName": "Project",
-          "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
+          "commandLineArgs": "database export"
       }
   }
 }

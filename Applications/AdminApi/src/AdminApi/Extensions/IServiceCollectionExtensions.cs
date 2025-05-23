@@ -2,8 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Filters;
-using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -128,7 +128,7 @@ public static class IServiceCollectionExtensions
         var builder = new ODataConventionModelBuilder()
             .EnableLowerCamelCase();
 
-        builder.EntitySet<IdentityOverview>("Identities")
+        builder.EntitySet<IdentityOverviewDTO>("Identities")
             .EntityType.HasKey(identity => identity.Address);
 
 

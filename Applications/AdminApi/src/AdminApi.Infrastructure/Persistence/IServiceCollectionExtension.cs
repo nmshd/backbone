@@ -1,5 +1,6 @@
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.AdminApi.Infrastructure.Persistence;
@@ -16,8 +17,8 @@ public static class IServiceCollectionExtensions
             {
                 BuildingBlocks.Infrastructure.Persistence.Database.IServiceCollectionExtensions.SQLSERVER => SQLSERVER_MIGRATIONS_ASSEMBLY,
                 BuildingBlocks.Infrastructure.Persistence.Database.IServiceCollectionExtensions.POSTGRES => POSTGRES_MIGRATIONS_ASSEMBLY,
-                _ => throw new Exception($"Unsupported database provider for Admin API")
-            }, "AdminUi");
+                _ => throw new Exception("Unsupported database provider for Admin API")
+            }, "AdminUi", queryTrackingBehavior: QueryTrackingBehavior.NoTracking);
 
         return services;
     }

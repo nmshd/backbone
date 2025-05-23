@@ -1,4 +1,4 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Query;
@@ -17,8 +17,18 @@ public class IdentitiesController : ODataController
     }
 
     [EnableQuery]
-    public IQueryable<IdentityOverview> Get()
+    public IQueryable<IdentityOverviewDTO> Get()
     {
-        return _adminApiDbContext.IdentityOverviews;
+        return _adminApiDbContext.Identities.Select(i => new IdentityOverviewDTO
+        {
+            Address = i.Address,
+            IdentityVersion = i.IdentityVersion,
+            CreatedAt = i.CreatedAt,
+            Tier = _adminApiDbContext.Tiers.Select(t => new TierDTO { Id = t.Id, Name = t.Name }).First(t => t.Id == i.TierId),
+            DatawalletVersion = _adminApiDbContext.Datawallets.Where(d => d.Owner == i.Address).Select(d => d.Version).First(),
+            CreatedWithClient = i.ClientId,
+            LastLoginAt = i.Devices.Max(d => d.User.LastLoginAt),
+            NumberOfDevices = i.Devices.Count
+        });
     }
 }

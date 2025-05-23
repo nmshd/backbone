@@ -44,7 +44,7 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
               cells: [
                 DataCell(Text(relationship.$2.peer)),
                 DataCell(Text(relationship.$2.requestedBy)),
-                DataCell(Text(relationship.$2.templateId)),
+                DataCell(Text(relationship.$2.templateId ?? '')),
                 DataCell(Text(relationship.$2.status)),
                 DataCell(
                   Tooltip(

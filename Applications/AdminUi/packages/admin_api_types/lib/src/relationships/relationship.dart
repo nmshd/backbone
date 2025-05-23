@@ -6,7 +6,7 @@ part 'relationship.g.dart';
 class Relationship {
   final String peer;
   final String requestedBy;
-  final String templateId;
+  final String? templateId;
   final String status;
   final DateTime creationDate;
   final DateTime? answeredAt;

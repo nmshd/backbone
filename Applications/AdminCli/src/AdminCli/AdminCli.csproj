@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
+        <PackageReference Include="Spectre.Console" Version="0.50.0" />
         <PackageReference Include="System.CommandLine" Version="[2.0.0-beta4.22272.1]" />
     </ItemGroup>
 
@@ -22,9 +23,18 @@
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Module\Announcements.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Module\Devices.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Module\Relationships.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Module\Synchronization.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
+        <ProjectReference Include="..\..\..\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="BeforeBuild" Condition="$(Configuration) == Debug">

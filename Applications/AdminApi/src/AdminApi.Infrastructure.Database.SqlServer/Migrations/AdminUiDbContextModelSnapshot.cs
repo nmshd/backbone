@@ -18,18 +18,135 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("AdminUi")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.AspNetUser", b =>
                 {
-                    b.Property<string>("ClientId")
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId")
+                        .IsUnique();
+
+                    b.ToTable("AspNetUsers", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Device", b =>
+                {
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityAddress");
+
+                    b.ToTable("Devices", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Identity", b =>
+                {
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletionGracePeriodEndsAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("IdentityVersion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TierId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Address");
+
+                    b.ToTable("Identities", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.IdentityDeletionProcessAuditLogEntry", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("IdentityAddressHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("MessageKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NewStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OldStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityDeletionProcessAuditLog", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.OpenIddictApplication", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DefaultTier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -38,73 +155,132 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.Property<int?>("MaxIdentities")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfIdentities")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("ClientId");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("ClientOverviews", "AdminUi");
+                    b.ToTable("OpenIddictApplications", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.PnsRegistration", b =>
                 {
-                    b.Property<string>("Address")
+                    b.Property<string>("DeviceId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Handle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DeviceId");
+
+                    b.ToTable("PnsRegistrations", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Tier", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tiers", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Files.File", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("CipherSize")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedWithClient")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DatawalletVersion")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("IdentityVersion")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("LastLoginAt")
+                    b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("NumberOfDevices")
-                        .HasColumnType("int");
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Address");
+                    b.HasKey("Id");
 
-                    b.ToTable((string)null);
-
-                    b.ToView("IdentityOverviews", "AdminUi");
+                    b.ToTable("FileMetadata", "Files", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.Message", b =>
                 {
-                    b.Property<string>("MessageId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("NumberOfAttachments")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Body")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<DateTime>("SendDate")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("SenderAddress")
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SenderDevice")
+                    b.Property<string>("CreatedByDevice")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MessageId");
+                    b.HasKey("Id");
 
-                    b.ToTable((string)null);
-
-                    b.ToView("MessageOverviews", "AdminUi");
+                    b.ToTable("Messages", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageRecipient", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.MessageAttachment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MessageId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("Attachments", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.MessageRecipient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,6 +296,13 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("ReceivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RelationshipId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MessageId");
@@ -130,28 +313,23 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.RelationshipOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.Relationship", b =>
                 {
-                    b.Property<DateTime?>("AnsweredAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AnsweredByDevice")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedByDevice")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("From")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("FromHasDecomposed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("RelationshipTemplateId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -160,108 +338,333 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable((string)null);
+                    b.Property<bool>("ToHasDecomposed")
+                        .HasColumnType("bit");
 
-                    b.ToView("RelationshipOverviews", "AdminUi");
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipTemplateId");
+
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.TierOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipAuditLogItem", b =>
                 {
-                    b.Property<bool>("CanBeManuallyAssigned")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("CanBeUsedAsDefaultForClient")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByDevice")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumberOfIdentities")
+                    b.Property<string>("RelationshipId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipId");
+
+                    b.ToTable("RelationshipAuditLog", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RelationshipTemplates", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("AllocatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RelationshipTemplateId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipTemplateId");
+
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.Datawallet", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Version")
                         .HasColumnType("int");
 
-                    b.ToTable((string)null);
+                    b.HasKey("Id");
 
-                    b.ToView("TierOverviews", "AdminUi");
+                    b.ToTable("Datawallets", "Synchronization", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.DatawalletModification", b =>
                 {
-                    b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Collection")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("EncryptedPayload")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ObjectIdentifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayloadCategory")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DatawalletModifications", "Synchronization", t =>
                         {
-                            b1.Property<string>("ClientOverviewClientId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<string>("Id")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultTierId");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("DefaultTierName");
-
-                            b1.HasKey("ClientOverviewClientId");
-
-                            b1.ToTable((string)null);
-
-                            b1.ToView("ClientOverviews", "AdminUi");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ClientOverviewClientId");
+                            t.ExcludeFromMigrations();
                         });
+                });
 
-                    b.Navigation("DefaultTier")
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.ExternalEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExternalEvents", "Synchronization", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.SyncError", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ErrorCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExternalEventId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SyncRunId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExternalEventId");
+
+                    b.HasIndex("SyncRunId");
+
+                    b.ToTable("SyncErrors", "Synchronization", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.SyncRun", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("FinalizedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SyncRuns", "Synchronization", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Tokens.Token", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens", "Tokens", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.AspNetUser", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Device", "Device")
+                        .WithOne("User")
+                        .HasForeignKey("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.AspNetUser", "DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Device");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Device", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Identity", "Identity")
+                        .WithMany("Devices")
+                        .HasForeignKey("IdentityAddress")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.MessageAttachment", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.Message", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.MessageRecipient", b =>
                 {
-                    b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
-                        {
-                            b1.Property<string>("IdentityOverviewAddress")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<string>("Id")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("TierId");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("TierName");
-
-                            b1.HasKey("IdentityOverviewAddress");
-
-                            b1.ToTable((string)null);
-
-                            b1.ToView("IdentityOverviews", "AdminUi");
-
-                            b1.WithOwner()
-                                .HasForeignKey("IdentityOverviewAddress");
-                        });
-
-                    b.Navigation("Tier")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageRecipient", b =>
-                {
-                    b.HasOne("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", null)
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.Message", null)
                         .WithMany("Recipients")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.Relationship", b =>
                 {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplate", "RelationshipTemplate")
+                        .WithMany()
+                        .HasForeignKey("RelationshipTemplateId");
+
+                    b.Navigation("RelationshipTemplate");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipAuditLogItem", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.Relationship", null)
+                        .WithMany("AuditLog")
+                        .HasForeignKey("RelationshipId");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplate", null)
+                        .WithMany("Allocations")
+                        .HasForeignKey("RelationshipTemplateId");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.SyncError", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.ExternalEvent", "ExternalEvent")
+                        .WithMany()
+                        .HasForeignKey("ExternalEventId");
+
+                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.SyncRun", "SyncRun")
+                        .WithMany()
+                        .HasForeignKey("SyncRunId");
+
+                    b.Navigation("ExternalEvent");
+
+                    b.Navigation("SyncRun");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Device", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Identity", b =>
+                {
+                    b.Navigation("Devices");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Messages.Message", b =>
+                {
+                    b.Navigation("Attachments");
+
                     b.Navigation("Recipients");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.Relationship", b =>
+                {
+                    b.Navigation("AuditLog");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Navigation("Allocations");
                 });
 #pragma warning restore 612, 618
         }
