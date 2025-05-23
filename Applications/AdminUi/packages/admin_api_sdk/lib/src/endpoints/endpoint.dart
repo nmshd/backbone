@@ -110,9 +110,10 @@ abstract class Endpoint {
     required int pageSize,
     Map<String, dynamic>? query,
   }) async {
+    final skip = pageNumber * pageSize;
     final response = await _dio.get<Map<String, dynamic>>(
       path,
-      queryParameters: {r'$top': '$pageSize', r'$skip': '$pageNumber', r'$count': 'true', r'$orderBy': orderBy, ...query ?? {}},
+      queryParameters: {r'$top': '$pageSize', r'$skip': '$skip', r'$count': 'true', r'$orderBy': orderBy, ...query ?? {}},
       options: Options(headers: {'Accept': 'application/json'}),
     );
     return _makeODataResult(response, transformer, pageNumber: pageNumber, pageSize: pageSize);
