@@ -1,4 +1,6 @@
-namespace Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
+
+namespace Backbone.AdminApi.DTOs;
 
 public class RelationshipDTO
 {

@@ -1,4 +1,4 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Query;
@@ -17,9 +17,9 @@ public class IdentitiesController : ODataController
     }
 
     [EnableQuery]
-    public IQueryable<IdentityOverview> Get()
+    public IQueryable<IdentityOverviewDTO> Get()
     {
-        return _adminApiDbContext.Identities.Select(i => new IdentityOverview
+        return _adminApiDbContext.Identities.Select(i => new IdentityOverviewDTO
         {
             Address = i.Address,
             IdentityVersion = i.IdentityVersion,

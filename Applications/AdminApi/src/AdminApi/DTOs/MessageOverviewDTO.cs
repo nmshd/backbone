@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
 
-namespace Backbone.AdminApi.Infrastructure.DTOs;
+namespace Backbone.AdminApi.DTOs;
 
 public class MessageOverview
 {

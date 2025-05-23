@@ -1,5 +1,6 @@
-namespace Backbone.AdminApi.Infrastructure.DTOs;
-public class ClientOverview
+namespace Backbone.AdminApi.DTOs;
+
+public class ClientOverviewDTO
 {
     public required string ClientId { get; set; }
     public required string DisplayName { get; set; }

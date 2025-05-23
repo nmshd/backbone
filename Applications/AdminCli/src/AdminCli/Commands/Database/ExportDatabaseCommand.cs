@@ -2,8 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
-using Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
 using Backbone.AdminCli.Commands.BaseClasses;
+using Backbone.AdminCli.Commands.Database.Model;
 using Backbone.Tooling;
 using MediatR;
 using Spectre.Console;

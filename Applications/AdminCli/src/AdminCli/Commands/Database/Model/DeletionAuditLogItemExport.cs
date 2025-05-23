@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
-namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
+namespace Backbone.AdminCli.Commands.Database.Model;
 
 public class DeletionAuditLogItemExport
 {

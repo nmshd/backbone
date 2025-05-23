@@ -1,6 +1,6 @@
-namespace Backbone.AdminApi.Infrastructure.DTOs;
+namespace Backbone.AdminApi.DTOs;
 
-public class IdentityOverview
+public class IdentityOverviewDTO
 {
     public required string Address { get; set; }
     public required DateTime CreatedAt { get; set; }

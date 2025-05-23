@@ -1,6 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
-
-namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
+﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
 
 public class Relationship
 {
@@ -14,6 +12,17 @@ public class Relationship
     public bool ToHasDecomposed { get; set; }
     public RelationshipTemplate? RelationshipTemplate { get; set; }
     public IList<RelationshipAuditLogItem> AuditLog { get; set; } = null!;
+}
+
+public enum RelationshipStatus
+{
+    Pending = 10,
+    Active = 20,
+    Rejected = 30,
+    Revoked = 40,
+    Terminated = 50,
+    DeletionProposed = 60,
+    ReadyForDeletion = 70
 }
 
 public class RelationshipAuditLogItem

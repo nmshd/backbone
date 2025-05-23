@@ -1,4 +1,5 @@
-namespace Backbone.AdminApi.Infrastructure.DTOs;
+namespace Backbone.AdminApi.DTOs;
+
 public class TierOverview
 {
     public required string Id { get; set; }

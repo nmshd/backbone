@@ -1,4 +1,4 @@
-namespace Backbone.AdminApi.Infrastructure.DTOs;
+namespace Backbone.AdminApi.DTOs;
 
 public class TierDTO
 {

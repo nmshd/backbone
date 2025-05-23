@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
-namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Exports;
+namespace Backbone.AdminCli.Commands.Database.Model;
 
 public class DeviceExport
 {
@@ -12,6 +12,6 @@ public class DeviceExport
     public required IdentityStatus IdentityStatus { get; set; }
     public required DateTime? IdentityDeletionGracePeriodEndsAt { get; set; }
 
-    public string? ClientName { get; set; }
+    public required string? ClientName { get; set; }
     public required PushNotificationPlatform? Platform { get; set; } = null!;
 }
