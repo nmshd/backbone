@@ -11,6 +11,5 @@ public class DeviceEntityTypeConfiguration : IEntityTypeConfiguration<Device>
         builder.ToTable("Devices", "Devices", t => t.ExcludeFromMigrations());
 
         builder.HasKey(x => x.Id);
-        // builder.HasOne(x => x.User).WithOne(x => x.Device);
     }
 }

@@ -11,6 +11,5 @@ internal class AspNetUserEntityTypeConfiguration : IEntityTypeConfiguration<AspN
         builder.ToTable("AspNetUsers", "Devices", t => t.ExcludeFromMigrations());
 
         builder.HasKey(x => x.Id);
-        builder.HasOne(x => x.Device).WithOne(x => x.User);
     }
 }
