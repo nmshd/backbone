@@ -36,13 +36,13 @@ public class AdminApiDbContext : AbstractDbContextBase
 
     public DbSet<File> FileMetadata { get; set; } = null!;
 
-    public virtual DbSet<Message> Messages { get; set; } = null!;
+    public DbSet<Message> Messages { get; set; } = null!;
 
     public DbSet<Datawallet> Datawallets { get; set; } = null!;
     public DbSet<DatawalletModification> DatawalletModifications { get; set; } = null!;
     public DbSet<SyncError> SyncErrors { get; set; } = null!;
 
-    public virtual DbSet<Token> Tokens { get; set; } = null!;
+    public DbSet<Token> Tokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
