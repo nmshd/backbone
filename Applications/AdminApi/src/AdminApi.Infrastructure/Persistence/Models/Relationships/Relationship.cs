@@ -13,4 +13,12 @@ public class Relationship
     public bool FromHasDecomposed { get; set; }
     public bool ToHasDecomposed { get; set; }
     public RelationshipTemplate? RelationshipTemplate { get; set; }
+    public IList<RelationshipAuditLogItem> AuditLog { get; set; } = null!;
+}
+
+public class RelationshipAuditLogItem
+{
+    public string Id { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
+    public string CreatedByDevice { get; set; } = null!;
 }

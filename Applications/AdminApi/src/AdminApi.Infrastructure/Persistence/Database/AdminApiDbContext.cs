@@ -1,4 +1,3 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
@@ -25,24 +24,12 @@ public class AdminApiDbContext : AbstractDbContextBase
     {
     }
 
-    public DbSet<IdentityOverview> IdentityOverviews { get; set; } = null!;
-
-    public DbSet<TierOverview> TierOverviews { get; set; } = null!;
-
-    public DbSet<ClientOverview> ClientOverviews { get; set; } = null!;
-
-    public DbSet<RelationshipOverview> RelationshipOverviews { get; set; } = null!;
-
-    public DbSet<MessageOverview> MessageOverviews { get; set; } = null!;
-
-
     public DbSet<Identity> Identities { get; set; } = null!;
     public DbSet<OpenIddictApplication> OpenIddictApplications { get; set; } = null!;
     public DbSet<Device> Devices { get; set; } = null!;
     public DbSet<Tier> Tiers { get; set; } = null!;
     public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
     public DbSet<IdentityDeletionProcessAuditLogEntry> IdentityDeletionProcessAuditLogs { get; set; } = null!;
-
 
     public DbSet<Relationship> Relationships { get; set; } = null!;
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
@@ -51,6 +38,7 @@ public class AdminApiDbContext : AbstractDbContextBase
 
     public virtual DbSet<Message> Messages { get; set; } = null!;
 
+    public DbSet<Datawallet> Datawallets { get; set; } = null!;
     public DbSet<DatawalletModification> DatawalletModifications { get; set; } = null!;
     public DbSet<SyncError> SyncErrors { get; set; } = null!;
 

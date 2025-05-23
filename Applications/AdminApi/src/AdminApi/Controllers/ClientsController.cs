@@ -32,7 +32,15 @@ public class ClientsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
     {
-        var clientOverviews = await _adminApiDbContext.ClientOverviews.ToListAsync(cancellationToken);
+        var clientOverviews = await _adminApiDbContext.OpenIddictApplications.Select(a => new ClientOverview
+        {
+            CreatedAt = a.CreatedAt,
+            ClientId = a.ClientId,
+            DefaultTier = _adminApiDbContext.Tiers.Select(t => new TierDTO { Id = t.Id, Name = t.Name }).First(t => t.Id == a.DefaultTier),
+            DisplayName = a.DisplayName,
+            NumberOfIdentities = _adminApiDbContext.Identities.Count(i => i.ClientId == a.ClientId),
+            MaxIdentities = a.MaxIdentities
+        }).ToListAsync(cancellationToken);
         return Ok(clientOverviews);
     }
 

@@ -37,12 +37,23 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
-            .Where(r => r.To == participant || r.From == participant)
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+        var relationships = await _adminApiDbContext.Relationships.Where(r => r.To == participant || r.From == participant).Select(r => new RelationshipDTO
+            {
+                TemplateId = r.RelationshipTemplateId,
+                CreatedByDevice = r.AuditLog.ElementAt(0).CreatedByDevice,
+                AnsweredAt = r.AuditLog.Count > 1 ? r.AuditLog.ElementAt(1).CreatedAt : null,
+                AnsweredByDevice = r.AuditLog.Count > 1 ? r.AuditLog.ElementAt(1).CreatedByDevice : null,
+                CreationDate = r.CreatedAt,
+                Peer = r.From == participant ? r.To : r.From,
+                RequestedBy = r.To == participant ? "Peer" : "Self",
+                Status = r.Status
+            })
+            .OrderAndPaginate(d => d.CreationDate, paginationFilter, cancellationToken);
 
-        var relationshipItems = relationshipOverviews.ItemsOnPage.Select(i => new RelationshipDTO(participant, i));
+        // var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
+        //     .Where(r => r.To == participant || r.From == participant)
+        //     .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
-        return Paged(new PagedResponse<RelationshipDTO>(relationshipItems, paginationFilter, relationshipOverviews.TotalNumberOfItems));
+        return Paged(new PagedResponse<RelationshipDTO>(relationships.ItemsOnPage, paginationFilter, relationships.TotalNumberOfItems));
     }
 }

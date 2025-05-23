@@ -7,6 +7,9 @@ public class Identity
     public IdentityStatus Status { get; set; }
     public DateTime? DeletionGracePeriodEndsAt { get; set; }
     public string ClientId { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
+    public byte IdentityVersion { get; set; }
+    public IList<Device> Devices { get; set; } = null!;
 }
 
 public enum IdentityStatus

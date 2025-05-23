@@ -19,6 +19,16 @@ public class IdentitiesController : ODataController
     [EnableQuery]
     public IQueryable<IdentityOverview> Get()
     {
-        return _adminApiDbContext.IdentityOverviews;
+        return _adminApiDbContext.Identities.Select(i => new IdentityOverview
+        {
+            Address = i.Address,
+            IdentityVersion = i.IdentityVersion,
+            CreatedAt = i.CreatedAt,
+            Tier = _adminApiDbContext.Tiers.Select(t => new TierDTO { Id = t.Id, Name = t.Name }).First(t => t.Id == i.TierId),
+            DatawalletVersion = _adminApiDbContext.Datawallets.Where(d => d.Owner == i.Address).Select(d => d.Version).First(),
+            CreatedWithClient = i.ClientId,
+            LastLoginAt = i.Devices.Max(d => d.User.LastLoginAt),
+            NumberOfDevices = i.Devices.Count
+        });
     }
 }

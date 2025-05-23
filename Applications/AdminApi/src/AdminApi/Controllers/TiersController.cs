@@ -32,7 +32,15 @@ public class TiersController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverview>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
     {
-        var tiers = await _adminApiDbContext.TierOverviews.ToListAsync(cancellationToken);
+        var tiers = await _adminApiDbContext.Tiers.Select(t => new TierOverview
+        {
+            Id = t.Id,
+            Name = t.Name,
+            NumberOfIdentities = _adminApiDbContext.Identities.Count(i => i.TierId == t.Id),
+            CanBeManuallyAssigned = t.CanBeManuallyAssigned,
+            CanBeUsedAsDefaultForClient = t.CanBeUsedAsDefaultForClient
+        }).ToListAsync(cancellationToken);
+
         return Ok(tiers);
     }
 
