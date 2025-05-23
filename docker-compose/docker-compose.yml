@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres@sha256:bbdcc0478449fa12e85e0e4aca644f42733be578ad29d2bcd28f376ed477489a
+    image: postgres@sha256:6efd0df010dc3cb40d5e33e3ef84acecc5e73161bd3df06029ee8698e5e12c60
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:latest@sha256:52cee5aeee06ad86e32a66648c75632d61e064b49b4d25b5a6183c44d547be4a
+    image: datalust/seq:latest@sha256:cc8a3cf7f1477744f9b4632747676622e7bf1b8aa09f740bdb382e506c33a0ef
     container_name: seq
     ports:
       - "8085:80"

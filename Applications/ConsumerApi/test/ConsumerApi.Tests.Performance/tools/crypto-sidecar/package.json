@@ -10,7 +10,7 @@
     "license": "ISC",
     "dependencies": {
         "@js-soft/ts-serval": "2.0.12",
-        "@nmshd/crypto": "2.1.1",
+        "@nmshd/crypto": "2.1.2",
         "@types/koa": "2.15.0",
         "@types/koa-router": "7.4.8",
         "koa": "3.0.0",
