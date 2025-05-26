@@ -5,7 +5,7 @@ using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.DomainEvents.Incoming;
 
-public class AnnouncementCreatedDomainEventHandlerTests
+public class AnnouncementCreatedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Sends_push_notification_for_announcement()
