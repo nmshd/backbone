@@ -37,7 +37,9 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var relationships = await _adminApiDbContext.Relationships.Where(r => r.To == participant || r.From == participant).Select(r => new RelationshipDTO
+        var relationships = await _adminApiDbContext.Relationships
+            .Where(r => r.To == participant || r.From == participant)
+            .Select(r => new RelationshipDTO
             {
                 TemplateId = r.RelationshipTemplateId,
                 CreatedByDevice = r.AuditLog.ElementAt(0).CreatedByDevice,
