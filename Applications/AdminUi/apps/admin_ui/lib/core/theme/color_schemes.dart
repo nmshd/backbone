@@ -40,7 +40,7 @@ ThemeData _generateColorScheme({
     tones: tonesConstructor(brightness),
   );
 
-  final cardTheme = CardTheme(color: colorScheme.surface, shadowColor: colorScheme.shadow, surfaceTintColor: colorScheme.surfaceTint);
+  final cardTheme = CardThemeData(color: colorScheme.surface, shadowColor: colorScheme.shadow, surfaceTintColor: colorScheme.surfaceTint);
 
   return ThemeData(colorScheme: colorScheme, extensions: [customColors], cardTheme: cardTheme);
 }

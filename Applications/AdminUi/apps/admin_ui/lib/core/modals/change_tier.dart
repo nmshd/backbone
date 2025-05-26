@@ -17,23 +17,22 @@ Future<void> showChangeTierDialog({
 
   await showDialog<void>(
     context: context,
-    builder:
-        (BuildContext context) => _ShowChangeTierDialog(
-          onTierUpdated: onTierUpdated,
-          currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
-          assignTier: ({required String tierId}) {
-            if (clientDetails != null) {
-              return GetIt.I.get<AdminApiClient>().clients.updateClient(
-                clientDetails.clientId,
-                defaultTier: tierId,
-                maxIdentities: clientDetails.maxIdentities,
-              );
-            }
+    builder: (BuildContext context) => _ShowChangeTierDialog(
+      onTierUpdated: onTierUpdated,
+      currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
+      assignTier: ({required String tierId}) {
+        if (clientDetails != null) {
+          return GetIt.I.get<AdminApiClient>().clients.updateClient(
+            clientDetails.clientId,
+            defaultTier: tierId,
+            maxIdentities: clientDetails.maxIdentities,
+          );
+        }
 
-            return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
-          },
-          availableTiers: availableTiers,
-        ),
+        return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
+      },
+      availableTiers: availableTiers,
+    ),
   );
 }
 
@@ -74,10 +73,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
             value: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue!),
-            items:
-                widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
-                  return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
-                }).toList(),
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
+              return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
+            }).toList(),
           ),
         ),
         actions: [

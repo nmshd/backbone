@@ -45,7 +45,10 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Align(alignment: Alignment.centerLeft, child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress)),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress),
+            ),
           ),
         ),
         Expanded(child: DeletionProcessAuditLogsTable(auditLogs: identityDeletionProcessAuditLogs)),

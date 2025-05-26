@@ -58,14 +58,13 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                 ),
                 Gaps.w8,
                 ElevatedButton(
-                  onPressed:
-                      isButtonEnabled
-                          ? () {
-                            final address = textController.text.trim();
-                            textController.clear();
-                            context.push('/identities/$address/deletion-process-audit-logs');
-                          }
-                          : null,
+                  onPressed: isButtonEnabled
+                      ? () {
+                          final address = textController.text.trim();
+                          textController.clear();
+                          context.push('/identities/$address/deletion-process-audit-logs');
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isButtonEnabled ? Theme.of(context).colorScheme.primary : Colors.grey,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

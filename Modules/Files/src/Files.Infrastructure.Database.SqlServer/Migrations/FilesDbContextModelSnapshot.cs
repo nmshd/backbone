@@ -18,7 +18,8 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Files")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -77,6 +78,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("LastOwnershipClaimAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -104,6 +108,18 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("OwnershipIsLocked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("OwnershipToken")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 

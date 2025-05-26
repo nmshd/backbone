@@ -52,17 +52,16 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
                 wrapInCard: false,
                 empty: Text(widget.emptyTableMessage),
-                errorBuilder:
-                    (error) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(context.l10n.identityMessageTable_errorLoadingData),
-                          Gaps.h16,
-                          FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
-                        ],
-                      ),
-                    ),
+                errorBuilder: (error) => Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(context.l10n.identityMessageTable_errorLoadingData),
+                      Gaps.h16,
+                      FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
+                    ],
+                  ),
+                ),
                 columns: <DataColumn2>[
                   if (widget.type == MessageType.outgoing) DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: ColumnSize.L),
                   if (widget.type == MessageType.incoming) ...[

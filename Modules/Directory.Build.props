@@ -35,7 +35,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.0]" />
         <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

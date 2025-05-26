@@ -13,8 +13,14 @@
         },
 
         {
-            // do not upgrade the dart sdk as it will not be compatible with the version that flutter ships
+            // do not upgrade the dart sdk as it may not be compatible with the version that flutter ships
             matchDatasources: ["dart-version"],
+            enabled: false
+        },
+
+        {
+            // we want to manually control the version of the flutter sdk
+            matchDatasources: ["flutter-version"],
             enabled: false
         },
 

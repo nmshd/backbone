@@ -1,6 +1,9 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
+using Backbone.Modules.Files.Domain.Entities;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -9,7 +12,11 @@ internal class FilesStepDefinitions
 {
     private readonly ResponseContext _responseContext;
     private readonly FilesContext _filesContext;
+
     private readonly ClientPool _clientPool;
+    private ApiResponse<RegenerateFileOwnershipResponse>? _resetOwnershipTokenResponse;
+    private ApiResponse<ValidateFileOwnershipTokenResponse> _validateOwnershipTokenResponse = null!;
+    private ApiResponse<ClaimFileOwnershipResponse>? _claimFileOwnershipResponse;
 
     public FilesStepDefinitions(ResponseContext responseContext, FilesContext filesContext, ClientPool clientPool)
     {
@@ -24,8 +31,19 @@ internal class FilesStepDefinitions
     public async Task GivenFileCreatedByI(string fileName, string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
+        var createResult = await Utils.CreateFile(client);
+        var metadata = await client.Files.GetFileMetadata(createResult.Id);
+        _filesContext.Files[fileName] = metadata.Result!;
+        _filesContext.FileNameToOwnershipToken[fileName] = createResult.OwnershipToken;
+    }
 
-        _filesContext.Files[fileName] = await Utils.CreateFile(client);
+    [Given($"{RegexFor.SINGLE_THING} tries to claim {RegexFor.SINGLE_THING} with a wrong token")]
+    public void GivenITriesToClaimFWithAWrongToken(string identityName, string fileName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var file = _filesContext.Files[fileName];
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = "wrongTokenXXXXXXXXXX" };
+        _responseContext.WhenResponse = client.Files.ClaimFileOwnership(file.Id, request).Result;
     }
 
     #endregion
@@ -66,6 +84,171 @@ internal class FilesStepDefinitions
         var file = _filesContext.Files[fileName];
 
         _responseContext.WhenResponse = await identity.Files.GetFileMetadata(file.Id);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with the file's ownership token")]
+    public async Task WhenISendsAPatchRequestToTheFilesFIdClaimOwnershipWithTheOwnershipTokenFOwnershipToken(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+
+        var fileId = _filesContext.Files[fileName].Id;
+        var token = _filesContext.FileNameToOwnershipToken[fileName];
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = token };
+
+        _responseContext.WhenResponse = _claimFileOwnershipResponse = await identity.Files.ClaimFileOwnership(fileId, request);
+
+        if (!_claimFileOwnershipResponse.IsError)
+            _filesContext.FileNameToOwnershipToken[fileName] = _claimFileOwnershipResponse.Result!.NewOwnershipToken;
+        var getFileResponse = await identity.Files.GetFileMetadata(fileId);
+        _filesContext.Files[fileName] = getFileResponse.Result!;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with an incorrect ownership token")]
+    public async Task WhenISendsApatchRequestToTheFilesFIdClaimOwnershipWithAnIncorrectOwnershipToken(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var fileId = _filesContext.Files[fileName].Id;
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = FileOwnershipToken.New().Value };
+
+        _responseContext.WhenResponse = _claimFileOwnershipResponse = identity.Files.ClaimFileOwnership(fileId, request).Result;
+
+        var getFileResponse = await identity.Files.GetFileMetadata(fileId);
+        _filesContext.Files[fileName] = getFileResponse.Result!;
+    }
+
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with an invalid ownership token")]
+    public void WhenISendsApatchRequestToTheFilesFIdClaimOwnershipWithAMalformedToken(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var fileId = _filesContext.Files.FirstOrDefault(f => f.Key == fileName).Value?.Id ?? fileName;
+
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = "ownershipTokenWithMoreThan20Characters" };
+        _responseContext.WhenResponse = _claimFileOwnershipResponse = identity.Files.ClaimFileOwnership(fileId, request).Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to claim a file with an invalid FileId")]
+    public void WhenITriesToClaimAFileWithAInvalidFileId(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = FileOwnershipToken.New().Value };
+        _responseContext.WhenResponse = _claimFileOwnershipResponse = identity.Files.ClaimFileOwnership("InvalidFileId", request).Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to claim a non-existing file")]
+    public void WhenITriesToClaimANonExistingFile(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = FileOwnershipToken.New().Value };
+        _responseContext.WhenResponse = _claimFileOwnershipResponse = identity.Files.ClaimFileOwnership(FileId.New(), request).Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/RegenerateOwnershipToken endpoint")]
+    public void WhenISendsAPatchRequestToTheFilesFIdRegenerateOwnershipTokenEndpoint(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var fileId = _filesContext.Files[fileName].Id;
+        _responseContext.WhenResponse = _resetOwnershipTokenResponse = identity.Files.RegenerateFileOwnershipToken(fileId).Result;
+
+        if (_resetOwnershipTokenResponse.Result != null)
+            _filesContext.FileNameToOwnershipToken[fileName] = _resetOwnershipTokenResponse.Result!.NewOwnershipToken ?? "";
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to regenerate the OwnershipToken for an invalid FileId")]
+    public void WhenITriesToRegenerateTheOwnershiptokenForAnInvalidFileId(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _resetOwnershipTokenResponse = identity.Files.RegenerateFileOwnershipToken("InvalidFileId").Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to regenerate the OwnershipToken of a non-existing FileId")]
+    public void WhenITriesToRegenerateTheOwnershipTokenOfANonExistingFileId(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _resetOwnershipTokenResponse = identity.Files.RegenerateFileOwnershipToken(FileId.New()).Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a Post request to the /Files/{RegexFor.SINGLE_THING}.Id/ValidateOwnershipToken with the file's ownership token")]
+    public async Task WhenISendsAPostRequestToTheFilesFIdValidateOwnershipTokenWithTheFilesOwnershipToken(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var fileId = _filesContext.Files[fileName].Id;
+        var token = _filesContext.FileNameToOwnershipToken[fileName];
+        var request = new ValidateFileOwnershipTokenRequest { OwnershipToken = token };
+        _responseContext.WhenResponse = _validateOwnershipTokenResponse = await identity.Files.ValidateFileOwnershipToken(fileId, request);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to validate an OwnershipToken of an invalid FileId")]
+    public void WhenITriesToValidateTheOwnershipTokenOfAnInvalidFileId(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var request = new ValidateFileOwnershipTokenRequest { OwnershipToken = FileOwnershipToken.New().Value };
+        _responseContext.WhenResponse = _validateOwnershipTokenResponse = identity.Files.ValidateFileOwnershipToken("InvalidFileId", request).Result;
+    }
+
+    [When($"{RegexFor.SINGLE_THING} tries to validate the token using an valid FileId of a non-existing file")]
+    public void WhenITriesToValidateTheTokenUsingAnValidFileIdOfANonExistingFile(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var request = new ValidateFileOwnershipTokenRequest { OwnershipToken = FileOwnershipToken.New().Value };
+        _responseContext.WhenResponse = _validateOwnershipTokenResponse = identity.Files.ValidateFileOwnershipToken(FileId.New(), request).Result;
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then($"the response contains the new OwnershipToken of {RegexFor.SINGLE_THING}")]
+    public void ThenTheResponseContainsTheNewOwnershipTokenOfF(string fileName)
+    {
+        string responseToken;
+        if (_claimFileOwnershipResponse != null)
+            responseToken = _claimFileOwnershipResponse.Result!.NewOwnershipToken;
+        else if (_resetOwnershipTokenResponse != null)
+            responseToken = _resetOwnershipTokenResponse.Result!.NewOwnershipToken;
+        else
+            throw new Exception("No response available");
+
+        _filesContext.FileNameToOwnershipToken[fileName].Should().BeEquivalentTo(responseToken);
+    }
+
+
+    [Then($"{RegexFor.SINGLE_THING} is the new owner of {RegexFor.SINGLE_THING}")]
+    public async Task ThenIIsTheNewOwnerOfF(string identityName, string fileName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        // The file needs to be reloaded to get the latest owner
+        var file = _filesContext.Files[fileName];
+        var reloadedFile = await identity.Files.GetFileMetadata(file.Id);
+        _filesContext.Files[fileName] = reloadedFile.Result!;
+
+        identity.IdentityData.Should().NotBeNull();
+        identity.IdentityData!.Address.Should().NotBeNullOrEmpty();
+        identity.IdentityData!.Address.Should().Be(_filesContext.Files[fileName].Owner);
+    }
+
+    [Then($"the ownership of {RegexFor.SINGLE_THING} is locked")]
+    public void ThenTheOwnershipOfFIsLocked(string fileName)
+    {
+        var file = _filesContext.Files[fileName];
+        file.Should().NotBeNull();
+        file!.OwnershipIsLocked.Should().BeTrue();
+    }
+
+    [Then($"the ownership of {RegexFor.SINGLE_THING} is not locked")]
+    public void ThenTheOwnershipOfFIsNotLocked(string fileName)
+    {
+        var file = _filesContext.Files[fileName];
+        file.Should().NotBeNull();
+        file!.OwnershipIsLocked.Should().BeFalse();
+    }
+
+    [Then($"the ValidateOwnershipTokenResponse contains {RegexFor.SINGLE_THING}")]
+    public void ThenTheValidateOwnershipTokenResponseContainsExpected(string expected)
+    {
+        _validateOwnershipTokenResponse.Should().NotBeNull();
+        _validateOwnershipTokenResponse.Result.Should().NotBeNull();
+        _validateOwnershipTokenResponse.Result!.IsValid.Should().Be(expected == "true");
     }
 
     #endregion

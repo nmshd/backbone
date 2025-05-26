@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="SimpleBase" Version="[5.3.0]" />
+        <PackageReference Include="SimpleBase" Version="[5.4.1]" />
     </ItemGroup>
 
     <ItemGroup>

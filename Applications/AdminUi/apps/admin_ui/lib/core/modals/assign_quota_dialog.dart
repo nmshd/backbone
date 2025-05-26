@@ -17,23 +17,22 @@ Future<void> showAddQuotaDialog({required BuildContext context, required VoidCal
 
   await showDialog<void>(
     context: context,
-    builder:
-        (BuildContext context) => _AssignQuotaDialog(
-          availableMetrics: metrics.data,
-          addQuota: ({required String metricKey, required int max, required String period}) {
-            if (tierId != null) {
-              return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
-            }
+    builder: (BuildContext context) => _AssignQuotaDialog(
+      availableMetrics: metrics.data,
+      addQuota: ({required String metricKey, required int max, required String period}) {
+        if (tierId != null) {
+          return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
+        }
 
-            return GetIt.I.get<AdminApiClient>().identities.createIndividualQuota(
-              address: identityAddress!,
-              metricKey: metricKey,
-              max: max,
-              period: period,
-            );
-          },
-          onQuotaAdded: onQuotaAdded,
-        ),
+        return GetIt.I.get<AdminApiClient>().identities.createIndividualQuota(
+          address: identityAddress!,
+          metricKey: metricKey,
+          max: max,
+          period: period,
+        );
+      },
+      onQuotaAdded: onQuotaAdded,
+    ),
   );
 }
 

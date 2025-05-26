@@ -19,7 +19,10 @@ class AppTitle extends StatelessWidget {
         Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: 'enmeshed', style: textStyle.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(
+                text: 'enmeshed',
+                style: textStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
               const TextSpan(text: ' Backbone Admin UI', style: textStyle),
             ],
           ),
