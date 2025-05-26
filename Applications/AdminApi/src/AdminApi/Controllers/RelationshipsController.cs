@@ -50,10 +50,6 @@ public class RelationshipsController : ApiControllerBase
             })
             .OrderAndPaginate(d => d.CreationDate, paginationFilter, cancellationToken);
 
-        // var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
-        //     .Where(r => r.To == participant || r.From == participant)
-        //     .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
         return Paged(new PagedResponse<RelationshipDTO>(relationships.ItemsOnPage, paginationFilter, relationships.TotalNumberOfItems));
     }
 }
