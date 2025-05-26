@@ -26,6 +26,8 @@ public class FeatureFlag : Entity
     {
         IsEnabled = value;
     }
+
+    public override string ToString() => $"{{\"{Name.Value}\": {IsEnabled}}}";
 }
 
 public record FeatureFlagName
