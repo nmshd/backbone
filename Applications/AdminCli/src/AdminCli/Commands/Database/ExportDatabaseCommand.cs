@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.AdminCli.Commands.BaseClasses;
@@ -8,13 +7,8 @@ using Backbone.Tooling;
 using MediatR;
 using Spectre.Console;
 
-// ReSharper disable MergeConditionalExpression
-
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-
 namespace Backbone.AdminCli.Commands.Database;
 
-[SuppressMessage("Style", "IDE0029:Use coalesce expression")]
 public class ExportDatabaseCommand : AdminCliCommand
 {
     private readonly AdminApiDbContext _adminApiDbContext;
@@ -192,7 +186,7 @@ public class ExportDatabaseCommand : AdminCliCommand
             .Select(r => new RelationshipExport
             {
                 RelationshipId = r.Id,
-                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId,
+                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.ToString(),
                 From = r.From,
                 To = r.To,
                 CreatedAt = r.CreatedAt,
