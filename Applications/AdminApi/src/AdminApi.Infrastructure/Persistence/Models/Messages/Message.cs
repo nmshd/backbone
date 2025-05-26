@@ -1,28 +1,30 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
 
 public class Message
 {
-    public string Id { get; set; } = null!;
-    public string CreatedBy { get; set; } = null!;
-    public string CreatedByDevice { get; set; } = null!;
-    public List<MessageRecipient> Recipients { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public byte[] Body { get; set; } = null!;
-    public IEnumerable<MessageAttachment> Attachments { get; set; } = null!;
+    public required string Id { get; init; }
+    public required string CreatedBy { get; init; }
+    public required string CreatedByDevice { get; init; }
+    public required List<MessageRecipient> Recipients { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required byte[] Body { get; init; }
+    public required IEnumerable<MessageAttachment> Attachments { get; init; }
 }
 
 public class MessageAttachment
 {
-    public string Id { get; set; } = null!;
-    public string MessageId { get; set; } = null!;
+    public required string Id { get; init; }
+    public required string MessageId { get; init; }
 }
 
 public class MessageRecipient
 {
-    public int Id { get; set; }
+    public required int Id { get; init; }
 
-    public string MessageId { get; set; } = null!;
-    public string RelationshipId { get; set; } = null!;
-    public string Address { get; set; } = null!;
-    public DateTime? ReceivedAt { get; set; }
+    public required string MessageId { get; init; }
+    public required string RelationshipId { get; init; }
+    public required string Address { get; init; }
+    public required DateTime? ReceivedAt { get; init; }
 }

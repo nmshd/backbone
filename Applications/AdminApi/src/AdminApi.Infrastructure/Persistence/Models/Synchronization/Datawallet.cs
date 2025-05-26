@@ -1,8 +1,10 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 
 public class Datawallet
 {
-    public string Id { get; set; } = null!;
-    public string Owner { get; set; } = null!;
-    public ushort Version { get; set; }
+    public required string Id { get; init; }
+    public required string Owner { get; init; }
+    public required ushort Version { get; init; }
 }

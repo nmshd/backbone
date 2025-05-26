@@ -1,9 +1,11 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class Device
 {
-    public string Id { get; set; } = null!;
-    public AspNetUser User { get; set; } = null!;
-    public Identity Identity { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
+    public required string Id { get; init; }
+    public required AspNetUser User { get; init; }
+    public required Identity Identity { get; init; }
+    public required DateTime CreatedAt { get; init; }
 }

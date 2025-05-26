@@ -1,9 +1,11 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class Tier
 {
-    public string Id { get; set; } = null!;
-    public string Name { get; set; } = null!;
-    public bool CanBeManuallyAssigned { get; set; }
-    public bool CanBeUsedAsDefaultForClient { get; set; }
+    public required string Id { get; init; }
+    public required string Name { get; init; }
+    public required bool CanBeManuallyAssigned { get; init; }
+    public required bool CanBeUsedAsDefaultForClient { get; init; }
 }

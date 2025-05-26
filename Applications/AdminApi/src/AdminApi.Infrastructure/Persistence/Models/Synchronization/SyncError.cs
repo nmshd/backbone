@@ -1,21 +1,23 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 
 public class SyncError
 {
-    public string Id { get; set; } = null!;
-    public ExternalEvent ExternalEvent { get; set; } = null!;
-    public SyncRun SyncRun { get; set; } = null!;
-    public string ErrorCode { get; set; } = null!;
+    public required string Id { get; init; }
+    public required ExternalEvent ExternalEvent { get; init; }
+    public required SyncRun SyncRun { get; init; }
+    public required string ErrorCode { get; init; }
 }
 
 public class ExternalEvent
 {
-    public string Id { get; set; } = null!;
-    public string Owner { get; set; } = null!;
+    public required string Id { get; init; }
+    public required string Owner { get; init; }
 }
 
 public class SyncRun
 {
-    public string Id { get; set; } = null!;
-    public DateTime? FinalizedAt { get; set; }
+    public required string Id { get; init; }
+    public required DateTime? FinalizedAt { get; init; }
 }

@@ -1,13 +1,15 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class IdentityDeletionProcessAuditLogEntry
 {
-    public string Id { get; set; } = null!;
-    public DeletionProcessStatus? OldStatus { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DeletionProcessStatus? NewStatus { get; set; }
-    public byte[] IdentityAddressHash { get; set; } = null!;
-    public string MessageKey { get; set; } = null!;
+    public required string Id { get; init; }
+    public required DeletionProcessStatus? OldStatus { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required DeletionProcessStatus? NewStatus { get; init; }
+    public required byte[] IdentityAddressHash { get; init; }
+    public required string MessageKey { get; init; }
 }
 
 public enum DeletionProcessStatus

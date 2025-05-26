@@ -1,10 +1,12 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Tokens;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Tokens;
 
 public class Token
 {
-    public string Id { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public string CreatedBy { get; set; } = null!;
-    public byte[] Content { get; set; } = null!;
-    public DateTime ExpiresAt { get; set; }
+    public required string Id { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required string CreatedBy { get; init; }
+    public required byte[] Content { get; init; }
+    public required DateTime ExpiresAt { get; init; }
 }

@@ -1,15 +1,17 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class Identity
 {
-    public string Address { get; set; } = null!;
-    public string TierId { get; set; } = null!;
-    public IdentityStatus Status { get; set; }
-    public DateTime? DeletionGracePeriodEndsAt { get; set; }
-    public string ClientId { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public byte IdentityVersion { get; set; }
-    public IList<Device> Devices { get; set; } = null!;
+    public required string Address { get; init; }
+    public required string TierId { get; init; }
+    public required IdentityStatus Status { get; init; }
+    public required DateTime? DeletionGracePeriodEndsAt { get; init; }
+    public required string ClientId { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required byte IdentityVersion { get; init; }
+    public required IList<Device> Devices { get; init; }
 }
 
 public enum IdentityStatus

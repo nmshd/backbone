@@ -1,17 +1,19 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
 
 public class Relationship
 {
-    public string Id { get; set; } = null!;
-    public string? RelationshipTemplateId { get; set; }
-    public string From { get; set; } = null!;
-    public string To { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public RelationshipStatus Status { get; set; }
-    public bool FromHasDecomposed { get; set; }
-    public bool ToHasDecomposed { get; set; }
-    public RelationshipTemplate? RelationshipTemplate { get; set; }
-    public IList<RelationshipAuditLogItem> AuditLog { get; set; } = null!;
+    public required string Id { get; init; }
+    public required string? RelationshipTemplateId { get; init; }
+    public required string From { get; init; }
+    public required string To { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required RelationshipStatus Status { get; init; }
+    public required bool FromHasDecomposed { get; init; }
+    public required bool ToHasDecomposed { get; init; }
+    public required RelationshipTemplate? RelationshipTemplate { get; init; }
+    public required IList<RelationshipAuditLogItem> AuditLog { get; init; }
 }
 
 public enum RelationshipStatus
@@ -27,7 +29,7 @@ public enum RelationshipStatus
 
 public class RelationshipAuditLogItem
 {
-    public string Id { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public string CreatedByDevice { get; set; } = null!;
+    public required string Id { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required string CreatedByDevice { get; init; }
 }

@@ -1,11 +1,13 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class OpenIddictApplication
 {
-    public string Id { get; set; } = null!;
-    public string ClientId { get; set; } = null!;
-    public string DisplayName { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public string DefaultTier { get; set; } = null!;
-    public int? MaxIdentities { get; set; }
+    public required string Id { get; init; }
+    public required string ClientId { get; init; }
+    public required string DisplayName { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required string DefaultTier { get; init; }
+    public required int? MaxIdentities { get; init; }
 }

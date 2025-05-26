@@ -1,15 +1,17 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
 
 public class RelationshipTemplate
 {
-    public string Id { get; set; } = null!;
-    public string CreatedBy { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public IEnumerable<RelationshipTemplateAllocation> Allocations { get; set; } = null!;
+    public required string Id { get; init; }
+    public required string CreatedBy { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required IEnumerable<RelationshipTemplateAllocation> Allocations { get; init; }
 }
 
 public class RelationshipTemplateAllocation
 {
-    public string Id { get; set; } = null!;
-    public DateTime? AllocatedAt { get; set; }
+    public required string Id { get; init; }
+    public required DateTime? AllocatedAt { get; init; }
 }

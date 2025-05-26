@@ -1,15 +1,17 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 
 public class DatawalletModification
 {
-    public string Id { get; set; } = null!;
-    public DateTime CreatedAt { get; set; }
-    public string CreatedBy { get; set; } = null!;
-    public string ObjectIdentifier { get; set; } = null!;
-    public string Collection { get; set; } = null!;
-    public DatawalletModificationType Type { get; set; }
-    public string? PayloadCategory { get; set; }
-    public byte[]? EncryptedPayload { get; set; }
+    public required string Id { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public required string CreatedBy { get; init; }
+    public required string ObjectIdentifier { get; init; }
+    public required string Collection { get; init; }
+    public required DatawalletModificationType Type { get; init; }
+    public required string? PayloadCategory { get; init; }
+    public required byte[]? EncryptedPayload { get; init; }
 }
 
 public enum DatawalletModificationType

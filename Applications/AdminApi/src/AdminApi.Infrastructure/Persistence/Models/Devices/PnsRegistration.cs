@@ -1,15 +1,17 @@
-﻿namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
+﻿// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+
+namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Devices;
 
 public class PnsRegistration
 {
-    public string DeviceId { get; set; } = null!;
-    public PnsHandle Handle { get; set; } = null!;
+    public required string DeviceId { get; init; }
+    public required PnsHandle Handle { get; init; }
 }
 
 public record PnsHandle
 {
-    public PushNotificationPlatform Platform { get; }
-    public string Value { get; }
+    public PushNotificationPlatform Platform { get; init; }
+    public string Value { get; init; }
 
     public PnsHandle(PushNotificationPlatform platform, string value)
     {
