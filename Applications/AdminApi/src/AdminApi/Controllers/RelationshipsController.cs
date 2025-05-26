@@ -42,9 +42,9 @@ public class RelationshipsController : ApiControllerBase
             .Select(r => new RelationshipDTO
             {
                 TemplateId = r.RelationshipTemplateId,
-                CreatedByDevice = r.AuditLog.ElementAt(0).CreatedByDevice,
-                AnsweredAt = r.AuditLog.Count > 1 ? r.AuditLog.ElementAt(1).CreatedAt : null,
-                AnsweredByDevice = r.AuditLog.Count > 1 ? r.AuditLog.ElementAt(1).CreatedByDevice : null,
+                CreatedByDevice = r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(0).CreatedByDevice,
+                AnsweredAt = r.AuditLog.Count > 1 ? r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(1).CreatedAt : null,
+                AnsweredByDevice = r.AuditLog.Count > 1 ? r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(1).CreatedByDevice : null,
                 CreationDate = r.CreatedAt,
                 Peer = r.From == participant ? r.To : r.From,
                 RequestedBy = r.To == participant ? "Peer" : "Self",
