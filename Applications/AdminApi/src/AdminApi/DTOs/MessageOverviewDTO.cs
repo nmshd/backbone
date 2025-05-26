@@ -2,7 +2,7 @@
 
 namespace Backbone.AdminApi.DTOs;
 
-public class MessageOverview
+public class MessageOverviewDTO
 {
     public string MessageId { get; set; } = null!;
     public string SenderAddress { get; set; } = null!;

@@ -30,7 +30,7 @@ public class MessagesController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<MessageOverview>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<MessageOverviewDTO>>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
@@ -43,7 +43,7 @@ public class MessagesController : ApiControllerBase
             .Include(m => m.Recipients)
             .Include(m => m.Attachments)
             .AsSplitQuery()
-            .Select(m => new MessageOverview
+            .Select(m => new MessageOverviewDTO
             {
                 MessageId = m.Id,
                 SenderAddress = m.CreatedBy,
@@ -62,6 +62,6 @@ public class MessagesController : ApiControllerBase
 
         var messages = await query.OrderAndPaginate(m => m.SendDate, paginationFilter, cancellationToken);
 
-        return Paged(new PagedResponse<MessageOverview>(messages.ItemsOnPage, paginationFilter, messages.TotalNumberOfItems));
+        return Paged(new PagedResponse<MessageOverviewDTO>(messages.ItemsOnPage, paginationFilter, messages.TotalNumberOfItems));
     }
 }
