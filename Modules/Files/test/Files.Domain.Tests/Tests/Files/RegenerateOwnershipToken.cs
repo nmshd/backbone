@@ -17,7 +17,7 @@ public class RegenerateOwnershipToken
         file.RegenerateOwnershipToken(file.Owner);
 
         // Assert
-        file.OwnershipToken.Should().NotBeEquivalentTo(oldToken);
+        file.OwnershipToken.Value.ShouldNotBe(oldToken.Value);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class RegenerateOwnershipToken
         var acting = () => file.RegenerateOwnershipToken(CreateRandomIdentityAddress());
 
         // Assert
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 
     [Fact]
@@ -44,6 +44,6 @@ public class RegenerateOwnershipToken
         file.RegenerateOwnershipToken(file.Owner);
 
         // Assert
-        file.OwnershipIsLocked.Should().BeFalse();
+        file.OwnershipIsLocked.ShouldBeFalse();
     }
 }

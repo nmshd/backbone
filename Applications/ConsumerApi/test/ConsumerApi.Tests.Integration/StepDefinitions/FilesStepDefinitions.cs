@@ -209,7 +209,7 @@ internal class FilesStepDefinitions
         else
             throw new Exception("No response available");
 
-        _filesContext.FileNameToOwnershipToken[fileName].Should().BeEquivalentTo(responseToken);
+        _filesContext.FileNameToOwnershipToken[fileName].ShouldBeEquivalentTo(responseToken);
     }
 
 
@@ -222,33 +222,33 @@ internal class FilesStepDefinitions
         var reloadedFile = await identity.Files.GetFileMetadata(file.Id);
         _filesContext.Files[fileName] = reloadedFile.Result!;
 
-        identity.IdentityData.Should().NotBeNull();
-        identity.IdentityData!.Address.Should().NotBeNullOrEmpty();
-        identity.IdentityData!.Address.Should().Be(_filesContext.Files[fileName].Owner);
+        identity.IdentityData.ShouldNotBeNull();
+        identity.IdentityData!.Address.ShouldNotBeNullOrEmpty();
+        identity.IdentityData!.Address.ShouldBe(_filesContext.Files[fileName].Owner);
     }
 
     [Then($"the ownership of {RegexFor.SINGLE_THING} is locked")]
     public void ThenTheOwnershipOfFIsLocked(string fileName)
     {
         var file = _filesContext.Files[fileName];
-        file.Should().NotBeNull();
-        file!.OwnershipIsLocked.Should().BeTrue();
+        file.ShouldNotBeNull();
+        file!.OwnershipIsLocked.ShouldBeTrue();
     }
 
     [Then($"the ownership of {RegexFor.SINGLE_THING} is not locked")]
     public void ThenTheOwnershipOfFIsNotLocked(string fileName)
     {
         var file = _filesContext.Files[fileName];
-        file.Should().NotBeNull();
-        file!.OwnershipIsLocked.Should().BeFalse();
+        file.ShouldNotBeNull();
+        file!.OwnershipIsLocked.ShouldBeFalse();
     }
 
     [Then($"the ValidateOwnershipTokenResponse contains {RegexFor.SINGLE_THING}")]
     public void ThenTheValidateOwnershipTokenResponseContainsExpected(string expected)
     {
-        _validateOwnershipTokenResponse.Should().NotBeNull();
-        _validateOwnershipTokenResponse.Result.Should().NotBeNull();
-        _validateOwnershipTokenResponse.Result!.IsValid.Should().Be(expected == "true");
+        _validateOwnershipTokenResponse.ShouldNotBeNull();
+        _validateOwnershipTokenResponse.Result.ShouldNotBeNull();
+        _validateOwnershipTokenResponse.Result!.IsValid.ShouldBe(expected == "true");
     }
 
     #endregion

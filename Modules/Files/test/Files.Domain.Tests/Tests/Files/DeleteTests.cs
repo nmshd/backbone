@@ -16,7 +16,7 @@ public class DeleteTests : AbstractTestsBase
         var acting = () => file.EnsureCanBeDeletedBy(identity);
 
         // Assert
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -30,6 +30,6 @@ public class DeleteTests : AbstractTestsBase
         var acting = () => file.EnsureCanBeDeletedBy(nonCreatingIdentity);
 
         // Assert
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 }

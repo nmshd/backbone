@@ -115,13 +115,13 @@ internal class SynchronizationStepDefinitions
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
         var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
 
-        syncRunResponse.Result.Should().NotBeNull();
-        syncRunResponse.Result!.Status.Should().Be("Created");
+        syncRunResponse.Result.ShouldNotBeNull();
+        syncRunResponse.Result!.Status.ShouldBe("Created");
         var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunResponse.Result!.SyncRun.Id);
 
         var fileId = _filesContext.Files[fileName].Id;
 
-        externalEvents.Result.Should().Contain(e =>
+        externalEvents.Result!.ShouldContain(e =>
             e.Type == "FileOwnershipLocked" &&
             e.Payload["fileId"].GetString() == fileId);
     }

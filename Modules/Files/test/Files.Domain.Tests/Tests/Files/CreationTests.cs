@@ -11,7 +11,7 @@ public class CreationTests
         var file = TestDataGenerator.CreateFile();
 
         // Assert
-        file.OwnershipIsLocked.Should().BeFalse();
+        file.OwnershipIsLocked.ShouldBeFalse();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class CreationTests
         var file = TestDataGenerator.CreateFile();
 
         // Assert
-        file.OwnershipToken.Should().NotBeNull();
-        file.OwnershipToken.Value.Length.Should().Be(20);
+        file.OwnershipToken.ShouldNotBeNull();
+        file.OwnershipToken.Value.Length.ShouldBe(20);
     }
 }
