@@ -14,11 +14,8 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class AnnouncementsController : ApiControllerBase
 {
-    private readonly ILogger<AnnouncementsController> _logger;
-
-    public AnnouncementsController(IMediator mediator, ILogger<AnnouncementsController> logger) : base(mediator)
+    public AnnouncementsController(IMediator mediator) : base(mediator)
     {
-        _logger = logger;
     }
 
     [HttpPost]
