@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
@@ -24,7 +24,7 @@ public class TokenAnonymizeForIdentityTests : AbstractTestsBase
         relationshipTemplate.AnonymizeForIdentity(DID_DOMAIN_NAME);
 
         // Assert
-        relationshipTemplate.ForIdentity.Should().Be(IdentityAddress.GetAnonymized(DID_DOMAIN_NAME));
+        relationshipTemplate.ForIdentity.ShouldBe(IdentityAddress.GetAnonymized(DID_DOMAIN_NAME));
     }
 
     [Fact]
@@ -41,6 +41,6 @@ public class TokenAnonymizeForIdentityTests : AbstractTestsBase
         var acting = () => relationshipTemplate.AnonymizeForIdentity(DID_DOMAIN_NAME);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.token.tokenNotPersonalized");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.token.tokenNotPersonalized");
     }
 }

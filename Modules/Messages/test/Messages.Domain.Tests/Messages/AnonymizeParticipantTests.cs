@@ -2,6 +2,7 @@
 using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -20,7 +21,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(senderAddress, anonymizedAddress);
 
         // Assert
-        message.CreatedBy.Should().Be(anonymizedAddress);
+        message.CreatedBy.ShouldBe(anonymizedAddress);
     }
 
     [Fact]
@@ -36,7 +37,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(recipientAddress, anonymizedAddress);
 
         // Assert
-        message.Recipients.Single().Address.Should().Be(anonymizedAddress);
+        message.Recipients.Single().Address.ShouldBe(anonymizedAddress);
     }
 
     [Fact]
@@ -54,8 +55,8 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(addressToAnonymize, anonymizedAddress);
 
         // Assert
-        message.Recipients.First().Address.Should().Be(recipientAddress);
-        message.CreatedBy.Should().Be(senderAddress);
+        message.Recipients.First().Address.ShouldBe(recipientAddress);
+        message.CreatedBy.ShouldBe(senderAddress);
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(recipientAddress, anonymizedAddress);
 
         // Assert
-        message.Should().NotHaveADomainEvent<MessageOrphanedDomainEvent>();
+        message.ShouldNotHaveADomainEvent<MessageOrphanedDomainEvent>();
     }
 
     [Fact]
@@ -91,7 +92,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(recipient1Address, anonymizedAddress);
 
         // Assert
-        message.Should().NotHaveADomainEvent<MessageOrphanedDomainEvent>();
+        message.ShouldNotHaveADomainEvent<MessageOrphanedDomainEvent>();
     }
 
     [Fact]
@@ -111,7 +112,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(recipient2Address, anonymizedAddress);
 
         // Assert
-        message.Should().HaveASingleDomainEvent<MessageOrphanedDomainEvent>();
+        message.ShouldHaveASingleDomainEvent<MessageOrphanedDomainEvent>();
     }
 
     private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)

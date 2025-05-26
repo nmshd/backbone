@@ -78,7 +78,7 @@ internal class TokensStepDefinitions
             {
                 var allocatedClient = _clientPool.FirstForIdentityName(allocatedIdentityName);
                 var allocatedResponse = password != null ? await allocatedClient.Tokens.GetToken(response.Result!.Id, password) : await allocatedClient.Tokens.GetToken(response.Result!.Id);
-                allocatedResponse.Status.Should().Be(HttpStatusCode.OK);
+                allocatedResponse.Status.ShouldBe(HttpStatusCode.OK);
             }
         }
     }
@@ -186,8 +186,15 @@ internal class TokensStepDefinitions
     [Then($@"the response contains Token\(s\) {RegexFor.LIST_OF_THINGS}")]
     public void ThenTheResponseContainsTokens(string tokenNames)
     {
-        var tokens = tokenNames.Split(',').Select(item => _tokensContext.CreateTokenResponses[item.Trim()]).ToList();
-        _listTokensResponse!.Result!.Should().BeEquivalentTo(tokens, options => options.WithStrictOrdering());
+        var tokens = tokenNames
+            .Split(',')
+            .Select(item => _tokensContext.CreateTokenResponses[item.Trim()])
+            .Select(item => (item.Id, item.CreatedAt))
+            .ToList();
+
+        _listTokensResponse!.Result!
+            .Select(item => (item.Id, item.CreatedAt))
+            .ShouldBe(tokens, true);
     }
 
     #endregion

@@ -20,8 +20,8 @@ public class ExpressionTests : AbstractTestsBase
         var wasExchangedBetweenRecipientAndSender = message.EvaluateWasExchangedBetweenExpression(message.Recipients.First().Address, message.CreatedBy);
 
         // Assert
-        wasExchangedBetweenSenderAndRecipient.Should().BeTrue();
-        wasExchangedBetweenRecipientAndSender.Should().BeTrue();
+        wasExchangedBetweenSenderAndRecipient.ShouldBeTrue();
+        wasExchangedBetweenRecipientAndSender.ShouldBeTrue();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateWasExchangedBetweenExpression(message.CreatedBy, CreateRandomIdentityAddress());
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     #endregion
@@ -53,7 +53,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateHasParticipantExpression(message.Recipients.First().Address);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class ExpressionTests : AbstractTestsBase
         var result = message.EvaluateHasParticipantExpression(message.Recipients.First().Address);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     #endregion

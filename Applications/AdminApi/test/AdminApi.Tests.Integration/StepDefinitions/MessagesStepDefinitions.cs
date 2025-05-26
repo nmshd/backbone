@@ -35,16 +35,16 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_messagesResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_messagesResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response contains a paginated list of Messages")]
     public async Task ThenTheResponseContainsAListOfMessages()
     {
-        _messagesResponse!.Result.Should().NotBeNull();
-        _messagesResponse!.Should().BeASuccess();
-        _messagesResponse!.ContentType.Should().StartWith("application/json");
-        await _messagesResponse.Should().ComplyWithSchema();
+        _messagesResponse!.Result.ShouldNotBeNull();
+        _messagesResponse!.ShouldBeASuccess();
+        _messagesResponse!.ContentType.ShouldStartWith("application/json");
+        await _messagesResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
@@ -52,15 +52,15 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     {
         if (_messagesResponse != null)
         {
-            _messagesResponse!.Error.Should().NotBeNull();
-            _messagesResponse.Error!.Code.Should().Be(errorCode);
+            _messagesResponse!.Error.ShouldNotBeNull();
+            _messagesResponse.Error!.Code.ShouldBe(errorCode);
         }
     }
 
     private async Task CreateIdentity()
     {
         var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
-        createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.ShouldBeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
 

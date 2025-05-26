@@ -29,7 +29,7 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         await connector.Send(registration, new TestPushNotification { Data = "test-notification-payload" }, new NotificationText("Test Title", "Test Body"));
 
         // Assert
-        client.SendAsyncCalls.Should().Be(1);
+        client.SendAsyncCalls.ShouldBe(1);
     }
 
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)

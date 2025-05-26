@@ -1,5 +1,5 @@
 using Backbone.SseServer.Controllers;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +18,7 @@ public class EventQueueTests : AbstractTestsBase
         var acting = () => queue.Register("testAddress");
 
         // Assert
-        acting.Should().Throw<ClientAlreadyRegisteredException>();
+        acting.ShouldThrow<ClientAlreadyRegisteredException>();
     }
 
     [Fact]
@@ -31,11 +31,11 @@ public class EventQueueTests : AbstractTestsBase
         var acting = () => queue.Deregister("testAddress");
 
         // Assert
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
-    public void Cannot_enqueue_for_identity_that_is_not_registered()
+    public async Task Cannot_enqueue_for_identity_that_is_not_registered()
     {
         // Arrange
         var queue = new EventQueue(A.Fake<ILogger<EventQueue>>());
@@ -44,7 +44,7 @@ public class EventQueueTests : AbstractTestsBase
         var acting = () => queue.EnqueueFor("testAddress", "testEventName", CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<ClientNotFoundException>();
+        await acting.ShouldThrowAsync<ClientNotFoundException>();
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class EventQueueTests : AbstractTestsBase
         var acting = () => queue.DequeueFor("testAddress", CancellationToken.None);
 
         // Assert
-        acting.Should().Throw<Exception>();
+        acting.ShouldThrow<Exception>();
     }
 
     [Fact]
@@ -74,9 +74,9 @@ public class EventQueueTests : AbstractTestsBase
         var eventNames = await queue.DequeueAllFor("testAddress");
 
         // Assert
-        eventNames.Should().HaveCount(2);
-        eventNames.Should().Contain("event1");
-        eventNames.Should().Contain("event2");
+        eventNames.ShouldHaveCount(2);
+        eventNames.ShouldContain("event1");
+        eventNames.ShouldContain("event2");
     }
 
     [Fact]
@@ -94,8 +94,8 @@ public class EventQueueTests : AbstractTestsBase
         var eventNames = await queue.DequeueAllFor("testAddress1");
 
         // Assert
-        eventNames.Should().HaveCount(1);
-        eventNames.Should().Contain("event1");
+        eventNames.ShouldHaveCount(1);
+        eventNames.ShouldContain("event1");
     }
 }
 

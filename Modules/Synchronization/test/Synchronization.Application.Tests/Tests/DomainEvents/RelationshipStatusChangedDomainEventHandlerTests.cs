@@ -117,7 +117,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         await handler.Handle(relationshipStatusChangedDomainEvent);
 
         // Assert
-        messageReceivedExternalEvent.IsDeliveryBlocked.Should().BeFalse();
+        messageReceivedExternalEvent.IsDeliveryBlocked.ShouldBeFalse();
         A.CallTo(() => mockDbContext.SaveChangesAsync(A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 

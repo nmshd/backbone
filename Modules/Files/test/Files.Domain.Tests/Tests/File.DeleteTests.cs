@@ -16,7 +16,7 @@ public class FileDeleteTests : AbstractTestsBase
 
         var acting = () => file.EnsureCanBeDeletedBy(identity);
 
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class FileDeleteTests : AbstractTestsBase
 
         var acting = () => file.EnsureCanBeDeletedBy(otherIdentity);
 
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 
     private static File CreateFile(IdentityAddress identityAddress)

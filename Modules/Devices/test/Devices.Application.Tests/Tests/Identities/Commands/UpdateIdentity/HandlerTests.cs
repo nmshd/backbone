@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateIdentity;
@@ -41,7 +40,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Fails_when_identity_does_not_exist()
+    public async Task Fails_when_identity_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -62,13 +61,13 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
-        exception.Message.Should().StartWith("Identity");
-        exception.Code.Should().Be("error.platform.recordNotFound");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldStartWith("Identity");
+        exception.Code.ShouldBe("error.platform.recordNotFound");
     }
 
     [Fact]
-    public void Fails_when_tier_does_not_exist()
+    public async Task Fails_when_tier_does_not_exist()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -89,13 +88,13 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        var exception = acting.Should().AwaitThrowAsync<NotFoundException>().Which;
-        exception.Message.Should().StartWith("Tier");
-        exception.Code.Should().Be("error.platform.recordNotFound");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldStartWith("Tier");
+        exception.Code.ShouldBe("error.platform.recordNotFound");
     }
 
     [Fact]
-    public void Does_nothing_when_tiers_are_the_same()
+    public async Task Does_nothing_when_tiers_are_the_same()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -115,7 +114,7 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<DomainException>();
+        await acting.ShouldThrowAsync<DomainException>();
         A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
     }
 

@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -24,11 +25,11 @@ public class CreationTests : AbstractTestsBase
         );
 
         // Assert
-        var domainEvent = message.Should().HaveASingleDomainEvent<MessageCreatedDomainEvent>();
-        domainEvent.CreatedBy.Should().Be(sender);
-        domainEvent.Id.Should().Be(message.Id);
-        domainEvent.Recipients.Should().HaveCount(1);
-        domainEvent.Recipients.First().Address.Should().Be(recipient.Address);
-        domainEvent.Recipients.First().RelationshipId.Should().Be(relationshipId);
+        var domainEvent = message.ShouldHaveASingleDomainEvent<MessageCreatedDomainEvent>();
+        domainEvent.CreatedBy.ShouldBe(sender);
+        domainEvent.Id.ShouldBe(message.Id);
+        domainEvent.Recipients.ShouldHaveCount(1);
+        domainEvent.Recipients.First().Address.ShouldBe(recipient.Address);
+        domainEvent.Recipients.First().RelationshipId.ShouldBe(relationshipId);
     }
 }

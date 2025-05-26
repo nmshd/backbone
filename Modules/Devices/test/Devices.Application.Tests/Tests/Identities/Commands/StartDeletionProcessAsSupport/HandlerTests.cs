@@ -26,21 +26,20 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new StartDeletionProcessAsSupportCommand(activeIdentity.Address), CancellationToken.None);
 
         // Assert
-        response.Should().NotBeNull();
-        response.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        response.ShouldNotBeNull();
+        response.Status.ShouldBe(DeletionProcessStatus.WaitingForApproval);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
-                A<Identity>.That.Matches(
-                    i => i.Address == activeIdentity.Address &&
-                         i.DeletionProcesses.Count == 1 &&
-                         i.DeletionProcesses[0].Id == response.Id &&
-                         i.DeletionProcesses[0].AuditLog.Count == 1),
+                A<Identity>.That.Matches(i => i.Address == activeIdentity.Address &&
+                                              i.DeletionProcesses.Count == 1 &&
+                                              i.DeletionProcesses[0].Id == response.Id &&
+                                              i.DeletionProcesses[0].AuditLog.Count == 1),
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public void Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
@@ -59,7 +58,8 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new StartDeletionProcessAsSupportCommand(address), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsSupportResponse>().Which.Message.Should().Contain("Identity");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)

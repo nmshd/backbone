@@ -1,6 +1,5 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
@@ -23,7 +22,7 @@ public class QuotaPeriodTests : AbstractTestsBase
         var start = quotaPeriod.CalculateBegin(SystemTime.UtcNow);
 
         // Assert
-        start.Should().Be(targetDate);
+        start.ShouldBe(DateTime.Parse(targetDate));
     }
 
     [Theory]
@@ -43,6 +42,6 @@ public class QuotaPeriodTests : AbstractTestsBase
         var start = quotaPeriod.CalculateEnd(SystemTime.UtcNow);
 
         // Assert
-        start.Should().Be(targetDate);
+        start.ShouldBe(DateTime.Parse(targetDate));
     }
 }

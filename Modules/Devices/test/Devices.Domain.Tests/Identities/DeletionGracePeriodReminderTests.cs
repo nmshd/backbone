@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -23,7 +24,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
-        deletionProcess.GracePeriodReminder1SentAt.Should().Be(currentDateTime);
+        deletionProcess.GracePeriodReminder1SentAt.ShouldBe(currentDateTime);
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -54,7 +55,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
-        deletionProcess.GracePeriodReminder2SentAt.Should().Be(currentDateTime);
+        deletionProcess.GracePeriodReminder2SentAt.ShouldBe(currentDateTime);
     }
 
 
@@ -69,7 +70,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -86,7 +87,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
-        deletionProcess.GracePeriodReminder3SentAt.Should().Be(currentDateTime);
+        deletionProcess.GracePeriodReminder3SentAt.ShouldBe(currentDateTime);
     }
 
 
@@ -101,19 +102,19 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
-        deletionProcess.AuditLog.Should().HaveCount(2);
+        deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.Approved);
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Approved);
     }
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()

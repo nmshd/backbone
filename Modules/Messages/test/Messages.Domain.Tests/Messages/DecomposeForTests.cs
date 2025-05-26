@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -21,7 +22,7 @@ public class DecomposeForTests : AbstractTestsBase
         else
         {
             var acting = () => input.Message.DecomposeFor(input.Decomposer, input.Peer, ANONYMIZED_ADDRESS);
-            acting.Should().Throw<DomainException>().Which.Code.Should().Be(output.ErrorCode);
+            acting.ShouldThrow<DomainException>().ShouldHaveError(output.ErrorCode);
         }
 
         // Assert
@@ -30,26 +31,26 @@ public class DecomposeForTests : AbstractTestsBase
 
         if (output.IsSuccess)
         {
-            recipient1.IsRelationshipDecomposedByRecipient.Should().Be(output.R1_HiddenForRecipient.Value);
-            recipient1.IsRelationshipDecomposedBySender.Should().Be(output.R1_HiddenForSender.Value);
+            recipient1.IsRelationshipDecomposedByRecipient.ShouldBe(output.R1_HiddenForRecipient.Value);
+            recipient1.IsRelationshipDecomposedBySender.ShouldBe(output.R1_HiddenForSender.Value);
 
-            recipient2.IsRelationshipDecomposedByRecipient.Should().Be(output.R2_HiddenForRecipient.Value);
-            recipient2.IsRelationshipDecomposedBySender.Should().Be(output.R2_HiddenForSender.Value);
+            recipient2.IsRelationshipDecomposedByRecipient.ShouldBe(output.R2_HiddenForRecipient.Value);
+            recipient2.IsRelationshipDecomposedBySender.ShouldBe(output.R2_HiddenForSender.Value);
 
             if (output.SenderIsAnonymized.Value)
-                input.Message.CreatedBy.Should().Be(ANONYMIZED_ADDRESS);
+                input.Message.CreatedBy.ShouldBe(ANONYMIZED_ADDRESS);
             else
-                input.Message.CreatedBy.Should().NotBe(ANONYMIZED_ADDRESS);
+                input.Message.CreatedBy.ShouldNotBe(ANONYMIZED_ADDRESS);
 
             if (output.R1IsAnonymized.Value)
-                recipient1.Address.Should().Be(ANONYMIZED_ADDRESS);
+                recipient1.Address.ShouldBe(ANONYMIZED_ADDRESS);
             else
-                recipient1.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+                recipient1.Address.ShouldNotBe(ANONYMIZED_ADDRESS);
 
             if (output.R2IsAnonymized.Value)
-                recipient2.Address.Should().Be(ANONYMIZED_ADDRESS);
+                recipient2.Address.ShouldBe(ANONYMIZED_ADDRESS);
             else
-                recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+                recipient2.Address.ShouldNotBe(ANONYMIZED_ADDRESS);
         }
     }
 }

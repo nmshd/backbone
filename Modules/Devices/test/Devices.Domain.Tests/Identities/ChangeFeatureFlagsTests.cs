@@ -1,6 +1,7 @@
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Devices.Domain.Tests.FluentAssertions.Extensions;
+using Backbone.Modules.Devices.Domain.Tests.Shouldly.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -23,8 +24,8 @@ public class ChangeFeatureFlagsTests : AbstractTestsBase
         identity.ChangeFeatureFlags(featureFlags);
 
         // Assert
-        var domainEvent = identity.Should().HaveASingleDomainEvent<FeatureFlagsOfIdentityChangedDomainEvent>();
-        domainEvent.IdentityAddress.Should().Be(identity.Address);
+        var domainEvent = identity.ShouldHaveASingleDomainEvent<FeatureFlagsOfIdentityChangedDomainEvent>();
+        domainEvent.IdentityAddress.ShouldBe(identity.Address);
     }
 
     [Theory]
@@ -44,8 +45,8 @@ public class ChangeFeatureFlagsTests : AbstractTestsBase
         identity.ChangeFeatureFlags(featureFlags);
 
         // Assert
-        identity.FeatureFlags.Should().Contain(newName);
-        identity.FeatureFlags.GetFeatureFlag(newName).IsEnabled.Should().Be(isEnabled);
+        identity.FeatureFlags.ShouldContain(newName);
+        identity.FeatureFlags.GetFeatureFlag(newName).IsEnabled.ShouldBe(isEnabled);
     }
 
     [Theory]
@@ -72,6 +73,6 @@ public class ChangeFeatureFlagsTests : AbstractTestsBase
         identity.ChangeFeatureFlags(featureFlagOverride);
 
         // Assert
-        identity.FeatureFlags.GetFeatureFlag(name).IsEnabled.Should().Be(newValue);
+        identity.FeatureFlags.GetFeatureFlag(name).IsEnabled.ShouldBe(newValue);
     }
 }

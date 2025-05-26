@@ -41,7 +41,7 @@ public class HandlerTests : AbstractTestsBase
                 && i.DeletionProcesses[0].Id == deletionProcess.Id), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        response.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        response.Status.ShouldBe(DeletionProcessStatus.Cancelled);
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
             A<DeletionProcessCancelledByOwnerPushNotification>._,
@@ -61,7 +61,7 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
 
         // Assert
-        acting.Should().ThrowAsync<NotFoundException>();
+        acting.ShouldThrowAsync<NotFoundException>();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IPushNotificationSender? pushNotificationSender = null)

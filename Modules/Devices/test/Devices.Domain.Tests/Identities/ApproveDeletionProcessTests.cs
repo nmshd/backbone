@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -23,9 +24,9 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         identity.ApproveDeletionProcess(identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!.Id, deviceId);
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
-        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
-        identity.TierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+        identity.Status.ShouldBe(IdentityStatus.ToBeDeleted);
+        identity.DeletionGracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
+        identity.TierId.ShouldBe(Tier.QUEUED_FOR_DELETION.Id);
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
@@ -38,11 +39,9 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
-        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        exception.Code.Should().Be("error.platform.recordNotFound");
-        exception.Message.Should().Contain("Device");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "Device");
     }
 
     [Fact]
@@ -56,11 +55,9 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcessId, deviceId);
-        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        exception.Code.Should().Be("error.platform.recordNotFound");
-        exception.Message.Should().Contain("IdentityDeletionProcess");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "IdentityDeletionProcess");
     }
 
     [Fact]
@@ -74,11 +71,9 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
         // Act
         var acting = () => identity.ApproveDeletionProcess(deletionProcess.Id, deviceId);
-        var exception = acting.Should().Throw<DomainException>().Which;
 
         // Assert
-        exception.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
-        exception.Message.Should().Contain("WaitingForApproval");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus", "WaitingForApproval");
     }
 
     [Fact]
@@ -94,25 +89,25 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         activeIdentity.ApproveDeletionProcess(deletionProcess.Id, activeDevice.Id);
 
         //Assert
-        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.ShouldHaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
 
-        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
-        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
-        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+        tierOfIdentityChangedDomainEvent.IdentityAddress.ShouldBe(activeIdentity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.ShouldBe(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.NewTierId.ShouldBe(Tier.QUEUED_FOR_DELETION.Id);
 
-        identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+        identityToBeDeletedDomainEvent.IdentityAddress.ShouldBe(activeIdentity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
-        deletionProcess.AuditLog.Should().HaveCount(2);
+        deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.WaitingForApproval);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Approved);
     }
 
     private static Identity CreateIdentity()

@@ -2,6 +2,7 @@
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -20,20 +21,20 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
         _metricsResponse = await _client.Metrics.GetAllMetrics();
-        _metricsResponse.Should().BeASuccess();
+        _metricsResponse.ShouldBeASuccess();
     }
 
     [Then("the response contains a list of Metrics")]
     public async Task ThenTheResponseContainsAListOfMetrics()
     {
-        _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
-        _metricsResponse!.ContentType.Should().StartWith("application/json");
-        await _metricsResponse.Should().ComplyWithSchema();
+        _metricsResponse!.Result.ShouldNotBeNullOrEmpty();
+        _metricsResponse!.ContentType.ShouldStartWith("application/json");
+        await _metricsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_metricsResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_metricsResponse!.Status).ShouldBe(expectedStatusCode);
     }
 }

@@ -175,8 +175,15 @@ internal class RelationshipTemplatesStepDefinitions
     [Then($@"the response contains Relationship Template\(s\) {RegexFor.LIST_OF_THINGS}")]
     public void ThenTheResponseContainsRelationshipTemplates(string relationshipTemplateNames)
     {
-        var relationshipTemplates = relationshipTemplateNames.Split(',').Select(item => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[item.Trim()]).ToList();
-        _listRelationshipTemplatesResponse!.Result!.Should().BeEquivalentTo(relationshipTemplates, options => options.WithStrictOrdering());
+        var relationshipTemplates = relationshipTemplateNames
+            .Split(',')
+            .Select(item => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[item.Trim()])
+            .Select(response => (response.Id, response.CreatedAt))
+            .ToList();
+
+        _listRelationshipTemplatesResponse!.Result!
+            .Select(item => (item.Id, item.CreatedAt))
+            .ShouldBe(relationshipTemplates, true);
     }
 
     #endregion

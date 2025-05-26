@@ -17,7 +17,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq
             var eventName = testEvent.GetEventName();
 
             // Assert
-            eventName.Should().Be("Test");
+            eventName.ShouldBe("Test");
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.RabbitMq
             var eventName = typeof(TestDomainEvent).GetEventName();
 
             // Assert
-            eventName.Should().Be("Test");
+            eventName.ShouldBe("Test");
         }
     }
 

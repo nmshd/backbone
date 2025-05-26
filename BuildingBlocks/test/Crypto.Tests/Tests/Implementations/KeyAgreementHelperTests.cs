@@ -10,7 +10,7 @@ public class KeyAgreementHelperTests : AbstractTestsBase
     public void IsValidPublicKey_ShouldReturnTrue_WhenPublicKeyIsValid()
     {
         var isValid = _keyAgreementHelper.IsValidPublicKey(_validPublicKey);
-        isValid.Should().BeTrue();
+        isValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -18,14 +18,14 @@ public class KeyAgreementHelperTests : AbstractTestsBase
     {
         var invalidPublicKey = ConvertibleString.FromBase64("DFN0");
         var isValid = _keyAgreementHelper.IsValidPublicKey(invalidPublicKey);
-        isValid.Should().BeFalse();
+        isValid.ShouldBeFalse();
     }
 
     [Fact]
     public void IsValidPrivateKey_ShouldReturnTrue_WhenPrivateKeyIsValid()
     {
         var isValid = _keyAgreementHelper.IsValidPublicKey(_validPrivateKey);
-        isValid.Should().BeTrue();
+        isValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class KeyAgreementHelperTests : AbstractTestsBase
     {
         var invalidPublicKey = ConvertibleString.FromBase64("k7oq");
         var isValid = _keyAgreementHelper.IsValidPublicKey(invalidPublicKey);
-        isValid.Should().BeFalse();
+        isValid.ShouldBeFalse();
     }
 
     #region Test Data

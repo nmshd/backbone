@@ -2,6 +2,7 @@
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Application.Tests.TestHelpers;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.Messages.DTOs;
 
@@ -20,8 +21,8 @@ public class MessageDTOTests : AbstractTestsBase
         var messageDTO = new MessageDTO(message, message.Recipients.First().Address, DID_DOMAIN_NAME);
 
         // Assert
-        messageDTO.Recipients.Should().HaveCount(1);
-        messageDTO.Recipients.First().Address.Should().Be(message.Recipients.First().Address);
+        messageDTO.Recipients.ShouldHaveCount(1);
+        messageDTO.Recipients.First().Address.ShouldBe(message.Recipients.First().Address);
     }
 
     [Fact]
@@ -34,9 +35,9 @@ public class MessageDTOTests : AbstractTestsBase
         var messageDTO = new MessageDTO(message, message.CreatedBy, DID_DOMAIN_NAME);
 
         // Assert
-        messageDTO.Recipients.Should().HaveCount(2);
-        messageDTO.Recipients.First().Address.Should().Be(message.Recipients.First().Address);
-        messageDTO.Recipients.Second().Address.Should().Be(message.Recipients.Second().Address);
+        messageDTO.Recipients.ShouldHaveCount(2);
+        messageDTO.Recipients.First().Address.ShouldBe(message.Recipients.First().Address);
+        messageDTO.Recipients.Second().Address.ShouldBe(message.Recipients.Second().Address);
     }
 
     [Fact]
@@ -50,6 +51,6 @@ public class MessageDTOTests : AbstractTestsBase
         var messageDTO = new MessageDTO(message, message.CreatedBy, DID_DOMAIN_NAME);
 
         // Assert
-        messageDTO.Recipients.First().Address.Should().Be(ANONYMIZED_ADDRESS);
+        messageDTO.Recipients.First().Address.ShouldBe(ANONYMIZED_ADDRESS);
     }
 }

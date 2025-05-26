@@ -3,6 +3,7 @@ using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
@@ -28,10 +29,10 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, password);
 
         // Assert
-        result.Should().Be(TokenAccessResult.AllocationAdded);
-        token.Allocations.Should().HaveCount(1);
-        token.Allocations[0].AllocatedBy.Should().Be(identityAddress);
-        token.Allocations[0].AllocatedByDevice.Should().Be(deviceId);
+        result.ShouldBe(TokenAccessResult.AllocationAdded);
+        token.Allocations.ShouldHaveCount(1);
+        token.Allocations[0].AllocatedBy.ShouldBe(identityAddress);
+        token.Allocations[0].AllocatedByDevice.ShouldBe(deviceId);
     }
 
     [Fact]
@@ -48,7 +49,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, wrongPassword);
 
         // Act
-        result.Should().Be(TokenAccessResult.WrongPassword);
+        result.ShouldBe(TokenAccessResult.WrongPassword);
     }
 
     [Fact]
@@ -63,7 +64,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, null);
 
         // Assert
-        result.Should().Be(TokenAccessResult.AllocationAdded);
+        result.ShouldBe(TokenAccessResult.AllocationAdded);
     }
 
     [Fact]
@@ -80,7 +81,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, password);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Ok);
+        result.ShouldBe(TokenAccessResult.Ok);
     }
 
     [Fact]
@@ -97,7 +98,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, null);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Ok);
+        result.ShouldBe(TokenAccessResult.Ok);
     }
 
     [Fact]
@@ -113,7 +114,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, null);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Ok);
+        result.ShouldBe(TokenAccessResult.Ok);
     }
 
     // Locked tokens
@@ -130,7 +131,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(null, null, null);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Locked);
+        result.ShouldBe(TokenAccessResult.Locked);
     }
 
     [Fact]
@@ -146,9 +147,8 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         token.TryToAccess(null, null, null);
 
         // Assert
-        token.IsLocked.Should().BeTrue();
-        token.DomainEvents.Should().HaveCount(1);
-        token.DomainEvents[0].Should().BeOfType<TokenLockedDomainEvent>();
+        token.IsLocked.ShouldBeTrue();
+        token.ShouldHaveASingleDomainEvent<TokenLockedDomainEvent>();
     }
 
     [Theory]
@@ -168,7 +168,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, usePassword ? password : null);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Ok);
+        result.ShouldBe(TokenAccessResult.Ok);
     }
 
     [Fact]
@@ -185,7 +185,7 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(identityAddress, deviceId, password);
 
         // Assert
-        result.Should().Be(TokenAccessResult.Locked);
+        result.ShouldBe(TokenAccessResult.Locked);
     }
 
     [Theory]
@@ -217,16 +217,16 @@ public partial class TokenTryToAccessAccessTests : AbstractTestsBase
         var result = token.TryToAccess(activeIdentity, CreateRandomDeviceId(), passwordOnGet);
 
         // Assert
-        result.Should().Be(properties.ExpectedResult);
+        result.ShouldBe(properties.ExpectedResult);
 
         var numberOfAllocationsAfterAct = token.Allocations.Count;
 
         var numberOfAddedAllocations = numberOfAllocationsAfterAct - numberOfAllocationsBeforeAct;
 
         if (result == TokenAccessResult.AllocationAdded)
-            numberOfAddedAllocations.Should().Be(1);
+            numberOfAddedAllocations.ShouldBe(1);
         else
-            numberOfAddedAllocations.Should().Be(0);
+            numberOfAddedAllocations.ShouldBe(0);
     }
 
     private static IdentityAddress? TranslateIdentity(Identity identityName)

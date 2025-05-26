@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -24,13 +25,13 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 
         // Assert
         AssertDeletionProcessWasStarted(activeIdentity);
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        deletionProcess.Status.ShouldBe(DeletionProcessStatus.WaitingForApproval);
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedBySupport);
-        auditLogEntry.DeviceIdHash.Should().BeNull();
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        auditLogEntry.MessageKey.ShouldBe(MessageKey.StartedBySupport);
+        auditLogEntry.DeviceIdHash.ShouldBeNull();
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.WaitingForApproval);
     }
 
     [Fact]
@@ -45,7 +46,7 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
         var acting = activeIdentity.StartDeletionProcessAsSupport;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
     [Fact]
@@ -58,33 +59,33 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
         var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
 
         //Assert
-        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStartedDomainEvent>();
-        domainEvent.Address.Should().Be(activeIdentity.Address);
-        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
-        domainEvent.Initiator.Should().Be(null);
+        var domainEvent = deletionProcess.ShouldHaveASingleDomainEvent<IdentityDeletionProcessStartedDomainEvent>();
+        domainEvent.Address.ShouldBe(activeIdentity.Address);
+        domainEvent.DeletionProcessId.ShouldBe(deletionProcess.Id);
+        domainEvent.Initiator.ShouldBe(null);
     }
 
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
-        activeIdentity.DeletionProcesses.Should().HaveCount(1);
+        activeIdentity.DeletionProcesses.ShouldHaveCount(1);
         var deletionProcess = activeIdentity.DeletionProcesses[0];
-        deletionProcess.Should().NotBeNull();
+        deletionProcess.ShouldNotBeNull();
 
-        deletionProcess.Id.Should().NotBeNull();
-        deletionProcess.Id.Value.Should().HaveLength(20);
+        deletionProcess.Id.ShouldNotBeNull();
+        deletionProcess.Id.Value.ShouldHaveCount(20);
 
-        deletionProcess.CreatedAt.Should().Be(SystemTime.UtcNow);
+        deletionProcess.CreatedAt.ShouldBe(SystemTime.UtcNow);
 
-        deletionProcess.AuditLog.Should().HaveCount(1);
+        deletionProcess.AuditLog.ShouldHaveCount(1);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.Should().BeNull();
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBeNull();
     }
 
     private static Identity CreateIdentity()

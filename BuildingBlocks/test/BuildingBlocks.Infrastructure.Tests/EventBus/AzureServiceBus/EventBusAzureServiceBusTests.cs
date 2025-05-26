@@ -14,7 +14,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus
             var queueName = EventBusAzureServiceBus.GetSubscriptionName<TestDomainEventHandler, TestDomainEvent>();
 
             // Assert
-            queueName.Should().Be("TestModule.Test");
+            queueName.ShouldBe("TestModule.Test");
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.AzureServiceBus
             var queueName = EventBusAzureServiceBus.GetSubscriptionName<VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEventHandler, VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfTestDomainEvent>();
 
             // Assert
-            queueName.Should().Be("TestModule.VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfT");
+            queueName.ShouldBe("TestModule.VeeeeeeeeeeeeeeeeeeeeeeeeeryLongNameOfT");
         }
     }
 }

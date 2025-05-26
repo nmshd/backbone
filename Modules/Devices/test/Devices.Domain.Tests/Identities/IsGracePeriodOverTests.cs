@@ -15,7 +15,7 @@ public class IsGracePeriodOverTests : AbstractTestsBase
         var result = identity.IsGracePeriodOver;
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -30,6 +30,6 @@ public class IsGracePeriodOverTests : AbstractTestsBase
         var result = identity.IsGracePeriodOver;
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 }

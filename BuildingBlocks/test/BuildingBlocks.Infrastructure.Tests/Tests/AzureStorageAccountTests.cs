@@ -149,8 +149,8 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync(CONTAINER_NAME)).ToListAsync();
 
-        retrievedBlobContent.Should().Contain(addBlobName1);
-        retrievedBlobContent.Should().Contain(addBlobName2);
+        retrievedBlobContent.ShouldContain(addBlobName1);
+        retrievedBlobContent.ShouldContain(addBlobName2);
 
         CloseAzuriteContainer();
     }
@@ -166,8 +166,8 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         var blobsWithPrefix1 = await (await azureBlobStorage.FindAllAsync("PREFIX1_")).ToListAsync();
 
-        blobsWithPrefix1.Should().Contain("PREFIX1_Blob");
-        blobsWithPrefix1.Should().NotContain("PREFIX2_Blob");
+        blobsWithPrefix1.ShouldContain("PREFIX1_Blob");
+        blobsWithPrefix1.ShouldNotContain("PREFIX2_Blob");
 
         CloseAzuriteContainer();
     }
@@ -179,7 +179,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         var retrievedBlobContent = await (await azureBlobStorage.FindAllAsync(CONTAINER_NAME)).ToListAsync();
 
-        retrievedBlobContent.Should().BeEmpty();
+        retrievedBlobContent.ShouldBeEmpty();
 
         CloseAzuriteContainer();
     }

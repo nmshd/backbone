@@ -16,7 +16,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public class ExtensionsTests : AbstractTestsBase
         var result = compiledExpression(intWrapper);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 }
 
