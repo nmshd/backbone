@@ -28,6 +28,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     {
         var response = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
+            Severity = AnnouncementSeverity.Medium,
+            IsSilent = false,
             Texts =
             [
                 new CreateAnnouncementRequestText
@@ -37,7 +39,6 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
-            Severity = AnnouncementSeverity.Medium,
             ExpiresAt = DateTime.UtcNow
         });
 
@@ -56,6 +57,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
@@ -75,6 +77,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
