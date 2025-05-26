@@ -128,10 +128,6 @@ public static class IServiceCollectionExtensions
         var builder = new ODataConventionModelBuilder()
             .EnableLowerCamelCase();
 
-        builder.EntitySet<IdentityOverviewDTO>("Identities")
-            .EntityType.HasKey(identity => identity.Address);
-
-
         services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
             .AddRouteComponents("odata", builder.GetEdmModel()));
 
