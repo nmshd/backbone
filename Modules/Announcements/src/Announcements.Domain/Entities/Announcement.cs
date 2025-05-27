@@ -15,9 +15,11 @@ public class Announcement : Entity
         Id = null!;
         Texts = null!;
         Recipients = null!;
+        Actions = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
+    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients,
+        IEnumerable<AnnouncementAction> actions)
     {
         Id = AnnouncementId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -25,6 +27,7 @@ public class Announcement : Entity
         Severity = severity;
         Texts = texts;
         Recipients = [.. recipients];
+        Actions = [.. actions];
 
         RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this, isSilent));
     }
@@ -34,6 +37,7 @@ public class Announcement : Entity
     public DateTime CreatedAt { get; }
     public DateTime? ExpiresAt { get; }
     public AnnouncementSeverity Severity { get; }
+    public List<AnnouncementAction> Actions { get; }
 
     public List<AnnouncementText> Texts { get; }
 
