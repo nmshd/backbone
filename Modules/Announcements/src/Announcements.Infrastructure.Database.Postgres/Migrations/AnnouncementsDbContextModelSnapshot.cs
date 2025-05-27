@@ -18,7 +18,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Announcements")
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("DbProvider", "Npgsql")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -43,6 +44,37 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.HasKey("Id");
 
                     b.ToTable("Announcements", "Announcements");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("AnnouncementId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnnouncementId");
+
+                    b.ToTable("AnnouncementActions", "Announcements");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
@@ -94,6 +126,13 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.ToTable("AnnouncementText", "Announcements");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("AnnouncementId");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
@@ -114,6 +153,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Recipients");
 
                     b.Navigation("Texts");

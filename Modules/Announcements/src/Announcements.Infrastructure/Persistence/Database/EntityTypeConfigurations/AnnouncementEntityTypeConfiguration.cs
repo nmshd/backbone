@@ -17,5 +17,6 @@ public class AnnouncementEntityTypeConfiguration : EntityEntityTypeConfiguration
         builder.Property(a => a.Severity);
 
         builder.HasMany(a => a.Texts).WithOne();
+        builder.HasMany(a => a.Actions).WithOne();
     }
 }
