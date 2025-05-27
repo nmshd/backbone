@@ -18,6 +18,14 @@ public class AnnouncementCreatedDomainEventHandler : IDomainEventHandler<Announc
 
     public async Task Handle(AnnouncementCreatedDomainEvent @event)
     {
+        await SendPushNotificationForAnnouncement(@event);
+    }
+
+    private async Task SendPushNotificationForAnnouncement(AnnouncementCreatedDomainEvent @event)
+    {
+        if (@event.IsSilent)
+            return;
+
         var pushNotificationTexts = @event.Texts.ToDictionary(k => k.Language, k => new NotificationText(k.Title, k.Body) { Title = k.Title, Body = k.Body });
 
         var pushNotificationFilter = @event.Recipients.IsEmpty()

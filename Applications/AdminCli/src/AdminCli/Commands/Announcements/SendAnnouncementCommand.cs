@@ -23,13 +23,20 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "The severity of the announcement. Possible values: Low, Medium, High"
         };
 
+        var isSilent = new Option<bool?>("--silent")
+        {
+            IsRequired = false,
+            Description = "Whether the announcement should be silent. A push notification will not be sent for silent announcements. By default, the announcement is not silent."
+        };
+
         AddOption(expiresAt);
         AddOption(severity);
+        AddOption(isSilent);
 
-        this.SetHandler(SendAnnouncement, severity, expiresAt);
+        this.SetHandler(SendAnnouncement, severity, expiresAt, isSilent);
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent)
     {
         try
         {
@@ -66,6 +73,7 @@ public class SendAnnouncementCommand : AdminCliCommand
                 {
                     Texts = texts,
                     Severity = severity,
+                    IsSilent = isSilent ?? false,
                     ExpiresAt = expiresAt
                 }, CancellationToken.None);
 

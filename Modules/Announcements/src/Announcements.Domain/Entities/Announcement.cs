@@ -17,17 +17,18 @@ public class Announcement : Entity
         Recipients = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
+    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
     {
         Id = AnnouncementId.New();
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
         Severity = severity;
         Texts = texts;
-        Recipients = recipients.ToList();
+        Recipients = [.. recipients];
 
-        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
+        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this, isSilent));
     }
+
 
     public AnnouncementId Id { get; }
     public DateTime CreatedAt { get; }

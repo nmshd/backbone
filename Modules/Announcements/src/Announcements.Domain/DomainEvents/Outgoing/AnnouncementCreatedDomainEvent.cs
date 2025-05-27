@@ -5,16 +5,18 @@ namespace Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 
 public class AnnouncementCreatedDomainEvent : DomainEvent
 {
-    public AnnouncementCreatedDomainEvent(Announcement announcement) : base($"{announcement.Id}/Created")
+    public AnnouncementCreatedDomainEvent(Announcement announcement, bool isSilent) : base($"{announcement.Id}/Created")
     {
         Id = announcement.Id.Value;
         Severity = announcement.Severity.ToString();
+        IsSilent = isSilent;
         Texts = announcement.Texts.Select(t => new AnnouncementCreatedDomainEventText(t)).ToList();
         Recipients = announcement.Recipients.Select(r => r.Address.Value).ToList();
     }
 
     public string Id { get; }
     public string Severity { get; }
+    public bool IsSilent { get; }
     public List<AnnouncementCreatedDomainEventText> Texts { get; }
     public List<string> Recipients { get; }
 }
