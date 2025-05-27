@@ -12,6 +12,14 @@ public class Announcement
     public required AnnouncementSeverity Severity { get; set; }
 
     public required AnnouncementText Text { get; set; }
+    public required List<AnnouncementAction> Actions { get; set; }
+}
+
+public enum AnnouncementSeverity
+{
+    Low,
+    Medium,
+    High
 }
 
 public class AnnouncementText
@@ -21,9 +29,8 @@ public class AnnouncementText
     public required string Body { get; set; }
 }
 
-public enum AnnouncementSeverity
+public class AnnouncementAction
 {
-    Low,
-    Medium,
-    High
+    public required string DisplayName { get; set; }
+    public required string Link { get; set; }
 }
