@@ -11,7 +11,7 @@ public class AnnouncementIqlQueryEntityFrameworkValueConverter : ValueConverter<
 
     public AnnouncementIqlQueryEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.Value,
+            valueObject => valueObject == null ? null : valueObject.Value,
             value => value == null ? null : AnnouncementIqlQuery.Parse(value),
             mappingHints
         )
