@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-final kIsDesktop =
+final bool kIsDesktop =
     !kIsWeb &&
     (defaultTargetPlatform == TargetPlatform.linux ||
         defaultTargetPlatform == TargetPlatform.macOS ||

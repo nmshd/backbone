@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
-  var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
+  ({bool sortAscending, int sortColumnIndex}) _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
   IdentityOverviewFilter? _filter;
   set filter(IdentityOverviewFilter? newFilter) {
     if (_filter != newFilter) {
