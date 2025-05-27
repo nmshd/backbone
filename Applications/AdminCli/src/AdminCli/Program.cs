@@ -1,6 +1,7 @@
 using System.CommandLine;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.AdminCli.Configuration;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
@@ -14,6 +15,7 @@ using Backbone.Modules.Tokens.Module;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
 using RootCommand = Backbone.AdminCli.Commands.RootCommand;
 
@@ -25,10 +27,7 @@ public class Program
 
     private static async Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false)
-            .Build();
+        var configuration = LoadConfiguration(args);
 
         var serviceProvider = BuildServiceProvider(configuration);
 
@@ -74,8 +73,29 @@ public class Program
             .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
             .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
+#pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
+        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminCliConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+        services.AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase);
+
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);
         return new AutofacServiceProvider(containerBuilder.Build());
+    }
+
+    private static IConfigurationRoot LoadConfiguration(string[] strings)
+    {
+        var configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.Sources.Clear();
+
+        configurationBuilder
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+
+        configurationBuilder.AddEnvironmentVariables();
+        configurationBuilder.AddCommandLine(strings);
+
+        return configurationBuilder.Build();
     }
 }
