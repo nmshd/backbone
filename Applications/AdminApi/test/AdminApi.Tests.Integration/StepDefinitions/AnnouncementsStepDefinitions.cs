@@ -14,7 +14,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST /Announcements")]
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
-    private ApiResponse<Announcement>? _announcementResponse;
+    private ApiResponse<Announcement>? _createAnnouncementResponse;
     private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
     private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
@@ -39,7 +39,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
-            ExpiresAt = DateTime.UtcNow
+            ExpiresAt = DateTime.UtcNow,
+            Actions = []
         });
 
         _givenAnnouncement = response.Result;
@@ -54,7 +55,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
-        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
             IsSilent = false,
@@ -67,14 +68,15 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Title = "Title",
                     Body = "Body"
                 }
-            ]
+            ],
+            Actions = []
         });
     }
 
     [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
     {
-        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
             IsSilent = false,
@@ -86,6 +88,38 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Language = "de",
                     Title = "Titel",
                     Body = "Inhalt"
+                }
+            ],
+            Actions = []
+        });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint with an action$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAnAction()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = true,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Please provide feedback",
+                    Body = "We would like to hear your thoughts on our service."
+                }
+            ],
+            Actions =
+            [
+                new CreateAnnouncementRequestAction
+                {
+                    DisplayName = new Dictionary<string, string>
+                    {
+                        { "en", "Give feedback" }
+                    },
+                    Link = "https://enmeshed.eu/feedback"
                 }
             ]
         });
@@ -101,8 +135,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _announcementResponse!.Result.Should().NotBeNull();
-        await _announcementResponse.Should().ComplyWithSchema();
+        _createAnnouncementResponse!.Result.Should().NotBeNull();
+        await _createAnnouncementResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
@@ -124,5 +158,15 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _whenResponse.Should().NotBeNull();
         _whenResponse!.Error.Should().NotBeNull();
         _whenResponse.Error!.Code.Should().Be(errorCode);
+    }
+
+    [Then("the response contains the action")]
+    public void ThenTheResponseContainsTheAction()
+    {
+        _createAnnouncementResponse!.Result.Should().NotBeNull();
+        _createAnnouncementResponse.Result!.Actions.Should().HaveCount(1);
+        _createAnnouncementResponse.Result.Actions.First().DisplayName.Should().ContainKey("en");
+        _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].Should().Be("Give feedback");
+        _createAnnouncementResponse.Result.Actions.First().Link.Should().Be("https://enmeshed.eu/feedback");
     }
 }
