@@ -70,6 +70,7 @@ public class ValidatorTests
         {
             ExpiresAt = null,
             Severity = AnnouncementSeverity.Low,
+            IsSilent = false,
             Texts = languages.Select(l => new CreateAnnouncementCommandText
             {
                 Language = l,
