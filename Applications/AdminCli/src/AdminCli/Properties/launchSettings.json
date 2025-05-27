@@ -27,6 +27,10 @@
       "Reset access-failed-count of Token": {
           "commandName": "Project",
           "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
+      },
+      "Export database": {
+          "commandName": "Project",
+          "commandLineArgs": "database export"
       }
   }
 }

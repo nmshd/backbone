@@ -9,7 +9,7 @@ part of 'relationship.dart';
 Relationship _$RelationshipFromJson(Map<String, dynamic> json) => Relationship(
   peer: json['peer'] as String,
   requestedBy: json['requestedBy'] as String,
-  templateId: json['templateId'] as String,
+  templateId: json['templateId'] as String?,
   status: json['status'] as String,
   creationDate: DateTime.parse(json['creationDate'] as String),
   answeredAt: json['answeredAt'] == null ? null : DateTime.parse(json['answeredAt'] as String),
