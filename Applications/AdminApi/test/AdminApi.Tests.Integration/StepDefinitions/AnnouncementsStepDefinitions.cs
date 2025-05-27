@@ -91,6 +91,27 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
+    {
+        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            IqlQuery = "StreetAddress.city='Heidelberg' && #'Primary Address'"
+        });
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
