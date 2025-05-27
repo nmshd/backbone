@@ -10,8 +10,15 @@ public class CreateAnnouncementCommand : IRequest<AnnouncementDTO>
     public required bool IsSilent { get; set; }
     public required List<CreateAnnouncementCommandText> Texts { get; set; }
     public DateTime? ExpiresAt { get; set; }
+    public required List<CreateAnnouncementCommandAction> Actions { get; set; }
 
     public List<string> Recipients { get; set; } = [];
+}
+
+public class CreateAnnouncementCommandAction
+{
+    public required Dictionary<string, string> DisplayName { get; set; }
+    public required string Link { get; set; }
 }
 
 public class CreateAnnouncementCommandText

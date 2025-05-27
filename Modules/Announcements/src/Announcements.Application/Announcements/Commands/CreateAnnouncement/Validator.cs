@@ -22,6 +22,7 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
 
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
         RuleForEach(x => x.Recipients).ValidId<CreateAnnouncementCommand, IdentityAddress>();
+        RuleForEach(x => x.Actions).SetValidator(new CreateAnnouncementCommandActionValidator());
     }
 }
 
@@ -32,5 +33,17 @@ public class CreateAnnouncementCommandTextValidator : AbstractValidator<CreateAn
         RuleFor(x => x.Language).TwoLetterIsoLanguage();
         RuleFor(x => x.Title).DetailedNotEmpty();
         RuleFor(x => x.Body).DetailedNotEmpty();
+    }
+}
+
+public class CreateAnnouncementCommandActionValidator : AbstractValidator<CreateAnnouncementCommandAction>
+{
+    public CreateAnnouncementCommandActionValidator()
+    {
+        RuleFor(x => x.Link).DetailedNotEmpty().MaximumLength(300);
+        RuleFor(x => x.DisplayName)
+            .Must(x => x.Any(t => t.Key == AnnouncementLanguage.DEFAULT_LANGUAGE.Value))
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
+            .WithMessage("An action must have a display name for English.");
     }
 }
