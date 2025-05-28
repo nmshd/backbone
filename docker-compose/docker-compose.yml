@@ -57,43 +57,6 @@ services:
       - ACCEPT_EULA=Y
     restart: unless-stopped
 
-  #elasticsearch:
-  #  image: elasticsearch:${ELK_VERSION}
-  #  container_name: elasticsearch
-  #  restart: always
-  #  volumes:
-  #    - elastic-data:/usr/share/elasticsearch/data/
-  #  environment:
-  #    - xpack.watcher.enabled=false
-  #    - xpack.security.enabled=false
-  #    - ES_JAVA_OPTS=-Xms512m -Xmx512m
-  #    - discovery.type=single-node
-
-  #logstash:
-  #  image: logstash:${ELK_VERSION}
-  #  container_name: logstash
-  #  restart: always
-  #  volumes:
-  #    - ./logstash:/etc/logstash/conf.d
-  #  command: logstash -f /etc/logstash/conf.d/logstash.conf
-  #  depends_on:
-  #    - elasticsearch
-  #  environment:
-  #    - LS_JAVA_OPTS=-Xmx256m -Xms256m
-  #    - ES_LOGSTASH_PORT=${ES_LOGSTASH_PORT}
-  #    - ES_ELASTICSEARCH_PORT=${ES_ELASTICSEARCH_PORT}
-
-  #kibana:
-  #  image: kibana:${ELK_VERSION}
-  #  container_name: kibana
-  #  restart: always
-  #  ports:
-  #    - ${ES_KIBANA_PORT}:5601
-  #  environment:
-  #    - ELASTICSEARCH_URL=http://elasticsearch:${ES_ELASTICSEARCH_PORT}
-  #  depends_on:
-  #    - elasticsearch
-
 networks:
   default:
     name: backbone
@@ -106,5 +69,4 @@ volumes:
     external: true
   azure-storage-emulator-volume:
     external: true
-  elastic-data:
   seq-data:
