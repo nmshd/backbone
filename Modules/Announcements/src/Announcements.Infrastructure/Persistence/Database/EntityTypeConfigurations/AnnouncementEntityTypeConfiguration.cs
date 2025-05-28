@@ -15,6 +15,7 @@ public class AnnouncementEntityTypeConfiguration : EntityEntityTypeConfiguration
         builder.Property(a => a.CreatedAt);
         builder.Property(a => a.ExpiresAt);
         builder.Property(a => a.Severity);
+        builder.Property(a => a.IqlQuery);
 
         builder.HasMany(a => a.Texts).WithOne();
     }
