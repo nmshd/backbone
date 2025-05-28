@@ -4,13 +4,13 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite@sha256:0a47e12e3693483cef5c71f35468b91d751611f172d2f97414e9c69113b106d9
+    image: mcr.microsoft.com/azure-storage/azurite:3.34.0@sha256:0a47e12e3693483cef5c71f35468b91d751611f172d2f97414e9c69113b106d9
     command: azurite-blob -l /data --blobHost "0.0.0.0"
     ports:
       - "10000:10000"
     volumes:
       - azure-storage-emulator-volume:/data
-  
+
   ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres@sha256:6efd0df010dc3cb40d5e33e3ef84acecc5e73161bd3df06029ee8698e5e12c60
+    image: postgres:17.5@sha256:6efd0df010dc3cb40d5e33e3ef84acecc5e73161bd3df06029ee8698e5e12c60
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.1-management-alpine@sha256:f545092f6cba538283053e69fca072a5acbc0fdad5c8419d6a860fb124572aa6
+    image: rabbitmq:4.1.0-management-alpine@sha256:f545092f6cba538283053e69fca072a5acbc0fdad5c8419d6a860fb124572aa6
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:latest@sha256:76d31ec93284c0003b97766f3fd2743616de0b510fc799054b5f0ac28820d330
+    image: datalust/seq:2025.1@sha256:76d31ec93284c0003b97766f3fd2743616de0b510fc799054b5f0ac28820d330
     container_name: seq
     ports:
       - "8085:80"
@@ -56,43 +56,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
     restart: unless-stopped
-
-  #elasticsearch:
-  #  image: elasticsearch:${ELK_VERSION}
-  #  container_name: elasticsearch
-  #  restart: always
-  #  volumes:
-  #    - elastic-data:/usr/share/elasticsearch/data/
-  #  environment:
-  #    - xpack.watcher.enabled=false
-  #    - xpack.security.enabled=false
-  #    - ES_JAVA_OPTS=-Xms512m -Xmx512m
-  #    - discovery.type=single-node
-
-  #logstash:
-  #  image: logstash:${ELK_VERSION}
-  #  container_name: logstash
-  #  restart: always
-  #  volumes:
-  #    - ./logstash:/etc/logstash/conf.d
-  #  command: logstash -f /etc/logstash/conf.d/logstash.conf
-  #  depends_on:
-  #    - elasticsearch
-  #  environment:
-  #    - LS_JAVA_OPTS=-Xmx256m -Xms256m
-  #    - ES_LOGSTASH_PORT=${ES_LOGSTASH_PORT}
-  #    - ES_ELASTICSEARCH_PORT=${ES_ELASTICSEARCH_PORT}
-
-  #kibana:
-  #  image: kibana:${ELK_VERSION}
-  #  container_name: kibana
-  #  restart: always
-  #  ports:
-  #    - ${ES_KIBANA_PORT}:5601
-  #  environment:
-  #    - ELASTICSEARCH_URL=http://elasticsearch:${ES_ELASTICSEARCH_PORT}
-  #  depends_on:
-  #    - elasticsearch
 
 networks:
   default:
@@ -106,5 +69,4 @@ volumes:
     external: true
   azure-storage-emulator-volume:
     external: true
-  elastic-data:
   seq-data:
