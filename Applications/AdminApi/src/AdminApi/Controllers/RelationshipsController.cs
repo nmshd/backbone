@@ -30,7 +30,7 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListAllRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)

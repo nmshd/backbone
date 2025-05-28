@@ -24,7 +24,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
 
     public async Task Handle(FeatureFlagsOfIdentityChangedDomainEvent @event)
     {
-        var identitiesToBeNotified = await ListAllIdentitiesToBeNotified(@event);
+        var identitiesToBeNotified = await ListIdentitiesToBeNotified(@event);
 
         var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
         {
@@ -35,7 +35,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         await Task.WhenAll(publishEventTasks);
     }
 
-    private async Task<HashSet<IdentityAddress>> ListAllIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
+    private async Task<HashSet<IdentityAddress>> ListIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
     {
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 

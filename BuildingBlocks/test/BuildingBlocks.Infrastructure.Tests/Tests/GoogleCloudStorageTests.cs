@@ -118,7 +118,7 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
 
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await (await _blobStorageUnderTest.ListAllAsync(BUCKET_NAME)).ToListAsync();
+        var retrievedBlobContent = await (await _blobStorageUnderTest.ListAsync(BUCKET_NAME)).ToListAsync();
 
         retrievedBlobContent.Should().Contain("BlobName1");
         retrievedBlobContent.Should().Contain("BlobName2");

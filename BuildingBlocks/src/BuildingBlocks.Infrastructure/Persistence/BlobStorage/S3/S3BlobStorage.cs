@@ -77,12 +77,12 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> ListAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAsync(string folder, string? prefix = null)
     {
-        return Task.FromResult(ListAllBlobsAsync(folder, prefix));
+        return Task.FromResult(ListBlobsAsync(folder, prefix));
     }
 
-    private async IAsyncEnumerable<string> ListAllBlobsAsync(string folder, string? prefix)
+    private async IAsyncEnumerable<string> ListBlobsAsync(string folder, string? prefix)
     {
         _logger.LogTrace("Listing all blobs...");
 

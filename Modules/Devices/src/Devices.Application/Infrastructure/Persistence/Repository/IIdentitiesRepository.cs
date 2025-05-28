@@ -13,7 +13,7 @@ public interface IIdentitiesRepository
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> Get(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
-    Task<IEnumerable<Identity>> ListAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Identity>> ListWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> List(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
     Task<Identity?> GetFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
@@ -26,7 +26,7 @@ public interface IIdentitiesRepository
 
     #region Devices
 
-    Task<DbPaginationResult<Device>> ListAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task<DbPaginationResult<Device>> ListDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<Device?> Get(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task<IEnumerable<Device>> ListDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
@@ -49,7 +49,7 @@ public interface IIdentitiesRepository
 
     #region Feature Flags
 
-    Task<FeatureFlagSet> ListAllFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken);
+    Task<FeatureFlagSet> ListFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken);
 
     #endregion
 }

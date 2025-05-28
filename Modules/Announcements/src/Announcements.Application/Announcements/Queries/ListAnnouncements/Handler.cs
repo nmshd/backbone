@@ -1,9 +1,9 @@
 ﻿using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
-namespace Backbone.Modules.Announcements.Application.Announcements.Queries.ListAllAnnouncements;
+namespace Backbone.Modules.Announcements.Application.Announcements.Queries.ListAnnouncements;
 
-public class Handler : IRequestHandler<ListAllAnnouncementsQuery, ListAllAnnouncementsResponse>
+public class Handler : IRequestHandler<ListAnnouncementsQuery, ListAnnouncementsResponse>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
 
@@ -12,10 +12,10 @@ public class Handler : IRequestHandler<ListAllAnnouncementsQuery, ListAllAnnounc
         _announcementsRepository = announcementsRepository;
     }
 
-    public async Task<ListAllAnnouncementsResponse> Handle(ListAllAnnouncementsQuery request, CancellationToken cancellationToken)
+    public async Task<ListAnnouncementsResponse> Handle(ListAnnouncementsQuery request, CancellationToken cancellationToken)
     {
         var announcements = await _announcementsRepository.List(cancellationToken);
 
-        return new ListAllAnnouncementsResponse(announcements);
+        return new ListAnnouncementsResponse(announcements);
     }
 }

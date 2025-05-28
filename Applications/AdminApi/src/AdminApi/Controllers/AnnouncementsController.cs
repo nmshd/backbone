@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using Backbone.Modules.Announcements.Application.Announcements.DTOs;
 using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAnnouncementById;
-using Backbone.Modules.Announcements.Application.Announcements.Queries.ListAllAnnouncements;
+using Backbone.Modules.Announcements.Application.Announcements.Queries.ListAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,10 +35,10 @@ public class AnnouncementsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(ListAllAnnouncementsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ListAnnouncementsResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListAnnouncements(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListAllAnnouncementsQuery(), cancellationToken);
+        var response = await _mediator.Send(new ListAnnouncementsQuery(), cancellationToken);
         return Ok(response);
     }
 }

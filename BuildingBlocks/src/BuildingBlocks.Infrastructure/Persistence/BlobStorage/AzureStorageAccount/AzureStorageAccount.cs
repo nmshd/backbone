@@ -60,7 +60,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> ListAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         var container = _containerClientFactory.GetContainerClient(folder);

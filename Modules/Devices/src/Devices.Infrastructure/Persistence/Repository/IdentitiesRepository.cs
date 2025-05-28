@@ -90,7 +90,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await _readonlyIdentities.AnyAsync(i => i.Address == address, cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> ListAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> ListWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
@@ -119,7 +119,7 @@ public class IdentitiesRepository : IIdentitiesRepository
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
 
-    public async Task<DbPaginationResult<Device>> ListAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<Device>> ListDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices
             .IncludeAll(_dbContext)
@@ -204,7 +204,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<FeatureFlagSet> ListAllFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken)
+    public async Task<FeatureFlagSet> ListFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken)
     {
         var featureFlags = await _dbContext.FeatureFlags.Where(f => f.OwnerAddress == identity).ToListAsync(cancellationToken);
         return FeatureFlagSet.Load(featureFlags);
