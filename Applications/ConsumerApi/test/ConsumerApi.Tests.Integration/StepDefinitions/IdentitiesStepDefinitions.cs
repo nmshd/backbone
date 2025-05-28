@@ -4,6 +4,8 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
@@ -32,7 +34,7 @@ internal class IdentitiesStepDefinitions
     private readonly ClientPool _clientPool;
 
     private ApiResponse<IsDeletedResponse>? _isDeletedResponse;
-    private ApiResponse<GetFeatureFlagsResponse>? _getFeatureFlagsResponse;
+    private ApiResponse<ListFeatureFlagsResponse>? _getFeatureFlagsResponse;
 
     public IdentitiesStepDefinitions(ResponseContext responseContext, ChallengesContext challengesContext, ClientPool clientPool, HttpClientFactory factory,
         IOptions<HttpConfiguration> httpConfiguration)
@@ -155,7 +157,7 @@ internal class IdentitiesStepDefinitions
         var requestorClient = _clientPool.FirstForIdentityName(requestorName);
 
         var peerAddress = _clientPool.FirstForIdentityName(peerName).IdentityData!.Address;
-        _responseContext.WhenResponse = _getFeatureFlagsResponse = await requestorClient.FeatureFlags.GetFeatureFlags(peerAddress);
+        _responseContext.WhenResponse = _getFeatureFlagsResponse = await requestorClient.FeatureFlags.ListFeatureFlags(peerAddress);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a PATCH request to the /Identities/Self/FeatureFlags endpoint with (\d*) features")]
@@ -205,7 +207,7 @@ internal class IdentitiesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+        var response = await client.FeatureFlags.ListFeatureFlags(client.IdentityData!.Address);
 
         response.IsSuccess.ShouldBeTrue();
 
@@ -229,7 +231,7 @@ internal class IdentitiesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+        var response = await client.FeatureFlags.ListFeatureFlags(client.IdentityData!.Address);
 
         response.IsSuccess.ShouldBeTrue();
         response.Result!.ShouldBeEmpty();
@@ -240,7 +242,7 @@ internal class IdentitiesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var response = await client.FeatureFlags.GetFeatureFlags(client.IdentityData!.Address);
+        var response = await client.FeatureFlags.ListFeatureFlags(client.IdentityData!.Address);
 
         response.IsSuccess.ShouldBeTrue();
 

@@ -30,7 +30,7 @@ public class TiersRepositoryTests : AbstractTestsBase
 
         var repository = new TiersRepository(actContext);
 
-        var actTier = (await repository.Find(arrangedTier.Id, CancellationToken.None, true))!;
+        var actTier = (await repository.Get(arrangedTier.Id, CancellationToken.None, true))!;
         actTier.DeleteQuota(tierQuotaDefinitionToBeDeleted.Id);
 
         // Act

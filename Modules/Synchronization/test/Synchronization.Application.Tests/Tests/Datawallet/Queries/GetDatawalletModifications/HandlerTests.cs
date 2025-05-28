@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.Queries.ListModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.Shouldly.Extensions;
@@ -42,7 +42,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -65,7 +65,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -88,7 +88,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -112,7 +112,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -136,7 +136,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -153,7 +153,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(0);
@@ -238,7 +238,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawalletOfActiveIdentity);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(9);
@@ -273,7 +273,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(0, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(0, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -301,8 +301,8 @@ public class HandlerTests : AbstractTestsBase
         const int pageSize = 2;
 
         // Act
-        var firstPage = await _handler.Handle(new GetModificationsQuery(new PaginationFilter(1, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
-        var secondPage = await _handler.Handle(new GetModificationsQuery(new PaginationFilter(2, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
+        var firstPage = await _handler.Handle(new ListModificationsQuery(new PaginationFilter(1, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
+        var secondPage = await _handler.Handle(new ListModificationsQuery(new PaginationFilter(2, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         firstPage.ShouldHaveCount(2);
@@ -334,7 +334,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);

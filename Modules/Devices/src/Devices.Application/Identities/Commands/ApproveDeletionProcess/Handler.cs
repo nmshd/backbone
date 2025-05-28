@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
     public async Task<ApproveDeletionProcessResponse> Handle(ApproveDeletionProcessCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
         var identityDeletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 

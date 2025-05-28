@@ -56,7 +56,7 @@ public class BlobStorageHealthCheck : IHealthCheck
     {
         try
         {
-            var downloadBytes = await _storage.FindAsync(_rootFolderName, filename);
+            var downloadBytes = await _storage.GetAsync(_rootFolderName, filename);
             var downloadedString = Encoding.UTF8.GetString(downloadBytes);
             return downloadedString == FILE_TEXT;
         }

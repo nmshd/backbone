@@ -23,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
         var fakeUserContext = A.Fake<IUserContext>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);

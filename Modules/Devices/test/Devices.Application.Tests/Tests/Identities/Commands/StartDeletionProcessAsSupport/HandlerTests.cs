@@ -17,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(activeIdentity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(activeIdentity);
 
         var handler = CreateHandler(mockIdentitiesRepository);
@@ -46,7 +46,7 @@ public class HandlerTests : AbstractTestsBase
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
+        A.CallTo(() => fakeIdentitiesRepository.Get(
                 address,
                 A<CancellationToken>._,
                 A<bool>._))

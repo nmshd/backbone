@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<GetRelationshipQuery, RelationshipDTO>
 
     public async Task<RelationshipDTO> Handle(GetRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var relationship = await _relationshipsRepository.FindRelationship(RelationshipId.Parse(request.Id), _activeIdentity, cancellationToken, track: false);
+        var relationship = await _relationshipsRepository.GetRelationship(RelationshipId.Parse(request.Id), _activeIdentity, cancellationToken, track: false);
 
         relationship.EnsureIsNotDecomposedBy(_activeIdentity);
 

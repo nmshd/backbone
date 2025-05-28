@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;
@@ -15,7 +16,7 @@ public class ChallengesRepository : IChallengesRepository
         _readonlyChallenges = dbContext.Challenges.AsNoTracking();
     }
 
-    public async Task<Challenge?> FindById(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Challenge?> GetById(string id, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _challenges : _readonlyChallenges)
             .Where(c => c.Id == id).FirstOrDefaultAsync(cancellationToken);

@@ -14,7 +14,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         _relationshipsReadOnly = dbContext.Relationships.AsNoTracking();
     }
 
-    public async Task<List<Relationship>> GetRelationships(IEnumerable<RelationshipId> ids, CancellationToken cancellationToken)
+    public async Task<List<Relationship>> ListRelationships(IEnumerable<RelationshipId> ids, CancellationToken cancellationToken)
     {
         return await _relationshipsReadOnly.Where(r => ids.Contains(r.Id)).ToListAsync(cancellationToken);
     }

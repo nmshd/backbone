@@ -41,7 +41,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListRelationshipTemplatesQueryItem[]? templates,
+    public async Task<IActionResult> List([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListRelationshipTemplatesQueryItem[]? templates,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         // We keep this code for backwards compatibility reasons. In a few months the `templates`

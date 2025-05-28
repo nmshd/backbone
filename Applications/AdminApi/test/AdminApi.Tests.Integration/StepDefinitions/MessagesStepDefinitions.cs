@@ -29,7 +29,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Messages endpoint with type '(.*)' and participant i.Address")]
     public async Task WhenAGetRequestIsSentToTheMessagesEndpoint(string type)
     {
-        _messagesResponse = await _client.Messages.GetMessagesWithParticipant(_identityAddress, new MessageType(type));
+        _messagesResponse = await _client.Messages.ListMessages(_identityAddress, new MessageType(type));
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

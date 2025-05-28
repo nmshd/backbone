@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<HandleCompletedDeletionProcessCommand>
     {
         var identityAddressHash = Hasher.HashUtf8(request.IdentityAddress);
 
-        var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(l => l.IdentityAddressHash == identityAddressHash, CancellationToken.None, track: true);
+        var auditLogEntries = await _identitiesRepository.ListIdentityDeletionProcessAuditLogs(l => l.IdentityAddressHash == identityAddressHash, CancellationToken.None, track: true);
 
         var auditLogEntriesArray = auditLogEntries.ToArray();
 

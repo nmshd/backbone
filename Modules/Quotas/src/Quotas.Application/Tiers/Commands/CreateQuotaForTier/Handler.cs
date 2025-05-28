@@ -26,14 +26,14 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
     {
         _logger.LogTrace("Handling CreateQuotaForTierCommand ...");
 
-        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
+        var tier = await _tiersRepository.Get(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
         if (parseMetricKeyResult.IsFailure)
             throw new DomainException(parseMetricKeyResult.Error);
 
-        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+        var metric = await _metricsRepository.Get(parseMetricKeyResult.Value, cancellationToken);
 
         var result = tier.CreateQuota(parseMetricKeyResult.Value, request.Max, request.Period);
         if (result.IsFailure)

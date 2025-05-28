@@ -12,8 +12,8 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyn
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
-using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
+using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.ListExternalEventsOfSyncRun;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,10 +76,10 @@ public class SyncRunsController : ApiControllerBase
     }
 
     [HttpGet("{id}/ExternalEvents")]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetExternalEventsOfSyncRunResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListExternalEventsOfSyncRunResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetExternalEventsOfSyncRun([FromRoute] string id,
+    public async Task<IActionResult> ListExternalEventsOfSyncRun([FromRoute] string id,
         [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
@@ -87,7 +87,7 @@ public class SyncRunsController : ApiControllerBase
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new GetExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
+        var response = await _mediator.Send(new ListExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
 
         return Paged(response);
     }

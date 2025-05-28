@@ -24,7 +24,7 @@ public class HandlerTests : AbstractTestsBase
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => fakeIdentitiesRepository
-                .FindByAddress(identity.Address, A<CancellationToken>._, true))
+                .Get(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);

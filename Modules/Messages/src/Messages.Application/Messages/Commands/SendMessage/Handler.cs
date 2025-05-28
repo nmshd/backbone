@@ -57,7 +57,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindYoungestRelationship(sender, recipientDto.Address, cancellationToken);
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetYoungestRelationship(sender, recipientDto.Address, cancellationToken);
 
             if (relationshipBetweenSenderAndRecipient == null)
             {

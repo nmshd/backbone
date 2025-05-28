@@ -11,10 +11,10 @@ using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListFeatureFlags;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
@@ -110,10 +110,10 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("Self/DeletionProcesses")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsOwnerResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDeletionProcesses(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAsOwnerResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ListDeletionProcesses(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessesAsOwnerQuery(), cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAsOwnerQuery(), cancellationToken);
         return Ok(response);
     }
 
@@ -155,12 +155,12 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/FeatureFlags")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetFeatureFlagsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListFeatureFlagsResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetFeatureFlags([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListFeatureFlags([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var request = new GetFeatureFlagsQuery { IdentityAddress = identityAddress };
+        var request = new ListFeatureFlagsQuery { IdentityAddress = identityAddress };
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }

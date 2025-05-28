@@ -8,7 +8,7 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
-using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +30,7 @@ public class TiersController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverviewDTO>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
+    public async Task<IActionResult> ListTiers(CancellationToken cancellationToken)
     {
         var tiers = await _adminApiDbContext.Tiers.Select(t => new TierOverviewDTO
         {
@@ -47,9 +47,9 @@ public class TiersController : ApiControllerBase
     [HttpGet("{tierId}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TierDetailsDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var tier = await _mediator.Send(new GetTierByIdQuery(tierId), cancellationToken);
+        var tier = await _mediator.Send(new GetTierQuery(tierId), cancellationToken);
         return Ok(tier);
     }
 

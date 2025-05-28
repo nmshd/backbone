@@ -78,7 +78,7 @@ public class HandlerTests : AbstractTestsBase
             returnedIdentities.Add(TestDataGenerator.CreateIdentityWithOneDevice());
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
+        A.CallTo(() => identitiesRepository.List(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
 
         return identitiesRepository;
     }

@@ -27,13 +27,13 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
 
     public async Task<IndividualQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 
         if (parseMetricKeyResult.IsFailure)
             throw new DomainException(parseMetricKeyResult.Error);
 
-        var metric = await _metricsRepository.Find(parseMetricKeyResult.Value, cancellationToken);
+        var metric = await _metricsRepository.Get(parseMetricKeyResult.Value, cancellationToken);
 
         var individualQuota = identity.CreateIndividualQuota(metric.Key, request.Max, request.Period);
 

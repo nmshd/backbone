@@ -91,7 +91,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("^a GET request is sent to the /Clients endpoint$")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
-        _whenResponse = _getClientsResponse = await _client.Clients.GetAllClients();
+        _whenResponse = _getClientsResponse = await _client.Clients.ListClients();
     }
 
     [When("^a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret$")]

@@ -26,7 +26,7 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeRelationshipsRepository.List(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
@@ -35,16 +35,14 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
         await handler.Handle(new IdentityDeletionCancelledDomainEvent(identityWithDeletionCancelled));
 
         //Assert
-        A.CallTo(() => mockEventBus.Publish(A<PeerDeletionCancelledDomainEvent>.That.Matches(
-                e => e.PeerOfIdentityWithDeletionCancelled == peer1 &&
-                     e.RelationshipId == relationshipToPeer1.Id &&
-                     e.IdentityWithDeletionCancelled == identityWithDeletionCancelled)))
+        A.CallTo(() => mockEventBus.Publish(A<PeerDeletionCancelledDomainEvent>.That.Matches(e => e.PeerOfIdentityWithDeletionCancelled == peer1 &&
+                                                                                                  e.RelationshipId == relationshipToPeer1.Id &&
+                                                                                                  e.IdentityWithDeletionCancelled == identityWithDeletionCancelled)))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockEventBus.Publish(A<PeerDeletionCancelledDomainEvent>.That.Matches(
-                e => e.PeerOfIdentityWithDeletionCancelled == peer2 &&
-                     e.RelationshipId == relationshipToPeer2.Id &&
-                     e.IdentityWithDeletionCancelled == identityWithDeletionCancelled)))
+        A.CallTo(() => mockEventBus.Publish(A<PeerDeletionCancelledDomainEvent>.That.Matches(e => e.PeerOfIdentityWithDeletionCancelled == peer2 &&
+                                                                                                  e.RelationshipId == relationshipToPeer2.Id &&
+                                                                                                  e.IdentityWithDeletionCancelled == identityWithDeletionCancelled)))
             .MustHaveHappenedOnceExactly();
     }
 

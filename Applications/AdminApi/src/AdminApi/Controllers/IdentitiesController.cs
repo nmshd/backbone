@@ -8,8 +8,8 @@ using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAsSupport;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAuditLogs;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
@@ -121,18 +121,18 @@ public class IdentitiesController : ApiControllerBase
     [HttpGet("{identityAddress}/DeletionProcesses")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsSupportResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
         return Ok(response);
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/AuditLogs")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAuditLogsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAuditLogsResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessesAuditLogsQuery(identityAddress), cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAuditLogsQuery(identityAddress), cancellationToken);
         return Ok(response);
     }
 

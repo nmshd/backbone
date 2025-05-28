@@ -47,13 +47,13 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     {
         var templateId = RelationshipTemplateId.Parse(_request.RelationshipTemplateId);
 
-        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, _cancellationToken, track: true) ??
+        _template = await _relationshipTemplatesRepository.Get(templateId, _activeIdentity, _cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(RelationshipTemplate));
     }
 
     private async Task CreateAndSaveRelationship()
     {
-        var existingRelationships = await _relationshipsRepository.FindRelationships(
+        var existingRelationships = await _relationshipsRepository.List(
             Relationship.IsBetween(_activeIdentity, _template.CreatedBy),
             _cancellationToken
         );

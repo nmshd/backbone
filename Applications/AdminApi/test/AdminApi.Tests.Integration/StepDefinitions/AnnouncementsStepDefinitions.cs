@@ -15,7 +15,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Announcement>? _announcementResponse;
-    private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private ApiResponse<ListAnnouncementsResponse>? _announcementsResponse;
     private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
 
@@ -48,7 +48,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When("^a GET request is sent to the /Announcements endpoint$")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
-        _whenResponse = _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
+        _whenResponse = _announcementsResponse = await _client.Announcements.ListAnnouncements();
     }
 
     [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]

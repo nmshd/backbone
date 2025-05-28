@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetPeerOfActiveIdentityInRelationshipQuer
 
     public async Task<GetPeerOfActiveIdentityInRelationshipResponse> Handle(GetPeerOfActiveIdentityInRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var peerIdentityAddress = await _relationshipsRepository.FindRelationshipPeer(RelationshipId.Parse(request.Id), _userContext.GetAddress(), cancellationToken);
+        var peerIdentityAddress = await _relationshipsRepository.GetRelationshipPeer(RelationshipId.Parse(request.Id), _userContext.GetAddress(), cancellationToken);
         return new GetPeerOfActiveIdentityInRelationshipResponse { IdentityAddress = peerIdentityAddress };
     }
 }

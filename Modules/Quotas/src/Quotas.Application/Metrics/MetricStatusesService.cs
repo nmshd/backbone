@@ -18,7 +18,7 @@ public class MetricStatusesService : IMetricStatusesService
 
     public async Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindByAddresses(identityAddresses, cancellationToken, track: true);
+        var identities = await _identitiesRepository.ListByAddresses(identityAddresses, cancellationToken, track: true);
         foreach (var identity in identities)
         {
             await identity.UpdateMetricStatuses(metrics, _metricCalculatorFactory, updateType, cancellationToken);
