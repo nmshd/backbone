@@ -12,7 +12,9 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
             Severity = announcement.Severity;
             Texts = announcement.Texts.Select(t => new AnnouncementTextDTO(t));
             Recipients = announcement.Recipients.Select(r => r.Address.ToString());
+            IqlQuery = announcement.IqlQuery?.ToString();
         }
+
 
         public string Id { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -20,5 +22,6 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
         public AnnouncementSeverity Severity { get; set; }
         public IEnumerable<AnnouncementTextDTO> Texts { get; set; }
         public IEnumerable<string> Recipients { get; set; }
+        public string? IqlQuery { get; set; }
     }
 }

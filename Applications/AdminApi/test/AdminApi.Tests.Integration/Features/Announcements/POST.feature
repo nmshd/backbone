@@ -12,3 +12,8 @@ User create an Announcement
         When a POST request is sent to the /Announcements endpoint without an English translation
         Then the response status code is 400 (Bad Request)
         And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
+
+    Scenario: Trying to create a non-silent Announcement with an IQL query
+        When a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query
+        Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.nonSilentAnnouncementCannotHaveIqlQuery"

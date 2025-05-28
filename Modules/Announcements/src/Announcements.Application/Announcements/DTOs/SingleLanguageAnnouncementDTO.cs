@@ -20,6 +20,8 @@ public class SingleLanguageAnnouncementDTO
 
         Title = textInLanguage.Title;
         Body = textInLanguage.Body;
+
+        IqlQuery = announcement.IqlQuery?.ToString();
     }
 
     public string Id { get; }
@@ -28,4 +30,5 @@ public class SingleLanguageAnnouncementDTO
     public AnnouncementSeverity Severity { get; }
     public string Title { get; set; }
     public string Body { get; set; }
+    public string? IqlQuery { get; set; }
 }
