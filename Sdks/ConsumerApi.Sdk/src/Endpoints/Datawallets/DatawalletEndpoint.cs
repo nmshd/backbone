@@ -13,9 +13,9 @@ public class DatawalletEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
         return await _client.Get<Datawallet>("Datawallet");
     }
 
-    public async Task<ApiResponse<GetDatawalletModificationsResponse>> GetDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListDatawalletModificationsResponse>> ListDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
     {
-        return await _client.Request<GetDatawalletModificationsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Datawallet/Modifications")
+        return await _client.Request<ListDatawalletModificationsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Datawallet/Modifications")
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("localIndex", localIndex.ToString())

@@ -20,9 +20,9 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
     public async Task Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
     {
         var newTierIdResult = TierId.Create(request.TierId);
-        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
-        var tiers = await _tiersRepository.FindByIds(new List<TierId> { identity.TierId, newTierIdResult.Value }, cancellationToken);
+        var tiers = await _tiersRepository.ListByIds(new List<TierId> { identity.TierId, newTierIdResult.Value }, cancellationToken);
         var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));
 
         identity.ChangeTier(newTier.Id);

@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         var tierNameResult = TierName.Create(defaultTier);
         if (tierNameResult.IsSuccess)
         {
-            var tier = await _tiersRepository.FindByName(tierNameResult.Value, cancellationToken);
+            var tier = await _tiersRepository.Get(tierNameResult.Value, cancellationToken);
 
             if (tier != null)
                 return tier.Id;

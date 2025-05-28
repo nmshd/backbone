@@ -50,15 +50,13 @@ public class MessageCreatedDomainEventHandlerTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockSynchronizationDbContext.CreateExternalEvent(
-                A<ExternalEvent>.That.Matches(
-                    e => e.Owner == recipient1Address &&
-                         e.Type == ExternalEventType.MessageReceived)))
+                A<ExternalEvent>.That.Matches(e => e.Owner == recipient1Address &&
+                                                   e.Type == ExternalEventType.MessageReceived)))
             .MustHaveHappenedOnceExactly();
 
         A.CallTo(() => mockSynchronizationDbContext.CreateExternalEvent(
-                A<ExternalEvent>.That.Matches(
-                    e => e.Owner == recipient2Address &&
-                         e.Type == ExternalEventType.MessageReceived)))
+                A<ExternalEvent>.That.Matches(e => e.Owner == recipient2Address &&
+                                                   e.Type == ExternalEventType.MessageReceived)))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -96,10 +94,9 @@ public class MessageCreatedDomainEventHandlerTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockSynchronizationDbContext.CreateExternalEvent(
-                A<ExternalEvent>.That.Matches(
-                    e => e.Owner == recipientAddress &&
-                         e.Type == ExternalEventType.MessageReceived &&
-                         e.IsDeliveryBlocked)))
+                A<ExternalEvent>.That.Matches(e => e.Owner == recipientAddress &&
+                                                   e.Type == ExternalEventType.MessageReceived &&
+                                                   e.IsDeliveryBlocked)))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -109,7 +106,7 @@ public class MessageCreatedDomainEventHandlerTests : AbstractTestsBase
 
         var relationshipsRepository = A.Fake<IRelationshipsRepository>();
 
-        A.CallTo(() => relationshipsRepository.GetRelationships(relationshipIds, A<CancellationToken>._))
+        A.CallTo(() => relationshipsRepository.ListRelationships(relationshipIds, A<CancellationToken>._))
             .Returns(relationships.ToList());
 
         return relationshipsRepository;

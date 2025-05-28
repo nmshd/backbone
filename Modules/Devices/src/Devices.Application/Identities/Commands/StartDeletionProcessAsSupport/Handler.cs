@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsSupportCommand, Sta
 
     public async Task<StartDeletionProcessAsSupportResponse> Handle(StartDeletionProcessAsSupportCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         var deletionProcess = identity.StartDeletionProcessAsSupport();
 
         await _identitiesRepository.Update(identity, cancellationToken);

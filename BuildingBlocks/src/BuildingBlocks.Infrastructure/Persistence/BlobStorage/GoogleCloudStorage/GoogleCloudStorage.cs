@@ -38,7 +38,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         _removedBlobs.Clear();
     }
 
-    public async Task<byte[]> FindAsync(string folder, string blobId)
+    public async Task<byte[]> GetAsync(string folder, string blobId)
     {
         _logger.LogTrace("Reading blob with key '{blobId}'...", blobId);
 
@@ -47,7 +47,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
             var stream = new MemoryStream();
 
             await _logger.TraceTime(async () =>
-                await _storageClient.DownloadObjectAsync(folder, blobId, stream), nameof(FindAsync));
+                await _storageClient.DownloadObjectAsync(folder, blobId, stream), nameof(GetAsync));
 
             stream.Position = 0;
             _logger.LogTrace("Found blob with key '{blobId}'.", blobId);
@@ -62,7 +62,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAllAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         try

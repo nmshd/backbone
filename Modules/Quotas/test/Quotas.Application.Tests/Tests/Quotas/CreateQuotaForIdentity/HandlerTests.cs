@@ -23,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
         var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number Of Sent Messages"));
         var metricStatusesService = A.Fake<IMetricStatusesService>();
         var handler = CreateHandler(identitiesRepository, metricsRepository, metricStatusesService);

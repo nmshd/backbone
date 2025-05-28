@@ -43,7 +43,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    public async Task<RelationshipTemplate?> Get(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
             .Include(r => r.Allocations)
@@ -54,7 +54,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<RelationshipTemplate>> List(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
@@ -79,7 +79,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
-    public async Task<IEnumerable<RelationshipTemplate>> FindTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RelationshipTemplate>> List(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
         return await _templates.Where(filter).ToListAsync(cancellationToken);
     }
@@ -96,13 +96,13 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
+    public async Task<IEnumerable<RelationshipTemplateAllocation>> ListRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
         CancellationToken cancellationToken)
     {
         return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<TResult>> FindRelationshipTemplateAllocations<TResult>(
+    public async Task<IEnumerable<TResult>> ListRelationshipTemplateAllocations<TResult>(
         Expression<Func<RelationshipTemplateAllocation, bool>> filter, Expression<Func<RelationshipTemplateAllocation, TResult>> selector, CancellationToken cancellationToken)
     {
         return await _relationshipTemplateAllocations.Where(filter).Select(selector).ToListAsync(cancellationToken);

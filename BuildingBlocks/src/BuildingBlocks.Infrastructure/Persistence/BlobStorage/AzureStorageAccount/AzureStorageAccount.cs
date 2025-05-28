@@ -35,7 +35,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         _removedBlobs.Add(blob);
     }
 
-    public async Task<byte[]> FindAsync(string folder, string blobId)
+    public async Task<byte[]> GetAsync(string folder, string blobId)
     {
         _logger.LogTrace("Reading blob with id '{blobId}'...", blobId);
 
@@ -60,7 +60,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAllAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         var container = _containerClientFactory.GetContainerClient(folder);

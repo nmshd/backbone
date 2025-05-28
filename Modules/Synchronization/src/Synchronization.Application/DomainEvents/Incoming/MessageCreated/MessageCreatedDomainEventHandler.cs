@@ -38,7 +38,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
     {
         var idsOfRelationshipsToMessageRecipients = @event.Recipients.Select(r => RelationshipId.Parse(r.RelationshipId));
 
-        var relationships = await _relationshipsRepository.GetRelationships(idsOfRelationshipsToMessageRecipients, CancellationToken.None);
+        var relationships = await _relationshipsRepository.ListRelationships(idsOfRelationshipsToMessageRecipients, CancellationToken.None);
 
         foreach (var recipient in @event.Recipients)
         {

@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<GetAnnouncementByIdQuery, AnnouncementDTO
     {
         var announcementId = AnnouncementId.Parse(request.Id);
 
-        var announcements = await _announcementsRepository.FindById(announcementId, cancellationToken) ?? throw new NotFoundException(nameof(Announcement));
+        var announcements = await _announcementsRepository.Get(announcementId, cancellationToken) ?? throw new NotFoundException(nameof(Announcement));
 
         return new AnnouncementDTO(announcements);
     }

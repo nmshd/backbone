@@ -45,7 +45,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
     private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
     {
-        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        var client = await _oAuthClientsRepository.Get(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
         if (clientIdentityCount >= client.MaxIdentities)

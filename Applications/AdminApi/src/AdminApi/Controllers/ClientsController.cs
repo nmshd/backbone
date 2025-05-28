@@ -30,7 +30,7 @@ public class ClientsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClientOverviewDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
+    public async Task<IActionResult> ListAllClients(CancellationToken cancellationToken)
     {
         var clientOverviews = await _adminApiDbContext.OpenIddictApplications.Select(a => new ClientOverviewDTO
         {

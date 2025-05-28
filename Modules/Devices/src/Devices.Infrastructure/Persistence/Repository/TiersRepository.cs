@@ -33,7 +33,7 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier?> FindByName(TierName tierName, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> Get(TierName tierName, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _tiers : _readonlyTiers).FirstOrDefaultAsync(i => i.Name == tierName, cancellationToken);
     }
@@ -64,24 +64,24 @@ public class TiersRepository : ITiersRepository
         return await _tiers.AnyAsync(t => t.Name == tierName, cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Tier>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<Tier>> List(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var paginationResult = await _tiers
             .OrderAndPaginate(d => d.Name, paginationFilter, cancellationToken);
         return paginationResult;
     }
 
-    public async Task<Tier?> FindById(TierId tierId, CancellationToken cancellationToken)
+    public async Task<Tier?> Get(TierId tierId, CancellationToken cancellationToken)
     {
         return await _tiers.FirstOrDefaultAsync(t => t.Id == tierId, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
     }
 
-    public async Task<Tier?> FindBasicTier(CancellationToken cancellationToken)
+    public async Task<Tier?> GetBasicTier(CancellationToken cancellationToken)
     {
         return await _tiers.GetBasicTier(cancellationToken);
     }
 
-    public async Task<IEnumerable<Tier>> FindByIds(IEnumerable<TierId> tierIds, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Tier>> ListByIds(IEnumerable<TierId> tierIds, CancellationToken cancellationToken)
     {
         return await _tiers.Where(t => tierIds.Contains(t.Id)).ToListAsync(cancellationToken);
     }

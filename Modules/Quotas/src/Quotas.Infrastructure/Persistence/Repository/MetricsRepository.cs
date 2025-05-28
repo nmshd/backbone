@@ -25,19 +25,19 @@ public class MetricsRepository : IMetricsRepository
         ];
     }
 
-    public Task<Metric> Find(MetricKey key, CancellationToken cancellationToken, bool track = false)
+    public Task<Metric> Get(MetricKey key, CancellationToken cancellationToken, bool track = false)
     {
         var metric = _metrics.FirstOrDefault(metric => metric.Key == key);
 
         return metric == null ? throw new NotFoundException(nameof(Metric)) : Task.FromResult(metric);
     }
 
-    public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Metric>> List(CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult(_metrics.AsEnumerable());
     }
 
-    public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Metric>> List(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
     {
         var metrics = _metrics.Where(m => keys.Contains(m.Key));
 

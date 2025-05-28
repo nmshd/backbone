@@ -36,12 +36,12 @@ public class AppOnboardingController : Controller
         if (selectedAppConfiguration == null)
             return View("AppSelection", new AppSelectionModel(_configuration.Apps));
 
-        var stores = GetStoresForUserAgent(selectedAppConfiguration);
+        var stores = ListStoresForUserAgent(selectedAppConfiguration);
 
         return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration, stores));
     }
 
-    private List<AppOnboardingModel.AppStore> GetStoresForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
+    private List<AppOnboardingModel.AppStore> ListStoresForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
     {
         var stores = new List<AppOnboardingModel.AppStore>();
 

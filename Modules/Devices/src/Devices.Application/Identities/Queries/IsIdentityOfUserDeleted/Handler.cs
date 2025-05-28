@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
 
     public async Task<IsIdentityOfUserDeletedResponse> Handle(IsIdentityOfUserDeletedQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindFirst(Identity.HasUser(request.Username), cancellationToken);
+        var identity = await _identitiesRepository.GetFirst(Identity.HasUser(request.Username), cancellationToken);
 
         bool isDeleted;
         DateTime? deletionGracePeriodEndsAt;
@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
         }
         else
         {
-            var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(
+            var auditLogEntries = await _identitiesRepository.ListIdentityDeletionProcessAuditLogs(
                 IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(Username.Parse(request.Username)),
                 cancellationToken);
 
@@ -39,6 +39,5 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
         }
 
         return new IsIdentityOfUserDeletedResponse(isDeleted, deletionGracePeriodEndsAt);
-
     }
 }

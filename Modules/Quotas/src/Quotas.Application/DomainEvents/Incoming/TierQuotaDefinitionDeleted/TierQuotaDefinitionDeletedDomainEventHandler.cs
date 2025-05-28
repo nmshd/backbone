@@ -31,7 +31,7 @@ public class TierQuotaDefinitionDeletedDomainEventHandler : IDomainEventHandler<
 
     private async Task RecalculateMetricStatuses(TierQuotaDefinitionDeletedDomainEvent @event)
     {
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(TierId.Parse(@event.TierId), CancellationToken.None);
+        var identitiesWithTier = await _identitiesRepository.ListWithTier(TierId.Parse(@event.TierId), CancellationToken.None);
 
         await _metricStatusesService.RecalculateMetricStatuses(
             identitiesWithTier.Select(i => i.Address).ToList(),

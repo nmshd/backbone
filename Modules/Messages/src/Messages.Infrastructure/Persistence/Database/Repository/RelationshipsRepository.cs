@@ -15,7 +15,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
     }
 
-    public Task<Relationship?> FindYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    public Task<Relationship?> GetYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
         return _readOnlyRelationships
             .WithParticipants(sender, recipient)

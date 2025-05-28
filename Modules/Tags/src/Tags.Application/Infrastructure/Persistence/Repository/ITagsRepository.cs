@@ -4,6 +4,6 @@ namespace Backbone.Modules.Tags.Application.Infrastructure.Persistence.Repositor
 
 public interface ITagsRepository
 {
-    IEnumerable<string> GetSupportedLanguages();
-    Dictionary<string, Dictionary<string, TagInfo>> GetAttributes();
+    IEnumerable<string> ListSupportedLanguages();
+    Dictionary<string, Dictionary<string, TagInfo>> ListAttributes();
 }
