@@ -17,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(activeIdentity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(activeIdentity);
 
         var handler = CreateHandler(mockIdentitiesRepository);
@@ -30,11 +30,10 @@ public class HandlerTests : AbstractTestsBase
         response.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
 
         A.CallTo(() => mockIdentitiesRepository.Update(
-                A<Identity>.That.Matches(
-                    i => i.Address == activeIdentity.Address &&
-                         i.DeletionProcesses.Count == 1 &&
-                         i.DeletionProcesses[0].Id == response.Id &&
-                         i.DeletionProcesses[0].AuditLog.Count == 1),
+                A<Identity>.That.Matches(i => i.Address == activeIdentity.Address &&
+                                              i.DeletionProcesses.Count == 1 &&
+                                              i.DeletionProcesses[0].Id == response.Id &&
+                                              i.DeletionProcesses[0].AuditLog.Count == 1),
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
@@ -47,7 +46,7 @@ public class HandlerTests : AbstractTestsBase
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
+        A.CallTo(() => fakeIdentitiesRepository.Get(
                 address,
                 A<CancellationToken>._,
                 A<bool>._))

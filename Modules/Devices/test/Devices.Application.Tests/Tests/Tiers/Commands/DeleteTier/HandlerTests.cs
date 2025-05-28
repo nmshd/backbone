@@ -27,7 +27,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
+        A.CallTo(() => _tiersRepository.Get(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfClientsWithDefaultTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
@@ -45,7 +45,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
+        A.CallTo(() => _tiersRepository.Get(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
 

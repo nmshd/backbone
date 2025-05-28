@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 
     public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
-        var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        var client = await _oAuthClientsRepository.Get(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         var numberOfIdentities = await _identitiesRepository.CountByClientId(client.ClientId, cancellationToken);
 
         return new ClientDTO(client, numberOfIdentities);

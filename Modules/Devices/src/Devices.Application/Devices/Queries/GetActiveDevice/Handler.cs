@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<GetActiveDeviceQuery, DeviceDTO>
 
     public async Task<DeviceDTO> Handle(GetActiveDeviceQuery request, CancellationToken cancellationToken)
     {
-        var device = await _identitiesRepository.GetDeviceById(_userContext.GetDeviceId(), cancellationToken) ?? throw new NotFoundException(nameof(Device));
+        var device = await _identitiesRepository.Get(_userContext.GetDeviceId(), cancellationToken) ?? throw new NotFoundException(nameof(Device));
         return new DeviceDTO(device);
     }
 }

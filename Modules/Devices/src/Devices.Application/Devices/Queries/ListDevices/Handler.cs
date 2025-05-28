@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
 
     public async Task<ListDevicesResponse> Handle(ListDevicesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _identitiesRepository.FindAllDevicesOfIdentity(_activeIdentity, request.Ids.Select(DeviceId.Parse), request.PaginationFilter, cancellationToken);
+        var dbPaginationResult = await _identitiesRepository.ListDevicesOfIdentity(_activeIdentity, request.Ids.Select(DeviceId.Parse), request.PaginationFilter, cancellationToken);
         return new ListDevicesResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

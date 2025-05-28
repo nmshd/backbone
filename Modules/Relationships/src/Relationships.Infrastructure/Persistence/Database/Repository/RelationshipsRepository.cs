@@ -26,7 +26,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
+    public async Task<IdentityAddress> GetRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
         var relationship = await _readOnlyRelationships
             .WithParticipant(identityAddress)
@@ -35,7 +35,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship.GetPeerOf(identityAddress);
     }
 
-    public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
+    public async Task<Relationship> GetRelationship(RelationshipId id, IdentityAddress identityAddress,
         CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
@@ -47,7 +47,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
+    public async Task<DbPaginationResult<Relationship>> ListRelationshipsWithIds(IEnumerable<RelationshipId> ids,
         IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _relationships : _readOnlyRelationships)
@@ -104,7 +104,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Relationship>> List(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
@@ -113,7 +113,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<T>> FindRelationships<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+    public async Task<IEnumerable<T>> List<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)

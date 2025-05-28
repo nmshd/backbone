@@ -30,7 +30,7 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> Get(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tier = await (track ? _tiers : _readOnlyTiers)
             .IncludeAll(_dbContext)
@@ -39,7 +39,7 @@ public class TiersRepository : ITiersRepository
         return tier;
     }
 
-    public async Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<TierQuotaDefinition> GetTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tierQuotaDefinition = await (track ? _tierQuotaDefinitions : _readOnlyTierQuotaDefinitions)
             .IncludeAll(_dbContext)

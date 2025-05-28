@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDelet
 
     public async Task<RejectDeletionProcessResponse> Handle(RejectDeletionProcessCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
         var deviceId = _userContext.GetDeviceId();
 
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);

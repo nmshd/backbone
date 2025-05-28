@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
     {
         _logger.LogTrace("Deleting individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
 
-        var identity = await _identitiesRepository.Find(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
         var quotaIdResult = QuotaId.Create(request.IndividualQuotaId);
         if (quotaIdResult.IsFailure)

@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ValidateFileOwnershipTokenQuery, Validate
 
     public async Task<ValidateFileOwnershipTokenResponse> Handle(ValidateFileOwnershipTokenQuery request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Get(FileId.Parse(request.FileId), cancellationToken) ?? throw new NotFoundException(nameof(File));
 
         var token = FileOwnershipToken.Parse(request.OwnershipToken);
         return new ValidateFileOwnershipTokenResponse { IsValid = file.ValidateFileOwnershipToken(token, _activeIdentity) };

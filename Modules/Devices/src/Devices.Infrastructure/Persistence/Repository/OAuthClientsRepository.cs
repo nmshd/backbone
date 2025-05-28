@@ -26,7 +26,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         _trackedApplications = new Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication>();
     }
 
-    public async Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<OAuthClient>> List(CancellationToken cancellationToken, bool track = false)
     {
         var applications = await _applicationManager.ListAsync(cancellationToken: cancellationToken).ToListAsync(cancellationToken);
 
@@ -52,7 +52,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return identityCounts;
     }
 
-    public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
+    public async Task<OAuthClient?> Get(string clientId, CancellationToken cancellationToken, bool track = false)
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
@@ -118,7 +118,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Update(OAuthClient client, CancellationToken cancellationToken)
     {
-        var application = await FindApplication(client.ClientId, cancellationToken);
+        var application = await GetApplication(client.ClientId, cancellationToken);
 
         application.UpdateFromModel(client);
         await _applicationManager.UpdateAsync(application, cancellationToken);
@@ -126,7 +126,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task Delete(string clientId, CancellationToken cancellationToken)
     {
-        var application = await FindApplication(clientId, cancellationToken);
+        var application = await GetApplication(clientId, cancellationToken);
 
         await _applicationManager.DeleteAsync(application, cancellationToken);
         _trackedApplications.Remove(clientId);
@@ -134,12 +134,12 @@ public class OAuthClientsRepository : IOAuthClientsRepository
 
     public async Task ChangeClientSecret(OAuthClient client, string clientSecret, CancellationToken cancellationToken)
     {
-        var application = await FindApplication(client.ClientId, cancellationToken);
+        var application = await GetApplication(client.ClientId, cancellationToken);
 
         await _applicationManager.UpdateAsync(application, clientSecret, cancellationToken);
     }
 
-    private async Task<CustomOpenIddictEntityFrameworkCoreApplication> FindApplication(string clientId, CancellationToken cancellationToken)
+    private async Task<CustomOpenIddictEntityFrameworkCoreApplication> GetApplication(string clientId, CancellationToken cancellationToken)
     {
         if (!_trackedApplications.TryGetValue(clientId, out var application))
         {

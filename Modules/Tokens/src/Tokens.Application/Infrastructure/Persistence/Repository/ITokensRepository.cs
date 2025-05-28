@@ -10,15 +10,15 @@ public interface ITokensRepository
 {
     Task Add(Token token);
 
-    Task<DbPaginationResult<Token>> FindTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<Token>> ListTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
-    Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Token>> List(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
 
-    Task<Token?> Find(TokenId tokenId, CancellationToken cancellationToken, bool track = false);
+    Task<Token?> Get(TokenId tokenId, CancellationToken cancellationToken, bool track = false);
     Task Update(Token token, CancellationToken cancellationToken);
     Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken);
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
     Task DeleteToken(Token token, CancellationToken cancellationToken);
-    Task<DbPaginationResult<Token>> FindAllTokens(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<DbPaginationResult<Token>> List(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
 }

@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
 
     public async Task Handle(DecomposeAndAnonymizeRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var relationships = (await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken, track: true)).ToList();
+        var relationships = (await _relationshipsRepository.List(Relationship.HasParticipant(request.IdentityAddress), cancellationToken, track: true)).ToList();
 
         foreach (var relationship in relationships)
             relationship.DecomposeDueToIdentityDeletion(request.IdentityAddress, _applicationConfiguration.DidDomainName);

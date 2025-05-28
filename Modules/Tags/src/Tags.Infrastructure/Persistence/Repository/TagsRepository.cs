@@ -16,6 +16,6 @@ public class TagsRepository : ITagsRepository
         _attributes = options.Value.TagsForAttributeValueTypes;
     }
 
-    public IEnumerable<string> GetSupportedLanguages() => _supportedLanguages;
-    public Dictionary<string, Dictionary<string, TagInfo>> GetAttributes() => _attributes;
+    public IEnumerable<string> ListSupportedLanguages() => _supportedLanguages;
+    public Dictionary<string, Dictionary<string, TagInfo>> ListAttributes() => _attributes;
 }

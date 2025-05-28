@@ -32,7 +32,7 @@ public class MessagesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<MessageOverviewDTO>>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)

@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetFileMetadataQuery, FileMetadataDTO>
 
     public async Task<FileMetadataDTO> Handle(GetFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Get(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
         return new FileMetadataDTO(file);
     }
 }

@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<RegenerateFileOwnershipTokenCommand, Rege
 
     public async Task<RegenerateFileOwnershipTokenResponse> Handle(RegenerateFileOwnershipTokenCommand request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Get(FileId.Parse(request.FileId), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 
         file.RegenerateOwnershipToken(_activeIdentity);
         await _filesRepository.Update(file, cancellationToken);

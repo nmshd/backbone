@@ -25,7 +25,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBa
         var secondIdentity = new Identity("some-identity-address-two", tierId);
         var identities = new List<Identity> { firstIdentity, secondIdentity };
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.FindWithTier(tierId, CancellationToken.None, true)).Returns(identities);
+        A.CallTo(() => identitiesRepository.ListWithTier(tierId, CancellationToken.None, true)).Returns(identities);
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act

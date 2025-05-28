@@ -7,7 +7,7 @@ using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
-using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.Queries.ListModifications;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,9 +38,9 @@ public class DatawalletController : ApiControllerBase
     }
 
     [HttpGet("Modifications")]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<GetModificationsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListModificationsResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetModifications([FromQuery] PaginationFilter paginationFilter,
+    public async Task<IActionResult> ListModifications([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] int? localIndex,
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion,
@@ -52,7 +52,7 @@ public class DatawalletController : ApiControllerBase
 
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        var request = new GetModificationsQuery(paginationFilter, localIndex, supportedDatawalletVersion);
+        var request = new ListModificationsQuery(paginationFilter, localIndex, supportedDatawalletVersion);
 
         var response = await _mediator.Send(request, cancellationToken);
         return Paged(response);

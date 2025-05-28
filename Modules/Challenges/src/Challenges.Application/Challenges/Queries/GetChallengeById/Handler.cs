@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 
     public async Task<ChallengeDTO> Handle(GetChallengeByIdQuery request, CancellationToken cancellationToken)
     {
-        var challenge = await _challengesRepository.Find(ChallengeId.Parse(request.Id), cancellationToken);
+        var challenge = await _challengesRepository.Get(ChallengeId.Parse(request.Id), cancellationToken);
 
         if (challenge.IsExpired())
         {

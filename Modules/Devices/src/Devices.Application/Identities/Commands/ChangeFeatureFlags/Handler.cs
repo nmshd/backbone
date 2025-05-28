@@ -24,8 +24,7 @@ public class Handler : IRequestHandler<ChangeFeatureFlagsCommand>
 
     public async Task Handle(ChangeFeatureFlagsCommand request, CancellationToken cancellationToken)
     {
-
-        var identity = await _identitiesRepository.FindByAddress(_activeIdentity, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(_activeIdentity, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         EnsureAllAdditionalFeatureFlagsCanBeCreated(request, identity);
 
         identity.ChangeFeatureFlags(request.ToDictionary(kv => FeatureFlagName.Parse(kv.Key), kv => kv.Value));

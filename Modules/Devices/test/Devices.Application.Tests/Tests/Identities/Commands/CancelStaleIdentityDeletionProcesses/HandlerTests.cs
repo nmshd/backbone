@@ -35,7 +35,7 @@ public class HandlerTests : AbstractTestsBase
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.ListWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns([identityWithStaleDeletionProcess, identityWithDeletionProcess]);
 
         var handler = CreateHandler(fakeIdentitiesRepository);
