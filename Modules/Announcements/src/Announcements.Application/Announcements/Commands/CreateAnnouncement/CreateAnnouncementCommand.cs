@@ -12,6 +12,7 @@ public class CreateAnnouncementCommand : IRequest<AnnouncementDTO>
     public DateTime? ExpiresAt { get; set; }
 
     public List<string> Recipients { get; set; } = [];
+    public string? IqlQuery { get; set; }
 }
 
 public class CreateAnnouncementCommandText

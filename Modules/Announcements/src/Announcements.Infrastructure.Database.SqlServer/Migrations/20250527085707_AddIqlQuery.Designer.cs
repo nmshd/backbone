@@ -4,6 +4,7 @@ using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AnnouncementsDbContext))]
-    partial class AnnouncementsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250527085707_AddIqlQuery")]
+    partial class AddIqlQuery
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

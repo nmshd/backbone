@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
@@ -15,13 +16,18 @@ public class Announcement : Entity
         Id = null!;
         Texts = null!;
         Recipients = null!;
+        IqlQuery = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients)
+    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients, AnnouncementIqlQuery? iqlQuery)
     {
+        if (!isSilent && iqlQuery != null)
+            throw new DomainException(DomainErrors.NonSilentAnnouncementCannotHaveIqlQuery());
+
         Id = AnnouncementId.New();
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
+        IqlQuery = iqlQuery;
         Severity = severity;
         Texts = texts;
         Recipients = [.. recipients];
@@ -29,10 +35,10 @@ public class Announcement : Entity
         RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this, isSilent));
     }
 
-
     public AnnouncementId Id { get; }
     public DateTime CreatedAt { get; }
     public DateTime? ExpiresAt { get; }
+    public AnnouncementIqlQuery? IqlQuery { get; }
     public AnnouncementSeverity Severity { get; }
 
     public List<AnnouncementText> Texts { get; }
