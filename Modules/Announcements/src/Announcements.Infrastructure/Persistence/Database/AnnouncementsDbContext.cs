@@ -30,6 +30,8 @@ public class AnnouncementsDbContext : AbstractDbContextBase
         configurationBuilder.Properties<AnnouncementId>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementId.MAX_LENGTH).HaveConversion<AnnouncementIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<AnnouncementLanguage>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementLanguage.LENGTH)
             .HaveConversion<AnnouncementLanguageEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<AnnouncementIqlQuery>().AreUnicode(true).AreFixedLength(false).HaveMaxLength(AnnouncementIqlQuery.MAX_LENGTH)
+            .HaveConversion<AnnouncementIqlQueryEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -18,7 +18,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Announcements")
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("DbProvider", "Npgsql")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -36,6 +37,12 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IqlQuery")
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(1000)")
+                        .IsFixedLength(false);
 
                     b.Property<int>("Severity")
                         .HasColumnType("integer");
