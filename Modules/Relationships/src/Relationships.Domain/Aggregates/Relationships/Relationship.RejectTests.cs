@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -19,7 +19,7 @@ public class RelationshipRejectTests : AbstractTestsBase
         relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        relationship.Status.Should().Be(RelationshipStatus.Rejected);
+        relationship.Status.ShouldBe(RelationshipStatus.Rejected);
     }
 
     [Fact]
@@ -34,17 +34,17 @@ public class RelationshipRejectTests : AbstractTestsBase
         relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(2);
+        relationship.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RejectionOfCreation);
-        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Pending);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Rejected);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+        auditLogEntry.Id.ShouldNotBeNull();
+        auditLogEntry.Reason.ShouldBe(RelationshipAuditLogEntryReason.RejectionOfCreation);
+        auditLogEntry.OldStatus.ShouldBe(RelationshipStatus.Pending);
+        auditLogEntry.NewStatus.ShouldBe(RelationshipStatus.Rejected);
+        auditLogEntry.CreatedBy.ShouldBe(IDENTITY_2);
+        auditLogEntry.CreatedByDevice.ShouldBe(DEVICE_2);
+        auditLogEntry.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
@@ -57,11 +57,11 @@ public class RelationshipRejectTests : AbstractTestsBase
         relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
-        domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.NewStatus.Should().Be(relationship.Status.ToString());
-        domainEvent.Initiator.Should().Be(relationship.LastModifiedBy);
-        domainEvent.Peer.Should().Be(relationship.GetPeerOf(relationship.LastModifiedBy));
+        var domainEvent = relationship.ShouldHaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
+        domainEvent.RelationshipId.ShouldBe(relationship.Id);
+        domainEvent.NewStatus.ShouldBe(relationship.Status.ToString());
+        domainEvent.Initiator.ShouldBe(relationship.LastModifiedBy);
+        domainEvent.Peer.ShouldBe(relationship.GetPeerOf(relationship.LastModifiedBy));
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class RelationshipRejectTests : AbstractTestsBase
         var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
+        acting.ShouldThrow<DomainException>().ShouldHaveError(
             "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Pending)
         );
@@ -90,7 +90,7 @@ public class RelationshipRejectTests : AbstractTestsBase
         var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1, null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
     }
 
     [Fact]
@@ -104,6 +104,6 @@ public class RelationshipRejectTests : AbstractTestsBase
         var acting = () => relationship.Reject(foreignAddress, DeviceId.New(), null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
     }
 }

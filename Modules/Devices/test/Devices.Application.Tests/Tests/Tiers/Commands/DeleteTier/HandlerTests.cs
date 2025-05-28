@@ -53,7 +53,7 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<DomainException>();
+        await acting.ShouldThrowAsync<DomainException>();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustNotHaveHappened();
     }
 

@@ -115,35 +115,35 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _announcementResponse!.Result.Should().NotBeNull();
-        await _announcementResponse.Should().ComplyWithSchema();
+        _announcementResponse!.Result.ShouldNotBeNull();
+        await _announcementResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
     public async Task ThenTheResponseContainsAListOfAnnouncements()
     {
-        _announcementsResponse!.Result.Should().NotBeNull();
-        await _announcementsResponse.Should().ComplyWithSchema();
+        _announcementsResponse!.Result.ShouldNotBeNull();
+        await _announcementsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains the Announcement a")]
     public void ThenTheResponseContainsTheAnnouncementA()
     {
-        _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
+        _announcementsResponse!.Result!.ShouldContain(a => a.Id == _givenAnnouncement!.Id);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _whenResponse.Should().NotBeNull();
-        _whenResponse!.Error.Should().NotBeNull();
-        _whenResponse.Error!.Code.Should().Be(errorCode);
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 }

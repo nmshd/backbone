@@ -16,7 +16,7 @@ public class ValidateOwnershipTokenTest
         var resultCorrectToken = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
 
         // Assert
-        resultCorrectToken.Should().BeTrue();
+        resultCorrectToken.ShouldBeTrue();
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class ValidateOwnershipTokenTest
         var result = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -40,9 +40,9 @@ public class ValidateOwnershipTokenTest
         var file = TestDataGenerator.CreateFile();
 
         // Act
-        var acting = () => file.ValidateFileOwnershipToken(file.OwnershipToken, CreateRandomIdentityAddress());
+        Func<object> acting = () => file.ValidateFileOwnershipToken(file.OwnershipToken, CreateRandomIdentityAddress());
 
         // Assert
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 }

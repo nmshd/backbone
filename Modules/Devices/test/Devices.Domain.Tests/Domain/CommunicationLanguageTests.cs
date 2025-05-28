@@ -14,7 +14,7 @@ public class CommunicationLanguageTests : AbstractTestsBase
         var communicationLanguage = CommunicationLanguage.Create(value);
 
         // Assert
-        communicationLanguage.IsSuccess.Should().BeTrue();
+        communicationLanguage.IsSuccess.ShouldBeTrue();
     }
 
     [Theory]
@@ -26,8 +26,8 @@ public class CommunicationLanguageTests : AbstractTestsBase
         var communicationLanguage = CommunicationLanguage.Create(value);
 
         // Assert
-        communicationLanguage.IsFailure.Should().BeTrue();
-        communicationLanguage.Error.Code.Should().Be("error.platform.validation.invalidDeviceCommunicationLanguage");
-        communicationLanguage.Error.Message.Should().Be("The Device Communication Language must be a valid two letter ISO code");
+        communicationLanguage.IsFailure.ShouldBeTrue();
+        communicationLanguage.Error.Code.ShouldBe("error.platform.validation.invalidDeviceCommunicationLanguage");
+        communicationLanguage.Error.Message.ShouldBe("The Device Communication Language must be a valid two letter ISO code");
     }
 }

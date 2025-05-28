@@ -25,7 +25,7 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     {
         var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
 
-        createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.ShouldBeASuccess();
 
         _newIdentityAddress = createIdentityResponse.Result!.Address;
     }
@@ -45,14 +45,14 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        _listTokensResponse.Should().NotBeNull();
-        _listTokensResponse.Result!.Count().Should().Be(0);
+        _listTokensResponse.ShouldNotBeNull();
+        _listTokensResponse.Result!.Count().ShouldBe(0);
     }
 }

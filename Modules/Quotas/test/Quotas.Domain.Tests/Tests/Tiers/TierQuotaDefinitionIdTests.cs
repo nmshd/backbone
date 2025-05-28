@@ -1,4 +1,5 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -11,7 +12,7 @@ public class TierQuotaDefinitionIdTests : AbstractTestsBase
         var result = TierQuotaDefinitionId.Create("TQDsomeTierQuotaId11");
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
@@ -21,9 +22,9 @@ public class TierQuotaDefinitionIdTests : AbstractTestsBase
         var tierQuotaDefinitionId = TierQuotaDefinitionId.Generate();
 
         // Assert
-        tierQuotaDefinitionId.Should().NotBeNull();
-        tierQuotaDefinitionId.Value.Should().HaveLength(20);
-        tierQuotaDefinitionId.Value.Should().StartWith("TQD");
+        tierQuotaDefinitionId.ShouldNotBeNull();
+        tierQuotaDefinitionId.Value.ShouldHaveCount(20);
+        tierQuotaDefinitionId.Value.ShouldStartWith("TQD");
     }
 
     [Fact]
@@ -33,9 +34,9 @@ public class TierQuotaDefinitionIdTests : AbstractTestsBase
         var result = TierQuotaDefinitionId.Create("TQQsomeTierQuotaId11");
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Id starts with");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Id starts with");
     }
 
     [Fact]
@@ -45,9 +46,9 @@ public class TierQuotaDefinitionIdTests : AbstractTestsBase
         var result = TierQuotaDefinitionId.Create("TQDtooManyCharactersOnId");
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Id has a length of");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Id has a length of");
     }
 
     [Theory]
@@ -60,8 +61,8 @@ public class TierQuotaDefinitionIdTests : AbstractTestsBase
         var result = TierQuotaDefinitionId.Create("TQD1111111111111111" + invalidCharacter);
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Valid characters are");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Valid characters are");
     }
 }

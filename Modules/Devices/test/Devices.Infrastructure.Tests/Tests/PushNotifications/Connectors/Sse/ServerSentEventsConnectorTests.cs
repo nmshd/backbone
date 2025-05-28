@@ -18,7 +18,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
@@ -50,8 +50,8 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error!.Reason.Should().Be(ErrorReason.InvalidHandle);
+        result.IsFailure.ShouldBeTrue();
+        result.Error!.Reason.ShouldBe(ErrorReason.InvalidHandle);
     }
 
     [Fact]
@@ -66,8 +66,8 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var result = await sseConnector.Send(CreatePnsRegistrationForSse(), new TestPushNotification());
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error!.Reason.Should().Be(ErrorReason.Unexpected);
+        result.IsSuccess.ShouldBeFalse();
+        result.Error!.Reason.ShouldBe(ErrorReason.Unexpected);
     }
 
     private static ServerSentEventsConnector CreateConnector(ISseServerClient? sseServerClient = null)

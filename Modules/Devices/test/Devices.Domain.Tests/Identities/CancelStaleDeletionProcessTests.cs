@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -16,8 +17,8 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -31,12 +32,12 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.Active);
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.WaitingForApproval);
+        identity.Status.ShouldBe(IdentityStatus.Active);
+        deletionProcess.Status.ShouldBe(DeletionProcessStatus.WaitingForApproval);
 
-        result.IsFailure.Should().BeTrue();
-        result.Error.Message.Should().Be("No deletion process is past due approval.");
-        result.Error.Code.Should().Be("error.platform.validation.device.noDeletionProcessIsPastDueApproval");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Message.ShouldBe("No deletion process is past due approval.");
+        result.Error.Code.ShouldBe("error.platform.validation.device.noDeletionProcessIsPastDueApproval");
     }
 
     [Fact]
@@ -54,11 +55,11 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.Active);
+        identity.Status.ShouldBe(IdentityStatus.Active);
 
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Status.Should().Be(DeletionProcessStatus.Cancelled);
-        result.Value.CancelledAt.Should().Be(utcNow);
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.Status.ShouldBe(DeletionProcessStatus.Cancelled);
+        result.Value.CancelledAt.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -73,11 +74,11 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         var result = identity.CancelStaleDeletionProcess();
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.AuditLog.Should().HaveCount(2); // count 2 because the first one was creation of the deletion process
-        result.Value.AuditLog[1].ProcessId.Should().Be(identity.DeletionProcesses[0].Id);
-        result.Value.AuditLog[1].OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        result.Value.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.AuditLog.ShouldHaveCount(2); // count 2 because the first one was creation of the deletion process
+        result.Value.AuditLog[1].ProcessId.ShouldBe(identity.DeletionProcesses[0].Id);
+        result.Value.AuditLog[1].OldStatus.ShouldBe(DeletionProcessStatus.WaitingForApproval);
+        result.Value.AuditLog[1].NewStatus.ShouldBe(DeletionProcessStatus.Cancelled);
     }
 
     [Fact]
@@ -92,13 +93,13 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         // Act
         var deletionProcessResult = identity.CancelStaleDeletionProcess();
 
-        deletionProcessResult.IsSuccess.Should().BeTrue();
+        deletionProcessResult.IsSuccess.ShouldBeTrue();
 
         var deletionProcess = deletionProcessResult.Value;
 
-        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
-        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
-        domainEvent.Address.Should().Be(identity.Address);
-        domainEvent.Initiator.Should().Be(null);
+        var domainEvent = deletionProcess.ShouldHaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        domainEvent.DeletionProcessId.ShouldBe(deletionProcess.Id);
+        domainEvent.Address.ShouldBe(identity.Address);
+        domainEvent.Initiator.ShouldBe(null);
     }
 }

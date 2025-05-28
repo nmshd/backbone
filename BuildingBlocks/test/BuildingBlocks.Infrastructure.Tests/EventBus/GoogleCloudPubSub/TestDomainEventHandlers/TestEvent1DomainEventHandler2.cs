@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
-using FluentAssertions.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Polly;
 using Xunit.Sdk;
 
@@ -30,14 +30,14 @@ public class TestEvent1DomainEventHandler2 : IDomainEventHandler<TestEvent1Domai
             .WaitAndRetry(retryCount: 5, _ => TimeSpan.FromSeconds(1))
             .Execute(() =>
             {
-                Instances.Should().HaveCount(1);
-                Instances[0].Triggered.Should().BeTrue();
+                Instances.ShouldHaveCount(1);
+                Instances[0].Triggered.ShouldBeTrue();
             });
     }
 
     public static void ShouldNotHaveAnyTriggeredInstance()
     {
-        Task.Delay(5.Seconds()).Wait();
-        Instances.Should().HaveCount(0);
+        Task.Delay(TimeSpan.FromSeconds(5)).Wait();
+        Instances.ShouldHaveCount(0);
     }
 }

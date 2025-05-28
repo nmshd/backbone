@@ -12,7 +12,7 @@ public class EventBusGoogleCloudPubSubTests : AbstractTestsBase
         var subscriptionName = EventBusGoogleCloudPubSub.GetSubscriptionName<TestDomainEventHandler, TestDomainEvent>("testProject");
 
         // Assert
-        subscriptionName.ProjectId.Should().Be("testProject");
-        subscriptionName.SubscriptionId.Should().Be("TestModule.Test");
+        subscriptionName.ProjectId.ShouldBe("testProject");
+        subscriptionName.SubscriptionId.ShouldBe("TestModule.Test");
     }
 }

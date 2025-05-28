@@ -42,7 +42,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
             Max = 2,
             Period = "Week"
         });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _quotaId = response.Result!.Id;
     }
@@ -101,17 +101,17 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
+        _whenResponse.ShouldNotBeNull();
 
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then("the response contains an IndividualQuota")]
     public async Task ThenTheResponseContainsAnIndividualQuota()
     {
-        _createQuotaResponse!.Result!.Should().NotBeNull();
-        _createQuotaResponse!.ContentType.Should().StartWith("application/json");
-        await _createQuotaResponse.Should().ComplyWithSchema();
+        _createQuotaResponse!.Result!.ShouldNotBeNull();
+        _createQuotaResponse!.ContentType.ShouldStartWith("application/json");
+        await _createQuotaResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
@@ -119,21 +119,21 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     {
         if (_createQuotaResponse != null)
         {
-            _createQuotaResponse!.Error.Should().NotBeNull();
-            _createQuotaResponse.Error!.Code.Should().Be(errorCode);
+            _createQuotaResponse!.Error.ShouldNotBeNull();
+            _createQuotaResponse.Error!.Code.ShouldBe(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Error.ShouldNotBeNull();
+            _deleteResponse.Error!.Code.ShouldBe(errorCode);
         }
     }
 
     private async Task CreateIdentity()
     {
         var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
-        createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.ShouldBeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
 

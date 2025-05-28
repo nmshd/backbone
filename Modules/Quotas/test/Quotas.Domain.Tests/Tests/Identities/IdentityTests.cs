@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
@@ -19,8 +20,8 @@ public class IdentityTests : AbstractTestsBase
         var identity = new Identity("some-address", TierId.Parse("TIRsomeTierId1111111"));
 
         // Assert
-        identity.Address.Should().Be("some-address");
-        identity.TierId.Should().Be(TierId.Parse("TIRsomeTierId1111111"));
+        identity.Address.ShouldBe("some-address");
+        identity.TierId.ShouldBe(TierId.Parse("TIRsomeTierId1111111"));
     }
 
     #endregion
@@ -39,7 +40,7 @@ public class IdentityTests : AbstractTestsBase
         var acting = () => identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.quotas.duplicateQuota");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.quotas.duplicateQuota");
     }
 
     #endregion
@@ -59,15 +60,15 @@ public class IdentityTests : AbstractTestsBase
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
 
         // Assert
-        identity.TierQuotas.Should().HaveCount(2);
+        identity.TierQuotas.ShouldHaveCount(2);
 
-        identity.TierQuotas.First().MetricKey.Should().Be(tierQuotaDefinition1.MetricKey);
-        identity.TierQuotas.First().Max.Should().Be(tierQuotaDefinition1.Max);
-        identity.TierQuotas.First().Period.Should().Be(tierQuotaDefinition1.Period);
+        identity.TierQuotas.First().MetricKey.ShouldBe(tierQuotaDefinition1.MetricKey);
+        identity.TierQuotas.First().Max.ShouldBe(tierQuotaDefinition1.Max);
+        identity.TierQuotas.First().Period.ShouldBe(tierQuotaDefinition1.Period);
 
-        identity.TierQuotas.Second().MetricKey.Should().Be(tierQuotaDefinition2.MetricKey);
-        identity.TierQuotas.Second().Max.Should().Be(tierQuotaDefinition2.Max);
-        identity.TierQuotas.Second().Period.Should().Be(tierQuotaDefinition2.Period);
+        identity.TierQuotas.Second().MetricKey.ShouldBe(tierQuotaDefinition2.MetricKey);
+        identity.TierQuotas.Second().Max.ShouldBe(tierQuotaDefinition2.Max);
+        identity.TierQuotas.Second().Period.ShouldBe(tierQuotaDefinition2.Period);
     }
 
     #endregion
@@ -85,7 +86,7 @@ public class IdentityTests : AbstractTestsBase
         identity.DeleteIndividualQuota(createdQuota.Id);
 
         // Assert
-        identity.IndividualQuotas.Should().HaveCount(0);
+        identity.IndividualQuotas.ShouldHaveCount(0);
     }
 
     [Fact]
@@ -100,8 +101,8 @@ public class IdentityTests : AbstractTestsBase
         identity.DeleteIndividualQuota(firstQuota.Id);
 
         // Assert
-        identity.IndividualQuotas.Should().HaveCount(1);
-        identity.IndividualQuotas.Should().Contain(secondQuota);
+        identity.IndividualQuotas.ShouldHaveCount(1);
+        identity.IndividualQuotas.ShouldContain(secondQuota);
     }
 
     [Fact]
@@ -114,9 +115,9 @@ public class IdentityTests : AbstractTestsBase
         var result = identity.DeleteIndividualQuota(QuotaId.Generate());
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.recordNotFound");
-        result.Error.Message.Should().StartWith("IndividualQuota");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.recordNotFound");
+        result.Error.Message.ShouldStartWith("IndividualQuota");
     }
 
     #endregion
@@ -135,7 +136,7 @@ public class IdentityTests : AbstractTestsBase
         identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition.Id);
 
         // Assert
-        identity.TierQuotas.Should().HaveCount(0);
+        identity.TierQuotas.ShouldHaveCount(0);
     }
 
     [Fact]
@@ -152,8 +153,8 @@ public class IdentityTests : AbstractTestsBase
         identity.DeleteTierQuotaFromDefinitionId(tierQuotaDefinition1.Id);
 
         // Assert
-        identity.TierQuotas.Should().HaveCount(1);
-        identity.TierQuotas.ElementAt(0).DefinitionId.Should().Be(tierQuotaDefinition2.Id);
+        identity.TierQuotas.ShouldHaveCount(1);
+        identity.TierQuotas.ElementAt(0).DefinitionId.ShouldBe(tierQuotaDefinition2.Id);
     }
 
     [Fact]
@@ -166,7 +167,7 @@ public class IdentityTests : AbstractTestsBase
         var acting = () => identity.DeleteTierQuotaFromDefinitionId(TierQuotaDefinitionId.Create("TQDsomeInexistentIdx").Value);
 
         // Assert
-        acting.Should().Throw<DomainException>();
+        acting.ShouldThrow<DomainException>();
     }
 
     #endregion
@@ -187,8 +188,8 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], metricCalculatorFactoryStub, MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.MetricStatuses.ShouldHaveCount(1);
+        identity.MetricStatuses.First().MetricKey.ShouldBe(MetricKey.NUMBER_OF_SENT_MESSAGES);
     }
 
     [Fact]
@@ -201,9 +202,9 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.ShouldHaveCount(1);
+        identity.MetricStatuses.First().MetricKey.ShouldBe(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -217,9 +218,9 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.ShouldHaveCount(1);
+        identity.MetricStatuses.First().MetricKey.ShouldBe(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -235,7 +236,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfHour();
     }
 
     [Fact]
@@ -252,7 +253,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfHour();
 
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
@@ -264,7 +265,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfHour();
     }
 
     [Fact]
@@ -281,7 +282,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfDay();
 
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
@@ -293,7 +294,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfDay();
     }
 
     [Fact]
@@ -316,7 +317,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(2), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfDay();
     }
 
     [Fact]
@@ -336,7 +337,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(0), MetricUpdateType.All);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     #endregion
@@ -355,7 +356,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
 
         // Assert
-        identity.TierId.Should().Be(newTier.Id);
+        identity.TierId.ShouldBe(newTier.Id);
     }
 
     /**
@@ -379,10 +380,9 @@ public class IdentityTests : AbstractTestsBase
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(1), CancellationToken.None);
 
         // Assert
-        identity.TierQuotas.Should().HaveCount(2);
-        identity.TierQuotas.Should()
-            .Contain(q => q.MetricKey == MetricKey.NUMBER_OF_SENT_MESSAGES)
-            .And.Contain(q => q.MetricKey == MetricKey.NUMBER_OF_RELATIONSHIPS);
+        identity.TierQuotas.ShouldHaveCount(2);
+        identity.TierQuotas.ShouldContain(q => q.MetricKey == MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.TierQuotas.ShouldContain(q => q.MetricKey == MetricKey.NUMBER_OF_RELATIONSHIPS);
     }
 
     /**
@@ -407,12 +407,12 @@ public class IdentityTests : AbstractTestsBase
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(2), CancellationToken.None);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
-        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBe(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.Second().IsExhaustedUntil.ShouldNotBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
-    public void Changing_Tier_fails_when_old_and_new_tier_match()
+    public async Task Changing_Tier_fails_when_old_and_new_tier_match()
     {
         // Arrange
         var identityAddress = CreateRandomIdentityAddress();
@@ -423,8 +423,8 @@ public class IdentityTests : AbstractTestsBase
         var acting = async () => await identity.ChangeTier(oldTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
 
         // Assert
-        var exception = acting.Should().AwaitThrowAsync<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.newAndOldMatch");
+        var exception = await acting.ShouldThrowAsync<DomainException>();
+        exception.ShouldHaveError("error.platform.validation.newAndOldMatch");
     }
 
     #endregion

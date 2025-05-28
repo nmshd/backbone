@@ -2,7 +2,7 @@
 using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Announcements.Domain.Tests.Tests;
 
@@ -26,12 +26,12 @@ public class AnnouncementTests : AbstractTestsBase
         );
 
         // Assert
-        var domainEvent = announcement.Should().HaveASingleDomainEvent<AnnouncementCreatedDomainEvent>();
-        domainEvent.Id.Should().Be(announcement.Id);
-        domainEvent.Severity.Should().Be("High");
-        domainEvent.Texts.Should().HaveCount(1);
-        domainEvent.Recipients.Should().HaveCount(1);
-        domainEvent.CreationDate.Should().Be(utcNow);
+        var domainEvent = announcement.ShouldHaveASingleDomainEvent<AnnouncementCreatedDomainEvent>();
+        domainEvent.Id.ShouldBe(announcement.Id);
+        domainEvent.Severity.ShouldBe("High");
+        domainEvent.Texts.ShouldHaveCount(1);
+        domainEvent.Recipients.ShouldHaveCount(1);
+        domainEvent.CreationDate.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -48,6 +48,6 @@ public class AnnouncementTests : AbstractTestsBase
         );
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.nonSilentAnnouncementCannotHaveIqlQuery");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.nonSilentAnnouncementCannotHaveIqlQuery");
     }
 }

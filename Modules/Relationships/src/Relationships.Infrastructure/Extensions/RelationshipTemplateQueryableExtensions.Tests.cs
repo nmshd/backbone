@@ -2,6 +2,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
@@ -40,7 +41,7 @@ public class RelationshipTemplateQueryableExtensionsTests : AbstractTestsBase
             .ToList();
 
         // Assert
-        result.Should().HaveCount(1);
+        result.ShouldHaveCount(1);
     }
 
     [Fact]
@@ -69,7 +70,7 @@ public class RelationshipTemplateQueryableExtensionsTests : AbstractTestsBase
 
 
         // Assert
-        result.Should().HaveCount(1);
+        result.ShouldHaveCount(1);
     }
 
     [Fact]
@@ -99,6 +100,6 @@ public class RelationshipTemplateQueryableExtensionsTests : AbstractTestsBase
 
 
         // Assert
-        result.Should().HaveCount(0);
+        result.ShouldHaveCount(0);
     }
 }

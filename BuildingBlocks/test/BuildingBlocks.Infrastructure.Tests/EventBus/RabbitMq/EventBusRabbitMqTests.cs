@@ -12,6 +12,6 @@ public class EventBusRabbitMqTests : AbstractTestsBase
         var queueName = EventBusRabbitMq.GetQueueName<TestDomainEventHandler, TestDomainEvent>();
 
         // Assert
-        queueName.Should().Be("TestModule.Test");
+        queueName.ShouldBe("TestModule.Test");
     }
 }

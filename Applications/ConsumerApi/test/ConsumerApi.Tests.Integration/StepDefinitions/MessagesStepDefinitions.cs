@@ -5,7 +5,7 @@ using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -85,24 +85,24 @@ internal class MessagesStepDefinitions
     {
         var addressOfIdentityThatShouldBeAnonymized = _clientPool.FirstForIdentityName(anonymizedIdentityName).IdentityData!.Address;
 
-        ThrowIfNull(_getMessagesResponse);
+        _getMessagesResponse.ShouldNotBeNull();
 
         var sentMessage = _getMessagesResponse.Result!.First();
 
         var otherRecipients = sentMessage.Recipients.Select(r => r.Address).Where(a => a != addressOfIdentityThatShouldBeAnonymized);
         var recipientAddressesAfterGet = sentMessage.Recipients.Select(r => r.Address).ToList();
 
-        recipientAddressesAfterGet.Should().Contain(otherRecipients);
-        recipientAddressesAfterGet.Should().Contain(IdentityAddress.GetAnonymized("localhost").Value);
-        recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
+        recipientAddressesAfterGet.ShouldContain(otherRecipients);
+        recipientAddressesAfterGet.ShouldContain(IdentityAddress.GetAnonymized("localhost").Value);
+        recipientAddressesAfterGet.ShouldNotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
     [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
     {
         var errorData = _sendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
-        errorData.Should().NotBeNull();
-        errorData!.PeersToBeDeleted.Contains(_clientPool.FirstForIdentityName(identityName).IdentityData!.Address).Should().BeTrue();
+        errorData.ShouldNotBeNull();
+        errorData!.PeersToBeDeleted.Contains(_clientPool.FirstForIdentityName(identityName).IdentityData!.Address).ShouldBeTrue();
     }
 
     [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
@@ -111,10 +111,10 @@ internal class MessagesStepDefinitions
         var message1 = _messagesContext.Messages[message1Name];
         var message2 = _messagesContext.Messages[message2Name];
 
-        ThrowIfNull(_getMessagesResponse);
+        _getMessagesResponse.ShouldNotBeNull();
 
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
+        _getMessagesResponse.Result!.ShouldContain(m => m.Id == message1.Id);
+        _getMessagesResponse.Result!.ShouldContain(m => m.Id == message2.Id);
     }
 
     [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
@@ -122,9 +122,9 @@ internal class MessagesStepDefinitions
     {
         var message = _messagesContext.Messages[messageName];
 
-        ThrowIfNull(_getMessagesResponse);
+        _getMessagesResponse.ShouldNotBeNull();
 
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
+        _getMessagesResponse.Result!.ShouldContain(m => m.Id == message.Id);
     }
 
     [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
@@ -132,9 +132,9 @@ internal class MessagesStepDefinitions
     {
         var message = _messagesContext.Messages[messageName];
 
-        ThrowIfNull(_getMessagesResponse);
+        _getMessagesResponse.ShouldNotBeNull();
 
-        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+        _getMessagesResponse.Result!.ShouldNotContain(m => m.Id == message.Id);
     }
 
     #endregion

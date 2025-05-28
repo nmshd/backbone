@@ -15,8 +15,8 @@ public class RelationshipTests : AbstractTestsBase
         var result2 = relationship.IsBetween(relationship.To, relationship.From);
 
         // Assert
-        result1.Should().BeTrue();
-        result2.Should().BeTrue();
+        result1.ShouldBeTrue();
+        result2.ShouldBeTrue();
     }
 
     [Fact]
@@ -33,8 +33,8 @@ public class RelationshipTests : AbstractTestsBase
         var result3 = relationship.IsBetween(CreateRandomIdentityAddress(), CreateRandomIdentityAddress());
 
         // Assert
-        result1.Should().BeFalse();
-        result2.Should().BeFalse();
-        result3.Should().BeFalse();
+        result1.ShouldBeFalse();
+        result2.ShouldBeFalse();
+        result3.ShouldBeFalse();
     }
 }

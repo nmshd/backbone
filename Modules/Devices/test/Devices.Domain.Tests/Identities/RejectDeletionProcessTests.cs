@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -36,10 +37,7 @@ public class RejectDeletionProcessTests : AbstractTestsBase
         var acting = () => identity.RejectDeletionProcess(identity.DeletionProcesses[0].Id, DeviceId.Parse("DVC"));
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-
-        exception.Code.Should().Be("error.platform.recordNotFound");
-        exception.Message.Should().Contain("Device");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "Device");
     }
 
     [Fact]
@@ -55,10 +53,7 @@ public class RejectDeletionProcessTests : AbstractTestsBase
         var acting = () => identity.RejectDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-
-        exception.Code.Should().Be("error.platform.recordNotFound");
-        exception.Message.Should().Contain("IdentityDeletionProcess");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "IdentityDeletionProcess");
     }
 
     [Fact]
@@ -74,22 +69,19 @@ public class RejectDeletionProcessTests : AbstractTestsBase
         var acting = () => identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-
-        exception.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
-        exception.Message.Should().Contain("WaitingForApproval");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus", "WaitingForApproval");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
-        deletionProcess.AuditLog.Should().HaveCount(2);
+        deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Rejected);
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.WaitingForApproval);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Rejected);
     }
 
     private static Identity CreateIdentity()

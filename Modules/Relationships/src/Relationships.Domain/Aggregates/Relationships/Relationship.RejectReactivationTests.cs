@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -18,7 +18,7 @@ public class RelationshipRejectReactivationTests : AbstractTestsBase
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.Status.Should().Be(RelationshipStatus.Terminated);
+        relationship.Status.ShouldBe(RelationshipStatus.Terminated);
     }
 
     [Fact]
@@ -33,17 +33,17 @@ public class RelationshipRejectReactivationTests : AbstractTestsBase
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(5); // AuditLog(Creation->Acceptance->Termination->Reactivation->Rejection)
+        relationship.AuditLog.ShouldHaveCount(5); // AuditLog(Creation->Acceptance->Termination->Reactivation->Rejection)
 
         var auditLogEntry = relationship.AuditLog.Last();
 
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RejectionOfReactivation);
-        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+        auditLogEntry.Id.ShouldNotBeNull();
+        auditLogEntry.Reason.ShouldBe(RelationshipAuditLogEntryReason.RejectionOfReactivation);
+        auditLogEntry.OldStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.NewStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.CreatedBy.ShouldBe(IDENTITY_2);
+        auditLogEntry.CreatedByDevice.ShouldBe(DEVICE_2);
+        auditLogEntry.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
@@ -57,9 +57,9 @@ public class RelationshipRejectReactivationTests : AbstractTestsBase
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipReactivationCompletedDomainEvent>();
-        domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.Peer.Should().Be(IDENTITY_1);
+        var domainEvent = relationship.ShouldHaveASingleDomainEvent<RelationshipReactivationCompletedDomainEvent>();
+        domainEvent.RelationshipId.ShouldBe(relationship.Id);
+        domainEvent.Peer.ShouldBe(IDENTITY_1);
     }
 
     [Fact]
@@ -72,8 +72,8 @@ public class RelationshipRejectReactivationTests : AbstractTestsBase
         var acting = () => relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.relationship.noRejectableReactivationRequestExists");
+        acting.ShouldThrow<DomainException>()
+            .ShouldHaveError("error.platform.validation.relationship.noRejectableReactivationRequestExists");
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class RelationshipRejectReactivationTests : AbstractTestsBase
         var acting = () => relationship.RejectReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
-        acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.relationship.noRejectableReactivationRequestExists");
+        acting.ShouldThrow<DomainException>()
+            .ShouldHaveError("error.platform.validation.relationship.noRejectableReactivationRequestExists");
     }
 }

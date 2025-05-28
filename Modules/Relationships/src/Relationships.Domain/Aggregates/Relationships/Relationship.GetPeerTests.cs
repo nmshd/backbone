@@ -14,7 +14,7 @@ public class RelationshipGetPeerTests : AbstractTestsBase
         var peer = relationship.GetPeerOf(relationship.From);
 
         // Assert
-        peer.Should().Be(relationship.To);
+        peer.ShouldBe(relationship.To);
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class RelationshipGetPeerTests : AbstractTestsBase
         var peer = relationship.GetPeerOf(relationship.To);
 
         // Assert
-        peer.Should().Be(relationship.From);
+        peer.ShouldBe(relationship.From);
     }
 }

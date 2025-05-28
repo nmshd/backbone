@@ -87,7 +87,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
     public void ThenTheNewStatusOfTheDeletionProcessIs(string deletionProcessName, string newDeletionProcessStatus)
     {
-        _cancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
+        _cancelDeletionProcessResponse!.Result!.Status.ShouldBe(newDeletionProcessStatus);
     }
 
     #endregion

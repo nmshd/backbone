@@ -6,6 +6,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -56,12 +57,12 @@ public class HandlerTests : AbstractTestsBase
         var handleWithImmediateSave = () => taskWithDelayedSave;
 
         // Assert
-        await handleWithImmediateSave.Should().NotThrowAsync();
+        await handleWithImmediateSave.ShouldNotThrowAsync();
 
         await handleWithDelayedSave
-            .Should().ThrowAsync<OperationFailedException>()
-            .WithMessage("The sent localIndex does not match the index of the latest modification.*")
-            .WithErrorCode("error.platform.validation.datawallet.datawalletNotUpToDate");
+            .ShouldThrowAsync<OperationFailedException>()
+            .ShouldContainMessage("The sent localIndex does not match the index of the latest modification.")
+            .ShouldHaveErrorCode("error.platform.validation.datawallet.datawalletNotUpToDate");
     }
 
     private Handler CreateHandlerWithImmediateSave()

@@ -17,7 +17,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = pendingRelationship.EvaluateCountsAsActiveExpression();
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = activeRelationship.EvaluateCountsAsActiveExpression();
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = rejectedRelationship.EvaluateCountsAsActiveExpression();
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = revokedRelationship.EvaluateCountsAsActiveExpression();
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     #endregion
@@ -73,7 +73,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = relationship.EvaluateHasParticipantExpression(relationship.From);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = relationship.EvaluateHasParticipantExpression(relationship.To);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = relationship.EvaluateHasParticipantExpression("did:e:localhost:dids:1111111111111111111111");
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     #endregion
@@ -119,8 +119,8 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result2 = relationship.EvaluateIsBetween(participant2, participant1);
 
         // Assert
-        result1.Should().BeTrue();
-        result2.Should().BeTrue();
+        result1.ShouldBeTrue();
+        result2.ShouldBeTrue();
     }
 
     [Fact]
@@ -140,9 +140,9 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result3 = relationship.EvaluateIsBetween(otherIdentity1, otherIdentity2);
 
         // Assert
-        result1.Should().BeFalse();
-        result2.Should().BeFalse();
-        result3.Should().BeFalse();
+        result1.ShouldBeFalse();
+        result2.ShouldBeFalse();
+        result3.ShouldBeFalse();
     }
 
     #endregion
@@ -166,7 +166,7 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
         var result = relationship.EvaluateHasStatusInWhichPeerShouldBeNotifiedAboutDeletion();
 
         // Assert
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     #endregion

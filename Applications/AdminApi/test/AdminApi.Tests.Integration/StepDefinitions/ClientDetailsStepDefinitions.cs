@@ -31,7 +31,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         {
             Name = "TestTier_" + CreateRandomString(12)
         });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _tierId = response.Result!.Id;
 
@@ -50,7 +50,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
             DefaultTier = _tierId,
             MaxIdentities = _maxIdentities
         });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _clientId = response.Result!.ClientId;
     }
@@ -64,17 +64,17 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
     [Then("the response contains Client c")]
     public async Task ThenTheResponseContainsAClient()
     {
-        _response!.Result!.Should().NotBeNull();
-        _response!.Result!.ClientId.Should().Be(_clientId);
-        _response!.Result!.DefaultTier.Should().Be(_tierId);
-        _response!.Result!.MaxIdentities.Should().Be(_maxIdentities);
-        _response!.ContentType.Should().StartWith("application/json");
-        await _response!.Should().ComplyWithSchema();
+        _response!.Result!.ShouldNotBeNull();
+        _response!.Result!.ClientId.ShouldBe(_clientId);
+        _response!.Result!.DefaultTier.ShouldBe(_tierId);
+        _response!.Result!.MaxIdentities.ShouldBe(_maxIdentities);
+        _response!.ContentType.ShouldStartWith("application/json");
+        await _response!.ShouldComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_response!.Status).Should().Be(expectedStatusCode);
+        ((int)_response!.Status).ShouldBe(expectedStatusCode);
     }
 }

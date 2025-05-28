@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionPro
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.RejectDeletionProcess;
@@ -42,12 +41,12 @@ public class HandlerTests : AbstractTestsBase
                 && i.DeletionProcesses.Any(d => d.Id == deletionProcess.Id)), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        response.Id.Should().Be(deletionProcess.Id);
-        response.Status.Should().Be(DeletionProcessStatus.Rejected);
+        response.Id.ShouldBe(deletionProcess.Id);
+        response.Status.ShouldBe(DeletionProcessStatus.Rejected);
     }
 
     [Fact]
-    public void Throws_when_given_identity_does_not_exist()
+    public async Task Throws_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
@@ -63,7 +62,8 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new RejectDeletionProcessCommand("some-deletion-process-id"), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, RejectDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext)

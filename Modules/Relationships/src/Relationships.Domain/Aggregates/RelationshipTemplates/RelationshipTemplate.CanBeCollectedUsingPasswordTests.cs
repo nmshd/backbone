@@ -17,7 +17,7 @@ public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : Ab
         var result = template.CanBeCollectedUsingPassword(collector, null);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : Ab
         var result = template.CanBeCollectedUsingPassword(collector, [1]);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : Ab
         var result = template.CanBeCollectedUsingPassword(collector, [2]);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : Ab
         var result = template.CanBeCollectedUsingPassword(creator, null);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -81,6 +81,6 @@ public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : Ab
         var result = template.CanBeCollectedUsingPassword(collector, null);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 }

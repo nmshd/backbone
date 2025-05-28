@@ -37,7 +37,7 @@ public class TiersRepositoryTests : AbstractTestsBase
         await repository.Update(actTier, CancellationToken.None);
 
         // Assert
-        assertContext.Set<TierQuotaDefinition>().Should().NotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
-        assertContext.Set<TierQuotaDefinition>().Should().Contain(q => q.Id == otherTierQuotaDefinition.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldNotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldContain(q => q.Id == otherTierQuotaDefinition.Id);
     }
 }

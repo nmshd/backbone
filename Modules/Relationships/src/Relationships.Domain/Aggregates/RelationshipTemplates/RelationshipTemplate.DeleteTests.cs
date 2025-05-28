@@ -14,7 +14,7 @@ public class RelationshipTemplateDeleteTests : AbstractTestsBase
 
         var acting = () => relationshipTemplate.EnsureCanBeDeletedBy(identity);
 
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class RelationshipTemplateDeleteTests : AbstractTestsBase
 
         var acting = () => relationshipTemplate.EnsureCanBeDeletedBy(otherIdentity);
 
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 
     private RelationshipTemplate CreateRelationshipTemplate(IdentityAddress identity)
