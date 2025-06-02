@@ -9,6 +9,8 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File : Entity
 {
+    private bool _ownershipIsLocked;
+
     // ReSharper disable once UnusedMember.Local
     private File()
     {
@@ -88,7 +90,18 @@ public class File : Entity
     public byte[] EncryptedProperties { get; set; }
 
     public FileOwnershipToken OwnershipToken { get; private set; }
-    public bool OwnershipIsLocked { get; private set; }
+
+    public bool OwnershipIsLocked
+    {
+        get => _ownershipIsLocked;
+        private set
+        {
+            if (!_ownershipIsLocked && value)
+                RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+
+            _ownershipIsLocked = value;
+        }
+    }
 
     public DateTime? LastOwnershipClaimAt { get; private set; }
 
@@ -144,13 +157,16 @@ public class File : Entity
 
     public bool ValidateFileOwnershipToken(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
     {
-        if (Owner != activeIdentity)
-            throw new DomainActionForbiddenException();
-
         if (OwnershipIsLocked)
             return false;
 
-        return OwnershipToken == ownershipToken;
+        if (OwnershipToken == ownershipToken)
+            return true;
+
+        if (Owner != activeIdentity)
+            OwnershipIsLocked = true;
+
+        return false;
     }
 
     public enum ClaimFileOwnershipResult

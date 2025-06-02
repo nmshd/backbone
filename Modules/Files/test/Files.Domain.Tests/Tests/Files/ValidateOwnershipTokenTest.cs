@@ -1,22 +1,83 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
+using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Domain.Tests.Helpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
 
 public class ValidateOwnershipTokenTest
 {
     [Fact]
-    public void Token_can_be_validated_by_its_owner()
+    public void Successful_validation_by_owner_returns_true()
     {
         // Arrange
         var file = TestDataGenerator.CreateFile();
 
         // Act
-        var resultCorrectToken = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
+        var validationResult = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
 
         // Assert
-        resultCorrectToken.ShouldBeTrue();
+        validationResult.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Unsuccessful_validation_by_owner_returns_false()
+    {
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
+        var incorrectOwnershipToken = FileOwnershipToken.New();
+
+        // Act
+        var validationResult = file.ValidateFileOwnershipToken(incorrectOwnershipToken, file.Owner);
+
+        // Assert
+        validationResult.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Successful_validation_by_non_owner_returns_true()
+    {
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
+        var validatingIdentity = CreateRandomIdentityAddress();
+
+        // Act
+        var validationResult = file.ValidateFileOwnershipToken(file.OwnershipToken, validatingIdentity);
+
+        // Assert
+        validationResult.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Unsuccessful_validation_by_non_owner_returns_false()
+    {
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
+        var incorrectOwnershipToken = FileOwnershipToken.New();
+        var validatingIdentity = CreateRandomIdentityAddress();
+
+        // Act
+        var validationResult = file.ValidateFileOwnershipToken(incorrectOwnershipToken, validatingIdentity);
+
+        // Assert
+        validationResult.ShouldBeFalse();
+        file.OwnershipIsLocked.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Unsuccessful_validation_by_non_owner_raises_FileOwnershipLockedDomainEvent()
+    {
+        // Arrange
+        var file = TestDataGenerator.CreateFile();
+        var incorrectOwnershipToken = FileOwnershipToken.New();
+        var validatingIdentity = CreateRandomIdentityAddress();
+
+        // Act
+        file.ValidateFileOwnershipToken(incorrectOwnershipToken, validatingIdentity);
+
+        // Assert
+        file.ShouldHaveASingleDomainEvent<FileOwnershipLockedDomainEvent>();
     }
 
     [Fact]
@@ -27,22 +88,9 @@ public class ValidateOwnershipTokenTest
         file.ClaimOwnership(FileOwnershipToken.New(), file.Owner);
 
         // Act
-        var result = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
+        var validationResult = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
 
         // Assert
-        result.ShouldBeFalse();
-    }
-
-    [Fact]
-    public void A_ownership_token_can_only_be_validated_by_its_owner()
-    {
-        // Arrange
-        var file = TestDataGenerator.CreateFile();
-
-        // Act
-        Func<object> acting = () => file.ValidateFileOwnershipToken(file.OwnershipToken, CreateRandomIdentityAddress());
-
-        // Assert
-        acting.ShouldThrow<DomainActionForbiddenException>();
+        validationResult.ShouldBeFalse();
     }
 }
