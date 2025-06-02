@@ -6,7 +6,7 @@ Identity tries to regenerate the OwnershipToken of a file
     Scenario: The owner of a file tries to regenerate its ownership token
         Given Identities i1 and i2
         And File f created by i1
-        And i2 tries to claim f with a wrong token
+        And the ownership of f is locked by i2
         When i1 sends a PATCH request to the /Files/f.Id/RegenerateOwnershipToken endpoint
         Then the response status code is 200 (OK)
         And the response contains the new OwnershipToken of f
