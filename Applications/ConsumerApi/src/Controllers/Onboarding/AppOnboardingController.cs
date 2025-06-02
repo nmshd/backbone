@@ -138,30 +138,28 @@ public class AppOnboardingModel
 
     public record AppStore
     {
-        private AppStore(string storeName, string? link, string noLinkText, string? customStoreButtonUrlOrBase64Encoded, string defaultStoreButtonBase64Encoded)
+        private AppStore(string storeName, string? link, string noLinkText, string storeButtonUrl)
         {
             StoreName = storeName;
             Link = link;
             NoLinkText = noLinkText;
-            CustomStoreButtonUrlOrBase64Encoded = customStoreButtonUrlOrBase64Encoded;
-            DefaultStoreButtonBase64Encoded = defaultStoreButtonBase64Encoded;
+            StoreButtonUrl = storeButtonUrl;
         }
 
         public static AppStore GooglePlayStore(ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreConfig config)
         {
-            return new AppStore("Google Play Store", config.AppLink, config.NoLinkText, config.CustomStoreButtonUrlOrBase64Encoded, config.DefaultStoreButtonBase64Encoded);
+            return new AppStore("Google Play Store", config.AppLink, config.NoLinkText, config.StoreButtonUrl);
         }
 
         public static AppStore AppleAppStore(ConsumerApiConfiguration.AppOnboardingConfiguration.App.StoreConfig config)
         {
-            return new AppStore("Apple App Store", config.AppLink, config.NoLinkText, config.CustomStoreButtonUrlOrBase64Encoded, config.DefaultStoreButtonBase64Encoded);
+            return new AppStore("Apple App Store", config.AppLink, config.NoLinkText, config.StoreButtonUrl);
         }
 
         public string StoreName { get; }
         public string? Link { get; }
         public string NoLinkText { get; }
-        public string? CustomStoreButtonUrlOrBase64Encoded { get; }
-        public string DefaultStoreButtonBase64Encoded { get; }
+        public string StoreButtonUrl { get; }
     }
 }
 

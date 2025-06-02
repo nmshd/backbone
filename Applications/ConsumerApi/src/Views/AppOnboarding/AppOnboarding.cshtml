@@ -75,7 +75,7 @@
                     <div class="app-store-button">
                         <a href="@appStore.Link" target="_blank">
                             <img
-                                src="@(string.IsNullOrEmpty(appStore.CustomStoreButtonUrlOrBase64Encoded) ? appStore.DefaultStoreButtonBase64Encoded : appStore.CustomStoreButtonUrlOrBase64Encoded)"
+                                src="@appStore.StoreButtonUrl"
                                 alt="@appStore.StoreName"
                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
                         </a>
