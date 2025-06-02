@@ -36,7 +36,7 @@ Identity tries to claim the ownership of a file
     Scenario: An identity tries to claim a file using the correct ownershiptoken but the file is blocked
         Given Identities i1 and i2
         And File f created by i1
-        And i2 tries to claim f with a wrong token
+        And the ownership of f is locked by i2
         When i2 sends a PATCH request to the /Files/f.Id/ClaimOwnership with the file's ownership token
         Then the response status code is 403 (Action Forbidden)
 

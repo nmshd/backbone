@@ -21,6 +21,9 @@ public static class TestDataGenerator
         var encryptedProperties = cipherHash;
         var content = "Hello World!".GetBytes();
 
-        return new File(owner, deviceId, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
+        var file = new File(owner, deviceId, ownerSignature, cipherHash, content, content.LongLength, DateTime.Today.AddDays(1), encryptedProperties);
+        file.ClearDomainEvents();
+
+        return file;
     }
 }
