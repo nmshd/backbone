@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:2025.1@sha256:76d31ec93284c0003b97766f3fd2743616de0b510fc799054b5f0ac28820d330
+    image: datalust/seq:2025.1@sha256:33152ceb33c03e80720e163fd396d8d35a600369b77eafb81700f0dc23c2200e
     container_name: seq
     ports:
       - "8085:80"
