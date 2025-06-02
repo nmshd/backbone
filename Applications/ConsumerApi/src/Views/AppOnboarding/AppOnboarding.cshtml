@@ -15,18 +15,38 @@
             link.setAttribute('onclick', clickString);
         });
     </script>
+
+    <style>
+        body {
+            background-color: @Model.BackgroundColor;
+        }
+
+        .info-box {
+            background-color: @Model.SecondaryColor;
+        }
+
+        .step-box {
+            background-color: @Model.PrimaryColor;
+        }
+
+        #app-install-step {
+            flex-direction: @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "column" : "row");
+            justify-content: space-between;
+        }
+    </style>
+
     <link rel="stylesheet" href="~/Style/Style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400&display=swap"
           rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div class="upper-spacer"></div>
+<div class="vertical-spacer"></div>
 <div class="container">
     <div class="logo-box">
         <div class="logo">
             <img
-                src="data:image/svg+xml;base64,@Model.BannerSvgBase64Encoded"
+                src="@Model.BannerUrlOrBase64Encoded"
                 alt="@Model.AppDisplayName Logo" />
         </div>
     </div>
@@ -37,11 +57,10 @@
             Um fortfahren zu können laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
         </p>
     </div>
-
     <div class="step-box" id="app-install-step">
-        <div class="step-row">
+        <div class="step-content">
             <p class="step-text">1.</p>
-            <p class="step-description">Laden Sie die @Model.AppDisplayName-App aus DEM GOOGLE PLAY STORE.</p>
+            <p class="step-description">Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
         </div>
         <div
             class="app-store-buttons @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "multi-button" : "")">
@@ -53,26 +72,16 @@
                 }
                 else
                 {
-                    if (@appStore.Link.Contains("play.google.com"))
-                    {
+                    <div class="app-store-button">
                         <a href="@appStore.Link" target="_blank">
-                            <img src="data:image/svg+xml;base64,@Model.GooglePlaySvgBase64Encoded"
-                                 alt="Mein Bildungsraum Logo"
-                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='#efefef';" />
+                            <img
+                                src="@(string.IsNullOrEmpty(appStore.CustomStoreButtonUrlOrBase64Encoded) ? appStore.DefaultStoreButtonBase64Encoded : appStore.CustomStoreButtonUrlOrBase64Encoded)"
+                                alt="@appStore.StoreName"
+                                onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
                         </a>
-                    }
-                    else if (@appStore.Link.Contains("apps.apple.com"))
-                    {
-                        <a href="@appStore.Link" target="_blank">
-                            <img src="data:image/svg+xml;base64,@Model.AppleAppStoreSvgBase64Encoded"
-                                 alt="Mein Bildungsraum Logo"
-                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='#efefef';" />
-                        </a>
-                    }
+                    </div>
                 }
             }
-
-
         </div>
     </div>
 
@@ -82,8 +91,9 @@
             <p class="step-text">Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
         </div>
         <img
-            src="https://play-lh.googleusercontent.com/odMq3flTg2f_Pz0wJ8ESty0BhMTtOJo4bmfnCiA1PyYGjs0j6-0H-uaa26KY6bWcj5uu=w240-h480"
+            src="@Model.AppIconUrlOrBase64Encoded"
             alt="App starten" class="app-icon" />
     </div>
 </div>
+<div class="vertical-spacer"></div>
 </body>

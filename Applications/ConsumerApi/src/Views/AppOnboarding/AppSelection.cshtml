@@ -7,6 +7,10 @@
 <!DOCTYPE html>
 <head>
     <title>Onboarding</title>
+    <link rel="stylesheet" href="~/Style/Style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400&display=swap"
+          rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @foreach (var app in Model.Apps)
     {
         <script>
@@ -14,17 +18,57 @@
                 const link = document.getElementById('linkTo@(app.Id)');
                 const queryString = new URLSearchParams(window.location.search);
                 queryString.set('app', '@app.Id');
-                link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
+                console.log(window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash);
+                let clickString = "location.href='" + window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash + "';";
+                link.setAttribute('onclick', clickString);
             });
         </script>
     }
+    <style>
+        body {
+            background-color: @Model.Apps[0].BackgroundColor;
+        }
+
+        .info-box {
+            background-color: @Model.Apps[0].SecondaryColor;
+        }
+
+        .step-box {
+            background-color: @Model.Apps[0].PrimaryColor;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-content {
+            width: 70%;
+        }
+
+        img {
+            align-self: flex-end;
+        }
+    </style>
 </head>
 <body>
-
-<p>Please pick the application specified by your provider and install it.</p>
-@foreach (var app in Model.Apps)
-{
-    <p><a href="" id="linkTo@(app.Id)">Install @app.DisplayName</a></p>
-}
+<div class="vertical-spacer"></div>
+<div class="container">
+    <div class="info-box">
+        <p class="info-text">
+            Please pick the application specified by your provider and install it.
+        </p>
+    </div>
+    @foreach (var app in Model.Apps)
+    {
+        <div class="step-box" id="linkTo@(app.Id)" onclick="" style="cursor: pointer;">
+            <div class="step-content">
+                <p class="step-text">Install @app.DisplayName</p>
+            </div>
+            <img
+                src="@app.AppIconUrlOrBase64Encoded"
+                alt="App starten" class="app-icon" />
+        </div>
+    }
+</div>
+<div class="vertical-spacer"></div>
 </body>
 
