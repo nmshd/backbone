@@ -33,6 +33,40 @@
             flex-direction: @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "column" : "row");
             justify-content: space-between;
         }
+
+        .banner {
+            padding: 1rem;
+        }
+
+        .banner img {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-box .store-button {
+            height: 40px;
+        }
+
+        .app-store-button {
+            display: flex;
+            align-self: center;
+            height: 40px;
+        }
+
+        .app-store-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            height: 40px;
+        }
+
+        .app-icon {
+            display: block;
+            width: 60px;
+            height: 60px;
+            border-radius: 20%;
+        }
     </style>
 
     <link rel="stylesheet" href="~/Style/Style.css" />
@@ -50,18 +84,18 @@
     </div>
 
     <div class="info-box">
-        <p class="info-text">
+        <p>
             Sie haben einen QR-Code der @Model.AppDisplayName-Plattform gescannt.
             Um fortfahren zu können laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
         </p>
     </div>
     <div class="step-box" id="app-install-step">
         <div class="step-content">
-            <p class="step-text">1.</p>
-            <p class="step-description">Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
+            <p>1.</p>
+            <p>Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
         </div>
         <div
-            class="app-store-buttons @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "multi-button" : "")">
+            class="@(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "app-store-buttons" : "app-store-button")">
             @foreach (var appStore in Model.Links)
             {
                 if (string.IsNullOrEmpty(appStore.Link))
@@ -73,6 +107,7 @@
                     <div>
                         <a href="@appStore.Link" target="_blank">
                             <img
+                                class="store-button"
                                 src="@appStore.StoreButtonUrl"
                                 alt="@appStore.StoreName"
                                 onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
@@ -85,8 +120,8 @@
 
     <div class="step-box" id="inAppLink" onclick="" style="cursor: pointer;">
         <div class="step-content">
-            <p class="step-text">2.</p>
-            <p class="step-text">Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
+            <p>2.</p>
+            <p>Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
         </div>
         <img
             src="@Model.AppIconUrl"

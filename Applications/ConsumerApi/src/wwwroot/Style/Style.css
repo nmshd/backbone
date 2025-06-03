@@ -15,27 +15,19 @@ body {
     margin: 0 auto;
 }
 
-.banner {
-    padding: 1rem;
-}
-
-.banner img {
-    width: 100%;
-    margin-bottom: 0.5rem;
-}
-
 .info-box {
-    padding: 1rem;
+    padding: 16px;
     border-radius: 4px;
     margin-top: 10px;
 }
 
 .step-box {
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 16px;
     border-radius: 4px;
     margin-top: 10px;
     display: flex;
+    gap: 16px;
     justify-content: space-between;
 }
 
@@ -44,29 +36,17 @@ body {
     flex-direction: row;
     align-items: flex-start;
     gap: 16px;
-    max-width: 70%;
-}
 
-.app-store-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 0px;
-    align-self: flex-end;
-    max-height: 40px;
-}
-
-.app-icon {
-    display: block;
-    width: 60px;
-    height: 60px;
-    margin: 0.5rem;
-    border-radius: 20%;
 }
 
 .vertical-spacer {
     height: 3rem;
 }
 
+.step-box p {
+    margin: 0;
+}
 
+.info-box p {
+    margin: 0;
+}
