@@ -5,6 +5,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.ClaimFileOwnership;
@@ -34,6 +35,8 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
             case File.ClaimFileOwnershipResult.IncorrectToken:
                 await _filesRepository.Update(file, cancellationToken);
                 throw new ActionForbiddenException();
+            case File.ClaimFileOwnershipResult.CannotClaimOwnFile:
+                throw new ApplicationException(ApplicationErrors.CannotClaimOwnershipOfOwnFile());
             case File.ClaimFileOwnershipResult.Locked:
                 throw new ActionForbiddenException();
             default:
