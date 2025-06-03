@@ -49,6 +49,10 @@ body {
     gap: 16px;
 }
 
+.numbered-step-content {
+    gap: 2px;
+}
+
 .step-box {
     color: #1A1B20;
     text-decoration: none;
