@@ -12,6 +12,13 @@ Identity tries to claim the ownership of a file
         And the response contains the new OwnershipToken of f
         And i1 receives an ExternalEvent of type FileOwnershipClaimed which contains the id of f and the address of i2
 
+    Scenario: An identity tries to claim its own file
+        Given Identity i
+        And File f created by i
+        When i sends a PATCH request to the /Files/f.Id/ClaimOwnership with the file's ownership token
+        Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.file.cannotClaimOwnershipOfOwnFile"
+
     Scenario: An identity tries to claim a file using an incorrect ownershiptoken
         Given Identities i1 and i2
         And File f created by i1
