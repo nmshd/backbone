@@ -109,7 +109,7 @@ internal class SynchronizationStepDefinitions
             e.Payload["relationshipTemplateId"].GetString() == templateId);
     }
 
-    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipLockedEvent which contains the id of {RegexFor.SINGLE_THING}")]
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipLocked which contains the id of {RegexFor.SINGLE_THING}")]
     public async Task ThenIReceivesAnExternalEventOfTypeFileOwnershipLocked(string notifiedIdentityName, string fileName)
     {
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
