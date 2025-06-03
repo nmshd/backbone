@@ -34,7 +34,7 @@
             width: 100%;
         }
 
-        .step-box .store-button {
+        .store-link img {
             height: 40px;
         }
 
@@ -97,9 +97,8 @@
                     else
                     {
                         <div>
-                            <a href="@appStore.Link" target="_blank">
+                            <a href="@appStore.Link" target="_blank" class="store-link">
                                 <img
-                                    class="store-button"
                                     src="@appStore.StoreButtonUrl"
                                     alt="@appStore.StoreName"
                                     onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
