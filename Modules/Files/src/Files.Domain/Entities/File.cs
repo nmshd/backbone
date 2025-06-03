@@ -150,8 +150,13 @@ public class File : Entity
         }
 
         LastOwnershipClaimAt = SystemTime.UtcNow;
+
+        var oldOwnerAddress = Owner;
+
         Owner = newOwnerAddress;
         OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
+
+        RaiseDomainEvent(new FileOwnershipClaimedDomainEvent(this, oldOwnerAddress));
         return ClaimFileOwnershipResult.Ok;
     }
 
