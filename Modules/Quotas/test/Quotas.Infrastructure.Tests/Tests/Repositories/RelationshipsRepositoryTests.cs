@@ -6,7 +6,6 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
-using FluentAssertions.Execution;
 using static Backbone.Modules.Quotas.Infrastructure.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
@@ -23,8 +22,6 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
 
     public RelationshipsRepositoryTests()
     {
-        AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_relationshipsArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<RelationshipsDbContext>(connection);
         (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
@@ -50,8 +47,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(1);
-        countForI2.Should().Be(1);
+        countForI1.ShouldBe(1u);
+        countForI2.ShouldBe(1u);
     }
 
     [Fact]
@@ -74,8 +71,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(2);
-        countForI2.Should().Be(2);
+        countForI1.ShouldBe(2u);
+        countForI2.ShouldBe(2u);
     }
 
     [Fact]
@@ -98,8 +95,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(2);
-        countForI2.Should().Be(2);
+        countForI1.ShouldBe(2u);
+        countForI2.ShouldBe(2u);
     }
 
     [Fact]
@@ -122,8 +119,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow).AddHours(2), quotaPeriod.CalculateEnd(SystemTime.UtcNow).AddHours(2), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(0);
-        countForI2.Should().Be(0);
+        countForI1.ShouldBe(0u);
+        countForI2.ShouldBe(0u);
     }
 
     [Fact]
@@ -146,7 +143,7 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var count = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow).AddHours(2), quotaPeriod.CalculateEnd(SystemTime.UtcNow).AddHours(2), CancellationToken.None);
 
         // Assert
-        count.Should().Be(0);
+        count.ShouldBe(0u);
     }
 
     [Fact]
@@ -169,7 +166,7 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(1);
-        countForI2.Should().Be(1);
+        countForI1.ShouldBe(1u);
+        countForI2.ShouldBe(1u);
     }
 }

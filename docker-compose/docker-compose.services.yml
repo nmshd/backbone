@@ -1,6 +1,6 @@
 services:
   consumer-api:
-    image: ghcr.io/nmshd/backbone-consumer-api:${BACKBONE_VERSION}
+    image: ghcr.io/nmshd/backbone-consumer-api:6.45.0
     container_name: consumerApi
     hostname: consumerApi
     environment:
@@ -18,7 +18,7 @@ services:
       - ./appsettings.override.json:/app/appsettings.override.json
 
   admin-ui:
-    image: ghcr.io/nmshd/backbone-admin-ui:${BACKBONE_VERSION}
+    image: ghcr.io/nmshd/backbone-admin-ui:6.45.0
     container_name: admin-ui
     hostname: adminUi
     ports:

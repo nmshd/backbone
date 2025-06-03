@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
@@ -19,8 +20,8 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt.Should().NotBeNull();
-        jwt.Value.Should().NotBeNull();
+        jwt.ShouldNotBeNull();
+        jwt.Value.ShouldNotBeNull();
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt1.Should().BeSameAs(jwt2);
+        jwt1.ShouldBeSameAs(jwt2);
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-other-bundle-id");
 
         // Assert
-        jwt1.Should().NotBeSameAs(jwt2);
+        jwt1.ShouldNotBeSameAs(jwt2);
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt1.Should().NotBeSameAs(jwt2);
+        jwt1.ShouldNotBeSameAs(jwt2);
     }
 
     [Fact]
@@ -81,10 +82,10 @@ public class JwtGeneratorTests : AbstractTestsBase
         Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id")); });
 
         // Assert
-        results.Should().NotBeNull();
-        results.Should().HaveCount(10000);
+        results.ShouldNotBeNull();
+        results.ShouldHaveCount(10000);
 
-        results.Distinct().Count().Should().Be(1);
+        results.Distinct().Count().ShouldBe(1);
     }
 
     [Fact]
@@ -106,15 +107,14 @@ public class JwtGeneratorTests : AbstractTestsBase
         });
 
         // Assert
-        results.Should()
-            .NotBeNull().And
-            .HaveCount(10000);
+        results.ShouldNotBeNull();
+        results.ShouldHaveCount(10000);
 
-        results.Count(r => ReferenceEquals(initialJwt, r)).Should().Be(0);
+        results.Count(r => ReferenceEquals(initialJwt, r)).ShouldBe(0);
 
         foreach (var result in results)
         {
-            result.Value.Should().NotBeSameAs(initialJwt.Value);
+            result.Value.ShouldNotBeSameAs(initialJwt.Value);
         }
     }
 

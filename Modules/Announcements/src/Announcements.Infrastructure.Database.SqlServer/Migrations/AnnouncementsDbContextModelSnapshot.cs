@@ -38,6 +38,12 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IqlQuery")
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(1000)")
+                        .IsFixedLength(false);
+
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 

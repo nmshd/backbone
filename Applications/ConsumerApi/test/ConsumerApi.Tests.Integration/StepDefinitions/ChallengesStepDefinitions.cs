@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -91,21 +92,21 @@ internal class ChallengesStepDefinitions
     [Then(@"the Challenge has an expiration date in the future")]
     public void ThenTheChallengeHasAnExpirationDateInTheFuture()
     {
-        _challengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
+        _challengeResponse!.Result!.ExpiresAt.ShouldBeAfter(DateTime.UtcNow);
     }
 
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
-        _challengeResponse!.Result!.CreatedBy.Should().BeNull();
-        _challengeResponse!.Result!.CreatedByDevice.Should().BeNull();
+        _challengeResponse!.Result!.CreatedBy.ShouldBeNull();
+        _challengeResponse!.Result!.CreatedByDevice.ShouldBeNull();
     }
 
     [Then("the Challenge contains information about the creator")]
     public void ThenTheChallengeContainsInformationAboutTheCreator()
     {
-        _challengeResponse!.Result!.CreatedBy.Should().NotBeNull();
-        _challengeResponse!.Result!.CreatedByDevice.Should().NotBeNull();
+        _challengeResponse!.Result!.CreatedBy.ShouldNotBeNull();
+        _challengeResponse!.Result!.CreatedByDevice.ShouldNotBeNull();
     }
 
     #endregion

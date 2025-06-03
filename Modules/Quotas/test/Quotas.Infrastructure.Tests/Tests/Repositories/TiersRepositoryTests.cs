@@ -30,14 +30,14 @@ public class TiersRepositoryTests : AbstractTestsBase
 
         var repository = new TiersRepository(actContext);
 
-        var actTier = (await repository.Find(arrangedTier.Id, CancellationToken.None, true))!;
+        var actTier = (await repository.Get(arrangedTier.Id, CancellationToken.None, true))!;
         actTier.DeleteQuota(tierQuotaDefinitionToBeDeleted.Id);
 
         // Act
         await repository.Update(actTier, CancellationToken.None);
 
         // Assert
-        assertContext.Set<TierQuotaDefinition>().Should().NotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
-        assertContext.Set<TierQuotaDefinition>().Should().Contain(q => q.Id == otherTierQuotaDefinition.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldNotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldContain(q => q.Id == otherTierQuotaDefinition.Id);
     }
 }

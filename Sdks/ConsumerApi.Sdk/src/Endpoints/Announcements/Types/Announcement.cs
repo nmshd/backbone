@@ -13,6 +13,8 @@ public class Announcement
 
     public required AnnouncementText Text { get; set; }
     public required List<AnnouncementAction> Actions { get; set; }
+
+    public required string? IqlQuery { get; set; }
 }
 
 public enum AnnouncementSeverity

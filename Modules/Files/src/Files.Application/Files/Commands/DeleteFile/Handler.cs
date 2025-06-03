@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<DeleteFileCommand>
 
     public async Task Handle(DeleteFileCommand request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Get(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 
         file.EnsureCanBeDeletedBy(_userContext.GetAddress());
 

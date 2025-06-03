@@ -6,7 +6,6 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
-using FluentAssertions.Execution;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
@@ -33,8 +32,6 @@ public class MessagesRepositoryTests : AbstractTestsBase
 
     public MessagesRepositoryTests()
     {
-        AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_messagesArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>(connection);
         (_, _actContext, _) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
@@ -62,7 +59,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        count.Should().Be(1);
+        count.ShouldBe(1u);
     }
 
     [Fact]
@@ -87,7 +84,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        count.Should().Be(3);
+        count.ShouldBe(3u);
     }
 
     [Fact]
@@ -110,7 +107,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        count.Should().Be(3);
+        count.ShouldBe(3u);
     }
 
     [Fact]
@@ -133,7 +130,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
-        count.Should().Be(2);
+        count.ShouldBe(2u);
     }
 
     private static Message CreateMessage(DateTime createdAt, IdentityAddress identityAddress)

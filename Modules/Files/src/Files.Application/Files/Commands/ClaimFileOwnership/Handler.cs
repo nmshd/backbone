@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
 
     public async Task<ClaimFileOwnershipResponse> Handle(ClaimFileOwnershipCommand request, CancellationToken cancellationToken)
     {
-        var file = await _filesRepository.Find(FileId.Parse(request.FileId), cancellationToken, true, false) ?? throw new NotFoundException(nameof(File));
+        var file = await _filesRepository.Get(FileId.Parse(request.FileId), cancellationToken, true, false) ?? throw new NotFoundException(nameof(File));
 
         var result = file.ClaimOwnership(FileOwnershipToken.Parse(request.OwnershipToken), _activeIdentity);
 

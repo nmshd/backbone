@@ -18,7 +18,7 @@ public class TokenLockedDomainEventHandlerTests : AbstractTestsBase
         var fakeRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        A.CallTo(() => fakeRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => fakeRepository.Get(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         var handler = new TokenLockedDomainEventHandler(mockPushSender, fakeRepository);
         var domainEvent = new TokenLockedDomainEvent { TokenId = "TOK00000000000000001", CreatedBy = identity.Address };

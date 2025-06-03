@@ -16,7 +16,7 @@ public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
         var acting = async () => await metricCalculator.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "some-address", CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<OverflowException>();
+        await acting.ShouldThrowAsync<OverflowException>();
     }
 
     private class FileMetadataRepositoryStub : IFilesRepository

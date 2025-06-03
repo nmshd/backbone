@@ -16,8 +16,8 @@ public class Handler : IRequestHandler<ListTagsQuery, ListTagsResponse>
     {
         var response = new ListTagsResponse
         {
-            SupportedLanguages = _tagsRepository.GetSupportedLanguages(),
-            TagsForAttributeValueTypes = _tagsRepository.GetAttributes()
+            SupportedLanguages = _tagsRepository.ListSupportedLanguages(),
+            TagsForAttributeValueTypes = _tagsRepository.ListAttributes()
         };
 
         return Task.FromResult(response);

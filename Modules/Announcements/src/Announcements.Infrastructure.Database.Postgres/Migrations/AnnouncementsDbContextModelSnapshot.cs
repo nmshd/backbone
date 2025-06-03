@@ -38,6 +38,12 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("IqlQuery")
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(1000)")
+                        .IsFixedLength(false);
+
                     b.Property<int>("Severity")
                         .HasColumnType("integer");
 

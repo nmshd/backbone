@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<ListRelationshipsQuery, ListRelationships
     public async Task<ListRelationshipsResponse> Handle(ListRelationshipsQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult =
-            await _relationshipsRepository.FindRelationshipsWithIds(request.Ids.Select(RelationshipId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
+            await _relationshipsRepository.ListRelationshipsWithIds(request.Ids.Select(RelationshipId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
 
         return new ListRelationshipsResponse(dbPaginationResult, request.PaginationFilter);
     }

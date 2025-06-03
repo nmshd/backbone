@@ -37,7 +37,7 @@ public static class Utils
         };
 
         var relationshipTemplateResponse = await templator.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
-        relationshipTemplateResponse.Should().BeASuccess();
+        relationshipTemplateResponse.ShouldBeASuccess();
 
         return await CreatePendingRelationshipUsingTemplate(requestor, relationshipTemplateResponse.Result!.Id);
     }
@@ -51,10 +51,10 @@ public static class Utils
         };
 
         var createRelationshipResponse = await requestor.Relationships.CreateRelationship(createRelationshipRequest);
-        createRelationshipResponse.Should().BeASuccess();
+        createRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await requestor.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -69,10 +69,10 @@ public static class Utils
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
-        acceptRelationshipResponse.Should().BeASuccess();
+        acceptRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -87,10 +87,10 @@ public static class Utils
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
-        acceptRelationshipResponse.Should().BeASuccess();
+        acceptRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -105,10 +105,10 @@ public static class Utils
         };
 
         var rejectRelationshipResponse = await client1.Relationships.RejectRelationship(relationshipMetadata.Id, rejectRelationshipRequest);
-        rejectRelationshipResponse.Should().BeASuccess();
+        rejectRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -118,10 +118,10 @@ public static class Utils
         var relationshipMetadata = await EstablishRelationshipBetween(client1, client2);
 
         var terminateRelationshipResponse = await client1.Relationships.TerminateRelationship(relationshipMetadata.Id);
-        terminateRelationshipResponse.Should().BeASuccess();
+        terminateRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -131,10 +131,10 @@ public static class Utils
         var relationshipMetadata = await CreateTerminatedRelationshipBetween(client1, client2);
 
         var reactivateRelationshipResponse = await client2.Relationships.ReactivateRelationship(relationshipMetadata.Id);
-        reactivateRelationshipResponse.Should().BeASuccess();
+        reactivateRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client2.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -153,7 +153,7 @@ public static class Utils
 
         var createFileResponse = await client.Files.UploadFile(createFileRequest);
 
-        createFileResponse.Should().BeASuccess();
+        createFileResponse.ShouldBeASuccess();
         return createFileResponse.Result!;
     }
 
@@ -171,11 +171,11 @@ public static class Utils
         };
         var sendMessageResponse = await sender.Messages.SendMessage(sendMessageRequest);
 
-        sendMessageResponse.Should().BeASuccess();
+        sendMessageResponse.ShouldBeASuccess();
 
         var getMessageResponse = await sender.Messages.GetMessage(sendMessageResponse.Result!.Id);
 
-        getMessageResponse.Should().BeASuccess();
+        getMessageResponse.ShouldBeASuccess();
 
         return getMessageResponse.Result!;
     }

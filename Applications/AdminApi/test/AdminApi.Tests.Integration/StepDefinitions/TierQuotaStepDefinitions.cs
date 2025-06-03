@@ -28,7 +28,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     public async Task GivenAValidTier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _tierId = response.Result!.Id;
 
@@ -47,7 +47,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
             Max = 2,
             Period = "Week"
         });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _tierQuotaDefinitionId = response.Result!.Id;
 
@@ -109,23 +109,23 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then("the response contains a TierQuota")]
     public async Task ThenTheResponseContainsATierQuotaDefinition()
     {
-        _createTierQuotaResponse!.Should().BeASuccess();
-        _createTierQuotaResponse!.ContentType.Should().StartWith("application/json");
-        await _createTierQuotaResponse.Should().ComplyWithSchema();
+        _createTierQuotaResponse!.ShouldBeASuccess();
+        _createTierQuotaResponse!.ContentType.ShouldStartWith("application/json");
+        await _createTierQuotaResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _whenResponse.Should().NotBeNull();
-        _whenResponse!.Error.Should().NotBeNull();
-        _whenResponse.Error!.Code.Should().Be(errorCode);
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 }

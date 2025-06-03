@@ -15,7 +15,7 @@ public class TierDeletedDomainEventHandlerTests : AbstractTestsBase
         // Arrange
         var tiersRepository = A.Fake<ITiersRepository>();
         var tier = new Tier(TierId.Parse("tier-id"), "tier-name");
-        A.CallTo(() => tiersRepository.Find(tier.Id, A<CancellationToken>._, A<bool>._)).Returns(tier);
+        A.CallTo(() => tiersRepository.Get(tier.Id, A<CancellationToken>._, A<bool>._)).Returns(tier);
         var handler = CreateHandler(tiersRepository);
 
         var tierDeletedDomainEvent = new TierDeletedDomainEvent(tier.Id);

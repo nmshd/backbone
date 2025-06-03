@@ -2,7 +2,7 @@ using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.OAuthClients;
 
@@ -26,8 +26,8 @@ public class OAuthClientTests : AbstractTestsBase
         client.Update(newTierId, newMaxIdentities, identitiesCount);
 
         // Assert
-        client.DefaultTier.Should().Be(newTierId);
-        client.MaxIdentities.Should().Be(newMaxIdentities);
+        client.DefaultTier.ShouldBe(newTierId);
+        client.MaxIdentities.ShouldBe(newMaxIdentities);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class OAuthClientTests : AbstractTestsBase
         var hasChanges = client.Update(newTierId, newMaxIdentities, identitiesCount);
 
         // Assert
-        hasChanges.Should().BeTrue();
+        hasChanges.ShouldBeTrue();
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class OAuthClientTests : AbstractTestsBase
         var hasChanges = client.Update(tierId, maxIdentities, identitiesCount);
 
         // Assert
-        hasChanges.Should().BeFalse();
+        hasChanges.ShouldBeFalse();
     }
 
     [Fact]
@@ -81,9 +81,9 @@ public class OAuthClientTests : AbstractTestsBase
         const int identitiesCount = 2;
 
         // Act
-        var acting = () => client.Update(oldTierId, newMaxIdentities, identitiesCount);
+        Func<object> acting = () => client.Update(oldTierId, newMaxIdentities, identitiesCount); //The type needs to be specified to Func<object>, because ShouldThrow is ambiguous for Func<bool>
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities");
     }
 }

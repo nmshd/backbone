@@ -9,12 +9,12 @@ public class ResetAccessFailedCountTests : AbstractTestsBase
     {
         // Arrange
         var token = CreateLockedToken();
-        token.IsLocked.Should().BeTrue();
+        token.IsLocked.ShouldBeTrue();
 
         // Act
         token.ResetAccessFailedCount();
 
         // Assert
-        token.IsLocked.Should().BeFalse();
+        token.IsLocked.ShouldBeFalse();
     }
 }

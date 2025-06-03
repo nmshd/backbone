@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
 
     public async Task<StartDeletionProcessAsOwnerResponse> Handle(StartDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
         var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId(), request.LengthOfGracePeriodInDays);
 

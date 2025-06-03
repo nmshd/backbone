@@ -19,7 +19,7 @@ public class ChallengesRepository : IChallengesRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken)
+    public async Task<Challenge> Get(ChallengeId id, CancellationToken cancellationToken)
     {
         return await _challenges
             .FirstWithId(id, cancellationToken);

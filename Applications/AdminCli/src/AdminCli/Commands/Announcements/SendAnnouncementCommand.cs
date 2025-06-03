@@ -29,14 +29,21 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "Whether the announcement should be silent. A push notification will not be sent for silent announcements. By default, the announcement is not silent."
         };
 
+        var iqlQuery = new Option<string?>("--iql-query")
+        {
+            IsRequired = false,
+            Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
+        };
+
         AddOption(expiresAt);
         AddOption(severity);
         AddOption(isSilent);
+        AddOption(iqlQuery);
 
-        this.SetHandler(SendAnnouncement, severity, expiresAt, isSilent);
+        this.SetHandler(SendAnnouncement, severity, expiresAt, isSilent, iqlQuery);
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery)
     {
         try
         {
@@ -74,7 +81,9 @@ public class SendAnnouncementCommand : AdminCliCommand
                     Texts = texts,
                     Severity = severity,
                     IsSilent = isSilent ?? false,
-                    ExpiresAt = expiresAt
+                    ExpiresAt = expiresAt,
+                    Actions = [],
+                    IqlQuery = iqlQuery
                 }, CancellationToken.None);
 
                 Console.WriteLine(@"Announcement sent successfully");

@@ -12,7 +12,7 @@ public class TierNameTests : AbstractTestsBase
         var tierName = TierName.Create(value);
         var isTierNameValid = tierName.IsSuccess;
 
-        isTierNameValid.Should().BeTrue();
+        isTierNameValid.ShouldBeTrue();
     }
 
     [Theory]
@@ -27,8 +27,8 @@ public class TierNameTests : AbstractTestsBase
         var errorCode = tierName.Error.Code;
         var errorMessage = tierName.Error.Message;
 
-        isTierNameInvalid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidTierName");
-        errorMessage.Should().Be($"Tier Name length must be between {TierName.MIN_LENGTH} and {TierName.MAX_LENGTH}");
+        isTierNameInvalid.ShouldBeTrue();
+        errorCode.ShouldBe("error.platform.validation.invalidTierName");
+        errorMessage.ShouldBe($"Tier Name length must be between {TierName.MIN_LENGTH} and {TierName.MAX_LENGTH}");
     }
 }

@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
 
     public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
+        var currentDevice = await _identitiesRepository.Get(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
         var changePasswordResult = await _userManager.ChangePasswordAsync(currentDevice.User, request.OldPassword, request.NewPassword);
 

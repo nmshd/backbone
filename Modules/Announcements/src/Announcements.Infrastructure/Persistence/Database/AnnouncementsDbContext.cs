@@ -32,6 +32,8 @@ public class AnnouncementsDbContext : AbstractDbContextBase
             .HaveConversion<AnnouncementActionIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<AnnouncementLanguage>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementLanguage.LENGTH)
             .HaveConversion<AnnouncementLanguageEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<AnnouncementIqlQuery>().AreUnicode(true).AreFixedLength(false).HaveMaxLength(AnnouncementIqlQuery.MAX_LENGTH)
+            .HaveConversion<AnnouncementIqlQueryEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

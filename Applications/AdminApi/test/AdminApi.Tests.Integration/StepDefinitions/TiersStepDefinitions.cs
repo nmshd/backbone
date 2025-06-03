@@ -33,7 +33,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenATier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _existingTierName = response.Result!.Name;
         _existingTierId = response.Result.Id;
@@ -43,7 +43,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenTheBasicTierAsT()
     {
         var response = await _client.Tiers.ListTiers();
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         var basicTier = response.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
@@ -95,40 +95,40 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Then("the response contains a paginated list of Tiers")]
     public async Task ThenTheResponseContainsAListOfTiers()
     {
-        _tiersResponse!.Should().BeASuccess();
-        _tiersResponse!.ContentType.Should().StartWith("application/json");
-        await _tiersResponse.Should().ComplyWithSchema();
+        _tiersResponse!.ShouldBeASuccess();
+        _tiersResponse!.ContentType.ShouldStartWith("application/json");
+        await _tiersResponse.ShouldComplyWithSchema();
     }
 
     [Then("the response contains a Tier")]
     public async Task ThenTheResponseContainsATier()
     {
-        _tierResponse!.Should().BeASuccess();
-        _tierResponse!.ContentType.Should().StartWith("application/json");
-        await _tierResponse.Should().ComplyWithSchema();
+        _tierResponse!.ShouldBeASuccess();
+        _tierResponse!.ContentType.ShouldStartWith("application/json");
+        await _tierResponse.ShouldComplyWithSchema();
     }
 
     [Then("the response contains Tier t")]
     public async Task ThenTheResponseContainsTierT()
     {
-        _getTierResponse!.Should().BeASuccess();
-        _getTierResponse!.ContentType.Should().StartWith("application/json");
-        await _getTierResponse.Should().ComplyWithSchema();
-        _getTierResponse.Result!.Id.Should().Be(_existingTierId);
+        _getTierResponse!.ShouldBeASuccess();
+        _getTierResponse!.ContentType.ShouldStartWith("application/json");
+        await _getTierResponse.ShouldComplyWithSchema();
+        _getTierResponse.Result!.Id.ShouldBe(_existingTierId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _whenResponse.Should().NotBeNull();
-        _whenResponse!.Error.Should().NotBeNull();
-        _whenResponse.Error!.Code.Should().Be(errorCode);
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 }

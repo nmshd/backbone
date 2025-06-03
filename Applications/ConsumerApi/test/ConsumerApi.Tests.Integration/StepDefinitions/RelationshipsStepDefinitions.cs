@@ -134,7 +134,7 @@ internal class RelationshipsStepDefinitions
         var decomposer = _clientPool.FirstForIdentityName(decomposerName);
 
         var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
     }
 
     #endregion
@@ -228,25 +228,25 @@ internal class RelationshipsStepDefinitions
     [Then("a Relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeTrue();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.ShouldBeTrue();
     }
 
     [Then("a Relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeFalse();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.ShouldBeFalse();
     }
 
     [Then(@"the relationship creation check code is ""(.+)""")]
     public void ThenTheCodeIs(string code)
     {
-        _canEstablishRelationshipResponse!.Result!.Code.Should().Be(code);
+        _canEstablishRelationshipResponse!.Result!.Code.ShouldBe(code);
     }
 
     [Then(@"the response does not contain a relationship creation check code")]
     public void ThenThereIsNoCode()
     {
-        _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
+        _canEstablishRelationshipResponse!.Result!.Code.ShouldBeNull();
     }
 
     [Then($"the Relationship {RegexFor.SINGLE_THING} still exists")]
@@ -256,7 +256,7 @@ internal class RelationshipsStepDefinitions
         var client = _clientPool.FirstForIdentityAddress(relationship.From);
 
         var getRelationshipResponse = await client.Relationships.GetRelationship(relationship.Id);
-        getRelationshipResponse.Status.Should().Be(HttpStatusCode.OK);
+        getRelationshipResponse.Status.ShouldBe(HttpStatusCode.OK);
 
         _relationshipsContext.Relationships[relationshipName] = getRelationshipResponse.Result!;
     }
@@ -265,7 +265,7 @@ internal class RelationshipsStepDefinitions
     public void ThenTheRelationshipDoesNotHaveARelationshipTemplate(string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        relationship.RelationshipTemplateId.Should().BeNull();
+        relationship.RelationshipTemplateId.ShouldBeNull();
     }
 
     #endregion

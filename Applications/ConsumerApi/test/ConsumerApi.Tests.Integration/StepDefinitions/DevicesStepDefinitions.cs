@@ -176,8 +176,8 @@ internal class DevicesStepDefinitions
         var deviceId = clientOfDeletedDevice.DeviceData!.DeviceId;
 
         var response = await clientOfOtherDevice.Devices.ListDevices();
-        response.Result!.Count.Should().Be(1);
-        response.Result!.First().Id.Should().NotBe(deviceId);
+        response.Result!.Count.ShouldBe(1);
+        response.Result!.First().Id.ShouldNotBe(deviceId);
     }
 
     [Then($"{RegexFor.SINGLE_THING} is not deleted")]
@@ -189,7 +189,7 @@ internal class DevicesStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
 
         var response = await client.Devices.ListDevices();
-        response.Result!.Where(d => d.Id == deviceId).Should().NotBeEmpty();
+        response.Result!.Where(d => d.Id == deviceId).ShouldNotBeEmpty();
     }
 
     [Then($"^the Backbone has persisted '([a-z]{{2}})' as the new communication language of {RegexFor.SINGLE_THING}.$")]
@@ -198,14 +198,14 @@ internal class DevicesStepDefinitions
         var client = _clientPool.GetForDeviceName(deviceName);
 
         var response = await client.Devices.ListDevices();
-        response.Result!.Count.Should().Be(1);
-        response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
+        response.Result!.Count.ShouldBe(1);
+        response.Result!.First().CommunicationLanguage.ShouldBe(_communicationLanguage);
     }
 
     [Then("the created Device is a backup Device")]
     public void ThenTheCreatedDeviceIsABackupDevice()
     {
-        _registerDeviceResponse!.Result!.IsBackupDevice.Should().BeTrue();
+        _registerDeviceResponse!.Result!.IsBackupDevice.ShouldBeTrue();
     }
 
     #endregion

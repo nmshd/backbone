@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, Relationshi
     public async Task<RelationshipDTO> Handle(TerminateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
-        var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
+        var relationship = await _relationshipsRepository.GetRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.Terminate(_activeIdentity, _activeDevice);
 

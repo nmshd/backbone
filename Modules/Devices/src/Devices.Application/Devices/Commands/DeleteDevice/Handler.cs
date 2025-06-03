@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
     public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
     {
         var deviceId = DeviceId.Parse(request.DeviceId);
-        var deviceThatIsBeingDeleted = await _identitiesRepository.GetDeviceById(deviceId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
+        var deviceThatIsBeingDeleted = await _identitiesRepository.Get(deviceId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
         deviceThatIsBeingDeleted.EnsureCanBeDeleted(_userContext.GetAddress());
 

@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Polly;
 using Xunit.Sdk;
 
@@ -29,8 +30,8 @@ public class TestEvent2DomainEventHandler : IDomainEventHandler<TestEvent2Domain
             .WaitAndRetry(retryCount: 5, _ => TimeSpan.FromSeconds(1))
             .Execute(() =>
             {
-                Instances.Should().HaveCount(1);
-                Instances[0].Triggered.Should().BeTrue();
+                Instances.ShouldHaveCount(1);
+                Instances[0].Triggered.ShouldBeTrue();
             });
     }
 }

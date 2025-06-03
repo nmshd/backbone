@@ -5,6 +5,7 @@ using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -15,7 +16,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Announcement>? _createAnnouncementResponse;
-    private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private ApiResponse<ListAnnouncementsResponse>? _announcementsResponse;
     private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
 
@@ -49,7 +50,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When("^a GET request is sent to the /Announcements endpoint$")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
-        _whenResponse = _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
+        _whenResponse = _announcementsResponse = await _client.Announcements.ListAnnouncements();
     }
 
     [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
@@ -125,48 +126,70 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            Actions = [],
+            IqlQuery = "StreetAddress.city='Heidelberg' && #'Primary Address'"
+        });
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _createAnnouncementResponse!.Result.Should().NotBeNull();
-        await _createAnnouncementResponse.Should().ComplyWithSchema();
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        await _createAnnouncementResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
     public async Task ThenTheResponseContainsAListOfAnnouncements()
     {
-        _announcementsResponse!.Result.Should().NotBeNull();
-        await _announcementsResponse.Should().ComplyWithSchema();
+        _announcementsResponse!.Result.ShouldNotBeNull();
+        await _announcementsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains the Announcement a")]
     public void ThenTheResponseContainsTheAnnouncementA()
     {
-        _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
+        _announcementsResponse!.Result!.ShouldContain(a => a.Id == _givenAnnouncement!.Id);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _whenResponse.Should().NotBeNull();
-        _whenResponse!.Error.Should().NotBeNull();
-        _whenResponse.Error!.Code.Should().Be(errorCode);
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 
     [Then("the response contains the action")]
     public void ThenTheResponseContainsTheAction()
     {
-        _createAnnouncementResponse!.Result.Should().NotBeNull();
-        _createAnnouncementResponse.Result!.Actions.Should().HaveCount(1);
-        _createAnnouncementResponse.Result.Actions.First().DisplayName.Should().ContainKey("en");
-        _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].Should().Be("Give feedback");
-        _createAnnouncementResponse.Result.Actions.First().Link.Should().Be("https://enmeshed.eu/feedback");
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        _createAnnouncementResponse.Result!.Actions.ShouldHaveCount(1);
+        _createAnnouncementResponse.Result.Actions.First().DisplayName.ShouldContainKey("en");
+        _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].ShouldBe("Give feedback");
+        _createAnnouncementResponse.Result.Actions.First().Link.ShouldBe("https://enmeshed.eu/feedback");
     }
 }

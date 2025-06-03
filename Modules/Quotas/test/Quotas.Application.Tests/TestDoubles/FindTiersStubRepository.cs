@@ -17,12 +17,12 @@ public class FindTiersStubRepository : ITiersRepository
         throw new NotSupportedException();
     }
 
-    public Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public Task<Tier?> Get(string id, CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult<Tier?>(_tier);
     }
 
-    public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
+    public Task<TierQuotaDefinition> GetTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotSupportedException();
     }

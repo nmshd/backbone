@@ -19,7 +19,7 @@ public class IdentityDeletionProcessTests : AbstractTestsBase
         var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Theory]
@@ -37,6 +37,6 @@ public class IdentityDeletionProcessTests : AbstractTestsBase
         var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 }

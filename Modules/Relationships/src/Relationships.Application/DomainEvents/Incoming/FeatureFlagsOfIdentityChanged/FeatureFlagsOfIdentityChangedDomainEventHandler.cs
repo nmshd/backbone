@@ -24,7 +24,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
 
     public async Task Handle(FeatureFlagsOfIdentityChangedDomainEvent @event)
     {
-        var identitiesToBeNotified = await FindAllIdentitiesToBeNotified(@event);
+        var identitiesToBeNotified = await ListIdentitiesToBeNotified(@event);
 
         var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
         {
@@ -35,12 +35,12 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         await Task.WhenAll(publishEventTasks);
     }
 
-    private async Task<HashSet<IdentityAddress>> FindAllIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
+    private async Task<HashSet<IdentityAddress>> ListIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)
     {
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
         var activeAndPendingRelationshipAddressPairs = await
-            _relationshipsRepository.FindRelationships(
+            _relationshipsRepository.List(
                 Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutFeatureFlagsChange()),
                 r => new { r.From, r.To },
                 CancellationToken.None);
@@ -48,7 +48,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         foreach (var relationshipParticipant in activeAndPendingRelationshipAddressPairs)
             identitiesToBeNotified.Add(@event.IdentityAddress == relationshipParticipant.From ? relationshipParticipant.To : relationshipParticipant.From);
 
-        var allocatorAddresses = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(
+        var allocatorAddresses = await _relationshipTemplatesRepository.ListRelationshipTemplateAllocations(
             RelationshipTemplateAllocation.BelongsToTemplateCreatedBy(@event.IdentityAddress),
             a => a.AllocatedBy, CancellationToken.None);
 
@@ -57,5 +57,3 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         return identitiesToBeNotified;
     }
 }
-
-

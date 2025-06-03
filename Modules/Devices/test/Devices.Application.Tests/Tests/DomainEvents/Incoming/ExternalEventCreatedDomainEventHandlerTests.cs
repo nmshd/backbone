@@ -21,7 +21,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
@@ -48,7 +48,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
 
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
@@ -73,7 +73,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
         await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = true });

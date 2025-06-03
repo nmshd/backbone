@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -19,17 +19,17 @@ public class RelationshipRequestReactivationTests : AbstractTestsBase
         relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(4);
+        relationship.AuditLog.ShouldHaveCount(4);
 
         var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.ReactivationRequested);
-        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+        auditLogEntry.Id.ShouldNotBeNull();
+        auditLogEntry.Reason.ShouldBe(RelationshipAuditLogEntryReason.ReactivationRequested);
+        auditLogEntry.OldStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.NewStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.CreatedBy.ShouldBe(IDENTITY_2);
+        auditLogEntry.CreatedByDevice.ShouldBe(DEVICE_2);
+        auditLogEntry.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
@@ -43,10 +43,10 @@ public class RelationshipRequestReactivationTests : AbstractTestsBase
         relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipReactivationRequestedDomainEvent>();
-        domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.RequestingIdentity.Should().Be(IDENTITY_2);
-        domainEvent.Peer.Should().Be(IDENTITY_1);
+        var domainEvent = relationship.ShouldHaveASingleDomainEvent<RelationshipReactivationRequestedDomainEvent>();
+        domainEvent.RelationshipId.ShouldBe(relationship.Id);
+        domainEvent.RequestingIdentity.ShouldBe(IDENTITY_2);
+        domainEvent.Peer.ShouldBe(IDENTITY_1);
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class RelationshipRequestReactivationTests : AbstractTestsBase
         var acting = () => relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
+        acting.ShouldThrow<DomainException>().ShouldHaveError(
             "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Terminated)
         );
@@ -77,7 +77,7 @@ public class RelationshipRequestReactivationTests : AbstractTestsBase
         var acting = () => relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
+        acting.ShouldThrow<DomainException>().ShouldHaveError(
             "error.platform.validation.relationship.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest");
     }
 }

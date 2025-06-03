@@ -13,7 +13,7 @@ public class PaginationDataTests : AbstractTestsBase
     {
         var sut = CreatePaginationData(1, pageSize, totalRecords);
 
-        sut.TotalPages.Should().Be(expectedTotalPages);
+        sut.TotalPages.ShouldBe(expectedTotalPages);
     }
 
     [Fact]
@@ -23,7 +23,7 @@ public class PaginationDataTests : AbstractTestsBase
 
         var sut = CreatePaginationData(1, null, totalRecords);
 
-        sut.PageSize.Should().Be(totalRecords);
+        sut.PageSize.ShouldBe(totalRecords);
     }
 
     private static PaginationData CreatePaginationData(int pageNumber, int? pageSize, int totalRecords)

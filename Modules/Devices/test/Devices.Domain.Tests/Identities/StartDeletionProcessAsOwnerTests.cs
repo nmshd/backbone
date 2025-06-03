@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -25,21 +26,21 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
-        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
-        activeIdentity.TierId.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
-        activeIdentity.Status.Should().Be(IdentityStatus.ToBeDeleted);
+        activeIdentity.DeletionGracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
+        activeIdentity.TierId.Value.ShouldBe(Tier.QUEUED_FOR_DELETION.Id.Value);
+        activeIdentity.Status.ShouldBe(IdentityStatus.ToBeDeleted);
 
         AssertDeletionProcessWasStarted(activeIdentity);
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
-        deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
-        deletionProcess.ApprovedByDevice.Should().Be(activeDevice.Id);
-        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
+        deletionProcess.Status.ShouldBe(DeletionProcessStatus.Approved);
+        deletionProcess.ApprovedAt.ShouldBe(SystemTime.UtcNow);
+        deletionProcess.ApprovedByDevice.ShouldBe(activeDevice.Id);
+        deletionProcess.GracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedByOwner);
-        auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
+        auditLogEntry.MessageKey.ShouldBe(MessageKey.StartedByOwner);
+        auditLogEntry.DeviceIdHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Approved);
     }
 
     [Fact]
@@ -56,9 +57,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         var acting = () => identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.recordNotFound");
-        exception.Message.Should().Contain("Device");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "Device");
     }
 
     [Fact]
@@ -75,7 +74,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
     [Fact]
@@ -90,13 +89,13 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         //Assert
-        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.ShouldHaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
 
-        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
-        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
-        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+        tierOfIdentityChangedDomainEvent.IdentityAddress.ShouldBe(activeIdentity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.ShouldBe(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.NewTierId.ShouldBe(Tier.QUEUED_FOR_DELETION.Id);
 
-        identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+        identityToBeDeletedDomainEvent.IdentityAddress.ShouldBe(activeIdentity.Address);
     }
 
     [Fact]
@@ -111,31 +110,31 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id, 1);
 
         // Assert
-        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
-        activeIdentity.DeletionProcesses.First().GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
+        activeIdentity.DeletionGracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-02"));
+        activeIdentity.DeletionProcesses.First().GracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-02"));
     }
 
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
-        activeIdentity.DeletionProcesses.Should().HaveCount(1);
+        activeIdentity.DeletionProcesses.ShouldHaveCount(1);
         var deletionProcess = activeIdentity.DeletionProcesses[0];
-        deletionProcess.Should().NotBeNull();
+        deletionProcess.ShouldNotBeNull();
 
-        deletionProcess.Id.Should().NotBeNull();
-        deletionProcess.Id.Value.Should().HaveLength(20);
+        deletionProcess.Id.ShouldNotBeNull();
+        deletionProcess.Id.Value.ShouldHaveCount(20);
 
-        deletionProcess.CreatedAt.Should().Be(SystemTime.UtcNow);
+        deletionProcess.CreatedAt.ShouldBe(SystemTime.UtcNow);
 
-        deletionProcess.AuditLog.Should().HaveCount(1);
+        deletionProcess.AuditLog.ShouldHaveCount(1);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.CreatedAt.Should().Be(SystemTime.UtcNow);
-        auditLogEntry.IdentityAddressHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.Should().BeNull();
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBeNull();
     }
 
     private static Identity CreateIdentity()

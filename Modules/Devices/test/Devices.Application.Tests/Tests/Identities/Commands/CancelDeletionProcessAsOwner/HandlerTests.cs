@@ -23,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
         var fakeUserContext = A.Fake<IUserContext>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
@@ -41,7 +41,7 @@ public class HandlerTests : AbstractTestsBase
                 && i.DeletionProcesses[0].Id == deletionProcess.Id), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        response.Status.Should().Be(DeletionProcessStatus.Cancelled);
+        response.Status.ShouldBe(DeletionProcessStatus.Cancelled);
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
             A<DeletionProcessCancelledByOwnerPushNotification>._,
@@ -61,7 +61,7 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
 
         // Assert
-        acting.Should().ThrowAsync<NotFoundException>();
+        acting.ShouldThrowAsync<NotFoundException>();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IPushNotificationSender? pushNotificationSender = null)

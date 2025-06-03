@@ -29,12 +29,12 @@ public class AnnouncementsRepository : IAnnouncementsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<List<Announcement>> FindAll(CancellationToken cancellationToken)
+    public Task<List<Announcement>> List(CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().ToListAsync(cancellationToken);
     }
 
-    public Task<List<Announcement>> FindAll(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
+    public Task<List<Announcement>> List(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements
             .IncludeAll(_dbContext)
@@ -50,7 +50,7 @@ public class AnnouncementsRepository : IAnnouncementsRepository
             .ExecuteDeleteAsync(cancellationToken);
     }
 
-    public Task<Announcement?> FindById(AnnouncementId id, CancellationToken cancellationToken)
+    public Task<Announcement?> Get(AnnouncementId id, CancellationToken cancellationToken)
     {
         return _readOnlyAnnouncements.IncludeAll(_dbContext).AsSplitQuery().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }

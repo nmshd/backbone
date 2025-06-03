@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -19,17 +19,17 @@ public class RelationshipRevokeReactivationTests : AbstractTestsBase
         relationship.RevokeReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(5);
+        relationship.AuditLog.ShouldHaveCount(5);
 
         var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RevocationOfReactivation);
-        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_1);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_1);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+        auditLogEntry.Id.ShouldNotBeNull();
+        auditLogEntry.Reason.ShouldBe(RelationshipAuditLogEntryReason.RevocationOfReactivation);
+        auditLogEntry.OldStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.NewStatus.ShouldBe(RelationshipStatus.Terminated);
+        auditLogEntry.CreatedBy.ShouldBe(IDENTITY_1);
+        auditLogEntry.CreatedByDevice.ShouldBe(DEVICE_1);
+        auditLogEntry.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
@@ -43,9 +43,9 @@ public class RelationshipRevokeReactivationTests : AbstractTestsBase
         relationship.RevokeReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipReactivationCompletedDomainEvent>();
-        domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.Peer.Should().Be(IDENTITY_2);
+        var domainEvent = relationship.ShouldHaveASingleDomainEvent<RelationshipReactivationCompletedDomainEvent>();
+        domainEvent.RelationshipId.ShouldBe(relationship.Id);
+        domainEvent.Peer.ShouldBe(IDENTITY_2);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class RelationshipRevokeReactivationTests : AbstractTestsBase
         var acting = () => relationship.RevokeReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
+        acting.ShouldThrow<DomainException>().ShouldHaveError(
             "error.platform.validation.relationship.noRevocableReactivationRequestExists"
         );
     }
@@ -73,7 +73,7 @@ public class RelationshipRevokeReactivationTests : AbstractTestsBase
         var acting = () => relationship.RevokeReactivation(IDENTITY_2, DEVICE_1);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
+        acting.ShouldThrow<DomainException>().ShouldHaveError(
             "error.platform.validation.relationship.noRevocableReactivationRequestExists"
         );
     }

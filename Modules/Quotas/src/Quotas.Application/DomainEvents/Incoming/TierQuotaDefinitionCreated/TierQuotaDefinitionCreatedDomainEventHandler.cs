@@ -24,7 +24,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
     {
         _logger.LogTrace("Handling QuotaCreatedForTierDomainEvent...");
 
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(TierId.Parse(@event.TierId), CancellationToken.None, true);
+        var identitiesWithTier = await _identitiesRepository.ListWithTier(TierId.Parse(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
@@ -32,7 +32,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
             return;
         }
 
-        var tierQuotaDefinition = await _tiersRepository.FindTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None, true);
+        var tierQuotaDefinition = await _tiersRepository.GetTierQuotaDefinition(@event.TierQuotaDefinitionId, CancellationToken.None, true);
 
         foreach (var identity in identitiesWithTier)
         {

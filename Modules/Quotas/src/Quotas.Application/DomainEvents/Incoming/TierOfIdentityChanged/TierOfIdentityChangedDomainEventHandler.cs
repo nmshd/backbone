@@ -23,8 +23,8 @@ public class TierOfIdentityChangedDomainEventHandler : IDomainEventHandler<TierO
 
     public async Task Handle(TierOfIdentityChangedDomainEvent @event)
     {
-        var identity = await _identitiesRepository.Find(@event.IdentityAddress, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Identity));
-        var newTier = await _tiersRepository.Find(@event.NewTierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
+        var identity = await _identitiesRepository.Get(@event.IdentityAddress, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var newTier = await _tiersRepository.Get(@event.NewTierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
 
         await identity.ChangeTier(newTier, _metricCalculatorFactory, CancellationToken.None);
 

@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Dele
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.ApproveDeletionProcess;
@@ -30,7 +29,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
@@ -58,14 +57,14 @@ public class HandlerTests : AbstractTestsBase
             A<CancellationToken>._)
         ).MustHaveHappenedOnceExactly();
 
-        response.Id.Should().Be(deletionProcess.Id);
-        response.ApprovedAt.Should().Be(utcNow);
-        response.ApprovedByDevice.Should().Be(device.Id);
-        response.Status.Should().Be(DeletionProcessStatus.Approved);
+        response.Id.ShouldBe(deletionProcess.Id);
+        response.ApprovedAt.ShouldBe(utcNow);
+        response.ApprovedByDevice.ShouldBe(device.Id);
+        response.Status.ShouldBe(DeletionProcessStatus.Approved);
     }
 
     [Fact]
-    public void Throws_when_given_identity_does_not_exist()
+    public async Task Throws_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
@@ -73,7 +72,7 @@ public class HandlerTests : AbstractTestsBase
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(address);
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
+        A.CallTo(() => fakeIdentitiesRepository.Get(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
@@ -81,7 +80,8 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new ApproveDeletionProcessCommand("some-deletion-process-id"), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)

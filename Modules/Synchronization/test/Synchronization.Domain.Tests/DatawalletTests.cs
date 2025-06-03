@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Synchronization.Domain.Tests;
 
@@ -13,7 +14,7 @@ public class DatawalletTests : AbstractTestsBase
 
         var acting = () => datawallet.Upgrade(new Datawallet.DatawalletVersion(1));
 
-        acting.Should().Throw<DomainException>().WithMessage("*it is not possible to upgrade to lower versions*");
+        acting.ShouldThrow<DomainException>().ShouldContainMessage("it is not possible to upgrade to lower versions");
     }
 
     [Fact]
@@ -23,7 +24,7 @@ public class DatawalletTests : AbstractTestsBase
 
         var modification = AddModificationToDatawallet(datawallet);
 
-        modification.Index.Should().Be(0);
+        modification.Index.ShouldBe(0);
     }
 
     [Fact]
@@ -34,10 +35,10 @@ public class DatawalletTests : AbstractTestsBase
 
         var datawallet = new Datawallet(version, owner);
 
-        datawallet.Id.Should().NotBeNull();
-        datawallet.Version.Should().Be(version);
-        datawallet.Owner.Should().Be(owner);
-        datawallet.Modifications.Should().NotBeNull();
+        datawallet.Id.ShouldNotBeNull();
+        datawallet.Version.ShouldBe(version);
+        datawallet.Owner.ShouldBe(owner);
+        datawallet.Modifications.ShouldNotBeNull();
     }
 
     [Fact]
@@ -45,7 +46,7 @@ public class DatawalletTests : AbstractTestsBase
     {
         var datawallet = CreateDatawallet();
 
-        datawallet.Modifications.Should().HaveCount(0);
+        datawallet.Modifications.ShouldHaveCount(0);
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class DatawalletTests : AbstractTestsBase
         AddModificationToDatawallet(datawallet);
         var secondModification = AddModificationToDatawallet(datawallet);
 
-        secondModification.Index.Should().Be(1);
+        secondModification.Index.ShouldBe(1);
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class DatawalletTests : AbstractTestsBase
 
         datawallet.Upgrade(new Datawallet.DatawalletVersion(2));
 
-        datawallet.Version.Should().Be(new Datawallet.DatawalletVersion(2));
+        datawallet.Version.ShouldBe(new Datawallet.DatawalletVersion(2));
     }
 
     [Fact]
@@ -75,9 +76,9 @@ public class DatawalletTests : AbstractTestsBase
         var datawallet = CreateDatawallet();
         var modification = AddModificationToDatawallet(datawallet);
 
-        var domainEvent = datawallet.Should().HaveASingleDomainEvent<DatawalletModifiedDomainEvent>();
-        domainEvent.Identity.Should().Be(datawallet.Owner);
-        domainEvent.ModifiedByDevice.Should().Be(modification.CreatedByDevice);
+        var domainEvent = datawallet.ShouldHaveASingleDomainEvent<DatawalletModifiedDomainEvent>();
+        domainEvent.Identity.ShouldBe(datawallet.Owner);
+        domainEvent.ModifiedByDevice.ShouldBe(modification.CreatedByDevice);
     }
 
     [Fact]
@@ -88,7 +89,7 @@ public class DatawalletTests : AbstractTestsBase
         AddModificationToDatawallet(datawallet);
         AddModificationToDatawallet(datawallet);
 
-        datawallet.DomainEvents.Should().HaveCount(1);
+        datawallet.DomainEvents.ShouldHaveCount(1);
     }
 
     private static Datawallet CreateDatawallet()

@@ -21,7 +21,9 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
         var actions = request.Actions.Select(a => new AnnouncementAction(a.DisplayName.ToDictionary(kv => AnnouncementLanguage.Parse(kv.Key), kv => kv.Value), a.Link));
         var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
 
-        var announcement = new Announcement(request.Severity, request.IsSilent, texts, request.ExpiresAt, recipients, actions);
+        var iqlQuery = request.IqlQuery == null ? null : AnnouncementIqlQuery.Parse(request.IqlQuery);
+
+        var announcement = new Announcement(request.Severity, request.IsSilent, texts, request.ExpiresAt, recipients, actions, iqlQuery);
 
         await _announcementsRepository.Add(announcement, cancellationToken);
 

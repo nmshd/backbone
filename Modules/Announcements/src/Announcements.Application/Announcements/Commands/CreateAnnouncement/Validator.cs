@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Announcements.Domain;
 using Backbone.Modules.Announcements.Domain.Entities;
 using FluentValidation;
 
@@ -11,6 +12,11 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
 {
     public Validator()
     {
+        RuleFor(x => x.IqlQuery!)
+            .Must(AnnouncementIqlQuery.IsValid).When(x => x.IqlQuery != null)
+            .WithErrorCode(DomainErrors.InvalidIqlQueryLengthForAnnouncement().Code)
+            .WithMessage(DomainErrors.InvalidIqlQueryLengthForAnnouncement().Message);
+
         RuleFor(x => x.Texts)
             .Must(x => x.Any(t => t.Language == AnnouncementLanguage.DEFAULT_LANGUAGE.Value))
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)

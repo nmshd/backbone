@@ -13,6 +13,7 @@ public class CreateAnnouncementCommand : IRequest<AnnouncementDTO>
     public required List<CreateAnnouncementCommandAction> Actions { get; set; }
 
     public List<string> Recipients { get; set; } = [];
+    public string? IqlQuery { get; set; }
 }
 
 public class CreateAnnouncementCommandAction

@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
     {
         _cancellationToken = cancellationToken;
-        _basicTier = (await _tiersRepository.FindBasicTier(cancellationToken))!;
+        _basicTier = (await _tiersRepository.GetBasicTier(cancellationToken))!;
 
         await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Aaaaaaaa1!");
         await CreateIdentityIfNecessary([2, 2, 2, 2, 2], "USRb", "Bbbbbbbb1!");

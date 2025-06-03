@@ -6,12 +6,12 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Relationships;
 
 public class RelationshipsEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListRelationshipsResponse>> GetAllRelationships(PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
     {
         return await _client.Get<ListRelationshipsResponse>($"api/{API_VERSION}/Relationships", null, pagination);
     }
 
-    public async Task<ApiResponse<ListRelationshipsResponse>> GetAllRelationships(string participant, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(string participant, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListRelationshipsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Relationships")

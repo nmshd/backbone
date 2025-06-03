@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.TestHelpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
@@ -16,6 +17,6 @@ public class RelationshipTemplateCollectTests : AbstractTestsBase
         template.AllocateFor(CreateRandomIdentityAddress(), CreateRandomDeviceId());
 
         // Assert
-        template.Should().HaveASingleDomainEvent<RelationshipTemplateAllocationsExhaustedDomainEvent>();
+        template.ShouldHaveASingleDomainEvent<RelationshipTemplateAllocationsExhaustedDomainEvent>();
     }
 }

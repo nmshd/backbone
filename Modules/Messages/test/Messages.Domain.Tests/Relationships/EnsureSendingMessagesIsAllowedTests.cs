@@ -2,6 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
 
@@ -17,7 +18,7 @@ public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
-        acting.Should().NotThrow<Exception>();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 5, 5);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached");
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
-        acting.Should().NotThrow<Exception>();
+        acting.ShouldNotThrow();
     }
 
     #region helpers

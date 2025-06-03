@@ -15,6 +15,8 @@ public class Announcement
 
     public required IEnumerable<string> Recipients { get; set; }
     public required IEnumerable<AnnouncementAction> Actions { get; set; }
+
+    public required string? IqlQuery { get; set; }
 }
 
 public class AnnouncementAction

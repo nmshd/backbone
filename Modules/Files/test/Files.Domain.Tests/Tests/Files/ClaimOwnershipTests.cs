@@ -18,10 +18,10 @@ public class ClaimOwnershipTests
         var result = file.ClaimOwnership(initialToken, claimingIdentity);
 
         // Assert
-        result.Should().Be(File.ClaimFileOwnershipResult.Ok);
-        file.LastOwnershipClaimAt.Should().NotBeNull();
-        file.Owner.Should().Be(claimingIdentity);
-        file.OwnershipToken.Should().NotBe(initialToken);
+        result.ShouldBe(File.ClaimFileOwnershipResult.Ok);
+        file.LastOwnershipClaimAt.ShouldNotBeNull();
+        file.Owner.ShouldBe(claimingIdentity);
+        file.OwnershipToken.ShouldNotBe(initialToken);
     }
 
     [Fact]
@@ -36,12 +36,12 @@ public class ClaimOwnershipTests
         var result = file.ClaimOwnership(FileOwnershipToken.New(), claimingIdentity);
 
         // Assert
-        file.OwnershipIsLocked.Should().BeTrue();
-        result.Should().Be(File.ClaimFileOwnershipResult.IncorrectToken);
+        file.OwnershipIsLocked.ShouldBeTrue();
+        result.ShouldBe(File.ClaimFileOwnershipResult.IncorrectToken);
 
-        file.LastOwnershipClaimAt.Should().BeNull();
-        file.Owner.Should().NotBe(claimingIdentity);
-        file.OwnershipToken.Should().Be(initialToken);
+        file.LastOwnershipClaimAt.ShouldBeNull();
+        file.Owner.ShouldNotBe(claimingIdentity);
+        file.OwnershipToken.ShouldBe(initialToken);
     }
 
     [Fact]
@@ -57,10 +57,10 @@ public class ClaimOwnershipTests
         var result = file.ClaimOwnership(initialToken, CreateRandomIdentityAddress());
 
         // Assert
-        result.Should().Be(File.ClaimFileOwnershipResult.Locked);
+        result.ShouldBe(File.ClaimFileOwnershipResult.Locked);
 
-        file.LastOwnershipClaimAt.Should().BeNull();
-        file.Owner.Should().Be(identity);
-        file.OwnershipToken.Should().Be(initialToken);
+        file.LastOwnershipClaimAt.ShouldBeNull();
+        file.Owner.ShouldBe(identity);
+        file.OwnershipToken.ShouldBe(initialToken);
     }
 }

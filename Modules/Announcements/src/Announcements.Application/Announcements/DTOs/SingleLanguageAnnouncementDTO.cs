@@ -21,6 +21,8 @@ public class SingleLanguageAnnouncementDTO
         Title = textInLanguage.Title;
         Body = textInLanguage.Body;
         Actions = announcement.Actions.Select(a => new SingleLanguageAnnouncementActionDTO(a, language));
+
+        IqlQuery = announcement.IqlQuery?.ToString();
     }
 
     public string Id { get; }
@@ -30,6 +32,7 @@ public class SingleLanguageAnnouncementDTO
     public string Title { get; set; }
     public string Body { get; set; }
     public IEnumerable<SingleLanguageAnnouncementActionDTO> Actions { get; set; }
+    public string? IqlQuery { get; set; }
 }
 
 public class SingleLanguageAnnouncementActionDTO
@@ -42,4 +45,5 @@ public class SingleLanguageAnnouncementActionDTO
 
     public string DisplayName { get; }
     public string Link { get; }
+    public string? IqlQuery { get; set; }
 }

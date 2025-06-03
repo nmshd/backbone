@@ -13,6 +13,7 @@ public class AnnouncementDTO
         Texts = announcement.Texts.Select(t => new AnnouncementTextDTO(t));
         Recipients = announcement.Recipients.Select(r => r.Address.ToString());
         Actions = announcement.Actions.Select(a => new AnnouncementActionDTO(a));
+        IqlQuery = announcement.IqlQuery?.ToString();
     }
 
 
@@ -23,6 +24,7 @@ public class AnnouncementDTO
     public IEnumerable<AnnouncementTextDTO> Texts { get; set; }
     public IEnumerable<string> Recipients { get; set; }
     public IEnumerable<AnnouncementActionDTO> Actions { get; set; }
+    public string? IqlQuery { get; set; }
 }
 
 public class AnnouncementActionDTO

@@ -22,9 +22,9 @@ public class TierCreatedDomainEventHandlerTests : AbstractTestsBase
         await handler.Handle(new TierCreatedDomainEvent(id, name));
 
         // Assert
-        mockTierRepository.WasCalled.Should().BeTrue();
-        mockTierRepository.WasCalledWith!.Id.Should().Be(id);
-        mockTierRepository.WasCalledWith.Name.Should().Be(name);
+        mockTierRepository.WasCalled.ShouldBeTrue();
+        mockTierRepository.WasCalledWith!.Id.ShouldBe(id);
+        mockTierRepository.WasCalledWith.Name.ShouldBe(name);
     }
 
     private static TierCreatedDomainEventHandler CreateHandler(AddMockTiersRepository tiers)
