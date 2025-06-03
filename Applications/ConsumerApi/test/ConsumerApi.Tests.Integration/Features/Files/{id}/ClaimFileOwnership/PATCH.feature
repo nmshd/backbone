@@ -10,6 +10,7 @@ Identity tries to claim the ownership of a file
         Then the response status code is 200 (OK)
         And i2 is the new owner of f
         And the response contains the new OwnershipToken of f
+        And i1 receives an ExternalEvent of type FileOwnershipClaimed which contains the id of f and the address of i2
 
     Scenario: An identity tries to claim a file using an incorrect ownershiptoken
         Given Identities i1 and i2
