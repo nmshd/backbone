@@ -118,6 +118,7 @@ public class AppOnboardingModel
     {
         AppId = config.Id;
         AppDisplayName = config.DisplayName;
+        AppDescription = config.Description;
         Links = links;
         BackgroundColor = config.BackgroundColor;
         PrimaryColor = config.PrimaryColor;
@@ -128,6 +129,7 @@ public class AppOnboardingModel
 
     public string AppId { get; }
     public string AppDisplayName { get; }
+    public string AppDescription { get; set; }
     public List<AppStore> Links { get; }
     public string BackgroundColor { get; }
     public string PrimaryColor { get; }

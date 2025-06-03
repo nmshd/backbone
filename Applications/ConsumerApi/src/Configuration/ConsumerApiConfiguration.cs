@@ -67,6 +67,9 @@ public class ConsumerApiConfiguration
             public string DisplayName { get; set; } = null!;
 
             [Required]
+            public string Description { get; set; } = null!;
+
+            [Required]
             public StoreConfig AppleAppStore { get; set; } = new();
 
             [Required]
