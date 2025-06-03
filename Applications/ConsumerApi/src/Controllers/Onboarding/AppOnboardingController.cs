@@ -56,8 +56,8 @@ public class AppOnboardingController : Controller
                 stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
                 break;
             case StoreType.Unknown:
-                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
                 stores.Add(AppOnboardingModel.AppStore.AppleAppStore(appConfiguration.AppleAppStore));
+                stores.Add(AppOnboardingModel.AppStore.GooglePlayStore(appConfiguration.GooglePlayStore));
                 break;
             default:
                 throw new Exception($"The store type {storeTypeForUserAgent} is not supported.");
