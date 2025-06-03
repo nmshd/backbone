@@ -40,6 +40,8 @@ body {
     display: flex;
     gap: 16px;
     justify-content: space-between;
+    color: #1A1B20;
+    text-decoration: none;
 }
 
 .step-content {
@@ -51,11 +53,6 @@ body {
 
 .numbered-step-content {
     gap: 2px;
-}
-
-.step-box {
-    color: #1A1B20;
-    text-decoration: none;
 }
 
 .step-box p {
