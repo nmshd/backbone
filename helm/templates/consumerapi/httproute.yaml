@@ -32,6 +32,9 @@ spec:
             value: /.well-known
         - path:
             type: PathPrefix
+            value: /style
+        - path:
+            type: PathPrefix
             value: /r
       backendRefs:
         - name: {{ .Values.consumerapi.name }}
