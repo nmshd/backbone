@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Domain.Events;
 
-namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershipIsLockedEvent;
+namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershipIsLocked;
 
 public class FileOwnershipLockedDomainEvent : DomainEvent
 {

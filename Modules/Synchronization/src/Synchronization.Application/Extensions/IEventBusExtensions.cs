@@ -64,7 +64,7 @@ public static class IEventBusExtensions
             eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>(),
             eventBus.Subscribe<PeerFeatureFlagsChangedDomainEvent, PeerFeatureFlagsChangedDomainEventHandler>(),
             eventBus.Subscribe<RelationshipTemplateAllocationsExhaustedDomainEvent, RelationshipTemplateAllocationsExhaustedDomainEventHandler>(),
-            eventBus.Subscribe<FileOwnershipLockedDomainEvent, FileOwnershipLockedEventHandler>(),
+            eventBus.Subscribe<FileOwnershipLockedDomainEvent, FileOwnershipLockedDomainEventHandler>(),
             eventBus.Subscribe<FileOwnershipClaimedDomainEvent, FileOwnershipClaimedDomainEventHandler>()
         });
     }
