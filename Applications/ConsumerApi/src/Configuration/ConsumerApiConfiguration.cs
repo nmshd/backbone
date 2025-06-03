@@ -67,10 +67,10 @@ public class ConsumerApiConfiguration
             public string DisplayName { get; set; } = null!;
 
             [Required]
-            public StoreConfig AppleAppStore { get; set; } = null!;
+            public StoreConfig AppleAppStore { get; set; } = new();
 
             [Required]
-            public StoreConfig GooglePlayStore { get; set; } = null!;
+            public StoreConfig GooglePlayStore { get; set; } = new();
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string BackgroundColor { get; set; } = "#FFFFFF";
