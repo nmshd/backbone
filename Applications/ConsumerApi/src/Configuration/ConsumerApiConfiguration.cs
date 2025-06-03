@@ -89,12 +89,12 @@ public class ConsumerApiConfiguration
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
-                ErrorMessage = "Invalid URL (must start with http[s]) or Base64 encoded resource (must start with data:image/[type];base64,).")]
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
             public string BannerUrl { get; set; } = null!;
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
-                ErrorMessage = "Invalid URL (must start with http[s]) or Base64 encoded resource (must start with data:image/[type];base64,).")]
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
             public string IconUrl { get; set; } = null!;
 
             public string GetBackgroundColor()
