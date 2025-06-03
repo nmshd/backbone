@@ -23,8 +23,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, ConsumerApiConfiguration configuration)
     {
         services
-            .AddControllersWithViews(
-                options =>
+            .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));
 
@@ -74,6 +73,7 @@ public static class IServiceCollectionExtensions
 
                 options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
 
         services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
