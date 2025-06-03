@@ -16,9 +16,7 @@
                 const link = document.getElementById('linkTo@(app.Id)');
                 const queryString = new URLSearchParams(window.location.search);
                 queryString.set('app', '@app.Id');
-                console.log(window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash);
-                let clickString = "location.href='" + window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash + "';";
-                link.setAttribute('onclick', clickString);
+                link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
             });
         </script>
     }
@@ -57,12 +55,12 @@
     </div>
     @foreach (var app in Model.Apps)
     {
-        <div class="step-box" id="linkTo@(app.Id)">
+        <a class="step-box" id="linkTo@(app.Id)">
             <div class="step-content">@app.DisplayName installieren</div>
             <img
                 src="@app.AppIconUrl"
                 alt="Zur App Installation" class="app-icon" />
-        </div>
+        </a>
     }
 </div>
 <div class="vertical-spacer"></div>

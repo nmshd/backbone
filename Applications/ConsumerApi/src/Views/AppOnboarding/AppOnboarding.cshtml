@@ -10,9 +10,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const link = document.getElementById('inAppLink');
-            let clickString = "location.href='" + window.location.toString().replace(/^(https)|(http)/, "@Model.AppId") + "';";
-            console.log(clickString);
-            link.setAttribute('onclick', clickString);
+            link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
         });
     </script>
 
@@ -80,7 +78,7 @@
     <div class="info-box">
         <p>
             Sie haben einen QR-Code der @Model.AppDisplayName-Plattform gescannt.
-            Um fortfahren zu können laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
+            Um fortfahren zu können, laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
         </p>
     </div>
     <div class="step-box" id="app-install-step">
@@ -112,15 +110,13 @@
         </div>
     </div>
 
-    <div class="step-box" id="inAppLink" onclick="" style="cursor: pointer;">
+    <a class="step-box" id="inAppLink">
         <div class="step-content">
             <p>2.</p>
             <p>Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
         </div>
-        <img
-            src="@Model.AppIconUrl"
-            alt="App starten" class="app-icon" />
-    </div>
+        <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
+    </a>
 </div>
 <div class="vertical-spacer"></div>
 </body>

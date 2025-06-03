@@ -40,7 +40,11 @@ body {
     flex-direction: row;
     align-items: flex-start;
     gap: 16px;
+}
 
+.step-box {
+    color: #1A1B20;
+    text-decoration: none;
 }
 
 .vertical-spacer {
