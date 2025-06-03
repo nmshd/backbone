@@ -23,16 +23,13 @@
         </script>
     }
     <style>
-        body {
-            background-color: @Model.Apps[0].BackgroundColor;
-        }
-
-        .info-box {
-            background-color: @Model.Apps[0].SecondaryColor;
+        :root {
+            --primary-color: @Model.Apps[0].PrimaryColor;
+            --secondary-color: @Model.Apps[0].SecondaryColor;
+            --background-color: @Model.Apps[0].BackgroundColor;
         }
 
         .step-box {
-            background-color: @Model.Apps[0].PrimaryColor;
             display: flex;
             justify-content: space-between;
             align-items: center;

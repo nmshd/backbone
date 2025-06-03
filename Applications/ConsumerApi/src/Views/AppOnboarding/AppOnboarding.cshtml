@@ -17,16 +17,10 @@
     </script>
 
     <style>
-        body {
-            background-color: @Model.BackgroundColor;
-        }
-
-        .info-box {
-            background-color: @Model.SecondaryColor;
-        }
-
-        .step-box {
-            background-color: @Model.PrimaryColor;
+        :root {
+            --primary-color: @Model.PrimaryColor;
+            --secondary-color: @Model.SecondaryColor;
+            --background-color: @Model.BackgroundColor;
         }
 
         #app-install-step {

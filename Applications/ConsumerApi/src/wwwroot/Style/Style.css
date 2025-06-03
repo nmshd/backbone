@@ -1,5 +1,6 @@
 body {
-    background-color: #f4f6fc;
+    /*noinspection CssUnresolvedCustomProperty*/
+    background-color: var(--background-color);
     margin: 0;
     padding: 0 16px;
     font-family: 'Arial', sans-serif;
@@ -16,13 +17,16 @@ body {
 }
 
 .info-box {
+    /*noinspection CssUnresolvedCustomProperty*/
+    background-color: var(--secondary-color);
     padding: 16px;
     border-radius: 4px;
     margin-top: 10px;
 }
 
 .step-box {
-    cursor: pointer;
+    /*noinspection CssUnresolvedCustomProperty*/
+    background-color: var(--primary-color);
     padding: 16px;
     border-radius: 4px;
     margin-top: 10px;
