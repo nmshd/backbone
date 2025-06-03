@@ -215,6 +215,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                 FileId = f.Id,
                 CreatedBy = f.CreatedBy,
                 CreatedAt = f.CreatedAt,
+                LastOwnershipClaimAt = f.LastOwnershipClaimAt,
                 Owner = f.Owner,
                 CipherSize = f.CipherSize,
                 ExpiresAt = f.ExpiresAt,
