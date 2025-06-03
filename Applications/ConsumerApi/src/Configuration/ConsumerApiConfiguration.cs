@@ -79,13 +79,13 @@ public class ConsumerApiConfiguration
             public StoreConfig GooglePlayStore { get; set; } = new(GOOGLE_PLAY_STORE_BUTTON_URL);
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? BackgroundColor { get; set; }
+            public string BackgroundColor { get; set; } = "#FFFFFF";
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? PrimaryColor { get; set; }
+            public string PrimaryColor { get; set; } = "#000000";
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? SecondaryColor { get; set; }
+            public string SecondaryColor { get; set; } = "#000000";
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
@@ -96,21 +96,6 @@ public class ConsumerApiConfiguration
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
             public string IconUrl { get; set; } = null!;
-
-            public string GetBackgroundColor()
-            {
-                return BackgroundColor ?? "#FFFFFF";
-            }
-
-            public string GetPrimaryColor()
-            {
-                return PrimaryColor ?? "#000000";
-            }
-
-            public string GetSecondaryColor()
-            {
-                return SecondaryColor ?? "#000000";
-            }
 
             public class StoreConfig
             {

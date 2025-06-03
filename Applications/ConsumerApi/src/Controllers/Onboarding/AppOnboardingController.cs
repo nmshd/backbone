@@ -97,9 +97,9 @@ public class AppSelectionModel
             Id = app.Id;
             DisplayName = app.DisplayName;
             AppIconUrl = app.IconUrl;
-            BackgroundColor = app.GetBackgroundColor();
-            PrimaryColor = app.GetPrimaryColor();
-            SecondaryColor = app.GetSecondaryColor();
+            BackgroundColor = app.BackgroundColor;
+            PrimaryColor = app.PrimaryColor;
+            SecondaryColor = app.SecondaryColor;
         }
 
         public string Id { get; }
@@ -119,9 +119,9 @@ public class AppOnboardingModel
         AppId = config.Id;
         AppDisplayName = config.DisplayName;
         Links = links;
-        BackgroundColor = config.GetBackgroundColor();
-        PrimaryColor = config.GetPrimaryColor();
-        SecondaryColor = config.GetSecondaryColor();
+        BackgroundColor = config.BackgroundColor;
+        PrimaryColor = config.PrimaryColor;
+        SecondaryColor = config.SecondaryColor;
         BannerUrl = config.BannerUrl;
         AppIconUrl = config.IconUrl;
     }
