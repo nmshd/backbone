@@ -61,7 +61,13 @@ public class FilesRepository : IFilesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<File?> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task Update(File file, CancellationToken cancellationToken)
+    {
+        _files.Update(file);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<File?> Get(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var file = await (track ? _files : _readOnlyFiles)
             .WithId(fileId)
@@ -76,14 +82,14 @@ public class FilesRepository : IFilesRepository
 
         if (fillContent)
         {
-            var fileContent = await _blobStorage.FindAsync(_blobConfiguration.RootFolder, fileId);
+            var fileContent = await _blobStorage.GetAsync(_blobConfiguration.RootFolder, fileId);
             file.LoadContent(fileContent);
         }
 
         return file;
     }
 
-    public async Task<DbPaginationResult<File>> FindFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<File>> ListFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _dbContext
             .SetReadOnly<File>()

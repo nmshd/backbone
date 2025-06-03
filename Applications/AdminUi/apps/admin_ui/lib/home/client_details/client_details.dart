@@ -125,8 +125,8 @@ class _ClientDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.maxIdentities,
                         value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
-                        onIconPressed:
-                            () => showChangeMaxIdentitiesDialog(context: context, clientDetails: clientDetails, onMaxIdentitiesUpdated: updateClient),
+                        onIconPressed: () =>
+                            showChangeMaxIdentitiesDialog(context: context, clientDetails: clientDetails, onMaxIdentitiesUpdated: updateClient),
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
                       ),
@@ -138,15 +138,14 @@ class _ClientDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.clientDetails_card_defaultTier,
                         value: currentTier.name,
-                        onIconPressed:
-                            currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
-                                ? () => showChangeTierDialog(
-                                  context: context,
-                                  onTierUpdated: updateClient,
-                                  clientDetails: clientDetails,
-                                  availableTiers: availableTiers,
-                                )
-                                : null,
+                        onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
+                            ? () => showChangeTierDialog(
+                                context: context,
+                                onTierUpdated: updateClient,
+                                clientDetails: clientDetails,
+                                availableTiers: availableTiers,
+                              )
+                            : null,
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.changeTier,
                       ),

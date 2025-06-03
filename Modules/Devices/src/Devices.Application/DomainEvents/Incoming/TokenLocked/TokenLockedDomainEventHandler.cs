@@ -21,7 +21,7 @@ public class TokenLockedDomainEventHandler : IDomainEventHandler<TokenLockedDoma
 
     public async Task Handle(TokenLockedDomainEvent @event)
     {
-        var identity = await _identitiesRepository.FindByAddress(@event.CreatedBy, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(@event.CreatedBy, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
         if (identity.Status is not IdentityStatus.ToBeDeleted)
             await _pushNotificationSender.SendNotification(

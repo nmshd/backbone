@@ -7,10 +7,12 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Commands.Crea
 public class CreateAnnouncementCommand : IRequest<AnnouncementDTO>
 {
     public required AnnouncementSeverity Severity { get; set; }
+    public required bool IsSilent { get; set; }
     public required List<CreateAnnouncementCommandText> Texts { get; set; }
     public DateTime? ExpiresAt { get; set; }
 
     public List<string> Recipients { get; set; } = [];
+    public string? IqlQuery { get; set; }
 }
 
 public class CreateAnnouncementCommandText

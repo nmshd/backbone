@@ -16,7 +16,7 @@ public class UrlSafeBase64ToByteArrayJsonConverterTests : AbstractTestsBase
 
         var utf8 = Encoding.UTF8.GetString(result.Bytes);
 
-        utf8.Should().BeEquivalentTo("---++###<<<>>-()/\")$%&&?!");
+        utf8.ShouldBeEquivalentTo("---++###<<<>>-()/\")$%&&?!");
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class UrlSafeBase64ToByteArrayJsonConverterTests : AbstractTestsBase
         var serResult = JsonSerializer.Serialize(obj,
             new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
 
-        serResult.Should().BeEquivalentTo(expected);
+        serResult.ShouldBeEquivalentTo(expected);
     }
 }
 

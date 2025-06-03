@@ -2,8 +2,8 @@
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using Backbone.Modules.Announcements.Application.Announcements.DTOs;
-using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAllAnnouncements;
 using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAnnouncementById;
+using Backbone.Modules.Announcements.Application.Announcements.Queries.ListAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +14,8 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class AnnouncementsController : ApiControllerBase
 {
-    private readonly ILogger<AnnouncementsController> _logger;
-
-    public AnnouncementsController(IMediator mediator, ILogger<AnnouncementsController> logger) : base(mediator)
+    public AnnouncementsController(IMediator mediator) : base(mediator)
     {
-        _logger = logger;
     }
 
     [HttpPost]
@@ -38,10 +35,10 @@ public class AnnouncementsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetAllAnnouncementsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ListAnnouncementsResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListAnnouncements(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetAllAnnouncementsQuery(), cancellationToken);
+        var response = await _mediator.Send(new ListAnnouncementsQuery(), cancellationToken);
         return Ok(response);
     }
 }

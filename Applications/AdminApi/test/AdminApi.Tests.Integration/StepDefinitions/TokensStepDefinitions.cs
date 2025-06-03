@@ -25,18 +25,18 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     {
         var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
 
-        createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.ShouldBeASuccess();
 
         _newIdentityAddress = createIdentityResponse.Result!.Address;
     }
 
-    [When(@"a GET request is sent to the /Tokens endpoint with the identity's address")]
+    [When("^a GET request is sent to the /Tokens endpoint with the identity's address$")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithTheIdentitysAddress()
     {
         _whenResponse = _listTokensResponse = await _client.Tokens.ListTokensByIdentity(new PaginationFilter { PageNumber = 1, PageSize = 5 }, _newIdentityAddress, CancellationToken.None);
     }
 
-    [When("a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint")]
+    [When("^a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint$")]
     public async Task WhenAPATCHRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
     {
         _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);
@@ -45,14 +45,14 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response content is an empty array")]
     public void ThenTheResponseContentIsAnEmptyArray()
     {
-        _listTokensResponse.Should().NotBeNull();
-        _listTokensResponse.Result!.Count().Should().Be(0);
+        _listTokensResponse.ShouldNotBeNull();
+        _listTokensResponse.Result!.Count().ShouldBe(0);
     }
 }

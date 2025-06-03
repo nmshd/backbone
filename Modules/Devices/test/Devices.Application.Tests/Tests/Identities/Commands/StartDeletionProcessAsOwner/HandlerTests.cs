@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProc
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcessAsOwner;
@@ -24,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
         var fakeUserContext = A.Fake<IUserContext>();
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.Get(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
@@ -35,15 +34,14 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
-        response.Should().NotBeNull();
-        response.ApprovedByDevice.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.ApprovedByDevice.ShouldNotBeNull();
 
         A.CallTo(() => mockIdentitiesRepository.Update(
-                A<Identity>.That.Matches(
-                    i => i.Address == activeIdentity.Address &&
-                         i.DeletionProcesses.Count == 1 &&
-                         i.DeletionProcesses[0].Id == response.Id &&
-                         i.DeletionProcesses[0].AuditLog.Count == 1),
+                A<Identity>.That.Matches(i => i.Address == activeIdentity.Address &&
+                                              i.DeletionProcesses.Count == 1 &&
+                                              i.DeletionProcesses[0].Id == response.Id &&
+                                              i.DeletionProcesses[0].AuditLog.Count == 1),
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
@@ -55,7 +53,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
@@ -63,7 +61,7 @@ public class HandlerTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(
+        A.CallTo(() => fakeIdentitiesRepository.Get(
                 A<IdentityAddress>._,
                 A<CancellationToken>._,
                 A<bool>._))
@@ -76,7 +74,8 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsOwnerResponse>().Which.Message.Should().Contain("Identity");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)

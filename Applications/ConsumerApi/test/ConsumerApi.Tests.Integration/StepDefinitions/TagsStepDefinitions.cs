@@ -27,7 +27,7 @@ public class TagsStepDefinitions
     {
         await WhenAGETRequestToTheTagsEndpointGetsSent();
 
-        _listTagsResponse!.Should().BeASuccess();
+        _listTagsResponse!.ShouldBeASuccess();
     }
 
     [Given($@"{RegexFor.SINGLE_THING} didn't change since the last fetch")]
@@ -40,7 +40,7 @@ public class TagsStepDefinitions
 
     #region When
 
-    [When("A GET request to the /Tags endpoint gets sent")]
+    [When("^A GET request to the /Tags endpoint gets sent$")]
     public async Task WhenAGETRequestToTheTagsEndpointGetsSent()
     {
         var client = _clientPool.Anonymous;
@@ -61,7 +61,7 @@ public class TagsStepDefinitions
     [Then("the response supports the English language")]
     public void AndTheResponseSupportsTheEnglishLanguage()
     {
-        _listTagsResponse!.Result!.SupportedLanguages.Should().Contain("en");
+        _listTagsResponse!.Result!.SupportedLanguages.ShouldContain("en");
     }
 
     [Then("the response attributes contain tags")]
@@ -69,15 +69,15 @@ public class TagsStepDefinitions
     {
         foreach (var attr in _listTagsResponse!.Result!.TagsForAttributeValueTypes.Values)
         {
-            attr.Should().NotBeEmpty();
+            attr.ShouldNotBeEmpty();
         }
     }
 
     [Then("the response content is empty")]
     public void ThenTheResponseContentIsEmpty()
     {
-        _listTagsResponse!.NotModified.Should().BeTrue();
-        _listTagsResponse!.Result.Should().BeNull();
+        _listTagsResponse!.NotModified.ShouldBeTrue();
+        _listTagsResponse!.Result.ShouldBeNull();
     }
 
     #endregion

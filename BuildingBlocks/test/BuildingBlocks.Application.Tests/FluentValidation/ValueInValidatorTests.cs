@@ -14,7 +14,7 @@ public class ValueInValidatorTests : AbstractTestsBase
 
         var validationResult = validator.Validate(new AClass { AStringProperty = value });
 
-        validationResult.IsValid.Should().BeTrue();
+        validationResult.IsValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class ValueInValidatorTests : AbstractTestsBase
 
         var validationResult = validator.Validate(new AClass { AStringProperty = "invalidValue" });
 
-        validationResult.IsValid.Should().BeFalse();
+        validationResult.IsValid.ShouldBeFalse();
     }
 
     [Fact]
@@ -36,11 +36,12 @@ public class ValueInValidatorTests : AbstractTestsBase
 
         var validationError = validationResult.Errors[0];
 
-        validationError.PropertyName.Should().Be(nameof(AClass.AStringProperty));
-        validationError.ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationError.ErrorMessage
-            .Should().Contain("'A String Property'").And.Subject
-            .Should().Contain("validValue1, validValue2");
+        validationError.PropertyName.ShouldBe(nameof(AClass.AStringProperty));
+        validationError.ErrorCode.ShouldBe("error.platform.validation.invalidPropertyValue");
+        validationError.ErrorMessage.ShouldSatisfyAllConditions(
+            m => m.ShouldContain("'A String Property'"),
+            m => m.ShouldContain("validValue1, validValue2")
+        );
     }
 
     private class AClass

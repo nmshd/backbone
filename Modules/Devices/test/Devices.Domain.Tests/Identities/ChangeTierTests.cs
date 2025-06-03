@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -17,10 +18,10 @@ public class ChangeTierTests : AbstractTestsBase
         identity.ChangeTier(TierId.Generate());
 
         // Assert
-        var domainEvent = identity.Should().HaveASingleDomainEvent<TierOfIdentityChangedDomainEvent>();
-        domainEvent.IdentityAddress.Should().Be(identity.Address);
-        domainEvent.OldTierId.Should().Be(oldTier);
-        domainEvent.NewTierId.Should().Be(identity.TierId);
+        var domainEvent = identity.ShouldHaveASingleDomainEvent<TierOfIdentityChangedDomainEvent>();
+        domainEvent.IdentityAddress.ShouldBe(identity.Address);
+        domainEvent.OldTierId.ShouldBe(oldTier);
+        domainEvent.NewTierId.ShouldBe(identity.TierId);
     }
 
     [Fact]
@@ -34,7 +35,7 @@ public class ChangeTierTests : AbstractTestsBase
         identity.ChangeTier(newTier);
 
         // Assert
-        identity.TierId.Should().Be(newTier);
+        identity.TierId.ShouldBe(newTier);
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class ChangeTierTests : AbstractTestsBase
         var acting = () => identity.ChangeTier(TierId.Generate());
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Message.Should().Be(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
+        acting.ShouldThrow<DomainException>().ShouldContainMessage(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
     }
 
     [Fact]
@@ -60,7 +61,7 @@ public class ChangeTierTests : AbstractTestsBase
         var acting = () => identity.ChangeTier(Tier.QUEUED_FOR_DELETION.Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Message.Should().Be(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
+        acting.ShouldThrow<DomainException>().ShouldContainMessage(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
     }
 
     [Fact]
@@ -74,6 +75,6 @@ public class ChangeTierTests : AbstractTestsBase
         var acting = () => identity.ChangeTier(tierId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("cannot be the same");
+        acting.ShouldThrow<DomainException>().ShouldContainMessage("cannot be the same");
     }
 }

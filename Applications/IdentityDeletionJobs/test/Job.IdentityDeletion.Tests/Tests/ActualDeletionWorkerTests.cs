@@ -8,7 +8,7 @@ using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
@@ -47,8 +47,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var worker = CreateWorker(fakeMediator, [mockIdentityDeleter]);
 
-        A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
-            .Returns(new FindRelationshipsOfIdentityResponse([]));
+        A.CallTo(() => fakeMediator.Send(A<ListRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
+            .Returns(new ListRelationshipsOfIdentityResponse([]));
 
         A.CallTo(() => fakeMediator.Send(A<GetIdentityQuery>.That.Matches(q => q.Address == identity1.Address.Value), A<CancellationToken>._))
             .Returns(new GetIdentityResponse(identity1));
@@ -72,7 +72,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identity1 = CreateIdentity();
         var identity2 = CreateIdentity();
         SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address);
-        A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse([]));
+        A.CallTo(() => fakeMediator.Send(A<ListRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new ListRelationshipsOfIdentityResponse([]));
 
         A.CallTo(() => fakeMediator.Send(A<GetIdentityQuery>.That.Matches(q => q.Address == identity1.Address.Value), A<CancellationToken>._))
             .Returns(new GetIdentityResponse(identity1));

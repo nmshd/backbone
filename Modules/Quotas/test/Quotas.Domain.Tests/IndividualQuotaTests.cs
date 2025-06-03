@@ -17,9 +17,9 @@ public class IndividualQuotaTests : AbstractTestsBase
         var individualQuota = new IndividualQuota(metricKey, max, period, "applyTo");
 
         // Assert
-        individualQuota.MetricKey.Should().Be(metricKey);
-        individualQuota.Period.Should().Be(period);
-        individualQuota.Max.Should().Be(max);
-        individualQuota.Weight.Should().Be(2);
+        individualQuota.MetricKey.ShouldBe(metricKey);
+        individualQuota.Period.ShouldBe(period);
+        individualQuota.Max.ShouldBe(max);
+        individualQuota.Weight.ShouldBe(2);
     }
 }

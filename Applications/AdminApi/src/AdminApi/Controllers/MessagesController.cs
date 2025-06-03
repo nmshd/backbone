@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Infrastructure.DTOs;
+﻿using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
@@ -10,6 +10,7 @@ using Backbone.Modules.Devices.Application;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -29,34 +30,38 @@ public class MessagesController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<MessageOverview>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<List<MessageOverviewDTO>>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListMessages([FromQuery] string participant, [FromQuery] string type, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        switch (type)
+        var query = _adminUiDbContext.Messages
+            .Include(m => m.Recipients)
+            .Include(m => m.Attachments)
+            .AsSplitQuery()
+            .Select(m => new MessageOverviewDTO
+            {
+                MessageId = m.Id,
+                SenderAddress = m.CreatedBy,
+                SendDate = m.CreatedAt,
+                SenderDevice = m.CreatedByDevice,
+                Recipients = m.Recipients,
+                NumberOfAttachments = m.Attachments.Count(),
+            });
+
+        query = type switch
         {
-            case "Incoming":
-                var incomingMessages = await _adminUiDbContext.MessageOverviews
-                    .Where(m => m.Recipients.Any(r => r.Address == participant))
-                    .IncludeAll(_adminUiDbContext)
-                    .OrderAndPaginate(d => d.SendDate, paginationFilter, cancellationToken);
+            "Incoming" => query.Where(m => m.Recipients.Any(r => r.Address == participant)),
+            "Outgoing" => query.Where(m => m.SenderAddress == participant),
+            _ => throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(type))),
+        };
 
-                return Paged(new PagedResponse<MessageOverview>(incomingMessages.ItemsOnPage, paginationFilter, incomingMessages.TotalNumberOfItems));
+        var messages = await query.OrderAndPaginate(m => m.SendDate, paginationFilter, cancellationToken);
 
-            case "Outgoing":
-                var outgoingMessages = await _adminUiDbContext.MessageOverviews
-                    .Where(m => m.SenderAddress == participant)
-                    .IncludeAll(_adminUiDbContext)
-                    .OrderAndPaginate(d => d.SendDate, paginationFilter, cancellationToken);
-
-                return Paged(new PagedResponse<MessageOverview>(outgoingMessages.ItemsOnPage, paginationFilter, outgoingMessages.TotalNumberOfItems));
-        }
-
-        throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(type)));
+        return Paged(new PagedResponse<MessageOverviewDTO>(messages.ItemsOnPage, paginationFilter, messages.TotalNumberOfItems));
     }
 }

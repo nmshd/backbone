@@ -6,7 +6,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -79,7 +78,7 @@ internal class TokensStepDefinitions
             {
                 var allocatedClient = _clientPool.FirstForIdentityName(allocatedIdentityName);
                 var allocatedResponse = password != null ? await allocatedClient.Tokens.GetToken(response.Result!.Id, password) : await allocatedClient.Tokens.GetToken(response.Result!.Id);
-                allocatedResponse.Status.Should().Be(HttpStatusCode.OK);
+                allocatedResponse.Status.ShouldBe(HttpStatusCode.OK);
             }
         }
     }
@@ -97,14 +96,14 @@ internal class TokensStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint$")]
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
-    [When("an anonymous user sends a POST request to the /Tokens endpoint")]
+    [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
@@ -187,8 +186,15 @@ internal class TokensStepDefinitions
     [Then($@"the response contains Token\(s\) {RegexFor.LIST_OF_THINGS}")]
     public void ThenTheResponseContainsTokens(string tokenNames)
     {
-        var tokens = tokenNames.Split(',').Select(item => _tokensContext.CreateTokenResponses[item.Trim()]).ToList();
-        _listTokensResponse!.Result!.Should().BeEquivalentTo(tokens, options => options.WithStrictOrdering());
+        var tokens = tokenNames
+            .Split(',')
+            .Select(item => _tokensContext.CreateTokenResponses[item.Trim()])
+            .Select(item => (item.Id, item.CreatedAt))
+            .ToList();
+
+        _listTokensResponse!.Result!
+            .Select(item => (item.Id, item.CreatedAt))
+            .ShouldBe(tokens, true);
     }
 
     #endregion

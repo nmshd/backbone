@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsSupport;
@@ -25,7 +24,7 @@ public class HandlerTests : AbstractTestsBase
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => fakeIdentitiesRepository
-                .FindByAddress(identity.Address, A<CancellationToken>._, true))
+                .Get(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
@@ -34,11 +33,11 @@ public class HandlerTests : AbstractTestsBase
         var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
 
         // Assert
-        identity.Status.Should().Be(IdentityStatus.Active);
+        identity.Status.ShouldBe(IdentityStatus.Active);
 
-        result.Id.Should().Be(deletionProcess.Id);
-        result.Status.Should().Be(DeletionProcessStatus.Cancelled);
-        result.CancelledAt.Should().Be(utcNow);
+        result.Id.ShouldBe(deletionProcess.Id);
+        result.Status.ShouldBe(DeletionProcessStatus.Cancelled);
+        result.CancelledAt.ShouldBe(utcNow);
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
             A<DeletionProcessCancelledBySupportPushNotification>._,
@@ -48,7 +47,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
@@ -59,7 +58,8 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcessId), CancellationToken.None);
 
         // Assert
-        acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IPushNotificationSender? pushNotificationSender = null)

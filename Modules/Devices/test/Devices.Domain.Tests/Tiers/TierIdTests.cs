@@ -14,14 +14,14 @@ public class TierIdTests : AbstractTestsBase
         var tierId = TierId.Create(validIdValue);
         var isTierIdValid = tierId.IsSuccess;
 
-        isTierIdValid.Should().BeTrue();
+        isTierIdValid.ShouldBeTrue();
     }
 
     [Fact]
     public void Can_generate_tier_id()
     {
         var tierId = TierId.Generate();
-        tierId.Should().NotBeNull();
+        tierId.ShouldNotBeNull();
     }
 
     [Fact]
@@ -34,9 +34,9 @@ public class TierIdTests : AbstractTestsBase
         var errorCode = tierId.Error.Code;
         var errorMessage = tierId.Error.Message;
 
-        isTierIdInvalid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Id starts with");
+        isTierIdInvalid.ShouldBeTrue();
+        errorCode.ShouldBe("error.platform.validation.invalidId");
+        errorMessage.ShouldContain("Id starts with");
     }
 
     [Fact]
@@ -49,9 +49,9 @@ public class TierIdTests : AbstractTestsBase
         var errorCode = tierId.Error.Code;
         var errorMessage = tierId.Error.Message;
 
-        isTierIdInvalid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Id has a length of");
+        isTierIdInvalid.ShouldBeTrue();
+        errorCode.ShouldBe("error.platform.validation.invalidId");
+        errorMessage.ShouldContain("Id has a length of");
     }
 
     [Fact]
@@ -64,8 +64,8 @@ public class TierIdTests : AbstractTestsBase
         var errorCode = tierId.Error.Code;
         var errorMessage = tierId.Error.Message;
 
-        isTierIdInvalid.Should().BeTrue();
-        errorCode.Should().Be("error.platform.validation.invalidId");
-        errorMessage.Should().Contain("Valid characters are");
+        isTierIdInvalid.ShouldBeTrue();
+        errorCode.ShouldBe("error.platform.validation.invalidId");
+        errorMessage.ShouldContain("Valid characters are");
     }
 }

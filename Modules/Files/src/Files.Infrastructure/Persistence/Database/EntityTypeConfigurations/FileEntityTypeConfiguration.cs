@@ -13,8 +13,10 @@ public class FileEntityTypeConfiguration : EntityEntityTypeConfiguration<File>
 
         builder.ToTable("FileMetadata");
 
+        builder.Ignore(m => m.Content);
+
         builder.Property(m => m.CipherHash).IsRequired();
 
-        builder.Ignore(m => m.Content);
+        builder.Property(m => m.OwnershipIsLocked).HasDefaultValue(true);
     }
 }

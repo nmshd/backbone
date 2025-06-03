@@ -35,15 +35,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.13.0]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.0]" />
         <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
-
-        <Using Include="FluentAssertions" />
+        <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />
@@ -51,13 +49,12 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
         <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <Using Include="FluentAssertions" />
+        <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />

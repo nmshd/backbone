@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelStaleIdentityDeletionProcesses;
@@ -18,8 +19,8 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.Should().NotBeNull();
-        response.Should().BeEmpty();
+        response.ShouldNotBeNull();
+        response.ShouldBeEmpty();
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class HandlerTests : AbstractTestsBase
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => fakeIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.ListWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
             .Returns([identityWithStaleDeletionProcess, identityWithDeletionProcess]);
 
         var handler = CreateHandler(fakeIdentitiesRepository);
@@ -44,8 +45,8 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.Should().HaveCount(1);
-        response.First().Should().Be(identityWithStaleDeletionProcess.DeletionProcesses[0].Id);
+        response.ShouldHaveCount(1);
+        response.First().ShouldBe(identityWithStaleDeletionProcess.DeletionProcesses[0].Id);
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null)

@@ -40,12 +40,14 @@ public static class IServiceCollectionExtensions
     }
 
     public static void AddDbContext<T>(this IServiceCollection services, DatabaseConfiguration configuration, Func<string, string> migrationAssemblyNameBuilder, string schemaName,
-        Action<DbContextOptionsBuilder>? setupDbContextOptions = null) where T : DbContext
+        Action<DbContextOptionsBuilder>? setupDbContextOptions = null, QueryTrackingBehavior queryTrackingBehavior = QueryTrackingBehavior.TrackAll) where T : DbContext
     {
         var migrationsAssemblyName = migrationAssemblyNameBuilder(configuration.Provider);
 
         services.AddDbContext<T>(dbContextOptions =>
         {
+            dbContextOptions.UseQueryTrackingBehavior(queryTrackingBehavior);
+
             switch (configuration.Provider)
             {
                 case SQLSERVER:

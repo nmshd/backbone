@@ -1,4 +1,4 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
@@ -30,19 +30,28 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<RelationshipDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListRelationships([FromQuery] string participant, [FromQuery] PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
+        var relationships = await _adminApiDbContext.Relationships
             .Where(r => r.To == participant || r.From == participant)
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+            .Select(r => new RelationshipDTO
+            {
+                TemplateId = r.RelationshipTemplateId,
+                CreatedByDevice = r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(0).CreatedByDevice,
+                AnsweredAt = r.AuditLog.Count > 1 ? r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(1).CreatedAt : null,
+                AnsweredByDevice = r.AuditLog.Count > 1 ? r.AuditLog.OrderBy(a => a.CreatedAt).ElementAt(1).CreatedByDevice : null,
+                CreationDate = r.CreatedAt,
+                Peer = r.From == participant ? r.To : r.From,
+                RequestedBy = r.To == participant ? "Peer" : "Self",
+                Status = r.Status
+            })
+            .OrderAndPaginate(d => d.CreationDate, paginationFilter, cancellationToken);
 
-        var relationshipItems = relationshipOverviews.ItemsOnPage.Select(i => new RelationshipDTO(participant, i));
-
-        return Paged(new PagedResponse<RelationshipDTO>(relationshipItems, paginationFilter, relationshipOverviews.TotalNumberOfItems));
+        return Paged(new PagedResponse<RelationshipDTO>(relationships.ItemsOnPage, paginationFilter, relationships.TotalNumberOfItems));
     }
 }

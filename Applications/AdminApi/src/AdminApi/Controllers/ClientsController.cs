@@ -1,4 +1,4 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
@@ -28,11 +28,19 @@ public class ClientsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClientOverview>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ClientOverviewDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllClients(CancellationToken cancellationToken)
+    public async Task<IActionResult> ListClients(CancellationToken cancellationToken)
     {
-        var clientOverviews = await _adminApiDbContext.ClientOverviews.ToListAsync(cancellationToken);
+        var clientOverviews = await _adminApiDbContext.OpenIddictApplications.Select(a => new ClientOverviewDTO
+        {
+            CreatedAt = a.CreatedAt,
+            ClientId = a.ClientId,
+            DefaultTier = _adminApiDbContext.Tiers.Select(t => new TierDTO { Id = t.Id, Name = t.Name }).First(t => t.Id == a.DefaultTier),
+            DisplayName = a.DisplayName,
+            NumberOfIdentities = _adminApiDbContext.Identities.Count(i => i.ClientId == a.ClientId),
+            MaxIdentities = a.MaxIdentities
+        }).ToListAsync(cancellationToken);
         return Ok(clientOverviews);
     }
 

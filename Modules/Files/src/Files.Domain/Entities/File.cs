@@ -9,6 +9,8 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File : Entity
 {
+    private bool _ownershipIsLocked;
+
     // ReSharper disable once UnusedMember.Local
     private File()
     {
@@ -23,6 +25,7 @@ public class File : Entity
         CipherHash = null!;
         Content = null!;
         EncryptedProperties = null!;
+        OwnershipToken = null!;
     }
 
     public File(IdentityAddress createdBy, DeviceId createdByDevice, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
@@ -35,6 +38,8 @@ public class File : Entity
         CreatedByDevice = ModifiedByDevice = createdByDevice;
 
         OwnerSignature = ownerSignature;
+
+        OwnershipToken = RegenerateOwnershipToken(Owner);
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
@@ -84,6 +89,22 @@ public class File : Entity
 
     public byte[] EncryptedProperties { get; set; }
 
+    public FileOwnershipToken OwnershipToken { get; private set; }
+
+    public bool OwnershipIsLocked
+    {
+        get => _ownershipIsLocked;
+        private set
+        {
+            if (!_ownershipIsLocked && value)
+                RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+
+            _ownershipIsLocked = value;
+        }
+    }
+
+    public DateTime? LastOwnershipClaimAt { get; private set; }
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
@@ -104,5 +125,54 @@ public class File : Entity
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public FileOwnershipToken RegenerateOwnershipToken(IdentityAddress activeIdentity)
+    {
+        if (Owner != activeIdentity)
+            throw new DomainActionForbiddenException();
+
+        OwnershipToken = FileOwnershipToken.New();
+        OwnershipIsLocked = false;
+        return OwnershipToken;
+    }
+
+    public ClaimFileOwnershipResult ClaimOwnership(FileOwnershipToken ownershipToken, IdentityAddress newOwnerAddress)
+    {
+        if (OwnershipIsLocked)
+            return ClaimFileOwnershipResult.Locked;
+
+        if (OwnershipToken != ownershipToken)
+        {
+            OwnershipIsLocked = true;
+            RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+            return ClaimFileOwnershipResult.IncorrectToken;
+        }
+
+        LastOwnershipClaimAt = SystemTime.UtcNow;
+        Owner = newOwnerAddress;
+        OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
+        return ClaimFileOwnershipResult.Ok;
+    }
+
+    public bool ValidateFileOwnershipToken(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
+    {
+        if (OwnershipIsLocked)
+            return false;
+
+        if (OwnershipToken == ownershipToken)
+            return true;
+
+        if (Owner != activeIdentity)
+            OwnershipIsLocked = true;
+
+        return false;
+    }
+
+    public enum ClaimFileOwnershipResult
+    {
+        Ok,
+        IncorrectToken,
+        Locked
     }
 }

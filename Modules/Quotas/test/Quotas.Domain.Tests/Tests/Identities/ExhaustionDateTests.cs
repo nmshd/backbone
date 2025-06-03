@@ -15,7 +15,7 @@ public class ExhaustionDateTests : AbstractTestsBase
         var parsedMainDate = new ExhaustionDate(DateTime.Parse(mainDate));
         var parsedComparedDate = new ExhaustionDate(DateTime.Parse(comparedDate));
 
-        parsedMainDate.CompareTo(parsedComparedDate).Should().Be(expectedResult);
+        parsedMainDate.CompareTo(parsedComparedDate).ShouldBe(expectedResult);
     }
 
     [Theory]
@@ -29,7 +29,7 @@ public class ExhaustionDateTests : AbstractTestsBase
         var parsedLeftDate = new ExhaustionDate(DateTime.Parse(mainDate));
         var parsedRightDate = new ExhaustionDate(DateTime.Parse(leftDate));
 
-        (parsedLeftDate < parsedRightDate).Should().Be(expectedResult);
+        (parsedLeftDate < parsedRightDate).ShouldBe(expectedResult);
     }
 
     [Theory]
@@ -43,7 +43,7 @@ public class ExhaustionDateTests : AbstractTestsBase
         var parsedLeftDate = new ExhaustionDate(DateTime.Parse(mainDate));
         var parsedRightDate = new ExhaustionDate(DateTime.Parse(leftDate));
 
-        (parsedLeftDate <= parsedRightDate).Should().Be(expectedResult);
+        (parsedLeftDate <= parsedRightDate).ShouldBe(expectedResult);
     }
 
     [Theory]
@@ -57,7 +57,7 @@ public class ExhaustionDateTests : AbstractTestsBase
         var parsedLeftDate = new ExhaustionDate(DateTime.Parse(mainDate));
         var parsedRightDate = new ExhaustionDate(DateTime.Parse(leftDate));
 
-        (parsedLeftDate > parsedRightDate).Should().Be(expectedResult);
+        (parsedLeftDate > parsedRightDate).ShouldBe(expectedResult);
     }
 
     [Theory]
@@ -71,6 +71,6 @@ public class ExhaustionDateTests : AbstractTestsBase
         var parsedLeftDate = new ExhaustionDate(DateTime.Parse(mainDate));
         var parsedRightDate = new ExhaustionDate(DateTime.Parse(leftDate));
 
-        (parsedLeftDate >= parsedRightDate).Should().Be(expectedResult);
+        (parsedLeftDate >= parsedRightDate).ShouldBe(expectedResult);
     }
 }

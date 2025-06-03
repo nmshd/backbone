@@ -1,4 +1,5 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
@@ -11,7 +12,7 @@ public class QuotaIdTests : AbstractTestsBase
         var result = QuotaId.Create("QUOsomeQuotaId111111");
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
@@ -21,9 +22,9 @@ public class QuotaIdTests : AbstractTestsBase
         var quotaId = QuotaId.Generate();
 
         // Assert
-        quotaId.Should().NotBeNull();
-        quotaId.Value.Should().HaveLength(20);
-        quotaId.Value.Should().StartWith("QUO");
+        quotaId.ShouldNotBeNull();
+        quotaId.Value.ShouldHaveCount(20);
+        quotaId.Value.ShouldStartWith("QUO");
     }
 
     [Fact]
@@ -33,9 +34,9 @@ public class QuotaIdTests : AbstractTestsBase
         var result = QuotaId.Create("QQQsomeQuotaId111111");
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Id starts with");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Id starts with");
     }
 
     [Fact]
@@ -45,9 +46,9 @@ public class QuotaIdTests : AbstractTestsBase
         var result = QuotaId.Create("QUOtooManyCharactersOnId");
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Id has a length of");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Id has a length of");
     }
 
     [Theory]
@@ -60,8 +61,8 @@ public class QuotaIdTests : AbstractTestsBase
         var result = QuotaId.Create("QUO1111111111111111" + invalidCharacter);
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.validation.invalidId");
-        result.Error.Message.Should().Contain("Valid characters are");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.validation.invalidId");
+        result.Error.Message.ShouldContain("Valid characters are");
     }
 }

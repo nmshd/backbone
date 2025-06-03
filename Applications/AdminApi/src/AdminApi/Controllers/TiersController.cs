@@ -1,4 +1,4 @@
-using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
@@ -8,7 +8,7 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
-using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+using Backbone.Modules.Quotas.Application.Tiers.Queries.GetTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,19 +29,27 @@ public class TiersController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverview>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverviewDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ListTiers(CancellationToken cancellationToken)
     {
-        var tiers = await _adminApiDbContext.TierOverviews.ToListAsync(cancellationToken);
+        var tiers = await _adminApiDbContext.Tiers.Select(t => new TierOverviewDTO
+        {
+            Id = t.Id,
+            Name = t.Name,
+            NumberOfIdentities = _adminApiDbContext.Identities.Count(i => i.TierId == t.Id),
+            CanBeManuallyAssigned = t.CanBeManuallyAssigned,
+            CanBeUsedAsDefaultForClient = t.CanBeUsedAsDefaultForClient
+        }).ToListAsync(cancellationToken);
+
         return Ok(tiers);
     }
 
     [HttpGet("{tierId}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TierDetailsDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetTierByIdAsync([FromRoute] string tierId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var tier = await _mediator.Send(new GetTierByIdQuery(tierId), cancellationToken);
+        var tier = await _mediator.Send(new GetTierQuery(tierId), cancellationToken);
         return Ok(tier);
     }
 

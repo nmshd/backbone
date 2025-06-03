@@ -4,7 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Fcm;
 
@@ -23,18 +23,18 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .Build();
 
         // Assert
-        message.Notification.Title.Should().Be("someNotificationTextTitle");
-        message.Notification.Body.Should().Be("someNotificationTextBody");
+        message.Notification.Title.ShouldBe("someNotificationTextTitle");
+        message.Notification.Body.ShouldBe("someNotificationTextBody");
 
-        message.Token.Should().Contain("token1");
+        message.Token.ShouldContain("token1");
 
-        message.Android.Notification.ChannelId.Should().Be("ENMESHED");
-        message.Data.Should().Contain("android_channel_id", "ENMESHED");
+        message.Android.Notification.ChannelId.ShouldBe("ENMESHED");
+        message.Data.ShouldContain(new KeyValuePair<string, string>("android_channel_id", "ENMESHED"));
 
-        message.Data["content-available"].Should().Be("1");
+        message.Data["content-available"].ShouldBe("1");
 
-        message.Android.CollapseKey.Should().Be("testNotificationId");
-        message.Android.Notification.Tag.Should().Be("testNotificationId");
+        message.Android.CollapseKey.ShouldBe("testNotificationId");
+        message.Android.Notification.Tag.ShouldBe("testNotificationId");
     }
 
     [Fact]
@@ -51,15 +51,15 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         var actualContent = message.Data["content"];
 
         // Assert
-        actualContent.Should().BeEquivalentToJson(
+        actualContent.ShouldBeEquivalentToJson(
             """
             {
-                      'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
-                      'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-                      'eventName': 'Test',
-                      'sentAt': '2021-01-01T00:00:00.000Z',
-                      'payload': {
-                        'someProperty': 'someValue'
+                      "accRef": "did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d",
+                      "devicePushIdentifier" : "DPIaaaaaaaaaaaaaaaaa",
+                      "eventName": "Test",
+                      "sentAt": "2021-01-01T00:00:00.000Z",
+                      "payload": {
+                        "someProperty": "someValue"
                       }
                     }
             """);

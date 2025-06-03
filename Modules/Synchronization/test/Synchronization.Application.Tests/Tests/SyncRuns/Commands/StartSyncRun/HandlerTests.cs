@@ -7,6 +7,7 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -57,8 +58,8 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        response.Status.Should().Be(StartSyncRunStatus.Created);
-        response.SyncRun.Should().NotBeNull();
+        response.Status.ShouldBe(StartSyncRunStatus.Created);
+        response.SyncRun.ShouldNotBeNull();
     }
 
     [Fact]
@@ -85,11 +86,11 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         await handleWithDelayedSave
-            .Should().ThrowAsync<OperationFailedException>()
-            .WithMessage("Another sync run is currently active.*")
-            .WithErrorCode("error.platform.validation.syncRun.cannotStartSyncRunWhenAnotherSyncRunIsRunning");
+            .ShouldThrowAsync<OperationFailedException>()
+            .ShouldContainMessage("Another sync run is currently active.")
+            .ShouldHaveErrorCode("error.platform.validation.syncRun.cannotStartSyncRunWhenAnotherSyncRunIsRunning");
 
-        await handleWithImmediateSave.Should().NotThrowAsync();
+        await handleWithImmediateSave.ShouldNotThrowAsync();
     }
 
     [Fact]
@@ -107,7 +108,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.syncRun.cannotStartSyncRunWhenAnotherSyncRunIsRunning");
+        await acting.ShouldThrowAsync<OperationFailedException>().ShouldHaveErrorCode("error.platform.validation.syncRun.cannotStartSyncRunWhenAnotherSyncRunIsRunning");
     }
 
     [Fact]
@@ -129,8 +130,8 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
-        itemsOfSyncRun.Should().Contain(i => i.Id == itemWithoutErrors.Id);
-        itemsOfSyncRun.Should().NotContain(i => i.Id == itemWithMaxErrorCount.Id);
+        itemsOfSyncRun.ShouldContain(i => i.Id == itemWithoutErrors.Id);
+        itemsOfSyncRun.ShouldNotContain(i => i.Id == itemWithMaxErrorCount.Id);
     }
 
     [Fact]
@@ -145,8 +146,8 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        response.Status.Should().Be(StartSyncRunStatus.NoNewEvents);
-        response.SyncRun.Should().BeNull();
+        response.Status.ShouldBe(StartSyncRunStatus.NoNewEvents);
+        response.SyncRun.ShouldBeNull();
     }
 
     [Fact]
@@ -168,8 +169,8 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
-        itemsOfSyncRun.Should().Contain(i => i.Id == itemOfActiveIdentity.Id);
-        itemsOfSyncRun.Should().NotContain(i => i.Id == itemOfOtherIdentity.Id);
+        itemsOfSyncRun.ShouldContain(i => i.Id == itemOfActiveIdentity.Id);
+        itemsOfSyncRun.ShouldNotContain(i => i.Id == itemOfOtherIdentity.Id);
     }
 
     [Fact]
@@ -188,8 +189,8 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
-        itemsOfSyncRun.Should().Contain(i => i.Id == unsyncedItem.Id);
-        itemsOfSyncRun.Should().NotContain(i => i.Id == syncedItem.Id);
+        itemsOfSyncRun.ShouldContain(i => i.Id == unsyncedItem.Id);
+        itemsOfSyncRun.ShouldNotContain(i => i.Id == syncedItem.Id);
     }
 
     [Fact]
@@ -218,15 +219,15 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        response.Status.Should().Be(StartSyncRunStatus.Created);
-        response.SyncRun.Should().NotBeNull();
+        response.Status.ShouldBe(StartSyncRunStatus.Created);
+        response.SyncRun.ShouldNotBeNull();
 
         var canceledSyncRun = _assertionContext.SyncRuns.First(s => s.Id == expiredSyncRun.Id);
-        canceledSyncRun.FinalizedAt.Should().NotBeNull();
+        canceledSyncRun.FinalizedAt.ShouldNotBeNull();
 
         var externalEventOfCanceledSyncRun = _assertionContext.ExternalEvents.First(i => i.Id == externalEvent.Id);
-        externalEventOfCanceledSyncRun.SyncRunId?.Value.Should().Be(response.SyncRun!.Id);
-        externalEventOfCanceledSyncRun.SyncErrorCount.Should().Be(1);
+        externalEventOfCanceledSyncRun.SyncRunId?.Value.ShouldBe(response.SyncRun!.Id);
+        externalEventOfCanceledSyncRun.SyncErrorCount.ShouldBe((byte)1);
     }
 
     #region CreateHandler

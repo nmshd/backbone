@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsA
 
     public async Task Handle(AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand request, CancellationToken cancellationToken)
     {
-        var allocations = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken);
+        var allocations = await _relationshipTemplatesRepository.ListRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken);
         var updatedAllocations = new List<RelationshipTemplateAllocation>();
 
         foreach (var allocation in allocations)

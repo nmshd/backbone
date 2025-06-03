@@ -8,7 +8,7 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Clients;
 
 public class ClientsEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListClientsResponse>> GetAllClients()
+    public async Task<ApiResponse<ListClientsResponse>> ListClients()
     {
         return await _client.Get<ListClientsResponse>($"api/{API_VERSION}/Clients");
     }

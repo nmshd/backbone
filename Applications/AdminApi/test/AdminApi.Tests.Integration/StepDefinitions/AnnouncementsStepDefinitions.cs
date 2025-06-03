@@ -15,7 +15,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Announcement>? _announcementResponse;
-    private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private ApiResponse<ListAnnouncementsResponse>? _announcementsResponse;
     private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
 
@@ -28,6 +28,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     {
         var response = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
+            Severity = AnnouncementSeverity.Medium,
+            IsSilent = false,
             Texts =
             [
                 new CreateAnnouncementRequestText
@@ -37,25 +39,25 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
-            Severity = AnnouncementSeverity.Medium,
             ExpiresAt = DateTime.UtcNow
         });
 
         _givenAnnouncement = response.Result;
     }
 
-    [When(@"a GET request is sent to the /Announcements endpoint")]
+    [When("^a GET request is sent to the /Announcements endpoint$")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
-        _whenResponse = _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
+        _whenResponse = _announcementsResponse = await _client.Announcements.ListAnnouncements();
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint with a valid content")]
+    [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
@@ -69,12 +71,13 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint without an English translation")]
+    [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
     {
         _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
@@ -88,38 +91,59 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
+    {
+        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            IqlQuery = "StreetAddress.city='Heidelberg' && #'Primary Address'"
+        });
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        _whenResponse.Should().NotBeNull();
-        ((int)_whenResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _announcementResponse!.Result.Should().NotBeNull();
-        await _announcementResponse.Should().ComplyWithSchema();
+        _announcementResponse!.Result.ShouldNotBeNull();
+        await _announcementResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
     public async Task ThenTheResponseContainsAListOfAnnouncements()
     {
-        _announcementsResponse!.Result.Should().NotBeNull();
-        await _announcementsResponse.Should().ComplyWithSchema();
+        _announcementsResponse!.Result.ShouldNotBeNull();
+        await _announcementsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains the Announcement a")]
     public void ThenTheResponseContainsTheAnnouncementA()
     {
-        _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
+        _announcementsResponse!.Result!.ShouldContain(a => a.Id == _givenAnnouncement!.Id);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _whenResponse.Should().NotBeNull();
-        _whenResponse!.Error.Should().NotBeNull();
-        _whenResponse.Error!.Code.Should().Be(errorCode);
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
@@ -21,8 +22,8 @@ public class RelationshipTemplateCreateTests : AbstractTestsBase
         var template = new RelationshipTemplate(address, deviceId, null, expiresAt, content, forIdentity);
 
         // Assert
-        var domainEvent = template.Should().HaveASingleDomainEvent<RelationshipTemplateCreatedDomainEvent>();
-        domainEvent.TemplateId.Should().Be(template.Id);
-        domainEvent.CreatedBy.Should().Be(address);
+        var domainEvent = template.ShouldHaveASingleDomainEvent<RelationshipTemplateCreatedDomainEvent>();
+        domainEvent.TemplateId.ShouldBe(template.Id);
+        domainEvent.CreatedBy.ShouldBe(address);
     }
 }

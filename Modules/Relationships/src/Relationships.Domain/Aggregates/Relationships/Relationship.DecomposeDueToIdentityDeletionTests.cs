@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -24,10 +24,10 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Assert
-        acting.Should().NotThrow();
-        relationship.Status.Should().Be(RelationshipStatus.DeletionProposed);
-        relationship.FromHasDecomposed.Should().BeTrue();
-        relationship.ToHasDecomposed.Should().BeFalse();
+        acting.ShouldNotThrow();
+        relationship.Status.ShouldBe(RelationshipStatus.DeletionProposed);
+        relationship.FromHasDecomposed.ShouldBeTrue();
+        relationship.ToHasDecomposed.ShouldBeFalse();
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var acting = () => relationship.DecomposeDueToIdentityDeletion(CreateRandomIdentityAddress(), DID_DOMAIN_NAME);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.requestingIdentityDoesNotBelongToRelationship");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.requestingIdentityDoesNotBelongToRelationship");
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_2, DID_DOMAIN_NAME);
 
         // Assert
-        acting.Should().NotThrow();
-        relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+        acting.ShouldNotThrow();
+        relationship.Status.ShouldBe(RelationshipStatus.ReadyForDeletion);
     }
 
     [Fact]
@@ -69,8 +69,8 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Assert
-        relationship.From.Should().Be(anonymousIdentity);
-        relationship.FromHasDecomposed.Should().BeTrue();
+        relationship.From.ShouldBe(anonymousIdentity);
+        relationship.FromHasDecomposed.ShouldBeTrue();
     }
 
     [Fact]
@@ -84,8 +84,8 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(3);
-        relationship.AuditLog[0].CreatedBy.Should().Be(anonymousIdentity);
-        relationship.AuditLog[2].CreatedBy.Should().Be(anonymousIdentity);
+        relationship.AuditLog.ShouldHaveCount(3);
+        relationship.AuditLog[0].CreatedBy.ShouldBe(anonymousIdentity);
+        relationship.AuditLog[2].CreatedBy.ShouldBe(anonymousIdentity);
     }
 }

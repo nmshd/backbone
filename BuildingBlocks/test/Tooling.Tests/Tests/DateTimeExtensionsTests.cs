@@ -1,6 +1,5 @@
 using System.Collections;
 using Backbone.Tooling.Extensions;
-using Backbone.UnitTestTools.Extensions;
 
 namespace Backbone.Tooling.Tests.Tests;
 
@@ -16,7 +15,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         var target = operation.Invoke(DateTime.Parse(pivot));
 
         // Assert
-        target.Should().Be(expected);
+        target.ShouldBe(DateTime.Parse(expected));
     }
 
     [Fact]
@@ -29,7 +28,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         var daysDifference = _dateTimeTomorrow.DaysUntilDate();
 
         // Assert
-        daysDifference.Should().Be(1);
+        daysDifference.ShouldBe(1);
     }
 
     [Fact]
@@ -42,7 +41,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         var daysDifference = _dateTimeYesterday.DaysUntilDate();
 
         // Assert
-        daysDifference.Should().Be(-1);
+        daysDifference.ShouldBe(-1);
     }
 
     [Fact]
@@ -55,7 +54,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         var daysDifference = _dateTimeNow.DaysUntilDate();
 
         // Assert
-        daysDifference.Should().Be(0);
+        daysDifference.ShouldBe(0);
     }
 
 #pragma warning disable CS8974 // Converting method group to non-delegate type

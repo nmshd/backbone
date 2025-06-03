@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -15,8 +16,8 @@ public class TierTests : AbstractTestsBase
         var tier = new Tier(TierId.Parse("TIRsomeTierId1111111"), "some tier");
 
         // Assert
-        tier.Id.Should().Be(TierId.Parse("TIRsomeTierId1111111"));
-        tier.Name.Should().Be("some tier");
+        tier.Id.ShouldBe(TierId.Parse("TIRsomeTierId1111111"));
+        tier.Name.ShouldBe("some tier");
     }
 
     [Fact]
@@ -29,7 +30,7 @@ public class TierTests : AbstractTestsBase
         tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
 
         // Assert
-        tier.Quotas.Should().HaveCount(1);
+        tier.Quotas.ShouldHaveCount(1);
     }
 
     [Fact]
@@ -40,8 +41,8 @@ public class TierTests : AbstractTestsBase
         var result = tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class TierTests : AbstractTestsBase
         tier.DeleteQuota(tier.Quotas.First().Id);
 
         // Assert
-        tier.Quotas.Should().HaveCount(0);
+        tier.Quotas.ShouldHaveCount(0);
     }
 
     [Fact]
@@ -73,8 +74,8 @@ public class TierTests : AbstractTestsBase
         var result = tier.DeleteQuota(addedQuotas.First().Id);
 
         // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Code.ShouldBe("error.platform.quotas.cannotCreateOrDeleteQuotaOnQueuedForDeletionTier");
     }
 
     [Fact]
@@ -92,8 +93,8 @@ public class TierTests : AbstractTestsBase
         tier.DeleteQuota(quotaIdToDelete);
 
         // Assert
-        tier.Quotas.Should().HaveCount(1);
-        tier.Quotas.First().Id.Should().Be(otherQuotaId);
+        tier.Quotas.ShouldHaveCount(1);
+        tier.Quotas.First().Id.ShouldBe(otherQuotaId);
     }
 
     [Fact]
@@ -106,8 +107,8 @@ public class TierTests : AbstractTestsBase
         var result = tier.DeleteQuota("SomeInexistentTierQuotaDefinitionId");
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Code.Should().Be("error.platform.recordNotFound");
+        result.IsSuccess.ShouldBeFalse();
+        result.Error.Code.ShouldBe("error.platform.recordNotFound");
     }
 
     [Fact]
@@ -122,8 +123,8 @@ public class TierTests : AbstractTestsBase
         var result = tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Code.Should().Be("error.platform.quotas.duplicateQuota");
+        result.IsSuccess.ShouldBeFalse();
+        result.Error.Code.ShouldBe("error.platform.quotas.duplicateQuota");
     }
 
     [Fact]
@@ -140,7 +141,7 @@ public class TierTests : AbstractTestsBase
         Action act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Assert
-        act.Should().Throw<InvalidOperationException>().Which.Message.Should().Be("Method can only be called for the 'Queued for Deletion' tier");
+        act.ShouldThrow<InvalidOperationException>().Message.ShouldBe("Method can only be called for the 'Queued for Deletion' tier");
     }
 
     [Fact]
@@ -158,9 +159,9 @@ public class TierTests : AbstractTestsBase
         var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
 
         // Assert
-        tier.Quotas.Should().HaveCount(1);
-        addedQuotas.Should().HaveCount(1);
-        addedQuotas.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        tier.Quotas.ShouldHaveCount(1);
+        addedQuotas.ShouldHaveCount(1);
+        addedQuotas.First().MetricKey.ShouldBe(MetricKey.NUMBER_OF_SENT_MESSAGES);
     }
 
     [Fact]
@@ -180,8 +181,8 @@ public class TierTests : AbstractTestsBase
         var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
 
         // Assert
-        addedQuotas.Should().HaveCount(1);
-        tier.Quotas.Should().HaveCount(2);
+        addedQuotas.ShouldHaveCount(1);
+        tier.Quotas.ShouldHaveCount(2);
     }
 
     [Fact]
@@ -199,9 +200,9 @@ public class TierTests : AbstractTestsBase
         tier.DeleteQuota(tierQuotaDefinitionId);
 
         // Assert
-        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>();
-        domainEvent.TierId.Should().Be(tierId);
-        domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
+        var domainEvent = tier.ShouldHaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>();
+        domainEvent.TierId.ShouldBe(tierId);
+        domainEvent.TierQuotaDefinitionId.ShouldBe(tierQuotaDefinitionId);
     }
 
     [Fact]
@@ -216,8 +217,8 @@ public class TierTests : AbstractTestsBase
         tier.CreateQuota(metricKey, 5, QuotaPeriod.Month);
 
         // Assert
-        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionCreatedDomainEvent>();
-        domainEvent.TierId.Should().Be(tierId);
+        var domainEvent = tier.ShouldHaveASingleDomainEvent<TierQuotaDefinitionCreatedDomainEvent>();
+        domainEvent.TierId.ShouldBe(tierId);
     }
 }
 

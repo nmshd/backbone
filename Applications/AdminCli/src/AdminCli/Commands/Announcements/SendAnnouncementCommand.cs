@@ -23,13 +23,27 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "The severity of the announcement. Possible values: Low, Medium, High"
         };
 
+        var isSilent = new Option<bool?>("--silent")
+        {
+            IsRequired = false,
+            Description = "Whether the announcement should be silent. A push notification will not be sent for silent announcements. By default, the announcement is not silent."
+        };
+
+        var iqlQuery = new Option<string?>("--iql-query")
+        {
+            IsRequired = false,
+            Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
+        };
+
         AddOption(expiresAt);
         AddOption(severity);
+        AddOption(isSilent);
+        AddOption(iqlQuery);
 
-        this.SetHandler(SendAnnouncement, severity, expiresAt);
+        this.SetHandler(SendAnnouncement, severity, expiresAt, isSilent, iqlQuery);
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery)
     {
         try
         {
@@ -66,7 +80,9 @@ public class SendAnnouncementCommand : AdminCliCommand
                 {
                     Texts = texts,
                     Severity = severity,
-                    ExpiresAt = expiresAt
+                    IsSilent = isSilent ?? false,
+                    ExpiresAt = expiresAt,
+                    IqlQuery = iqlQuery
                 }, CancellationToken.None);
 
                 Console.WriteLine(@"Announcement sent successfully");

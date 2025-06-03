@@ -14,7 +14,7 @@
       },
       "Create Announcement": {
           "commandName": "Project",
-          "commandLineArgs": "announcement send --expiration 2025-12-31 --severity medium"
+          "commandLineArgs": "announcement send --silent --expiration 2025-12-31 --severity medium --iql-query \"StreetAddress.city='Heidelberg' && #'Primary Address'\""
       },
       "Delete Announcement": {
           "commandName": "Project",
@@ -27,6 +27,10 @@
       "Reset access-failed-count of Token": {
           "commandName": "Project",
           "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
+      },
+      "Export database": {
+          "commandName": "Project",
+          "commandLineArgs": "database export"
       }
   }
 }

@@ -46,7 +46,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         _removedBlobs.Clear();
     }
 
-    public async Task<byte[]> FindAsync(string folder, string id)
+    public async Task<byte[]> GetAsync(string folder, string id)
     {
         _logger.LogTrace("Reading blob with key '{blobId}'...", id);
 
@@ -77,12 +77,12 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAsync(string folder, string? prefix = null)
     {
-        return Task.FromResult(FindAllBlobsAsync(folder, prefix));
+        return Task.FromResult(ListBlobsAsync(folder, prefix));
     }
 
-    private async IAsyncEnumerable<string> FindAllBlobsAsync(string folder, string? prefix)
+    private async IAsyncEnumerable<string> ListBlobsAsync(string folder, string? prefix)
     {
         _logger.LogTrace("Listing all blobs...");
 

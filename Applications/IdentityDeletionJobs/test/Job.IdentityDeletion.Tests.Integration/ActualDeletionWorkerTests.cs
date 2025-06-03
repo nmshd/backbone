@@ -9,6 +9,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,28 +43,26 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
 
-        auditLogEntriesForDeletedData.Should().HaveCount(13);
+        auditLogEntriesForDeletedData.ShouldHaveCount(13);
 
-        auditLogEntriesForDeletedData.Should().AllSatisfy(e =>
-        {
-            e.AdditionalData.Should().HaveCount(1);
-            e.AdditionalData!.First().Key.Should().Be("aggregateType");
-        });
+        auditLogEntriesForDeletedData.ShouldAllBe(e =>
+            e.AdditionalData != null && e.AdditionalData.Count == 1 && e.AdditionalData.First().Key == "aggregateType"
+        );
 
         var deletedAggregates = auditLogEntriesForDeletedData.SelectMany(e => e.AdditionalData!.Values).ToList();
-        deletedAggregates.Should().Contain("Challenges");
-        deletedAggregates.Should().Contain("PnsRegistrations");
-        deletedAggregates.Should().Contain("Identities");
-        deletedAggregates.Should().Contain("Files");
-        deletedAggregates.Should().Contain("QuotaIdentities");
-        deletedAggregates.Should().Contain("Relationships");
-        deletedAggregates.Should().Contain("RelationshipTemplates");
-        deletedAggregates.Should().Contain("RelationshipTemplateAllocations");
-        deletedAggregates.Should().Contain("ExternalEvents");
-        deletedAggregates.Should().Contain("SyncRuns");
-        deletedAggregates.Should().Contain("Datawallets");
-        deletedAggregates.Should().Contain("Tokens");
-        deletedAggregates.Should().Contain("AnnouncementRecipients");
+        deletedAggregates.ShouldContain("Challenges");
+        deletedAggregates.ShouldContain("PnsRegistrations");
+        deletedAggregates.ShouldContain("Identities");
+        deletedAggregates.ShouldContain("Files");
+        deletedAggregates.ShouldContain("QuotaIdentities");
+        deletedAggregates.ShouldContain("Relationships");
+        deletedAggregates.ShouldContain("RelationshipTemplates");
+        deletedAggregates.ShouldContain("RelationshipTemplateAllocations");
+        deletedAggregates.ShouldContain("ExternalEvents");
+        deletedAggregates.ShouldContain("SyncRuns");
+        deletedAggregates.ShouldContain("Datawallets");
+        deletedAggregates.ShouldContain("Tokens");
+        deletedAggregates.ShouldContain("AnnouncementRecipients");
     }
 
     [Fact]
@@ -79,7 +78,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var assertionContext = GetService<DevicesDbContext>();
 
         var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address);
-        identityAfterAct.Should().BeNull();
+        identityAfterAct.ShouldBeNull();
     }
 
     [Fact]
@@ -98,7 +97,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var assertionContext = GetService<RelationshipsDbContext>();
 
         var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
-        relationshipsAfterAct.Should().BeEmpty();
+        relationshipsAfterAct.ShouldBeEmpty();
     }
 
     [Fact]
@@ -116,7 +115,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var assertionContext = GetService<RelationshipsDbContext>();
 
         var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync();
-        templatesAfterAct.Should().BeEmpty();
+        templatesAfterAct.ShouldBeEmpty();
     }
 
     private T GetService<T>() where T : notnull

@@ -11,7 +11,7 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
         var error = Relationship.CanEstablish([]);
 
         // Assert
-        error.Should().BeNull();
+        error.ShouldBeNull();
     }
 
     [Fact]
@@ -21,7 +21,7 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
         var error = Relationship.CanEstablish([TestData.CreateRelationshipInStatus(RelationshipStatus.ReadyForDeletion)]);
 
         // Assert
-        error.Should().BeNull();
+        error.ShouldBeNull();
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
         var error = Relationship.CanEstablish([TestData.CreateRelationshipInStatus(RelationshipStatus.Rejected)]);
 
         // Assert
-        error.Should().BeNull();
+        error.ShouldBeNull();
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
         var error = Relationship.CanEstablish([TestData.CreateRelationshipInStatus(RelationshipStatus.Revoked)]);
 
         // Assert
-        error.Should().BeNull();
+        error.ShouldBeNull();
     }
 
     [Theory]
@@ -55,7 +55,7 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
         var error = Relationship.CanEstablish([TestData.CreateRelationshipInStatus(status)]);
 
         // Assert
-        error.Should().NotBeNull();
-        error!.Code.Should().Be("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
+        error.ShouldNotBeNull();
+        error!.Code.ShouldBe("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
     }
 }

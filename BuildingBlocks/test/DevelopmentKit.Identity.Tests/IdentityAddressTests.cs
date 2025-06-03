@@ -22,7 +22,7 @@ public class IdentityAddressTests : AbstractTestsBase
     {
         var address = IdentityAddress.Create(Convert.FromBase64String(publicKey), "prod.enmeshed.eu");
 
-        address.Value.Should().Be(expectedAddress);
+        address.Value.ShouldBe(expectedAddress);
     }
 
     [Theory]
@@ -37,7 +37,7 @@ public class IdentityAddressTests : AbstractTestsBase
     // ReSharper enable StringLiteralTypo
     public void IsValidReturnsFalseForInvalidAddress(string identityAddress)
     {
-        IdentityAddress.IsValid(identityAddress).Should().BeFalse();
+        IdentityAddress.IsValid(identityAddress).ShouldBeFalse();
     }
 
     [Fact]
@@ -46,7 +46,7 @@ public class IdentityAddressTests : AbstractTestsBase
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.DidDomainName);
 
-        address.Value.Should().Be(testData.Address);
+        address.Value.ShouldBe(testData.Address);
     }
 
     [Fact]
@@ -55,7 +55,7 @@ public class IdentityAddressTests : AbstractTestsBase
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.DidDomainName);
 
-        address.Value.Should().Be(testData.Address);
+        address.Value.ShouldBe(testData.Address);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class IdentityAddressTests : AbstractTestsBase
         var testData = TestData.Valid();
         var isValid = IdentityAddress.IsValid(testData.Address);
 
-        isValid.Should().BeTrue();
+        isValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class IdentityAddressTests : AbstractTestsBase
     {
         var isValid = IdentityAddress.IsValid("did:e:bkb-nmshd-preprod.nbpdev.de:dids:a75bf465d17e972367a986");
 
-        isValid.Should().BeTrue();
+        isValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class IdentityAddressTests : AbstractTestsBase
         var testData = TestData.WithInvalidChecksum();
         var isValid = IdentityAddress.IsValid(testData.Address);
 
-        isValid.Should().BeFalse();
+        isValid.ShouldBeFalse();
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class IdentityAddressTests : AbstractTestsBase
         var testData = TestData.WithInvalidMainPart();
         var isValid = IdentityAddress.IsValid(testData.Address);
 
-        isValid.Should().BeFalse();
+        isValid.ShouldBeFalse();
     }
 }
 

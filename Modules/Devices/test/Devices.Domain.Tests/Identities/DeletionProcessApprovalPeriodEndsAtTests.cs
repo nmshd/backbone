@@ -1,5 +1,4 @@
 ﻿using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
 using static Backbone.Modules.Devices.Domain.Tests.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
@@ -19,6 +18,6 @@ public class DeletionProcessApprovalPeriodEndsAtTests : AbstractTestsBase
         var approvalPeriodEndsAt = deletionProcess.ApprovalPeriodEndsAt;
 
         // Assert
-        approvalPeriodEndsAt.Should().Be("2024-01-08");
+        approvalPeriodEndsAt.ShouldBe(DateTime.Parse("2024-01-08"));
     }
 }

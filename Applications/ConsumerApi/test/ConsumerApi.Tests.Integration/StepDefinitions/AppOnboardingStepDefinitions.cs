@@ -32,7 +32,7 @@ internal class AppOnboardingStepDefinitions
 
     #region When
 
-    [When($"a call is made to the /r/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"")]
+    [When($"^a call is made to the /r/resourceId endpoint for the app \"{RegexFor.SINGLE_THING}\"$")]
     public async Task WhenACallIsMadeToTheRResourceIdEndpointFor(string appId)
     {
         var requestUrl = $"r/tok12345?app={appId}";
@@ -46,29 +46,29 @@ internal class AppOnboardingStepDefinitions
     [Then($"the response contains a link with the domain name \"{RegexFor.URL}\"")]
     public void ThenTheResponseContainsALinkContaining(string url)
     {
-        _onboardingResponse.Should().NotBeNull();
+        _onboardingResponse.ShouldNotBeNull();
 
         var responseContent = _onboardingResponse.Content.ReadAsStringAsync().Result;
         const string pattern = @"<a\s+(?:[^>]*?\s+)?href\s*=\s*[""']?(?<href>[^'"" >]+)[""']?";
 
         var matches = Regex.Matches(responseContent, pattern, RegexOptions.IgnoreCase);
 
-        matches.Should().NotBeEmpty();
-        matches.Should().Contain(link => link.Value.Contains(url));
+        matches.ShouldNotBeEmpty();
+        matches.ShouldContain(link => link.Value.Contains(url));
     }
 
     [Then($"the response does not contains a link with the domain name \"{RegexFor.URL}\"")]
     public void ThenTheResponseDoesNotContainALinkContaining(string url)
     {
-        _onboardingResponse.Should().NotBeNull();
+        _onboardingResponse.ShouldNotBeNull();
 
         var responseContent = _onboardingResponse.Content.ReadAsStringAsync().Result;
         const string pattern = @"<a\s+(?:[^>]*?\s+)?href\s*=\s*[""']?(?<href>[^'"" >]+)[""']?";
 
         var matches = Regex.Matches(responseContent, pattern, RegexOptions.IgnoreCase);
 
-        matches.Should().NotBeEmpty();
-        matches.Should().NotContain(link => link.Value.Contains(url));
+        matches.ShouldNotBeEmpty();
+        matches.ShouldNotContain(link => link.Value.Contains(url));
     }
 
     #endregion

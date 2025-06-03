@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -20,12 +21,12 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
-        identity.TierId.Should().Be(tierIdBeforeDeletion);
-        identity.TierIdBeforeDeletion.Should().Be(null);
-        identity.Status.Should().Be(IdentityStatus.Active);
-        deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
-        deletionProcess.CancelledAt.Should().Be(DateTime.Parse("2024-01-01"));
-        deletionProcess.CancelledByDevice.Should().Be(identity.Devices[0].Id);
+        identity.TierId.ShouldBe(tierIdBeforeDeletion);
+        identity.TierIdBeforeDeletion.ShouldBe(null);
+        identity.Status.ShouldBe(IdentityStatus.Active);
+        deletionProcess.Status.ShouldBe(DeletionProcessStatus.Cancelled);
+        deletionProcess.CancelledAt.ShouldBe(DateTime.Parse("2024-01-01"));
+        deletionProcess.CancelledByDevice.ShouldBe(identity.Devices[0].Id);
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
@@ -42,7 +43,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var acting = () => identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
+        acting.ShouldThrow<DomainException>().ShouldContainMessage("IdentityDeletionProcess");
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.gracePeriodHasAlreadyExpired");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.gracePeriodHasAlreadyExpired");
     }
 
     [Fact]
@@ -84,27 +85,27 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
-        var deletionProcessDomainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
-        deletionProcessDomainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
-        deletionProcessDomainEvent.Address.Should().Be(identity.Address);
-        deletionProcessDomainEvent.Initiator.Should().Be(identity.Address);
+        var deletionProcessDomainEvent = deletionProcess.ShouldHaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        deletionProcessDomainEvent.DeletionProcessId.ShouldBe(deletionProcess.Id);
+        deletionProcessDomainEvent.Address.ShouldBe(identity.Address);
+        deletionProcessDomainEvent.Initiator.ShouldBe(identity.Address);
 
-        var (tierOfIdentityChangedDomainEvent, identityDeletionCancelledDomainEvent) = identity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCancelledDomainEvent>();
+        var (tierOfIdentityChangedDomainEvent, identityDeletionCancelledDomainEvent) = identity.ShouldHaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCancelledDomainEvent>();
 
-        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(identity.Address);
-        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
-        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(identity.TierId);
+        tierOfIdentityChangedDomainEvent.IdentityAddress.ShouldBe(identity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.ShouldBe(Tier.QUEUED_FOR_DELETION.Id);
+        tierOfIdentityChangedDomainEvent.NewTierId.ShouldBe(identity.TierId);
 
-        identityDeletionCancelledDomainEvent.IdentityAddress.Should().Be(identity.Address);
+        identityDeletionCancelledDomainEvent.IdentityAddress.ShouldBe(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
-        deletionProcess.AuditLog.Should().HaveCount(2);
+        deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.Should().Be(deletionProcess.Id);
-        auditLogEntry.OldStatus.Should().Be(DeletionProcessStatus.Approved);
-        auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
+        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Cancelled);
     }
 }

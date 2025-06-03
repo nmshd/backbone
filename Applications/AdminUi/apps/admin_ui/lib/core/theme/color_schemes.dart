@@ -8,15 +8,19 @@ const _secondarySeedColor = Color(0xFF1A80D9);
 const _tertiarySeedColor = Color(0xFFFF7600);
 const _errorSeedColor = Color(0xFF8C1742);
 
-final lightTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: Brightness.light, customColors: lightCustomColors);
-final darkTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: Brightness.dark, customColors: darkCustomColors);
+final ThemeData lightTheme = _generateColorScheme(
+  tonesConstructor: FlexTones.material,
+  brightness: Brightness.light,
+  customColors: lightCustomColors,
+);
+final ThemeData darkTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: Brightness.dark, customColors: darkCustomColors);
 
-final highContrastTheme = _generateColorScheme(
+final ThemeData highContrastTheme = _generateColorScheme(
   tonesConstructor: FlexTones.ultraContrast,
   brightness: Brightness.light,
   customColors: lightHighContrastCustomColors,
 );
-final highContrastDarkTheme = _generateColorScheme(
+final ThemeData highContrastDarkTheme = _generateColorScheme(
   tonesConstructor: FlexTones.ultraContrast,
   brightness: Brightness.dark,
   customColors: darkHighContrastCustomColors,
@@ -40,7 +44,7 @@ ThemeData _generateColorScheme({
     tones: tonesConstructor(brightness),
   );
 
-  final cardTheme = CardTheme(color: colorScheme.surface, shadowColor: colorScheme.shadow, surfaceTintColor: colorScheme.surfaceTint);
+  final cardTheme = CardThemeData(color: colorScheme.surface, shadowColor: colorScheme.shadow, surfaceTintColor: colorScheme.surfaceTint);
 
   return ThemeData(colorScheme: colorScheme, extensions: [customColors], cardTheme: cardTheme);
 }

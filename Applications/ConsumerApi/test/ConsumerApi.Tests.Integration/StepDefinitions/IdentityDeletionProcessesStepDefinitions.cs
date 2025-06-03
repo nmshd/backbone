@@ -73,7 +73,7 @@ internal class IdentityDeletionProcessesStepDefinitions
             await client.Identities.CancelDeletionProcess(_identitiesContext.StartDeletionProcessResponses[deletionProcessName].Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{{id}}/Approve endpoint with \"([^\"]*)\"")]
+    [When($"^{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{{id}}/Approve endpoint with \"([^\"]*)\"$")]
     public async Task WhenDeviceSendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string identityName, string nonExistentDeletionProcessId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -87,7 +87,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
     public void ThenTheNewStatusOfTheDeletionProcessIs(string deletionProcessName, string newDeletionProcessStatus)
     {
-        _cancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
+        _cancelDeletionProcessResponse!.Result!.Status.ShouldBe(newDeletionProcessStatus);
     }
 
     #endregion

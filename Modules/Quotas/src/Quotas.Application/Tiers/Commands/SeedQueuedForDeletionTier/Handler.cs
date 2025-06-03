@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
     {
         for (var retries = 0; retries < MAX_RETRIES_TO_FIND_QUEUED_FOR_DELETION_TIER; retries++)
         {
-            var queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
+            var queuedForDeletionTier = await _tiersRepository.Get(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
 
             if (queuedForDeletionTier != null)
                 return queuedForDeletionTier;
@@ -45,7 +45,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
 
     private async Task Seed(Tier queuedForDeletionTier)
     {
-        var metrics = await _metricsRepository.FindAll(CancellationToken.None);
+        var metrics = await _metricsRepository.List(CancellationToken.None);
         var excludedMetricKeys = new List<MetricKey>
         {
             MetricKey.NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS, // Identities to be deleted should still be able to modify the datawallet

@@ -16,7 +16,7 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
         var result = relationship.HasParticipant(identityAddress);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
         var result = relationship.HasParticipant(identityAddress);
 
         // Assert
-        result.Should().BeTrue();
-        relationship.To.Should().Be(identityAddress);
+        result.ShouldBeTrue();
+        relationship.To.ShouldBe(identityAddress);
     }
 
     [Fact]
@@ -47,9 +47,9 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
         var hasIdentityAddressTo = relationship.HasParticipant(identityAddressTo);
 
         // Assert
-        hasIdentityAddressFrom.Should().BeTrue();
-        hasIdentityAddressTo.Should().BeTrue();
-        relationship.From.Should().Be(identityAddressFrom);
+        hasIdentityAddressFrom.ShouldBeTrue();
+        hasIdentityAddressTo.ShouldBeTrue();
+        relationship.From.ShouldBe(identityAddressFrom);
     }
 }
 

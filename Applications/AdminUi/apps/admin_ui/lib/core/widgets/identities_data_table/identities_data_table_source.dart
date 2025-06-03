@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
-  var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
+  ({bool sortAscending, int sortColumnIndex}) _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
   IdentityOverviewFilter? _filter;
   set filter(IdentityOverviewFilter? newFilter) {
     if (_filter != newFilter) {
@@ -55,39 +55,36 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       );
       _pagination = response.pagination;
 
-      final rows =
-          response.data.indexed
-              .map(
-                (identity) => DataRow2.byIndex(
-                  index: pageNumber * count + identity.$1,
-                  onTap: () => navigateToIdentity(address: identity.$2.address),
-                  cells: [
-                    DataCell(Text(identity.$2.address)),
-                    if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
-                    if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
-                    DataCell(Text(identity.$2.numberOfDevices.toString())),
-                    DataCell(
-                      Tooltip(
-                        message:
-                            '${DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)} ${DateFormat.Hms().format(identity.$2.createdAt)}',
-                        child: Text(DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)),
-                      ),
-                    ),
-                    DataCell(
-                      Tooltip(
-                        message:
-                            identity.$2.lastLoginAt != null
-                                ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
-                                : '',
-                        child: Text(identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : ''),
-                      ),
-                    ),
-                    DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
-                    DataCell(Text(identity.$2.identityVersion.toString())),
-                  ],
+      final rows = response.data.indexed
+          .map(
+            (identity) => DataRow2.byIndex(
+              index: pageNumber * count + identity.$1,
+              onTap: () => navigateToIdentity(address: identity.$2.address),
+              cells: [
+                DataCell(Text(identity.$2.address)),
+                if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
+                if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
+                DataCell(Text(identity.$2.numberOfDevices.toString())),
+                DataCell(
+                  Tooltip(
+                    message: '${DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)} ${DateFormat.Hms().format(identity.$2.createdAt)}',
+                    child: Text(DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)),
+                  ),
                 ),
-              )
-              .toList();
+                DataCell(
+                  Tooltip(
+                    message: identity.$2.lastLoginAt != null
+                        ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
+                        : '',
+                    child: Text(identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : ''),
+                  ),
+                ),
+                DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
+                DataCell(Text(identity.$2.identityVersion.toString())),
+              ],
+            ),
+          )
+          .toList();
 
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {

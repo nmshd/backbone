@@ -20,11 +20,11 @@ public class TierQuotaTests : AbstractTestsBase
         var tierQuota = new TierQuota(tierQuotaDefinition, applyTo);
 
         // Assert
-        tierQuota.Id.Should().NotBeNull();
-        tierQuota.ApplyTo.Should().Be(applyTo);
-        tierQuota.MetricKey.Should().Be(metricKey);
-        tierQuota.Period.Should().Be(period);
-        tierQuota.Max.Should().Be(max);
-        tierQuota.Weight.Should().Be(1);
+        tierQuota.Id.ShouldNotBeNull();
+        tierQuota.ApplyTo.ShouldBe(applyTo);
+        tierQuota.MetricKey.ShouldBe(metricKey);
+        tierQuota.Period.ShouldBe(period);
+        tierQuota.Max.ShouldBe(max);
+        tierQuota.Weight.ShouldBe(1);
     }
 }
