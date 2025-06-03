@@ -50,17 +50,13 @@
 <div class="container">
     <div class="steps-container">
         <div class="info-box">
-            <p>
-                Bitte wählen Sie die von Ihrem Anbieter angegebene App aus und installieren Sie sie.
-            </p>
+            <p>Bitte wählen Sie die von Ihrem Anbieter angegebene App aus und installieren Sie sie.</p>
         </div>
         @foreach (var app in Model.Apps)
         {
             <a class="step-box" id="linkTo@(app.Id)">
                 <div class="step-content">@app.DisplayName installieren</div>
-                <img
-                    src="@app.AppIconUrl"
-                    alt="Zur App Installation" class="app-icon" />
+                <img src="@app.AppIconUrl" alt="Zur App Installation" class="app-icon" />
             </a>
         }
     </div>
