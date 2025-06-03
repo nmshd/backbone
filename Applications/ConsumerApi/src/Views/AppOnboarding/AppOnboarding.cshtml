@@ -27,12 +27,11 @@
         }
 
         .banner {
-            padding: 1rem;
+            padding: 64px 32px;
         }
 
         .banner img {
             width: 100%;
-            margin-bottom: 0.5rem;
         }
 
         .step-box .store-button {
@@ -65,7 +64,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div class="vertical-spacer"></div>
 <div class="container">
     <div class="banner-box">
         <div class="banner">
@@ -75,48 +73,50 @@
         </div>
     </div>
 
-    <div class="info-box">
-        <p>
-            Sie haben einen QR-Code der @Model.AppDisplayName-Plattform gescannt.
-            Um fortfahren zu können, laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
-        </p>
-    </div>
-    <div class="step-box" id="app-install-step">
-        <div class="step-content">
-            <p>1.</p>
-            <p>Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
+    <div class="steps-container">
+        <div class="info-box">
+            <p>
+                Sie haben einen QR-Code der @Model.AppDisplayName-Plattform gescannt.
+                Um fortfahren zu können, laden Sie die @Model.AppDisplayName-App auf Ihr Gerät.
+            </p>
         </div>
-        <div
-            class="@(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "app-store-buttons" : "app-store-button")">
-            @foreach (var appStore in Model.Links)
-            {
-                if (string.IsNullOrEmpty(appStore.Link))
-                {
-                    <p>@appStore.NoLinkText</p>
-                }
-                else
-                {
-                    <div>
-                        <a href="@appStore.Link" target="_blank">
-                            <img
-                                class="store-button"
-                                src="@appStore.StoreButtonUrl"
-                                alt="@appStore.StoreName"
-                                onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
-                        </a>
-                    </div>
-                }
-            }
-        </div>
-    </div>
 
-    <a class="step-box" id="inAppLink">
-        <div class="step-content">
-            <p>2.</p>
-            <p>Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
+        <div class="step-box" id="app-install-step">
+            <div class="step-content">
+                <p>1.</p>
+                <p>Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
+            </div>
+            <div
+                class="@(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "app-store-buttons" : "app-store-button")">
+                @foreach (var appStore in Model.Links)
+                {
+                    if (string.IsNullOrEmpty(appStore.Link))
+                    {
+                        <p>@appStore.NoLinkText</p>
+                    }
+                    else
+                    {
+                        <div>
+                            <a href="@appStore.Link" target="_blank">
+                                <img
+                                    class="store-button"
+                                    src="@appStore.StoreButtonUrl"
+                                    alt="@appStore.StoreName"
+                                    onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
         </div>
-        <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
-    </a>
+
+        <a class="step-box" id="inAppLink">
+            <div class="step-content">
+                <p>2.</p>
+                <p>Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
+            </div>
+            <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
+        </a>
+    </div>
 </div>
-<div class="vertical-spacer"></div>
 </body>

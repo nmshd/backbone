@@ -12,8 +12,17 @@ body {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     max-width: 430px;
     margin: 0 auto;
+}
+
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .info-box {
@@ -21,7 +30,6 @@ body {
     background-color: var(--secondary-color);
     padding: 16px;
     border-radius: 4px;
-    margin-top: 10px;
 }
 
 .step-box {
@@ -29,7 +37,6 @@ body {
     background-color: var(--primary-color);
     padding: 16px;
     border-radius: 4px;
-    margin-top: 10px;
     display: flex;
     gap: 16px;
     justify-content: space-between;
@@ -45,10 +52,6 @@ body {
 .step-box {
     color: #1A1B20;
     text-decoration: none;
-}
-
-.vertical-spacer {
-    height: 3rem;
 }
 
 .step-box p {
