@@ -96,14 +96,12 @@
                     }
                     else
                     {
-                        <div>
-                            <a href="@appStore.Link" target="_blank" class="store-link">
-                                <img
-                                    src="@appStore.StoreButtonUrl"
-                                    alt="@appStore.StoreName"
-                                    onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
-                            </a>
-                        </div>
+                        <a href="@appStore.Link" target="_blank" class="store-link">
+                            <img
+                                src="@appStore.StoreButtonUrl"
+                                alt="@appStore.StoreName"
+                                onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
+                        </a>
                     }
                 }
             </div>
