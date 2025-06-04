@@ -112,7 +112,8 @@
                        title="@(string.IsNullOrEmpty(appStore.Link) ? appStore.NoLinkText : null)"
                        tabindex="0"
                        target="_blank"
-                       class="store-link">
+                       class="store-link"
+                       aria-label="@(string.IsNullOrEmpty(appStore.Link) ? appStore.NoLinkText : $@"{appStore.StoreName} öffnen")">
                         <img
                             src="@appStore.StoreButtonUrl"
                             alt="@appStore.StoreName"
