@@ -34,7 +34,7 @@
       },
       "Export database": {
           "commandName": "Project",
-          "commandLineArgs": "database export"
+          "commandLineArgs": "database export --sensitive"
       }
   }
 }
