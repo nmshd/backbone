@@ -27,6 +27,20 @@ public class ClaimOwnershipTests
     }
 
     [Fact]
+    public void Cannot_claim_ownership_for_own_file()
+    {
+        // Arrange
+        var owner = CreateRandomIdentityAddress();
+        var file = TestDataGenerator.CreateFile(owner);
+
+        // Act
+        var result = file.ClaimOwnership(file.OwnershipToken, owner);
+
+        // Assert
+        result.ShouldBe(File.ClaimFileOwnershipResult.CannotClaimOwnFile);
+    }
+
+    [Fact]
     public void Claiming_a_file_ownership_with_the_wrong_token_locks_it()
     {
         // Arrange

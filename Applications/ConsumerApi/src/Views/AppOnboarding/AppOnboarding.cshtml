@@ -9,29 +9,128 @@
     <title>Onboarding</title>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const link = document.getElementById('inAppLink');
+            const link = document.getElementById('in-app-link');
             link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
         });
     </script>
+
+    <style>
+        :root {
+            --primary-color: @Model.PrimaryColor;
+            --secondary-color: @Model.SecondaryColor;
+            --background-color: @Model.BackgroundColor;
+        }
+
+        #app-install-step {
+            flex-direction: @(Model.Links.Count > 1 ? "column" : "row");
+            justify-content: space-between;
+        }
+
+        .banner {
+            padding: 64px 32px;
+        }
+
+        .banner img {
+            width: 100%;
+        }
+
+        .store-link img {
+            height: 40px;
+        }
+
+        .app-store-button {
+            display: flex;
+            align-self: center;
+            height: 40px;
+        }
+
+        .app-store-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: end;
+            gap: 16px;
+            height: 40px;
+        }
+
+        .store-link-missing {
+            opacity: 0.3;
+        }
+
+        @@media (pointer: coarse), (hover: none) {
+            [title] {
+                position: relative;
+                display: inline-flex;
+                justify-content: center;
+            }
+
+            [title]:focus::after {
+                content: attr(title);
+                position: absolute;
+                top: 90%;
+                background-color: #555;
+                color: #fff;
+                border: 1px solid;
+                width: fit-content;
+                padding: 3px;
+                font-size: 10px;
+            }
+        }
+
+        .app-icon {
+            display: block;
+            width: 60px;
+            height: 60px;
+            border-radius: 20%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="~/style/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<p>App already installed?</p>
-<p>Then please click the link below to open the app directly:</p>
-<br />
-<br />
-<a href="" id="inAppLink">Open @Model.AppDisplayName App</a><br />
-<p>App not yet installed?</p>
-<p>Then please click the link below to install the app:</p>
-<br />
-@foreach (var link in Model.Links)
-{
-    if (link.Link != null)
-    {
-        <p>@link.StoreName: <a href="@link.Link" target="_blank">@link.Link</a></p>
-    }
-    else
-    {
-        <p>@link.StoreName: @link.NoLinkText</p>
-    }
-}
+<div class="container">
+    <div class="banner-box">
+        <div class="banner">
+            <img src="@Model.BannerUrl" alt="@Model.AppDisplayName Logo" />
+        </div>
+    </div>
+
+    <div class="steps-container">
+        <div class="info-box">
+            <p>@Model.AppDescription</p>
+        </div>
+
+        <div class="step-box" id="app-install-step">
+            <div class="step-content numbered-step-content">
+                <p>1.</p>
+                <p>Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
+            </div>
+            <div class="@(Model.Links.Count > 1 ? "app-store-buttons" : "app-store-button")">
+                @foreach (var appStore in Model.Links)
+                {
+                    <a href="@appStore.Link"
+                       title="@(string.IsNullOrEmpty(appStore.Link) ? appStore.NoLinkText : null)"
+                       tabindex="0"
+                       target="_blank"
+                       class="store-link"
+                       aria-label="@(string.IsNullOrEmpty(appStore.Link) ? appStore.NoLinkText : $@"{appStore.StoreName} öffnen")">
+                        <img
+                            src="@appStore.StoreButtonUrl"
+                            alt="@appStore.StoreName"
+                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';"
+                            class="@(string.IsNullOrEmpty(appStore.Link) ? "store-link-missing" : null) " />
+                    </a>
+                }
+            </div>
+        </div>
+
+        <a class="step-box" id="in-app-link">
+            <div class="step-content numbered-step-content">
+                <p>2.</p>
+                <p>Klicken Sie anschließend hier, um die App mit Ihrem Code zu starten.</p>
+            </div>
+            <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
+        </a>
+    </div>
+</div>
 </body>

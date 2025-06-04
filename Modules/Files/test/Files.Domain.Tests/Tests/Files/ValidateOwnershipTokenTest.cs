@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Domain.Tests.Helpers;
@@ -85,10 +84,12 @@ public class ValidateOwnershipTokenTest
     {
         // Arrange
         var file = TestDataGenerator.CreateFile();
-        file.ClaimOwnership(FileOwnershipToken.New(), file.Owner);
+        var newOwner = CreateRandomIdentityAddress();
+
+        file.ClaimOwnership(FileOwnershipToken.New(), newOwner);
 
         // Act
-        var validationResult = file.ValidateFileOwnershipToken(file.OwnershipToken, file.Owner);
+        var validationResult = file.ValidateFileOwnershipToken(file.OwnershipToken, newOwner);
 
         // Assert
         validationResult.ShouldBeFalse();
