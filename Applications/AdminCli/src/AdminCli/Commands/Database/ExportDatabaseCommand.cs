@@ -131,7 +131,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     : null,
                 ClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName,
+                ClientId = d.Identity.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -172,7 +173,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -197,9 +199,11 @@ public class ExportDatabaseCommand : AdminCliCommand
                 FromClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId) == null
                     ? null
                     : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId)!.DisplayName,
+                FromClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId,
                 ToClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName,
+                ToClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -223,9 +227,11 @@ public class ExportDatabaseCommand : AdminCliCommand
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId)!
                             .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId,
                 OwnerClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName,
+                OwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -250,12 +256,14 @@ public class ExportDatabaseCommand : AdminCliCommand
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
                             .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId,
                 RecipientClientName =
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
                         a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
-                            a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName
+                            a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName,
+                RecipientClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -280,7 +288,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -301,7 +310,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                SyncItemOwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -323,7 +333,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
