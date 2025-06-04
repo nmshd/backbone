@@ -22,7 +22,7 @@
         }
 
         #app-install-step {
-            flex-direction: @(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "column" : "row");
+            flex-direction: @(Model.Links.Count > 1 ? "column" : "row");
             justify-content: space-between;
         }
 
@@ -52,6 +52,30 @@
             height: 40px;
         }
 
+        .store-link-missing {
+            opacity: 0.3;
+        }
+
+        @@media (pointer: coarse), (hover: none) {
+            [title] {
+                position: relative;
+                display: inline-flex;
+                justify-content: center;
+            }
+
+            [title]:focus::after {
+                content: attr(title);
+                position: absolute;
+                top: 90%;
+                background-color: #555;
+                color: #fff;
+                border: 1px solid;
+                width: fit-content;
+                padding: 3px;
+                font-size: 10px;
+            }
+        }
+
         .app-icon {
             display: block;
             width: 60px;
@@ -73,9 +97,7 @@
 
     <div class="steps-container">
         <div class="info-box">
-            <p>
-                @Model.AppDescription
-            </p>
+            <p>@Model.AppDescription</p>
         </div>
 
         <div class="step-box" id="app-install-step">
@@ -83,23 +105,20 @@
                 <p>1.</p>
                 <p>Laden Sie die @Model.AppDisplayName-App aus dem @Model.AppStoreDescriptor.</p>
             </div>
-            <div
-                class="@(Model.Links.Count(l => !string.IsNullOrEmpty(l.Link)) > 1 ? "app-store-buttons" : "app-store-button")">
+            <div class="@(Model.Links.Count > 1 ? "app-store-buttons" : "app-store-button")">
                 @foreach (var appStore in Model.Links)
                 {
-                    if (string.IsNullOrEmpty(appStore.Link))
-                    {
-                        <p>@appStore.NoLinkText</p>
-                    }
-                    else
-                    {
-                        <a href="@appStore.Link" target="_blank" class="store-link">
-                            <img
-                                src="@appStore.StoreButtonUrl"
-                                alt="@appStore.StoreName"
-                                onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';" />
-                        </a>
-                    }
+                    <a href="@appStore.Link"
+                       title="@(string.IsNullOrEmpty(appStore.Link) ? appStore.NoLinkText : null)"
+                       tabindex="0"
+                       target="_blank"
+                       class="store-link">
+                        <img
+                            src="@appStore.StoreButtonUrl"
+                            alt="@appStore.StoreName"
+                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';"
+                            class="@(string.IsNullOrEmpty(appStore.Link) ? "store-link-missing" : null) " />
+                    </a>
                 }
             </div>
         </div>
