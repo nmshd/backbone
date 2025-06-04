@@ -11,6 +11,7 @@ public class DeviceExport
     public required string Tier { get; set; } = null!;
     public required IdentityStatus IdentityStatus { get; set; }
     public required DateTime? IdentityDeletionGracePeriodEndsAt { get; set; }
+    public required string? ClientId { get; set; }
     public required string? ClientName { get; set; }
     public required PushNotificationPlatform? Platform { get; set; } = null!;
 }
