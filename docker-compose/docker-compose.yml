@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.1.0-management-alpine@sha256:770948395acde6a1faf449f8570dc1f0365eb573dba1c6c89d060e1fcbfe199c
+    image: rabbitmq:4.1.1-management-alpine@sha256:9fc85a36fa241654208ae3e27b6cc34a6d629069730174ebabf9d5dee2872132
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
