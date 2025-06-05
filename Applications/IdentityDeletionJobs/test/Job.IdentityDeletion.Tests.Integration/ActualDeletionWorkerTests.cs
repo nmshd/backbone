@@ -43,7 +43,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
 
-        auditLogEntriesForDeletedData.ShouldHaveCount(14);
+        auditLogEntriesForDeletedData.ShouldHaveCount(13);
 
         auditLogEntriesForDeletedData.ShouldAllBe(e =>
             e.AdditionalData != null && e.AdditionalData.Count == 1 && e.AdditionalData.First().Key == "aggregateType"
@@ -54,7 +54,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         deletedAggregates.ShouldContain("PnsRegistrations");
         deletedAggregates.ShouldContain("Identities");
         deletedAggregates.ShouldContain("Files");
-        deletedAggregates.ShouldContain("Messages");
         deletedAggregates.ShouldContain("QuotaIdentities");
         deletedAggregates.ShouldContain("Relationships");
         deletedAggregates.ShouldContain("RelationshipTemplates");
@@ -80,33 +79,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address);
         identityAfterAct.ShouldBeNull();
-    }
-
-    [Fact]
-    public async Task Anonymizes_the_identity_in_all_messages_instead_of_deleting_the_message()
-    {
-        // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = await SeedDatabaseWithIdentity();
-        var relationship = await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peer);
-
-        var sentMessage = await SeedDatabaseWithMessage(relationship, from: identityToBeDeleted, to: peer);
-        var receivedMessage = await SeedDatabaseWithMessage(relationship, from: peer, to: identityToBeDeleted);
-
-        // Act
-        await _host.StartAsync();
-
-        // Assert
-        var assertionContext = GetService<MessagesDbContext>();
-
-        var messagesOfIdentityAfterAct = await assertionContext.Messages.Where(Message.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
-        messagesOfIdentityAfterAct.ShouldBeEmpty();
-
-        var sentMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == sentMessage.Id);
-        sentMessageAfterAct.ShouldNotBeNull();
-
-        var receivedMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == receivedMessage.Id);
-        receivedMessageAfterAct.ShouldNotBeNull();
     }
 
     [Fact]
