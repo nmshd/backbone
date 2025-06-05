@@ -35,7 +35,10 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
-            message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
+            if (@event.WasDueToIdentityDeletion)
+                message.AnonymizeParticipant(@event.Initiator, anonymizedIdentityAddress);
+            else
+                message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
         }
 
         await _messagesRepository.Update(messagesExchangedBetweenRelationshipParticipants);
