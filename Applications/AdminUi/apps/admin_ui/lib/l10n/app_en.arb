@@ -108,6 +108,8 @@
     "createAnnouncementDialog_title": "Create Announcement",
     "createAnnouncementDialog_explanation": "If a language is not maintained, the English text will be used.",
     "createAnnouncementDialog_impact": "Impact",
+    "createAnnouncementDialog_sendAPushNotification": "Send a push notification",
+    "createAnnouncementDialog_iqlQuery": "IQL Query",
     "createAnnouncement_selectLanguage": "Select Language",
     "createAnnouncement_pleaseFillAllRequiredFields": "Please fill all required fields.",
     "createAnnouncementDialog_requiredField": "This field is required.",
