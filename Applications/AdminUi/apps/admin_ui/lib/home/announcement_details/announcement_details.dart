@@ -74,7 +74,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                           EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: _announcmentDetails!.iqlQuery!),
                         EntityDetails(
                           title: context.l10n.announcementDetails_sendAPushNotification,
-                          value: _announcmentDetails!.isSilent ? context.l10n.yes : context.l10n.no,
+                          value: _announcmentDetails!.isSilent ? context.l10n.no : context.l10n.yes,
                         ),
                       ],
                     ),
