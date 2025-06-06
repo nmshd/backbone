@@ -81,6 +81,7 @@
     "announcementsOverview_noAnnouncementsFound": "No announcements found.",
     "announcementsDialog_details": "Announcement Details",
     "announcementsDetails": "Announcement Detail",
+    "announcementDetails_iqlQuery": "IQL Query",
     "createAnnouncement_announcementError": "An error occurred while creating the announcement. Please try again.",
     "createAnnouncement_defaultLanguage": "Languages (default is English)",
     "changeClientSecretDialog_copyToClipboard": "Copy to Clipboard",

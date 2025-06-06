@@ -13,8 +13,16 @@ class Announcement {
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
+  final String? iqlQuery;
 
-  Announcement({required this.id, required this.createdAt, required this.expiresAt, required this.severity, required this.texts});
+  Announcement({
+    required this.id,
+    required this.createdAt,
+    required this.expiresAt,
+    required this.severity,
+    required this.texts,
+    required this.iqlQuery,
+  });
 
   factory Announcement.fromJson(dynamic json) => _$AnnouncementFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
