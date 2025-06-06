@@ -15,11 +15,20 @@ class AnnouncementsEndpoint extends Endpoint {
   Future<ApiResponse<CreateAnnouncementResponse>> createAnnouncement({
     required AnnouncementSeverity severity,
     required List<AnnouncementText> announcementTexts,
+    required bool isSilent,
     String? expiresAt,
     List<String>? recipients,
+    String? iqlQuery,
   }) => post(
     '/api/v1/Announcements',
-    data: {'expiresAt': expiresAt, 'severity': severity.name, 'texts': announcementTexts, 'recipients': recipients},
+    data: {
+      'expiresAt': expiresAt,
+      'severity': severity.name,
+      'texts': announcementTexts,
+      'recipients': recipients,
+      'isSilent': isSilent,
+      'iqlQuery': iqlQuery,
+    },
     transformer: CreateAnnouncementResponse.fromJson,
   );
 }

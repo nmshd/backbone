@@ -30,6 +30,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   AnnouncementSeverity? _selectedSeverity;
   DateTime? _selectedExpirationDate;
+  bool _sendAPushNotification = false;
+  String _iqlQuery = '';
   final List<AnnouncementSeverity> _severityOptions = AnnouncementSeverity.values;
 
   final List<_AnnouncementTextFormWidget> _announcementTextWidgets = [];
@@ -111,6 +113,20 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   },
                 ),
                 Gaps.h16,
+                CheckboxListTile(
+                  title: Text(context.l10n.createAnnouncementDialog_sendAPushNotification),
+                  value: _sendAPushNotification,
+                  onChanged: (value) => setState(() => _sendAPushNotification = value ?? false),
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                Gaps.h16,
+                TextFormField(
+                  initialValue: _iqlQuery,
+                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_iqlQuery, border: const OutlineInputBorder()),
+                  onChanged: (value) => _iqlQuery = value,
+                ),
+                Gaps.h16,
                 Row(
                   children: [
                     Expanded(child: Text(context.l10n.createAnnouncement_defaultLanguage)),
@@ -158,6 +174,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   severity: _selectedSeverity!,
                   announcementTexts: announcementTexts,
                   recipients: [],
+                  iqlQuery: _iqlQuery,
+                  isSilent: !_sendAPushNotification,
                 );
 
                 if (!context.mounted) return;

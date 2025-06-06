@@ -23,5 +23,6 @@ namespace Backbone.Modules.Announcements.Application.Announcements.DTOs
         public IEnumerable<AnnouncementTextDTO> Texts { get; set; }
         public IEnumerable<string> Recipients { get; set; }
         public string? IqlQuery { get; set; }
+        public bool IsSilent { get; set; }
     }
 }

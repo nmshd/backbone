@@ -44,6 +44,9 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("nvarchar(1000)")
                         .IsFixedLength(false);
 
+                    b.Property<bool>("IsSilent")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 
