@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import '../widgets/language_picker.dart';
 
 Future<void> showCreateAnnouncementDialog({required BuildContext context, required VoidCallback onAnnouncementCreated}) async {
   await showDialog<void>(
@@ -32,15 +31,15 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   DateTime? _selectedExpirationDate;
   bool _sendAPushNotification = false;
   String _iqlQuery = '';
+  String _englishTitle = '';
+  String _englishBody = '';
+  String _germanTitle = '';
+  String _germanBody = '';
   final List<AnnouncementSeverity> _severityOptions = AnnouncementSeverity.values;
-
-  final List<_AnnouncementTextFormWidget> _announcementTextWidgets = [];
 
   @override
   void initState() {
     super.initState();
-
-    _announcementTextWidgets.add(_AnnouncementTextFormWidget(defaultLanguage: 'en', formKey: _formKey, onRemove: _remove));
   }
 
   @override
@@ -126,22 +125,47 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_iqlQuery, border: const OutlineInputBorder()),
                   onChanged: (value) => _iqlQuery = value,
                 ),
-                Gaps.h16,
-                Row(
-                  children: [
-                    Expanded(child: Text(context.l10n.createAnnouncement_defaultLanguage)),
-                    IconButton.filled(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {
-                          _announcementTextWidgets.add(_AnnouncementTextFormWidget(formKey: _formKey, onRemove: _remove));
-                        });
-                      },
-                    ),
-                  ],
+                Gaps.h32,
+                TextFormField(
+                  initialValue: _englishTitle,
+                  decoration: InputDecoration(
+                    labelText: '${context.l10n.createAnnouncementDialog_englishTitle}*',
+                    border: const OutlineInputBorder(),
+                  ),
+                  validator: (value) => validateRequiredField(context, value),
+                  onChanged: (value) => _englishTitle = value,
                 ),
                 Gaps.h16,
-                Column(spacing: 16, children: _announcementTextWidgets),
+                TextFormField(
+                  initialValue: _englishBody,
+                  decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_englishBody}*', border: const OutlineInputBorder()),
+                  validator: (value) => validateRequiredField(context, value),
+                  onChanged: (value) => _englishBody = value,
+                ),
+                Gaps.h32,
+                TextFormField(
+                  initialValue: _germanTitle,
+                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanTitle, border: const OutlineInputBorder()),
+                  onChanged: (value) => _germanTitle = value,
+                  validator: (value) {
+                    if ((value == null || value.isEmpty) && (_germanBody.isNotEmpty)) {
+                      return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
+                    }
+                    return null;
+                  },
+                ),
+                Gaps.h16,
+                TextFormField(
+                  initialValue: _germanBody,
+                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanBody, border: const OutlineInputBorder()),
+                  onChanged: (value) => _germanBody = value,
+                  validator: (value) {
+                    if ((value == null || value.isEmpty) && (_germanTitle.isNotEmpty)) {
+                      return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
+                    }
+                    return null;
+                  },
+                ),
               ],
             ),
           ),
@@ -157,16 +181,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
           child: FilledButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                final announcementTexts = <AnnouncementText>[];
-
-                for (final announcementTextWidget in _announcementTextWidgets) {
-                  final title = announcementTextWidget.titleController.text;
-                  final body = announcementTextWidget.bodyController.text;
-                  final language = announcementTextWidget.languageController.text == ''
-                      ? announcementTextWidget.defaultLanguage
-                      : announcementTextWidget.languageController.text;
-
-                  announcementTexts.add(AnnouncementText(title: title, body: body, language: language!));
+                final announcementTexts = <AnnouncementText>[AnnouncementText(language: 'en', title: _englishTitle, body: _englishBody)];
+                if (_germanTitle.isNotEmpty && _germanBody.isNotEmpty) {
+                  announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
                 }
 
                 final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
@@ -196,14 +213,6 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     );
   }
 
-  void _remove(_AnnouncementTextFormWidget announcementTextWidget) {
-    final index = _announcementTextWidgets.indexWhere((element) => element == announcementTextWidget);
-
-    setState(() {
-      _announcementTextWidgets.removeAt(index);
-    });
-  }
-
   void _showSuccessSnackbar() {
     final snackBar = SnackBar(
       content: Text(context.l10n.createAnnouncement_announcementSuccess, style: const TextStyle(color: Colors.white)),
@@ -222,74 +231,6 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-}
-
-class _AnnouncementTextFormWidget extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  final void Function(_AnnouncementTextFormWidget index) onRemove;
-
-  _AnnouncementTextFormWidget({required this.formKey, required this.onRemove, this.defaultLanguage});
-
-  @override
-  State<_AnnouncementTextFormWidget> createState() => _AnnouncementTextFormWidgetState();
-
-  final String? defaultLanguage;
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController bodyController = TextEditingController();
-  final TextEditingController languageController = TextEditingController();
-}
-
-class _AnnouncementTextFormWidgetState extends State<_AnnouncementTextFormWidget> {
-  String? selectedLanguage;
-  @override
-  void dispose() {
-    widget.titleController.dispose();
-    widget.bodyController.dispose();
-    widget.languageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          spacing: 16,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.defaultLanguage == null) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [TextButton(onPressed: () => widget.onRemove(widget), child: Text(context.l10n.remove))],
-              ),
-              LanguagePicker(
-                width: MediaQuery.of(context).size.width,
-                labelText: '${context.l10n.announcementsLanguage}*',
-                onLanguageChanged: (selectedLanguage) {
-                  setState(() {
-                    widget.languageController.text = selectedLanguage;
-                  });
-                },
-                validator: (value) => validateRequiredField(context, widget.languageController.text),
-              ),
-            ],
-            TextFormField(
-              controller: widget.titleController,
-              validator: (value) => validateRequiredField(context, value),
-              decoration: InputDecoration(labelText: '${context.l10n.title}*', border: const OutlineInputBorder()),
-            ),
-            TextFormField(
-              controller: widget.bodyController,
-              validator: (value) => validateRequiredField(context, value),
-              decoration: InputDecoration(labelText: '${context.l10n.body}*', border: const OutlineInputBorder()),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
