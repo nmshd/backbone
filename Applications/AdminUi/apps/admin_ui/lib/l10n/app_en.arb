@@ -1,6 +1,8 @@
 {
     "@@locale": "en",
     "add": "Add",
+    "yes": "Yes",
+    "no": "No",
     "addQuota": "Add Quota",
     "address": "Address",
     "assign": "Assign",
@@ -82,6 +84,7 @@
     "announcementsDialog_details": "Announcement Details",
     "announcementsDetails": "Announcement Detail",
     "announcementDetails_iqlQuery": "IQL Query",
+    "announcementDetails_sendAPushNotification": "Send a Push Notification",
     "createAnnouncement_announcementError": "An error occurred while creating the announcement. Please try again.",
     "createAnnouncement_defaultLanguage": "Languages (default is English)",
     "changeClientSecretDialog_copyToClipboard": "Copy to Clipboard",

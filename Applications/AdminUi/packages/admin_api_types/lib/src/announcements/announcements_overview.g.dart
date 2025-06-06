@@ -13,6 +13,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
   severity: json['severity'] as String,
   texts: (json['texts'] as List<dynamic>).map(AnnouncementText.fromJson).toList(),
   iqlQuery: json['iqlQuery'] as String?,
+  isSilent: json['isSilent'] as bool,
 );
 
 Map<String, dynamic> _$AnnouncementToJson(Announcement instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$AnnouncementToJson(Announcement instance) => <String, dyn
   'severity': instance.severity,
   'texts': instance.texts,
   'iqlQuery': instance.iqlQuery,
+  'isSilent': instance.isSilent,
 };
