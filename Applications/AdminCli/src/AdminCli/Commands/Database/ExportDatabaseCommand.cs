@@ -21,7 +21,15 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         _adminApiDbContext = adminApiDbContext;
 
-        this.SetHandler(ExportDatabase);
+        var includeSensitiveData = new Option<bool>("--sensitive")
+        {
+            IsRequired = false,
+            Description = "If this is set, sensitive data like IDs or identity addresses are exported as well."
+        };
+
+        AddOption(includeSensitiveData);
+
+        this.SetHandler(ExportDatabase, includeSensitiveData);
 
         DeleteExportDirectory();
         DeleteOldZipFiles();
@@ -58,7 +66,7 @@ public class ExportDatabaseCommand : AdminCliCommand
         }
     }
 
-    private async Task ExportDatabase()
+    private async Task ExportDatabase(bool includeSensitiveData = false)
     {
         await AnsiConsole.Progress()
             .Columns(new TaskDescriptionColumn(), new ProgressBarColumn(), new SpinnerColumn(), new PercentageColumn())
@@ -75,31 +83,31 @@ public class ExportDatabaseCommand : AdminCliCommand
                 var exportSyncErrorsTask = ctx.AddTask("Sync errors", autoStart: false);
 
                 exportDevicesTask.StartTask();
-                await ExportDevices(exportDevicesTask);
+                await ExportDevices(includeSensitiveData, exportDevicesTask);
 
                 exportDeletionAuditLogItemsTask.StartTask();
                 await ExportDeletionAuditLogItems(exportDeletionAuditLogItemsTask);
 
                 exportRelationshipTemplatesTask.StartTask();
-                await ExportRelationshipTemplates(exportRelationshipTemplatesTask);
+                await ExportRelationshipTemplates(includeSensitiveData, exportRelationshipTemplatesTask);
 
                 exportRelationshipsTask.StartTask();
-                await ExportRelationships(exportRelationshipsTask);
+                await ExportRelationships(includeSensitiveData, exportRelationshipsTask);
 
                 exportFilesTask.StartTask();
-                await ExportFiles(exportFilesTask);
+                await ExportFiles(includeSensitiveData, exportFilesTask);
 
                 exportMessagesTask.StartTask();
-                await ExportMessages(exportMessagesTask);
+                await ExportMessages(includeSensitiveData, exportMessagesTask);
 
                 exportDatawalletModificationsTask.StartTask();
-                await ExportDatawalletModifications(exportDatawalletModificationsTask);
+                await ExportDatawalletModifications(includeSensitiveData, exportDatawalletModificationsTask);
 
                 exportTokensTask.StartTask();
-                await ExportTokens(exportTokensTask);
+                await ExportTokens(includeSensitiveData, exportTokensTask);
 
                 exportSyncErrorsTask.StartTask();
-                await ExportSyncErrors(exportSyncErrorsTask);
+                await ExportSyncErrors(includeSensitiveData, exportSyncErrorsTask);
             });
 
         ZipExportDirectory();
@@ -112,15 +120,15 @@ public class ExportDatabaseCommand : AdminCliCommand
              """);
     }
 
-    private async Task ExportDevices(ProgressTask progressReporter)
+    private async Task ExportDevices(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var devices = _adminApiDbContext
             .Devices
             .Select(d => new DeviceExport
             {
-                DeviceId = d.Id,
+                DeviceId = includeSensitiveData ? d.Id : "",
                 LastLoginAt = d.User.LastLoginAt,
-                IdentityAddress = d.Identity.Address,
+                IdentityAddress = includeSensitiveData ? d.Identity.Address : "",
                 CreatedAt = d.CreatedAt,
                 Tier = _adminApiDbContext.Tiers.FirstOrDefault(t => t.Id == d.Identity.TierId)!.Name,
                 IdentityStatus = d.Identity.Status,
@@ -131,7 +139,8 @@ public class ExportDatabaseCommand : AdminCliCommand
                     : null,
                 ClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName,
+                ClientId = d.Identity.ClientId
             })
             .ToAsyncEnumerable();
 
@@ -155,14 +164,14 @@ public class ExportDatabaseCommand : AdminCliCommand
         await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", progressReporter);
     }
 
-    private async Task ExportRelationshipTemplates(ProgressTask progressReporter)
+    private async Task ExportRelationshipTemplates(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var templates = _adminApiDbContext
             .RelationshipTemplates
             .Select(t => new RelationshipTemplateExport
             {
-                TemplateId = t.Id,
-                CreatedBy = t.CreatedBy,
+                TemplateId = includeSensitiveData ? t.Id : "",
+                CreatedBy = includeSensitiveData ? t.CreatedBy : "",
                 CreatedAt = t.CreatedAt,
                 AllocatedAt = t.Allocations.Any()
                     ? t.Allocations.First()
@@ -172,23 +181,24 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(templates, "relationshipTemplates.csv", progressReporter);
     }
 
-    private async Task ExportRelationships(ProgressTask progressReporter)
+    private async Task ExportRelationships(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var relationships = _adminApiDbContext
             .Relationships
             .Select(r => new RelationshipExport
             {
-                RelationshipId = r.Id,
-                TemplateId = r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.ToString(),
-                From = r.From,
-                To = r.To,
+                RelationshipId = includeSensitiveData ? r.Id : "",
+                TemplateId = includeSensitiveData ? r.RelationshipTemplateId == null ? null : r.RelationshipTemplateId.ToString() : "",
+                From = includeSensitiveData ? r.From : "",
+                To = includeSensitiveData ? r.To : "",
                 CreatedAt = r.CreatedAt,
                 Status = r.Status,
                 FromHasDecomposed = r.FromHasDecomposed,
@@ -197,25 +207,28 @@ public class ExportDatabaseCommand : AdminCliCommand
                 FromClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId) == null
                     ? null
                     : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId)!.DisplayName,
+                FromClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.From)!.ClientId,
                 ToClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName,
+                ToClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(relationships, "relationships.csv", progressReporter);
     }
 
-    private async Task ExportFiles(ProgressTask progressReporter)
+    private async Task ExportFiles(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var files = _adminApiDbContext
             .Files
             .Select(f => new FileExport
             {
-                FileId = f.Id,
-                CreatedBy = f.CreatedBy,
+                FileId = includeSensitiveData ? f.Id : "",
+                CreatedBy = includeSensitiveData ? f.CreatedBy : "",
                 CreatedAt = f.CreatedAt,
-                Owner = f.Owner,
+                LastOwnershipClaimAt = f.LastOwnershipClaimAt,
+                Owner = includeSensitiveData ? f.Owner : "",
                 CipherSize = f.CipherSize,
                 ExpiresAt = f.ExpiresAt,
                 CreatedByClientName =
@@ -223,25 +236,27 @@ public class ExportDatabaseCommand : AdminCliCommand
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId)!
                             .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.CreatedBy)!.ClientId,
                 OwnerClientName = _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId) == null
                     ? null
-                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName
+                    : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName,
+                OwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(files, "files.csv", progressReporter);
     }
 
-    private async Task ExportMessages(ProgressTask progressReporter)
+    private async Task ExportMessages(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var messages = _adminApiDbContext
             .Messages
             .Select(m => new MessageExport
             {
-                MessageId = m.Id,
-                CreatedBy = m.CreatedBy,
-                RelationshipId = m.Recipients.First().RelationshipId,
-                Recipient = m.Recipients.First().Address,
+                MessageId = includeSensitiveData ? m.Id : "",
+                CreatedBy = includeSensitiveData ? m.CreatedBy : "",
+                RelationshipId = includeSensitiveData ? m.Recipients.First().RelationshipId : "",
+                Recipient = includeSensitiveData ? m.Recipients.First().Address : "",
                 CreatedAt = m.CreatedAt,
                 ReceivedAt = m.Recipients.First().ReceivedAt,
                 CipherSize = m.Body.Length,
@@ -250,27 +265,29 @@ public class ExportDatabaseCommand : AdminCliCommand
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
                             .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId,
                 RecipientClientName =
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
                         a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a =>
-                            a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName
+                            a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName,
+                RecipientClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(messages, "messages.csv", progressReporter);
     }
 
-    private async Task ExportDatawalletModifications(ProgressTask progressReporter)
+    private async Task ExportDatawalletModifications(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var modifications = _adminApiDbContext
             .DatawalletModifications
             .Select(m => new DatawalletModificationExport
             {
-                DatawalletModificationId = m.Id,
+                DatawalletModificationId = includeSensitiveData ? m.Id : "",
                 CreatedAt = m.CreatedAt,
-                CreatedBy = m.CreatedBy,
+                CreatedBy = includeSensitiveData ? m.CreatedBy : "",
                 ObjectIdentifier = m.ObjectIdentifier,
                 Collection = m.Collection,
                 Type = m.Type,
@@ -280,50 +297,53 @@ public class ExportDatabaseCommand : AdminCliCommand
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(modifications, "datawalletModifications.csv", progressReporter);
     }
 
-    private async Task ExportSyncErrors(ProgressTask progressReporter)
+    private async Task ExportSyncErrors(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var syncErrors = _adminApiDbContext
             .SyncErrors
             .Select(e => new SyncErrorExport
             {
                 ErrorId = e.Id,
-                SyncItemOwner = e.ExternalEvent.Owner,
+                SyncItemOwner = includeSensitiveData ? e.ExternalEvent.Owner : "",
                 CreatedAt = e.SyncRun.FinalizedAt,
                 ErrorCode = e.ErrorCode,
                 SyncItemOwnerClientName =
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                SyncItemOwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId
             })
             .ToAsyncEnumerable();
 
         await StreamToCSV(syncErrors, "syncErrors.csv", progressReporter);
     }
 
-    private async Task ExportTokens(ProgressTask progressReporter)
+    private async Task ExportTokens(bool includeSensitiveData, ProgressTask progressReporter)
     {
         var modifications = _adminApiDbContext
             .Tokens
             .Select(t => new TokenExport
             {
-                TokenId = t.Id,
+                TokenId = includeSensitiveData ? t.Id : "",
                 CreatedAt = t.CreatedAt,
-                CreatedBy = t.CreatedBy,
+                CreatedBy = includeSensitiveData ? t.CreatedBy : "",
                 CipherSize = t.Content.Length,
                 ExpiresAt = t.ExpiresAt,
                 CreatedByClientName =
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
-                            .DisplayName
+                            .DisplayName,
+                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 

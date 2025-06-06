@@ -139,6 +139,9 @@ public class File : Entity
 
     public ClaimFileOwnershipResult ClaimOwnership(FileOwnershipToken ownershipToken, IdentityAddress newOwnerAddress)
     {
+        if (Owner == newOwnerAddress)
+            return ClaimFileOwnershipResult.CannotClaimOwnFile;
+
         if (OwnershipIsLocked)
             return ClaimFileOwnershipResult.Locked;
 
@@ -150,8 +153,13 @@ public class File : Entity
         }
 
         LastOwnershipClaimAt = SystemTime.UtcNow;
+
+        var oldOwnerAddress = Owner;
+
         Owner = newOwnerAddress;
         OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
+
+        RaiseDomainEvent(new FileOwnershipClaimedDomainEvent(this, oldOwnerAddress));
         return ClaimFileOwnershipResult.Ok;
     }
 
@@ -172,6 +180,7 @@ public class File : Entity
     public enum ClaimFileOwnershipResult
     {
         Ok,
+        CannotClaimOwnFile,
         IncorrectToken,
         Locked
     }

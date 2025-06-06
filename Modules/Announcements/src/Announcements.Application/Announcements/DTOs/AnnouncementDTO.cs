@@ -25,6 +25,7 @@ public class AnnouncementDTO
     public IEnumerable<string> Recipients { get; set; }
     public IEnumerable<AnnouncementActionDTO> Actions { get; set; }
     public string? IqlQuery { get; set; }
+    public bool IsSilent { get; set; }
 }
 
 public class AnnouncementActionDTO

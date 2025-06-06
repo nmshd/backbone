@@ -7,6 +7,7 @@ public class File
     public required string Id { get; init; }
     public required string CreatedBy { get; init; }
     public required DateTime CreatedAt { get; init; }
+    public required DateTime? LastOwnershipClaimAt { get; init; }
     public required string Owner { get; init; }
     public required long CipherSize { get; init; }
     public required DateTime ExpiresAt { get; init; }

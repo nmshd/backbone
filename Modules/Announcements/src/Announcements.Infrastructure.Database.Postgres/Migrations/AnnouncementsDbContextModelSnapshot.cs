@@ -44,6 +44,9 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("character varying(1000)")
                         .IsFixedLength(false);
 
+                    b.Property<bool>("IsSilent")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Severity")
                         .HasColumnType("integer");
 

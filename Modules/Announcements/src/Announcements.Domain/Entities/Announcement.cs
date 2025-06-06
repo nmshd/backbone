@@ -33,9 +33,10 @@ public class Announcement : Entity
         Severity = severity;
         Texts = texts;
         Recipients = [.. recipients];
+        IsSilent = isSilent;
         Actions = [.. actions];
 
-        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this, isSilent));
+        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
 
     public AnnouncementId Id { get; }
@@ -43,11 +44,13 @@ public class Announcement : Entity
     public DateTime? ExpiresAt { get; }
     public AnnouncementIqlQuery? IqlQuery { get; }
     public AnnouncementSeverity Severity { get; }
-    public List<AnnouncementAction> Actions { get; }
+    public bool IsSilent { get; }
 
     public List<AnnouncementText> Texts { get; }
 
     public List<AnnouncementRecipient> Recipients { get; }
+
+    public List<AnnouncementAction> Actions { get; }
 
     public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }

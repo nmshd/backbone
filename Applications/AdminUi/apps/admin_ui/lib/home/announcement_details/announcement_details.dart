@@ -70,6 +70,12 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                             title: context.l10n.expiresAt,
                             value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.expiresAt!),
                           ),
+                        if (_announcmentDetails!.iqlQuery != null)
+                          EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: _announcmentDetails!.iqlQuery!),
+                        EntityDetails(
+                          title: context.l10n.announcementDetails_sendAPushNotification,
+                          value: _announcmentDetails!.isSilent ? context.l10n.no : context.l10n.yes,
+                        ),
                       ],
                     ),
                   ],

@@ -109,7 +109,7 @@ internal class SynchronizationStepDefinitions
             e.Payload["relationshipTemplateId"].GetString() == templateId);
     }
 
-    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipLockedEvent which contains the id of {RegexFor.SINGLE_THING}")]
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipLocked which contains the id of {RegexFor.SINGLE_THING}")]
     public async Task ThenIReceivesAnExternalEventOfTypeFileOwnershipLocked(string notifiedIdentityName, string fileName)
     {
         var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
@@ -124,6 +124,27 @@ internal class SynchronizationStepDefinitions
         externalEvents.Result!.ShouldContain(e =>
             e.Type == "FileOwnershipLocked" &&
             e.Payload["fileId"].GetString() == fileId);
+    }
+
+    [Then($@"{RegexFor.SINGLE_THING} receives an ExternalEvent of type FileOwnershipClaimed which contains the id of {RegexFor.SINGLE_THING} and the address of {RegexFor.SINGLE_THING}")]
+    public async Task ThenIReceivesAnExternalEventOfTypeFileOwnershipClaimed(string notifiedIdentityName, string fileName, string newOwnerName)
+    {
+        await Task.Delay(5000); // Ensure the event is processed
+
+        var newOwnerAddress = _clientPool.FirstForIdentityName(newOwnerName).IdentityData!.Address;
+        var client = _clientPool.FirstForIdentityName(notifiedIdentityName);
+        var syncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
+
+        syncRunResponse.Result.ShouldNotBeNull();
+        syncRunResponse.Result!.Status.ShouldBe("Created");
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunResponse.Result!.SyncRun.Id);
+
+        var fileId = _filesContext.Files[fileName].Id;
+
+        externalEvents.Result!.ShouldContain(e =>
+            e.Type == "FileOwnershipClaimed" &&
+            e.Payload["fileId"].GetString() == fileId &&
+            e.Payload["newOwnerAddress"].GetString() == newOwnerAddress);
     }
 
     #endregion

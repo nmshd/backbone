@@ -20,6 +20,10 @@
           "commandName": "Project",
           "commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy"
       },
+      "Create Tier": {
+          "commandName": "Project",
+          "commandLineArgs": "tier create --name test"
+      },
       "List Tiers": {
           "commandName": "Project",
           "commandLineArgs": "tier list"
@@ -30,7 +34,7 @@
       },
       "Export database": {
           "commandName": "Project",
-          "commandLineArgs": "database export"
+          "commandLineArgs": "database export --sensitive"
       }
   }
 }

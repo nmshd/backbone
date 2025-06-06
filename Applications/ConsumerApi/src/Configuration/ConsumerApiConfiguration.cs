@@ -67,23 +67,36 @@ public class ConsumerApiConfiguration
             public string DisplayName { get; set; } = null!;
 
             [Required]
+            public string Description { get; set; } = null!;
+
+            [Required]
             public StoreConfig AppleAppStore { get; set; } = new();
 
             [Required]
             public StoreConfig GooglePlayStore { get; set; } = new();
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? PrimaryColor { get; set; }
+            public string BackgroundColor { get; set; } = "#FFFFFF";
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string? SecondaryColor { get; set; }
+            public string PrimaryColor { get; set; } = "#000000";
 
-            public string? IconUrl { get; set; }
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string SecondaryColor { get; set; } = "#000000";
+
+            [Required]
+            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
+            public string BannerUrl { get; set; } = null!;
+
+            [Required]
+            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
+            public string IconUrl { get; set; } = null!;
 
             public class StoreConfig
             {
                 public string? AppLink { get; set; } = null!;
-
                 public string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }

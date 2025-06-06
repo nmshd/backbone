@@ -1,5 +1,7 @@
+using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Domain.Tests.Helpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
@@ -22,6 +24,20 @@ public class ClaimOwnershipTests
         file.LastOwnershipClaimAt.ShouldNotBeNull();
         file.Owner.ShouldBe(claimingIdentity);
         file.OwnershipToken.ShouldNotBe(initialToken);
+    }
+
+    [Fact]
+    public void Cannot_claim_ownership_for_own_file()
+    {
+        // Arrange
+        var owner = CreateRandomIdentityAddress();
+        var file = TestDataGenerator.CreateFile(owner);
+
+        // Act
+        var result = file.ClaimOwnership(file.OwnershipToken, owner);
+
+        // Assert
+        result.ShouldBe(File.ClaimFileOwnershipResult.CannotClaimOwnFile);
     }
 
     [Fact]
@@ -62,5 +78,23 @@ public class ClaimOwnershipTests
         file.LastOwnershipClaimAt.ShouldBeNull();
         file.Owner.ShouldBe(identity);
         file.OwnershipToken.ShouldBe(initialToken);
+    }
+
+    [Fact]
+    public void Raises_FileOwnershipClaimedDomainEvent()
+    {
+        // Arrange
+        var originalOwner = CreateRandomIdentityAddress();
+        var newOwner = CreateRandomIdentityAddress();
+        var file = TestDataGenerator.CreateFile(originalOwner);
+
+        // Act
+        file.ClaimOwnership(file.OwnershipToken, newOwner);
+
+        // Assert
+        var domainEvent = file.ShouldHaveASingleDomainEvent<FileOwnershipClaimedDomainEvent>();
+        domainEvent.FileId.ShouldBe(file.Id.Value);
+        domainEvent.NewOwnerAddress.ShouldBe(newOwner.Value);
+        domainEvent.OldOwnerAddress.ShouldBe(originalOwner.Value);
     }
 }
