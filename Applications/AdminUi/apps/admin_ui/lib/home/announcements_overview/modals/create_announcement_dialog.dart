@@ -35,6 +35,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   String _englishBody = '';
   String _germanTitle = '';
   String _germanBody = '';
+  final List<_CreateAnnouncementLinkAction> _linkActions = [];
+
   final List<AnnouncementSeverity> _severityOptions = AnnouncementSeverity.values;
 
   @override
@@ -49,167 +51,273 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      scrollable: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
-      contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
-      content: SizedBox(
-        width: 500,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(context.l10n.createAnnouncementDialog_explanation),
-                Gaps.h32,
-                Text('*${context.l10n.required}'),
-                Gaps.h16,
-                DropdownButtonFormField(
-                  validator: (value) => validateRequiredField(context, value?.name),
-                  decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_impact}*', border: const OutlineInputBorder()),
-                  items: _severityOptions.map((severity) {
-                    return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
-                  }).toList(),
-                  onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
-                ),
-                Gaps.h16,
-                TextFormField(
-                  controller: TextEditingController(text: _selectedExpirationDate != null ? DateFormat.yMd().format(_selectedExpirationDate!) : ''),
-                  decoration: InputDecoration(
-                    labelText: context.l10n.expiresAt,
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () async {
-                        final selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(const Duration(days: 365)),
-                        );
+    return LayoutBuilder(
+      builder: (context, constraints) => AlertDialog(
+        scrollable: true,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
+        content: SizedBox(
+          height: constraints.maxHeight * .7,
+          width: 1000,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(context.l10n.createAnnouncementDialog_explanation),
+                  Gaps.h32,
+                  Text('*${context.l10n.required}'),
+                  Gaps.h16,
+                  DropdownButtonFormField(
+                    validator: (value) => validateRequiredField(context, value?.name),
+                    decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_impact}*', border: const OutlineInputBorder()),
+                    items: _severityOptions.map((severity) {
+                      return DropdownMenuItem<AnnouncementSeverity>(value: severity, child: Text(severity.name));
+                    }).toList(),
+                    onChanged: (newValue) => setState(() => _selectedSeverity = newValue),
+                  ),
+                  Gaps.h16,
+                  TextFormField(
+                    controller: TextEditingController(text: _selectedExpirationDate != null ? DateFormat.yMd().format(_selectedExpirationDate!) : ''),
+                    decoration: InputDecoration(
+                      labelText: context.l10n.expiresAt,
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () async {
+                          final selectedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(const Duration(days: 365)),
+                          );
 
-                        if (selectedDate != null) {
-                          setState(() => _selectedExpirationDate = selectedDate);
-                        }
-                      },
+                          if (selectedDate != null) {
+                            setState(() => _selectedExpirationDate = selectedDate);
+                          }
+                        },
+                      ),
+                    ),
+                    onTap: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+
+                      if (selectedDate != null) {
+                        setState(() => _selectedExpirationDate = selectedDate);
+                      }
+                    },
+                  ),
+                  Gaps.h16,
+                  CheckboxListTile(
+                    title: Text(context.l10n.createAnnouncementDialog_sendAPushNotification),
+                    value: _sendAPushNotification,
+                    onChanged: (value) => setState(() => _sendAPushNotification = value ?? false),
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  Gaps.h16,
+                  TextFormField(
+                    initialValue: _iqlQuery,
+                    decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_iqlQuery, border: const OutlineInputBorder()),
+                    onChanged: (value) => _iqlQuery = value,
+                  ),
+                  Gaps.h32,
+                  TextFormField(
+                    initialValue: _englishTitle,
+                    decoration: InputDecoration(
+                      labelText: '${context.l10n.createAnnouncementDialog_englishTitle}*',
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => validateRequiredField(context, value),
+                    onChanged: (value) => _englishTitle = value,
+                  ),
+                  Gaps.h16,
+                  TextFormField(
+                    initialValue: _englishBody,
+                    decoration: InputDecoration(
+                      labelText: '${context.l10n.createAnnouncementDialog_englishBody}*',
+                      border: const OutlineInputBorder(),
+                    ),
+                    validator: (value) => validateRequiredField(context, value),
+                    onChanged: (value) => _englishBody = value,
+                  ),
+                  Gaps.h32,
+                  TextFormField(
+                    initialValue: _germanTitle,
+                    decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanTitle, border: const OutlineInputBorder()),
+                    onChanged: (value) => _germanTitle = value,
+                    validator: (value) {
+                      if ((value == null || value.isEmpty) && (_germanBody.isNotEmpty)) {
+                        return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  Gaps.h16,
+                  TextFormField(
+                    initialValue: _germanBody,
+                    decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanBody, border: const OutlineInputBorder()),
+                    onChanged: (value) => _germanBody = value,
+                    validator: (value) {
+                      if ((value == null || value.isEmpty) && (_germanTitle.isNotEmpty)) {
+                        return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  Gaps.h16,
+
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(context.l10n.createAnnouncementDialog_linkActions_heading, style: Theme.of(context).textTheme.bodyLarge),
+                              FloatingActionButton.small(
+                                onPressed: () => setState(() => _linkActions.add(_CreateAnnouncementLinkAction(link: ''))),
+                                child: const Icon(Icons.add),
+                                elevation: 0,
+                              ),
+                            ],
+                          ),
+                          Gaps.h16,
+                          Text(context.l10n.createAnnouncementDialog_linkActions_explanation),
+                          Gaps.h16,
+                          ReorderableListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _linkActions.length,
+                            onReorder: (oldIndex, newIndex) {
+                              setState(() {
+                                if (newIndex > oldIndex) {
+                                  newIndex -= 1;
+                                }
+                                final item = _linkActions.removeAt(oldIndex);
+                                _linkActions.insert(newIndex, item);
+                              });
+                            },
+                            itemBuilder: (context, index) => ListTile(
+                              key: ValueKey(index),
+                              contentPadding: const EdgeInsets.fromLTRB(0, 0, 40, 0), // Avoid that the content flows into the reorder-handle
+                              title: Row(
+                                children: [
+                                  IconButton(icon: const Icon(Icons.delete), onPressed: () => setState(() => _linkActions.removeAt(index))),
+                                  Expanded(
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextFormField(
+                                            // controller: TextEditingController(text: _linkActions[index].link),
+                                            decoration: InputDecoration(
+                                              labelText: '${context.l10n.createAnnouncementDialog_linkActions_englishDisplayName}*',
+                                              border: const OutlineInputBorder(),
+                                            ),
+                                            onChanged: (value) => _linkActions[index].englishDisplayName = value,
+                                            validator: (value) => validateRequiredField(context, value),
+                                          ),
+                                        ),
+                                        Gaps.w8,
+                                        SizedBox(
+                                          width: 200,
+                                          child: TextFormField(
+                                            // controller: TextEditingController(text: _linkActions[index].link),
+                                            decoration: InputDecoration(
+                                              labelText: context.l10n.createAnnouncementDialog_linkActions_germanDisplayName,
+                                              border: const OutlineInputBorder(),
+                                            ),
+                                            onChanged: (value) => _linkActions[index].germanDisplayName = value,
+                                          ),
+                                        ),
+                                        Gaps.w8,
+                                        Expanded(
+                                          child: TextFormField(
+                                            // controller: TextEditingController(text: _linkActions[index].link),
+                                            decoration: InputDecoration(
+                                              labelText: '${context.l10n.createAnnouncementDialog_linkActions_link}*',
+                                              border: const OutlineInputBorder(),
+                                            ),
+                                            onChanged: (value) => _linkActions[index].link = value,
+                                            validator: (value) => validateRequiredField(context, value),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  onTap: () async {
-                    final selectedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 365)),
-                    );
-
-                    if (selectedDate != null) {
-                      setState(() => _selectedExpirationDate = selectedDate);
-                    }
-                  },
-                ),
-                Gaps.h16,
-                CheckboxListTile(
-                  title: Text(context.l10n.createAnnouncementDialog_sendAPushNotification),
-                  value: _sendAPushNotification,
-                  onChanged: (value) => setState(() => _sendAPushNotification = value ?? false),
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                Gaps.h16,
-                TextFormField(
-                  initialValue: _iqlQuery,
-                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_iqlQuery, border: const OutlineInputBorder()),
-                  onChanged: (value) => _iqlQuery = value,
-                ),
-                Gaps.h32,
-                TextFormField(
-                  initialValue: _englishTitle,
-                  decoration: InputDecoration(
-                    labelText: '${context.l10n.createAnnouncementDialog_englishTitle}*',
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) => validateRequiredField(context, value),
-                  onChanged: (value) => _englishTitle = value,
-                ),
-                Gaps.h16,
-                TextFormField(
-                  initialValue: _englishBody,
-                  decoration: InputDecoration(labelText: '${context.l10n.createAnnouncementDialog_englishBody}*', border: const OutlineInputBorder()),
-                  validator: (value) => validateRequiredField(context, value),
-                  onChanged: (value) => _englishBody = value,
-                ),
-                Gaps.h32,
-                TextFormField(
-                  initialValue: _germanTitle,
-                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanTitle, border: const OutlineInputBorder()),
-                  onChanged: (value) => _germanTitle = value,
-                  validator: (value) {
-                    if ((value == null || value.isEmpty) && (_germanBody.isNotEmpty)) {
-                      return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
-                    }
-                    return null;
-                  },
-                ),
-                Gaps.h16,
-                TextFormField(
-                  initialValue: _germanBody,
-                  decoration: InputDecoration(labelText: context.l10n.createAnnouncementDialog_germanBody, border: const OutlineInputBorder()),
-                  onChanged: (value) => _germanBody = value,
-                  validator: (value) {
-                    if ((value == null || value.isEmpty) && (_germanTitle.isNotEmpty)) {
-                      return context.l10n.createAnnouncementDialog_titleAndBodyAreRequired;
-                    }
-                    return null;
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      actions: [
-        SizedBox(
-          height: 40,
-          child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
-        ),
-        SizedBox(
-          height: 40,
-          child: FilledButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                final announcementTexts = <AnnouncementText>[AnnouncementText(language: 'en', title: _englishTitle, body: _englishBody)];
-                if (_germanTitle.isNotEmpty && _germanBody.isNotEmpty) {
-                  announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
-                }
-
-                final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
-                  expiresAt: _selectedExpirationDate?.toIso8601String(),
-                  severity: _selectedSeverity!,
-                  announcementTexts: announcementTexts,
-                  recipients: [],
-                  iqlQuery: _iqlQuery,
-                  isSilent: !_sendAPushNotification,
-                );
-
-                if (!context.mounted) return;
-                context.pop();
-
-                if (response.hasError) {
-                  _showErrorSnackbar();
-                  return;
-                }
-                widget.onAnnouncementCreated();
-                _showSuccessSnackbar();
-              }
-            },
-            child: Text(context.l10n.create),
+        actions: [
+          SizedBox(
+            height: 40,
+            child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
           ),
-        ),
-      ],
+          SizedBox(
+            height: 40,
+            child: FilledButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  final announcementTexts = <AnnouncementText>[AnnouncementText(language: 'en', title: _englishTitle, body: _englishBody)];
+                  if (_germanTitle.isNotEmpty && _germanBody.isNotEmpty) {
+                    announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
+                  }
+
+                  final linkActions = _linkActions.map((action) {
+                    final mappedAction = AnnouncementLinkAction(link: action.link, displayName: {'en': action.englishDisplayName});
+                    if (action.germanDisplayName.isNotEmpty) {
+                      mappedAction.displayName['de'] = action.germanDisplayName;
+                    }
+                    return mappedAction;
+                  }).toList();
+
+                  final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
+                    expiresAt: _selectedExpirationDate?.toIso8601String(),
+                    severity: _selectedSeverity!,
+                    announcementTexts: announcementTexts,
+                    recipients: [],
+                    iqlQuery: _iqlQuery,
+                    isSilent: !_sendAPushNotification,
+                    linkActions: linkActions,
+                  );
+
+                  if (!context.mounted) return;
+                  context.pop();
+
+                  if (response.hasError) {
+                    _showErrorSnackbar();
+                    return;
+                  }
+                  widget.onAnnouncementCreated();
+                  _showSuccessSnackbar();
+                }
+              },
+              child: Text(context.l10n.create),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -232,6 +340,14 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+}
+
+class _CreateAnnouncementLinkAction {
+  String link;
+  String englishDisplayName = '';
+  String germanDisplayName = '';
+
+  _CreateAnnouncementLinkAction({required this.link});
 }
 
 String? validateRequiredField(BuildContext context, String? value) {
