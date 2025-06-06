@@ -31,8 +31,9 @@ public class Announcement : Entity
         Severity = severity;
         Texts = texts;
         Recipients = [.. recipients];
+        IsSilent = isSilent;
 
-        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this, isSilent));
+        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
 
     public AnnouncementId Id { get; }
@@ -40,6 +41,7 @@ public class Announcement : Entity
     public DateTime? ExpiresAt { get; }
     public AnnouncementIqlQuery? IqlQuery { get; }
     public AnnouncementSeverity Severity { get; }
+    public bool IsSilent { get; }
 
     public List<AnnouncementText> Texts { get; }
 
