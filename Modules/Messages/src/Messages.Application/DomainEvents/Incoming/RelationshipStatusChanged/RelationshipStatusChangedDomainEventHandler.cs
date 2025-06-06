@@ -35,6 +35,9 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
+            // If the status was changed due to identity deletion, we are forced to anonymize the address of the identity that deleted itself.
+            // If it was a manual status change though, we only want to mark the identity as decomposed on this message. Only after both
+            // participants have decomposed the relationship the message will be anonymized/deleted.
             if (@event.WasDueToIdentityDeletion)
                 message.AnonymizeParticipant(@event.Initiator, anonymizedIdentityAddress);
             else
