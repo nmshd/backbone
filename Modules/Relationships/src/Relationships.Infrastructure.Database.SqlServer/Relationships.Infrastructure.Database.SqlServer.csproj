@@ -4,4 +4,7 @@
         <ProjectReference Include="..\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="xunit.v3" Version="[2.0.2]" />
+    </ItemGroup>
 </Project>

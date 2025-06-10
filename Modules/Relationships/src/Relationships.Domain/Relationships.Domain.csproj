@@ -5,4 +5,8 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="xunit.v3" Version="[2.0.2]" />
+    </ItemGroup>
+
 </Project>

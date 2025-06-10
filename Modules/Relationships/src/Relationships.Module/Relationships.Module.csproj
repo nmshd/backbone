@@ -13,5 +13,6 @@
 
     <ItemGroup>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.5]" />
+        <PackageReference Include="xunit.v3" Version="[2.0.2]" />
     </ItemGroup>
 </Project>

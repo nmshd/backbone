@@ -3,12 +3,13 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FakeItEasy" Version="[8.3.0]" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.1]" />
-        <PackageReference Include="xunit" Version="[2.9.3]" />
+        <PackageReference Include="xunit.v3" Version="[2.0.2]" />
         <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.0]">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +21,7 @@
         <ProjectReference Include="..\..\..\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
         <ProjectReference Include="..\..\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     </ItemGroup>
 
 </Project>
