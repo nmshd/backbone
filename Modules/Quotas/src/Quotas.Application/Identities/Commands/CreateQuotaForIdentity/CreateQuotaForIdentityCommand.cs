@@ -6,16 +6,8 @@ namespace Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaFor
 
 public class CreateQuotaForIdentityCommand : IRequest<IndividualQuotaDTO>
 {
-    public CreateQuotaForIdentityCommand(string identityAddress, string metricKey, int max, QuotaPeriod period)
-    {
-        IdentityAddress = identityAddress;
-        MetricKey = metricKey;
-        Max = max;
-        Period = period;
-    }
-
-    public string IdentityAddress { get; set; }
-    public string MetricKey { get; set; }
-    public int Max { get; set; }
-    public QuotaPeriod Period { get; set; }
+    public required string IdentityAddress { get; init; }
+    public required string MetricKey { get; init; }
+    public required int Max { get; init; }
+    public required QuotaPeriod Period { get; init; }
 }

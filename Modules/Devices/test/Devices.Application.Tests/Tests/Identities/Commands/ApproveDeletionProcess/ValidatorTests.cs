@@ -14,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ApproveDeletionProcessCommand(IdentityDeletionProcessId.Generate()));
+        var validationResult = validator.TestValidate(new ApproveDeletionProcessCommand { DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,7 +27,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ApproveDeletionProcessCommand("invalid-deletion-process-id"));
+        var validationResult = validator.TestValidate(new ApproveDeletionProcessCommand { DeletionProcessId = "invalid-deletion-process-id" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(ApproveDeletionProcessCommand.DeletionProcessId));

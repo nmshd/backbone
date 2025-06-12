@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartDeletionProcessAsSupportCommand(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new StartDeletionProcessAsSupportCommand { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartDeletionProcessAsSupportCommand("invalid-identity-address"));
+        var validationResult = validator.TestValidate(new StartDeletionProcessAsSupportCommand { IdentityAddress = "invalid-identity-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(StartDeletionProcessAsSupportCommand.IdentityAddress));

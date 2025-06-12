@@ -13,7 +13,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartSyncRunCommand(SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, 1));
+        var validationResult = validator.TestValidate(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 1 });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartSyncRunCommand(SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, 0));
+        var validationResult = validator.TestValidate(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 0 });
 
         // Assert
         validationResult.ShouldHaveValidationErrorFor(x => x.SupportedDatawalletVersion);

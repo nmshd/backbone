@@ -5,12 +5,6 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListR
 
 public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
 {
-    public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<string>? ids)
-    {
-        PaginationFilter = paginationFilter;
-        Ids = ids == null ? [] : ids.ToList();
-    }
-
-    public PaginationFilter PaginationFilter { get; set; }
-    public List<string> Ids { get; set; }
+    public required PaginationFilter PaginationFilter { get; init; }
+    public required List<string> Ids { get; set; }
 }

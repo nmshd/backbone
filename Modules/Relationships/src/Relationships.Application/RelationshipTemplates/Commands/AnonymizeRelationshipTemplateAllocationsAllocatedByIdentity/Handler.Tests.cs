@@ -18,7 +18,7 @@ public class HandlerTests : AbstractTestsBase
         var oldIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
-        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(oldIdentityAddress);
+        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = oldIdentityAddress };
         var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.ListRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))
@@ -44,7 +44,7 @@ public class HandlerTests : AbstractTestsBase
         var anotherIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
-        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(anotherIdentityAddress);
+        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = anotherIdentityAddress };
         var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.ListRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))

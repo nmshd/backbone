@@ -52,7 +52,7 @@ public class DatawalletController : ApiControllerBase
 
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
-        var request = new ListModificationsQuery(paginationFilter, localIndex, supportedDatawalletVersion);
+        var request = new ListModificationsQuery { PaginationFilter = paginationFilter, LocalIndex = localIndex, SupportedDatawalletVersion = supportedDatawalletVersion };
 
         var response = await _mediator.Send(request, cancellationToken);
         return Paged(response);
@@ -66,8 +66,9 @@ public class DatawalletController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new PushDatawalletModificationsCommand(request.Modifications,
-            request.LocalIndex, supportedDatawalletVersion), cancellationToken);
+        var response = await _mediator.Send(
+            new PushDatawalletModificationsCommand { Modifications = request.Modifications, LocalIndex = request.LocalIndex, SupportedDatawalletVersion = supportedDatawalletVersion },
+            cancellationToken);
         return Created(string.Empty, response);
     }
 }

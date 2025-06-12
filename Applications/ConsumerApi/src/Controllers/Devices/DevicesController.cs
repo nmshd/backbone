@@ -80,7 +80,7 @@ public class DevicesController : ApiControllerBase
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new ListDevicesQuery(paginationFilter, ids), cancellationToken);
+        var response = await _mediator.Send(new ListDevicesQuery { PaginationFilter = paginationFilter, Ids = ids }, cancellationToken);
 
         return Paged(response);
     }
