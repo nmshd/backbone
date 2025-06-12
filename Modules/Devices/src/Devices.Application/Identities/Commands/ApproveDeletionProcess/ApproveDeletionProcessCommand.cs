@@ -4,10 +4,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeleti
 
 public class ApproveDeletionProcessCommand : IRequest<ApproveDeletionProcessResponse>
 {
-    public ApproveDeletionProcessCommand(string deletionProcessId)
-    {
-        DeletionProcessId = deletionProcessId;
-    }
-
-    public string DeletionProcessId { get; set; }
+    public required string DeletionProcessId { get; init; }
 }

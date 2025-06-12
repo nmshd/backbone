@@ -14,8 +14,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(),
-            new[] { new ListRelationshipTemplatesQueryItem() { Id = RelationshipTemplateId.New(), Password = [1, 2, 3] } }));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery
+        {
+            PaginationFilter = new PaginationFilter(),
+            QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New(), Password = [1, 2, 3] }]
+        });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -29,7 +32,8 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult =
-            validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { new ListRelationshipTemplatesQueryItem() { Id = RelationshipTemplateId.New() } }));
+            validator.TestValidate(new ListRelationshipTemplatesQuery
+                { PaginationFilter = new PaginationFilter(), QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New() }] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -42,7 +46,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), []));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery { PaginationFilter = new PaginationFilter(), QueryItems = [] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(

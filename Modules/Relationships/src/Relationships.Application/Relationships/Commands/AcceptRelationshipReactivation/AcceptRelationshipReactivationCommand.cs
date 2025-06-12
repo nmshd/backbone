@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Acce
 
 public class AcceptRelationshipReactivationCommand : IRequest<AcceptRelationshipReactivationResponse>
 {
-    public required string RelationshipId { get; set; }
+    public required string RelationshipId { get; init; }
 }

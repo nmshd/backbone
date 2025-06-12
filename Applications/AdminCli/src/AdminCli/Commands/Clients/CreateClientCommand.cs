@@ -58,7 +58,9 @@ public class CreateClientCommand : AdminCliCommand
     private async Task CreateClient(string? clientId,
         string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
     {
-        var response = await _mediator.Send(new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities),
+        var response = await _mediator.Send(
+            new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand
+                { ClientId = clientId, DisplayName = displayName, ClientSecret = clientSecret, DefaultTier = defaultTier, MaxIdentities = maxIdentities },
             CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));

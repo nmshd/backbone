@@ -4,10 +4,5 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteE
 
 public class DeleteExternalEventsOfIdentityCommand : IRequest
 {
-    public DeleteExternalEventsOfIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

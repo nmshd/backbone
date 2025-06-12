@@ -49,7 +49,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var tier = await _mediator.Send(new GetTierQuery(tierId), cancellationToken);
+        var tier = await _mediator.Send(new GetTierQuery { Id = tierId }, cancellationToken);
         return Ok(tier);
     }
 
@@ -68,7 +68,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var command = new DeleteTierCommand(tierId);
+        var command = new DeleteTierCommand { TierId = tierId };
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -79,7 +79,8 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateQuotaForTierRequest request, CancellationToken cancellationToken)
     {
-        var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand(tierId, request.MetricKey, request.Max, request.Period), cancellationToken);
+        var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand { TierId = tierId, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period },
+            cancellationToken);
         return Created(createdTierQuotaDefinition);
     }
 
@@ -88,7 +89,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTierQuota([FromRoute] string tierId, [FromRoute] string tierQuotaDefinitionId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteTierQuotaDefinitionCommand(tierId, tierQuotaDefinitionId), cancellationToken);
+        await _mediator.Send(new DeleteTierQuotaDefinitionCommand { TierId = tierId, TierQuotaDefinitionId = tierQuotaDefinitionId }, cancellationToken);
         return NoContent();
     }
 }

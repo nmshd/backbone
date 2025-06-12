@@ -15,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
         var mockOptions = A.Dummy<IOptions<ApplicationConfiguration>>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository, mockOptions);
-        var request = new DecomposeAndAnonymizeRelationshipsOfIdentityCommand(CreateRandomIdentityAddress());
+        var request = new DecomposeAndAnonymizeRelationshipsOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() };
 
         // Act
         await handler.Handle(request, CancellationToken.None);
