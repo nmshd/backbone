@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDeletionProcessesAuditLogsQuery(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDeletionProcessesAuditLogsQuery("some-invalid-address"));
+        var validationResult = validator.TestValidate(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = "some-invalid-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(ListDeletionProcessesAuditLogsQuery.IdentityAddress));

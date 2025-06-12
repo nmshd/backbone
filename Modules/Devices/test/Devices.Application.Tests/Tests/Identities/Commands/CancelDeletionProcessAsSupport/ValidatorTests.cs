@@ -14,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(CreateRandomIdentityAddress(), IdentityDeletionProcessId.Generate()));
+        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand { Address = CreateRandomIdentityAddress(), DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,7 +27,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand("invalid-identity-address", IdentityDeletionProcessId.Generate()));
+        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand { Address = "invalid-identity-address", DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionAsSupportCommand.Address));
@@ -40,7 +40,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
+        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand { Address = CreateRandomIdentityAddress(), DeletionProcessId = "invalid-deletion-process-id" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionAsSupportCommand.DeletionProcessId));

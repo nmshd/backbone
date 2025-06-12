@@ -4,10 +4,5 @@ namespace Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChal
 
 public class DeleteChallengesOfIdentityCommand : IRequest
 {
-    public DeleteChallengesOfIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

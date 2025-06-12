@@ -16,7 +16,7 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var handler = CreateHandler(mockIdentitiesRepository);
 
-        await handler.Handle(new DeleteIdentityCommand(identity.Address), CancellationToken.None);
+        await handler.Handle(new DeleteIdentityCommand { IdentityAddress = identity.Address }, CancellationToken.None);
 
         A.CallTo(() => mockIdentitiesRepository.Delete(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }

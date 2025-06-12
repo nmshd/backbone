@@ -33,7 +33,7 @@ public class MessagesController : ApiControllerBase
     public async Task<IActionResult> ListMessages([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        var command = new ListMessagesQuery(paginationFilter, ids);
+        var command = new ListMessagesQuery { PaginationFilter = paginationFilter, Ids = ids };
 
         command.PaginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
