@@ -99,6 +99,27 @@ public class EventQueueTests : AbstractTestsBase
         eventNames.ShouldHaveCount(1);
         eventNames.ShouldContain("event1");
     }
+
+    [Fact]
+    public async Task Queue_sends_keep_alive_event()
+    {
+        // Arrange
+        var config = new Configuration { Sse = new Configuration.SseConfiguration { KeepAliveEventInterval = 1 } };
+        var options = A.Fake<IOptions<Configuration>>();
+        A.CallTo(() => options.Value).Returns(config);
+
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), options);
+        queue.Register("testAddress", CancellationToken.None);
+
+        // Act
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+        var eventNames = await queue.DequeueAllFor("testAddress");
+        queue.Deregister("testAddress");
+
+        // Assert
+        eventNames.ShouldHaveCount(1);
+        eventNames.ShouldContain(EventQueue.KEEP_ALIVE_EVENT);
+    }
 }
 
 file static class Extensions

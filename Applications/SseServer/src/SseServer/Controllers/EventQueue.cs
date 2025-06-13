@@ -6,7 +6,7 @@ namespace Backbone.SseServer.Controllers;
 
 public class EventQueue : IEventQueue
 {
-    private const string KEEP_ALIVE_EVENT = "keep-alive";
+    public const string KEEP_ALIVE_EVENT = "keep-alive";
 
     private readonly ILogger<EventQueue> _logger;
     private readonly ConcurrentDictionary<string, Channel<string>> _channels = new();
