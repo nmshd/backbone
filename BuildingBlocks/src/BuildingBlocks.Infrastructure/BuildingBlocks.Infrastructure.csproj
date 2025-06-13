@@ -3,7 +3,7 @@
     <ItemGroup>
         <PackageReference Include="Autofac" Version="[8.3.0]" />
         <PackageReference Include="AWSSDK.S3" Version="[4.0.1.6]" />
-        <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.19.0]" />
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
         <PackageReference Include="Azure.Storage.Blobs" Version="[12.24.1]" />
         <PackageReference Include="Google.Cloud.PubSub.V1" Version="[3.24.0]" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
@@ -11,7 +11,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.6]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.6]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[9.0.6]" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.11.0]" />
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.12.0]" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[9.0.6]" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.6.0]" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[9.0.6]" />
