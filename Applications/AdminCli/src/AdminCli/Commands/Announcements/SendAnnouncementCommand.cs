@@ -82,6 +82,7 @@ public class SendAnnouncementCommand : AdminCliCommand
                     Severity = severity,
                     IsSilent = isSilent ?? false,
                     ExpiresAt = expiresAt,
+                    Actions = [],
                     IqlQuery = iqlQuery
                 }, CancellationToken.None);
 

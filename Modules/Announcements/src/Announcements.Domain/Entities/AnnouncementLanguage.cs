@@ -43,4 +43,9 @@ public record AnnouncementLanguage
 
         return null;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }
