@@ -5,6 +5,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="xunit.v3" Version="[2.0.2]" />
+        <PackageReference Include="xunit.v3" Version="[2.0.2]">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>
