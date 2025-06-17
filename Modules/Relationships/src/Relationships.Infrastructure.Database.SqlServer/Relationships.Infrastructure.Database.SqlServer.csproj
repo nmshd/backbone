@@ -1,11 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="xunit.v3.extensibility.core" Version="[2.0.2]">
+        <PackageReference Include="xunit.v3" Version="[2.0.2]">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
