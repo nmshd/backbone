@@ -7,12 +7,12 @@ namespace Backbone.AdminApi.Configuration;
 public class AdminApiConfiguration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; init; }
 
     public CorsConfiguration Cors { get; set; } = new();
 
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 
     public class AuthenticationConfiguration
     {
