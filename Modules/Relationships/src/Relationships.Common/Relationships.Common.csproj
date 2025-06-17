@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="FluentValidation" Version="[12.0.0]" />
-        <PackageReference Include="xunit.v3.extensibility.core" Version="[2.0.2]">
+        <PackageReference Include="xunit.v3" Version="[2.0.2]">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
