@@ -33,7 +33,7 @@ public class ValidatorTests : AbstractTestsBase
         // Act
         var validationResult =
             validator.TestValidate(new ListRelationshipTemplatesQuery
-                { PaginationFilter = new PaginationFilter(), QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New() }] });
+            { PaginationFilter = new PaginationFilter(), QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New() }] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

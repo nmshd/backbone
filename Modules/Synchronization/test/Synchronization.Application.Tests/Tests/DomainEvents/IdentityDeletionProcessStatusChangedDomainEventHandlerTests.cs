@@ -15,7 +15,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
         // Arrange
         var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent
-            { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId" };
+        { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId" };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
@@ -35,7 +35,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
         // Arrange
         var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent
-            { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId", Initiator = deletionProcessOwner };
+        { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId", Initiator = deletionProcessOwner };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
