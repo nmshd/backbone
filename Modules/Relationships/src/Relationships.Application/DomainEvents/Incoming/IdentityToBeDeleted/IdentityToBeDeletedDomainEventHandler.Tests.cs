@@ -34,7 +34,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
-        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted, gracePeriodEndsAt));
+        await handler.Handle(new IdentityToBeDeletedDomainEvent { IdentityAddress = identityToBeDeleted, GracePeriodEndsAt = gracePeriodEndsAt });
 
         //Assert
         A.CallTo(() => mockEventBus.Publish(A<PeerToBeDeletedDomainEvent>.That.Matches(e => e.PeerOfIdentityToBeDeleted == peer1 &&
