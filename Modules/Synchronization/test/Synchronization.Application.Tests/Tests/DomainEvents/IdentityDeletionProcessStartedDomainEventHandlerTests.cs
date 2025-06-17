@@ -33,7 +33,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
         // Arrange
         var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStartedDomainEvent = new IdentityDeletionProcessStartedDomainEvent
-            { Address = deletionProcessOwner, DeletionProcessId = "some-deletion-process-id", Initiator = deletionProcessOwner };
+        { Address = deletionProcessOwner, DeletionProcessId = "some-deletion-process-id", Initiator = deletionProcessOwner };
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
 

@@ -52,7 +52,7 @@ public class CreateClientCommand : AdminCliCommand
     {
         var response = await _mediator.Send(
             new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand
-                { ClientId = clientId, DisplayName = displayName, ClientSecret = clientSecret, DefaultTier = defaultTier, MaxIdentities = maxIdentities },
+            { ClientId = clientId, DisplayName = displayName, ClientSecret = clientSecret, DefaultTier = defaultTier, MaxIdentities = maxIdentities },
             CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
