@@ -22,7 +22,8 @@ public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockDbContext);
 
         // Act
-        await handler.Handle(new PeerToBeDeletedDomainEvent { PeerOfIdentityToBeDeleted = peerOfIdentityToBeDeleted, RelationshipId = "some-relationship-id", IdentityToBeDeleted = "some-deletedIdentity-id", GracePeriodEndsAt = gracePeriodEndsAt });
+        await handler.Handle(new PeerToBeDeletedDomainEvent
+            { PeerOfIdentityToBeDeleted = peerOfIdentityToBeDeleted, RelationshipId = "some-relationship-id", IdentityToBeDeleted = "some-deletedIdentity-id", GracePeriodEndsAt = gracePeriodEndsAt });
 
         // Assert
         A.CallTo(() => mockDbContext.CreateExternalEvent(A<PeerToBeDeletedExternalEvent>._)).MustHaveHappenedOnceExactly();
