@@ -6,5 +6,5 @@ namespace Backbone.Modules.Files.Application;
 public class ApplicationConfiguration
 {
     [Required]
-    public PaginationConfiguration Pagination { get; set; } = new();
+    public required PaginationConfiguration Pagination { get; set; }
 }
