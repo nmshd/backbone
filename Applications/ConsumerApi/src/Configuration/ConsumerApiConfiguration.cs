@@ -6,12 +6,12 @@ namespace Backbone.ConsumerApi.Configuration;
 public class ConsumerApiConfiguration
 {
     [Required]
-    public required AuthenticationConfiguration Authentication { get; set; }
+    public required AuthenticationConfiguration Authentication { get; init; }
 
     public CorsConfiguration Cors { get; set; } = new();
 
     [Required]
-    public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required ConsumerApiInfrastructureConfiguration Infrastructure { get; init; }
 
     public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
 
@@ -58,6 +58,13 @@ public class ConsumerApiConfiguration
 
         public string? DefaultAppId { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
+                yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
+                    [nameof(Apps), nameof(DefaultAppId)]);
+        }
+
         public class App
         {
             [Required]
@@ -99,13 +106,6 @@ public class ConsumerApiConfiguration
                 public string? AppLink { get; set; } = null!;
                 public string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
             }
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
-                yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
-                    [nameof(Apps), nameof(DefaultAppId)]);
         }
     }
 }

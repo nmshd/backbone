@@ -6,12 +6,12 @@ namespace Backbone.SseServer;
 public class Configuration
 {
     [Required]
-    public required AuthenticationConfiguration Authentication { get; set; }
+    public required AuthenticationConfiguration Authentication { get; init; }
 
     public required CorsConfiguration Cors { get; set; }
 
     [Required]
-    public required InfrastructureConfiguration Infrastructure { get; set; }
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 
     public SseServerConfiguration SseServer { get; set; } = new();
 
