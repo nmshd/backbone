@@ -14,8 +14,15 @@ public class Announcement
     public required IEnumerable<AnnouncementText> Texts { get; set; }
 
     public required IEnumerable<string> Recipients { get; set; }
+    public required IEnumerable<AnnouncementAction> Actions { get; set; }
 
     public required string? IqlQuery { get; set; }
+}
+
+public class AnnouncementAction
+{
+    public required Dictionary<string, string> DisplayName { get; set; }
+    public required string Link { get; set; }
 }
 
 public class AnnouncementText

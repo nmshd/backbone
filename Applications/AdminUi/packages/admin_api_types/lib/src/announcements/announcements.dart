@@ -1,4 +1,5 @@
 export 'announcement_languages.dart';
+export 'announcement_link_action.dart';
 export 'announcement_severity_type.dart';
 export 'announcement_text.dart';
 export 'announcements_overview.dart';

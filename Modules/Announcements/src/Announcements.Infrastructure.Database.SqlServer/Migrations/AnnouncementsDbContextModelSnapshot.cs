@@ -55,6 +55,37 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("Announcements", "Announcements");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("AnnouncementId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnnouncementId");
+
+                    b.ToTable("AnnouncementActions", "Announcements");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
                     b.Property<string>("AnnouncementId")
@@ -104,6 +135,13 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("AnnouncementText", "Announcements");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("AnnouncementId");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
@@ -124,6 +162,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Recipients");
 
                     b.Navigation("Texts");
