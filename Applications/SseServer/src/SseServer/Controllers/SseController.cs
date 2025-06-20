@@ -44,7 +44,7 @@ public class SseController : ControllerBase
 
         try
         {
-            _eventQueue.Register(address);
+            _eventQueue.Register(address, HttpContext.RequestAborted);
 
             await streamWriter.SendServerSentEvent("ConnectionOpened");
 

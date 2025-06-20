@@ -13,6 +13,8 @@ public class Configuration
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
+    public SseConfiguration Sse { get; set; } = new();
+
     public class AuthenticationConfiguration
     {
         public string JwtSigningCertificate { get; set; } = "";
@@ -28,5 +30,10 @@ public class Configuration
     {
         [Required]
         public EventBusConfiguration EventBus { get; set; } = new();
+    }
+
+    public class SseConfiguration
+    {
+        public int KeepAliveEventInterval { get; set; } = 240;
     }
 }
