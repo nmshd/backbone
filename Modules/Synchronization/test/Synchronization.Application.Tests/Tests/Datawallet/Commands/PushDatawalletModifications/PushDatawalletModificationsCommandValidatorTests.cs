@@ -13,14 +13,17 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand(
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand
+        {
+            Modifications =
             [
                 new PushDatawalletModificationItem
                 {
                     Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
                 }
             ],
-            1));
+            SupportedDatawalletVersion = 1
+        });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -33,14 +36,17 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand(
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand
+        {
+            Modifications =
             [
                 new PushDatawalletModificationItem
                 {
                     Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
                 }
             ],
-            0));
+            SupportedDatawalletVersion = 0
+        });
 
         // Assert
         validationResult.ShouldHaveValidationErrorFor(x => x.SupportedDatawalletVersion);

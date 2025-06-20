@@ -6,7 +6,7 @@ namespace Backbone.ConsumerApi.Configuration;
 public class ConsumerApiConfiguration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; set; }
 
     public CorsConfiguration Cors { get; set; } = new();
 
@@ -37,7 +37,7 @@ public class ConsumerApiConfiguration
 
         [Required]
         [Range(60, 3600)]
-        public int JwtLifetimeInSeconds { get; set; }
+        public required int JwtLifetimeInSeconds { get; set; }
     }
 
     public class CorsConfiguration
@@ -61,13 +61,13 @@ public class ConsumerApiConfiguration
         public class App
         {
             [Required]
-            public string Id { get; set; } = null!;
+            public required string Id { get; set; }
 
             [Required]
-            public string DisplayName { get; set; } = null!;
+            public required string DisplayName { get; set; }
 
             [Required]
-            public string Description { get; set; } = null!;
+            public required string Description { get; set; }
 
             [Required]
             public StoreConfig AppleAppStore { get; set; } = new();

@@ -17,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
         var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await handler.Handle(new DeleteFilesOfIdentityCommand(identityAddress), CancellationToken.None);
+        await handler.Handle(new DeleteFilesOfIdentityCommand { IdentityAddress = identityAddress }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(A<Expression<Func<File, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();

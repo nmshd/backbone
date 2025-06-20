@@ -4,10 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListR
 
 public class ListRelationshipsOfIdentityQuery : IRequest<ListRelationshipsOfIdentityResponse>
 {
-    public ListRelationshipsOfIdentityQuery(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetPe
 
 public class GetPeerOfActiveIdentityInRelationshipQuery : IRequest<GetPeerOfActiveIdentityInRelationshipResponse>
 {
-    public required string Id { get; set; }
+    public required string Id { get; init; }
 }

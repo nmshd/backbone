@@ -21,12 +21,12 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DecomposeAndAnonymizeRelationshipsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DecomposeAndAnonymizeRelationshipsOfIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
-        await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand(identityAddress));
-        await _mediator.Send(new AnonymizeRelationshipTemplatesForIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeRelationshipTemplatesForIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
-        await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(identityAddress));
+        await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
     }
 }

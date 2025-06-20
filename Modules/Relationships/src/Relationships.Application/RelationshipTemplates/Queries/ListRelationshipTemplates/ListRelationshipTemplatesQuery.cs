@@ -5,14 +5,8 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {
-    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<ListRelationshipTemplatesQueryItem>? queries)
-    {
-        PaginationFilter = paginationFilter;
-        QueryItems = queries == null ? [] : queries.ToList();
-    }
-
-    public PaginationFilter PaginationFilter { get; set; }
-    public List<ListRelationshipTemplatesQueryItem> QueryItems { get; set; }
+    public required PaginationFilter PaginationFilter { get; init; }
+    public required List<ListRelationshipTemplatesQueryItem> QueryItems { get; init; }
 }
 
 public class ListRelationshipTemplatesQueryItem

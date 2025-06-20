@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcessAsSupport;
@@ -23,7 +22,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository);
 
         // Act
-        var response = await handler.Handle(new StartDeletionProcessAsSupportCommand(activeIdentity.Address), CancellationToken.None);
+        var response = await handler.Handle(new StartDeletionProcessAsSupportCommand { IdentityAddress = activeIdentity.Address }, CancellationToken.None);
 
         // Assert
         response.ShouldNotBeNull();
@@ -55,7 +54,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository);
 
         // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessAsSupportCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessAsSupportCommand { IdentityAddress = address }, CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

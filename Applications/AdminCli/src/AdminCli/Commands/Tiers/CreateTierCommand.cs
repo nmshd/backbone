@@ -22,7 +22,7 @@ public class CreateTierCommand : AdminCliCommand
 
     private async Task CreateTier(string name)
     {
-        var response = await _mediator.Send(new Modules.Devices.Application.Tiers.Commands.CreateTier.CreateTierCommand(name), CancellationToken.None);
+        var response = await _mediator.Send(new Modules.Devices.Application.Tiers.Commands.CreateTier.CreateTierCommand { Name = name }, CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
     }

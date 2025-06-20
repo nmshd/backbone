@@ -17,7 +17,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CreateTierCommand(value));
+        var validationResult = validator.TestValidate(new CreateTierCommand { Name = value });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(

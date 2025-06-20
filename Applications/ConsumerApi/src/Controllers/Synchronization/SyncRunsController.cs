@@ -43,10 +43,12 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
-        var identityResponse = await _mediator.Send(new GetIdentityQuery(_userContext.GetAddress()), cancellationToken);
+        var identityResponse = await _mediator.Send(new GetIdentityQuery { Address = _userContext.GetAddress() }, cancellationToken);
         EnsureIdentityIsNotToBeDeleted(identityResponse);
 
-        var response = await _mediator.Send(new StartSyncRunCommand(requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration, supportedDatawalletVersion), cancellationToken);
+        var response = await _mediator.Send(
+            new StartSyncRunCommand { Type = requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, Duration = requestBody.Duration, SupportedDatawalletVersion = supportedDatawalletVersion },
+            cancellationToken);
 
         return response.Status == StartSyncRunStatus.Created ? Created(response) : Ok(response);
     }
@@ -58,8 +60,9 @@ public class SyncRunsController : ApiControllerBase
     public async Task<IActionResult> FinalizeExternalEventSync([FromRoute] string id,
         [FromBody] FinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id,
-            request.ExternalEventResults, request.DatawalletModifications), cancellationToken);
+        var response = await _mediator.Send(
+            new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = id, ExternalEventResults = request.ExternalEventResults, DatawalletModifications = request.DatawalletModifications },
+            cancellationToken);
 
         return Ok(response);
     }
@@ -70,7 +73,9 @@ public class SyncRunsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> FinalizeDatawalletVersionUpgrade([FromRoute] string id, [FromBody] FinalizeDatawalletVersionUpgradeRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id, request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
+        var response = await _mediator.Send(
+            new FinalizeDatawalletVersionUpgradeSyncRunCommand { SyncRunId = id, NewDatawalletVersion = request.NewDatawalletVersion, DatawalletModifications = request.DatawalletModifications },
+            cancellationToken);
 
         return Ok(response);
     }
@@ -87,7 +92,7 @@ public class SyncRunsController : ApiControllerBase
         if (paginationFilter.PageSize > _configuration.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var response = await _mediator.Send(new ListExternalEventsOfSyncRunQuery(id, paginationFilter), cancellationToken);
+        var response = await _mediator.Send(new ListExternalEventsOfSyncRunQuery { SyncRunId = id, PaginationFilter = paginationFilter }, cancellationToken);
 
         return Paged(response);
     }
@@ -98,7 +103,7 @@ public class SyncRunsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSyncRunById(string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetSyncRunByIdQuery(id), cancellationToken);
+        var response = await _mediator.Send(new GetSyncRunByIdQuery { SyncRunId = id }, cancellationToken);
         return Ok(response);
     }
 
@@ -108,7 +113,7 @@ public class SyncRunsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RefreshExpirationTimeOfSyncRun(string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id), cancellationToken);
+        var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = id }, cancellationToken);
         return Ok(response);
     }
 

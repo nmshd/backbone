@@ -2,14 +2,9 @@
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
+
 public class GetDeletionProcessAsSupportQuery : IRequest<IdentityDeletionProcessDetailsDTO>
 {
-    public GetDeletionProcessAsSupportQuery(string identityAddress, string deletionProcessId)
-    {
-        IdentityAddress = identityAddress;
-        DeletionProcessId = deletionProcessId;
-    }
-
-    public string IdentityAddress { get; set; }
-    public string DeletionProcessId { get; set; }
+    public required string IdentityAddress { get; init; }
+    public required string DeletionProcessId { get; init; }
 }

@@ -22,7 +22,7 @@ public class ResetAccessFailedCountOfTokenCommand : AdminCliCommand
 
     private async Task ResetAccessFailedCount(string tokenId)
     {
-        await _mediator.Send(new Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken.ResetAccessFailedCountOfTokenCommand(tokenId), CancellationToken.None);
+        await _mediator.Send(new Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken.ResetAccessFailedCountOfTokenCommand { TokenId = tokenId }, CancellationToken.None);
 
         Console.WriteLine(@"Access failed count has been reset.");
     }

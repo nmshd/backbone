@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 
 public class DeleteRelationshipTemplateCommand : IRequest
 {
-    public required string Id { get; set; }
+    public required string Id { get; init; }
 }

@@ -6,5 +6,5 @@ namespace Backbone.Modules.Quotas.Infrastructure;
 public class InfrastructureConfiguration
 {
     [Required]
-    public DatabaseConfiguration SqlDatabase { get; set; } = new();
+    public required DatabaseConfiguration SqlDatabase { get; set; }
 }

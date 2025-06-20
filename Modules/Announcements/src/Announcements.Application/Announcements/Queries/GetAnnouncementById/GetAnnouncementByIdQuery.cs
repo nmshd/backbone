@@ -5,10 +5,5 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Queries.GetAn
 
 public class GetAnnouncementByIdQuery : IRequest<AnnouncementDTO>
 {
-    public GetAnnouncementByIdQuery(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; }
+    public required string Id { get; init; }
 }

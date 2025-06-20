@@ -14,7 +14,7 @@ public class HandlerTests : AbstractTestsBase
         var mockRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository);
-        var request = new DeleteRelationshipTemplatesOfIdentityCommand(CreateRandomIdentityAddress());
+        var request = new DeleteRelationshipTemplatesOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() };
 
         // Act
         await handler.Handle(request, CancellationToken.None);

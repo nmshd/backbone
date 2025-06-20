@@ -15,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListFileMetadataQuery(new PaginationFilter(), [FileId.New()]));
+        var validationResult = validator.TestValidate(new ListFileMetadataQuery { PaginationFilter = new PaginationFilter(), Ids = [FileId.New()] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,7 +28,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListFileMetadataQuery(new PaginationFilter(), ["some-invalid-file-id"]));
+        var validationResult = validator.TestValidate(new ListFileMetadataQuery { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-file-id"] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(

@@ -30,7 +30,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
 
         // Acting
-        var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
+        var result = await handler.Handle(new CancelDeletionAsSupportCommand { Address = identity.Address, DeletionProcessId = deletionProcess.Id }, CancellationToken.None);
 
         // Assert
         identity.Status.ShouldBe(IdentityStatus.Active);
@@ -55,7 +55,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcessId), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand { Address = identity.Address, DeletionProcessId = deletionProcessId }, CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

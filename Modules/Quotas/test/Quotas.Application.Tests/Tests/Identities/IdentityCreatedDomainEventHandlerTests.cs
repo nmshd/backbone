@@ -25,7 +25,7 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, stubTiersRepository);
 
         // Act
-        await handler.Handle(new IdentityCreatedDomainEvent(address, tierId));
+        await handler.Handle(new IdentityCreatedDomainEvent { Address = address, Tier = tierId });
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.Address == address && i.TierId == tierId), CancellationToken.None)).MustHaveHappened();
@@ -49,7 +49,7 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, stubTiersRepository);
 
         // Act
-        await handler.Handle(new IdentityCreatedDomainEvent(address, tierId));
+        await handler.Handle(new IdentityCreatedDomainEvent { Address = address, Tier = tierId });
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();

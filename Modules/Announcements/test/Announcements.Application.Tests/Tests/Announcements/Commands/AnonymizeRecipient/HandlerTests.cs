@@ -15,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
         var mockRepository = A.Fake<IAnnouncementsRepository>();
 
         var handler = new Handler(mockRepository);
-        var command = new DeleteAnnouncementRecipientsCommand(CreateRandomIdentityAddress().Value);
+        var command = new DeleteAnnouncementRecipientsCommand { IdentityAddress = CreateRandomIdentityAddress().Value };
 
         // Act
         await handler.Handle(command, CancellationToken.None);

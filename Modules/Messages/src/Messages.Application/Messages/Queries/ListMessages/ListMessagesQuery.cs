@@ -5,12 +5,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesQuery : IRequest<ListMessagesResponse>
 {
-    public ListMessagesQuery(PaginationFilter paginationFilter, IEnumerable<string> ids)
-    {
-        PaginationFilter = paginationFilter;
-        Ids = ids;
-    }
-
-    public PaginationFilter PaginationFilter { get; set; }
-    public IEnumerable<string> Ids { get; set; }
+    public required PaginationFilter PaginationFilter { get; init; }
+    public required IEnumerable<string> Ids { get; init; }
 }

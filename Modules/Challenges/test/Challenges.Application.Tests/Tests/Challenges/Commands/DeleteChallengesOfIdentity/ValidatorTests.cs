@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand("invalid-identity-address"));
+        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand { IdentityAddress = "invalid-identity-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(DeleteChallengesOfIdentityCommand.IdentityAddress));

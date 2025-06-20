@@ -32,7 +32,7 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
-        await handler.Handle(new IdentityDeletedDomainEvent(identityToBeDeleted));
+        await handler.Handle(new IdentityDeletedDomainEvent { IdentityAddress = identityToBeDeleted });
 
         //Assert
         A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(e => e.PeerOfDeletedIdentity == peer1 &&

@@ -4,16 +4,9 @@ namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 
 public class UpdateClientCommand : IRequest<UpdateClientResponse>
 {
-    public UpdateClientCommand(string clientId, string defaultTier, int? maxIdentities)
-    {
-        ClientId = clientId;
-        DefaultTier = defaultTier;
-        MaxIdentities = maxIdentities;
-    }
+    public required string ClientId { get; init; }
 
-    public string ClientId { get; set; }
+    public required string DefaultTier { get; init; }
 
-    public string DefaultTier { get; set; }
-
-    public int? MaxIdentities { get; set; }
+    public int? MaxIdentities { get; init; }
 }

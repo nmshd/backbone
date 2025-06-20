@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEs
 
 public class CanEstablishRelationshipQuery : IRequest<CanEstablishRelationshipResponse>
 {
-    public required string PeerAddress { get; set; }
+    public required string PeerAddress { get; init; }
 }

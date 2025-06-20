@@ -14,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteTierCommand(TierId.Generate()));
+        var validationResult = validator.TestValidate(new DeleteTierCommand { TierId = TierId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,7 +27,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteTierCommand("invalid-tier_id"));
+        var validationResult = validator.TestValidate(new DeleteTierCommand { TierId = "invalid-tier_id" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(DeleteTierCommand.TierId));

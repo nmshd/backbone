@@ -4,5 +4,5 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Queries.ListA
 
 public class ListAnnouncementsForActiveIdentityInLanguageQuery : IRequest<ListAnnouncementsInLanguageResponse>
 {
-    public required string Language { get; set; }
+    public required string Language { get; init; }
 }

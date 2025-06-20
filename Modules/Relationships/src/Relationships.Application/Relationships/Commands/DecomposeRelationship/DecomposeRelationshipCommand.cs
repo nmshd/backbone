@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Deco
 
 public class DecomposeRelationshipCommand : IRequest<DecomposeRelationshipResponse>
 {
-    public required string RelationshipId { get; set; }
+    public required string RelationshipId { get; init; }
 }
