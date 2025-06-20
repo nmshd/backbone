@@ -147,7 +147,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName2, addBlobContent2);
         await azureBlobStorage.SaveAsync();
 
-        var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync();
+        var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync(TestContext.Current.CancellationToken);
 
         retrievedBlobContent.ShouldContain(addBlobName1);
         retrievedBlobContent.ShouldContain(addBlobName2);
@@ -164,7 +164,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
         azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2_Blob", "content"u8.ToArray());
         await azureBlobStorage.SaveAsync();
 
-        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync("PREFIX1_")).ToListAsync();
+        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync("PREFIX1_")).ToListAsync(TestContext.Current.CancellationToken);
 
         blobsWithPrefix1.ShouldContain("PREFIX1_Blob");
         blobsWithPrefix1.ShouldNotContain("PREFIX2_Blob");
@@ -177,7 +177,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync();
+        var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync(TestContext.Current.CancellationToken);
 
         retrievedBlobContent.ShouldBeEmpty();
 

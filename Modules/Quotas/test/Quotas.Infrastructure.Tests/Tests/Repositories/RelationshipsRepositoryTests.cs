@@ -36,8 +36,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreatePendingRelationship(I1, I2),
             CreatePendingRelationship(I2, I1)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -60,8 +60,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreateActiveRelationship(I1, I2),
             CreateActiveRelationship(I2, I1)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -84,8 +84,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreateTerminatedRelationship(I1, I2),
             CreateTerminatedRelationship(I2, I1)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -108,8 +108,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreateRelationshipWithRequestedReactivation(from: I1, to: I2, reactivationRequestedBy: I1),
             CreateRelationshipWithRequestedReactivation(from: I2, to: I1, reactivationRequestedBy: I2)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -133,8 +133,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreateActiveRelationship(I2, I4),
             CreateActiveRelationship(I2, I3)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -155,8 +155,8 @@ public class RelationshipsRepositoryTests : AbstractTestsBase
             CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I1),
             CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I2)
         };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships, TestContext.Current.CancellationToken);
+        await _relationshipsArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new RelationshipsRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;

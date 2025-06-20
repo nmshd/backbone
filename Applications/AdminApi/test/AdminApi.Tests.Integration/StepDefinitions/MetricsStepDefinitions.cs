@@ -2,7 +2,6 @@
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -27,7 +26,8 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     [Then("the response contains a list of Metrics")]
     public async Task ThenTheResponseContainsAListOfMetrics()
     {
-        _metricsResponse!.Result.ShouldNotBeNullOrEmpty();
+        _metricsResponse!.Result.ShouldNotBeNull();
+        _metricsResponse.Result.Count.ShouldBeGreaterThan(0);
         _metricsResponse!.ContentType.ShouldStartWith("application/json");
         await _metricsResponse.ShouldComplyWithSchema();
     }

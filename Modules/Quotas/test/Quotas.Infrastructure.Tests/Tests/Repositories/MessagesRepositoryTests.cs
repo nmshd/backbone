@@ -49,8 +49,8 @@ public class MessagesRepositoryTests : AbstractTestsBase
             CreateMessage(YESTERDAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1)
         };
-        await _messagesArrangeContext.Messages.AddRangeAsync(messages);
-        await _messagesArrangeContext.SaveChangesAsync();
+        await _messagesArrangeContext.Messages.AddRangeAsync(messages, TestContext.Current.CancellationToken);
+        await _messagesArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
@@ -74,8 +74,8 @@ public class MessagesRepositoryTests : AbstractTestsBase
             CreateMessage(LAST_YEAR, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
-        await _messagesArrangeContext.Messages.AddRangeAsync(messages);
-        await _messagesArrangeContext.SaveChangesAsync();
+        await _messagesArrangeContext.Messages.AddRangeAsync(messages, TestContext.Current.CancellationToken);
+        await _messagesArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Month;
@@ -97,8 +97,8 @@ public class MessagesRepositoryTests : AbstractTestsBase
             CreateMessage(TOMORROW, _identityAddress1),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
-        await _messagesArrangeContext.Messages.AddRangeAsync(messages);
-        await _messagesArrangeContext.SaveChangesAsync();
+        await _messagesArrangeContext.Messages.AddRangeAsync(messages, TestContext.Current.CancellationToken);
+        await _messagesArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Total;
@@ -120,8 +120,8 @@ public class MessagesRepositoryTests : AbstractTestsBase
             CreateMessage(TOMORROW, _identityAddress2),
             CreateMessage(NEXT_YEAR, _identityAddress1)
         };
-        await _messagesArrangeContext.Messages.AddRangeAsync(messages);
-        await _messagesArrangeContext.SaveChangesAsync();
+        await _messagesArrangeContext.Messages.AddRangeAsync(messages, TestContext.Current.CancellationToken);
+        await _messagesArrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new MessagesRepository(_actContext);
         const QuotaPeriod quotaPeriod = QuotaPeriod.Total;

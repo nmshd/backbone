@@ -1,8 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit.v3" Version="[2.0.2]">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

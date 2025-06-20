@@ -1,4 +1,4 @@
-﻿using ArchUnitNET.xUnit;
+﻿using ArchUnitNET.xUnitV3;
 using Backbone.UnitTestTools.BaseClasses;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 

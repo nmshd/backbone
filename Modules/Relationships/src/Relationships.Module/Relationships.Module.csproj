@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Module\BuildingBlocks.Module.csproj" />
@@ -13,5 +17,8 @@
 
     <ItemGroup>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.6]" />
+        <PackageReference Include="xunit.v3" Version="[2.0.2]">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>

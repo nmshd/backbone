@@ -1,6 +1,6 @@
 using System.Collections;
 using ArchUnitNET.Domain;
-using ArchUnitNET.xUnit;
+using ArchUnitNET.xUnitV3;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Backbone.Backbone.Tests.ArchUnit;

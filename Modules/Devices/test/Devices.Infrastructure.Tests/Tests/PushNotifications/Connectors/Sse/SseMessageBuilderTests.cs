@@ -19,7 +19,7 @@ public class SseMessageBuilderTests : AbstractTestsBase
         request.RequestUri?.ToString().ShouldBe("recipient-address/events");
 
         request.Content.ShouldNotBeNull();
-        var actualContent = await request.Content!.ReadAsStringAsync();
+        var actualContent = await request.Content!.ReadAsStringAsync(TestContext.Current.CancellationToken);
         actualContent.ShouldBeEquivalentToJson("""{ "eventName": "Test" }""");
     }
 }
