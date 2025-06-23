@@ -10,19 +10,19 @@ public class CreateEntitiesCommand : Command
 {
     public CreateEntitiesCommand() : base("CreateEntities", "Creates entities in the consumer API using the SDK")
     {
-        var baseAddress = new Option<string>("--baseAddress") { Description = "The base address of the consumer API." };
+        var baseAddress = new Option<string>("--baseAddress") { Description = "The base address of the consumer API.", Required = true };
         Options.Add(baseAddress);
 
-        var clientId = new Option<string>("--clientId") { Description = "The client id to use." };
+        var clientId = new Option<string>("--clientId") { Description = "The client id to use.", Required = true };
         Options.Add(clientId);
 
-        var clientSecret = new Option<string>("--clientSecret") { Description = "The corresponding client secret." };
+        var clientSecret = new Option<string>("--clientSecret") { Description = "The corresponding client secret.", Required = true };
         Options.Add(clientSecret);
 
-        var configurationFilePath = new Option<string>("--relationshipsAndMessages") { Description = "The csv file with the relationships and messages configuration." };
+        var configurationFilePath = new Option<string>("--relationshipsAndMessages") { Description = "The csv file with the relationships and messages configuration.", Required = true };
         Options.Add(configurationFilePath);
 
-        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration." };
+        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration.", Required = true };
         Options.Add(poolsFilePath);
 
         SetAction(async (parseResult, token) =>

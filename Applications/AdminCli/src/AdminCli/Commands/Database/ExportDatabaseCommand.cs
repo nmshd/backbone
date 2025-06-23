@@ -21,7 +21,7 @@ public class ExportDatabaseCommand : AdminCliCommand
     {
         _adminApiDbContext = adminApiDbContext;
 
-        var includeSensitiveData = new Option<bool>("--sensitive")
+        var includeSensitiveData = new Option<bool?>("--sensitive")
         {
             Required = false,
             Description = "If this is set, sensitive data like IDs or identity addresses are exported as well."
@@ -31,7 +31,7 @@ public class ExportDatabaseCommand : AdminCliCommand
 
         SetAction((ParseResult parseResult, CancellationToken token) =>
         {
-            var includeSensitiveDataValue = parseResult.GetRequiredValue(includeSensitiveData);
+            var includeSensitiveDataValue = parseResult.GetValue(includeSensitiveData) ?? false;
             return ExportDatabase(includeSensitiveDataValue);
         });
         DeleteExportDirectory();

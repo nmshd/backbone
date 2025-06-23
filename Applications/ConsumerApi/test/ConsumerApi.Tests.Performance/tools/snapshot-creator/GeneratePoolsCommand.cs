@@ -12,7 +12,7 @@ public class GeneratePoolsCommand : Command
 {
     public GeneratePoolsCommand() : base("GeneratePools", "Generates Pools according to the configuration provided")
     {
-        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration." };
+        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration.", Required = true };
         Options.Add(poolsFilePath);
 
         SetAction(async (parseResult, token) =>
