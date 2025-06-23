@@ -46,11 +46,11 @@ public class CreateClientCommand : AdminCliCommand
 
         SetAction((ParseResult parseResult, CancellationToken token) =>
         {
-            var clientIdValue = parseResult.GetRequiredValue(clientId);
-            var displayNameValue = parseResult.GetRequiredValue(displayName);
-            var clientSecretValue = parseResult.GetRequiredValue(clientSecret);
+            var clientIdValue = parseResult.GetValue(clientId);
+            var displayNameValue = parseResult.GetValue(displayName);
+            var clientSecretValue = parseResult.GetValue(clientSecret);
             var defaultTierIdValue = parseResult.GetRequiredValue(defaultTierId);
-            var maxIdentitiesValue = parseResult.GetRequiredValue(maxIdentities);
+            var maxIdentitiesValue = parseResult.GetValue(maxIdentities);
             return CreateClient(clientIdValue, displayNameValue, clientSecretValue, defaultTierIdValue, maxIdentitiesValue);
         });
     }
