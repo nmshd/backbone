@@ -1,4 +1,3 @@
-﻿using System.CommandLine;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
 
-await new MainCommand().InvokeAsync(args);
+await new MainCommand().Parse(args).InvokeAsync();

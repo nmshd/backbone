@@ -7,7 +7,7 @@ public class AnnouncementCommand : Command
     public AnnouncementCommand(SendAnnouncementCommand sendAnnouncementCommand,
         DeleteAnnouncementCommand deleteAnnouncementCommand) : base("announcement")
     {
-        AddCommand(sendAnnouncementCommand);
-        AddCommand(deleteAnnouncementCommand);
+        Subcommands.Add(sendAnnouncementCommand);
+        Subcommands.Add(deleteAnnouncementCommand);
     }
 }
