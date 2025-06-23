@@ -11,13 +11,17 @@ public class ResetAccessFailedCountOfTokenCommand : AdminCliCommand
     {
         var tokenId = new Option<string>("--id")
         {
-            IsRequired = true,
+            Required = true,
             Description = "The id of the Token of which the access failed count should be resetted."
         };
 
-        AddOption(tokenId);
+        Options.Add(tokenId);
 
-        this.SetHandler(ResetAccessFailedCount, tokenId);
+        SetAction((ParseResult parseResult, CancellationToken token) =>
+        {
+            var tokenIdValue = parseResult.GetRequiredValue(tokenId);
+            return ResetAccessFailedCount(tokenIdValue);
+        });
     }
 
     private async Task ResetAccessFailedCount(string tokenId)

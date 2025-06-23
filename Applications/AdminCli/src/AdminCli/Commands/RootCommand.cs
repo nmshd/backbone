@@ -10,10 +10,10 @@ public class RootCommand : System.CommandLine.RootCommand
 {
     public RootCommand(ClientCommand clientCommand, TierCommand tierCommand, AnnouncementCommand announcementCommand, TokenCommand tokenCommand, DatabaseCommand databaseCommand)
     {
-        AddCommand(clientCommand);
-        AddCommand(databaseCommand);
-        AddCommand(tierCommand);
-        AddCommand(announcementCommand);
-        AddCommand(tokenCommand);
+        Subcommands.Add(clientCommand);
+        Subcommands.Add(databaseCommand);
+        Subcommands.Add(tierCommand);
+        Subcommands.Add(announcementCommand);
+        Subcommands.Add(tokenCommand);
     }
 }
