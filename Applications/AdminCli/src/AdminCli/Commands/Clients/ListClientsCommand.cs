@@ -10,7 +10,7 @@ public class ListClientsCommand : AdminCliCommand
 {
     public ListClientsCommand(IMediator mediator) : base(mediator, "list", "List all existing OAuth clients")
     {
-        this.SetHandler(ListClients);
+        SetAction((ParseResult parseResult, CancellationToken token) => ListClients());
     }
 
     private async Task ListClients()
