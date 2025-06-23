@@ -13,34 +13,42 @@ public class SendAnnouncementCommand : AdminCliCommand
     {
         var expiresAt = new Option<string?>("--expiration")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The expiration date of the announcement."
         };
 
         var severity = new Option<string?>("--severity")
         {
-            IsRequired = true,
+            Required = true,
             Description = "The severity of the announcement. Possible values: Low, Medium, High"
         };
 
         var isSilent = new Option<bool?>("--silent")
         {
-            IsRequired = false,
+            Required = false,
             Description = "Whether the announcement should be silent. A push notification will not be sent for silent announcements. By default, the announcement is not silent."
         };
 
         var iqlQuery = new Option<string?>("--iql-query")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
         };
 
-        AddOption(expiresAt);
-        AddOption(severity);
-        AddOption(isSilent);
-        AddOption(iqlQuery);
+        Options.Add(expiresAt);
+        Options.Add(severity);
+        Options.Add(isSilent);
+        Options.Add(iqlQuery);
 
-        this.SetHandler(SendAnnouncement, severity, expiresAt, isSilent, iqlQuery);
+        SetAction((parseResult, token) =>
+        {
+            var severityValue = parseResult.GetRequiredValue(severity);
+            var expiresAtValue = parseResult.GetValue(expiresAt);
+            var isSilentValue = parseResult.GetValue(isSilent);
+            var iqlQueryValue = parseResult.GetValue(iqlQuery);
+
+            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue);
+        });
     }
 
     private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery)

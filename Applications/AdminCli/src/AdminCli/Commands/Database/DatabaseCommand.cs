@@ -6,7 +6,7 @@ public class DatabaseCommand : Command
 {
     public DatabaseCommand(ExportDatabaseCommand exportDatabaseCommand) : base("database")
     {
-        AddCommand(exportDatabaseCommand);
+        Subcommands.Add(exportDatabaseCommand);
     }
 }
 

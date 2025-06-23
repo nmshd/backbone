@@ -6,6 +6,6 @@ public class TokenCommand : Command
 {
     public TokenCommand(ResetAccessFailedCountOfTokenCommand resetAccessFailedCountCommand) : base("token")
     {
-        AddCommand(resetAccessFailedCountCommand);
+        Subcommands.Add(resetAccessFailedCountCommand);
     }
 }
