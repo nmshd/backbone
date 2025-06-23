@@ -41,5 +41,10 @@
         <None Update="xunit.runner.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Remove="Reqnroll\userid" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Reqnroll\" />
     </ItemGroup>
 </Project>

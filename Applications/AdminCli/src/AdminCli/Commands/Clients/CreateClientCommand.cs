@@ -11,40 +11,48 @@ public class CreateClientCommand : AdminCliCommand
     {
         var clientId = new Option<string>("--clientId")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The clientId of the OAuth client. Default: a randomly generated string."
         };
         var displayName = new Option<string>("--displayName")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The displayName of the OAuth client. Default: the clientId."
         };
 
         var clientSecret = new Option<string>("--clientSecret")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The clientSecret of the OAuth client. Default: a randomly generated string."
         };
 
         var defaultTierId = new Option<string>("--defaultTier")
         {
-            IsRequired = true,
+            Required = true,
             Description = "The id or name of the Tier that should be assigned to all Identities created with this OAuth client."
         };
 
         var maxIdentities = new Option<int?>("--maxIdentities")
         {
-            IsRequired = false,
+            Required = false,
             Description = "The maximum number of Identities that can be created with this OAuth client."
         };
 
-        AddOption(clientId);
-        AddOption(displayName);
-        AddOption(clientSecret);
-        AddOption(defaultTierId);
-        AddOption(maxIdentities);
+        Options.Add(clientId);
+        Options.Add(displayName);
+        Options.Add(clientSecret);
+        Options.Add(defaultTierId);
+        Options.Add(maxIdentities);
 
-        this.SetHandler(CreateClient, clientId, displayName, clientSecret, defaultTierId, maxIdentities);
+        SetAction((ParseResult parseResult, CancellationToken token) =>
+        {
+            var clientIdValue = parseResult.GetRequiredValue(clientId);
+            var displayNameValue = parseResult.GetRequiredValue(displayName);
+            var clientSecretValue = parseResult.GetRequiredValue(clientSecret);
+            var defaultTierIdValue = parseResult.GetRequiredValue(defaultTierId);
+            var maxIdentitiesValue = parseResult.GetRequiredValue(maxIdentities);
+            return CreateClient(clientIdValue, displayNameValue, clientSecretValue, defaultTierIdValue, maxIdentitiesValue);
+        });
     }
 
     private async Task CreateClient(string? clientId,

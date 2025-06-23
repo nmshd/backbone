@@ -10,22 +10,31 @@ public class CreateEntitiesCommand : Command
 {
     public CreateEntitiesCommand() : base("CreateEntities", "Creates entities in the consumer API using the SDK")
     {
-        var baseAddress = new Option<string>(name: "--baseAddress", description: "The base address of the consumer API.");
-        AddOption(baseAddress);
+        var baseAddress = new Option<string>("--baseAddress") { Description = "The base address of the consumer API." };
+        Options.Add(baseAddress);
 
-        var clientId = new Option<string>(name: "--clientId", description: "The client id to use.");
-        AddOption(clientId);
+        var clientId = new Option<string>("--clientId") { Description = "The client id to use." };
+        Options.Add(clientId);
 
-        var clientSecret = new Option<string>(name: "--clientSecret", description: "The corresponding client secret.");
-        AddOption(clientSecret);
+        var clientSecret = new Option<string>("--clientSecret") { Description = "The corresponding client secret." };
+        Options.Add(clientSecret);
 
-        var configurationFilePath = new Option<string>(name: "--relationshipsAndMessages", description: "The csv file with the relationships and messages configuration.");
-        AddOption(configurationFilePath);
+        var configurationFilePath = new Option<string>("--relationshipsAndMessages") { Description = "The csv file with the relationships and messages configuration." };
+        Options.Add(configurationFilePath);
 
-        var poolsFilePath = new Option<string>(name: "--poolsFile", description: "The json file with the pools' configuration.");
-        AddOption(poolsFilePath);
+        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration." };
+        Options.Add(poolsFilePath);
 
-        this.SetHandler(EntityCreationProcessor, baseAddress, clientId, clientSecret, configurationFilePath, poolsFilePath);
+        SetAction(async (parseResult, token) =>
+        {
+            var baseAddressValue = parseResult.GetRequiredValue(baseAddress);
+            var clientIdValue = parseResult.GetRequiredValue(clientId);
+            var clientSecretValue = parseResult.GetRequiredValue(clientSecret);
+            var configurationFilePathValue = parseResult.GetRequiredValue(configurationFilePath);
+            var poolsFilePathValue = parseResult.GetRequiredValue(poolsFilePath);
+
+            await EntityCreationProcessor(baseAddressValue, clientIdValue, clientSecretValue, configurationFilePathValue, poolsFilePathValue);
+        });
     }
 
     private static async Task EntityCreationProcessor(string baseAddress, string clientId, string clientSecret, string configurationFilePath, string poolsFilePath)
