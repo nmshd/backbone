@@ -25,6 +25,20 @@ spec:
             type: Exact
             value: /health
         - path:
+            type: PathPrefix
+            value: /api
+        - path:
+            type: PathPrefix
+            value: /style
+        - path:
+            type: PathPrefix
+            value: /r
+      backendRefs:
+        - name: {{ .Values.consumerapi.name }}
+          port: 8080
+    - matches:
+      backendRefs:
+        - path:
             type: Exact
             value: /.well-known/assetlinks.json
         - path:
@@ -36,16 +50,6 @@ spec:
         - path:
             type: Exact
             value: /.well-known/jwks
-        - path:
-            type: PathPrefix
-            value: /api
-        - path:
-            type: PathPrefix
-            value: /style
-        - path:
-            type: PathPrefix
-            value: /r
-      backendRefs:
         - name: {{ .Values.consumerapi.name }}
           port: 8080
 {{- end }}
