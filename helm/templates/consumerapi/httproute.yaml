@@ -36,6 +36,10 @@ spec:
         - path:
             type: Exact
             value: /.well-known/jwks
+      backendRefs:
+        - name: {{ .Values.consumerapi.name }}
+          port: 8080
+    - matches:
         - path:
             type: PathPrefix
             value: /api
