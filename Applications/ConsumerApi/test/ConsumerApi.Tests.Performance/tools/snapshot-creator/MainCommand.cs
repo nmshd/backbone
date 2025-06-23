@@ -6,7 +6,7 @@ public class MainCommand : RootCommand
 {
     public MainCommand()
     {
-        AddCommand(new GeneratePoolsCommand());
-        AddCommand(new CreateEntitiesCommand());
+        Subcommands.Add(new GeneratePoolsCommand());
+        Subcommands.Add(new CreateEntitiesCommand());
     }
 }

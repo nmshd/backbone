@@ -6,7 +6,7 @@ public class TierCommand : Command
 {
     public TierCommand(ListTiersCommand listTiersCommand, CreateTierCommand createTierCommand) : base("tier")
     {
-        AddCommand(listTiersCommand);
-        AddCommand(createTierCommand);
+        Subcommands.Add(listTiersCommand);
+        Subcommands.Add(createTierCommand);
     }
 }

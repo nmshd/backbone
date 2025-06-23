@@ -12,10 +12,14 @@ public class GeneratePoolsCommand : Command
 {
     public GeneratePoolsCommand() : base("GeneratePools", "Generates Pools according to the configuration provided")
     {
-        var poolsFilePath = new Option<string>(name: "--poolsFile", description: "The json file with the pools' configuration.");
-        AddOption(poolsFilePath);
+        var poolsFilePath = new Option<string>("--poolsFile") { Description = "The json file with the pools' configuration.", Required = true };
+        Options.Add(poolsFilePath);
 
-        this.SetHandler(GenerationPreprocessor, poolsFilePath);
+        SetAction(async (parseResult, token) =>
+        {
+            var poolsFilePathValue = parseResult.GetRequiredValue(poolsFilePath);
+            await GenerationPreprocessor(poolsFilePathValue);
+        });
     }
 
     private static async Task GenerationPreprocessor(string poolsFilePath)
