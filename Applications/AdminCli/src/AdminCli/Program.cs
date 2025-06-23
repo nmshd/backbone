@@ -1,4 +1,3 @@
-using System.CommandLine;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Infrastructure.Persistence;
@@ -33,7 +32,7 @@ public class Program
 
         var rootCommand = serviceProvider.GetRequiredService<RootCommand>();
 
-        await rootCommand.InvokeAsync(args);
+        await rootCommand.Parse(args).InvokeAsync();
     }
 
     private static IServiceProvider BuildServiceProvider(IConfiguration configuration)

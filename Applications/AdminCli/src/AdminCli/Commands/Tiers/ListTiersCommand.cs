@@ -11,7 +11,7 @@ public class ListTiersCommand : AdminCliCommand
 {
     public ListTiersCommand(IMediator mediator) : base(mediator, "list", "List all existing Tiers")
     {
-        this.SetHandler(ListTiers);
+        SetAction((ParseResult parseResult, CancellationToken token) => ListTiers());
     }
 
     private async Task ListTiers()
