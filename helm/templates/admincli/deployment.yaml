@@ -65,7 +65,7 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- include "generateEnvVars" (list .Values.global.env .Values.consumerapi.env) | nindent 12 }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.admincli.env) | nindent 12 }}
           tty: true
           command:
             - /bin/bash
