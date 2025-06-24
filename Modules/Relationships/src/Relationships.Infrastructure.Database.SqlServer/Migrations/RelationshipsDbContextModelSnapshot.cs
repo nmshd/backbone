@@ -18,7 +18,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -66,6 +67,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.Property<byte[]>("Password")
                         .HasMaxLength(200)
                         .HasColumnType("varbinary(200)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -156,6 +163,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<bool>("ToHasDecomposed")
                         .HasColumnType("bit");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 

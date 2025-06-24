@@ -46,3 +46,10 @@ User requests Relationship Templates
           | i2             | rt1, rt2, rt3, rt4, rt5, rt7, rt8, rt10, rt11, rt12, rt13, rt14 |
           | i3             | rt1, rt2, rt3, rt4, rt5, rt7, rt10, rt12, rt13                  |
           | i4             | rt1, rt2, rt3, rt4, rt5, rt7                                    |
+
+    Scenario: testing if the number of allocations count can be incorrect
+        Given a total of 100 Identities with the prefix concurrent and their id
+        And Identity i1
+        And a Relationship Template t1 created by i1 with 5 max allocations
+        When all identities containing concurrent accept the template t1 simultaneously
+        Then when i1 checks the number of allocations for t1 it is 5

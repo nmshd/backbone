@@ -11,4 +11,5 @@ public class RelationshipTemplate
     public byte[]? Content { get; set; }
     public required DateTime CreatedAt { get; set; }
     public string? ForIdentity { get; set; }
+    public int NumberOfAllocations { get; set; } = -1;
 }

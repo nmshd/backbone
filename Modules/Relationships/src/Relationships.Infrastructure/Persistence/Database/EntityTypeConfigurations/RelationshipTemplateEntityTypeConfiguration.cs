@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Microsoft.EntityFrameworkCore;
@@ -29,5 +30,7 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
         builder
             .Property(x => x.Password)
             .HasMaxLength(RelationshipTemplate.MAX_PASSWORD_LENGTH);
+
+        builder.HasVersion(x => x.Version);
     }
 }

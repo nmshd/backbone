@@ -67,6 +67,17 @@ internal class IdentitiesStepDefinitions
         }
     }
 
+    [Given($"a total of {RegexFor.SINGLE_THING} Identities with the prefix {RegexFor.SINGLE_THING} and their id")]
+    public void GivenATotalOfIdentitiesColletedInAListL(int count, string prefix)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            var identityName = $"{prefix}{i}";
+            var client = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).GetAwaiter().GetResult();
+            _clientPool.Add(client).ForIdentity(identityName);
+        }
+    }
+
     [Given($@"{RegexFor.SINGLE_THING} has feature flags feature1 (enabled|disabled) and feature2 (enabled|disabled)")]
     public async Task GivenIHasFeatureFlagsFeatureEnabledAndFeatureDisabled(string identityName, string feature1State, string feature2State)
     {

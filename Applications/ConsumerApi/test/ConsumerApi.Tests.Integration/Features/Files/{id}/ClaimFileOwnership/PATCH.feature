@@ -52,3 +52,10 @@ Identity tries to claim the ownership of a file
         Given Identity i
         When i tries to claim a non-existing file
         Then the response status code is 404 (Not Found)
+
+    Scenario: Multiple identities try to claim ownership of a file at the same time
+        Given a total of 100 Identities with the prefix concurrent and their id
+        And Identity i1
+        And File f1 created by i1
+        When all identities with concurrent in their name send a PATCH request to the /Files/f1.Id/ClaimOwnership with the file's ownership token
+        Then the response status code is 200 for exactly one request
