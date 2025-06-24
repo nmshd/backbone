@@ -5,6 +5,8 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
+[CollectionDefinition(nameof(JwtGeneratorTests), DisableParallelization = true)]
+[Collection(nameof(JwtGeneratorTests))]
 public class JwtGeneratorTests : AbstractTestsBase
 {
     private const string SOME_KEY =
