@@ -26,6 +26,7 @@ public class File : Entity
         Content = null!;
         EncryptedProperties = null!;
         OwnershipToken = null!;
+        Version = null!;
     }
 
     public File(IdentityAddress createdBy, DeviceId createdByDevice, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
@@ -49,6 +50,8 @@ public class File : Entity
         ExpiresAt = expiresAt;
 
         EncryptedProperties = encryptedProperties;
+
+        Version = null!; //This property gets set by the database
 
         RaiseDomainEvent(new FileUploadedDomainEvent(this));
     }
@@ -74,6 +77,8 @@ public class File : Entity
     public byte[] CipherHash { get; set; }
 
     public byte[] Content { get; private set; }
+
+    public object Version { get; set; }
 
     public void LoadContent(byte[] content)
     {

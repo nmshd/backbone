@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
@@ -18,6 +17,8 @@ internal class FilesStepDefinitions
     private ApiResponse<RegenerateFileOwnershipResponse>? _resetOwnershipTokenResponse;
     private ApiResponse<ValidateFileOwnershipTokenResponse> _validateOwnershipTokenResponse = null!;
     private ApiResponse<ClaimFileOwnershipResponse>? _claimFileOwnershipResponse;
+
+    public List<ApiResponse<ClaimFileOwnershipResponse>> ConcurrentOwnershipResponses = new();
 
     public FilesStepDefinitions(ResponseContext responseContext, FilesContext filesContext, ClientPool clientPool)
     {
@@ -207,6 +208,36 @@ internal class FilesStepDefinitions
         _filesContext.Files[fileName] = getFileResponse.Result!;
     }
 
+    [When($"all identities with {RegexFor.SINGLE_THING} in their name send a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with the file's ownership token")]
+    public async Task WhenAllIdentitiesWithConcurrentInTheirNameSendApatchRequestToTheFilesFIdClaimOwnershipWithTheFilesOwnershipToken(string identityName, string fileName)
+    {
+        var clients = _clientPool.GetAllForIdentityNameContaining("concurrent");
+        var fileId = _filesContext.Files[fileName].Id;
+        var token = _filesContext.FileNameToOwnershipToken[fileName];
+        var request = new ClaimFileOwnershipRequest { OwnershipToken = token };
+
+        //foreach (var client in clients) await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
+        var taskFactories = clients.Select(client =>
+            new Func<Task>(async () =>
+            {
+                try
+                {
+                    var response = await client.Files.ClaimFileOwnership(fileId, request);
+                    ConcurrentOwnershipResponses.Add(response);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Can not prozess one of the concurrent tasks: " + e.Message);
+                }
+            })
+        ).ToList();
+
+        var tasks = taskFactories.Select(Task.Run).ToList();
+
+        await Task.WhenAll(tasks);
+        Console.WriteLine($"All {clients.Length} concurrent requests have been processed.");
+    }
+
     #endregion
 
     #region Then
@@ -262,6 +293,13 @@ internal class FilesStepDefinitions
         _validateOwnershipTokenResponse.ShouldNotBeNull();
         _validateOwnershipTokenResponse.Result.ShouldNotBeNull();
         _validateOwnershipTokenResponse.Result!.IsValid.ShouldBe(expected == "true");
+    }
+
+    [Then($"the response status code is {RegexFor.SINGLE_THING} for exactly one request")]
+    public void ThenTheResponseStatusCodeIsOkForExactlyOneRequest(int expectedStatusCode)
+    {
+        ConcurrentOwnershipResponses.ShouldNotBeNull();
+        ConcurrentOwnershipResponses.Count(r => (int)r.Status == expectedStatusCode).ShouldBe(1);
     }
 
     #endregion

@@ -19,6 +19,7 @@ public class RelationshipTemplate : Entity
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
+        Version = null!;
     }
 
     public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null,
@@ -35,6 +36,7 @@ public class RelationshipTemplate : Entity
         ForIdentity = forIdentity;
         Password = password;
 
+        Version = null!; //This property handled and set by the database 
         RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
 
@@ -54,6 +56,8 @@ public class RelationshipTemplate : Entity
     public byte[]? Password { get; set; }
 
     public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
+
+    public object Version { get; set; }
 
     public void AllocateFor(IdentityAddress identity, DeviceId device)
     {

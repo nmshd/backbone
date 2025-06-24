@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
@@ -25,5 +26,7 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
         builder.Property(x => x.CreationResponseContent);
 
         builder.HasMany(r => r.AuditLog).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasVersion(r => r.Version);
     }
 }
