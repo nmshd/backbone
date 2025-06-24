@@ -16,7 +16,6 @@ internal class RelationshipTemplatesStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
     private readonly ClientPool _clientPool;
-
     private ApiResponse<ListRelationshipTemplatesResponse>? _listRelationshipTemplatesResponse;
 
     public RelationshipTemplatesStepDefinitions(ResponseContext responseContext, RelationshipTemplatesContext relationshipTemplatesContext, ClientPool clientPool)
@@ -141,6 +140,20 @@ internal class RelationshipTemplatesStepDefinitions
         _responseContext.WhenResponse = await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
+    [When($"all identities containing {RegexFor.SINGLE_THING} accept the template {RegexFor.SINGLE_THING} simultaneously")]
+    public async Task WhenAllIdentitiesContianingConcurrentAcceptTheTemplateSimoutaneously(string containedInIdentityName, string templateName)
+    {
+        var clients = _clientPool.GetAllForIdentityNameContaining("concurrent");
+        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id;
+
+        //foreach (var client in clients) await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
+
+        var tasks = new List<Task>();
+        foreach (var client in clients) tasks.Add(client.RelationshipTemplates.GetTemplate(relationshipTemplateId));
+        await Task.WhenAll(tasks);
+        Console.WriteLine($"All clients have accepted the template {templateName} with ID {relationshipTemplateId}.");
+    }
+
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates endpoint with the following payloads")]
     public async Task WhenISendsAGETRequestToTheRelationshipTemplatesEndpointWithTheFollowingPayloads(string identityName, Table table)
     {
@@ -184,6 +197,19 @@ internal class RelationshipTemplatesStepDefinitions
         _listRelationshipTemplatesResponse!.Result!
             .Select(item => (item.Id, item.CreatedAt))
             .ShouldBe(relationshipTemplates, true);
+    }
+
+    [Then($"when {RegexFor.SINGLE_THING} checks the number of allocations for {RegexFor.SINGLE_THING} it is {RegexFor.SINGLE_THING}")]
+    public async Task ThenTheNumberOfAllocationsForTIs(string identityName, string templateName, int expectedNumberOfAllocations)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var listRelationshipTemplatesQueryItem = new List<ListRelationshipTemplatesQueryItem> { new() { Id = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id } };
+        var response = await client.RelationshipTemplates.ListTemplates(listRelationshipTemplatesQueryItem);
+
+        response.Result!.Count.ShouldBe(1);
+        var relationshipTemplate = response.Result!.First();
+
+        relationshipTemplate.NumberOfAllocations.ShouldBe(expectedNumberOfAllocations);
     }
 
     #endregion

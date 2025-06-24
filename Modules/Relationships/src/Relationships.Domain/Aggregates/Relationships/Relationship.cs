@@ -21,6 +21,7 @@ public class Relationship : Entity
         From = null!;
         To = null!;
         AuditLog = null!;
+        Version = null!;
     }
 
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
@@ -40,6 +41,8 @@ public class Relationship : Entity
         CreationContent = creationContent;
 
         AuditLog = [new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)];
+
+        Version = null!; // This property gets set by the database
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
@@ -91,6 +94,8 @@ public class Relationship : Entity
 
     public bool FromHasDecomposed { get; private set; }
     public bool ToHasDecomposed { get; private set; }
+
+    public object Version { get; set; } // This property gets set by the database
 
     public IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
     {

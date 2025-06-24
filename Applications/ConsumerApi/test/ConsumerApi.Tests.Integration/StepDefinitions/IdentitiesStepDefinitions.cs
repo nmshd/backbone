@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
@@ -64,6 +63,17 @@ internal class IdentitiesStepDefinitions
         foreach (var identityName in SplitNames(identityNames))
         {
             var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+            _clientPool.Add(client).ForIdentity(identityName);
+        }
+    }
+
+    [Given($"a total of {RegexFor.SINGLE_THING} Identities with the prefix {RegexFor.SINGLE_THING} and their id")]
+    public void GivenATotalOfIdentitiesColletedInAListL(int count, string prefix)
+    {
+        for (var i = 0; i < count; i++)
+        {
+            var identityName = $"{prefix}{i}";
+            var client = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).GetAwaiter().GetResult();
             _clientPool.Add(client).ForIdentity(identityName);
         }
     }

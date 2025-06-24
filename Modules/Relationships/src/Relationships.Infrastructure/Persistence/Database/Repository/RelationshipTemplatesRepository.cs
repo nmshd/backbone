@@ -72,7 +72,8 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         var query = (track ? _templates : _readOnlyTemplates)
             .NotExpiredFor(activeIdentity)
             .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
-            .Where(idAndPasswordFilter);
+            .Where(idAndPasswordFilter)
+            .Include(r => r.Allocations);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 

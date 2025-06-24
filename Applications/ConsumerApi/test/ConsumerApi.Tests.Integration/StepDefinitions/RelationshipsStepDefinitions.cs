@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
@@ -13,6 +14,7 @@ internal class RelationshipsStepDefinitions
 {
     #region Constructor, Fields, Properties
 
+    public List<ApiResponse<RelationshipMetadata>> CreateRelationshipMetadataResponses = new();
     private readonly RelationshipsContext _relationshipsContext;
     private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
     private readonly ResponseContext _responseContext;
@@ -39,6 +41,20 @@ internal class RelationshipsStepDefinitions
         var peer = _clientPool.FirstForIdentityName(creatorName == requestorName ? templatorName : requestorName);
 
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
+    }
+
+    [Given($"pending relationships {RegexFor.SINGLE_THING}_evenIndex between each even index with prefix {RegexFor.SINGLE_THING} and the next odd one created by the even one")]
+    public async Task GivenPendingREvenIndexRelationshipsBetweenEachEvenIndexWithPrefixConcurrentAndTheNextOddOneCreatedByTheEvenOne(string relationshipNamePrefix, string clientNamePrefix)
+    {
+        var clients = _clientPool.GetAllForIdentityNameContaining(relationshipNamePrefix);
+        for (var i = 0; i < clients.Length - 1; i += 2)
+        {
+            var requestor = clients[i];
+            var templator = clients[i + 1];
+
+            var relationshipName = $"{relationshipNamePrefix}_{i}";
+            _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(templator, requestor);
+        }
     }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
@@ -221,6 +237,40 @@ internal class RelationshipsStepDefinitions
             await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(peerName).IdentityData!.Address);
     }
 
+    [When(
+        $"all odd identities with prefix {RegexFor.SINGLE_THING} simultaneously send a PUT request to the /Relationships/{RegexFor.SINGLE_THING}_evenIndex.id/Accept endpoint and a PUT request to /Relationships/{RegexFor.SINGLE_THING}_evenIndex.Id/Reject")]
+    public async Task WhenAllOddIndeciesSimputaneouslySendAputRequestToTheRelationshipsREvenIndexIdAcceptEndpointAndAputRequestToRelationshipsREvenIndexIdReject(string identityPrefix,
+        string relationshipPrefix, string relationshipNamePrefix2)
+    {
+        var clients = _clientPool.GetAllForIdentityNameContaining(identityPrefix);
+        var tasksCreated = new List<Func<Task>>();
+
+        for (var i = 1; i < clients.Length; i += 2)
+        {
+            var client = clients[i];
+            var relationshipName = $"{relationshipPrefix}_{i - 1}";
+
+            tasksCreated.Add(new Func<Task>(async () =>
+            {
+                var response = await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                    new AcceptRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
+                CreateRelationshipMetadataResponses.Add(response);
+            }));
+            tasksCreated.Add(new Func<Task>(async () =>
+            {
+                var response = await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                    new RejectRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
+                CreateRelationshipMetadataResponses.Add(response);
+            }));
+        }
+
+        // start all tasks concurrently and await their completion
+        var tasks = tasksCreated.Select(Task.Run).ToList();
+        await Task.WhenAll(tasks);
+
+        Console.WriteLine($"All {tasks.Count} concurrent requests have been processed.");
+    }
+
     #endregion
 
     #region Then
@@ -266,6 +316,13 @@ internal class RelationshipsStepDefinitions
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
         relationship.RelationshipTemplateId.ShouldBeNull();
+    }
+
+    [Then($"are exactly {RegexFor.SINGLE_THING} responses have code {RegexFor.SINGLE_THING}")]
+    public void ThenAreExactlyResponsesHaveCode(int p0, int p1)
+    {
+        var responsesWithCode = CreateRelationshipMetadataResponses.Count(r => (int)r.Status == p1);
+        responsesWithCode.ShouldBe(p0);
     }
 
     #endregion

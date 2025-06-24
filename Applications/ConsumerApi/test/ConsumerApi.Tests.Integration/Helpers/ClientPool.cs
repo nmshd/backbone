@@ -27,6 +27,11 @@ public class ClientPool
     public Client FirstForIdentityName(string identityName) => _clientWrappers.First(c => c.IdentityName == identityName).Client;
     public Client FirstForIdentityAddress(string identityAddress) => _clientWrappers.First(c => c.Client.IdentityData?.Address == identityAddress).Client;
 
+    public Client[] GetAllForIdentityNameContaining(string containedInName)
+    {
+        return _clientWrappers.Where(cw => cw.IdentityName != null && cw.IdentityName.Contains(containedInName)).Select(cw => cw.Client).ToArray();
+    }
+
     public Client[] GetAllForIdentityNames(List<string> identityNames) =>
         _clientWrappers.Where(cw => cw.IdentityName != null && identityNames.Contains(cw.IdentityName)).Select(cw => cw.Client).ToArray();
 

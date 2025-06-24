@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,5 +19,7 @@ public class FileEntityTypeConfiguration : EntityEntityTypeConfiguration<File>
         builder.Property(m => m.CipherHash).IsRequired();
 
         builder.Property(m => m.OwnershipIsLocked).HasDefaultValue(true);
+
+        builder.HasVersion(m => m.Version);
     }
 }

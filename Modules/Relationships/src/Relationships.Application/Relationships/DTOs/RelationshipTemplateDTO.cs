@@ -14,6 +14,7 @@ public class RelationshipTemplateDTO
         Content = relationshipTemplate.Content;
         CreatedAt = relationshipTemplate.CreatedAt;
         ForIdentity = relationshipTemplate.ForIdentity?.Value;
+        NumberOfAllocations = relationshipTemplate.Allocations.Count;
     }
 
     public string Id { get; set; }
@@ -24,4 +25,6 @@ public class RelationshipTemplateDTO
     public byte[]? Content { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? ForIdentity { get; set; }
+
+    public int NumberOfAllocations { get; set; } = -1;
 }

@@ -16,6 +16,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+            .AddOpenBehavior(typeof(DbConcurrencyBehavior<,>))
         );
 
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
