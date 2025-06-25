@@ -187,8 +187,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                               Text(context.l10n.createAnnouncementDialog_linkActions_heading, style: Theme.of(context).textTheme.bodyLarge),
                               FloatingActionButton.small(
                                 onPressed: () => setState(() => _linkActions.add(_CreateAnnouncementLinkAction(link: ''))),
-                                child: const Icon(Icons.add),
                                 elevation: 0,
+                                child: const Icon(Icons.add),
                               ),
                             ],
                           ),
