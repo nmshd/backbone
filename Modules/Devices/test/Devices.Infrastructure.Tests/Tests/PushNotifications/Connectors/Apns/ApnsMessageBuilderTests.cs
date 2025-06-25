@@ -39,7 +39,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId("testNotificationId")
             .Build();
-        var actualContent = await request.Content!.ReadAsStringAsync();
+        var actualContent = await request.Content!.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         // Assert
         actualContent.ShouldBeEquivalentToJson(
