@@ -4,10 +4,5 @@ namespace Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierDeleted;
 
 public class TierDeletedDomainEvent : DomainEvent
 {
-    public TierDeletedDomainEvent(string id)
-    {
-        Id = id;
-    }
-
-    public string Id { get; private set; }
+    public required string Id { get; set; }
 }
