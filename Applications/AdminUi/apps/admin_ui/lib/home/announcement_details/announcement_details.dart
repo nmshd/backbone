@@ -82,7 +82,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                 ),
               ),
             ),
-            _AnnouncementsTextTable(announcementTexts: _announcmentDetails!.texts),
+            _AnnouncementTextsTable(announcementTexts: _announcmentDetails!.texts),
           ],
         ),
       ),
@@ -100,10 +100,10 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
   }
 }
 
-class _AnnouncementsTextTable extends StatelessWidget {
+class _AnnouncementTextsTable extends StatelessWidget {
   final List<AnnouncementText> announcementTexts;
 
-  const _AnnouncementsTextTable({required this.announcementTexts});
+  const _AnnouncementTextsTable({required this.announcementTexts});
 
   @override
   Widget build(BuildContext context) {
