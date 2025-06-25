@@ -1,7 +1,7 @@
 ﻿using ArchUnitNET.Domain;
 using ArchUnitNET.Domain.Extensions;
 using ArchUnitNET.Fluent.Conditions;
-using ArchUnitNET.xUnit;
+using ArchUnitNET.xUnitV3;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using MediatR;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
