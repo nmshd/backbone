@@ -11,13 +11,17 @@ public class CreateTierCommand : AdminCliCommand
     {
         var name = new Option<string>("--name")
         {
-            IsRequired = true,
+            Required = true,
             Description = "The name of the Tier."
         };
 
-        AddOption(name);
+        Options.Add(name);
 
-        this.SetHandler(CreateTier, name);
+        SetAction((ParseResult parseResult, CancellationToken token) =>
+        {
+            var nameValue = parseResult.GetRequiredValue(name);
+            return CreateTier(nameValue);
+        });
     }
 
     private async Task CreateTier(string name)

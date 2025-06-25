@@ -11,13 +11,17 @@ public class DeleteAnnouncementCommand : AdminCliCommand
     {
         var announcementId = new Option<string>("--id")
         {
-            IsRequired = true,
+            Required = true,
             Description = "The id of the Announcement that should be deleted."
         };
 
-        AddOption(announcementId);
+        Options.Add(announcementId);
 
-        this.SetHandler(DeleteAnnouncement, announcementId);
+        SetAction((parseResult, token) =>
+        {
+            var announcementIdValue = parseResult.GetRequiredValue(announcementId);
+            return DeleteAnnouncement(announcementIdValue);
+        });
     }
 
     private async Task DeleteAnnouncement(string announcementId)

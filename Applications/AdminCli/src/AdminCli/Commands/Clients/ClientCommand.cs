@@ -6,8 +6,8 @@ public class ClientCommand : Command
 {
     public ClientCommand(CreateClientCommand createClientCommand, ListClientsCommand listClientsCommand, DeleteClientsCommand deleteClientsCommand) : base("client")
     {
-        AddCommand(createClientCommand);
-        AddCommand(listClientsCommand);
-        AddCommand(deleteClientsCommand);
+        Subcommands.Add(createClientCommand);
+        Subcommands.Add(listClientsCommand);
+        Subcommands.Add(deleteClientsCommand);
     }
 }
