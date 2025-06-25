@@ -13,13 +13,13 @@ public class DomainEvents
 {
     private readonly List<IType> _outgoingDomainEvents = Types()
         .That().AreAssignableTo(typeof(DomainEvent))
-        .And().ResideInNamespace(".Outgoing", true)
+        .And().ResideInNamespace("\\.Outgoing", true)
         .GetObjects(Backbone.ARCHITECTURE)
         .ToList();
 
     private readonly GivenTypesConjunction _incomingDomainEvents = Types()
         .That().AreAssignableTo(typeof(DomainEvent))
-        .And().ResideInNamespace(".Incoming.", true);
+        .And().ResideInNamespace("\\.Incoming\\.", true);
 
     [Fact]
     public void IncomingDomainEventsShouldNotHaveConstructors()
@@ -31,7 +31,7 @@ public class DomainEvents
                     return new ConditionResult(type, false, "should not have a constructor with parameters");
 
                 return new ConditionResult(type, true);
-            }, "not have constructors")
+            }, "not have constructors with parameters")
             .Because(
                 "objects are only created by the JSON Serializer anyway. Adding a constructor with parameters only causes errors during deserialization if the parameter names don't match the property names.")
             .Check(Backbone.ARCHITECTURE);
@@ -54,7 +54,7 @@ public class DomainEvents
 
                 return new ConditionResult(type, true);
             }, "have all of their properties found in their corresponding outgoing domain event")
-            .Because("otherwise they would not be serialized correctly from JSON")
+            .Because("otherwise they would not be deserialized correctly from JSON")
             .Check(Backbone.ARCHITECTURE);
     }
 }
