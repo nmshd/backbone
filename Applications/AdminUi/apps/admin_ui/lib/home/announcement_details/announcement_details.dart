@@ -17,7 +17,7 @@ class AnnouncementDetails extends StatefulWidget {
 }
 
 class _AnnouncementDetailsState extends State<AnnouncementDetails> {
-  Announcement? _announcmentDetails;
+  Announcement? _announcementDetails;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_announcmentDetails == null) return const Center(child: CircularProgressIndicator());
+    if (_announcementDetails == null) return const Center(child: CircularProgressIndicator());
 
     return Scrollbar(
       child: SingleChildScrollView(
@@ -60,21 +60,21 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        EntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcmentDetails!.severity),
+                        EntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcementDetails!.severity),
                         EntityDetails(
                           title: context.l10n.createdAt,
-                          value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.createdAt),
+                          value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcementDetails!.createdAt),
                         ),
-                        if (_announcmentDetails!.expiresAt != null)
+                        if (_announcementDetails!.expiresAt != null)
                           EntityDetails(
                             title: context.l10n.expiresAt,
-                            value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcmentDetails!.expiresAt!),
+                            value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcementDetails!.expiresAt!),
                           ),
-                        if (_announcmentDetails!.iqlQuery != null)
-                          EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: _announcmentDetails!.iqlQuery!),
+                        if (_announcementDetails!.iqlQuery != null)
+                          EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: _announcementDetails!.iqlQuery!),
                         EntityDetails(
                           title: context.l10n.announcementDetails_sendAPushNotification,
-                          value: _announcmentDetails!.isSilent ? context.l10n.no : context.l10n.yes,
+                          value: _announcementDetails!.isSilent ? context.l10n.no : context.l10n.yes,
                         ),
                       ],
                     ),
