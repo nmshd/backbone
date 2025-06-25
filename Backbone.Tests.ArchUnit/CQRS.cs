@@ -1,5 +1,5 @@
 using ArchUnitNET.Domain;
-using ArchUnitNET.xUnit;
+using ArchUnitNET.xUnitV3;
 using MediatR;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
