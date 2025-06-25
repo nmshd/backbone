@@ -113,7 +113,7 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ValidateOwnershipToken(string fileId, [FromBody] ValidateFileOwnershipTokenRequest validateRequest, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery(validateRequest.OwnershipToken, fileId), cancellationToken);
+        var response = await _mediator.Send(new ValidateFileOwnershipTokenQuery { OwnershipToken = validateRequest.OwnershipToken, FileId = fileId }, cancellationToken);
         return Ok(response);
     }
 
@@ -140,7 +140,7 @@ public class FilesController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_configuration.Pagination.MaxPageSize));
 
-        var fileMetadata = await _mediator.Send(new ListFileMetadataQuery(paginationFilter, ids), cancellationToken);
+        var fileMetadata = await _mediator.Send(new ListFileMetadataQuery { PaginationFilter = paginationFilter, Ids = ids }, cancellationToken);
         return Paged(fileMetadata);
     }
 }

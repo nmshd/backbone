@@ -4,12 +4,6 @@ namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaFor
 
 public class DeleteQuotaForIdentityCommand : IRequest
 {
-    public DeleteQuotaForIdentityCommand(string identityAddress, string individualQuotaId)
-    {
-        IdentityAddress = identityAddress;
-        IndividualQuotaId = individualQuotaId;
-    }
-
-    public string IdentityAddress { get; set; }
-    public string IndividualQuotaId { get; set; }
+    public required string IdentityAddress { get; init; }
+    public required string IndividualQuotaId { get; init; }
 }

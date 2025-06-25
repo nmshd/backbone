@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand("some-invalid-address"));
+        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = "some-invalid-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(DeletePnsRegistrationsOfIdentityCommand.IdentityAddress));

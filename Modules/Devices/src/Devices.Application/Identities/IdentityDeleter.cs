@@ -19,9 +19,9 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeletePnsRegistrationsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "PnsRegistrations");
-        await _mediator.Send(new DeleteIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Identities");
     }
 }

@@ -9,13 +9,13 @@ public class ApplicationConfiguration
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 
     [Required]
-    public PaginationConfiguration Pagination { get; set; } = new();
+    public required PaginationConfiguration Pagination { get; set; }
 
     [Required]
     [MinLength(3)]
     [MaxLength(45)]
-    public string DidDomainName { get; set; } = null!;
+    public required string DidDomainName { get; set; }
 
     [Required]
-    public int MaxNumberOfMessageRecipients { get; set; }
+    public required int MaxNumberOfMessageRecipients { get; set; }
 }

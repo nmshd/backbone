@@ -15,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDevicesQuery(new PaginationFilter(), [DeviceId.New().Value]));
+        var validationResult = validator.TestValidate(new ListDevicesQuery { PaginationFilter = new PaginationFilter(), Ids = [DeviceId.New().Value] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,7 +28,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDevicesQuery(new PaginationFilter(), ["some-invalid-device-id"]));
+        var validationResult = validator.TestValidate(new ListDevicesQuery { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-device-id"] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(

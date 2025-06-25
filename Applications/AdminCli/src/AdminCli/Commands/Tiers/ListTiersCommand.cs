@@ -16,7 +16,7 @@ public class ListTiersCommand : AdminCliCommand
 
     private async Task ListTiers()
     {
-        var response = await _mediator.Send(new ListTiersQuery(new PaginationFilter()), CancellationToken.None);
+        var response = await _mediator.Send(new ListTiersQuery { PaginationFilter = new PaginationFilter() }, CancellationToken.None);
 
         Console.WriteLine(@"The following tiers are configured:");
 

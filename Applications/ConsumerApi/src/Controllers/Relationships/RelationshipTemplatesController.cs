@@ -48,7 +48,7 @@ public class RelationshipTemplatesController : ApiControllerBase
         // parameter will become required, and the fallback to `ids` will be removed.
         templates = templates is { Length: > 0 } ? templates : ids.Select(id => new ListRelationshipTemplatesQueryItem { Id = id }).ToArray();
 
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, templates);
+        var request = new ListRelationshipTemplatesQuery { PaginationFilter = paginationFilter, QueryItems = templates.ToList() };
 
         request.PaginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 

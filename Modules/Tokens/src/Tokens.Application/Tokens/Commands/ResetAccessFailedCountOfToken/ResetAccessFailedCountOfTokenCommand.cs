@@ -4,10 +4,5 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedC
 
 public class ResetAccessFailedCountOfTokenCommand : IRequest
 {
-    public ResetAccessFailedCountOfTokenCommand(string tokenId)
-    {
-        TokenId = tokenId;
-    }
-
-    public string TokenId { get; set; }
+    public required string TokenId { get; init; }
 }

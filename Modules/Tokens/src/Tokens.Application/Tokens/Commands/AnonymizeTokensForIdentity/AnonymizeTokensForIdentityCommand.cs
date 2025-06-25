@@ -4,10 +4,5 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.AnonymizeTokensFor
 
 public class AnonymizeTokensForIdentityCommand : IRequest
 {
-    public AnonymizeTokensForIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

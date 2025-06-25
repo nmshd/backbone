@@ -4,10 +4,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletio
 
 public class CancelDeletionProcessAsOwnerCommand : IRequest<CancelDeletionProcessAsOwnerResponse>
 {
-    public CancelDeletionProcessAsOwnerCommand(string deletionProcessId)
-    {
-        DeletionProcessId = deletionProcessId;
-    }
-
-    public string DeletionProcessId { get; set; }
+    public required string DeletionProcessId { get; init; }
 }

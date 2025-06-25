@@ -5,5 +5,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionPro
 
 public class GetDeletionProcessAsOwnerQuery : IRequest<IdentityDeletionProcessOverviewDTO>
 {
-    public required string Id { get; set; }
+    public required string Id { get; init; }
 }

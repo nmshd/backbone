@@ -49,7 +49,7 @@ public class ClientsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetClient([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var client = await _mediator.Send(new GetClientQuery(id), cancellationToken);
+        var client = await _mediator.Send(new GetClientQuery { Id = id }, cancellationToken);
         return Ok(client);
     }
 
@@ -67,7 +67,7 @@ public class ClientsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeClientSecret([FromRoute] string clientId, [FromBody] ChangeClientSecretRequest request, CancellationToken cancellationToken)
     {
-        var changedClient = await _mediator.Send(new ChangeClientSecretCommand(clientId, request.NewSecret), cancellationToken);
+        var changedClient = await _mediator.Send(new ChangeClientSecretCommand { ClientId = clientId, NewSecret = request.NewSecret }, cancellationToken);
         return Ok(changedClient);
     }
 
@@ -77,7 +77,7 @@ public class ClientsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateClient([FromRoute] string clientId, [FromBody] UpdateClientRequest request, CancellationToken cancellationToken)
     {
-        var updatedClient = await _mediator.Send(new UpdateClientCommand(clientId, request.DefaultTier, request.MaxIdentities), cancellationToken);
+        var updatedClient = await _mediator.Send(new UpdateClientCommand { ClientId = clientId, DefaultTier = request.DefaultTier, MaxIdentities = request.MaxIdentities }, cancellationToken);
         return Ok(updatedClient);
     }
 
@@ -86,7 +86,7 @@ public class ClientsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteClient([FromRoute] string clientId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteClientCommand(clientId), cancellationToken);
+        await _mediator.Send(new DeleteClientCommand { ClientId = clientId }, cancellationToken);
         return NoContent();
     }
 }

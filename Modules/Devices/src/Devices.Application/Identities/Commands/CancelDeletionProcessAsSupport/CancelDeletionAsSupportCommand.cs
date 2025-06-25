@@ -4,12 +4,6 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletio
 
 public class CancelDeletionAsSupportCommand : IRequest<CancelDeletionAsSupportResponse>
 {
-    public CancelDeletionAsSupportCommand(string address, string deletionProcessId)
-    {
-        Address = address;
-        DeletionProcessId = deletionProcessId;
-    }
-
-    public string Address { get; set; }
-    public string DeletionProcessId { get; set; }
+    public required string Address { get; init; }
+    public required string DeletionProcessId { get; init; }
 }

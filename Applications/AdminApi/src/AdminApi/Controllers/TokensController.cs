@@ -7,7 +7,6 @@ using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokensByIdentity;
-using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +45,7 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string tokenId, CancellationToken cancellationToken)
     {
-        var request = new ResetAccessFailedCountOfTokenCommand(tokenId);
+        var request = new ResetAccessFailedCountOfTokenCommand { TokenId = tokenId };
         await _mediator.Send(request, cancellationToken);
         return NoContent();
     }

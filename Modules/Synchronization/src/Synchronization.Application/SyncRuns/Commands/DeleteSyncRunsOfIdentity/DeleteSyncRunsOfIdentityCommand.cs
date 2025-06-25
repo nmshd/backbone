@@ -4,10 +4,5 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteS
 
 public class DeleteSyncRunsOfIdentityCommand : IRequest
 {
-    public DeleteSyncRunsOfIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

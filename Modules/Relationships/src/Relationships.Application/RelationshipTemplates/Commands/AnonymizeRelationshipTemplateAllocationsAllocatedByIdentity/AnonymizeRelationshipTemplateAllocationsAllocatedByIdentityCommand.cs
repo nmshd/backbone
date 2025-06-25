@@ -4,10 +4,5 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 
 public class AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand : IRequest
 {
-    public AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

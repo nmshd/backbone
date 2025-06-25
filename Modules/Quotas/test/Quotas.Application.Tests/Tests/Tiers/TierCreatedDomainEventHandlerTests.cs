@@ -19,7 +19,7 @@ public class TierCreatedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockTierRepository);
 
         // Act
-        await handler.Handle(new TierCreatedDomainEvent(id, name));
+        await handler.Handle(new TierCreatedDomainEvent { Id = id, Name = name });
 
         // Assert
         mockTierRepository.WasCalled.ShouldBeTrue();
