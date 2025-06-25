@@ -10,7 +10,7 @@ public class CreateAnnouncementCommand : IRequest<AnnouncementDTO>
     public required bool IsSilent { get; set; }
     public required List<CreateAnnouncementCommandText> Texts { get; set; }
     public DateTime? ExpiresAt { get; set; }
-    public required List<CreateAnnouncementCommandAction> Actions { get; set; }
+    public List<CreateAnnouncementCommandAction> Actions { get; set; } = [];
 
     public List<string> Recipients { get; set; } = [];
     public string? IqlQuery { get; set; }
