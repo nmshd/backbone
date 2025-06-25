@@ -25,8 +25,8 @@ public class TiersRepositoryTests : AbstractTestsBase
         var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month).Value;
         var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_FILES, 5, QuotaPeriod.Month).Value;
 
-        await arrangeContext.Tiers.AddAsync(arrangedTier);
-        await arrangeContext.SaveChangesAsync();
+        await arrangeContext.Tiers.AddAsync(arrangedTier, TestContext.Current.CancellationToken);
+        await arrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new TiersRepository(actContext);
 

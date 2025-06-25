@@ -5,6 +5,8 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
+[CollectionDefinition(nameof(JwtGeneratorTests), DisableParallelization = true)]
+[Collection(nameof(JwtGeneratorTests))]
 public class JwtGeneratorTests : AbstractTestsBase
 {
     private const string SOME_KEY =
@@ -104,6 +106,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         {
             SystemTime.Set(expiredSystemTime); // we need to set the SystemTime in here, because Parallel executes each iteration in a different thread, and SystemTime sets the time only for the current thread
             results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id"));
+            SystemTime.Reset(); // we need to reset the SystemTime after each iteration because resetting it via AbstractTestsBase will only reset the SystemTime for the thread active at that time, leaving the other threads with the wrong time
         });
 
         // Assert
