@@ -48,7 +48,7 @@ public class CreateAnnouncementCommandActionValidator : AbstractValidator<Create
     public CreateAnnouncementCommandActionValidator()
     {
         RuleFor(x => x.Link).DetailedNotEmpty().MaximumLength(300);
-        
+
         RuleFor(x => x.DisplayName)
             .Must(x => x.Any(t => t.Key == AnnouncementLanguage.DEFAULT_LANGUAGE.Value))
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
