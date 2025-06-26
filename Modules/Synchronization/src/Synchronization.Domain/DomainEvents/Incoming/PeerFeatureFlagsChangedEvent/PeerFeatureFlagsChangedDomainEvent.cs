@@ -4,6 +4,12 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerFeat
 
 public class PeerFeatureFlagsChangedDomainEvent : DomainEvent
 {
-    public string PeerAddress { get; set; } = null!;
-    public string NotifiedIdentityAddress { get; set; } = null!;
+    public PeerFeatureFlagsChangedDomainEvent(string peerAddress, string notifiedIdentityAddress)
+    {
+        PeerAddress = peerAddress;
+        NotifiedIdentityAddress = notifiedIdentityAddress;
+    }
+
+    public string PeerAddress { get; set; }
+    public string NotifiedIdentityAddress { get; set; }
 }
