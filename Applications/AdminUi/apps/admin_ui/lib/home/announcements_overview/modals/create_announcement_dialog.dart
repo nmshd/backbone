@@ -35,7 +35,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   String _englishBody = '';
   String _germanTitle = '';
   String _germanBody = '';
-  final List<_CreateAnnouncementLinkAction> _linkActions = [];
+  final List<_CreateAnnouncementAction> _actions = [];
 
   final List<AnnouncementSeverity> _severityOptions = AnnouncementSeverity.values;
 
@@ -184,27 +184,27 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(context.l10n.createAnnouncementDialog_linkActions_heading, style: Theme.of(context).textTheme.bodyLarge),
+                              Text(context.l10n.createAnnouncementDialog_actions_heading, style: Theme.of(context).textTheme.bodyLarge),
                               FloatingActionButton.small(
-                                onPressed: () => setState(() => _linkActions.add(_CreateAnnouncementLinkAction(link: ''))),
+                                onPressed: () => setState(() => _actions.add(_CreateAnnouncementAction(link: ''))),
                                 elevation: 0,
                                 child: const Icon(Icons.add),
                               ),
                             ],
                           ),
                           Gaps.h16,
-                          Text(context.l10n.createAnnouncementDialog_linkActions_explanation),
+                          Text(context.l10n.createAnnouncementDialog_actions_explanation),
                           Gaps.h16,
                           ReorderableListView.builder(
                             shrinkWrap: true,
-                            itemCount: _linkActions.length,
+                            itemCount: _actions.length,
                             onReorder: (oldIndex, newIndex) {
                               setState(() {
                                 if (newIndex > oldIndex) {
                                   newIndex -= 1;
                                 }
-                                final item = _linkActions.removeAt(oldIndex);
-                                _linkActions.insert(newIndex, item);
+                                final item = _actions.removeAt(oldIndex);
+                                _actions.insert(newIndex, item);
                               });
                             },
                             itemBuilder: (context, index) => ListTile(
@@ -212,7 +212,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                               contentPadding: const EdgeInsets.fromLTRB(0, 0, 40, 0), // Avoid that the content flows into the reorder-handle
                               title: Row(
                                 children: [
-                                  IconButton(icon: const Icon(Icons.delete), onPressed: () => setState(() => _linkActions.removeAt(index))),
+                                  IconButton(icon: const Icon(Icons.delete), onPressed: () => setState(() => _actions.removeAt(index))),
                                   Expanded(
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,12 +220,11 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                                         SizedBox(
                                           width: 200,
                                           child: TextFormField(
-                                            // controller: TextEditingController(text: _linkActions[index].link),
                                             decoration: InputDecoration(
-                                              labelText: '${context.l10n.createAnnouncementDialog_linkActions_englishDisplayName}*',
+                                              labelText: '${context.l10n.createAnnouncementDialog_actions_englishDisplayName}*',
                                               border: const OutlineInputBorder(),
                                             ),
-                                            onChanged: (value) => _linkActions[index].englishDisplayName = value,
+                                            onChanged: (value) => _actions[index].englishDisplayName = value,
                                             validator: (value) => validateRequiredField(context, value),
                                           ),
                                         ),
@@ -233,23 +232,21 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                                         SizedBox(
                                           width: 200,
                                           child: TextFormField(
-                                            // controller: TextEditingController(text: _linkActions[index].link),
                                             decoration: InputDecoration(
-                                              labelText: context.l10n.createAnnouncementDialog_linkActions_germanDisplayName,
+                                              labelText: context.l10n.createAnnouncementDialog_actions_germanDisplayName,
                                               border: const OutlineInputBorder(),
                                             ),
-                                            onChanged: (value) => _linkActions[index].germanDisplayName = value,
+                                            onChanged: (value) => _actions[index].germanDisplayName = value,
                                           ),
                                         ),
                                         Gaps.w8,
                                         Expanded(
                                           child: TextFormField(
-                                            // controller: TextEditingController(text: _linkActions[index].link),
                                             decoration: InputDecoration(
-                                              labelText: '${context.l10n.createAnnouncementDialog_linkActions_link}*',
+                                              labelText: '${context.l10n.createAnnouncementDialog_actions_link}*',
                                               border: const OutlineInputBorder(),
                                             ),
-                                            onChanged: (value) => _linkActions[index].link = value,
+                                            onChanged: (value) => _actions[index].link = value,
                                             validator: (value) => validateRequiredField(context, value),
                                           ),
                                         ),
@@ -284,7 +281,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
                   }
 
-                  final linkActions = _linkActions.map((action) {
+                  final actions = _actions.map((action) {
                     final mappedAction = AnnouncementAction(link: action.link, displayName: {'en': action.englishDisplayName});
                     if (action.germanDisplayName.isNotEmpty) {
                       mappedAction.displayName['de'] = action.germanDisplayName;
@@ -299,7 +296,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     recipients: [],
                     iqlQuery: _iqlQuery,
                     isSilent: !_sendAPushNotification,
-                    actions: linkActions,
+                    actions: actions,
                   );
 
                   if (!context.mounted) return;
@@ -342,12 +339,12 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
   }
 }
 
-class _CreateAnnouncementLinkAction {
+class _CreateAnnouncementAction {
   String link;
   String englishDisplayName = '';
   String germanDisplayName = '';
 
-  _CreateAnnouncementLinkAction({required this.link});
+  _CreateAnnouncementAction({required this.link});
 }
 
 String? validateRequiredField(BuildContext context, String? value) {
