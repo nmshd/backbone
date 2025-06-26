@@ -1,6 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -19,15 +20,20 @@ class AnnouncementDetails extends StatefulWidget {
 class _AnnouncementDetailsState extends State<AnnouncementDetails> {
   Announcement? _announcementDetails;
 
+  late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController = ScrollController();
 
     _loadAnnouncement();
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -35,10 +41,14 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
   Widget build(BuildContext context) {
     if (_announcementDetails == null) return const Center(child: CircularProgressIndicator());
 
+    final announcementDetails = _announcementDetails!;
+
     return Scrollbar(
+      controller: _scrollController,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (kIsDesktop)
               Row(
@@ -53,28 +63,28 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(context.l10n.announcementsDetails, style: Theme.of(context).textTheme.headlineLarge),
+                    Text(context.l10n.announcementDetails, style: Theme.of(context).textTheme.headlineLarge),
                     const SizedBox(height: 32),
                     Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        EntityDetails(title: context.l10n.announcementsOverview_severity, value: _announcementDetails!.severity),
+                        EntityDetails(title: context.l10n.announcementsOverview_severity, value: announcementDetails.severity),
                         EntityDetails(
                           title: context.l10n.createdAt,
-                          value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcementDetails!.createdAt),
+                          value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcementDetails.createdAt),
                         ),
-                        if (_announcementDetails!.expiresAt != null)
+                        if (announcementDetails.expiresAt != null)
                           EntityDetails(
                             title: context.l10n.expiresAt,
-                            value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(_announcementDetails!.expiresAt!),
+                            value: DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcementDetails.expiresAt!),
                           ),
-                        if (_announcementDetails!.iqlQuery != null)
-                          EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: _announcementDetails!.iqlQuery!),
+                        if (announcementDetails.iqlQuery != null)
+                          EntityDetails(title: context.l10n.announcementDetails_iqlQuery, value: announcementDetails.iqlQuery!),
                         EntityDetails(
                           title: context.l10n.announcementDetails_sendAPushNotification,
-                          value: _announcementDetails!.isSilent ? context.l10n.no : context.l10n.yes,
+                          value: announcementDetails.isSilent ? context.l10n.no : context.l10n.yes,
                         ),
                       ],
                     ),
@@ -82,7 +92,8 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                 ),
               ),
             ),
-            _AnnouncementTextsTable(announcementTexts: _announcmentDetails!.texts),
+            _AnnouncementTextsCard(announcementTexts: announcementDetails.texts),
+            _AnnouncementActionsCard(announcementActions: announcementDetails.actions),
           ],
         ),
       ),
@@ -95,22 +106,22 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
     if (!mounted) return;
 
     setState(() {
-      _announcmentDetails = announcementDetailsResponse.data;
+      _announcementDetails = announcementDetailsResponse.data;
     });
   }
 }
 
-class _AnnouncementTextsTable extends StatelessWidget {
+class _AnnouncementTextsCard extends StatelessWidget {
   final List<AnnouncementText> announcementTexts;
 
-  const _AnnouncementTextsTable({required this.announcementTexts});
+  const _AnnouncementTextsCard({required this.announcementTexts});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: SizedBox(
         width: double.infinity,
-        height: 500,
+        height: 200,
         child: DataTable2(
           columns: <DataColumn>[
             DataColumn2(label: Text(context.l10n.announcementsLanguage)),
@@ -128,6 +139,97 @@ class _AnnouncementTextsTable extends StatelessWidget {
                 ),
               )
               .toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class _AnnouncementActionsCard extends StatelessWidget {
+  final List<AnnouncementLinkAction> announcementActions;
+
+  const _AnnouncementActionsCard({required this.announcementActions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.announcementDetails_actions, style: Theme.of(context).textTheme.titleMedium),
+            Gaps.h12,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: announcementActions.map(
+                (action) {
+                  return SizedBox(
+                    width: 500,
+                    child: Card(
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Table(
+                          columnWidths: const <int, TableColumnWidth>{
+                            0: IntrinsicColumnWidth(),
+                            1: FlexColumnWidth(),
+                          },
+                          // border: TableBorder(horizontalInside: BorderSide(color: Colors.grey.shade300)),
+                          children: [
+                            TableRow(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  child: Text(
+                                    context.l10n.announcementDetails_actions_englishName,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                  child: Text(action.displayName['en'] ?? ''),
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  child: Text(
+                                    context.l10n.announcementDetails_actions_germanName,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                  child: Text(action.displayName['de'] ?? ''),
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                  child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                  child: Text(action.link),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ).toList(),
+            ),
+          ],
         ),
       ),
     );
