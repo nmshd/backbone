@@ -207,54 +207,10 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                                 _actions.insert(newIndex, item);
                               });
                             },
-                            itemBuilder: (context, index) => ListTile(
+                            itemBuilder: (context, index) => _ActionRow(
                               key: ValueKey(index),
-                              contentPadding: const EdgeInsets.fromLTRB(0, 0, 40, 0), // Avoid that the content flows into the reorder-handle
-                              title: Row(
-                                children: [
-                                  IconButton(icon: const Icon(Icons.delete), onPressed: () => setState(() => _actions.removeAt(index))),
-                                  Expanded(
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 200,
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                              labelText: '${context.l10n.createAnnouncementDialog_actions_englishDisplayName}*',
-                                              border: const OutlineInputBorder(),
-                                            ),
-                                            onChanged: (value) => _actions[index].englishDisplayName = value,
-                                            validator: (value) => validateRequiredField(context, value),
-                                          ),
-                                        ),
-                                        Gaps.w8,
-                                        SizedBox(
-                                          width: 200,
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                              labelText: context.l10n.createAnnouncementDialog_actions_germanDisplayName,
-                                              border: const OutlineInputBorder(),
-                                            ),
-                                            onChanged: (value) => _actions[index].germanDisplayName = value,
-                                          ),
-                                        ),
-                                        Gaps.w8,
-                                        Expanded(
-                                          child: TextFormField(
-                                            decoration: InputDecoration(
-                                              labelText: '${context.l10n.createAnnouncementDialog_actions_link}*',
-                                              border: const OutlineInputBorder(),
-                                            ),
-                                            onChanged: (value) => _actions[index].link = value,
-                                            validator: (value) => validateRequiredField(context, value),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              action: _actions[index],
+                              remove: () => setState(() => _actions.removeAt(index)),
                             ),
                           ),
                         ],
@@ -274,48 +230,53 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
           SizedBox(
             height: 40,
             child: FilledButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  final announcementTexts = <AnnouncementText>[AnnouncementText(language: 'en', title: _englishTitle, body: _englishBody)];
-                  if (_germanTitle.isNotEmpty && _germanBody.isNotEmpty) {
-                    announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
-                  }
-
-                  final actions = _actions.map((action) {
-                    final mappedAction = AnnouncementAction(link: action.link, displayName: {'en': action.englishDisplayName});
-                    if (action.germanDisplayName.isNotEmpty) {
-                      mappedAction.displayName['de'] = action.germanDisplayName;
-                    }
-                    return mappedAction;
-                  }).toList();
-
-                  final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
-                    expiresAt: _selectedExpirationDate?.toIso8601String(),
-                    severity: _selectedSeverity!,
-                    announcementTexts: announcementTexts,
-                    recipients: [],
-                    iqlQuery: _iqlQuery,
-                    isSilent: !_sendAPushNotification,
-                    actions: actions,
-                  );
-
-                  if (!context.mounted) return;
-                  context.pop();
-
-                  if (response.hasError) {
-                    _showErrorSnackbar();
-                    return;
-                  }
-                  widget.onAnnouncementCreated();
-                  _showSuccessSnackbar();
-                }
-              },
+              onPressed: _createAnnouncement,
               child: Text(context.l10n.create),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _createAnnouncement() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final announcementTexts = <AnnouncementText>[AnnouncementText(language: 'en', title: _englishTitle, body: _englishBody)];
+    if (_germanTitle.isNotEmpty && _germanBody.isNotEmpty) {
+      announcementTexts.add(AnnouncementText(language: 'de', title: _germanTitle, body: _germanBody));
+    }
+
+    final actions = _actions.map((action) {
+      final mappedAction = AnnouncementAction(link: action.link, displayName: {'en': action.englishDisplayName});
+      if (action.germanDisplayName.isNotEmpty) {
+        mappedAction.displayName['de'] = action.germanDisplayName;
+      }
+      return mappedAction;
+    }).toList();
+
+    final response = await GetIt.I.get<AdminApiClient>().announcements.createAnnouncement(
+      expiresAt: _selectedExpirationDate?.toIso8601String(),
+      severity: _selectedSeverity!,
+      announcementTexts: announcementTexts,
+      recipients: [],
+      iqlQuery: _iqlQuery,
+      isSilent: !_sendAPushNotification,
+      actions: actions,
+    );
+
+    if (!mounted) return;
+
+    context.pop();
+
+    if (response.hasError) {
+      _showErrorSnackbar();
+      return;
+    }
+
+    widget.onAnnouncementCreated();
+
+    _showSuccessSnackbar();
   }
 
   void _showSuccessSnackbar() {
@@ -352,4 +313,101 @@ String? validateRequiredField(BuildContext context, String? value) {
     return context.l10n.createAnnouncementDialog_requiredField;
   }
   return null;
+}
+
+class _ActionRow extends StatefulWidget {
+  final VoidCallback remove;
+  final _CreateAnnouncementAction action;
+
+  const _ActionRow({required this.remove, required this.action, super.key});
+
+  @override
+  State<_ActionRow> createState() => _ActionRowState();
+}
+
+class _ActionRowState extends State<_ActionRow> {
+  late final TextEditingController _englishDisplayNameController;
+  late final TextEditingController _germanDisplayNameController;
+  late final TextEditingController _linkController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _englishDisplayNameController = TextEditingController(text: widget.action.englishDisplayName);
+    _germanDisplayNameController = TextEditingController(text: widget.action.germanDisplayName);
+    _linkController = TextEditingController(text: widget.action.link);
+  }
+
+  @override
+  void dispose() {
+    _englishDisplayNameController.dispose();
+    _germanDisplayNameController.dispose();
+    _linkController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ActionRow oldWidget) {
+    _englishDisplayNameController.text = widget.action.englishDisplayName;
+    _germanDisplayNameController.text = widget.action.germanDisplayName;
+    _linkController.text = widget.action.link;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.fromLTRB(0, 0, 40, 0), // Avoid that the content flows into the reorder-handle
+      title: Row(
+        children: [
+          IconButton(icon: const Icon(Icons.delete), onPressed: widget.remove),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    controller: _englishDisplayNameController,
+                    decoration: InputDecoration(
+                      labelText: '${context.l10n.createAnnouncementDialog_actions_englishDisplayName}*',
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => widget.action.englishDisplayName = value,
+                    validator: (value) => validateRequiredField(context, value),
+                  ),
+                ),
+                Gaps.w8,
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    controller: _germanDisplayNameController,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.createAnnouncementDialog_actions_germanDisplayName,
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => widget.action.germanDisplayName = value,
+                  ),
+                ),
+                Gaps.w8,
+                Expanded(
+                  child: TextFormField(
+                    controller: _linkController,
+                    decoration: InputDecoration(
+                      labelText: '${context.l10n.createAnnouncementDialog_actions_link}*',
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => widget.action.link = value,
+                    validator: (value) => validateRequiredField(context, value),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
