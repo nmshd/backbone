@@ -12,7 +12,7 @@ class Announcement {
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
-  final List<AnnouncementLinkAction> actions;
+  final List<AnnouncementAction> actions;
   final String? iqlQuery;
   final bool isSilent;
 

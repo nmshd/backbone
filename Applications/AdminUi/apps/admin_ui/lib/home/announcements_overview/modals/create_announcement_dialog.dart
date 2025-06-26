@@ -285,7 +285,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                   }
 
                   final linkActions = _linkActions.map((action) {
-                    final mappedAction = AnnouncementLinkAction(link: action.link, displayName: {'en': action.englishDisplayName});
+                    final mappedAction = AnnouncementAction(link: action.link, displayName: {'en': action.englishDisplayName});
                     if (action.germanDisplayName.isNotEmpty) {
                       mappedAction.displayName['de'] = action.germanDisplayName;
                     }
@@ -299,7 +299,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     recipients: [],
                     iqlQuery: _iqlQuery,
                     isSilent: !_sendAPushNotification,
-                    linkActions: linkActions,
+                    actions: linkActions,
                   );
 
                   if (!context.mounted) return;

@@ -12,7 +12,7 @@ Announcement _$AnnouncementFromJson(Map<String, dynamic> json) => Announcement(
   expiresAt: json['expiresAt'] == null ? null : DateTime.parse(json['expiresAt'] as String),
   severity: json['severity'] as String,
   texts: (json['texts'] as List<dynamic>).map(AnnouncementText.fromJson).toList(),
-  actions: (json['actions'] as List<dynamic>).map(AnnouncementLinkAction.fromJson).toList(),
+  actions: (json['actions'] as List<dynamic>).map(AnnouncementAction.fromJson).toList(),
   iqlQuery: json['iqlQuery'] as String?,
   isSilent: json['isSilent'] as bool,
 );

@@ -146,7 +146,7 @@ class _AnnouncementTextsCard extends StatelessWidget {
 }
 
 class _AnnouncementActionsCard extends StatelessWidget {
-  final List<AnnouncementLinkAction> announcementActions;
+  final List<AnnouncementAction> announcementActions;
 
   const _AnnouncementActionsCard({required this.announcementActions});
 
@@ -164,70 +164,69 @@ class _AnnouncementActionsCard extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: 8,
               runSpacing: 8,
-              children: announcementActions.map(
-                (action) {
-                  return SizedBox(
-                    width: 500,
-                    child: Card(
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Table(
-                          columnWidths: const <int, TableColumnWidth>{
-                            0: IntrinsicColumnWidth(),
-                            1: FlexColumnWidth(),
-                          },
-                          // border: TableBorder(horizontalInside: BorderSide(color: Colors.grey.shade300)),
-                          children: [
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                  child: Text(
-                                    context.l10n.announcementDetails_actions_englishName,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+              children: announcementActions
+                  .map(
+                    (action) => SizedBox(
+                      width: 500,
+                      child: Card(
+                        elevation: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Table(
+                            columnWidths: const <int, TableColumnWidth>{
+                              0: IntrinsicColumnWidth(),
+                              1: FlexColumnWidth(),
+                            },
+                            children: [
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                    child: Text(
+                                      context.l10n.announcementDetails_actions_englishName,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                  child: Text(action.displayName['en'] ?? ''),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                  child: Text(
-                                    context.l10n.announcementDetails_actions_germanName,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                    child: Text(action.displayName['en'] ?? ''),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                  child: Text(action.displayName['de'] ?? ''),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                  child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                  child: Text(action.link),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                    child: Text(
+                                      context.l10n.announcementDetails_actions_germanName,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                    child: Text(action.displayName['de'] ?? ''),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12, bottom: 12),
+                                    child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
+                                    child: Text(action.link),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ).toList(),
+                  )
+                  .toList(),
             ),
           ],
         ),

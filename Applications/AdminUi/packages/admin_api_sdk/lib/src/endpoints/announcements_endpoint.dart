@@ -18,7 +18,7 @@ class AnnouncementsEndpoint extends Endpoint {
     required bool isSilent,
     String? expiresAt,
     List<String>? recipients,
-    List<AnnouncementLinkAction>? linkActions,
+    List<AnnouncementAction>? actions,
     String? iqlQuery,
   }) => post(
     '/api/v1/Announcements',
@@ -29,7 +29,7 @@ class AnnouncementsEndpoint extends Endpoint {
       'recipients': recipients,
       'isSilent': isSilent,
       'iqlQuery': iqlQuery,
-      'actions': linkActions,
+      'actions': actions,
     },
     transformer: CreateAnnouncementResponse.fromJson,
   );
