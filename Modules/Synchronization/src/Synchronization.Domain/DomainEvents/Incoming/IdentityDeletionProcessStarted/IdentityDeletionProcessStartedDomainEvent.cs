@@ -4,14 +4,7 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.Identity
 
 public class IdentityDeletionProcessStartedDomainEvent : DomainEvent
 {
-    public IdentityDeletionProcessStartedDomainEvent(string address, string deletionProcessId, string? initiator)
-    {
-        DeletionProcessId = deletionProcessId;
-        Address = address;
-        Initiator = initiator;
-    }
-
-    public string Address { get; private set; }
-    public string DeletionProcessId { get; private set; }
-    public string? Initiator { get; }
+    public string Address { get; private set; } = null!;
+    public string DeletionProcessId { get; private set; } = null!;
+    public string? Initiator { get; private set; } = null!;
 }
