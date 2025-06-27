@@ -9,7 +9,6 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[9.0.6]" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[9.0.6]" />
         <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="[9.0.6]" />
-        <PackageReference Include="Newtonsoft.Json" Version="[13.0.3]" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="[9.0.6]" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" />
         <PackageReference Include="OpenIddict.AspNetCore" Version="[6.4.0]" />

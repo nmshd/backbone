@@ -22,4 +22,5 @@ public class DomainEvent
 
     public string DomainEventId { get; set; }
     public DateTime CreationDate { get; set; }
+    public string Type => GetType().Name.ToLower();
 }
