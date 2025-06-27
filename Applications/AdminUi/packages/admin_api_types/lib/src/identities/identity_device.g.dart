@@ -24,6 +24,10 @@ Map<String, dynamic> _$IdentityDeviceToJson(IdentityDevice instance) => <String,
   'communicationLanguage': instance.communicationLanguage,
 };
 
-LastLoginInformation _$LastLoginInformationFromJson(Map<String, dynamic> json) => LastLoginInformation(time: DateTime.parse(json['time'] as String));
+LastLoginInformation _$LastLoginInformationFromJson(Map<String, dynamic> json) => LastLoginInformation(
+  time: DateTime.parse(json['time'] as String),
+);
 
-Map<String, dynamic> _$LastLoginInformationToJson(LastLoginInformation instance) => <String, dynamic>{'time': instance.time.toIso8601String()};
+Map<String, dynamic> _$LastLoginInformationToJson(LastLoginInformation instance) => <String, dynamic>{
+  'time': instance.time.toIso8601String(),
+};
