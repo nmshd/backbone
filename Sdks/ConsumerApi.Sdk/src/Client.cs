@@ -28,13 +28,16 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Client
 {
+    private readonly Configuration _configuration;
+    private readonly HttpClient _httpClient;
+
     private Client(HttpClient httpClient, Configuration configuration, DeviceData? deviceData, IdentityData? identityData)
     {
         IAuthenticator authenticator = deviceData != null ? new OAuthAuthenticator(configuration.Authentication, httpClient) : new AnonymousAuthenticator();
         var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
 
-        Configuration = configuration;
-        HttpClient = httpClient;
+        _configuration = configuration;
+        _httpClient = httpClient;
         DeviceData = deviceData;
         IdentityData = identityData;
 
@@ -55,10 +58,8 @@ public class Client
         Tokens = new TokensEndpoint(endpointClient);
     }
 
-    public HttpClient HttpClient { get; } //TODO: Timo (In order to use the client in my external test project, I had to open some properties. Should we keep it this way or revert it?)
-    public Configuration Configuration { get; }
     public DeviceData? DeviceData { get; }
-    public IdentityData? IdentityData { get; private set; }
+    public IdentityData? IdentityData { get; }
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     public AnnouncementsEndpoint Announcements { get; }
@@ -172,8 +173,8 @@ public class Client
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = client.Configuration.Authentication.ClientCredentials.ClientId,
-            ClientSecret = client.Configuration.Authentication.ClientCredentials.ClientSecret,
+            ClientId = client._configuration.Authentication.ClientCredentials.ClientId,
+            ClientSecret = client._configuration.Authentication.ClientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonSerializer.Serialize(new CryptoSignaturePublicKey
@@ -203,18 +204,6 @@ public class Client
         };
 
         return (identityData, deviceData);
-    }
-
-    public async Task QueryOwnIdentity()
-    {
-        if (IdentityData != null) return;
-
-        var getIdentityResponse = await Identities.GetOwnIdentity();
-        if (getIdentityResponse.IsError)
-            throw new Exception($"There was an error when querying the identity. The error code was '{getIdentityResponse.Error.Code}'. The message was '{getIdentityResponse.Error.Message}'.");
-
-        var identityData = new IdentityData { Address = getIdentityResponse.Result.Address };
-        IdentityData = identityData;
     }
 
     public async Task<Client> OnboardNewDevice(string password)
@@ -248,7 +237,7 @@ public class Client
         {
             Authentication = new Configuration.AuthenticationConfiguration
             {
-                ClientCredentials = Configuration.Authentication.ClientCredentials,
+                ClientCredentials = _configuration.Authentication.ClientCredentials,
                 UserCredentials = new UserCredentials(createDeviceResponse.Result.Username, password)
             }
         };
@@ -259,7 +248,7 @@ public class Client
             UserCredentials = new UserCredentials(createDeviceResponse.Result.Username, password)
         };
 
-        var client = new Client(HttpClient, configuration, newDeviceData, IdentityData);
+        var client = new Client(_httpClient, configuration, newDeviceData, IdentityData);
 
         return client;
     }
