@@ -302,10 +302,16 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
 class _CreateAnnouncementAction {
   String link;
-  String englishDisplayName = '';
-  String germanDisplayName = '';
+  String englishDisplayName;
+  String germanDisplayName;
 
-  _CreateAnnouncementAction({required this.link});
+  _CreateAnnouncementAction({required this.link}) : englishDisplayName = '', germanDisplayName = '';
+
+  bool equals(_CreateAnnouncementAction other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other.link == link && other.englishDisplayName == englishDisplayName && other.germanDisplayName == germanDisplayName;
+  }
 }
 
 String? validateRequiredField(BuildContext context, String? value) {
@@ -350,9 +356,14 @@ class _ActionRowState extends State<_ActionRow> {
 
   @override
   void didUpdateWidget(covariant _ActionRow oldWidget) {
-    _englishDisplayNameController.text = widget.action.englishDisplayName;
-    _germanDisplayNameController.text = widget.action.germanDisplayName;
-    _linkController.text = widget.action.link;
+    if (oldWidget.action.equals(widget.action)) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _englishDisplayNameController.text = widget.action.englishDisplayName;
+      _germanDisplayNameController.text = widget.action.germanDisplayName;
+      _linkController.text = widget.action.link;
+    });
+
     super.didUpdateWidget(oldWidget);
   }
 
