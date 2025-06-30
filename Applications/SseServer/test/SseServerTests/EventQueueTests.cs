@@ -112,7 +112,7 @@ public class EventQueueTests : AbstractTestsBase
         queue.Register("testAddress", CancellationToken.None);
 
         // Act
-        await Task.Delay(TimeSpan.FromMilliseconds(500));
+        await Task.Delay(TimeSpan.FromMilliseconds(500), TestContext.Current.CancellationToken);
         var eventNames = await queue.DequeueAllFor("testAddress");
         queue.Deregister("testAddress");
 
