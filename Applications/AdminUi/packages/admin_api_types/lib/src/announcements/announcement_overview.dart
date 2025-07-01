@@ -1,9 +1,9 @@
-import 'package:admin_api_types/admin_api_types.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-export 'create_announcement_response.dart';
+import 'announcement_action.dart';
+import 'announcement_text.dart';
 
-part 'announcements_overview.g.dart';
+part 'announcement_overview.g.dart';
 
 @JsonSerializable()
 class Announcement {
