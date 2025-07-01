@@ -62,7 +62,71 @@ public class ValidatorTests
         validationResult.ShouldHaveValidationErrorFor("Texts[0].Body").WithErrorCode("error.platform.validation.invalidPropertyValue");
     }
 
-    private static CreateAnnouncementCommand CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body")
+    [Fact]
+    public void Expects_an_english_display_name_for_actions()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(CreateCommand(action: new CreateAnnouncementCommandAction
+        {
+            Link = "https://enmeshed.eu",
+            DisplayName = new Dictionary<string, string>
+            {
+                { "de", "Test Titel" }
+            }
+        }));
+
+        // Assert
+        validationResult.ShouldHaveValidationErrorFor("Actions[0].DisplayName").WithErrorMessage("An action must have a display name for English.");
+    }
+
+    [Fact]
+    public void Expects_at_least_one_character_for_action_display_names()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(CreateCommand(action: new CreateAnnouncementCommandAction
+        {
+            Link = "https://enmeshed.eu",
+            DisplayName = new Dictionary<string, string>
+            {
+                { "en", "" }
+            }
+        }));
+
+        // Assert
+        validationResult.ShouldHaveValidationErrorFor("Actions[0].DisplayName[0]").WithErrorMessage("A display name must have between 1 and 30 characters.");
+    }
+
+    [Theory]
+    [InlineData("\n")]
+    [InlineData("\r")]
+    [InlineData("\r\n")]
+    [InlineData("\n\r")]
+    public void Expects_only_valid_characters_for_action_display_names(string displayNameWithInvalidCharacters)
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(CreateCommand(action: new CreateAnnouncementCommandAction
+        {
+            Link = "https://enmeshed.eu",
+            DisplayName = new Dictionary<string, string>
+            {
+                { "en", displayNameWithInvalidCharacters }
+            }
+        }));
+
+        // Assert
+        validationResult.ShouldHaveValidationErrorFor("Actions[0].DisplayName[0]").WithErrorMessage("A display name must not contain line breaks.");
+    }
+
+    private static CreateAnnouncementCommand CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body", CreateAnnouncementCommandAction? action = null)
     {
         languages ??= ["en", "de"];
 
@@ -76,7 +140,8 @@ public class ValidatorTests
                 Language = l,
                 Title = title,
                 Body = body!
-            }).ToList()
+            }).ToList(),
+            Actions = action == null ? [] : [action]
         };
 
         return command;

@@ -1,5 +1,3 @@
-import 'package:admin_api_sdk/src/endpoints/announcements_endpoint.dart';
-import 'package:admin_api_sdk/src/endpoints/metrics_endpoint.dart';
 import 'package:dio/dio.dart';
 
 import 'endpoints/endpoints.dart';
