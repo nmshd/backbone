@@ -57,11 +57,11 @@ public class CreateAnnouncementCommandActionValidator : AbstractValidator<Create
         RuleForEach(x => x.DisplayName)
             .Must(x => x.Value.Length is <= 30 and > 0)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
-            .WithMessage("A display name cannot have at least 1 and more than 30 characters.");
+            .WithMessage("A display name must have between 1 and 30 characters.");
 
         RuleForEach(x => x.DisplayName)
-            .Must(x => x.Value.MatchesRegex("^[a-zA-Z0-9_!?.,;/ ]+\\z"))
+            .Must(x => x.Value.MatchesRegex("^[^\r\n]+\\z"))
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
-            .WithMessage("A display name can only contain letters, numbers, spaces, and the following characters: _!?.,;/");
+            .WithMessage("A display name must not contain line breaks.");
     }
 }
