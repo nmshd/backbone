@@ -39,9 +39,9 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_announcementDetails == null) return const Center(child: CircularProgressIndicator());
+    final announcementDetails = _announcementDetails;
 
-    final announcementDetails = _announcementDetails!;
+    if (announcementDetails == null) return const Center(child: CircularProgressIndicator());
 
     return Scrollbar(
       controller: _scrollController,
