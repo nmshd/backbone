@@ -1,10 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'announcement_action.dart';
 import 'announcement_text.dart';
 
-export 'create_announcement_response.dart';
-
-part 'announcements_overview.g.dart';
+part 'announcement_overview.g.dart';
 
 @JsonSerializable()
 class Announcement {
@@ -13,6 +12,7 @@ class Announcement {
   final DateTime? expiresAt;
   final String severity;
   final List<AnnouncementText> texts;
+  final List<AnnouncementAction> actions;
   final String? iqlQuery;
   final bool isSilent;
 
@@ -22,6 +22,7 @@ class Announcement {
     required this.expiresAt,
     required this.severity,
     required this.texts,
+    required this.actions,
     required this.iqlQuery,
     required this.isSilent,
   });

@@ -30,3 +30,7 @@ scripts:
   generate_translations:
     run: melos exec --dir-exists=lib/l10n --flutter -- "flutter gen-l10n && dart format lib/generated/l10n"
     description: Generate translations in all packages
+
+  build_runner:
+    run: melos exec --depends-on build_runner -- "dart run build_runner build --delete-conflicting-outputs && dart format ."
+    description: Run build runner in all packages that depend on it (e.g. for regenerating admin api types)

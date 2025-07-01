@@ -22,6 +22,7 @@ public class AnnouncementTests : AbstractTestsBase
             [new AnnouncementText(AnnouncementLanguage.DEFAULT_LANGUAGE, "Test Title", "Test Body")],
             expiresAt: null,
             recipients: [new AnnouncementRecipient(CreateRandomIdentityAddress())],
+            [],
             iqlQuery: AnnouncementIqlQuery.Parse("StreetAddress.city='Heidelberg' && #'Primary Address'")
         );
 
@@ -44,6 +45,7 @@ public class AnnouncementTests : AbstractTestsBase
             [new AnnouncementText(AnnouncementLanguage.DEFAULT_LANGUAGE, "Test Title", "Test Body")],
             expiresAt: null,
             recipients: [new AnnouncementRecipient(CreateRandomIdentityAddress())],
+            [],
             iqlQuery: AnnouncementIqlQuery.Parse("StreetAddress.city='Heidelberg' && #'Primary Address'")
         );
 
