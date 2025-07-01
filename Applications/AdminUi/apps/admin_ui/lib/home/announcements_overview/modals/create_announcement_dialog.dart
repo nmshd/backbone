@@ -51,17 +51,18 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => AlertDialog(
-        scrollable: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
-        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
-        content: SizedBox(
-          height: constraints.maxHeight * .7,
-          width: 1000,
-          child: SingleChildScrollView(
+    return AlertDialog(
+      scrollable: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
+      contentPadding: const EdgeInsets.only(top: 20, bottom: 32),
+      content: SizedBox(
+        height: MediaQuery.sizeOf(context).height * .7,
+        width: 1000,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Form(
               key: _formKey,
               child: Column(
@@ -222,20 +223,20 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
             ),
           ),
         ),
-        actions: [
-          SizedBox(
-            height: 40,
-            child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
-          ),
-          SizedBox(
-            height: 40,
-            child: FilledButton(
-              onPressed: _createAnnouncement,
-              child: Text(context.l10n.create),
-            ),
-          ),
-        ],
       ),
+      actions: [
+        SizedBox(
+          height: 40,
+          child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
+        ),
+        SizedBox(
+          height: 40,
+          child: FilledButton(
+            onPressed: _createAnnouncement,
+            child: Text(context.l10n.create),
+          ),
+        ),
+      ],
     );
   }
 
