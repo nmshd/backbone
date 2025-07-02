@@ -1,5 +1,6 @@
 using Backbone.SseServer;
 using Backbone.SseServer.Controllers;
+using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
@@ -104,19 +105,17 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Queue_sends_keep_alive_event()
     {
         // Arrange
-        var config = new Configuration { Sse = new Configuration.SseConfiguration { KeepAliveEventInterval = 1 } };
-        var options = A.Fake<IOptions<Configuration>>();
-        A.CallTo(() => options.Value).Returns(config);
+        var config = new Configuration { SseServer = new Configuration.SseConfiguration { KeepAliveEventIntervalInSeconds = 1 } };
+        var options = new OptionsWrapper<Configuration>(config);
 
         var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), options);
         queue.Register("testAddress", CancellationToken.None);
 
         // Act
-        await Task.Delay(TimeSpan.FromMilliseconds(500), TestContext.Current.CancellationToken);
-        var eventNames = await queue.DequeueAllFor("testAddress");
-        queue.Deregister("testAddress");
+        await Task.Delay(1.Seconds(), TestContext.Current.CancellationToken);
 
         // Assert
+        var eventNames = await queue.DequeueAllFor("testAddress");
         eventNames.ShouldHaveCount(1);
         eventNames.ShouldContain(EventQueue.KEEP_ALIVE_EVENT);
     }

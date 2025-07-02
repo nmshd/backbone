@@ -54,7 +54,7 @@ public class EventQueue : IEventQueue
 
     private async Task SendKeepAliveEvents(string address, CancellationToken cancellationToken)
     {
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(_configuration.Sse.KeepAliveEventInterval));
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(_configuration.SseServer.KeepAliveEventIntervalInSeconds));
         while (await timer.WaitForNextTickAsync(cancellationToken))
         {
             if (!_channels.ContainsKey(address)) break;

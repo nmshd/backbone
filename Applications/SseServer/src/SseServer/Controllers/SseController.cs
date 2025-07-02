@@ -44,11 +44,11 @@ public class SseController : ControllerBase
 
         try
         {
-            _eventQueue.Register(address, HttpContext.RequestAborted);
+            _eventQueue.Register(address, cancellationToken);
 
             await streamWriter.SendServerSentEvent("ConnectionOpened");
 
-            await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
+            await foreach (var eventName in _eventQueue.DequeueFor(address, cancellationToken))
             {
                 _logger.LogDebug("Sending event '{EventName}'...", eventName);
                 await streamWriter.SendServerSentEvent(eventName);

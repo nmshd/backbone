@@ -13,7 +13,7 @@ public class Configuration
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    public SseConfiguration Sse { get; set; } = new();
+    public SseConfiguration SseServer { get; set; } = new();
 
     public class AuthenticationConfiguration
     {
@@ -34,6 +34,6 @@ public class Configuration
 
     public class SseConfiguration
     {
-        public int KeepAliveEventInterval { get; set; } = 240;
+        public int KeepAliveEventIntervalInSeconds { get; set; } = 240;
     }
 }
