@@ -105,7 +105,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Queue_sends_keep_alive_event()
     {
         // Arrange
-        var config = new Configuration { SseServer = new Configuration.SseConfiguration { KeepAliveEventIntervalInSeconds = 1 } };
+        var config = new Configuration { SseServer = new Configuration.SseServerConfiguration { KeepAliveEventIntervalInSeconds = 1 } };
         var options = new OptionsWrapper<Configuration>(config);
 
         var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), options);
