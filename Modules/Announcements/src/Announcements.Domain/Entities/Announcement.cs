@@ -16,10 +16,12 @@ public class Announcement : Entity
         Id = null!;
         Texts = null!;
         Recipients = null!;
+        Actions = null!;
         IqlQuery = null!;
     }
 
-    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients, AnnouncementIqlQuery? iqlQuery)
+    public Announcement(AnnouncementSeverity severity, bool isSilent, List<AnnouncementText> texts, DateTime? expiresAt, IEnumerable<AnnouncementRecipient> recipients,
+        IEnumerable<AnnouncementAction> actions, AnnouncementIqlQuery? iqlQuery)
     {
         if (!isSilent && iqlQuery != null)
             throw new DomainException(DomainErrors.NonSilentAnnouncementCannotHaveIqlQuery());
@@ -32,6 +34,7 @@ public class Announcement : Entity
         Texts = texts;
         Recipients = [.. recipients];
         IsSilent = isSilent;
+        Actions = [.. actions];
 
         RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
@@ -46,6 +49,8 @@ public class Announcement : Entity
     public List<AnnouncementText> Texts { get; }
 
     public List<AnnouncementRecipient> Recipients { get; }
+
+    public List<AnnouncementAction> Actions { get; }
 
     public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }
