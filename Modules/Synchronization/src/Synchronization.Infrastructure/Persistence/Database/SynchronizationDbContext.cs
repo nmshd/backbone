@@ -168,16 +168,25 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return previousSyncRun;
     }
 
+    public async Task<bool> DoNewUnsyncedExternalEventsExist(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken)
+    {
+        return await UnsyncedExternalEventsQuery(owner, maxErrorCount).AnyAsync(cancellationToken);
+    }
+
     public async Task<List<ExternalEvent>> GetUnsyncedExternalEvents(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken)
     {
-        var unsyncedEvents = await ExternalEvents
+        var unsyncedEvents = await UnsyncedExternalEventsQuery(owner, maxErrorCount).ToListAsync(cancellationToken);
+
+        return unsyncedEvents;
+    }
+
+    private IQueryable<ExternalEvent> UnsyncedExternalEventsQuery(IdentityAddress owner, byte maxErrorCount)
+    {
+        return ExternalEvents
             .WithOwner(owner)
             .Unsynced()
             .NotBlocked()
-            .WithErrorCountBelow(maxErrorCount)
-            .ToListAsync(cancellationToken);
-
-        return unsyncedEvents;
+            .WithErrorCountBelow(maxErrorCount);
     }
 
     public async Task DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken)
