@@ -58,7 +58,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m))
+            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m)),
         };
 
         return response;
@@ -90,10 +90,13 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+        var newUnsyncedExternalEventsExist = await _dbContext.DoNewUnsyncedExternalEventsExist(_activeIdentity, 0, cancellationToken);
+
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = newModifications.Select(x => new CreatedDatawalletModificationDTO(x))
+            DatawalletModifications = newModifications.Select(x => new CreatedDatawalletModificationDTO(x)),
+            NewUnsyncedExternalEventsExist = newUnsyncedExternalEventsExist
         };
 
         return response;
