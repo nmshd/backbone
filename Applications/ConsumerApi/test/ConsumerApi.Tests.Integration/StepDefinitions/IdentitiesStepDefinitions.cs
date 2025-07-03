@@ -1,9 +1,9 @@
-﻿using Backbone.BuildingBlocks.SDK.Crypto;
+﻿using System.Text.Json;
+using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
@@ -15,7 +15,6 @@ using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
@@ -105,7 +104,7 @@ internal class IdentitiesStepDefinitions
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
-        var serializedChallenge = JsonConvert.SerializeObject(_challengesContext.Challenges[challengeName]);
+        var serializedChallenge = JsonSerializer.Serialize(_challengesContext.Challenges[challengeName]);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
 
@@ -115,7 +114,7 @@ internal class IdentitiesStepDefinitions
             ClientSecret = _clientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
-            IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
+            IdentityPublicKey = ConvertibleString.FromUtf8(JsonSerializer.Serialize(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = identityKeyPair.PublicKey.Base64Representation

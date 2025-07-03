@@ -330,6 +330,7 @@ public class Identity : Entity
         {
             FeatureFlags.Set(keyValuePair.Key, keyValuePair.Value);
         }
+
         RaiseDomainEvent(new FeatureFlagsOfIdentityChangedDomainEvent(this));
     }
 

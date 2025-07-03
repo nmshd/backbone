@@ -11,6 +11,6 @@ public class FileUploadedDomainEvent : DomainEvent
         FileId = file.Id.ToString();
     }
 
-    public string FileId { get; private set; }
-    public string Owner { get; private set; }
+    public string FileId { get; init; }
+    public string Owner { get; init; }
 }

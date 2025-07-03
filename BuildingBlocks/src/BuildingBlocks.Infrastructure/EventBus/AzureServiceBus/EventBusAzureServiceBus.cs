@@ -1,15 +1,14 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -17,11 +16,6 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
     private const int MAX_DELIVERY_COUNT = 5;
-
-    private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
-    {
-        ContractResolver = new ContractResolverWithPrivates()
-    };
 
     private readonly ServiceBusProcessorOptions _options = new()
     {
@@ -66,7 +60,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
-        var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
+        var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
         _metrics.TrackHandledMessageSize(body.Length);
@@ -204,7 +198,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
     {
         var eventType = typeof(TEvent);
 
-        var domainEvent = JsonConvert.DeserializeObject<TEvent>(message, JSON_SERIALIZER_SETTINGS)!;
+        var domainEvent = JsonSerializer.Deserialize<TEvent>(message)!;
         var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
         try

@@ -1,8 +1,8 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
@@ -12,7 +12,6 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Type = System.Type;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
@@ -29,11 +28,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         public const string EVENT_NAME = "Subject";
         public const string CORRELATION_ID = "CorrelationId";
     }
-
-    private static readonly JsonSerializerSettings JSON_SERIALIZER_SETTINGS = new()
-    {
-        ContractResolver = new ContractResolverWithPrivates()
-    };
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
@@ -71,8 +65,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
-
-        var jsonMessage = JsonConvert.SerializeObject(@event, JSON_SERIALIZER_SETTINGS);
+        var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var messageBytes = ByteString.CopyFromUtf8(jsonMessage);
 
         _metrics.TrackHandledMessageSize(messageBytes.Length);
@@ -192,7 +185,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
-        var domainEvent = JsonConvert.DeserializeObject(message, eventType, JSON_SERIALIZER_SETTINGS)!;
+        var domainEvent = JsonSerializer.Deserialize(message, eventType)!;
 
         await using var scope = _serviceProvider.CreateAsyncScope();
 
