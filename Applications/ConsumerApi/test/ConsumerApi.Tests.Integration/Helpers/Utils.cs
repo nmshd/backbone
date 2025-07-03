@@ -20,7 +20,7 @@ public static class Utils
     public static SignedChallenge CreateSignedChallenge(Client identity, Challenge challenge)
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
-        var identityKeyPair = identity.IdentityData!.KeyPair;
+        var identityKeyPair = identity.IdentityData!.KeyPair!;
 
         var serializedChallenge = JsonSerializer.Serialize(challenge, new JsonSerializerOptions { IncludeFields = true });
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));

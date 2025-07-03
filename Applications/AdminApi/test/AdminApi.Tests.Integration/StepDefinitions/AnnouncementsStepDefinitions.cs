@@ -5,6 +5,7 @@ using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -14,7 +15,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST /Announcements")]
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
-    private ApiResponse<Announcement>? _announcementResponse;
+    private ApiResponse<Announcement>? _createAnnouncementResponse;
     private ApiResponse<ListAnnouncementsResponse>? _announcementsResponse;
     private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
@@ -39,7 +40,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
-            ExpiresAt = DateTime.UtcNow
+            ExpiresAt = DateTime.UtcNow,
+            Actions = []
         });
 
         _givenAnnouncement = response.Result;
@@ -54,47 +56,7 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
-        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
-        {
-            Severity = AnnouncementSeverity.High,
-            IsSilent = false,
-            ExpiresAt = SystemTime.UtcNow.AddDays(1),
-            Texts =
-            [
-                new CreateAnnouncementRequestText
-                {
-                    Language = "en",
-                    Title = "Title",
-                    Body = "Body"
-                }
-            ]
-        });
-    }
-
-    [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
-    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
-    {
-        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
-        {
-            Severity = AnnouncementSeverity.High,
-            IsSilent = false,
-            ExpiresAt = SystemTime.UtcNow.AddDays(1),
-            Texts =
-            [
-                new CreateAnnouncementRequestText
-                {
-                    Language = "de",
-                    Title = "Titel",
-                    Body = "Inhalt"
-                }
-            ]
-        });
-    }
-
-    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
-    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
-    {
-        _whenResponse = _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
             IsSilent = false,
@@ -108,6 +70,80 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
+            Actions = []
+        });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "de",
+                    Title = "Titel",
+                    Body = "Inhalt"
+                }
+            ],
+            Actions = []
+        });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint with an action$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAnAction()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = true,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Please provide feedback",
+                    Body = "We would like to hear your thoughts on our service."
+                }
+            ],
+            Actions =
+            [
+                new CreateAnnouncementRequestAction
+                {
+                    DisplayName = new Dictionary<string, string>
+                    {
+                        { "en", "Give feedback" }
+                    },
+                    Link = "https://enmeshed.eu/feedback"
+                }
+            ]
+        });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            Actions = [],
             IqlQuery = "StreetAddress.city='Heidelberg' && #'Primary Address'"
         });
     }
@@ -122,8 +158,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _announcementResponse!.Result.ShouldNotBeNull();
-        await _announcementResponse.ShouldComplyWithSchema();
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        await _createAnnouncementResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
@@ -145,5 +181,15 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _whenResponse.ShouldNotBeNull();
         _whenResponse!.Error.ShouldNotBeNull();
         _whenResponse.Error!.Code.ShouldBe(errorCode);
+    }
+
+    [Then("the response contains the action")]
+    public void ThenTheResponseContainsTheAction()
+    {
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        _createAnnouncementResponse.Result!.Actions.ShouldHaveCount(1);
+        _createAnnouncementResponse.Result.Actions.First().DisplayName.ShouldContainKey("en");
+        _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].ShouldBe("Give feedback");
+        _createAnnouncementResponse.Result.Actions.First().Link.ShouldBe("https://enmeshed.eu/feedback");
     }
 }

@@ -4,8 +4,8 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: "^3.8.0"
-  flutter: ">=3.32.0"
+  sdk: "^3.8.1"
+  flutter: ">=3.32.4"
 
 dependencies:
   admin_api_sdk: ^1.0.0
@@ -27,7 +27,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   get_it: ^8.0.0
-  go_router: ^15.0.0
+  go_router: ^16.0.0
   intl: any
   logger: ^2.4.0
   shared_preferences: ^2.3.2
