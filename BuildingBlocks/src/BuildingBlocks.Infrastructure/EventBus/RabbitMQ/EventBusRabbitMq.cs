@@ -238,6 +238,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var eventName = @event.GetEventName();
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
+
         var message = JsonSerializer.Serialize(@event, @event.GetType());
 
         var body = Encoding.UTF8.GetBytes(message);
