@@ -11,6 +11,6 @@ public class RelationshipTemplateCreatedDomainEvent : DomainEvent
         CreatedBy = template.CreatedBy;
     }
 
-    public string TemplateId { get; private set; }
-    public string CreatedBy { get; private set; }
+    public string TemplateId { get; init; }
+    public string CreatedBy { get; init; }
 }
