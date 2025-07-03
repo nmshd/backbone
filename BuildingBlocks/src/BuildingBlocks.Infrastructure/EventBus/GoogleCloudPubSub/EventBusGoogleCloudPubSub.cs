@@ -3,7 +3,6 @@ using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
@@ -29,12 +28,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         public const string EVENT_NAME = "Subject";
         public const string CORRELATION_ID = "CorrelationId";
     }
-
-    private static readonly JsonSerializerOptions JSON_SERIALIZER_SETTINGS = new()
-    {
-        IncludeFields = true,
-        Converters = { new PolymorphicEventConverter() }
-    };
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventBusGoogleCloudPubSub> _logger;
@@ -72,8 +65,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
-
-        var jsonMessage = JsonSerializer.Serialize(@event, JSON_SERIALIZER_SETTINGS);
+        var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var messageBytes = ByteString.CopyFromUtf8(jsonMessage);
 
         _metrics.TrackHandledMessageSize(messageBytes.Length);
@@ -193,7 +185,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
-        var domainEvent = JsonSerializer.Deserialize(message, eventType, JSON_SERIALIZER_SETTINGS)!;
+        var domainEvent = JsonSerializer.Deserialize(message, eventType)!;
 
         await using var scope = _serviceProvider.CreateAsyncScope();
 

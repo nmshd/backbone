@@ -5,7 +5,6 @@ using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,12 +33,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 {
     private const int PUBLISH_RETRY_COUNT = 5;
     private const int HANDLER_RETRY_COUNT = 5;
-
-    private static readonly JsonSerializerOptions JSON_SERIALIZER_SETTINGS = new()
-    {
-        IncludeFields = true,
-        Converters = { new PolymorphicEventConverter() }
-    };
 
     private readonly ILogger<EventBusRabbitMq> _logger;
     private readonly IServiceProvider _serviceProvider;
@@ -216,7 +209,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
 
-        var domainEvent = JsonSerializer.Deserialize<TEvent>(message, JSON_SERIALIZER_SETTINGS);
+        var domainEvent = JsonSerializer.Deserialize<TEvent>(message);
 
         var handlerType = typeof(THandler);
 
@@ -245,8 +238,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var eventName = @event.GetEventName();
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
-
-        var message = JsonSerializer.Serialize(@event, JSON_SERIALIZER_SETTINGS);
+        var message = JsonSerializer.Serialize(@event, @event.GetType());
 
         var body = Encoding.UTF8.GetBytes(message);
 
