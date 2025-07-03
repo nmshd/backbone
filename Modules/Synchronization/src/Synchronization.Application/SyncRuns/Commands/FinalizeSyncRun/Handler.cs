@@ -90,7 +90,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var newUnsyncedExternalEventsExist = await _dbContext.DoNewUnsyncedExternalEventsExist(_activeIdentity, 0, cancellationToken);
+        var newUnsyncedExternalEventsExist = await _dbContext.DoNewUnsyncedExternalEventsExist(_activeIdentity, 1, cancellationToken);
 
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
