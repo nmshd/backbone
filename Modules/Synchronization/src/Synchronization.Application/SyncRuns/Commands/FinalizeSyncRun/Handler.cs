@@ -58,7 +58,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m)),
+            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m))
         };
 
         return response;
