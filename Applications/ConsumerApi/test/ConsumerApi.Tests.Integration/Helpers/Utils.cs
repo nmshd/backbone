@@ -24,7 +24,7 @@ public static class Utils
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = identity.IdentityData!.KeyPair!;
 
-        var serializedChallenge = JsonSerializer.Serialize(challenge, JSON_OPTIONS);
+        var serializedChallenge = JsonSerializer.Serialize(challenge);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
 
         return new SignedChallenge(serializedChallenge, challengeSignature);
