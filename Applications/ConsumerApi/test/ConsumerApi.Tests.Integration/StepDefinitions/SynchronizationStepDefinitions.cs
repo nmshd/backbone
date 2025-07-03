@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.UnitTestTools.Shouldly.Extensions;
+using ExternalEventResult = Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.ExternalEventResult;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -17,6 +18,7 @@ internal class SynchronizationStepDefinitions
     private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
     private readonly FilesContext _filesContext;
     private ApiResponse<ListExternalEventsResponse>? _listExternalEventsOfSyncRunResponse;
+    private ApiResponse<FinalizeExternalEventSyncResponse>? _finalizeExternalEventSyncResponse;
 
     public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool, RelationshipTemplatesContext relationshipTemplatesContext,
         FilesContext filesContext)
@@ -52,6 +54,49 @@ internal class SynchronizationStepDefinitions
         var syncRunId = _startSyncRunResponses[syncRunName].SyncRun.Id;
 
         _responseContext.WhenResponse = _listExternalEventsOfSyncRunResponse = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunId);
+    }
+
+
+    [When($"{RegexFor.SINGLE_THING} finalizes {RegexFor.SINGLE_THING}")]
+    public async Task WhenIFinalizesSr(string identityName, string syncRunName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var syncRunId = _startSyncRunResponses[syncRunName].SyncRun.Id;
+
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunId);
+
+        var request = new FinalizeExternalEventSyncRequest
+        {
+            DatawalletModifications = [],
+            ExternalEventResults = externalEvents.Result!.Select(e => new ExternalEventResult
+            {
+                ExternalEventId = e.Id,
+                ErrorCode = null
+            }).ToList()
+        };
+
+        _responseContext.WhenResponse = _finalizeExternalEventSyncResponse = await client.SyncRuns.FinalizeExternalEventSync(syncRunId, request);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} finalizes {RegexFor.SINGLE_THING} with errors for all sync items")]
+    public async Task WhenIFinalizesSrWithErrorsForAllSyncItems(string identityName, string syncRunName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var syncRunId = _startSyncRunResponses[syncRunName].SyncRun.Id;
+
+        var externalEvents = await client.SyncRuns.ListExternalEventsOfSyncRun(syncRunId);
+
+        var request = new FinalizeExternalEventSyncRequest
+        {
+            DatawalletModifications = [],
+            ExternalEventResults = externalEvents.Result!.Select(e => new ExternalEventResult
+            {
+                ExternalEventId = e.Id,
+                ErrorCode = "some-error-code"
+            }).ToList()
+        };
+
+        _responseContext.WhenResponse = _finalizeExternalEventSyncResponse = await client.SyncRuns.FinalizeExternalEventSync(syncRunId, request);
     }
 
     #endregion
@@ -145,6 +190,18 @@ internal class SynchronizationStepDefinitions
             e.Type == "FileOwnershipClaimed" &&
             e.Payload["fileId"].GetString() == fileId &&
             e.Payload["newOwnerAddress"].GetString() == newOwnerAddress);
+    }
+
+    [Then("the response contains the information that new unsynced external events exist")]
+    public void ThenTheResponseContainsATheInformationThatNewUnsyncedExternalEventsExist()
+    {
+        _finalizeExternalEventSyncResponse!.Result!.NewUnsyncedExternalEventsExist.ShouldBeTrue();
+    }
+
+    [Then("the response contains the information that new unsynced external events do not exist")]
+    public void ThenTheResponseContainsATheInformationThatNewUnsyncedExternalEventsDoNotExist()
+    {
+        _finalizeExternalEventSyncResponse!.Result!.NewUnsyncedExternalEventsExist.ShouldBeFalse();
     }
 
     #endregion
