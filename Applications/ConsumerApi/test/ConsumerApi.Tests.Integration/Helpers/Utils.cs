@@ -17,12 +17,14 @@ namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 public static class Utils
 {
+    private static readonly JsonSerializerOptions JSON_OPTIONS = new() { IncludeFields = true };
+
     public static SignedChallenge CreateSignedChallenge(Client identity, Challenge challenge)
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = identity.IdentityData!.KeyPair!;
 
-        var serializedChallenge = JsonSerializer.Serialize(challenge, new JsonSerializerOptions { IncludeFields = true });
+        var serializedChallenge = JsonSerializer.Serialize(challenge, JSON_OPTIONS);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
 
         return new SignedChallenge(serializedChallenge, challengeSignature);
