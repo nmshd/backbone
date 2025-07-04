@@ -4,6 +4,12 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.Relation
 
 public class RelationshipReactivationRequestedDomainEvent : DomainEvent
 {
-    public required string RelationshipId { get; set; }
-    public required string Peer { get; set; }
+    public RelationshipReactivationRequestedDomainEvent(string relationshipId, string peer) : base($"{relationshipId}/Reactivate")
+    {
+        RelationshipId = relationshipId;
+        Peer = peer;
+    }
+
+    public string RelationshipId { get; }
+    public string Peer { get; }
 }

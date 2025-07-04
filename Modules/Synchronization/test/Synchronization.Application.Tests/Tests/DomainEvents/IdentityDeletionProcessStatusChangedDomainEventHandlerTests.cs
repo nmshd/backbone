@@ -14,8 +14,12 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
     {
         // Arrange
         var deletionProcessOwner = CreateRandomIdentityAddress();
+            <<<<<<< HEAD
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent
-        { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId" };
+                { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId" };
+            ====== =
+        var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", null);
+            >>>>>>> parent of 956b033b(WIP: required properties in events)
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
@@ -34,8 +38,12 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
     {
         // Arrange
         var deletionProcessOwner = CreateRandomIdentityAddress();
+            <<<<<<< HEAD
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent
-        { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId", Initiator = deletionProcessOwner };
+                { DeletionProcessOwner = deletionProcessOwner, DeletionProcessId = "someDeletionProcessId", Initiator = deletionProcessOwner };
+            ====== =
+        var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", deletionProcessOwner);
+            >>>>>>> parent of 956b033b(WIP: required properties in events)
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 

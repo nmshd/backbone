@@ -5,5 +5,5 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 
 public class FeatureFlagsOfIdentityChangedDomainEvent : DomainEvent
 {
-    public required IdentityAddress IdentityAddress { get; init; }
+    public IdentityAddress IdentityAddress { get; set; } = null!;
 }

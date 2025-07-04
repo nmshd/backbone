@@ -4,7 +4,14 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDele
 
 public class PeerDeletedDomainEvent : DomainEvent
 {
-    public required string PeerOfDeletedIdentity { get; set; }
-    public required string RelationshipId { get; set; }
-    public required string DeletedIdentity { get; set; }
+    public PeerDeletedDomainEvent(string peerOfDeletedIdentity, string relationshipId, string deletedIdentity)
+    {
+        PeerOfDeletedIdentity = peerOfDeletedIdentity;
+        RelationshipId = relationshipId;
+        DeletedIdentity = deletedIdentity;
+    }
+
+    public string PeerOfDeletedIdentity { get; }
+    public string RelationshipId { get; }
+    public string DeletedIdentity { get; }
 }

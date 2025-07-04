@@ -32,7 +32,7 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
-        await handler.Handle(new IdentityDeletionCancelledDomainEvent { IdentityAddress = identityWithDeletionCancelled });
+        await handler.Handle(new IdentityDeletionCancelledDomainEvent(identityWithDeletionCancelled));
 
         //Assert
         A.CallTo(() => mockEventBus.Publish(A<PeerDeletionCancelledDomainEvent>.That.Matches(e => e.PeerOfIdentityWithDeletionCancelled == peer1 &&

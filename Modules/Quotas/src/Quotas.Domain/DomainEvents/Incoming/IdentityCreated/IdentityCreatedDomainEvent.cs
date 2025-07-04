@@ -4,7 +4,13 @@ namespace Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.IdentityCreated;
 
 public class IdentityCreatedDomainEvent : DomainEvent
 {
-    public required string Address { get; set; }
+    public IdentityCreatedDomainEvent(string address, string tier)
+    {
+        Address = address;
+        Tier = tier;
+    }
 
-    public required string Tier { get; set; }
+    public string Address { get; private set; }
+
+    public string Tier { get; private set; }
 }
