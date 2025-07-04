@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.SseServer;
 using Backbone.SseServer.Controllers;
 using Backbone.Tooling.Extensions;
@@ -105,7 +106,13 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Queue_sends_keep_alive_event()
     {
         // Arrange
-        var config = new Configuration { SseServer = new Configuration.SseServerConfiguration { KeepAliveEventIntervalInSeconds = 1 } };
+        var config = new Configuration
+        {
+            Authentication = new Configuration.AuthenticationConfiguration(),
+            SseServer = new Configuration.SseServerConfiguration { KeepAliveEventIntervalInSeconds = 1 },
+            Cors = new Configuration.CorsConfiguration(),
+            Infrastructure = new Configuration.InfrastructureConfiguration { EventBus = new EventBusConfiguration { ProductName = "AzureServiceBus" } }
+        };
         var options = new OptionsWrapper<Configuration>(config);
 
         var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), options);
