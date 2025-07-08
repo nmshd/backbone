@@ -12,6 +12,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET /Announcements")]
+[Scope(Feature = "DELETE /Announcements/{id}")]
 [Scope(Feature = "POST /Announcements")]
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
@@ -148,6 +149,12 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When("^a DELETE request is sent to the /Announcements/a.Id endpoint$")]
+    public async Task WhenADeleteRequestIsSentToTheAnnouncementsAIdEndpoint()
+    {
+        _whenResponse = await _client.Announcements.DeleteById(_givenAnnouncement!.Id);
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
@@ -191,5 +198,12 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         _createAnnouncementResponse.Result.Actions.First().DisplayName.ShouldContainKey("en");
         _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].ShouldBe("Give feedback");
         _createAnnouncementResponse.Result.Actions.First().Link.ShouldBe("https://enmeshed.eu/feedback");
+    }
+
+    [Then("the Announcement a does not exist anymore")]
+    public async Task ThenTheAnnouncementADoesNotExistAnymore()
+    {
+        var announcements = await _client.Announcements.ListAnnouncements();
+        announcements.Result!.ShouldNotContain(a => a.Id == _givenAnnouncement!.Id);
     }
 }
