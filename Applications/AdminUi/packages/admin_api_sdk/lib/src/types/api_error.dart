@@ -16,4 +16,7 @@ class ApiError {
       message: json['message'] as String,
     );
   }
+
+  @override
+  String toString() => 'ApiError{id: $id, docs: $docs, time: $time, code: $code, message: $message}';
 }
