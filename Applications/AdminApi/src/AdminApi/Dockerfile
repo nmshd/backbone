@@ -11,7 +11,7 @@ WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:f353951d75cd99696c912ba7a29a1c6905fe0c1c7613e12e5318efed40d9b287 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:2346351dfe95ffdfe8352042647b2c9746c62cfc812eead9b9bf6154937c86ba AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
