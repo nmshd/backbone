@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 import '/core/core.dart';
 
@@ -134,6 +135,8 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 
       return;
     }
+
+    GetIt.I.get<Logger>().e('Failed to delete announcement: ${response.error}');
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
