@@ -8,38 +8,38 @@ public class Configuration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration? Cors { get; set; }
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
     public required InfrastructureConfiguration Infrastructure { get; init; }
 
     [Required]
-    public required SseServerConfiguration SseServer { get; set; }
+    public required SseServerConfiguration SseServer { get; init; }
 
     public class AuthenticationConfiguration
     {
         [Required]
-        public required string JwtSigningCertificate { get; set; } = "";
+        public required string JwtSigningCertificate { get; init; } = "";
     }
 
     public class CorsConfiguration
     {
         [Required]
-        public string AllowedOrigins { get; set; } = "";
+        public string AllowedOrigins { get; init; } = "";
 
         [Required]
-        public string ExposedHeaders { get; set; } = "";
+        public string ExposedHeaders { get; init; } = "";
     }
 
     public class InfrastructureConfiguration
     {
         [Required]
-        public required EventBusConfiguration EventBus { get; set; }
+        public required EventBusConfiguration EventBus { get; init; }
     }
 
     public class SseServerConfiguration
     {
         [Required]
-        public required int KeepAliveEventIntervalInSeconds { get; set; }
+        public required int KeepAliveEventIntervalInSeconds { get; init; }
     }
 }
