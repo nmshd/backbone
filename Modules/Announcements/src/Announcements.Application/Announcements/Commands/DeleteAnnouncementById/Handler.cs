@@ -19,10 +19,13 @@ public class Handler : IRequestHandler<DeleteAnnouncementByIdCommand>
 
     public async Task Handle(DeleteAnnouncementByIdCommand request, CancellationToken cancellationToken)
     {
-        var parsedIdentityAddress = AnnouncementId.Parse(request.Id);
-        var linesDeleted = await _announcementsRepository.Delete(parsedIdentityAddress, cancellationToken);
-        if (linesDeleted > 0) _logger.AnnouncementDeleted();
-        else throw new NotFoundException(nameof(Announcement));
+        var parsedId = AnnouncementId.Parse(request.Id);
+        var linesDeleted = await _announcementsRepository.Delete(parsedId, cancellationToken);
+
+        if (linesDeleted > 0)
+            _logger.AnnouncementDeleted();
+        else
+            throw new NotFoundException(nameof(Announcement));
     }
 }
 
