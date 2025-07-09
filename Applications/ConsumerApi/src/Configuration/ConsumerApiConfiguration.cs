@@ -8,64 +8,64 @@ public class ConsumerApiConfiguration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration? Cors { get; set; }
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
     public required ConsumerApiInfrastructureConfiguration Infrastructure { get; init; }
 
-    public AppOnboardingConfiguration? AppOnboarding { get; set; }
+    public AppOnboardingConfiguration? AppOnboarding { get; init; }
 
-    public WellKnownEndpointsConfiguration? WellKnownEndpoints { get; set; }
+    public WellKnownEndpointsConfiguration? WellKnownEndpoints { get; init; }
 
     public class WellKnownEndpointsConfiguration
     {
         [Required]
-        public required string[] AppleAppSiteAssociations { get; set; }
+        public required string[] AppleAppSiteAssociations { get; init; }
 
         [Required]
-        public required AndroidAssetLink[] AndroidAssetLinks { get; set; }
+        public required AndroidAssetLink[] AndroidAssetLinks { get; init; }
 
         public class AndroidAssetLink
         {
             [Required]
-            public required string PackageName { get; set; }
+            public required string PackageName { get; init; }
 
             [Required]
-            public required string[] Sha256CertFingerprints { get; set; }
+            public required string[] Sha256CertFingerprints { get; init; }
         }
     }
 
     public class AuthenticationConfiguration
     {
         [Required]
-        public required string JwtSigningCertificate { get; set; }
+        public required string JwtSigningCertificate { get; init; }
 
         [Required]
         [Range(60, 3600)]
-        public required int JwtLifetimeInSeconds { get; set; }
+        public required int JwtLifetimeInSeconds { get; init; }
     }
 
     public class CorsConfiguration
     {
         [Required]
-        public string AllowedOrigins { get; set; } = "";
+        public string AllowedOrigins { get; init; } = "";
 
         [Required]
-        public string ExposedHeaders { get; set; } = "";
+        public string ExposedHeaders { get; init; } = "";
     }
 
     public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
-        public required EventBusConfiguration EventBus { get; set; }
+        public required EventBusConfiguration EventBus { get; init; }
     }
 
     public class AppOnboardingConfiguration : IValidatableObject
     {
         [Required]
-        public required App[] Apps { get; set; }
+        public required App[] Apps { get; init; }
 
-        public string? DefaultAppId { get; set; }
+        public string? DefaultAppId { get; init; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -77,48 +77,48 @@ public class ConsumerApiConfiguration
         public class App
         {
             [Required]
-            public required string Id { get; set; }
+            public required string Id { get; init; }
 
             [Required]
-            public required string DisplayName { get; set; }
+            public required string DisplayName { get; init; }
 
             [Required]
-            public required string Description { get; set; }
+            public required string Description { get; init; }
 
             [Required]
-            public required StoreConfig AppleAppStore { get; set; }
+            public required StoreConfig AppleAppStore { get; init; }
 
             [Required]
-            public required StoreConfig GooglePlayStore { get; set; }
-
-            [Required]
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string BackgroundColor { get; set; } = "#FFFFFF";
+            public required StoreConfig GooglePlayStore { get; init; }
 
             [Required]
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string PrimaryColor { get; set; } = "#000000";
+            public string BackgroundColor { get; init; } = "#FFFFFF";
 
             [Required]
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string SecondaryColor { get; set; } = "#000000";
+            public string PrimaryColor { get; init; } = "#000000";
+
+            [Required]
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string SecondaryColor { get; init; } = "#000000";
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public required string BannerUrl { get; set; }
+            public required string BannerUrl { get; init; }
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public required string IconUrl { get; set; }
+            public required string IconUrl { get; init; }
 
             public class StoreConfig
             {
-                public string? AppLink { get; set; } = null!;
+                public string? AppLink { get; init; } = null!;
 
                 [Required]
-                public required string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
+                public required string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
     }
