@@ -22,11 +22,11 @@ public class AdminApiConfiguration
 
     public class CorsConfiguration
     {
-        [Required]
-        public string AllowedOrigins { get; init; } = string.Empty;
+        [Required(AllowEmptyStrings = true)]
+        public string AllowedOrigins { get; init; } = "";
 
-        [Required]
-        public string ExposedHeaders { get; init; } = string.Empty;
+        [Required(AllowEmptyStrings = true)]
+        public string ExposedHeaders { get; init; } = "";
 
         public bool AccessControlAllowCredentials { get; init; } = false;
     }

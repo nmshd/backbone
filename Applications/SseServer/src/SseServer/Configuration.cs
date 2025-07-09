@@ -24,10 +24,10 @@ public class Configuration
 
     public class CorsConfiguration
     {
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string AllowedOrigins { get; init; } = "";
 
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string ExposedHeaders { get; init; } = "";
     }
 
