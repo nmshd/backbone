@@ -8,25 +8,30 @@ public class ConsumerApiConfiguration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
+    public CorsConfiguration? Cors { get; set; }
 
     [Required]
     public required ConsumerApiInfrastructureConfiguration Infrastructure { get; init; }
 
-    public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
+    public AppOnboardingConfiguration? AppOnboarding { get; set; }
 
-    public WellKnownEndpointsConfiguration WellKnownEndpoints { get; set; } = new();
+    public WellKnownEndpointsConfiguration? WellKnownEndpoints { get; set; }
 
     public class WellKnownEndpointsConfiguration
     {
-        public string[] AppleAppSiteAssociations { get; set; } = [];
+        [Required]
+        public required string[] AppleAppSiteAssociations { get; set; }
 
-        public AndroidAssetLink[] AndroidAssetLinks { get; set; } = [];
+        [Required]
+        public required AndroidAssetLink[] AndroidAssetLinks { get; set; }
 
         public class AndroidAssetLink
         {
-            public string PackageName { get; set; } = "";
-            public string[] Sha256CertFingerprints { get; set; } = [];
+            [Required]
+            public required string PackageName { get; set; }
+
+            [Required]
+            public required string[] Sha256CertFingerprints { get; set; }
         }
     }
 
@@ -42,19 +47,23 @@ public class ConsumerApiConfiguration
 
     public class CorsConfiguration
     {
+        [Required]
         public string AllowedOrigins { get; set; } = "";
+
+        [Required]
         public string ExposedHeaders { get; set; } = "";
     }
 
     public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
-        public required EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; set; }
     }
 
     public class AppOnboardingConfiguration : IValidatableObject
     {
-        public App[] Apps { get; set; } = [];
+        [Required]
+        public required App[] Apps { get; set; }
 
         public string? DefaultAppId { get; set; }
 
@@ -82,12 +91,15 @@ public class ConsumerApiConfiguration
             [Required]
             public required StoreConfig GooglePlayStore { get; set; }
 
+            [Required]
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string BackgroundColor { get; set; } = "#FFFFFF";
 
+            [Required]
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string PrimaryColor { get; set; } = "#000000";
 
+            [Required]
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string SecondaryColor { get; set; } = "#000000";
 
@@ -104,7 +116,9 @@ public class ConsumerApiConfiguration
             public class StoreConfig
             {
                 public string? AppLink { get; set; } = null!;
-                public string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
+
+                [Required]
+                public required string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
     }

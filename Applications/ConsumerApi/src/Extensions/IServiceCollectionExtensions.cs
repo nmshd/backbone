@@ -23,8 +23,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, ConsumerApiConfiguration configuration)
     {
         services
-            .AddControllersWithViews(
-                options =>
+            .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));
 
@@ -85,17 +84,20 @@ public static class IServiceCollectionExtensions
                 policy.RequireAuthenticatedUser();
             });
 
-        services.AddCors(options =>
+        if (configuration.Cors != null)
         {
-            options.AddDefaultPolicy(builder =>
+            services.AddCors(options =>
             {
-                builder
-                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-        });
+        }
 
         services.AddHttpContextAccessor();
 
