@@ -65,17 +65,20 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
-        services.AddCors(options =>
+        if (configuration.Cors != null)
         {
-            options.AddDefaultPolicy(builder =>
+            services.AddCors(options =>
             {
-                builder
-                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-        });
+        }
 
         services.AddAuthentication().AddJwtBearer("default", options =>
         {

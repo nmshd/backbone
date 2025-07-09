@@ -8,21 +8,26 @@ public class Configuration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
-    public required CorsConfiguration Cors { get; set; }
+    public CorsConfiguration? Cors { get; set; }
 
     [Required]
     public required InfrastructureConfiguration Infrastructure { get; init; }
 
-    public SseServerConfiguration SseServer { get; set; } = new();
+    [Required]
+    public required SseServerConfiguration SseServer { get; set; }
 
     public class AuthenticationConfiguration
     {
-        public string JwtSigningCertificate { get; set; } = "";
+        [Required]
+        public required string JwtSigningCertificate { get; set; } = "";
     }
 
     public class CorsConfiguration
     {
+        [Required]
         public string AllowedOrigins { get; set; } = "";
+
+        [Required]
         public string ExposedHeaders { get; set; } = "";
     }
 
@@ -34,6 +39,7 @@ public class Configuration
 
     public class SseServerConfiguration
     {
-        public int KeepAliveEventIntervalInSeconds { get; set; } = 240;
+        [Required]
+        public required int KeepAliveEventIntervalInSeconds { get; set; }
     }
 }
