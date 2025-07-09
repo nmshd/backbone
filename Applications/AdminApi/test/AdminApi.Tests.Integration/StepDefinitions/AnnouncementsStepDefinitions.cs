@@ -149,10 +149,16 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("^a DELETE request is sent to the /Announcements/a.Id endpoint$")]
+    [When("^a DELETE request is sent to the /Announcements/{id} endpoint with a.Id$")]
     public async Task WhenADeleteRequestIsSentToTheAnnouncementsAIdEndpoint()
     {
         _whenResponse = await _client.Announcements.DeleteById(_givenAnnouncement!.Id);
+    }
+
+    [When("^a DELETE request is sent to the /Announcements/{id} endpoint with a non existing id$")]
+    public async Task WhenADeleteRequestIsSentToTheAnnouncementsIdEndpointWithANonExistingId()
+    {
+        _whenResponse = await _client.Announcements.DeleteById("ANCnonExistingId0000");
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
