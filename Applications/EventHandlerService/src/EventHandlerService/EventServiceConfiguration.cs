@@ -6,11 +6,11 @@ namespace Backbone.EventHandlerService;
 public class EventServiceConfiguration
 {
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 }
 
 public class InfrastructureConfiguration
 {
     [Required]
-    public EventBusConfiguration EventBus { get; set; } = new();
+    public required EventBusConfiguration EventBus { get; init; }
 }
