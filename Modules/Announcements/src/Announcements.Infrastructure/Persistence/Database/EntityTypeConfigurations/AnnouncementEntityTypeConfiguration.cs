@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Database.EntityTypeConfigurations;
@@ -18,7 +19,7 @@ public class AnnouncementEntityTypeConfiguration : EntityEntityTypeConfiguration
         builder.Property(a => a.IqlQuery);
         builder.Property(a => a.IsSilent);
 
-        builder.HasMany(a => a.Texts).WithOne();
-        builder.HasMany(a => a.Actions).WithOne();
+        builder.HasMany(a => a.Texts).WithOne().OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(a => a.Actions).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }
