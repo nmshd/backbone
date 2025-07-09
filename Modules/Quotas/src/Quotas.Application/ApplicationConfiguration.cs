@@ -6,5 +6,5 @@ namespace Backbone.Modules.Quotas.Application;
 public class ApplicationConfiguration
 {
     [Required]
-    public required PaginationConfiguration Pagination { get; set; }
+    public required PaginationConfiguration Pagination { get; init; }
 }

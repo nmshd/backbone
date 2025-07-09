@@ -7,7 +7,7 @@ public class ApplicationConfiguration
 {
     [Required]
     [Range(1, 100)]
-    public required int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
+    public required int MaxNumberOfUnreceivedMessagesFromOneSender { get; init; }
 
     [Required]
     public required PaginationConfiguration Pagination { get; init; }
