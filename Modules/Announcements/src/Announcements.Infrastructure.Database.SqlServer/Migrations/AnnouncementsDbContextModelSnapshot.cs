@@ -19,7 +19,7 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
             modelBuilder
                 .HasDefaultSchema("Announcements")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -139,7 +139,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
                         .WithMany("Actions")
-                        .HasForeignKey("AnnouncementId");
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
