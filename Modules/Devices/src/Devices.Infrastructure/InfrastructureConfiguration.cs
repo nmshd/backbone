@@ -7,8 +7,8 @@ namespace Backbone.Modules.Devices.Infrastructure;
 public class InfrastructureConfiguration
 {
     [Required]
-    public required DatabaseConfiguration SqlDatabase { get; set; }
+    public required DatabaseConfiguration SqlDatabase { get; init; }
 
     [Required]
-    public required PushNotificationConfiguration PushNotifications { get; set; }
+    public required PushNotificationConfiguration PushNotifications { get; init; }
 }
