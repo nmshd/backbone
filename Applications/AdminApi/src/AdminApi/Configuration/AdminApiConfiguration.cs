@@ -9,7 +9,7 @@ public class AdminApiConfiguration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
     public required InfrastructureConfiguration Infrastructure { get; init; }
@@ -22,8 +22,12 @@ public class AdminApiConfiguration
 
     public class CorsConfiguration
     {
+        [Required]
         public string AllowedOrigins { get; set; } = string.Empty;
+
+        [Required]
         public string ExposedHeaders { get; set; } = string.Empty;
+
         public bool AccessControlAllowCredentials { get; set; } = false;
     }
 
