@@ -7,14 +7,14 @@ namespace Backbone.AdminCli.Configuration;
 public class AdminCliConfiguration
 {
     [Required]
-    public required AdminInfrastructureConfiguration Infrastructure { get; set; }
+    public required AdminInfrastructureConfiguration Infrastructure { get; init; }
 
     public class AdminInfrastructureConfiguration
     {
         [Required]
-        public required EventBusConfiguration EventBus { get; set; }
+        public required EventBusConfiguration EventBus { get; init; }
 
         [Required]
-        public required DatabaseConfiguration SqlDatabase { get; set; }
+        public required DatabaseConfiguration SqlDatabase { get; init; }
     }
 }
