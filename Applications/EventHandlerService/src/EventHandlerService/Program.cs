@@ -82,11 +82,11 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((hostContext, services) =>
         {
             var configuration = hostContext.Configuration;
-            services.ConfigureAndValidate<EventServiceConfiguration>(configuration.Bind);
+            services.ConfigureAndValidate<EventHandlerServiceConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
             var parsedConfiguration =
-                services.BuildServiceProvider().GetRequiredService<IOptions<EventServiceConfiguration>>().Value;
+                services.BuildServiceProvider().GetRequiredService<IOptions<EventHandlerServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
             services.AddTransient<IHostedService, EventHandlerService>();

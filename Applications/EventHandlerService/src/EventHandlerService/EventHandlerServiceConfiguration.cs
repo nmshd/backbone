@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.EventHandlerService;
 
-public class EventServiceConfiguration
+public class EventHandlerServiceConfiguration
 {
     [Required]
     public required InfrastructureConfiguration Infrastructure { get; init; }
