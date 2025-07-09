@@ -2,7 +2,7 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.6]" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.7]" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.1.0]" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.6]" />
