@@ -17,4 +17,9 @@ public class AnnouncementsEndpoint(EndpointClient client) : AdminApiEndpoint(cli
     {
         return await _client.Get<ListAnnouncementsResponse>($"api/{API_VERSION}/Announcements");
     }
+
+    public async Task<ApiResponse<EmptyResponse>> DeleteById(string id)
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Announcements/{id}");
+    }
 }

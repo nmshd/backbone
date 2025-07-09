@@ -60,7 +60,10 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   rows: _announcements
                       .map(
                         (announcement) => DataRow2(
-                          onTap: () => context.go('/announcements/${announcement.id}'),
+                          onTap: () async {
+                            await context.push('/announcements/${announcement.id}');
+                            await _reloadAnnouncements();
+                          },
                           cells: [
                             DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
                             DataCell(
