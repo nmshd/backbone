@@ -8,9 +8,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public static class IServiceCollectionExtensions
 {
-    public const string SQLSERVER = "SqlServer";
-    public const string POSTGRES = "Postgres";
-
     public static IServiceCollection AddSaveChangesTimeInterceptor(this IServiceCollection services)
     {
         if (EnvironmentVariables.DEBUG_PERFORMANCE)
@@ -30,8 +27,8 @@ public static class IServiceCollectionExtensions
             {
                 var migrationsAssemblyNameTemplate = p switch
                 {
-                    SQLSERVER => sqlserverMigrationsAssembly,
-                    POSTGRES => postgresMigrationsAssembly,
+                    DatabaseConfiguration.SQLSERVER => sqlserverMigrationsAssembly,
+                    DatabaseConfiguration.POSTGRES => postgresMigrationsAssembly,
                     _ => throw new Exception($"Unsupported database provider for module {moduleName}")
                 };
 
@@ -50,7 +47,7 @@ public static class IServiceCollectionExtensions
 
             switch (configuration.Provider)
             {
-                case SQLSERVER:
+                case DatabaseConfiguration.SQLSERVER:
                     dbContextOptions.UseSqlServer(configuration.ConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(configuration.CommandTimeout);
@@ -59,7 +56,7 @@ public static class IServiceCollectionExtensions
                         sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schemaName);
                     });
                     break;
-                case POSTGRES:
+                case DatabaseConfiguration.POSTGRES:
                     dbContextOptions.UseNpgsql(configuration.ConnectionString, sqlOptions =>
                     {
                         sqlOptions.CommandTimeout(configuration.CommandTimeout);

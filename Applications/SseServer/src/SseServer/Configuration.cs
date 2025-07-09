@@ -19,7 +19,7 @@ public class Configuration
     public class AuthenticationConfiguration
     {
         [Required]
-        public required string JwtSigningCertificate { get; init; } = "";
+        public required string JwtSigningCertificate { get; init; }
     }
 
     public class CorsConfiguration

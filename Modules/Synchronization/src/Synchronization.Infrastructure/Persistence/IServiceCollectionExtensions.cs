@@ -7,14 +7,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPersistence(this IServiceCollection services, Action<DatabaseConfiguration> setupOptions)
-    {
-        var options = new DatabaseConfiguration();
-        setupOptions.Invoke(options);
-
-        services.AddPersistence(options);
-    }
-
     public static void AddPersistence(this IServiceCollection services, DatabaseConfiguration options)
     {
         services.AddDatabase(options);

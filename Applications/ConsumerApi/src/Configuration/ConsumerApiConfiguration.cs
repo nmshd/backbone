@@ -118,7 +118,7 @@ public class ConsumerApiConfiguration
                 public string? AppLink { get; init; } = null!;
 
                 [Required]
-                public required string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
+                public string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
     }

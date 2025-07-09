@@ -52,24 +52,24 @@ public static class RabbitMqServiceCollectionExtensions
 public class RabbitMqConfiguration
 {
     [Required]
-    public bool EnableSsl { get; set; } = true;
+    public bool EnableSsl { get; init; } = true;
 
     [Required]
     [MinLength(1)]
-    public string ExchangeName { get; set; } = "enmeshed";
+    public string ExchangeName { get; init; } = "enmeshed";
 
     [Required]
     [MinLength(1)]
-    public string HostName { get; set; } = null!;
+    public required string HostName { get; init; }
 
     [Required]
-    public int Port { get; set; } = 5672;
-
-    [Required]
-    [MinLength(1)]
-    public string Username { get; set; } = null!;
+    public int Port { get; init; } = 5672;
 
     [Required]
     [MinLength(1)]
-    public string Password { get; set; } = null!;
+    public required string Username { get; init; }
+
+    [Required]
+    [MinLength(1)]
+    public required string Password { get; init; }
 }
