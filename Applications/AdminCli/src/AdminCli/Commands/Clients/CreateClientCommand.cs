@@ -55,13 +55,18 @@ public class CreateClientCommand : AdminCliCommand
         });
     }
 
-    private async Task CreateClient(string? clientId,
-        string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
+    private async Task CreateClient(string? clientId, string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
     {
-        var response = await _mediator.Send(
-            new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand
-            { ClientId = clientId, DisplayName = displayName, ClientSecret = clientSecret, DefaultTier = defaultTier, MaxIdentities = maxIdentities },
-            CancellationToken.None);
+        var command = new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand
+        {
+            ClientId = clientId,
+            DisplayName = displayName,
+            ClientSecret = clientSecret,
+            DefaultTier = defaultTier,
+            MaxIdentities = maxIdentities
+        };
+
+        var response = await _mediator.Send(command, CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine(@"Please note the secret since you cannot obtain it later.");

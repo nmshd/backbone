@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.SseServer;
 using Backbone.SseServer.Controllers;
 using Backbone.Tooling.Extensions;
@@ -15,7 +14,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Cannot_register_if_already_registered()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
         queue.Register("testAddress", CancellationToken.None);
 
         // Act
@@ -29,7 +28,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Can_deregister_even_if_not_registered()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
 
         // Act
         var acting = () => queue.Deregister("testAddress");
@@ -42,7 +41,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Cannot_enqueue_for_identity_that_is_not_registered()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
 
         // Act
         var acting = () => queue.EnqueueFor("testAddress", "testEventName", CancellationToken.None);
@@ -55,7 +54,7 @@ public class EventQueueTests : AbstractTestsBase
     public void Cannot_dequeue_for_identity_that_is_not_registered()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
 
         // Act
         var acting = () => queue.DequeueFor("testAddress", CancellationToken.None);
@@ -68,7 +67,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Dequeue_returns_elements_from_the_queue()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
         queue.Register("testAddress", CancellationToken.None);
 
         await queue.EnqueueFor("testAddress", "event1", CancellationToken.None);
@@ -87,7 +86,7 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Dequeue_only_returns_elements_for_the_given_identity()
     {
         // Arrange
-        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration>>());
+        var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), A.Fake<IOptions<Configuration.SseServerConfiguration>>());
         queue.Register("testAddress1", CancellationToken.None);
         queue.Register("testAddress2", CancellationToken.None);
 
@@ -106,14 +105,8 @@ public class EventQueueTests : AbstractTestsBase
     public async Task Queue_sends_keep_alive_event()
     {
         // Arrange
-        var config = new Configuration
-        {
-            Authentication = new Configuration.AuthenticationConfiguration(),
-            SseServer = new Configuration.SseServerConfiguration { KeepAliveEventIntervalInSeconds = 1 },
-            Cors = new Configuration.CorsConfiguration(),
-            Infrastructure = new Configuration.InfrastructureConfiguration { EventBus = new EventBusConfiguration { ProductName = "AzureServiceBus" } }
-        };
-        var options = new OptionsWrapper<Configuration>(config);
+        var config = new Configuration.SseServerConfiguration { KeepAliveEventIntervalInSeconds = 1 };
+        var options = new OptionsWrapper<Configuration.SseServerConfiguration>(config);
 
         var queue = new EventQueue(A.Fake<ILogger<EventQueue>>(), options);
         queue.Register("testAddress", CancellationToken.None);

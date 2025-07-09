@@ -7,12 +7,12 @@ namespace Backbone.SseServer.Controllers;
 public class EventQueue : IEventQueue
 {
     public const string KEEP_ALIVE_EVENT = "keep-alive";
+    private readonly ConcurrentDictionary<string, Channel<string>> _channels = new();
+    private readonly Configuration.SseServerConfiguration _configuration;
 
     private readonly ILogger<EventQueue> _logger;
-    private readonly ConcurrentDictionary<string, Channel<string>> _channels = new();
-    private readonly Configuration _configuration;
 
-    public EventQueue(ILogger<EventQueue> logger, IOptions<Configuration> options)
+    public EventQueue(ILogger<EventQueue> logger, IOptions<Configuration.SseServerConfiguration> options)
     {
         _logger = logger;
         _configuration = options.Value;
@@ -54,7 +54,7 @@ public class EventQueue : IEventQueue
 
     private async Task SendKeepAliveEvents(string address, CancellationToken cancellationToken)
     {
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(_configuration.SseServer.KeepAliveEventIntervalInSeconds));
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(_configuration.KeepAliveEventIntervalInSeconds));
         while (await timer.WaitForNextTickAsync(cancellationToken))
         {
             if (!_channels.ContainsKey(address)) break;

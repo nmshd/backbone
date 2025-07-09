@@ -31,9 +31,13 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult =
-            validator.TestValidate(new ListRelationshipTemplatesQuery
-            { PaginationFilter = new PaginationFilter(), QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New() }] });
+        var command = new ListRelationshipTemplatesQuery
+        {
+            PaginationFilter = new PaginationFilter(),
+            QueryItems = [new ListRelationshipTemplatesQueryItem { Id = RelationshipTemplateId.New() }]
+        };
+
+        var validationResult = validator.TestValidate(command);
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

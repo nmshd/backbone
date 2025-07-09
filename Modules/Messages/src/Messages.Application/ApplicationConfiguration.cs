@@ -5,8 +5,9 @@ namespace Backbone.Modules.Messages.Application;
 
 public class ApplicationConfiguration
 {
+    [Required]
     [Range(1, 100)]
-    public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
+    public required int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 
     [Required]
     public required PaginationConfiguration Pagination { get; init; }

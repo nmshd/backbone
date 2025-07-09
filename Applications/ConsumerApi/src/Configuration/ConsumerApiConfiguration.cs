@@ -33,7 +33,7 @@ public class ConsumerApiConfiguration
     public class AuthenticationConfiguration
     {
         [Required]
-        public string JwtSigningCertificate { get; set; } = "";
+        public required string JwtSigningCertificate { get; set; }
 
         [Required]
         [Range(60, 3600)]
@@ -49,7 +49,7 @@ public class ConsumerApiConfiguration
     public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; set; } = new();
     }
 
     public class AppOnboardingConfiguration : IValidatableObject
@@ -77,10 +77,10 @@ public class ConsumerApiConfiguration
             public required string Description { get; set; }
 
             [Required]
-            public StoreConfig AppleAppStore { get; set; } = new();
+            public required StoreConfig AppleAppStore { get; set; }
 
             [Required]
-            public StoreConfig GooglePlayStore { get; set; } = new();
+            public required StoreConfig GooglePlayStore { get; set; }
 
             [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
             public string BackgroundColor { get; set; } = "#FFFFFF";
@@ -94,12 +94,12 @@ public class ConsumerApiConfiguration
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public string BannerUrl { get; set; } = null!;
+            public required string BannerUrl { get; set; }
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public string IconUrl { get; set; } = null!;
+            public required string IconUrl { get; set; }
 
             public class StoreConfig
             {

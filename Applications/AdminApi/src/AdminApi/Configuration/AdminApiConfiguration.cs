@@ -17,7 +17,7 @@ public class AdminApiConfiguration
     public class AuthenticationConfiguration
     {
         [Required]
-        public string ApiKey { get; set; } = string.Empty;
+        public required string ApiKey { get; init; }
     }
 
     public class CorsConfiguration
@@ -30,9 +30,9 @@ public class AdminApiConfiguration
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; init; }
 
         [Required]
-        public DatabaseConfiguration SqlDatabase { get; set; } = new();
+        public required DatabaseConfiguration SqlDatabase { get; init; }
     }
 }
