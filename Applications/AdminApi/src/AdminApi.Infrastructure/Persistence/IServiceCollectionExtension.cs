@@ -15,8 +15,8 @@ public static class IServiceCollectionExtensions
         services.AddDbContext<AdminApiDbContext>(configuration,
             p => p switch
             {
-                BuildingBlocks.Infrastructure.Persistence.Database.IServiceCollectionExtensions.SQLSERVER => SQLSERVER_MIGRATIONS_ASSEMBLY,
-                BuildingBlocks.Infrastructure.Persistence.Database.IServiceCollectionExtensions.POSTGRES => POSTGRES_MIGRATIONS_ASSEMBLY,
+                DatabaseConfiguration.SQLSERVER => SQLSERVER_MIGRATIONS_ASSEMBLY,
+                DatabaseConfiguration.POSTGRES => POSTGRES_MIGRATIONS_ASSEMBLY,
                 _ => throw new Exception("Unsupported database provider for Admin API")
             }, "AdminUi", queryTrackingBehavior: QueryTrackingBehavior.NoTracking);
 

@@ -80,7 +80,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        var identity = await _mediator.Send(new GetIdentityQuery(identityAddress.Value));
+        var identity = await _mediator.Send(new GetIdentityQuery { Address = identityAddress.Value });
 
         foreach (var identityDeleter in _identityDeleters)
         {
@@ -89,7 +89,7 @@ public class ActualDeletionWorker : IHostedService
 
         var usernames = identity.Devices.Select(d => d.Username);
 
-        await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress.Value, usernames));
+        await _mediator.Send(new HandleCompletedDeletionProcessCommand { IdentityAddress = identityAddress.Value, Usernames = usernames });
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)

@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetIdentityQuery(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new GetIdentityQuery { Address = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +26,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetIdentityQuery("some-invalid-address"));
+        var validationResult = validator.TestValidate(new GetIdentityQuery { Address = "some-invalid-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(GetIdentityQuery.Address));

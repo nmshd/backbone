@@ -23,13 +23,13 @@ public class GoogleCloudPubSubConfiguration
 {
     [Required]
     [Length(4, 30)]
-    public string ProjectId { get; set; } = null!;
+    public required string ProjectId { get; init; }
 
     [Required]
     [Length(1, 255)]
-    public string TopicName { get; set; } = null!;
+    public required string TopicName { get; init; }
 
     [Required]
     [MinLength(50)]
-    public string ServiceAccountJson { get; set; } = null!;
+    public required string ServiceAccountJson { get; init; }
 }

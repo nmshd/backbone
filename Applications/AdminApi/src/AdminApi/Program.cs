@@ -188,7 +188,7 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny");
 
-        if (configuration.Cors.AccessControlAllowCredentials)
+        if (configuration.Cors is { AccessControlAllowCredentials: true })
             policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
     });
 

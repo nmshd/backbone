@@ -4,10 +4,5 @@ namespace Backbone.Modules.Announcements.Application.Announcements.Commands.Dele
 
 public record DeleteAnnouncementRecipientsCommand : IRequest
 {
-    public DeleteAnnouncementRecipientsCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; }
+    public required string IdentityAddress { get; init; }
 }

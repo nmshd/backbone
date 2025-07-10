@@ -25,7 +25,7 @@ public static class GoogleCloudStorageServiceCollectionExtensions
 
 public class GoogleCloudStorageConfiguration
 {
-    public required string? ServiceAccountJson { get; set; }
+    public string? ServiceAccountJson { get; set; }
 
     [Required]
     [MinLength(2)]

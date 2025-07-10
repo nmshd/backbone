@@ -5,14 +5,14 @@ namespace Backbone.ConsumerApi.Tests.Integration.Configuration;
 public class HttpConfiguration
 {
     [Required]
-    public ClientCredentialsConfiguration ClientCredentials { get; set; } = new();
+    public required ClientCredentialsConfiguration ClientCredentials { get; set; }
 }
 
 public class ClientCredentialsConfiguration
 {
     [Required]
-    public string ClientId { get; set; } = string.Empty;
+    public required string ClientId { get; set; }
 
     [Required]
-    public string ClientSecret { get; set; } = string.Empty;
+    public required string ClientSecret { get; set; }
 }

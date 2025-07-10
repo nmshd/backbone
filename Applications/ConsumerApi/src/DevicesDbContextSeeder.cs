@@ -44,7 +44,7 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
     {
         if (await GetBasicTier(context) == null)
         {
-            await _mediator.Send(new CreateTierCommand(TierName.BASIC_DEFAULT_NAME));
+            await _mediator.Send(new CreateTierCommand { Name = TierName.BASIC_DEFAULT_NAME });
         }
     }
 

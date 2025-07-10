@@ -14,7 +14,8 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var peerOfIdentityWithDeletionCancelled = CreateRandomIdentityAddress();
-        var domainEvent = new PeerDeletionCancelledDomainEvent { PeerOfIdentityWithDeletionCancelled = peerOfIdentityWithDeletionCancelled, RelationshipId = "some-relationship-id", IdentityWithDeletionCancelled = "some-deletedIdentity-id" };
+        var domainEvent = new PeerDeletionCancelledDomainEvent
+        { PeerOfIdentityWithDeletionCancelled = peerOfIdentityWithDeletionCancelled, RelationshipId = "some-relationship-id", IdentityWithDeletionCancelled = "some-deletedIdentity-id" };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 

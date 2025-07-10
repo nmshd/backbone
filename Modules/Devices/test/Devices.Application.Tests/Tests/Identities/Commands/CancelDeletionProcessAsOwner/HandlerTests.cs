@@ -31,7 +31,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
-        var response = await handler.Handle(new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id), CancellationToken.None);
+        var response = await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = deletionProcess.Id }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
@@ -58,7 +58,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = address }, CancellationToken.None);
 
         // Assert
         acting.ShouldThrowAsync<NotFoundException>();

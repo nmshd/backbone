@@ -43,7 +43,7 @@ public class AnnouncementsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAnnouncement(string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetAnnouncementByIdQuery(id), cancellationToken);
+        var response = await _mediator.Send(new GetAnnouncementByIdQuery { Id = id }, cancellationToken);
         return Ok(response);
     }
 

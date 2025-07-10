@@ -5,11 +5,11 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.S
 public class SseConfiguration
 {
     [Required]
-    public required bool Enabled { get; set; }
+    public required bool Enabled { get; init; }
 
-    public required bool EnableHealthCheck { get; set; } = false;
+    public bool EnableHealthCheck { get; init; } = false;
 
     [Url]
     [RequiredIf(nameof(Enabled), true)]
-    public required string SseServerBaseAddress { get; set; }
+    public required string SseServerBaseAddress { get; init; }
 }

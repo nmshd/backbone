@@ -20,7 +20,7 @@ public class HandlerTests : AbstractTestsBase
         var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tierId = TierId.Parse("TIRsomeTierId1111111");
         var identity = new Identity(CreateRandomIdentityAddress(), tierId);
-        var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand { IdentityAddress = identity.Address, MetricKey = metricKey.Value, Max = 5, Period = QuotaPeriod.Month };
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);

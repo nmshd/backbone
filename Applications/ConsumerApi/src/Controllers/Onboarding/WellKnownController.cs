@@ -8,7 +8,7 @@ namespace Backbone.ConsumerApi.Controllers.Onboarding;
 [Route(".well-known")]
 public class WellKnownController : Controller
 {
-    private readonly ConsumerApiConfiguration.WellKnownEndpointsConfiguration _configuration;
+    private readonly ConsumerApiConfiguration.WellKnownEndpointsConfiguration? _configuration;
 
     public WellKnownController(IOptions<ConsumerApiConfiguration> configuration)
     {
@@ -18,19 +18,21 @@ public class WellKnownController : Controller
     [HttpGet("apple-app-site-association")]
     public IActionResult AppleAppSiteAssociation()
     {
-        return Json(new AppleAppSiteAssociation(_configuration.AppleAppSiteAssociations));
+        return _configuration == null ? NotFound() : Json(new AppleAppSiteAssociation(_configuration.AppleAppSiteAssociations));
     }
 
     [HttpGet("assetlinks.json")]
     public IActionResult AndroidAssetLinks()
     {
-        return Json(_configuration.AndroidAssetLinks.Select(a => new AndroidAssetLink(
-            new AndroidAssetLink.TargetModel
-            {
-                PackageName = a.PackageName,
-                Sha256CertFingerprints = a.Sha256CertFingerprints
-            }
-        )));
+        return _configuration == null
+            ? NotFound()
+            : Json(_configuration.AndroidAssetLinks.Select(a => new AndroidAssetLink(
+                new AndroidAssetLink.TargetModel
+                {
+                    PackageName = a.PackageName,
+                    Sha256CertFingerprints = a.Sha256CertFingerprints
+                }
+            )));
     }
 }
 

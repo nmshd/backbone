@@ -6,11 +6,11 @@ namespace Backbone.DatabaseMigrator;
 public class Configuration
 {
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = null!;
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 }
 
 public class InfrastructureConfiguration
 {
     [Required]
-    public DatabaseConfiguration SqlDatabase { get; set; } = null!;
+    public required DatabaseConfiguration SqlDatabase { get; init; }
 }

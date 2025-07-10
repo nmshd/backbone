@@ -85,7 +85,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ApproveDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ApproveDeletionProcessCommand(id), cancellationToken);
+        var response = await _mediator.Send(new ApproveDeletionProcessCommand { DeletionProcessId = id }, cancellationToken);
         return Ok(response);
     }
 
@@ -95,7 +95,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RejectDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RejectDeletionProcessCommand(id), cancellationToken);
+        var response = await _mediator.Send(new RejectDeletionProcessCommand { DeletionProcessId = id }, cancellationToken);
         return Ok(response);
     }
 
@@ -123,7 +123,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand(id), cancellationToken);
+        var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = id }, cancellationToken);
         return Ok(response);
     }
 

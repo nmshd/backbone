@@ -6,15 +6,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 
 public static class S3ServiceCollectionExtensions
 {
-    public static void AddS3(this IServiceCollection services,
-        Action<S3BucketConfiguration> setupOptions)
-    {
-        var options = new S3BucketConfiguration();
-        setupOptions.Invoke(options);
-
-        services.AddS3(options);
-    }
-
     public static void AddS3(this IServiceCollection services, S3BucketConfiguration configuration)
     {
         services.Configure<S3BucketConfiguration>(s3Options =>
@@ -32,14 +23,14 @@ public static class S3ServiceCollectionExtensions
 public class S3BucketConfiguration
 {
     [Required]
-    public string ServiceUrl { get; set; } = string.Empty;
+    public required string ServiceUrl { get; set; }
 
     [Required]
-    public string AccessKeyId { get; set; } = string.Empty;
+    public required string AccessKeyId { get; set; }
 
     [Required]
-    public string SecretAccessKey { get; set; } = string.Empty;
+    public required string SecretAccessKey { get; set; }
 
     [Required]
-    public string BucketName { get; set; } = string.Empty;
+    public required string BucketName { get; set; }
 }

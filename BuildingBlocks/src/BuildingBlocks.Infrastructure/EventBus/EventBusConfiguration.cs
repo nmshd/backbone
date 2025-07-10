@@ -7,13 +7,23 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public class EventBusConfiguration
 {
+    public const string AZURE = "AzureServiceBus";
+    public const string GOOGLE_CLOUD = "GoogleCloudPubSub";
+    public const string RABBIT_MQ = "RabbitMQ";
+
     [Required]
-    [RegularExpression("AzureServiceBus|GoogleCloudPubSub|RabbitMQ")]
-    public string ProductName { get; set; } = null!;
+    [RegularExpression($"{AZURE}|{GOOGLE_CLOUD}|{RABBIT_MQ}")]
+    public required string ProductName { get; init; }
 
-    public RabbitMqConfiguration RabbitMq { get; set; } = null!;
 
-    public ServiceBusOptions AzureServiceBus { get; set; } = null!;
+    [RequiredIf(nameof(ProductName), RABBIT_MQ)]
+    public RabbitMqConfiguration RabbitMq { get; init; } = null!;
 
-    public GoogleCloudPubSubConfiguration GoogleCloudPubSub { get; set; } = null!;
+
+    [RequiredIf(nameof(ProductName), AZURE)]
+    public ServiceBusOptions AzureServiceBus { get; init; } = null!;
+
+
+    [RequiredIf(nameof(ProductName), GOOGLE_CLOUD)]
+    public GoogleCloudPubSubConfiguration GoogleCloudPubSub { get; init; } = null!;
 }

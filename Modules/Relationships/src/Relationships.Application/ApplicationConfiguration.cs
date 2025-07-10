@@ -6,10 +6,10 @@ namespace Backbone.Modules.Relationships.Application;
 public class ApplicationConfiguration
 {
     [Required]
-    public PaginationConfiguration Pagination { get; set; } = new();
+    public required PaginationConfiguration Pagination { get; init; }
 
     [Required]
     [MinLength(3)]
     [MaxLength(45)]
-    public string DidDomainName { get; set; } = null!;
+    public required string DidDomainName { get; init; }
 }

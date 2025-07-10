@@ -14,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListIdentitiesQuery([CreateRandomIdentityAddress()], IdentityStatus.Active));
+        var validationResult = validator.TestValidate(new ListIdentitiesQuery { Addresses = [CreateRandomIdentityAddress()], Status = IdentityStatus.Active });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,7 +27,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListIdentitiesQuery(["some-invalid-address"], IdentityStatus.Active));
+        var validationResult = validator.TestValidate(new ListIdentitiesQuery { Addresses = ["some-invalid-address"], Status = IdentityStatus.Active });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(

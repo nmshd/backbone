@@ -113,6 +113,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
     services.AddCustomIdentity(environment);
+
+    services.Configure(parsedConfiguration.SseServer);
 }
 
 static void Configure(WebApplication app)

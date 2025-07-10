@@ -6,34 +6,40 @@ namespace Backbone.SseServer;
 public class Configuration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 
-    public SseServerConfiguration SseServer { get; set; } = new();
+    [Required]
+    public required SseServerConfiguration SseServer { get; init; }
 
     public class AuthenticationConfiguration
     {
-        public string JwtSigningCertificate { get; set; } = "";
+        [Required]
+        public required string JwtSigningCertificate { get; init; }
     }
 
     public class CorsConfiguration
     {
-        public string AllowedOrigins { get; set; } = "";
-        public string ExposedHeaders { get; set; } = "";
+        [Required(AllowEmptyStrings = true)]
+        public string AllowedOrigins { get; init; } = "";
+
+        [Required(AllowEmptyStrings = true)]
+        public string ExposedHeaders { get; init; } = "";
     }
 
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; init; }
     }
 
     public class SseServerConfiguration
     {
-        public int KeepAliveEventIntervalInSeconds { get; set; } = 240;
+        [Required]
+        public required int KeepAliveEventIntervalInSeconds { get; init; }
     }
 }
