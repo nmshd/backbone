@@ -1,6 +1,6 @@
 {
     "type": "module",
     "devDependencies": {
-        "zx": "8.6.1"
+        "zx": "8.6.2"
     }
 }
