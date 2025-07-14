@@ -25,7 +25,7 @@ public class Cqrs
     public void ClassesInheritingFromIRequestShouldHaveNameEndingWithCommandOrQuery()
     {
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
-            .Should().HaveName(".+(Command|Query)$", true).As("should have names ending with 'Command' or 'Query'")
+            .Should().HaveNameMatching(".+(Command|Query)$").As("should have names ending with 'Command' or 'Query'")
             .Check(Backbone.ARCHITECTURE);
     }
 
@@ -33,7 +33,7 @@ public class Cqrs
     public void CommandsShouldResideInCommandsNamespace()
     {
         Classes().That().Are(COMMANDS)
-            .Should().ResideInNamespace(".+\\.Commands\\.", true)
+            .Should().ResideInNamespaceMatching(".+\\.Commands\\.")
             .Check(Backbone.ARCHITECTURE);
     }
 
@@ -41,7 +41,7 @@ public class Cqrs
     public void QueriesShouldResideInQueriesNamespace()
     {
         Classes().That().Are(QUERIES)
-            .Should().ResideInNamespace(".+\\.Queries\\.", true)
+            .Should().ResideInNamespaceMatching(".+\\.Queries\\.")
             .Check(Backbone.ARCHITECTURE);
     }
 }
