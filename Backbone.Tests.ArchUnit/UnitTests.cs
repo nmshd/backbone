@@ -9,7 +9,7 @@ public class UnitTests
     [Fact]
     public void UnitTestsShouldExtendAbstractTestsBase()
     {
-        Classes().That().HaveName(".+Tests$", true)
+        Classes().That().HaveNameMatching(".+Tests$")
             .And().AreNot(typeof(UnitTests))
             .Should().BeAssignableTo(typeof(AbstractTestsBase))
             .Check(Backbone.ARCHITECTURE);
