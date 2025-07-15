@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
@@ -35,10 +36,18 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
         };
 
+        var recipients = new Option<IEnumerable<string>?>("--recipients")
+        {
+            Required = false,
+            AllowMultipleArgumentsPerToken = true,
+            Description = "The recipients of the announcement (seperated by ','). If not specified, the announcement will be sent to all identities."
+        };
+
         Options.Add(expiresAt);
         Options.Add(severity);
         Options.Add(isSilent);
         Options.Add(iqlQuery);
+        Options.Add(recipients);
 
         SetAction((parseResult, token) =>
         {
@@ -46,12 +55,13 @@ public class SendAnnouncementCommand : AdminCliCommand
             var expiresAtValue = parseResult.GetValue(expiresAt);
             var isSilentValue = parseResult.GetValue(isSilent);
             var iqlQueryValue = parseResult.GetValue(iqlQuery);
+            var recipientsValue = parseResult.GetValue(recipients);
 
-            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue);
+            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, recipientsValue);
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, IEnumerable<string>? recipients)
     {
         try
         {
@@ -68,8 +78,27 @@ public class SendAnnouncementCommand : AdminCliCommand
                 _ => throw new ArgumentException($@"Specified expiration datetime '{expiresAtInput}' is not a valid DateTime.")
             };
 
-            var texts = ReadTextsFromCommandLineInput();
+            var recipientsList = new List<string>();
+            if (recipients != null)
+            {
+                recipientsList = recipients.SelectMany(x => x.Split(',')).Select(r => r.Trim()).ToList();
 
+                // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
+                if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
+                {
+                    Console.WriteLine(@"No recipients provided. Exiting...");
+                    return;
+                }
+
+                var invalidRecipients = recipientsList.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
+                if (invalidRecipients.Any())
+                {
+                    Console.WriteLine($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
+                    return;
+                }
+            }
+
+            var texts = ReadTextsFromCommandLineInput();
             if (texts.Count == 0)
             {
                 Console.WriteLine(@"No texts provided. Exiting...");
@@ -91,7 +120,8 @@ public class SendAnnouncementCommand : AdminCliCommand
                     IsSilent = isSilent ?? false,
                     ExpiresAt = expiresAt,
                     Actions = [],
-                    IqlQuery = iqlQuery
+                    IqlQuery = iqlQuery,
+                    Recipients = recipientsList
                 }, CancellationToken.None);
 
                 Console.WriteLine(@"Announcement sent successfully");
