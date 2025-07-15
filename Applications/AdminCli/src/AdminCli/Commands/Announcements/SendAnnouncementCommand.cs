@@ -55,13 +55,13 @@ public class SendAnnouncementCommand : AdminCliCommand
             var expiresAtValue = parseResult.GetValue(expiresAt);
             var isSilentValue = parseResult.GetValue(isSilent);
             var iqlQueryValue = parseResult.GetValue(iqlQuery);
-            var recipientsValue = parseResult.GetValue(recipients);
+            var recipientsValue = parseResult.GetValue(recipients) ?? [];
 
-            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, recipientsValue);
+            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, [.. recipientsValue]);
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, IEnumerable<string>? recipients)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipientsList)
     {
         try
         {
@@ -78,24 +78,18 @@ public class SendAnnouncementCommand : AdminCliCommand
                 _ => throw new ArgumentException($@"Specified expiration datetime '{expiresAtInput}' is not a valid DateTime.")
             };
 
-            var recipientsList = new List<string>();
-            if (recipients != null)
+            // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
+            if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
             {
-                recipientsList = [.. recipients.Select(r => r.Trim())];
+                Console.WriteLine(@"No recipients provided. Exiting...");
+                return;
+            }
 
-                // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
-                if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
-                {
-                    Console.WriteLine(@"No recipients provided. Exiting...");
-                    return;
-                }
-
-                var invalidRecipients = recipientsList.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
-                if (invalidRecipients.Any())
-                {
-                    Console.WriteLine($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
-                    return;
-                }
+            var invalidRecipients = recipientsList.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
+            if (invalidRecipients.Any())
+            {
+                Console.WriteLine($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
+                return;
             }
 
             var texts = ReadTextsFromCommandLineInput();
