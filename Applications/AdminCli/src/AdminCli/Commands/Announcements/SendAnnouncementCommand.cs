@@ -40,6 +40,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         {
             Required = false,
             AllowMultipleArgumentsPerToken = true,
+            Arity = ArgumentArity.ZeroOrMore,
             Description = "The recipients of the announcement (separated by a whitespace i.e. \"--recipients addr1 addr2 addr3\"). If not specified, the announcement will be sent to all identities."
         };
 
@@ -79,7 +80,7 @@ public class SendAnnouncementCommand : AdminCliCommand
             };
 
             // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
-            if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
+            if (recipientsList.Count == 0)
             {
                 Console.WriteLine(@"No recipients provided. Exiting...");
                 return;
