@@ -7,7 +7,7 @@
         "@babel/plugin-proposal-object-rest-spread": "7.20.7",
         "@babel/preset-env": "7.28.0",
         "@babel/preset-typescript": "7.27.1",
-        "@js-soft/eslint-config-ts": "1.6.14",
+        "@js-soft/eslint-config-ts": "2.0.1",
         "@js-soft/license-check": "1.0.9",
         "@types/k6": "1.1.1",
         "@types/papaparse": "5.3.16",
