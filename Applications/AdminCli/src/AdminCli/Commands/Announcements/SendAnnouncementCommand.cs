@@ -81,7 +81,10 @@ public class SendAnnouncementCommand : AdminCliCommand
             var recipientsList = new List<string>();
             if (recipients != null)
             {
-                recipientsList = recipients.SelectMany(x => x.Split(',')).Select(r => r.Trim()).ToList();
+                recipientsList = recipients.SelectMany(x => x.Split(','))
+                                            .Select(r => r.Trim())
+                                            .Where(r => !string.IsNullOrWhiteSpace(r))
+                                            .ToList();
 
                 // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
                 if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
