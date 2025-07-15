@@ -40,7 +40,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         {
             Required = false,
             AllowMultipleArgumentsPerToken = true,
-            Description = "The recipients of the announcement (seperated by ','). If not specified, the announcement will be sent to all identities."
+            Description = "The recipients of the announcement (separated by ','). If not specified, the announcement will be sent to all identities."
         };
 
         Options.Add(expiresAt);
