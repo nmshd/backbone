@@ -40,7 +40,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         {
             Required = false,
             AllowMultipleArgumentsPerToken = true,
-            Description = "The recipients of the announcement (separated by ','). If not specified, the announcement will be sent to all identities."
+            Description = "The recipients of the announcement (separated by a whitespace i.e. \"--recipients addr1 addr2 addr3\"). If not specified, the announcement will be sent to all identities."
         };
 
         Options.Add(expiresAt);
@@ -81,10 +81,7 @@ public class SendAnnouncementCommand : AdminCliCommand
             var recipientsList = new List<string>();
             if (recipients != null)
             {
-                recipientsList = recipients.SelectMany(x => x.Split(','))
-                                            .Select(r => r.Trim())
-                                            .Where(r => !string.IsNullOrWhiteSpace(r))
-                                            .ToList();
+                recipientsList = [.. recipients.Select(r => r.Trim())];
 
                 // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
                 if (!recipientsList.Any() || recipientsList[0].StartsWith("--"))
