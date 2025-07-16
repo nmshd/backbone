@@ -11,4 +11,8 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Entities\Relationships\" />
+    </ItemGroup>
+
 </Project>
