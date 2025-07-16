@@ -62,7 +62,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipientsList)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients)
     {
         try
         {
@@ -80,14 +80,13 @@ public class SendAnnouncementCommand : AdminCliCommand
             };
 
             // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
-            if (recipientsList.Count == 0)
+            if (recipients.Count == 0)
             {
-                Console.WriteLine(@"No recipients provided. Exiting...");
-                return;
+                throw new Exception("If you use the \"--recipients\" options, at least one recipient has to be specified.");
             }
 
-            var invalidRecipients = recipientsList.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
-            if (invalidRecipients.Any())
+            var invalidRecipients = recipients.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
+            if (invalidRecipients.Count != 0)
             {
                 Console.WriteLine($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
                 return;
@@ -116,7 +115,7 @@ public class SendAnnouncementCommand : AdminCliCommand
                     ExpiresAt = expiresAt,
                     Actions = [],
                     IqlQuery = iqlQuery,
-                    Recipients = recipientsList
+                    Recipients = recipients
                 }, CancellationToken.None);
 
                 Console.WriteLine(@"Announcement sent successfully");
