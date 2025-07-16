@@ -32,8 +32,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
-        var keyInformation = _configuration.GetKeyInformationForBundleId(registration.AppId);
-        var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
+        var jwt = GetJwt(registration);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
             .AddContent(notificationContent)
@@ -43,6 +42,32 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         _logger.Sending(notificationContent.EventName);
 
+        return await Send(registration, request);
+    }
+
+    public async Task<SendResult> SendTextOnly(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    {
+        ValidateRegistration(registration);
+
+        var jwt = GetJwt(registration);
+
+        var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
+            .SetNotificationText(notificationText.Title, notificationText.Body)
+            .SetNotificationId(notificationId)
+            .Build();
+
+        return await Send(registration, request);
+    }
+
+    private Jwt GetJwt(PnsRegistration registration)
+    {
+        var keyInformation = _configuration.GetKeyInformationForBundleId(registration.AppId);
+        var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
+        return jwt;
+    }
+
+    private async Task<SendResult> Send(PnsRegistration registration, HttpRequestMessage request)
+    {
         var response = await _httpClient.SendAsync(request);
 
         if (response.IsSuccessStatusCode)

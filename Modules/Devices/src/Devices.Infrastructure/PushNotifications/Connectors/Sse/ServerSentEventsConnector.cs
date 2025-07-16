@@ -39,6 +39,12 @@ public class ServerSentEventsConnector : IPnsConnector
         }
     }
 
+    public Task<SendResult> SendTextOnly(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    {
+        // we currently don't want to send text-only notifications via SSE
+        return Task.FromResult(SendResult.Success(registration.DeviceId));
+    }
+
     public void ValidateRegistration(PnsRegistration registration)
     {
         // There is nothing to validate here

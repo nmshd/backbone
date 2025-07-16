@@ -38,6 +38,24 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
         _logger.Sending(notificationContent.EventName);
 
+        return await Send(registration, message);
+    }
+
+    public async Task<SendResult> SendTextOnly(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    {
+        ValidateRegistration(registration);
+
+        var message = new FcmMessageBuilder()
+            .SetNotificationText(notificationText.Title, notificationText.Body)
+            .SetTag(notificationId)
+            .SetToken(registration.Handle.Value)
+            .Build();
+
+        return await Send(registration, message);
+    }
+
+    private async Task<SendResult> Send(PnsRegistration registration, Message message)
+    {
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
         {
