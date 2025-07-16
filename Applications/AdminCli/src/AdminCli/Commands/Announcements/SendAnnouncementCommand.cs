@@ -100,31 +100,24 @@ public class SendAnnouncementCommand : AdminCliCommand
 
             Console.WriteLine(@"Sending announcement...");
 
-            try
+            var response = await _mediator.Send(new CreateAnnouncementCommand
             {
-                var response = await _mediator.Send(new CreateAnnouncementCommand
-                {
-                    Texts = texts,
-                    Severity = severity,
-                    IsSilent = isSilent ?? false,
-                    ExpiresAt = expiresAt,
-                    Actions = [],
-                    IqlQuery = iqlQuery,
-                    Recipients = recipients
-                }, cancellationToken);
+                Texts = texts,
+                Severity = severity,
+                IsSilent = isSilent ?? false,
+                ExpiresAt = expiresAt,
+                Actions = [],
+                IqlQuery = iqlQuery,
+                Recipients = recipients
+            }, cancellationToken);
 
-                Console.WriteLine(@"Announcement sent successfully");
-                Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            Console.WriteLine(@"Announcement sent successfully");
+            Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         }
         catch (Exception e)
         {
-            Console.WriteLine($@"An error occurred: {e.Message}");
+            Console.WriteLine(e);
+            throw;
         }
     }
 
