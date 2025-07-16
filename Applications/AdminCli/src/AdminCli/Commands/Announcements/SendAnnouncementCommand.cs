@@ -36,7 +36,7 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
         };
 
-        var recipients = new Option<IEnumerable<string>?>("--recipients")
+        var recipients = new Option<IEnumerable<string>>("--recipients")
         {
             Required = false,
             AllowMultipleArgumentsPerToken = true,
@@ -51,7 +51,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         Options.Add(iqlQuery);
         Options.Add(recipients);
 
-        SetAction((parseResult, token) =>
+        SetAction((parseResult, cancellationToken) =>
         {
             var severityValue = parseResult.GetRequiredValue(severity);
             var expiresAtValue = parseResult.GetValue(expiresAt);
@@ -59,11 +59,11 @@ public class SendAnnouncementCommand : AdminCliCommand
             var iqlQueryValue = parseResult.GetValue(iqlQuery);
             var recipientsValue = parseResult.GetValue(recipients);
 
-            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, [.. recipientsValue]);
+            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, [.. recipientsValue!], cancellationToken);
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients)
+    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients, CancellationToken cancellationToken)
     {
         try
         {
@@ -117,7 +117,7 @@ public class SendAnnouncementCommand : AdminCliCommand
                     Actions = [],
                     IqlQuery = iqlQuery,
                     Recipients = recipients
-                }, CancellationToken.None);
+                }, cancellationToken);
 
                 Console.WriteLine(@"Announcement sent successfully");
                 Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
