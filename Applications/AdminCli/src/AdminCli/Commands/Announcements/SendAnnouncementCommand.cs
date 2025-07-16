@@ -35,23 +35,34 @@ public class SendAnnouncementCommand : AdminCliCommand
             Description = "The IQL query that must be matched by receiving identities in order to show the announcement."
         };
 
+        var recipients = new Option<IEnumerable<string>>("--recipients")
+        {
+            Required = false,
+            AllowMultipleArgumentsPerToken = true,
+            Arity = ArgumentArity.ZeroOrMore,
+            DefaultValueFactory = _ => [],
+            Description = "The recipients of the announcement (separated by a whitespace i.e. \"--recipients addr1 addr2 addr3\"). If not specified, the announcement will be sent to all identities."
+        };
+
         Options.Add(expiresAt);
         Options.Add(severity);
         Options.Add(isSilent);
         Options.Add(iqlQuery);
+        Options.Add(recipients);
 
-        SetAction((parseResult, token) =>
+        SetAction((parseResult, cancellationToken) =>
         {
             var severityValue = parseResult.GetRequiredValue(severity);
             var expiresAtValue = parseResult.GetValue(expiresAt);
             var isSilentValue = parseResult.GetValue(isSilent);
             var iqlQueryValue = parseResult.GetValue(iqlQuery);
+            var recipientsValue = parseResult.GetValue(recipients);
 
-            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue);
+            return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, [.. recipientsValue!], cancellationToken);
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery)
+    private async Task<int> SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients, CancellationToken cancellationToken)
     {
         try
         {
@@ -68,44 +79,47 @@ public class SendAnnouncementCommand : AdminCliCommand
                 _ => throw new ArgumentException($@"Specified expiration datetime '{expiresAtInput}' is not a valid DateTime.")
             };
 
-            var texts = ReadTextsFromCommandLineInput();
-
-            if (texts.Count == 0)
+            // if the --recipients option is empty, another flag could be parsed as the first result i.e. "--silent"
+            if (recipients.Count == 0)
             {
-                Console.WriteLine(@"No texts provided. Exiting...");
-                return;
+                throw new Exception("If you use the \"--recipients\" options, at least one recipient has to be specified.");
             }
+
+            var texts = ReadTextsFromCommandLineInput();
+            if (texts.Count == 0)
+                throw new Exception(@"No texts provided. Exiting...");
 
             Console.WriteLine(@"You entered the following texts:");
             Console.WriteLine(JsonSerializer.Serialize(texts, JSON_SERIALIZER_OPTIONS));
-            if (!PromptForConfirmation(@"Do you want to proceed?")) return;
+
+            if (!PromptForConfirmation(@"Do you want to proceed?"))
+            {
+                Console.WriteLine(@"The operation was cancelled.");
+                return 0;
+            }
 
             Console.WriteLine(@"Sending announcement...");
 
-            try
+            var response = await _mediator.Send(new CreateAnnouncementCommand
             {
-                var response = await _mediator.Send(new CreateAnnouncementCommand
-                {
-                    Texts = texts,
-                    Severity = severity,
-                    IsSilent = isSilent ?? false,
-                    ExpiresAt = expiresAt,
-                    Actions = [],
-                    IqlQuery = iqlQuery
-                }, CancellationToken.None);
+                Texts = texts,
+                Severity = severity,
+                IsSilent = isSilent ?? false,
+                ExpiresAt = expiresAt,
+                Actions = [],
+                IqlQuery = iqlQuery,
+                Recipients = recipients
+            }, cancellationToken);
 
-                Console.WriteLine(@"Announcement sent successfully");
-                Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            Console.WriteLine(@"Announcement sent successfully");
+            Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
+
+            return 0;
         }
         catch (Exception e)
         {
-            Console.WriteLine($@"An error occurred: {e.Message}");
+            await Console.Error.WriteLineAsync($@"An error occurred: {e.Message}");
+            return 1;
         }
     }
 
