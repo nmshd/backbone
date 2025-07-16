@@ -41,6 +41,7 @@ public class SendAnnouncementCommand : AdminCliCommand
             Required = false,
             AllowMultipleArgumentsPerToken = true,
             Arity = ArgumentArity.ZeroOrMore,
+            DefaultValueFactory = _ => [],
             Description = "The recipients of the announcement (separated by a whitespace i.e. \"--recipients addr1 addr2 addr3\"). If not specified, the announcement will be sent to all identities."
         };
 
@@ -56,7 +57,7 @@ public class SendAnnouncementCommand : AdminCliCommand
             var expiresAtValue = parseResult.GetValue(expiresAt);
             var isSilentValue = parseResult.GetValue(isSilent);
             var iqlQueryValue = parseResult.GetValue(iqlQuery);
-            var recipientsValue = parseResult.GetValue(recipients) ?? [];
+            var recipientsValue = parseResult.GetValue(recipients);
 
             return SendAnnouncement(severityValue, expiresAtValue, isSilentValue, iqlQueryValue, [.. recipientsValue]);
         });
