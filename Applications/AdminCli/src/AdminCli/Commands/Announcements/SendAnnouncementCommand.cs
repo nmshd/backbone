@@ -88,17 +88,11 @@ public class SendAnnouncementCommand : AdminCliCommand
 
             var invalidRecipients = recipients.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
             if (invalidRecipients.Count != 0)
-            {
-                Console.WriteLine($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
-                return;
-            }
+                throw new Exception($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
 
             var texts = ReadTextsFromCommandLineInput();
             if (texts.Count == 0)
-            {
-                Console.WriteLine(@"No texts provided. Exiting...");
-                return;
-            }
+                throw new Exception(@"No texts provided. Exiting...");
 
             Console.WriteLine(@"You entered the following texts:");
             Console.WriteLine(JsonSerializer.Serialize(texts, JSON_SERIALIZER_OPTIONS));
