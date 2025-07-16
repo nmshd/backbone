@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
@@ -85,10 +84,6 @@ public class SendAnnouncementCommand : AdminCliCommand
             {
                 throw new Exception("If you use the \"--recipients\" options, at least one recipient has to be specified.");
             }
-
-            var invalidRecipients = recipients.Where(recipient => !IdentityAddress.IsValid(recipient)).ToList();
-            if (invalidRecipients.Count != 0)
-                throw new Exception($@"One or more recipients are not valid addresses: '{string.Join("', '", invalidRecipients)}'. Exiting...");
 
             var texts = ReadTextsFromCommandLineInput();
             if (texts.Count == 0)
