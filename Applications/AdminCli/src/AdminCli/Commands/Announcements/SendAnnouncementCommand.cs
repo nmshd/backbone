@@ -63,7 +63,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         });
     }
 
-    private async Task SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients, CancellationToken cancellationToken)
+    private async Task<int> SendAnnouncement(string? severityInput, string? expiresAtInput, bool? isSilent, string? iqlQuery, List<string> recipients, CancellationToken cancellationToken)
     {
         try
         {
@@ -96,7 +96,12 @@ public class SendAnnouncementCommand : AdminCliCommand
 
             Console.WriteLine(@"You entered the following texts:");
             Console.WriteLine(JsonSerializer.Serialize(texts, JSON_SERIALIZER_OPTIONS));
-            if (!PromptForConfirmation(@"Do you want to proceed?")) return;
+
+            if (!PromptForConfirmation(@"Do you want to proceed?"))
+            {
+                Console.WriteLine(@"The operation was cancelled.");
+                return 0;
+            }
 
             Console.WriteLine(@"Sending announcement...");
 
@@ -113,11 +118,13 @@ public class SendAnnouncementCommand : AdminCliCommand
 
             Console.WriteLine(@"Announcement sent successfully");
             Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
+
+            return 0;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            await Console.Error.WriteLineAsync($@"An error occurred: {e.Message}");
+            return 1;
         }
     }
 
