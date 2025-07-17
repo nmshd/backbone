@@ -38,9 +38,9 @@ public class Relationship : Entity
         return r => (r.From == address1 && r.To == address2) || (r.From == address2 && r.To == address1);
     }
 
-    public static Expression<Func<Relationship, bool>> IsBetween(IdentityAddress address1, IdentityAddress[] peerAddresses)
+    public static Expression<Func<Relationship, bool>> IsBetween(IdentityAddress mainAddress, IdentityAddress[] peerAddresses)
     {
-        return r => (r.From == address1 && peerAddresses.Contains(r.To)) || peerAddresses.Contains(r.From) && r.To == address1;
+        return r => (r.From == mainAddress && peerAddresses.Contains(r.To)) || peerAddresses.Contains(r.From) && r.To == mainAddress;
     }
 }
 

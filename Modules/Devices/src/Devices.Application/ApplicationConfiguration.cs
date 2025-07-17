@@ -33,7 +33,7 @@ public class ApplicationConfiguration
         public required string Code { get; init; }
 
         [Required]
-        public Dictionary<string, NotificationTranslation> Translations { get; init; } = [];
+        public required Dictionary<string, NotificationTranslation> Translations { get; init; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
