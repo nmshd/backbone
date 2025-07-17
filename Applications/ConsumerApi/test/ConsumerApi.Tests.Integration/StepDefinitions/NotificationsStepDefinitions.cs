@@ -23,7 +23,7 @@ internal class NotificationsStepDefinitions
     #region When
 
     [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Notifications endpoint with {RegexFor.SINGLE_THING} as recipient$")]
-    public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string senderName, string recipientName)
+    public async Task WhenIdentitySendsAPostRequestToTheNotificationsEndpoint(string senderName, string recipientName)
     {
         var senderClient = _clientPool.FirstForIdentityName(senderName);
         var recipientAddress = _clientPool.FirstForIdentityName(recipientName).IdentityData!.Address;
@@ -34,8 +34,6 @@ internal class NotificationsStepDefinitions
             Recipients = [recipientAddress]
         });
     }
-
-    #endregion
 
     [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Notifications endpoint with {RegexFor.SINGLE_THING} as recipient and a non existing code$")]
     public async Task WhenISendsAPOSTRequestToTheNotificationsEndpointWithIAsRecipientAndANonExistingCode(string senderName, string recipientName)
@@ -49,4 +47,18 @@ internal class NotificationsStepDefinitions
             Recipients = [recipientAddress]
         });
     }
+
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Notifications endpoint without a recipient$")]
+    public async Task WhenISendsAPOSTRequestToTheNotificationsEndpointWithoutARecipient(string senderName)
+    {
+        var senderClient = _clientPool.FirstForIdentityName(senderName);
+
+        _responseContext.WhenResponse = await senderClient.Notifications.SendNotification(new SendNotificationRequest
+        {
+            Code = "TestCode",
+            Recipients = []
+        });
+    }
+
+    #endregion
 }
