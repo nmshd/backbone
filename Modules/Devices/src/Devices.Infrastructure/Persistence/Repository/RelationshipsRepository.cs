@@ -23,10 +23,18 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<List<Relationship>> GetYoungestRelationships(IdentityAddress mainIdentity, IdentityAddress[] peers, CancellationToken cancellationToken)
     {
-        return await _readonlyRelationships
+        var relationships = await _readonlyRelationships
             .Where(Relationship.IsBetween(mainIdentity, peers))
             .GroupBy(r => new { r.From, r.To })
             .Select(g => g.OrderByDescending(gr => gr.CreatedAt).First())
             .ToListAsync(cancellationToken);
+
+        // we need to ensure that we only return distinct relationships, where the order of From and To does not matter
+        var distinctRelationships = relationships
+            .GroupBy(r => string.Compare(r.From.Value, r.To.Value, StringComparison.Ordinal) > 0 ? new { A = r.From, B = r.To } : new { A = r.To, B = r.From })
+            .Select(g => g.OrderByDescending(gr => gr.CreatedAt).First())
+            .ToList();
+
+        return distinctRelationships;
     }
 }
