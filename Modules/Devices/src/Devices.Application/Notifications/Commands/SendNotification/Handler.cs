@@ -30,26 +30,23 @@ public class Handler : IRequestHandler<SendNotificationCommand>
 
         await EnsureRelationshipsToAllRecipientsExist(parsedRecipients, cancellationToken);
 
-        var notification = GetNotificationByCode(request);
+        var notification = GetNotificationFromConfigurationByCode(request);
 
-        var notificationTexts = notification.Translations.ToDictionary(kv => kv.Key, kv => new NotificationText(kv.Value.Title, kv.Value.Body));
+        var parsedNotificationTexts = notification.Translations.ToDictionary(kv => kv.Key, kv => new NotificationText(kv.Value.Title, kv.Value.Body));
         var notificationId = $"notification_{request.Code}";
         var pushNotificationFilter = SendPushNotificationFilter.AllDevicesOf(parsedRecipients);
 
-        await _pushNotificationSender.SendTextOnlyNotification(notificationTexts, notificationId, pushNotificationFilter, cancellationToken);
+        await _pushNotificationSender.SendTextOnlyNotification(parsedNotificationTexts, notificationId, pushNotificationFilter, cancellationToken);
     }
 
-    private ApplicationConfiguration.NotificationTextsConfiguration GetNotificationByCode(SendNotificationCommand request)
+    private ApplicationConfiguration.NotificationTextsConfiguration GetNotificationFromConfigurationByCode(SendNotificationCommand request)
     {
-        if (_notifications == null || _notifications.Texts.Count == 0)
-            throw new ApplicationException(ApplicationErrors.Notifications.CodeDoesNotExist([]));
+        var textFromConfiguration = _notifications?.Texts.FirstOrDefault(t => t.Code == request.Code);
 
-        var validMessageCodes = _notifications.Texts.Select(t => t.Code).ToList();
+        if (textFromConfiguration == null)
+            throw new ApplicationException(ApplicationErrors.Notifications.CodeDoesNotExist(_notifications!.Texts.Select(t => t.Code)));
 
-        if (validMessageCodes.All(c => c != request.Code))
-            throw new ApplicationException(ApplicationErrors.Notifications.CodeDoesNotExist(validMessageCodes));
-
-        return _notifications.Texts.First(t => t.Code == request.Code);
+        return textFromConfiguration;
     }
 
     private async Task EnsureRelationshipsToAllRecipientsExist(IdentityAddress[] recipients, CancellationToken cancellationToken)

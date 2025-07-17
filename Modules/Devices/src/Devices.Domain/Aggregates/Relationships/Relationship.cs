@@ -24,8 +24,13 @@ public class Relationship : Entity
 
     public void EnsureSendingNotificationsIsAllowed()
     {
-        if (Status is not (RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated))
+        if (Status is not (RelationshipStatus.Pending or RelationshipStatus.Active or RelationshipStatus.Terminated))
             throw new DomainException(DomainErrors.RelationshipToRecipientIsNotInCorrectStatus([RelationshipStatus.Active, RelationshipStatus.Pending, RelationshipStatus.Terminated]));
+    }
+
+    public bool HasParticipant(IdentityAddress potentialPeerAddress)
+    {
+        return From == potentialPeerAddress || To == potentialPeerAddress;
     }
 
     public static Expression<Func<Relationship, bool>> IsBetween(IdentityAddress address1, IdentityAddress address2)
@@ -36,11 +41,6 @@ public class Relationship : Entity
     public static Expression<Func<Relationship, bool>> IsBetween(IdentityAddress address1, IdentityAddress[] peerAddresses)
     {
         return r => (r.From == address1 && peerAddresses.Contains(r.To)) || peerAddresses.Contains(r.From) && r.To == address1;
-    }
-
-    public bool HasParticipant(IdentityAddress potentialPeerAddress)
-    {
-        return From == potentialPeerAddress || To == potentialPeerAddress;
     }
 }
 
