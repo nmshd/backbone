@@ -20,7 +20,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
             .Build();
 
         // Assert
-        request.RequestUri!.ToString().ShouldContain("https://api.development.push.apple.com/3/device/someDeviceId");
+        request.RequestUri!.ToString().ShouldContain("https://api.sandbox.push.apple.com/3/device/someDeviceId");
         request.Headers.GetValues("apns-topic").FirstOrDefault().ShouldBe("someAppBundleIdentifier");
         request.Headers.GetValues("apns-expiration").FirstOrDefault().ShouldBe("0");
         request.Headers.GetValues("apns-push-type").FirstOrDefault().ShouldBe("alert");
