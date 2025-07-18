@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
@@ -14,7 +15,9 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
     public void Built_message_has_all_properties_set()
     {
         // Act
-        var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt").SetNotificationId("testNotificationId").Build();
+        var request = new ApnsMessageBuilder("someAppBundleIdentifier", PushEnvironment.Development, ApnsHandle.Parse("someDeviceId").Value, "someValidJwt")
+            .SetNotificationId("testNotificationId")
+            .Build();
 
         // Assert
         request.RequestUri!.ToString().ShouldContain("https://api.development.push.apple.com/3/device/someDeviceId");
@@ -33,7 +36,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
 
         // Act
-        var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
+        var request = new ApnsMessageBuilder("someAppBundleIdentifier", PushEnvironment.Development, ApnsHandle.Parse("someDeviceId").Value, "someValidJwt")
             .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
                 new TestPushNotification { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")

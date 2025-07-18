@@ -17,13 +17,13 @@ public class ServerSentEventsConnector : IPnsConnector
     }
 
     // The `notificationText` parameter is not used in this implementation, so we make it optional. This simplifies the tests.
-    public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText? notificationText = null)
+    public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText? _ = null)
     {
+        var eventName = notification.GetEventName();
+
         try
         {
-            var eventName = notification.GetEventName();
-
-            _logger.Sending(eventName);
+            _logger.Sending();
 
             await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
             return SendResult.Success(registration.DeviceId);
@@ -39,9 +39,9 @@ public class ServerSentEventsConnector : IPnsConnector
         }
     }
 
-    public Task<SendResult> SendTextOnly(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    public Task<SendResult> Send(PnsRegistration registration, NotificationText notificationText, string notificationId)
     {
-        // we currently don't want to send text-only notifications via SSE
+        // we currently don't want to send push notifications without content via SSE
         return Task.FromResult(SendResult.Success(registration.DeviceId));
     }
 
@@ -57,8 +57,8 @@ internal static partial class ServerSentEventsConnectorLogs
         EventId = 433411,
         EventName = "ServerSentEventsConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}').")]
-    public static partial void Sending(this ILogger logger, string eventName);
+        Message = "Sending push notification.")]
+    public static partial void Sending(this ILogger logger);
 
     [LoggerMessage(
         EventId = 707295,

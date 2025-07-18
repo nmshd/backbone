@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<SendNotificationCommand>
         var notificationId = $"notification_{request.Code}";
         var pushNotificationFilter = SendPushNotificationFilter.AllDevicesOf(parsedRecipients);
 
-        await _pushNotificationSender.SendTextOnlyNotification(parsedNotificationTexts, notificationId, pushNotificationFilter, cancellationToken);
+        await _pushNotificationSender.SendNotification(parsedNotificationTexts, notificationId, pushNotificationFilter, cancellationToken);
     }
 
     private ApplicationConfiguration.NotificationTextsConfiguration GetNotificationFromConfigurationByCode(SendNotificationCommand request)

@@ -104,8 +104,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         return groups;
     }
 
-
-    public async Task SendTextOnlyNotification(Dictionary<string, NotificationText> notificationTexts, string notificationId, SendPushNotificationFilter filter, CancellationToken cancellationToken)
+    public async Task SendNotification(Dictionary<string, NotificationText> notificationTexts, string notificationId, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var devices = await ListDevices(filter, cancellationToken);
         var deviceIds = devices.Select(d => d.Id).ToArray();
@@ -126,7 +125,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
                     if (!notificationTexts.TryGetValue(device.CommunicationLanguage, out var notificationText))
                         notificationText = notificationTexts[CommunicationLanguage.DEFAULT_LANGUAGE];
 
-                    return pnsConnector.SendTextOnly(r, notificationText, notificationId);
+                    return pnsConnector.Send(r, notificationText, notificationId);
                 });
 
             var sendResults = await Task.WhenAll(sendTasks);
