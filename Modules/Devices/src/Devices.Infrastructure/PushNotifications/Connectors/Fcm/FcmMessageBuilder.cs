@@ -36,8 +36,11 @@ public class FcmMessageBuilder
         _message.Android.Notification.ChannelId = channelId;
     }
 
-    public FcmMessageBuilder AddContent(NotificationContent content)
+    public FcmMessageBuilder AddContent(NotificationContent? content)
     {
+        if (content == null)
+            return this;
+
         _data["content"] = JsonSerializer.Serialize(content, _jsonSerializerOptions);
         SetContentAvailable(true);
 

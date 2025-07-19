@@ -75,4 +75,19 @@ public static class ApplicationErrors
                 $"Only {maxNumberOfFeatureFlagsPerIdentity} feature flags can be created.");
         }
     }
+
+    public static class Notifications
+    {
+        public static ApplicationError CodeDoesNotExist(IEnumerable<string> validMessageCodes)
+        {
+            return new ApplicationError("error.platform.validation.notification.codeDoesNotExist",
+                $"The given message code does not exist. Valid message codes are: [{string.Join(", ", validMessageCodes)}]");
+        }
+
+        public static ApplicationError NoRelationshipToOneOrMoreRecipientsExists()
+        {
+            return new ApplicationError("error.platform.validation.notification.noRelationshipToOneOrMoreRecipientsExists",
+                "You don't have a relationship to one or more recipients of the notification. A relationship is required to send a notification.");
+        }
+    }
 }

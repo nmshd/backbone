@@ -31,7 +31,7 @@ public class SendResult
         return new SendResult(deviceId);
     }
 
-    public static SendResult Failure(DeviceId deviceId, ErrorReason reason, string message = "")
+    public static SendResult Failure(DeviceId deviceId, ErrorReason reason, string? message = null)
     {
         return new SendResult(deviceId, new SendError(reason, message));
     }

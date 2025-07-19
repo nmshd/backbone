@@ -19,7 +19,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -73,12 +73,18 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("From")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class RelationshipTypeConfiguration : EntityEntityTypeConfiguration<Relationship>
+public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration<Relationship>
 {
     public override void Configure(EntityTypeBuilder<Relationship> builder)
     {
@@ -17,5 +17,9 @@ public class RelationshipTypeConfiguration : EntityEntityTypeConfiguration<Relat
 
         builder.Property(x => x.From);
         builder.Property(x => x.To);
+
+        builder.Property(x => x.Status);
+
+        builder.Property(x => x.CreatedAt);
     }
 }

@@ -24,10 +24,20 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
     {
-        ValidateRegistration(registration);
-
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
+
+        return await Send(registration, notificationText, notificationContent, notificationId);
+    }
+
+    public Task<SendResult> Send(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    {
+        return Send(registration, notificationText, null, notificationId);
+    }
+
+    private async Task<SendResult> Send(PnsRegistration registration, NotificationText notificationText, NotificationContent? notificationContent, string? notificationId)
+    {
+        ValidateRegistration(registration);
 
         var message = new FcmMessageBuilder()
             .AddContent(notificationContent)
@@ -36,8 +46,13 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             .SetToken(registration.Handle.Value)
             .Build();
 
-        _logger.Sending(notificationContent.EventName);
+        _logger.Sending();
 
+        return await Send(registration, message);
+    }
+
+    private async Task<SendResult> Send(PnsRegistration registration, Message message)
+    {
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
         {
@@ -73,6 +88,6 @@ internal static partial class FirebaseCloudMessagingConnectorLogs
         EventId = 227730,
         EventName = "FirebaseCloudMessagingConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}').")]
-    public static partial void Sending(this ILogger logger, string eventName);
+        Message = "Sending push notification...")]
+    public static partial void Sending(this ILogger logger);
 }

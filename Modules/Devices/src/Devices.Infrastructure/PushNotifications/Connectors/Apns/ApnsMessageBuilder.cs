@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling.Extensions;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -14,9 +16,9 @@ public class ApnsMessageBuilder
     private readonly JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
     private readonly HttpRequestMessage _request;
 
-    public ApnsMessageBuilder(string appBundleIdentifier, string path, string jwt)
+    public ApnsMessageBuilder(string appBundleIdentifier, PushEnvironment environment, ApnsHandle handle, string jwt)
     {
-        _request = new HttpRequestMessage(HttpMethod.Post, new Uri(path))
+        _request = new HttpRequestMessage(HttpMethod.Post, BuildUrl(environment, handle.Value))
         {
             Version = HttpVersion.Version30,
             Headers =
@@ -31,8 +33,24 @@ public class ApnsMessageBuilder
         _request.Headers.Authorization = new AuthenticationHeaderValue("bearer", jwt);
     }
 
-    public ApnsMessageBuilder AddContent(NotificationContent content)
+
+    private static Uri BuildUrl(PushEnvironment environment, string handle)
     {
+        var baseUrl = environment switch
+        {
+            PushEnvironment.Development => "https://api.sandbox.push.apple.com:443/3/device",
+            PushEnvironment.Production => "https://api.push.apple.com:443/3/device",
+            _ => throw new ArgumentOutOfRangeException(nameof(environment))
+        };
+
+        return new Uri($"{baseUrl}/{handle}");
+    }
+
+    public ApnsMessageBuilder AddContent(NotificationContent? content)
+    {
+        if (content == null)
+            return this;
+
         _notification.Content = content;
         SetContentAvailable(true);
         return this;
