@@ -15,7 +15,7 @@
         "babel-loader": "10.0.0",
         "clean-webpack-plugin": "4.0.0",
         "copy-webpack-plugin": "13.0.0",
-        "eslint": "^8.57.0",
+        "eslint": "^9.31.0",
         "papaparse": "5.5.3",
         "prettier": "3.6.2",
         "typescript": "5.8.3",
