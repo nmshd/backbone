@@ -53,11 +53,14 @@ public class Handler : IRequestHandler<SendNotificationCommand>
     {
         var relationshipsToRecipients = await _relationshipsRepository.GetYoungestRelationships(_activeIdentity, recipients, cancellationToken);
 
+        var recipientsWithoutRelationships = recipients.Where(rec => !relationshipsToRecipients.Any(rel => rel.HasParticipant(rec))).ToList();
+
+        if (recipientsWithoutRelationships.Count != 0)
+            throw new ApplicationException(ApplicationErrors.Notifications.NoRelationshipToOneOrMoreRecipientsExists(recipientsWithoutRelationships));
+
         foreach (var recipient in recipients)
         {
-            var relationship = relationshipsToRecipients.FirstOrDefault(r => r.HasParticipant(recipient)) ??
-                               throw new ApplicationException(ApplicationErrors.Notifications.NoRelationshipToOneOrMoreRecipientsExists());
-
+            var relationship = relationshipsToRecipients.First(r => r.HasParticipant(recipient));
             relationship.EnsureSendingNotificationsIsAllowed();
         }
     }

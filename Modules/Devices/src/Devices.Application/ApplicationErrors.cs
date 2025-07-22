@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application;
@@ -81,13 +82,13 @@ public static class ApplicationErrors
         public static ApplicationError CodeDoesNotExist(IEnumerable<string> validMessageCodes)
         {
             return new ApplicationError("error.platform.validation.notification.codeDoesNotExist",
-                $"The given message code does not exist. Valid message codes are: [{string.Join(", ", validMessageCodes)}]");
+                $"The given message code does not exist. Valid message codes are: {string.Join(", ", validMessageCodes)}");
         }
 
-        public static ApplicationError NoRelationshipToOneOrMoreRecipientsExists()
+        public static ApplicationError NoRelationshipToOneOrMoreRecipientsExists(IEnumerable<IdentityAddress> invalidRecipients)
         {
             return new ApplicationError("error.platform.validation.notification.noRelationshipToOneOrMoreRecipientsExists",
-                "You don't have a relationship to one or more recipients of the notification. A relationship is required to send a notification.");
+                $"You don't have a relationship to one or more recipients of the notification. A relationship is required to send a notification. The invalid recipients are: : {string.Join(", ", invalidRecipients)}");
         }
     }
 }
