@@ -45,7 +45,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         return devices.Select(d => d.CommunicationLanguage).Distinct().ToList();
     }
 
-    public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts, CancellationToken cancellationToken)
+    public async Task SendNotification(IPushNotification notification, Dictionary<string, NotificationText> notificationTexts, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var devices = await ListDevices(filter, cancellationToken);
         var mappedNotificationTexts = notificationTexts.ToDictionary(kvp => CommunicationLanguage.Create(kvp.Key).Value, kvp => kvp.Value);
@@ -104,7 +104,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         return groups;
     }
 
-    public async Task SendNotification(Dictionary<string, NotificationText> notificationTexts, string notificationId, SendPushNotificationFilter filter, CancellationToken cancellationToken)
+    public async Task SendNotification(string notificationId, Dictionary<string, NotificationText> notificationTexts, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var devices = await ListDevices(filter, cancellationToken);
         var deviceIds = devices.Select(d => d.Id).ToArray();
