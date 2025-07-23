@@ -40,7 +40,7 @@ public class CustomUserStore : UserStore<ApplicationUser>
     public override Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = new CancellationToken())
     {
         Context.Attach(user.Device);
-        Context.Update(user.Device);
+        Context.Entry(user.Device).CurrentValues.SetValues(user.Device);
         return base.UpdateAsync(user, cancellationToken);
     }
 }

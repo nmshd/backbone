@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, Re
 
     private async Task SaveSyncRun(SyncRun syncRun, CancellationToken cancellationToken)
     {
-        _dbContext.Set<SyncRun>().Update(syncRun);
+        _dbContext.Set<SyncRun>().Entry(syncRun).CurrentValues.SetValues(syncRun);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
     }

@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         CheckPreconditions();
 
         _syncRun.FinalizeDatawalletVersionUpgrade();
-        _dbContext.Set<SyncRun>().Update(_syncRun);
+        _dbContext.Set<SyncRun>().Entry(_syncRun).CurrentValues.SetValues(_syncRun);
 
         _datawallet = await _dbContext.GetDatawalletForInsertion(_activeIdentity, cancellationToken);
 
@@ -48,7 +48,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         else
         {
             _datawallet.Upgrade(new Datawallet.DatawalletVersion(request.NewDatawalletVersion));
-            _dbContext.Set<Datawallet>().Update(_datawallet);
+            _dbContext.Set<Datawallet>().Entry(_datawallet).CurrentValues.SetValues(_datawallet);
         }
 
         var newModifications = AddModificationsToDatawallet(request.DatawalletModifications);
@@ -83,10 +83,10 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
             }).ToArray();
 
         _syncRun.FinalizeExternalEventSync(eventResults);
-        _dbContext.Set<SyncRun>().Update(_syncRun);
+        _dbContext.Set<SyncRun>().Entry(_syncRun).CurrentValues.SetValues(_syncRun);
 
         var newModifications = AddModificationsToDatawallet(request.DatawalletModifications);
-        _dbContext.Set<Datawallet>().Update(_datawallet);
+        _dbContext.Set<Datawallet>().Entry(_datawallet).CurrentValues.SetValues(_datawallet);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
