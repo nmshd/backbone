@@ -13,6 +13,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
+using Backbone.ConsumerApi.Sdk.Endpoints.Notifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
@@ -49,6 +50,7 @@ public class Client
         FeatureFlags = new FeatureFlagsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
+        Notifications = new NotificationsEndpoint(endpointClient);
         PushNotifications = new PushNotificationsEndpoint(endpointClient);
         Quotas = new QuotasEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
@@ -70,6 +72,7 @@ public class Client
     public FilesEndpoint Files { get; }
     public IdentitiesEndpoint Identities { get; }
     public MessagesEndpoint Messages { get; }
+    public NotificationsEndpoint Notifications { get; }
     public PushNotificationsEndpoint PushNotifications { get; }
     public QuotasEndpoint Quotas { get; }
     public RelationshipsEndpoint Relationships { get; }

@@ -22,7 +22,7 @@ public class AnnouncementCreatedDomainEventHandlerTests : AbstractTestsBase
         });
 
         // Assert
-        A.CallTo(() => mockPushSenderService.SendNotification(A<IPushNotification>._, A<SendPushNotificationFilter>._, A<Dictionary<string, NotificationText>>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushSenderService.SendNotification(A<IPushNotification>._, A<Dictionary<string, NotificationText>>._, A<SendPushNotificationFilter>._, A<CancellationToken>._))
             .MustHaveHappened();
     }
 
@@ -41,7 +41,7 @@ public class AnnouncementCreatedDomainEventHandlerTests : AbstractTestsBase
         });
 
         // Assert
-        A.CallTo(() => mockPushSenderService.SendNotification(A<IPushNotification>._, A<SendPushNotificationFilter>._, A<Dictionary<string, NotificationText>>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushSenderService.SendNotification(A<IPushNotification>._, A<Dictionary<string, NotificationText>>._, A<SendPushNotificationFilter>._, A<CancellationToken>._))
             .MustNotHaveHappened();
     }
 }

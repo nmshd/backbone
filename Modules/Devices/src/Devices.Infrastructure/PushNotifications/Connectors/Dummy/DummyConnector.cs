@@ -21,6 +21,13 @@ public class DummyConnector : IPnsConnector
         return Task.FromResult(SendResult.Success(registration.DeviceId));
     }
 
+    public Task<SendResult> Send(PnsRegistration registration, NotificationText notificationText, string notificationId)
+    {
+        _logger.Sending("no-content");
+
+        return Task.FromResult(SendResult.Success(registration.DeviceId));
+    }
+
     public void ValidateRegistration(PnsRegistration registration)
     {
     }
