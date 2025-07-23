@@ -22,7 +22,7 @@ public class Validator : AbstractValidator<SendMessageCommand>
                 .SetValidator(new SendMessageCommandRecipientInformationValidator()));
 
         RuleFor(m => m.Recipients.Count)
-            .LessThanOrEqualTo(options.Value.MaxNumberOfMessageRecipients)
+            .InclusiveBetween(1, options.Value.MaxNumberOfMessageRecipients)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Body).DetailedNotNull().NumberOfBytes(1, 10.Mebibytes());
