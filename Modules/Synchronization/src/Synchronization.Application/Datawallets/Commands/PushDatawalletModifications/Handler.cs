@@ -77,7 +77,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     {
         var newModifications = _request.Modifications.Select(CreateModification);
 
-        _dbContext.Set<Datawallet>().Update(_datawallet!);
 
         var modificationsArray = newModifications.ToArray();
 

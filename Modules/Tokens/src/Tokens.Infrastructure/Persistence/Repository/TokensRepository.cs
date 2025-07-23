@@ -72,7 +72,6 @@ public class TokensRepository : ITokensRepository
 
     public async Task Update(Token token, CancellationToken cancellationToken)
     {
-        _tokensDbSet.Update(token);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
