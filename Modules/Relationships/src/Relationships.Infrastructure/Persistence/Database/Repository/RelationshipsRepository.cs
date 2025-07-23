@@ -64,7 +64,6 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task Update(Relationship relationship)
     {
-        _relationships.Entry(relationship).CurrentValues.SetValues(relationship);
         await _dbContext.SaveChangesAsync();
     }
 

@@ -108,7 +108,6 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private async Task CancelPreviousSyncRun()
     {
         _previousSyncRun!.Cancel();
-        _dbContext.Set<SyncRun>().Entry(_previousSyncRun).CurrentValues.SetValues(_previousSyncRun);
 
         await _dbContext.SaveChangesAsync(_cancellationToken);
     }
