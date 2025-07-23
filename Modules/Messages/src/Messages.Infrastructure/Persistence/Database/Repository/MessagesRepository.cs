@@ -74,7 +74,7 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task Update(Message message)
     {
-        _messages.Update(message);
+        _messages.Entry(message).CurrentValues.SetValues(message);
         await _dbContext.SaveChangesAsync();
     }
 

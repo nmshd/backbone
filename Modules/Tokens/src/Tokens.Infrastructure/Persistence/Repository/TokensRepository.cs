@@ -72,7 +72,7 @@ public class TokensRepository : ITokensRepository
 
     public async Task Update(Token token, CancellationToken cancellationToken)
     {
-        _tokensDbSet.Update(token);
+        _tokensDbSet.Entry(token).CurrentValues.SetValues(token);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

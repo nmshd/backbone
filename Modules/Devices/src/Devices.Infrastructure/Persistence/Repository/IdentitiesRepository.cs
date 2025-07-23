@@ -150,13 +150,13 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Update(Device device, CancellationToken cancellationToken)
     {
-        _devices.Update(device);
+        _devices.Entry(device).CurrentValues.SetValues(device);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
-        _identities.Update(identity);
+        _identities.Entry(identity).CurrentValues.SetValues(identity);
         try
         {
             await _dbContext.SaveChangesAsync(cancellationToken);

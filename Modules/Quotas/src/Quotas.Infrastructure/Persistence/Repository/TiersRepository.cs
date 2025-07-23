@@ -56,7 +56,7 @@ public class TiersRepository : ITiersRepository
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
         RemoveOrphanedTierQuotaDefinitions();
-        _tiers.Update(tier);
+        _tiers.Entry(tier).CurrentValues.SetValues(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

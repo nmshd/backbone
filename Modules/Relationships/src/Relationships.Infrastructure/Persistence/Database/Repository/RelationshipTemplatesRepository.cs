@@ -86,7 +86,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 
     public async Task Update(RelationshipTemplate template)
     {
-        _templates.Update(template);
+        _templates.Entry(template).CurrentValues.SetValues(template);
         await _dbContext.SaveChangesAsync();
     }
 

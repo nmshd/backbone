@@ -57,7 +57,7 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
 
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)
     {
-        _registrations.Update(registration);
+        _registrations.Entry(registration).CurrentValues.SetValues(registration);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
