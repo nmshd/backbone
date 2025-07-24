@@ -11,5 +11,5 @@ public class RelationshipTemplate : Entity
 
     public string Id { get; } = null!;
     public IdentityAddress CreatedBy { get; } = null!;
-    public List<RelationshipTemplateAllocation> Allocations { get; } = null!;
+    public virtual List<RelationshipTemplateAllocation> Allocations { get; } = null!;
 }

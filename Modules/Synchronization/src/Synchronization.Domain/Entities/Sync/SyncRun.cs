@@ -39,9 +39,9 @@ public class SyncRun : Entity
     public IdentityAddress CreatedBy { get; }
     public DeviceId CreatedByDevice { get; }
     public DateTime? FinalizedAt { get; internal set; }
-    public IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
+    public virtual IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
     public int EventCount { get; }
-    public IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
+    public virtual IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
 
 
     public bool IsFinalized => FinalizedAt != null;

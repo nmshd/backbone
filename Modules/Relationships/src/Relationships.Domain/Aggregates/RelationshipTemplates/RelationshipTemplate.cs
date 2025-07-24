@@ -40,7 +40,7 @@ public class RelationshipTemplate : Entity
 
     public RelationshipTemplateId Id { get; set; }
 
-    public ICollection<Relationship> Relationships { get; set; } = [];
+    public virtual ICollection<Relationship> Relationships { get; set; } = [];
 
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
@@ -53,7 +53,7 @@ public class RelationshipTemplate : Entity
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
+    public virtual List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
     public void AllocateFor(IdentityAddress identity, DeviceId device)
     {

@@ -28,7 +28,7 @@ public class Datawallet : Entity
     public DatawalletId Id { get; }
     public IdentityAddress Owner { get; }
     public DatawalletVersion Version { get; private set; }
-    public List<DatawalletModification> Modifications { get; }
+    public virtual List<DatawalletModification> Modifications { get; }
     public DatawalletModification? LatestModification => Modifications.MaxBy(m => m.Index);
 
     public void Upgrade(DatawalletVersion targetVersion)

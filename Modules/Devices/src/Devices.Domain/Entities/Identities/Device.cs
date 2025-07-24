@@ -65,9 +65,9 @@ public class Device : Entity
     public DeviceId Id { get; set; }
 
     public IdentityAddress IdentityAddress { get; set; }
-    public Identity Identity { get; set; }
+    public virtual Identity Identity { get; set; }
 
-    public ApplicationUser User { get; set; }
+    public virtual ApplicationUser User { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

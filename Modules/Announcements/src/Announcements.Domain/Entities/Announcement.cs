@@ -46,11 +46,11 @@ public class Announcement : Entity
     public AnnouncementSeverity Severity { get; }
     public bool IsSilent { get; }
 
-    public List<AnnouncementText> Texts { get; }
+    public virtual List<AnnouncementText> Texts { get; }
 
-    public List<AnnouncementRecipient> Recipients { get; }
+    public virtual List<AnnouncementRecipient> Recipients { get; }
 
-    public List<AnnouncementAction> Actions { get; }
+    public virtual List<AnnouncementAction> Actions { get; }
 
     public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }

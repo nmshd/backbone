@@ -46,7 +46,7 @@ public class IdentityDeletionProcess : Entity
 
     private IdentityAddress IdentityAddress { get; }
 
-    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
+    public virtual IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
     public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInDays);

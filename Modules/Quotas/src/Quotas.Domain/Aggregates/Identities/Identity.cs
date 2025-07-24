@@ -43,11 +43,11 @@ public class Identity : Entity
 
     public TierId TierId { get; private set; }
 
-    public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
+    public virtual IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
 
-    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
-    public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
-    internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
+    public virtual IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
+    public virtual IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
+    internal virtual IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {

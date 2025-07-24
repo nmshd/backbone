@@ -13,7 +13,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
-    private readonly EfCoreFeatureFlagSet _efCoreFeatureFlagSetDoNotUse = [];
+    protected virtual EfCoreFeatureFlagSet EfCoreFeatureFlagSetDoNotUse { get; } = [];
     private TierId? _tierId;
 
     // ReSharper disable once UnusedMember.Local
@@ -67,7 +67,7 @@ public class Identity : Entity
     public byte[] PublicKey { get; }
     public DateTime CreatedAt { get; }
 
-    public List<Device> Devices { get; }
+    public virtual List<Device> Devices { get; }
 
     public byte IdentityVersion { get; private set; }
 
@@ -90,14 +90,14 @@ public class Identity : Entity
         }
     }
 
-    public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
+    public virtual IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
 
     public IdentityStatus Status { get; private set; }
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
-    public FeatureFlagSet FeatureFlags => _efCoreFeatureFlagSetDoNotUse;
+    public virtual FeatureFlagSet FeatureFlags => EfCoreFeatureFlagSetDoNotUse;
 
     public bool IsNew()
     {

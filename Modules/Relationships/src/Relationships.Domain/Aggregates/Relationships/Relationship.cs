@@ -75,7 +75,7 @@ public class Relationship : Entity
 
     public RelationshipId Id { get; }
     public RelationshipTemplateId? RelationshipTemplateId { get; }
-    public RelationshipTemplate? RelationshipTemplate { get; }
+    public virtual RelationshipTemplate? RelationshipTemplate { get; }
 
     public IdentityAddress From { get; private set; }
     public IdentityAddress To { get; private set; }
@@ -85,7 +85,7 @@ public class Relationship : Entity
     public RelationshipStatus Status { get; private set; }
     public byte[]? CreationContent { get; }
     public byte[]? CreationResponseContent { get; private set; }
-    public List<RelationshipAuditLogEntry> AuditLog { get; }
+    public virtual List<RelationshipAuditLogEntry> AuditLog { get; }
 
     public IdentityAddress LastModifiedBy => AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy;
 

@@ -20,7 +20,7 @@ public class Tier : Entity
 
     public TierId Id { get; }
     public string Name { get; }
-    public List<TierQuotaDefinition> Quotas { get; }
+    public virtual List<TierQuotaDefinition> Quotas { get; }
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {

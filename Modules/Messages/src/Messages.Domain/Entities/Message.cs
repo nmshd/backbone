@@ -44,8 +44,8 @@ public class Message : Entity
 
     public byte[] Body { get; private set; }
 
-    public IReadOnlyCollection<Attachment> Attachments { get; }
-    public IReadOnlyCollection<RecipientInformation> Recipients { get; }
+    public virtual IReadOnlyCollection<Attachment> Attachments { get; }
+    public virtual IReadOnlyCollection<RecipientInformation> Recipients { get; }
 
     private bool CanAnonymizeSender => Recipients.All(r => r.IsRelationshipFullyDecomposed);
 

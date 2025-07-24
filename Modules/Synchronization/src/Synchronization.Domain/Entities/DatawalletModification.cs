@@ -39,7 +39,7 @@ public class DatawalletModification : Entity
     }
 
     public DatawalletModificationId Id { get; }
-    public Datawallet? Datawallet { get; }
+    public virtual Datawallet? Datawallet { get; }
     public DatawalletVersion DatawalletVersion { get; }
     public long Index { get; }
     public string ObjectIdentifier { get; }
