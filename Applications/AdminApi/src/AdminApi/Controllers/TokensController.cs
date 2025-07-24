@@ -5,8 +5,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken;
-using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokensByIdentity;
+using Backbone.Modules.Tokens.Application.Tokens.Queries.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace Backbone.AdminApi.Controllers;
 public class TokensController(IMediator mediator, IOptions<ApplicationConfiguration> options) : ApiControllerBase(mediator)
 {
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TokenDTO>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListTokensResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokensByIdentity([FromQuery] PaginationFilter paginationFilter, [FromQuery] string createdBy, CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize != null)
