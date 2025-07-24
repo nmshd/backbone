@@ -16,15 +16,15 @@ public class Token : Entity
     private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
-    protected Token()
+    private Token()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
+        Content = null!;
         _allocations = null!;
         Version = null!;
-        Content = null!;
     }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
@@ -37,7 +37,7 @@ public class Token : Entity
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
 
-        Content = new TokenContent(Id, content);
+        Content = content;
         ForIdentity = forIdentity;
         Password = password;
 
@@ -56,8 +56,7 @@ public class Token : Entity
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public virtual TokenContent Content { get; }
-
+    public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 
@@ -79,7 +78,7 @@ public class Token : Entity
         }
     }
 
-    public virtual IReadOnlyList<TokenAllocation> Allocations => _allocations;
+    public IReadOnlyList<TokenAllocation> Allocations => _allocations;
     public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK;
     public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
 
@@ -202,18 +201,6 @@ public class Token : Entity
     {
         AccessFailedCount = 0;
     }
-}
-
-public class TokenContent
-{
-    public TokenContent(TokenId id, byte[] content)
-    {
-        Id = id;
-        Content = content;
-    }
-
-    public TokenId Id { get; }
-    public byte[] Content { get; }
 }
 
 public enum TokenAccessResult

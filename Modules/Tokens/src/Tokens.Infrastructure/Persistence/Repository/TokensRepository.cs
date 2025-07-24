@@ -23,7 +23,7 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> ListTokensAllocatedOrCreatedByWithContent(IEnumerable<string> ids, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> ListTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
@@ -36,18 +36,16 @@ public class TokensRepository : ITokensRepository
         return templates;
     }
 
-    public async Task<IEnumerable<Token>> ListWithoutContent(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Token>> List(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _tokensDbSet : _readonlyTokensDbSet)
-            .Include(t => t.Allocations)
             .Where(filter)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Token>> ListWithContent(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<DbPaginationResult<Token>> List(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
-            .IncludeAll(_dbContext)
             .Where(filter);
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
@@ -55,16 +53,7 @@ public class TokensRepository : ITokensRepository
         return dbPaginationResult;
     }
 
-    public async Task<Token?> GetWithContent(TokenId id, CancellationToken cancellationToken, bool track = false)
-    {
-        var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
-            .IncludeAll(_dbContext)
-            .FirstOrDefaultAsync(Token.HasId(id), cancellationToken);
-
-        return token;
-    }
-
-    public async Task<Token?> GetWithoutContent(TokenId id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Token?> Get(TokenId id, CancellationToken cancellationToken, bool track = false)
     {
         var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
             .IncludeAll(_dbContext)

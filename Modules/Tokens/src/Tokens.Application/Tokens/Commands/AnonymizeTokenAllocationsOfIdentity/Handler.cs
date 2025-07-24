@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<AnonymizeTokenAllocationsOfIdentityComman
 
     public async Task Handle(AnonymizeTokenAllocationsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var tokens = (await _tokensRepository.ListWithoutContent(Token.HasAllocationFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken, track: true)).ToList();
+        var tokens = (await _tokensRepository.List(Token.HasAllocationFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken, track: true)).ToList();
 
         foreach (var token in tokens)
             token.AnonymizeTokenAllocation(request.IdentityAddress, _applicationConfiguration.DidDomainName);

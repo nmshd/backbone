@@ -19,7 +19,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
             modelBuilder
                 .HasDefaultSchema("Tokens")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -34,6 +34,9 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -103,40 +106,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("TokenId", "AllocatedBy");
 
                     b.ToTable("TokenAllocations", "Tokens");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenContent", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<byte[]>("Content")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.Property<uint>("_TableSharingConcurrencyTokenConvention_Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("xid")
-                        .HasColumnName("xmin");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tokens", "Tokens");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.Token", b =>
-                {
-                    b.HasOne("Backbone.Modules.Tokens.Domain.Entities.TokenContent", "_content")
-                        .WithOne()
-                        .HasForeignKey("Backbone.Modules.Tokens.Domain.Entities.Token", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("_content");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenAllocation", b =>
