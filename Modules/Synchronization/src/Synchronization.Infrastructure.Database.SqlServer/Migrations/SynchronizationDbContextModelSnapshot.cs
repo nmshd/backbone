@@ -18,7 +18,11 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,7 +42,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
-                    b.Property<ushort>("Version")
+                    b.Property<int>("Version")
                         .IsUnicode(false)
                         .HasColumnType("int");
 
@@ -86,7 +90,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<ushort>("DatawalletVersion")
+                    b.Property<int>("DatawalletVersion")
                         .IsUnicode(false)
                         .HasColumnType("int");
 
@@ -126,8 +130,22 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
