@@ -112,8 +112,8 @@ public class AbstractDbContextBase : DbContext, IDbContext
         };
 #if DEBUG
         optionsBuilder.ConfigureWarnings(w => w.Throw(evilEvents)); //Lazyload now throws in DEBUG
-#else
-        optionsBuilder.ConfigureWarnings(w => w.Log(evilEvents.Select(lle => (lle, LogLevel.Warning)).ToArray()));
+// #else
+        // optionsBuilder.ConfigureWarnings(w => w.Log(evilEvents.Select(lle => (lle, Microsoft.Extensions.Logging.LogLevel.Warning)).ToArray()));
 #endif
     }
 
