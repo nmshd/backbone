@@ -12,8 +12,8 @@ public class RelationshipDTO
         To = relationship.To;
         CreatedAt = relationship.CreatedAt;
         Status = relationship.Status;
-        CreationContent = relationship.CreationContent;
-        CreationResponseContent = relationship.CreationResponseContent;
+        CreationContent = relationship.Details.CreationContent;
+        CreationResponseContent = relationship.Details.CreationResponseContent;
         AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
     }
 

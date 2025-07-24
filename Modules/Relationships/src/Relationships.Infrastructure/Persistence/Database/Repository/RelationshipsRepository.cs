@@ -35,8 +35,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship.GetPeerOf(identityAddress);
     }
 
-    public async Task<Relationship> GetRelationship(RelationshipId id, IdentityAddress identityAddress,
-        CancellationToken cancellationToken, bool track = false)
+    public async Task<Relationship> GetRelationshipWithContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
@@ -47,7 +46,19 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<DbPaginationResult<Relationship>> ListRelationshipsWithIds(IEnumerable<RelationshipId> ids,
+    public async Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    {
+        var relationship = await (track ? _relationships : _readOnlyRelationships)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
+            .AsSplitQuery()
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
+
+        return relationship;
+    }
+
+    public async Task<DbPaginationResult<Relationship>> ListRelationshipsWithContent(IEnumerable<RelationshipId> ids,
         IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _relationships : _readOnlyRelationships)
@@ -103,20 +114,22 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Relationship>> List(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)
-            .IncludeAll(_dbContext)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
             .AsSplitQuery()
             .Where(filter)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<T>> List<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+    public async Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)
-            .IncludeAll(_dbContext)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
             .AsSplitQuery()
             .Where(filter)
             .Select(selector)

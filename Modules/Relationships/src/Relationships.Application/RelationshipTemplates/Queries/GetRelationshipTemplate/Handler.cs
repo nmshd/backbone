@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
 
     private async Task<RelationshipTemplate> GetRelationshipTemplate(string relationshipTemplateId, byte[]? password, CancellationToken cancellationToken)
     {
-        var relationshipTemplate = await _relationshipTemplatesRepository.Get(RelationshipTemplateId.Parse(relationshipTemplateId), _userContext.GetAddress(), cancellationToken, true) ??
+        var relationshipTemplate = await _relationshipTemplatesRepository.GetWithContent(RelationshipTemplateId.Parse(relationshipTemplateId), _userContext.GetAddress(), cancellationToken, true) ??
                                    throw new NotFoundException(nameof(RelationshipTemplate));
 
         if (!relationshipTemplate.CanBeCollectedUsingPassword(_userContext.GetAddress(), password))

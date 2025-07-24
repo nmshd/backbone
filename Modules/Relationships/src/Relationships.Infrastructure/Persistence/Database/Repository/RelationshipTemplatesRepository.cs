@@ -43,7 +43,19 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<RelationshipTemplate?> Get(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    public async Task<RelationshipTemplate?> GetWithContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    {
+        var template = await (track ? _templates : _readOnlyTemplates)
+            .Include(r => r.Allocations)
+            .Include(r => r.Details)
+            .NotExpiredFor(identityAddress)
+            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
+            .FirstWithIdOrDefault(id, cancellationToken);
+
+        return template;
+    }
+
+    public async Task<RelationshipTemplate?> GetWithoutContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
             .Include(r => r.Allocations)
@@ -54,7 +66,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> List(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
@@ -70,6 +82,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         }
 
         var query = (track ? _templates : _readOnlyTemplates)
+            .Include(t => t.Details)
             .NotExpiredFor(activeIdentity)
             .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
             .Where(idAndPasswordFilter);
@@ -79,7 +92,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
-    public async Task<IEnumerable<RelationshipTemplate>> List(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RelationshipTemplate>> ListWithoutContent(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
         return await _templates.Where(filter).ToListAsync(cancellationToken);
     }
