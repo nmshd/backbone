@@ -11,7 +11,7 @@ public class TokenDTO
         CreatedByDevice = token.CreatedByDevice;
         CreatedAt = token.CreatedAt;
         ExpiresAt = token.ExpiresAt;
-        Content = token.Content;
+        Content = token.Content.Content;
         ForIdentity = token.ForIdentity?.Value;
         IsPasswordProtected = token.Password is { Length: > 0 };
     }
