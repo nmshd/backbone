@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
     public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
     {
-        var message = await _messagesRepository.GetWithContent(MessageId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true);
+        var message = await _messagesRepository.Get(MessageId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true);
 
         var recipient = message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress());
 

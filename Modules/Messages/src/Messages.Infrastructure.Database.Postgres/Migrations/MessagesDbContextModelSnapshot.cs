@@ -18,11 +18,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.7")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -56,6 +52,9 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<byte[]>("Body")
+                        .HasColumnType("bytea");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -78,23 +77,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("CreatedBy");
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("CreatedBy"), "hash");
-
-                    b.ToTable("Messages", "Messages");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.MessageBody", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<byte[]>("Body")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
-                    b.HasKey("Id");
 
                     b.ToTable("Messages", "Messages");
                 });
@@ -201,17 +183,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Message", b =>
-                {
-                    b.HasOne("Backbone.Modules.Messages.Domain.Entities.MessageBody", "Body")
-                        .WithOne()
-                        .HasForeignKey("Backbone.Modules.Messages.Domain.Entities.Message", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Body");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>

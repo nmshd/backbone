@@ -30,7 +30,7 @@ public class Message : Entity
 
         CreatedBy = createdBy;
         CreatedByDevice = createdByDevice;
-        Body = new MessageBody(Id, body);
+        Body = body;
         Attachments = attachments.ToList();
 
         RaiseDomainEvent(new MessageCreatedDomainEvent(this));
@@ -42,10 +42,10 @@ public class Message : Entity
     public IdentityAddress CreatedBy { get; private set; }
     public DeviceId CreatedByDevice { get; }
 
-    public virtual MessageBody Body { get; }
+    public byte[] Body { get; private set; }
 
-    public virtual IReadOnlyCollection<Attachment> Attachments { get; }
-    public virtual IReadOnlyCollection<RecipientInformation> Recipients { get; }
+    public IReadOnlyCollection<Attachment> Attachments { get; }
+    public IReadOnlyCollection<RecipientInformation> Recipients { get; }
 
     private bool CanAnonymizeSender => Recipients.All(r => r.IsRelationshipFullyDecomposed);
 
@@ -122,24 +122,4 @@ public class Message : Entity
     }
 
     #endregion
-}
-
-public class MessageBody
-{
-    // ReSharper disable once UnusedMember.Local
-    private MessageBody()
-    {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = null!;
-        Body = null!;
-    }
-
-    public MessageBody(MessageId id, byte[] body)
-    {
-        Id = id;
-        Body = body;
-    }
-
-    public MessageId Id { get; }
-    public byte[] Body { get; }
 }
