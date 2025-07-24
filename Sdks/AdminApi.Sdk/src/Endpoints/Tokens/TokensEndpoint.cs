@@ -7,13 +7,13 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Tokens;
 
 public class TokensEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListTokensTestResponse>> ListTokensByIdentity(PaginationFilter paginationFilter, string createdBy, CancellationToken cancellationToken)
+    public async Task<ApiResponse<ListTokensResponse>> ListTokensByIdentity(PaginationFilter paginationFilter, string createdBy, CancellationToken cancellationToken)
     {
         var queryParameters = new NameValueCollection()
         {
             { "createdBy", createdBy }
         };
-        return await _client.Get<ListTokensTestResponse>($"api/{API_VERSION}/Tokens", queryParameters, paginationFilter);
+        return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", queryParameters, paginationFilter);
     }
 
     public async Task<ApiResponse<EmptyResponse>> ResetAccessFailedCount(string tokenId, CancellationToken cancellationToken)
