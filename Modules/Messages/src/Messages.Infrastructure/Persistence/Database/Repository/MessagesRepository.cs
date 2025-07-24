@@ -24,7 +24,7 @@ public class MessagesRepository : IMessagesRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Message> Get(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Message> GetWithContent(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAll(_dbContext)
@@ -49,7 +49,7 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Message>> ListMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter,
+    public async Task<DbPaginationResult<Message>> ListWithContent(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _messages : _readOnlyMessages)
@@ -77,10 +77,11 @@ public class MessagesRepository : IMessagesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Message>> List(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Message>> ListWithoutContent(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
         return await _messages
-            .IncludeAll(_dbContext)
+            .Include(m => m.Recipients)
+            .Include(m => m.Attachments)
             .AsSplitQuery()
             .Where(expression)
             .ToListAsync(cancellationToken);

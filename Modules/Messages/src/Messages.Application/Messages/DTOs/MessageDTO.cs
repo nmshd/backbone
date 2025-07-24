@@ -11,7 +11,7 @@ public class MessageDTO
         CreatedAt = message.CreatedAt;
         CreatedBy = message.CreatedBy;
         CreatedByDevice = message.CreatedByDevice;
-        Body = message.Body;
+        Body = message.Body.Body;
         Attachments = message.Attachments.Select(a => new AttachmentDTO(a)).ToList();
         Recipients = MapRecipients(message, activeIdentity, didDomainName);
     }
