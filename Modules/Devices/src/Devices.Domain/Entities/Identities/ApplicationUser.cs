@@ -31,7 +31,7 @@ public class ApplicationUser : IdentityUser
 
     public DeviceId DeviceId { get; set; }
 
-    public Device Device
+    public virtual Device Device
     {
         get => _device;
         init

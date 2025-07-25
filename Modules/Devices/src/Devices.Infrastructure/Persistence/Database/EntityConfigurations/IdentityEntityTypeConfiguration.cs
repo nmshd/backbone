@@ -23,6 +23,6 @@ public class IdentityEntityTypeConfiguration : EntityEntityTypeConfiguration<Ide
 
         builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany<FeatureFlag>("_efCoreFeatureFlagSetDoNotUse").WithOne().HasForeignKey(x => x.OwnerAddress).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany<FeatureFlag>("EfCoreFeatureFlagSetDoNotUse").WithOne().HasForeignKey(x => x.OwnerAddress).OnDelete(DeleteBehavior.Cascade);
     }
 }

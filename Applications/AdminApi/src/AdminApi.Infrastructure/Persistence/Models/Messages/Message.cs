@@ -7,10 +7,10 @@ public class Message
     public required string Id { get; init; }
     public required string CreatedBy { get; init; }
     public required string CreatedByDevice { get; init; }
-    public required List<MessageRecipient> Recipients { get; init; }
+    public virtual required List<MessageRecipient> Recipients { get; init; }
     public required DateTime CreatedAt { get; init; }
     public required byte[] Body { get; init; }
-    public required IEnumerable<MessageAttachment> Attachments { get; init; }
+    public virtual required IEnumerable<MessageAttachment> Attachments { get; init; }
 }
 
 public class MessageAttachment

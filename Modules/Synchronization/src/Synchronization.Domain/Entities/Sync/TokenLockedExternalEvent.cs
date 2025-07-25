@@ -5,7 +5,7 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 public class TokenLockedExternalEvent : ExternalEvent
 {
     // ReSharper disable once UnusedMember.Local
-    private TokenLockedExternalEvent()
+    protected TokenLockedExternalEvent()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }

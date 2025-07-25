@@ -19,6 +19,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder
                 .HasDefaultSchema("Devices")
                 .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -903,7 +906,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
-                        .WithMany("_efCoreFeatureFlagSetDoNotUse")
+                        .WithMany("EfCoreFeatureFlagSetDoNotUse")
                         .HasForeignKey("OwnerAddress")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1027,7 +1030,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Navigation("Devices");
 
-                    b.Navigation("_efCoreFeatureFlagSetDoNotUse");
+                    b.Navigation("EfCoreFeatureFlagSetDoNotUse");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>

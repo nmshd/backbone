@@ -11,6 +11,15 @@ public class Tier : Entity
 {
     public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Parse("TIR00000000000000001"), "Queued For Deletion");
 
+    // ReSharper disable once UnusedMember.Local
+    protected Tier()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        Name = null!;
+        Quotas = null!;
+    }
+
     public Tier(TierId id, string name)
     {
         Id = id;
@@ -20,7 +29,7 @@ public class Tier : Entity
 
     public TierId Id { get; }
     public string Name { get; }
-    public List<TierQuotaDefinition> Quotas { get; }
+    public virtual List<TierQuotaDefinition> Quotas { get; }
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {

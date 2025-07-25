@@ -16,7 +16,7 @@ public class Token : Entity
     private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
-    private Token()
+    protected Token()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -78,7 +78,7 @@ public class Token : Entity
         }
     }
 
-    public IReadOnlyList<TokenAllocation> Allocations => _allocations;
+    public virtual IReadOnlyList<TokenAllocation> Allocations => _allocations;
     public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK;
     public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
 

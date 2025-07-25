@@ -9,7 +9,7 @@ namespace Backbone.Modules.Messages.Domain.Entities;
 public class RecipientInformation : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private RecipientInformation()
+    protected RecipientInformation()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Address = null!;
