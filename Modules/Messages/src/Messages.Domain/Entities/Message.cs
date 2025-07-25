@@ -17,7 +17,7 @@ public class Message : Entity
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
-        Body = null!;
+        Details = null!;
         Attachments = null!;
         Recipients = null!;
     }
@@ -30,7 +30,7 @@ public class Message : Entity
 
         CreatedBy = createdBy;
         CreatedByDevice = createdByDevice;
-        Body = body;
+        Details = new MessageDetails { Id = Id, Body = body };
         Attachments = attachments.ToList();
 
         RaiseDomainEvent(new MessageCreatedDomainEvent(this));
@@ -42,7 +42,7 @@ public class Message : Entity
     public IdentityAddress CreatedBy { get; private set; }
     public DeviceId CreatedByDevice { get; }
 
-    public byte[] Body { get; private set; }
+    public virtual MessageDetails Details { get; }
 
     public virtual IReadOnlyCollection<Attachment> Attachments { get; }
     public virtual IReadOnlyCollection<RecipientInformation> Recipients { get; }
@@ -122,4 +122,10 @@ public class Message : Entity
     }
 
     #endregion
+}
+
+public class MessageDetails
+{
+    public required MessageId Id { get; init; } = null!;
+    public required byte[] Body { get; init; }
 }

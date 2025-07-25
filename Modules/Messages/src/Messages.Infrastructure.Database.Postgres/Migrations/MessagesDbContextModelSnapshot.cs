@@ -56,9 +56,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("Body")
-                        .HasColumnType("bytea");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -81,6 +78,23 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("CreatedBy");
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("CreatedBy"), "hash");
+
+                    b.ToTable("Messages", "Messages");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.MessageDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("Body")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Messages", "Messages");
                 });
@@ -189,6 +203,15 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.MessageDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Messages.Domain.Entities.MessageDetails", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
                 {
                     b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
@@ -201,6 +224,9 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Message", b =>
                 {
                     b.Navigation("Attachments");
+
+                    b.Navigation("Details")
+                        .IsRequired();
 
                     b.Navigation("Recipients");
                 });
