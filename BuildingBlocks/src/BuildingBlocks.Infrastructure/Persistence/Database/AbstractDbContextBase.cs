@@ -112,7 +112,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
         };
 #if DEBUG
         optionsBuilder.ConfigureWarnings(w => w.Throw(evilEvents));
-// #else
+#else
         // optionsBuilder.ConfigureWarnings(w => w.Log(evilEvents.Select(lle => (lle, Microsoft.Extensions.Logging.LogLevel.Warning)).ToArray()));
 #endif
     }
