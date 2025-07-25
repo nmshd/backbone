@@ -17,7 +17,6 @@ public class DatawalletModification : Entity
         CreatedBy = null!;
         CreatedByDevice = null!;
         Collection = null!;
-        Details = null!;
     }
 
     public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier,
@@ -32,7 +31,7 @@ public class DatawalletModification : Entity
         Collection = collection;
         ObjectIdentifier = objectIdentifier;
         PayloadCategory = payloadCategory;
-        Details = new DatawalletModificationDetails { Id = Id, EncryptedPayload = encryptedPayload };
+        EncryptedPayload = encryptedPayload;
         CreatedBy = datawallet.Owner;
 
         CreatedAt = SystemTime.UtcNow;
@@ -50,7 +49,7 @@ public class DatawalletModification : Entity
     public DeviceId CreatedByDevice { get; }
     public string Collection { get; }
     public DatawalletModificationType Type { get; }
-    public virtual DatawalletModificationDetails Details { get; }
+    public byte[]? EncryptedPayload { get; private set; }
 }
 
 public enum DatawalletModificationType
@@ -59,10 +58,4 @@ public enum DatawalletModificationType
     Update = 1,
     Delete = 2,
     CacheChanged = 3
-}
-
-public class DatawalletModificationDetails
-{
-    public required DatawalletModificationId Id { get; init; } = null!;
-    public required byte[]? EncryptedPayload { get; init; }
 }

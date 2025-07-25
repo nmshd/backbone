@@ -94,6 +94,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsUnicode(false)
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("EncryptedPayload")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
@@ -115,22 +118,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.HasIndex("CreatedBy", "Index")
                         .IsUnique();
-
-                    b.ToTable("DatawalletModifications", "Synchronization");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModificationDetails", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
-                    b.Property<byte[]>("EncryptedPayload")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
 
                     b.ToTable("DatawalletModifications", "Synchronization");
                 });
@@ -323,15 +310,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.Navigation("Datawallet");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModificationDetails", b =>
-                {
-                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", null)
-                        .WithOne("Details")
-                        .HasForeignKey("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModificationDetails", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
@@ -359,12 +337,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>
                 {
                     b.Navigation("Modifications");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>
-                {
-                    b.Navigation("Details")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
