@@ -94,7 +94,7 @@ public class TokensRepository : ITokensRepository
 
     public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
     {
-#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used.
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
         await _tokensDbSet.Where(filter).BatchDeleteAsync(cancellationToken);
 #pragma warning restore CS0618 // Type or member is obsolete
     }
