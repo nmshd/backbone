@@ -51,8 +51,10 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
         var deletionProcessId = IdentityDeletionProcessId.Generate();
-        var handler = CreateHandler();
+        var handler = CreateHandler(identitiesRepository);
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand { Address = identity.Address, DeletionProcessId = deletionProcessId }, CancellationToken.None);
