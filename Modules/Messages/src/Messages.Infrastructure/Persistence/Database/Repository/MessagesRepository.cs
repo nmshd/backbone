@@ -7,6 +7,7 @@ using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repositor
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
@@ -89,6 +90,8 @@ public class MessagesRepository : IMessagesRepository
 
     public async Task Delete(MessageId messageId, CancellationToken cancellationToken)
     {
-        await _messages.Where(m => m.Id == messageId).ExecuteDeleteAsync(cancellationToken);
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used.
+        await _messages.Where(m => m.Id == messageId).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 }

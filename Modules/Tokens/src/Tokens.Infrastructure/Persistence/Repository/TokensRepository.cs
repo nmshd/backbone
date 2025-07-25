@@ -6,6 +6,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Repository;
@@ -93,7 +94,9 @@ public class TokensRepository : ITokensRepository
 
     public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
     {
-        await _tokensDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used.
+        await _tokensDbSet.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     public async Task DeleteToken(Token token, CancellationToken cancellationToken)
