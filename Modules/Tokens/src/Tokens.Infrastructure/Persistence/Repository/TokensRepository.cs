@@ -40,6 +40,7 @@ public class TokensRepository : ITokensRepository
     {
         return await (track ? _tokensDbSet : _readonlyTokensDbSet)
             .Where(filter)
+            .Include(t => t.Allocations)
             .ToListAsync(cancellationToken);
     }
 
