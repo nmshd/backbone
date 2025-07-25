@@ -17,7 +17,7 @@ public class Identity : Entity
     private TierId? _tierId;
 
     // ReSharper disable once UnusedMember.Local
-    private Identity()
+    protected Identity()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         ClientId = null!;

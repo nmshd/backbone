@@ -10,7 +10,7 @@ namespace Backbone.Modules.Announcements.Domain.Entities;
 public class Announcement : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Announcement()
+    protected Announcement()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;

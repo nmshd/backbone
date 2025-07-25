@@ -5,7 +5,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 
 public class RelationshipTemplate : Entity
 {
-    private RelationshipTemplate()
+    protected RelationshipTemplate()
     {
     }
 

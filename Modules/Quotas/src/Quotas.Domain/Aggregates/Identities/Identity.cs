@@ -20,7 +20,7 @@ public class Identity : Entity
     private readonly object _latestExhaustionDateLock = new();
 
     // ReSharper disable once UnusedMember.Local
-    private Identity()
+    protected Identity()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Address = null!;

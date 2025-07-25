@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 
 public class RelationshipTemplateAllocation : Entity
 {
-    private RelationshipTemplateAllocation()
+    protected RelationshipTemplateAllocation()
     {
     }
 

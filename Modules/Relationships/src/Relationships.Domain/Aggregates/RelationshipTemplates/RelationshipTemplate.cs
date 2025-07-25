@@ -13,7 +13,7 @@ public class RelationshipTemplate : Entity
     public const int MAX_PASSWORD_LENGTH = 200;
 
     // ReSharper disable once UnusedMember.Local
-    private RelationshipTemplate()
+    protected RelationshipTemplate()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
