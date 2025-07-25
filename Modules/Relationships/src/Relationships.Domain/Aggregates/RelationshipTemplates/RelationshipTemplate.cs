@@ -19,6 +19,7 @@ public class RelationshipTemplate : Entity
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
+        Details = null!;
     }
 
     public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null,
@@ -31,7 +32,7 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = createdByDevice;
         MaxNumberOfAllocations = maxNumberOfAllocations;
         ExpiresAt = expiresAt;
-        Content = content;
+        Details = new RelationshipTemplateDetails { Id = Id, Content = content };
         ForIdentity = forIdentity;
         Password = password;
 
@@ -46,7 +47,8 @@ public class RelationshipTemplate : Entity
     public DeviceId CreatedByDevice { get; set; }
     public int? MaxNumberOfAllocations { get; set; }
     public DateTime? ExpiresAt { get; set; }
-    public byte[]? Content { get; private set; }
+
+    public virtual RelationshipTemplateDetails Details { get; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -140,4 +142,10 @@ public class RelationshipTemplate : Entity
     }
 
     #endregion
+}
+
+public class RelationshipTemplateDetails
+{
+    public required RelationshipTemplateId Id { get; init; } = null!;
+    public required byte[] Content { get; init; } = null!;
 }

@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, Re
     public async Task<RevokeRelationshipReactivationResponse> Handle(RevokeRelationshipReactivationCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
-        var relationship = await _relationshipsRepository.GetRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
+        var relationship = await _relationshipsRepository.GetRelationshipWithoutContent(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.RevokeReactivation(_activeIdentity, _activeDevice);
 

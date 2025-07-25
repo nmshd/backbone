@@ -9,12 +9,13 @@ namespace Backbone.Modules.Relationships.Application.Infrastructure.Persistence.
 
 public interface IRelationshipTemplatesRepository
 {
-    Task<DbPaginationResult<RelationshipTemplate>> List(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
-    Task<IEnumerable<RelationshipTemplate>> List(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
+    Task<IEnumerable<RelationshipTemplate>> ListWithoutContent(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
 
-    Task<RelationshipTemplate?> Get(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
+    Task<RelationshipTemplate?> GetWithContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
+    Task<RelationshipTemplate?> GetWithoutContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
     Task Update(IEnumerable<RelationshipTemplate> templates, CancellationToken cancellationToken);

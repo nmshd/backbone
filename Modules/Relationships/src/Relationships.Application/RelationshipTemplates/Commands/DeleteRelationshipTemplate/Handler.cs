@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<DeleteRelationshipTemplateCommand>
 
     public async Task Handle(DeleteRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {
-        var relationshipTemplate = await _relationshipTemplatesRepository.Get(RelationshipTemplateId.Parse(request.Id), _userContext.GetAddress(), cancellationToken) ??
+        var relationshipTemplate = await _relationshipTemplatesRepository.GetWithoutContent(RelationshipTemplateId.Parse(request.Id), _userContext.GetAddress(), cancellationToken) ??
                                    throw new NotFoundException(nameof(RelationshipTemplate));
 
         relationshipTemplate.EnsureCanBeDeletedBy(_userContext.GetAddress());

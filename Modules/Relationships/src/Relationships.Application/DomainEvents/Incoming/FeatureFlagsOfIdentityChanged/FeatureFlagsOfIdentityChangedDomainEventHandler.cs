@@ -36,7 +36,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
         var activeAndPendingRelationshipAddressPairs = await
-            _relationshipsRepository.List(
+            _relationshipsRepository.ListWithoutContent(
                 Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutFeatureFlagsChange()),
                 r => new { r.From, r.To },
                 CancellationToken.None);
