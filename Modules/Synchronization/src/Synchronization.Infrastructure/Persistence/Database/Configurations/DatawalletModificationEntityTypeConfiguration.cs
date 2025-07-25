@@ -1,10 +1,11 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
-public class DatawalletModificationEntityTypeConfiguration : EntityEntityTypeConfiguration<DatawalletModification>
+public class DatawalletModificationEntityTypeConfiguration : EntityEntityTypeConfiguration<DatawalletModification>, IEntityTypeConfiguration<DatawalletModificationDetails>
 {
     public override void Configure(EntityTypeBuilder<DatawalletModification> builder)
     {
@@ -23,6 +24,11 @@ public class DatawalletModificationEntityTypeConfiguration : EntityEntityTypeCon
         builder.Property(x => x.ObjectIdentifier).HasMaxLength(100);
         builder.Property(x => x.PayloadCategory).HasMaxLength(50);
         builder.Property(x => x.Type);
-        builder.Property(x => x.EncryptedPayload);
+        builder.HasOne(x => x.Details).WithOne().HasForeignKey<DatawalletModificationDetails>(x => x.Id).IsRequired();
+    }
+
+    public void Configure(EntityTypeBuilder<DatawalletModificationDetails> builder)
+    {
+        builder.ToTable("DatawalletModifications");
     }
 }

@@ -23,7 +23,7 @@ public class DatawalletModificationDTO
         CreatedByDevice = datawalletModification.CreatedByDevice;
         Collection = datawalletModification.Collection;
         Type = MapDatawalletModificationType(datawalletModification.Type);
-        EncryptedPayload = datawalletModification.EncryptedPayload;
+        EncryptedPayload = datawalletModification.Details.EncryptedPayload;
     }
 
     public string Id { get; set; }
