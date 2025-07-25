@@ -47,7 +47,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_cancel_when_given_identity_does_not_exist()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
