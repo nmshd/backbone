@@ -22,7 +22,7 @@ public class Token : Entity
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
-        Content = null!;
+        Details = null!;
         _allocations = null!;
         Version = null!;
     }
@@ -37,7 +37,7 @@ public class Token : Entity
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
 
-        Content = content;
+        Details = new TokenDetails { Id = Id, Content = content };
         ForIdentity = forIdentity;
         Password = password;
 
@@ -56,7 +56,7 @@ public class Token : Entity
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public byte[] Content { get; private set; }
+    public virtual TokenDetails Details { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 
@@ -211,4 +211,10 @@ public enum TokenAccessResult
     ForIdentityDoesNotMatch,
     Locked,
     Expired
+}
+
+public class TokenDetails
+{
+    public required TokenId Id { get; init; } = null!;
+    public required byte[] Content { get; init; }
 }

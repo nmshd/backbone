@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<ResetAccessFailedCountOfTokenCommand>
 
     public async Task Handle(ResetAccessFailedCountOfTokenCommand request, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Get(TokenId.Parse(request.TokenId), cancellationToken) ?? throw new NotFoundException(nameof(Token));
+        var token = await _tokensRepository.GetWithoutContent(TokenId.Parse(request.TokenId), cancellationToken) ?? throw new NotFoundException(nameof(Token));
         token.ResetAccessFailedCount();
         await _tokensRepository.Update(token, cancellationToken);
     }
