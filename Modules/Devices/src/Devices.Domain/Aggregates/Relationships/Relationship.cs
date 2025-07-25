@@ -8,7 +8,7 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 public class Relationship : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Relationship()
+    protected Relationship()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }

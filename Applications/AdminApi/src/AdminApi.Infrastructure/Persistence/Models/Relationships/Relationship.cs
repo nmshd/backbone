@@ -12,8 +12,8 @@ public class Relationship
     public required RelationshipStatus Status { get; init; }
     public required bool FromHasDecomposed { get; init; }
     public required bool ToHasDecomposed { get; init; }
-    public required RelationshipTemplate? RelationshipTemplate { get; init; }
-    public required IList<RelationshipAuditLogItem> AuditLog { get; init; }
+    public virtual required RelationshipTemplate? RelationshipTemplate { get; init; }
+    public virtual required IList<RelationshipAuditLogItem> AuditLog { get; init; }
 }
 
 public enum RelationshipStatus

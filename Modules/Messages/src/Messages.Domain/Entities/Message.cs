@@ -11,7 +11,7 @@ namespace Backbone.Modules.Messages.Domain.Entities;
 public class Message : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Message()
+    protected Message()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -44,8 +44,8 @@ public class Message : Entity
 
     public byte[] Body { get; private set; }
 
-    public IReadOnlyCollection<Attachment> Attachments { get; }
-    public IReadOnlyCollection<RecipientInformation> Recipients { get; }
+    public virtual IReadOnlyCollection<Attachment> Attachments { get; }
+    public virtual IReadOnlyCollection<RecipientInformation> Recipients { get; }
 
     private bool CanAnonymizeSender => Recipients.All(r => r.IsRelationshipFullyDecomposed);
 
