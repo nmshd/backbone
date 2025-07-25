@@ -11,7 +11,7 @@ public class Identity
     public required string ClientId { get; init; }
     public required DateTime CreatedAt { get; init; }
     public required byte IdentityVersion { get; init; }
-    public required IList<Device> Devices { get; init; }
+    public virtual required IList<Device> Devices { get; init; }
 }
 
 public enum IdentityStatus
