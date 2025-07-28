@@ -110,7 +110,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpPut("{id}/Terminate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipMetadataDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)

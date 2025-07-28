@@ -19,7 +19,10 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
             modelBuilder
                 .HasDefaultSchema("Tokens")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -34,9 +37,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -108,6 +108,29 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("TokenAllocations", "Tokens");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<uint>("_TableSharingConcurrencyTokenConvention_Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens", "Tokens");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenAllocation", b =>
                 {
                     b.HasOne("Backbone.Modules.Tokens.Domain.Entities.Token", null)
@@ -117,9 +140,21 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Tokens.Domain.Entities.Token", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.Token", b =>
                 {
                     b.Navigation("Allocations");
+
+                    b.Navigation("Details")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

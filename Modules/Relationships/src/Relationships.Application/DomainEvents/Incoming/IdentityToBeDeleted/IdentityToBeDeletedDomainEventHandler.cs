@@ -28,7 +28,7 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
     {
         var relationships = (await _relationshipsRepository
-            .List(
+            .ListWithoutContent(
                 Relationship.HasParticipant(identityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()),
                 CancellationToken.None)).ToList();
         return relationships;

@@ -26,7 +26,7 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => fakeRelationshipsRepository.List(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeRelationshipsRepository.ListWithoutContent(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);

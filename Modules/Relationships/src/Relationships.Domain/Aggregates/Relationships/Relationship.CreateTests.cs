@@ -25,7 +25,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         relationship.RelationshipTemplateId.ShouldBe(RELATIONSHIP_TEMPLATE_OF_2.Id);
         relationship.RelationshipTemplate.ShouldBe(RELATIONSHIP_TEMPLATE_OF_2);
         relationship.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
-        relationship.CreationContent.ShouldBe([0, 1, 2]);
+        relationship.Details.CreationContent.ShouldBe([0, 1, 2]);
     }
 
     [Fact]

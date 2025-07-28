@@ -20,7 +20,7 @@ public class RelationshipAcceptTests : AbstractTestsBase
 
         // Assert
         relationship.Status.ShouldBe(RelationshipStatus.Active);
-        relationship.CreationResponseContent.ShouldBeEquivalentTo(new byte[] { 0 });
+        relationship.Details.CreationResponseContent.ShouldBeEquivalentTo(new byte[] { 0 });
     }
 
     [Fact]

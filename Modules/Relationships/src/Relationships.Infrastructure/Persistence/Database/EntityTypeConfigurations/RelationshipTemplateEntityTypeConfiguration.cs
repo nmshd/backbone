@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfiguration<RelationshipTemplate>
+public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfiguration<RelationshipTemplate>, IEntityTypeConfiguration<RelationshipTemplateDetails>
 {
     public override void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
@@ -29,5 +29,12 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
         builder
             .Property(x => x.Password)
             .HasMaxLength(RelationshipTemplate.MAX_PASSWORD_LENGTH);
+
+        builder.HasOne(x => x.Details).WithOne().HasForeignKey<RelationshipTemplateDetails>(x => x.Id).IsRequired();
+    }
+
+    public void Configure(EntityTypeBuilder<RelationshipTemplateDetails> builder)
+    {
+        builder.ToTable("RelationshipTemplates");
     }
 }

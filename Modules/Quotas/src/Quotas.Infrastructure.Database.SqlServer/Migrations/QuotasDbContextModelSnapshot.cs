@@ -18,10 +18,53 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Quotas")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Challenges.Challenge", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Challenges", "Challenges", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.DatawalletModifications.DatawalletModification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DatawalletModifications", "Synchronization", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata.FileMetadata", b =>
                 {
@@ -41,6 +84,26 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FileMetadata", "Files", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Device", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Devices", "Devices", t =>
                         {
                             t.ExcludeFromMigrations();
                         });
@@ -66,6 +129,26 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.HasIndex("TierId");
 
                     b.ToTable("Identities", "Quotas");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IdentityDeletionProcess", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityDeletionProcesses", "Devices", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IndividualQuota", b =>
@@ -136,18 +219,18 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(80)");
 
-                    b.Property<string>("_definitionId")
+                    b.Property<string>("DefinitionId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
-                        .HasColumnName("DefinitionId")
                         .IsFixedLength();
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplyTo");
 
-                    b.HasIndex("_definitionId");
+                    b.HasIndex("DefinitionId");
 
                     b.ToTable("TierQuotas", "Quotas");
                 });
@@ -324,12 +407,13 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", "_definition")
+                    b.HasOne("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", "Definition")
                         .WithMany()
-                        .HasForeignKey("_definitionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("_definition");
+                    b.Navigation("Definition");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", b =>

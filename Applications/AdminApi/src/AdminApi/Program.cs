@@ -130,7 +130,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
                 .UseDbContext<DevicesDbContext>()
                 .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
                     CustomOpenIddictEntityFrameworkCoreToken, string>();
-            options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
+            options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
     services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);

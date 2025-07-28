@@ -15,7 +15,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
     private IResponse? _whenResponse = null;
-    private ApiResponse<ListTokensTestResponse> _listTokensResponse = null!;
+    private ApiResponse<ListTokensResponse> _listTokensResponse = null!;
     private ApiResponse<EmptyResponse> _resetAccesesFailedCountResponse = null!;
     private string _newIdentityAddress = string.Empty;
 

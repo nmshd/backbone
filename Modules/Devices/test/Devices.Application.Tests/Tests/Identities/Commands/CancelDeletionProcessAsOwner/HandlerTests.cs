@@ -51,17 +51,25 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_cancel_when_given_identity_does_not_exist()
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
-        var handler = CreateHandler();
+
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Get(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
+
+        var userContext = A.Fake<IUserContext>();
+        A.CallTo(() => userContext.GetAddress()).Returns(address);
+
+        var handler = CreateHandler(identitiesRepository, userContext);
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = address }, CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = IdentityDeletionProcessId.Generate() }, CancellationToken.None);
 
         // Assert
-        acting.ShouldThrowAsync<NotFoundException>();
+        var exception = await acting.ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldContain("Identity");
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IPushNotificationSender? pushNotificationSender = null)

@@ -6,7 +6,7 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 public class TokenAllocation : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private TokenAllocation()
+    protected TokenAllocation()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         TokenId = null!;

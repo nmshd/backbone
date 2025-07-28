@@ -29,7 +29,6 @@ public class CustomUserStore : UserStore<ApplicationUser>
     {
         var user = await Context
             .Set<ApplicationUser>()
-            .AsNoTracking()
             .Include(u => u.Device)
             .ThenInclude(d => d.Identity)
             .FirstOrDefaultAsync(filter, cancellationToken);
@@ -37,10 +36,26 @@ public class CustomUserStore : UserStore<ApplicationUser>
         return user;
     }
 
-    public override Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken = new CancellationToken())
     {
-        Context.Attach(user.Device);
-        Context.Update(user.Device);
-        return base.UpdateAsync(user, cancellationToken);
+        // This implementation is almost the same as the base implementation. The only difference is that we don't call `Context.Update`. 
+        // That's not necessary because the user is already being tracked by the DbContext when it is retrieved from the database.
+        // If we called `Context.Update` here, it would cause all properties to be marked as modified, instead of only the ones that changed.
+        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfDisposed();
+        ArgumentNullException.ThrowIfNull(user);
+
+        Context.Attach(user);
+        user.ConcurrencyStamp = Guid.NewGuid().ToString();
+        try
+        {
+            await SaveChanges(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
+        }
+
+        return IdentityResult.Success;
     }
 }

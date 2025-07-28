@@ -8,10 +8,10 @@ namespace Backbone.BuildingBlocks.API.Mvc;
 
 public class AspNetCoreUserContext : IUserContext
 {
-    private const string ADDRESS_CLAIM = "address";
+    private const string ADDRESS_CLAIM_OLD = "address";
+    private const string ADDRESS_CLAIM = "nmshd_address";
     private const string DEVICE_ID_CLAIM = "device_id";
     private const string USER_ID_CLAIM = "sub";
-    private const string SUBSCRIPTION_PLAN_CLAIM = "subscription_plan";
     private const string CLIENT_ID_CLAIM = "client_id";
     private readonly IHttpContextAccessor _context;
 
@@ -22,7 +22,7 @@ public class AspNetCoreUserContext : IUserContext
 
     public IdentityAddress GetAddress()
     {
-        var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM) ?? throw new NotFoundException();
+        var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM) ?? GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM_OLD) ?? throw new NotFoundException();
         return IdentityAddress.Parse(address);
     }
 

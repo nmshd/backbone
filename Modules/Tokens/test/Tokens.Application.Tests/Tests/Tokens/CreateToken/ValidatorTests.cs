@@ -46,8 +46,8 @@ public class ValidatorTests : AbstractTestsBase
             new CreateTokenCommand { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue", "'Content' must not be empty.");
-        validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue",
+        validationResult.ShouldHaveValidationErrorForItem("Content", "error.platform.validation.invalidPropertyValue", "'Content' must not be empty.");
+        validationResult.ShouldHaveValidationErrorForItem("Content", "error.platform.validation.invalidPropertyValue",
             "'Content' must be between 1 and 10485760 bytes long. You entered 0 bytes.");
     }
 
