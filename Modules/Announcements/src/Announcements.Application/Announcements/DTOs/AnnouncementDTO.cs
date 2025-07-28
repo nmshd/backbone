@@ -14,6 +14,7 @@ public class AnnouncementDTO
         Recipients = announcement.Recipients.Select(r => r.Address.ToString());
         Actions = announcement.Actions.Select(a => new AnnouncementActionDTO(a));
         IqlQuery = announcement.IqlQuery?.ToString();
+        IsSilent = announcement.IsSilent;
     }
 
 
