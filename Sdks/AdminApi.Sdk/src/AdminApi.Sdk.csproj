@@ -3,6 +3,5 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
-        <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.Domain\Tokens.Domain.csproj" />
     </ItemGroup>
 </Project>

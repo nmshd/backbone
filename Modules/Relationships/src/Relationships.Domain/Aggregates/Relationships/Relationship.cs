@@ -12,7 +12,7 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 public class Relationship : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Relationship()
+    protected Relationship()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -21,6 +21,7 @@ public class Relationship : Entity
         From = null!;
         To = null!;
         AuditLog = null!;
+        Details = null!;
     }
 
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
@@ -37,7 +38,7 @@ public class Relationship : Entity
 
         CreatedAt = SystemTime.UtcNow;
 
-        CreationContent = creationContent;
+        Details = new RelationshipDetails { Id = Id, CreationContent = creationContent };
 
         AuditLog = [new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)];
 
@@ -75,7 +76,7 @@ public class Relationship : Entity
 
     public RelationshipId Id { get; }
     public RelationshipTemplateId? RelationshipTemplateId { get; }
-    public RelationshipTemplate? RelationshipTemplate { get; }
+    public virtual RelationshipTemplate? RelationshipTemplate { get; }
 
     public IdentityAddress From { get; private set; }
     public IdentityAddress To { get; private set; }
@@ -83,9 +84,8 @@ public class Relationship : Entity
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; private set; }
-    public byte[]? CreationContent { get; }
-    public byte[]? CreationResponseContent { get; private set; }
-    public List<RelationshipAuditLogEntry> AuditLog { get; }
+    public virtual RelationshipDetails Details { get; }
+    public virtual List<RelationshipAuditLogEntry> AuditLog { get; }
 
     public IdentityAddress LastModifiedBy => AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy;
 
@@ -103,7 +103,7 @@ public class Relationship : Entity
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
         Status = RelationshipStatus.Active;
-        CreationResponseContent = creationResponseContent;
+        Details.CreationResponseContent = creationResponseContent;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.AcceptanceOfCreation,
@@ -134,7 +134,7 @@ public class Relationship : Entity
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
-        CreationResponseContent = creationResponseContent;
+        Details.CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Rejected;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -154,7 +154,7 @@ public class Relationship : Entity
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsCreatedBySelf(activeIdentity);
 
-        CreationResponseContent = creationResponseContent;
+        Details.CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Revoked;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -429,4 +429,11 @@ public class Relationship : Entity
     }
 
     #endregion
+}
+
+public class RelationshipDetails
+{
+    public required RelationshipId Id { get; init; } = null!;
+    public required byte[]? CreationContent { get; init; }
+    public byte[]? CreationResponseContent { get; internal set; }
 }

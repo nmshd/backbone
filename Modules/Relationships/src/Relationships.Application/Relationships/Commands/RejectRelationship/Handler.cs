@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
 
-        var relationship = await _relationshipsRepository.GetRelationship(relationshipId, _activeIdentity, cancellationToken, track: true) ??
+        var relationship = await _relationshipsRepository.GetRelationshipWithContent(relationshipId, _activeIdentity, cancellationToken, track: true) ??
                            throw new NotFoundException(nameof(Relationship));
 
         relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent);

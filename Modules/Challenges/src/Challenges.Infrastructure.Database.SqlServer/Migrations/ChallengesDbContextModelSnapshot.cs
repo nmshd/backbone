@@ -18,7 +18,11 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Challenges")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

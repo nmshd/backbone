@@ -8,7 +8,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class IdentityDeletionProcessAuditLogEntry : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private IdentityDeletionProcessAuditLogEntry()
+    protected IdentityDeletionProcessAuditLogEntry()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;

@@ -18,7 +18,11 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,9 +56,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("Body")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -76,6 +77,23 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedBy")
                         .HasAnnotation("Npgsql:IndexMethod", "hash");
+
+                    b.ToTable("Messages", "Messages");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.MessageDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("Body")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Messages", "Messages");
                 });
@@ -184,6 +202,15 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.MessageDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Messages.Domain.Entities.MessageDetails", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
                 {
                     b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
@@ -196,6 +223,9 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Message", b =>
                 {
                     b.Navigation("Attachments");
+
+                    b.Navigation("Details")
+                        .IsRequired();
 
                     b.Navigation("Recipients");
                 });

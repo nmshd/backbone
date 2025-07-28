@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<ListRelationshipsOfIdentityQuery, ListRel
 
     public async Task<ListRelationshipsOfIdentityResponse> Handle(ListRelationshipsOfIdentityQuery request, CancellationToken cancellationToken)
     {
-        var relationships = await _relationshipsRepository.List(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
+        var relationships = await _relationshipsRepository.ListWithoutContent(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
 
         return new ListRelationshipsOfIdentityResponse(relationships);
     }

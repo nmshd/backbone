@@ -19,7 +19,10 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
             modelBuilder
                 .HasDefaultSchema("AdminUi")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -219,6 +222,9 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastOwnershipClaimAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Owner")

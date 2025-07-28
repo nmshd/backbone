@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<DeleteTokenCommand>
 
     public async Task Handle(DeleteTokenCommand request, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Get(TokenId.Parse(request.Id), cancellationToken) ?? throw new NotFoundException(nameof(Token));
+        var token = await _tokensRepository.GetWithoutContent(TokenId.Parse(request.Id), cancellationToken) ?? throw new NotFoundException(nameof(Token));
 
         token.EnsureCanBeDeletedBy(_userContext.GetAddress());
 

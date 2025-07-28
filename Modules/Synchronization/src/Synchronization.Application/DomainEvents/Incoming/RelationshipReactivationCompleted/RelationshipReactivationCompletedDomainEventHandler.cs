@@ -50,7 +50,6 @@ public class RelationshipReactivationCompletedDomainEventHandler : IDomainEventH
         foreach (var externalEvent in externalEvents)
         {
             externalEvent.UnblockDelivery();
-            _dbContext.Set<ExternalEvent>().Update(externalEvent);
         }
 
         await _dbContext.SaveChangesAsync(CancellationToken.None);

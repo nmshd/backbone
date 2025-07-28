@@ -5,11 +5,11 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 
 public class RelationshipTemplate : Entity
 {
-    private RelationshipTemplate()
+    protected RelationshipTemplate()
     {
     }
 
     public string Id { get; } = null!;
     public IdentityAddress CreatedBy { get; } = null!;
-    public List<RelationshipTemplateAllocation> Allocations { get; } = null!;
+    public virtual List<RelationshipTemplateAllocation> Allocations { get; } = null!;
 }

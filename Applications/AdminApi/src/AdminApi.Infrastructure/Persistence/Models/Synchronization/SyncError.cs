@@ -5,8 +5,8 @@ namespace Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 public class SyncError
 {
     public required string Id { get; init; }
-    public required ExternalEvent ExternalEvent { get; init; }
-    public required SyncRun SyncRun { get; init; }
+    public virtual required ExternalEvent ExternalEvent { get; init; }
+    public virtual required SyncRun SyncRun { get; init; }
     public required string ErrorCode { get; init; }
 }
 

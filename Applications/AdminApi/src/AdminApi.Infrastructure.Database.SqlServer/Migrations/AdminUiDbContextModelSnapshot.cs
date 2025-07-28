@@ -19,7 +19,10 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
             modelBuilder
                 .HasDefaultSchema("AdminUi")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -219,6 +222,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastOwnershipClaimAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Owner")
