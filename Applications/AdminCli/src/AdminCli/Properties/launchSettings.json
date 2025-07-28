@@ -2,7 +2,7 @@
   "profiles": {
       "Create Client": {
           "commandName": "Project",
-          "commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic --maxIdentities 100"
+          "commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic"
       },
       "List Clients": {
           "commandName": "Project",
