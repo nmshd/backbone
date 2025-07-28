@@ -18,7 +18,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
         IOptionsMonitor<OpenIddictEntityFrameworkCoreOptions> options)
         : base(cache, context, options)
     {
-        this._customDbContext = context;
+        _customDbContext = context;
     }
 
     public override async ValueTask DeleteAsync(CustomOpenIddictEntityFrameworkCoreApplication application, CancellationToken cancellationToken)
