@@ -19,10 +19,11 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using OpenIddict.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
-public class DevicesDbContext : IdentityDbContext<ApplicationUser>
+public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IOpenIddictEntityFrameworkCoreContext
 {
     private const int MAX_RETRY_COUNT = 50000;
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -252,5 +253,10 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>
             await _eventBus.Publish(e.DomainEvents);
             e.ClearDomainEvents();
         }
+    }
+
+    public ValueTask<DbContext> GetDbContextAsync(CancellationToken cancellationToken)
+    {
+        return new ValueTask<DbContext>(this);
     }
 }
