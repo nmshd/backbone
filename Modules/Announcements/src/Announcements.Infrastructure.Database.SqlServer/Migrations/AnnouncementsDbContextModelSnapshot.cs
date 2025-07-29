@@ -82,6 +82,9 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<byte>("Order")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnnouncementId");
