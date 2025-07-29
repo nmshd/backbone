@@ -18,8 +18,8 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
     public async Task<AnnouncementDTO> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
         var recipients = request.Recipients.Select(r => new AnnouncementRecipient(IdentityAddress.Parse(r)));
-        var actions = request.Actions.Select(a => new AnnouncementAction(a.DisplayName.ToDictionary(kv => AnnouncementLanguage.Parse(kv.Key), kv => kv.Value), a.Link));
         var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
+        var actions = request.Actions.Select((a, i) => new AnnouncementAction(a.DisplayName.ToDictionary(kv => AnnouncementLanguage.Parse(kv.Key), kv => kv.Value), a.Link, (byte)i));
 
         var iqlQuery = string.IsNullOrEmpty(request.IqlQuery) ? null : AnnouncementIqlQuery.Parse(request.IqlQuery);
 
