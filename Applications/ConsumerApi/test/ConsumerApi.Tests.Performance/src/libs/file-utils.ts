@@ -118,7 +118,7 @@ export function loadPools(folderName: string, whatoToLoad: PoolLoadOptions[] = [
         parsedRelationshipTemplates.forEach((relationshipTemplate) => {
             const identity = identitiesMap.get(relationshipTemplate.IdentityAddress);
             if (identity !== undefined) {
-                if (identity.relationshipTemplates === undefined) identity.relationshipTemplates = [];
+                identity.relationshipTemplates ??= [];
                 identity.relationshipTemplates.push({ relationshipTemplateId: relationshipTemplate.RelationshipTemplateId });
             }
         });
@@ -129,11 +129,11 @@ export function loadPools(folderName: string, whatoToLoad: PoolLoadOptions[] = [
         const parsedRelationships = papaparse.parse<CSVRelationship>(RelationshipsFile, { header: true }).data.filter((x) => x.RelationshipId !== "");
         parsedRelationships.forEach((relationship) => {
             const identityFrom = identitiesMap.get(relationship.AddressFrom)!;
-            if (identityFrom.relationships === undefined) identityFrom.relationships = [];
+            identityFrom.relationships ??= [];
             identityFrom.relationships.push({ fromAddress: relationship.AddressFrom, toAddress: relationship.AddressTo, relationshipId: relationship.RelationshipId });
 
             const identityTo = identitiesMap.get(relationship.AddressTo)!;
-            if (identityTo.relationships === undefined) identityTo.relationships = [];
+            identityTo.relationships ??= [];
             identityTo.relationships.push({ fromAddress: relationship.AddressTo, toAddress: relationship.AddressFrom, relationshipId: relationship.RelationshipId });
         });
     }
