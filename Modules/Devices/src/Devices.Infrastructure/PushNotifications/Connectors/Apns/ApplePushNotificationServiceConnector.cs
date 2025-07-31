@@ -16,14 +16,16 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly IJwtGenerator _jwtGenerator;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
+    private readonly PushNotificationMetrics _metrics;
     private readonly ApnsConfiguration _configuration;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsConfiguration> options, IJwtGenerator jwtGenerator,
-        ILogger<ApplePushNotificationServiceConnector> logger)
+        ILogger<ApplePushNotificationServiceConnector> logger, PushNotificationMetrics metrics)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
         _logger = logger;
+        _metrics = metrics;
         _configuration = options.Value;
     }
 
@@ -61,7 +63,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         _logger.Sending();
 
-        return await Send(registration, message);
+        return await Send(registration, message, notificationContent?.EventName);
     }
 
     private Jwt GetJwt(PnsRegistration registration)
@@ -71,19 +73,22 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         return jwt;
     }
 
-    private async Task<SendResult> Send(PnsRegistration registration, HttpRequestMessage request)
+    private async Task<SendResult> Send(PnsRegistration registration, HttpRequestMessage request, string? eventName)
     {
         var response = await _httpClient.SendAsync(request);
 
         if (response.IsSuccessStatusCode)
+        {
+            _metrics.IncrementNumberOfSentPushNotifications(eventName, PushNotificationPlatform.Apns);
             return SendResult.Success(registration.DeviceId);
+        }
 
         var responseContent = await JsonSerializer.DeserializeAsync<ApiError>(await response.Content.ReadAsStreamAsync(), JsonSerializerOptions.Web);
+        var errorReason = responseContent?.Reason == "Unregistered" ? ErrorReason.InvalidHandle : ErrorReason.Unexpected;
 
-        if (responseContent?.Reason == "Unregistered")
-            return SendResult.Failure(registration.DeviceId, ErrorReason.InvalidHandle);
+        _metrics.IncrementNumberOfSendErrors(eventName, errorReason, PushNotificationPlatform.Apns);
 
-        return SendResult.Failure(registration.DeviceId, ErrorReason.Unexpected, responseContent?.Reason);
+        return SendResult.Failure(registration.DeviceId, errorReason, responseContent?.Reason);
     }
 
     public void ValidateRegistration(PnsRegistration registration)
