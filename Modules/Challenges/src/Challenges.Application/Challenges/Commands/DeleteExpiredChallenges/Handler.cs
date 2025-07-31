@@ -1,4 +1,5 @@
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -17,13 +18,7 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
     public async Task<DeleteExpiredChallengesResponse> Handle(DeleteExpiredChallengesCommand request, CancellationToken cancellationToken)
     {
-        if (cancellationToken.IsCancellationRequested)
-        {
-            _logger.CancellationRequested();
-            return DeleteExpiredChallengesResponse.NoDeletedChallenges();
-        }
-
-        var deletedChallengesCount = await _challengesRepository.DeleteExpiredChallenges(cancellationToken);
+        var deletedChallengesCount = await _challengesRepository.Delete(Challenge.CanBeCleanedUp, cancellationToken);
 
         _logger.DeletionSuccessful(deletedChallengesCount);
 
@@ -35,13 +30,6 @@ public class Handler : IRequestHandler<DeleteExpiredChallengesCommand, DeleteExp
 
 internal static partial class DeleteExpiredChallengesLogs
 {
-    [LoggerMessage(
-        EventId = 599235,
-        EventName = "Challenges.DeleteExpiredChallenges.CancellationRequested",
-        Level = LogLevel.Debug,
-        Message = "Cancellation was requested. Stopping execution...")]
-    public static partial void CancellationRequested(this ILogger logger);
-
     [LoggerMessage(
         EventId = 916630,
         EventName = "Challenges.DeleteExpiredChallenges.DeletionSuccessful",
