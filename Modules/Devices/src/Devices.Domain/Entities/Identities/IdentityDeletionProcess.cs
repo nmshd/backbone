@@ -187,6 +187,7 @@ public class IdentityDeletionProcess : Entity
         ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
+        GracePeriodEndsAt = null;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }
