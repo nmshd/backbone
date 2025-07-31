@@ -73,7 +73,8 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
     private static ServerSentEventsConnector CreateConnector(ISseServerClient? sseServerClient = null)
     {
         sseServerClient ??= A.Dummy<ISseServerClient>();
-        return new ServerSentEventsConnector(sseServerClient, A.Dummy<ILogger<ServerSentEventsConnector>>());
+        var metrics = A.Dummy<PushNotificationMetrics>();
+        return new ServerSentEventsConnector(sseServerClient, A.Dummy<ILogger<ServerSentEventsConnector>>(), metrics);
     }
 
     private class TestPushNotification : IPushNotification;
