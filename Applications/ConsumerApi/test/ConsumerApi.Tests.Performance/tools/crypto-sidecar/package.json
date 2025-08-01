@@ -11,7 +11,7 @@
     "dependencies": {
         "@js-soft/ts-serval": "2.0.13",
         "@nmshd/crypto": "2.1.2",
-        "@types/koa": "2.15.0",
+        "@types/koa": "3.0.0",
         "@types/koa-router": "7.4.8",
         "koa": "3.0.1",
         "koa-body": "6.0.1",
