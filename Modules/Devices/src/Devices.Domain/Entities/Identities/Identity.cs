@@ -292,6 +292,7 @@ public class Identity : Entity
         deletionProcess.CancelAsOwner(Address, cancelledByDeviceId);
         TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
+        DeletionGracePeriodEndsAt = null;
         Status = IdentityStatus.Active;
 
         RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
