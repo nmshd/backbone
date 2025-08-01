@@ -55,8 +55,9 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         });
         var jwtGenerator = A.Dummy<IJwtGenerator>();
         var logger = A.Dummy<ILogger<ApplePushNotificationServiceConnector>>();
+        var pushNotificationMetrics = A.Dummy<PushNotificationMetrics>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger, pushNotificationMetrics);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)

@@ -8,15 +8,18 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.D
 public class DummyConnector : IPnsConnector
 {
     private readonly ILogger<DummyConnector> _logger;
+    private readonly PushNotificationMetrics _metrics;
 
-    public DummyConnector(ILogger<DummyConnector> logger)
+    public DummyConnector(ILogger<DummyConnector> logger, PushNotificationMetrics metrics)
     {
         _logger = logger;
+        _metrics = metrics;
     }
 
     public Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
     {
         _logger.Sending(notification.GetEventName());
+        _metrics.IncrementNumberOfSentPushNotifications(notification.GetEventName(), PushNotificationPlatform.Dummy);
 
         return Task.FromResult(SendResult.Success(registration.DeviceId));
     }

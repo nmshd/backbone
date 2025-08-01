@@ -18,6 +18,8 @@ public static class IServiceCollectionExtensions
     {
         services.AddSingleton<PushNotificationResourceManager>();
 
+        services.AddSingleton<PushNotificationMetrics>();
+
         services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
 
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
