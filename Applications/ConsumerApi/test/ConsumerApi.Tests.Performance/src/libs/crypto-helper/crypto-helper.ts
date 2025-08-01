@@ -8,7 +8,7 @@ export class CryptoHelper {
     });
 
     public static generateKeyPair(): KeyPair {
-        return CryptoHelper.client.get("keypair").json() as unknown as KeyPair;
+        return CryptoHelper.client.get("keypair").json() as KeyPair;
     }
 
     public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestPayload): string | undefined {
@@ -23,7 +23,7 @@ export class CryptoHelper {
                     headers: { "Content-Type": "application/json" }
                 }
             )
-            .json();
+            .json() as string | undefined;
     }
 }
 
