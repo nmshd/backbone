@@ -55,6 +55,7 @@ services:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
     restart: unless-stopped
 
 networks:
