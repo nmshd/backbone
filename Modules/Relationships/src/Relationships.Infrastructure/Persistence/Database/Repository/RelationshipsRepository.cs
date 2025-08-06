@@ -47,6 +47,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
+    public async Task<IEnumerable<Relationship>> ListRelationshipsWithContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _relationships : _readOnlyRelationships)
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
+            .Where(filter)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
@@ -116,7 +125,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.Where(filter).BatchDeleteAsync(cancellationToken);
 #pragma warning restore CS0618 // Type or member is obsolete
     }
-    
+
     public async Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken)
     {
         foreach (var relationship in relationships)
