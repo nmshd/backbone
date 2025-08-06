@@ -24,4 +24,6 @@ public interface IRelationshipsRepository
 
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
+
+    Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken);
 }

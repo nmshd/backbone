@@ -104,6 +104,14 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
+    public async Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken)
+    {
+        foreach (var relationship in relationships)
+        {
+            await _dbContext.Entry(relationship).ReloadAsync(cancellationToken);
+        }
+    }
+
     public async Task<IEnumerable<Relationship>> List(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _relationships : _readOnlyRelationships)
