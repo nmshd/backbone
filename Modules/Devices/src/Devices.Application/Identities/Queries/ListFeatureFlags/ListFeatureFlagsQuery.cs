@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.ListFeatureFla
 
 public class ListFeatureFlagsQuery : IRequest<ListFeatureFlagsResponse>
 {
-    public required string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

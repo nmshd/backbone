@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTe
 
 public class SendTestNotificationCommand : IRequest<Unit>
 {
-    public required object Data { get; set; }
+    public required object Data { get; init; }
 }

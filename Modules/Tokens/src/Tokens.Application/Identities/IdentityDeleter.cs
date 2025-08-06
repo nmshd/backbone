@@ -20,9 +20,9 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteTokensOfIdentityCommand(identityAddress));
-        await _mediator.Send(new AnonymizeTokensForIdentityCommand(identityAddress));
-        await _mediator.Send(new AnonymizeTokenAllocationsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteTokensOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeTokensForIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeTokenAllocationsOfIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Tokens");
     }
 }

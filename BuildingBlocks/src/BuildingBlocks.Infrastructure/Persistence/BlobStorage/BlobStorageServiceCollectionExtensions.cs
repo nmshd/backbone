@@ -56,10 +56,16 @@ public class BlobStorageOptions : IValidatableObject
     [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}|{S3_BUCKET}")]
     public string ProductName { get; set; } = null!;
 
+
+    [RequiredIf(nameof(ProductName), AZURE_STORAGE_ACCOUNT)]
     public AzureStorageAccountConfiguration? AzureStorageAccount { get; set; }
 
+
+    [RequiredIf(nameof(ProductName), GOOGLE_CLOUD_STORAGE)]
     public GoogleCloudStorageConfiguration? GoogleCloudStorage { get; set; }
 
+
+    [RequiredIf(nameof(ProductName), S3_BUCKET)]
     public S3BucketConfiguration? S3Bucket { get; set; }
 
     public string RootFolder => ProductName switch

@@ -19,7 +19,10 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
             modelBuilder
                 .HasDefaultSchema("Announcements")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -78,6 +81,9 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<byte>("Order")
+                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
@@ -139,7 +145,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
                         .WithMany("Actions")
-                        .HasForeignKey("AnnouncementId");
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>

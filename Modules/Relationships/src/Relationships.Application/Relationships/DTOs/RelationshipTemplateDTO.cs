@@ -11,7 +11,7 @@ public class RelationshipTemplateDTO
         CreatedByDevice = relationshipTemplate.CreatedByDevice;
         MaxNumberOfAllocations = relationshipTemplate.MaxNumberOfAllocations;
         ExpiresAt = relationshipTemplate.ExpiresAt;
-        Content = relationshipTemplate.Content;
+        Content = relationshipTemplate.Details.Content;
         CreatedAt = relationshipTemplate.CreatedAt;
         ForIdentity = relationshipTemplate.ForIdentity?.Value;
     }

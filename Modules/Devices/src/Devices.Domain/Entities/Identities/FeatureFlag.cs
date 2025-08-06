@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class FeatureFlag : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private FeatureFlag()
+    protected FeatureFlag()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Name = null!;

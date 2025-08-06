@@ -32,6 +32,6 @@ public class AnnouncementCreatedDomainEventHandler : IDomainEventHandler<Announc
             ? SendPushNotificationFilter.AllDevicesOfAllIdentities()
             : SendPushNotificationFilter.AllDevicesOf(@event.Recipients.Select(IdentityAddress.Parse).ToArray());
 
-        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, pushNotificationFilter, pushNotificationTexts, CancellationToken.None);
+        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, pushNotificationTexts, pushNotificationFilter, CancellationToken.None);
     }
 }

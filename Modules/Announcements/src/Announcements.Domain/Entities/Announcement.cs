@@ -10,7 +10,7 @@ namespace Backbone.Modules.Announcements.Domain.Entities;
 public class Announcement : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Announcement()
+    protected Announcement()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -46,11 +46,11 @@ public class Announcement : Entity
     public AnnouncementSeverity Severity { get; }
     public bool IsSilent { get; }
 
-    public List<AnnouncementText> Texts { get; }
+    public virtual List<AnnouncementText> Texts { get; }
 
-    public List<AnnouncementRecipient> Recipients { get; }
+    public virtual List<AnnouncementRecipient> Recipients { get; }
 
-    public List<AnnouncementAction> Actions { get; }
+    public virtual List<AnnouncementAction> Actions { get; }
 
     public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }

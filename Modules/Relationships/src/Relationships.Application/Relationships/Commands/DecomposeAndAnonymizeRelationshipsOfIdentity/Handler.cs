@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
 
     public async Task Handle(DecomposeAndAnonymizeRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var relationships = (await _relationshipsRepository.List(Relationship.HasParticipant(request.IdentityAddress), cancellationToken, track: true)).ToList();
+        var relationships = (await _relationshipsRepository.ListWithoutContent(Relationship.HasParticipant(request.IdentityAddress), cancellationToken, track: true)).ToList();
         await _relationshipsRepository.ReloadRelationships(relationships,
             cancellationToken); //TODO: Timo (This reloads the relationships from the db, bc they are changed by the deletion of the template)
 

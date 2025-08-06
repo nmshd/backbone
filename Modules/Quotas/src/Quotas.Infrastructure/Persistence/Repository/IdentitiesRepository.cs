@@ -70,7 +70,6 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
-        _dbContext.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

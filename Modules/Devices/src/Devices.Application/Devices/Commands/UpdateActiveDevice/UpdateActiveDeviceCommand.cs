@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.UpdateActiveDevi
 
 public class UpdateActiveDeviceCommand : IRequest
 {
-    public required string CommunicationLanguage { get; set; }
+    public required string CommunicationLanguage { get; init; }
 }

@@ -36,7 +36,8 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateIndividualQuota([FromRoute] string identityAddress, [FromBody] CreateQuotaForIdentityRequest request, CancellationToken cancellationToken)
     {
-        var createdIndividualQuotaDTO = await _mediator.Send(new CreateQuotaForIdentityCommand(identityAddress, request.MetricKey, request.Max, request.Period), cancellationToken);
+        var createdIndividualQuotaDTO =
+            await _mediator.Send(new CreateQuotaForIdentityCommand { IdentityAddress = identityAddress, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period }, cancellationToken);
         return Created(createdIndividualQuotaDTO);
     }
 
@@ -46,7 +47,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteIndividualQuota([FromRoute] string identityAddress, [FromRoute] string individualQuotaId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteQuotaForIdentityCommand(identityAddress, individualQuotaId), cancellationToken);
+        await _mediator.Send(new DeleteQuotaForIdentityCommand { IdentityAddress = identityAddress, IndividualQuotaId = individualQuotaId }, cancellationToken);
         return NoContent();
     }
 
@@ -55,8 +56,8 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetIdentityByAddress([FromRoute] string address, CancellationToken cancellationToken)
     {
-        var identity = await _mediator.Send(new GetIdentityQueryDevices(address), cancellationToken);
-        var quotas = await _mediator.Send(new GetIdentityQueryQuotas(address), cancellationToken);
+        var identity = await _mediator.Send(new GetIdentityQueryDevices { Address = address }, cancellationToken);
+        var quotas = await _mediator.Send(new GetIdentityQueryQuotas { Address = address }, cancellationToken);
 
         var response = new GetIdentityResponse
         {
@@ -114,7 +115,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> StartDeletionProcess([FromRoute] string address, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
+        var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand { IdentityAddress = address }, cancellationToken);
         return Created("", response);
     }
 
@@ -123,7 +124,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAsSupportQuery { IdentityAddress = identityAddress }, cancellationToken);
         return Ok(response);
     }
 
@@ -132,7 +133,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListDeletionProcessesAuditLogsQuery(identityAddress), cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identityAddress }, cancellationToken);
         return Ok(response);
     }
 
@@ -141,7 +142,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new CancelDeletionAsSupportCommand(address, deletionProcessId), cancellationToken);
+        await _mediator.Send(new CancelDeletionAsSupportCommand { Address = address, DeletionProcessId = deletionProcessId }, cancellationToken);
         return NoContent();
     }
 
@@ -150,7 +151,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcessAsSupport([FromRoute] string identityAddress, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessAsSupportQuery(identityAddress, deletionProcessId), cancellationToken);
+        var response = await _mediator.Send(new GetDeletionProcessAsSupportQuery { IdentityAddress = identityAddress, DeletionProcessId = deletionProcessId }, cancellationToken);
         return Ok(response);
     }
 }

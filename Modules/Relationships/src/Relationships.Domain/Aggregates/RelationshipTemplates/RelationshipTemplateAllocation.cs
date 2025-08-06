@@ -8,7 +8,7 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates
 public class RelationshipTemplateAllocation : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private RelationshipTemplateAllocation()
+    protected RelationshipTemplateAllocation()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         RelationshipTemplateId = null!;
@@ -26,7 +26,7 @@ public class RelationshipTemplateAllocation : Entity
 
     public int Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; set; }
-    public RelationshipTemplate RelationshipTemplate { get; } = null!;
+    public virtual RelationshipTemplate RelationshipTemplate { get; } = null!;
     public IdentityAddress AllocatedBy { get; private set; }
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }

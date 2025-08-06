@@ -7,8 +7,8 @@ namespace Backbone.Modules.Files.Infrastructure;
 public class InfrastructureConfiguration
 {
     [Required]
-    public DatabaseConfiguration SqlDatabase { get; set; } = new();
+    public required DatabaseConfiguration SqlDatabase { get; init; }
 
     [Required]
-    public BlobStorageOptions BlobStorage { get; set; } = new();
+    public required BlobStorageOptions BlobStorage { get; init; }
 }

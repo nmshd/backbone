@@ -6,106 +6,120 @@ namespace Backbone.ConsumerApi.Configuration;
 public class ConsumerApiConfiguration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
-    public ConsumerApiInfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required ConsumerApiInfrastructureConfiguration Infrastructure { get; init; }
 
-    public AppOnboardingConfiguration? AppOnboarding { get; set; } = new();
+    public AppOnboardingConfiguration? AppOnboarding { get; init; }
 
-    public WellKnownEndpointsConfiguration WellKnownEndpoints { get; set; } = new();
+    public WellKnownEndpointsConfiguration? WellKnownEndpoints { get; init; }
 
     public class WellKnownEndpointsConfiguration
     {
-        public string[] AppleAppSiteAssociations { get; set; } = [];
+        [Required]
+        public required string[] AppleAppSiteAssociations { get; init; }
 
-        public AndroidAssetLink[] AndroidAssetLinks { get; set; } = [];
+        [Required]
+        public required AndroidAssetLink[] AndroidAssetLinks { get; init; }
 
         public class AndroidAssetLink
         {
-            public string PackageName { get; set; } = "";
-            public string[] Sha256CertFingerprints { get; set; } = [];
+            [Required]
+            public required string PackageName { get; init; }
+
+            [Required]
+            public required string[] Sha256CertFingerprints { get; init; }
         }
     }
 
     public class AuthenticationConfiguration
     {
         [Required]
-        public string JwtSigningCertificate { get; set; } = "";
+        public required string JwtSigningCertificate { get; init; }
 
         [Required]
         [Range(60, 3600)]
-        public int JwtLifetimeInSeconds { get; set; }
+        public required int JwtLifetimeInSeconds { get; init; }
     }
 
     public class CorsConfiguration
     {
-        public string AllowedOrigins { get; set; } = "";
-        public string ExposedHeaders { get; set; } = "";
+        [Required(AllowEmptyStrings = true)]
+        public string AllowedOrigins { get; init; } = "";
+
+        [Required(AllowEmptyStrings = true)]
+        public string ExposedHeaders { get; init; } = "";
     }
 
     public class ConsumerApiInfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; init; }
     }
 
     public class AppOnboardingConfiguration : IValidatableObject
     {
-        public App[] Apps { get; set; } = [];
+        [Required]
+        public required App[] Apps { get; init; }
 
-        public string? DefaultAppId { get; set; }
-
-        public class App
-        {
-            [Required]
-            public string Id { get; set; } = null!;
-
-            [Required]
-            public string DisplayName { get; set; } = null!;
-
-            [Required]
-            public string Description { get; set; } = null!;
-
-            [Required]
-            public StoreConfig AppleAppStore { get; set; } = new();
-
-            [Required]
-            public StoreConfig GooglePlayStore { get; set; } = new();
-
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string BackgroundColor { get; set; } = "#FFFFFF";
-
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string PrimaryColor { get; set; } = "#000000";
-
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string SecondaryColor { get; set; } = "#000000";
-
-            [Required]
-            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
-                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public string BannerUrl { get; set; } = null!;
-
-            [Required]
-            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
-                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
-            public string IconUrl { get; set; } = null!;
-
-            public class StoreConfig
-            {
-                public string? AppLink { get; set; } = null!;
-                public string NoLinkText { get; set; } = "This app is not officially available in this store yet. Please check back later.";
-            }
-        }
+        public string? DefaultAppId { get; init; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (DefaultAppId != null && Apps.All(a => a.Id != DefaultAppId))
                 yield return new ValidationResult($"The {nameof(DefaultAppId)} currently set to \"{DefaultAppId}\" is not part of the configured apps.",
                     [nameof(Apps), nameof(DefaultAppId)]);
+        }
+
+        public class App
+        {
+            [Required]
+            public required string Id { get; init; }
+
+            [Required]
+            public required string DisplayName { get; init; }
+
+            [Required]
+            public required string Description { get; init; }
+
+            [Required]
+            public required StoreConfig AppleAppStore { get; init; }
+
+            [Required]
+            public required StoreConfig GooglePlayStore { get; init; }
+
+            [Required]
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string BackgroundColor { get; init; } = "#FFFFFF";
+
+            [Required]
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string PrimaryColor { get; init; } = "#000000";
+
+            [Required]
+            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+            public string SecondaryColor { get; init; } = "#000000";
+
+            [Required]
+            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
+            public required string BannerUrl { get; init; }
+
+            [Required]
+            [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
+                ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
+            public required string IconUrl { get; init; }
+
+            public class StoreConfig
+            {
+                public string? AppLink { get; init; } = null!;
+
+                [Required]
+                public string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
+            }
         }
     }
 }

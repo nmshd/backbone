@@ -6,5 +6,5 @@ namespace Backbone.Modules.Challenges.Infrastructure;
 public class InfrastructureConfiguration
 {
     [Required]
-    public DatabaseConfiguration SqlDatabase { get; set; } = new();
+    public required DatabaseConfiguration SqlDatabase { get; init; }
 }

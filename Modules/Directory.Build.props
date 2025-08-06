@@ -8,8 +8,6 @@
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-
-        <MetalamaLicense>112591-ZU658QQQXEAETFQCB88YNBFRY2EWBBJFF4JX3YHRW87WNTFR46ULX7HRZDATQASR28MWN7JFS6ZTZ9QGMJHBKCL4GUAFN7768NAMQ6K8V4R3EWTHJP6A6EKXC46SYPT5TMW9QQGD9AZSNSQQBU9RGDWQHEQKPZUXVDVKBJKP</MetalamaLicense>
     </PropertyGroup>
 
     <!-- TODO: remove this PropertyGroup once the following Rider bug was fixed: https://youtrack.jetbrains.com/issue/RIDER-119965/NuGetAuditSuppress-ignored-->
@@ -31,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
-        <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.1]">
+        <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.3]">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

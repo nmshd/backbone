@@ -26,13 +26,13 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => fakeRelationshipsRepository.List(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeRelationshipsRepository.ListWithoutContent(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
-        await handler.Handle(new IdentityDeletedDomainEvent(identityToBeDeleted));
+        await handler.Handle(new IdentityDeletedDomainEvent { IdentityAddress = identityToBeDeleted });
 
         //Assert
         A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(e => e.PeerOfDeletedIdentity == peer1 &&

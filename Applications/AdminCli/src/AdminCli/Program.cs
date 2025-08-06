@@ -60,7 +60,7 @@ public class Program
                     .UseDbContext<DevicesDbContext>()
                     .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
                         CustomOpenIddictEntityFrameworkCoreToken, string>();
-                options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
+                options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
             });
 
         services.AddSingleton<IQuotaChecker, AlwaysSuccessQuotaChecker>();

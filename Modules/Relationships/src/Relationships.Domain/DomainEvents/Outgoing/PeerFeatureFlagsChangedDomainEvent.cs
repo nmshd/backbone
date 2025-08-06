@@ -4,10 +4,12 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 public class PeerFeatureFlagsChangedDomainEvent : DomainEvent
 {
-    public PeerFeatureFlagsChangedDomainEvent()
+    public PeerFeatureFlagsChangedDomainEvent(string peerAddress, string notifiedIdentityAddress)
     {
+        PeerAddress = peerAddress;
+        NotifiedIdentityAddress = notifiedIdentityAddress;
     }
 
-    public required string PeerAddress { get; set; }
-    public required string NotifiedIdentityAddress { get; set; }
+    public string PeerAddress { get; set; }
+    public string NotifiedIdentityAddress { get; set; }
 }

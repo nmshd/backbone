@@ -16,10 +16,10 @@ public static class IServiceCollectionExtension
 
         switch (provider)
         {
-            case IServiceCollectionExtensions.SQLSERVER:
+            case DatabaseConfiguration.SQLSERVER:
                 services.AddTransient<IMetricStatusesRepository, SqlServerMetricStatusesRepository>();
                 break;
-            case IServiceCollectionExtensions.POSTGRES:
+            case DatabaseConfiguration.POSTGRES:
                 services.AddTransient<IMetricStatusesRepository, PostgresMetricStatusesRepository>();
                 break;
         }

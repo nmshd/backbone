@@ -8,21 +8,21 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.F
 public class FcmConfiguration
 {
     [Required]
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; init; } = true;
 
     [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
-    public required Dictionary<string, ServiceAccount> ServiceAccounts { get; set; } = [];
+    public required Dictionary<string, ServiceAccount> ServiceAccounts { get; init; }
 
     [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
-    public required Dictionary<string, ServiceAccountInformation> Apps { get; set; } = [];
+    public required Dictionary<string, ServiceAccountInformation> Apps { get; init; }
 
     public class ServiceAccountInformation
     {
         [Required]
         [MinLength(1)]
-        public string ServiceAccountName { get; set; } = string.Empty;
+        public required string ServiceAccountName { get; init; }
     }
 
     public bool HasConfigForAppId(string appId)
@@ -57,7 +57,7 @@ public class FcmConfiguration
     {
         [Required]
         [MinLength(1)]
-        public required string ServiceAccountJson { get; set; } = string.Empty;
+        public required string ServiceAccountJson { get; init; }
     }
 }
 

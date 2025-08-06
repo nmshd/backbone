@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.6]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.8]" />
     </ItemGroup>
 
 </Project>

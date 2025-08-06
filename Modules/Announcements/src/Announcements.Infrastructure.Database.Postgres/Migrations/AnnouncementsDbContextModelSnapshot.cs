@@ -19,7 +19,10 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
             modelBuilder
                 .HasDefaultSchema("Announcements")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -78,6 +81,9 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
+
+                    b.Property<byte>("Order")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
@@ -139,7 +145,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.Postgres.Migrat
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
                         .WithMany("Actions")
-                        .HasForeignKey("AnnouncementId");
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>

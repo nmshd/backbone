@@ -24,7 +24,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -44,7 +44,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -67,7 +67,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -90,7 +90,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert

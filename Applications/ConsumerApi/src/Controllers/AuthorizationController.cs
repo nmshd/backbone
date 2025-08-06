@@ -67,7 +67,7 @@ public class AuthorizationController : ApiControllerBase
             [
                 new(Claims.Subject, user.Id),
                 new(Claims.Name, user.UserName!.Trim()),
-                new("address", user.Device.IdentityAddress),
+                new("nmshd_address", user.Device.IdentityAddress),
                 new("device_id", user.Device.Id)
             ],
             authenticationType: TokenValidationParameters.DefaultAuthenticationType);

@@ -33,4 +33,11 @@ class AnnouncementsEndpoint extends Endpoint {
     },
     transformer: CreateAnnouncementResponse.fromJson,
   );
+
+  Future<ApiResponse<void>> deleteAnnouncement(String announcementId) => delete(
+    '/api/v1/Announcements/$announcementId',
+    expectedStatus: 204,
+    transformer: (e) {},
+    allowEmptyResponse: true,
+  );
 }

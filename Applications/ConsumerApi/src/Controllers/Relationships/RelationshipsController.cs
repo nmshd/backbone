@@ -55,7 +55,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListRelationships([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        var request = new ListRelationshipsQuery(paginationFilter, ids);
+        var request = new ListRelationshipsQuery { PaginationFilter = paginationFilter, Ids = ids.ToList() };
 
         request.PaginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 
@@ -110,7 +110,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpPut("{id}/Terminate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipMetadataDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
@@ -174,7 +174,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CanEstablishRelationship([FromQuery(Name = "peer")] string peerAddress, CancellationToken cancellationToken)
     {
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerAddress), cancellationToken);
+        var peerIdentity = await _mediator.Send(new GetIdentityQuery { Address = peerAddress }, cancellationToken);
 
         var response = peerIdentity.Status is IdentityStatus.ToBeDeleted
             ? new CanEstablishRelationshipResponse { CanCreate = false, Code = ApplicationErrors.Relationship.PeerIsToBeDeleted().Code }
@@ -185,7 +185,7 @@ public class RelationshipsController : ApiControllerBase
 
     private async Task EnsurePeerIsNotToBeDeleted(string peerIdentityAddress, CancellationToken cancellationToken)
     {
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerIdentityAddress), cancellationToken);
+        var peerIdentity = await _mediator.Send(new GetIdentityQuery { Address = peerIdentityAddress }, cancellationToken);
         if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
             throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted());
     }

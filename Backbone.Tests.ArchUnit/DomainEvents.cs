@@ -13,13 +13,13 @@ public class DomainEvents
 {
     private readonly List<IType> _outgoingDomainEvents = Types()
         .That().AreAssignableTo(typeof(DomainEvent))
-        .And().ResideInNamespace("\\.Outgoing", true)
+        .And().ResideInNamespaceMatching("\\.Outgoing")
         .GetObjects(Backbone.ARCHITECTURE)
         .ToList();
 
     private readonly GivenTypesConjunction _incomingDomainEvents = Types()
         .That().AreAssignableTo(typeof(DomainEvent))
-        .And().ResideInNamespace("\\.Incoming\\.", true);
+        .And().ResideInNamespaceMatching("\\.Incoming\\.");
 
     [Fact]
     public void IncomingDomainEventsShouldNotHaveConstructors()

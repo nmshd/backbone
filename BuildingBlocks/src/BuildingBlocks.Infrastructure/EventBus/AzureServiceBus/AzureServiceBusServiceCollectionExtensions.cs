@@ -23,5 +23,5 @@ public class ServiceBusOptions
 {
     [Required]
     [MinLength(10)]
-    public string ConnectionString { get; set; } = null!;
+    public required string ConnectionString { get; init; }
 }

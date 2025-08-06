@@ -4,10 +4,5 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.Dele
 
 public class DeleteDatawalletsOfIdentityCommand : IRequest
 {
-    public DeleteDatawalletsOfIdentityCommand(string identityAddress)
-    {
-        IdentityAddress = identityAddress;
-    }
-
-    public string IdentityAddress { get; set; }
+    public required string IdentityAddress { get; init; }
 }

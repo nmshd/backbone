@@ -8,10 +8,6 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public static class EventBusServiceCollectionExtensions
 {
-    public const string AZURE = "AzureServiceBus";
-    public const string GOOGLE_CLOUD = "GoogleCloudPubSub";
-    public const string RABBIT_MQ = "RabbitMQ";
-
     public static void AddEventBus(this IServiceCollection services, EventBusConfiguration configuration, string meterName)
     {
         services.AddSingleton(new Meter(meterName));
@@ -20,13 +16,13 @@ public static class EventBusServiceCollectionExtensions
 
         switch (configuration.ProductName)
         {
-            case AZURE:
+            case EventBusConfiguration.AZURE:
                 services.AddAzureServiceBus(configuration.AzureServiceBus);
                 break;
-            case GOOGLE_CLOUD:
+            case EventBusConfiguration.GOOGLE_CLOUD:
                 services.AddGoogleCloudPubSub(configuration.GoogleCloudPubSub);
                 break;
-            case RABBIT_MQ:
+            case EventBusConfiguration.RABBIT_MQ:
                 services.AddRabbitMq(configuration.RabbitMq);
                 break;
             case "":

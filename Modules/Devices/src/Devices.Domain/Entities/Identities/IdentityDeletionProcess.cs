@@ -11,7 +11,7 @@ public class IdentityDeletionProcess : Entity
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
     // ReSharper disable once UnusedMember.Local
-    private IdentityDeletionProcess()
+    protected IdentityDeletionProcess()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         IdentityAddress = null!;
@@ -46,7 +46,7 @@ public class IdentityDeletionProcess : Entity
 
     private IdentityAddress IdentityAddress { get; }
 
-    public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
+    public virtual IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
     public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInDays);
@@ -187,6 +187,7 @@ public class IdentityDeletionProcess : Entity
         ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
+        GracePeriodEndsAt = null;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }

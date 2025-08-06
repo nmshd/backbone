@@ -57,7 +57,7 @@ public class TokensController : ApiControllerBase
         // parameter will become required again, and the fallback to `tokens` will be removed.
         ids = ids.Count != 0 ? ids : tokens?.Select(t => t.Id).ToList() ?? [];
 
-        var request = new ListTokensQuery(paginationFilter, ids);
+        var request = new ListTokensQuery { PaginationFilter = paginationFilter, Ids = ids };
 
         paginationFilter.PageSize ??= _configuration.Pagination.DefaultPageSize;
 

@@ -7,7 +7,7 @@ public class RelationshipTemplate
     public required string Id { get; init; }
     public required string CreatedBy { get; init; }
     public required DateTime CreatedAt { get; init; }
-    public required IEnumerable<RelationshipTemplateAllocation> Allocations { get; init; }
+    public virtual required IEnumerable<RelationshipTemplateAllocation> Allocations { get; init; }
 }
 
 public class RelationshipTemplateAllocation

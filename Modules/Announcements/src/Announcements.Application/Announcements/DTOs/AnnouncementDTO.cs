@@ -12,8 +12,9 @@ public class AnnouncementDTO
         Severity = announcement.Severity;
         Texts = announcement.Texts.Select(t => new AnnouncementTextDTO(t));
         Recipients = announcement.Recipients.Select(r => r.Address.ToString());
-        Actions = announcement.Actions.Select(a => new AnnouncementActionDTO(a));
+        Actions = announcement.Actions.OrderBy(a => a.Order).Select(a => new AnnouncementActionDTO(a));
         IqlQuery = announcement.IqlQuery?.ToString();
+        IsSilent = announcement.IsSilent;
     }
 
 

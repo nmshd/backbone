@@ -19,6 +19,8 @@ public class AnnouncementActionEntityTypeConfiguration : EntityEntityTypeConfigu
 
         builder.Property(x => x.Link).HasMaxLength(300);
 
+        builder.Property(x => x.Order);
+
         builder.Property(x => x.DisplayName).HasConversion<AnnouncementActionDisplayNameEntityFrameworkConverter>(ValueComparer.CreateDefault<Dictionary<AnnouncementLanguage, string>>(false))
             .HasMaxLength(300);
     }

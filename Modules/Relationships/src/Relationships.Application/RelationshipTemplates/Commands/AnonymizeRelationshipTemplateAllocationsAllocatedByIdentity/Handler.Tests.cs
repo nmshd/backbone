@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -18,7 +19,7 @@ public class HandlerTests : AbstractTestsBase
         var oldIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
-        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(oldIdentityAddress);
+        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = oldIdentityAddress };
         var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.ListRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))
@@ -44,7 +45,7 @@ public class HandlerTests : AbstractTestsBase
         var anotherIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
-        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(anotherIdentityAddress);
+        var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = anotherIdentityAddress };
         var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.ListRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))
@@ -62,6 +63,7 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IRelationshipTemplatesRepository mockRepository)
     {
-        return new Handler(mockRepository, Options.Create(new ApplicationConfiguration { DidDomainName = "localhost" }));
+        return new Handler(mockRepository,
+            Options.Create(new ApplicationConfiguration { DidDomainName = "localhost", Pagination = new PaginationConfiguration { DefaultPageSize = 10, MaxPageSize = 100 } }));
     }
 }

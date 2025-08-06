@@ -26,7 +26,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => fakeRelationshipsRepository.List(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeRelationshipsRepository.ListWithoutContent(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
         var gracePeriodEndsAt = DateTime.Parse("2022-01-01");
@@ -34,7 +34,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
-        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted, gracePeriodEndsAt));
+        await handler.Handle(new IdentityToBeDeletedDomainEvent { IdentityAddress = identityToBeDeleted, GracePeriodEndsAt = gracePeriodEndsAt });
 
         //Assert
         A.CallTo(() => mockEventBus.Publish(A<PeerToBeDeletedDomainEvent>.That.Matches(e => e.PeerOfIdentityToBeDeleted == peer1 &&

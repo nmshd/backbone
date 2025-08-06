@@ -18,6 +18,8 @@ public static class IServiceCollectionExtensions
     {
         services.AddSingleton<PushNotificationResourceManager>();
 
+        services.AddSingleton<PushNotificationMetrics>();
+
         services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
 
         services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
@@ -77,16 +79,16 @@ public static class IServiceCollectionExtensions
 public class PushNotificationConfiguration
 {
     [Required]
-    public PushNotificationProviders Providers { get; set; } = null!;
+    public required PushNotificationProviders Providers { get; init; }
 
     public class PushNotificationProviders
     {
-        public required FcmConfiguration? Fcm { get; set; } = null!;
+        public required FcmConfiguration? Fcm { get; init; }
 
-        public required ApnsConfiguration? Apns { get; set; } = null!;
+        public required ApnsConfiguration? Apns { get; init; }
 
-        public required DummyConfiguration? Dummy { get; set; } = null!;
+        public required DummyConfiguration? Dummy { get; init; }
 
-        public required SseConfiguration? Sse { get; set; } = null!;
+        public required SseConfiguration? Sse { get; init; }
     }
 }

@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain;
@@ -79,5 +80,11 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities",
             $"The requested maximum number of identities {requestedMaxIdentities} is less than the current number of identities {identitiesCount}.");
+    }
+
+    public static DomainError RelationshipToRecipientIsNotInCorrectStatus(IEnumerable<RelationshipStatus> validStatuses)
+    {
+        return new DomainError("error.platform.validation.notification.relationshipToRecipientIsNotInCorrectStatus",
+            $"The relationship to the recipient is not in the correct status for this operation. The valid statuses are: {string.Join(", ", validStatuses)}.");
     }
 }

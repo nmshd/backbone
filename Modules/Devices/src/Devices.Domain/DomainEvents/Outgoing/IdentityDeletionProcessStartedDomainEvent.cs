@@ -11,7 +11,7 @@ public class IdentityDeletionProcessStartedDomainEvent : DomainEvent
         Initiator = initiator;
     }
 
-    public string Address { get; private set; }
-    public string DeletionProcessId { get; private set; }
+    public string Address { get; init; }
+    public string DeletionProcessId { get; init; }
     public string? Initiator { get; set; }
 }

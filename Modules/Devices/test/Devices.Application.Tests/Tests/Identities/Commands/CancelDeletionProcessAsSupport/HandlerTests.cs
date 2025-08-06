@@ -30,7 +30,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
 
         // Acting
-        var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
+        var result = await handler.Handle(new CancelDeletionAsSupportCommand { Address = identity.Address, DeletionProcessId = deletionProcess.Id }, CancellationToken.None);
 
         // Assert
         identity.Status.ShouldBe(IdentityStatus.Active);
@@ -47,15 +47,17 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Cannot_start_when_given_identity_does_not_exist()
+    public async Task Cannot_cancel_when_given_identity_does_not_exist()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
         var deletionProcessId = IdentityDeletionProcessId.Generate();
-        var handler = CreateHandler();
+        var handler = CreateHandler(identitiesRepository);
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcessId), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionAsSupportCommand { Address = identity.Address, DeletionProcessId = deletionProcessId }, CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

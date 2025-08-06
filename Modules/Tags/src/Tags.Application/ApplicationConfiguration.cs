@@ -7,9 +7,10 @@ namespace Backbone.Modules.Tags.Application;
 public class ApplicationConfiguration
 {
     [Required]
-    public List<string> SupportedLanguages { get; set; } = [];
+    public required List<string> SupportedLanguages { get; init; }
 
-    public Dictionary<string, Dictionary<string, TagInfo>> TagsForAttributeValueTypes { get; set; } = [];
+    [Required]
+    public Dictionary<string, Dictionary<string, TagInfo>> TagsForAttributeValueTypes { get; init; } = [];
 }
 
 [AttributeUsage(AttributeTargets.Class)]

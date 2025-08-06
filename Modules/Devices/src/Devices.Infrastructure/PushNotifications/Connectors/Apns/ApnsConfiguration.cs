@@ -7,15 +7,15 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.A
 
 public class ApnsConfiguration
 {
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; init; } = true;
 
     [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
-    public required Dictionary<string, Key> Keys { get; set; } = new();
+    public required Dictionary<string, Key> Keys { get; init; }
 
     [RequiredIf(nameof(Enabled), true)]
     [MinLength(1)]
-    public required Dictionary<string, Bundle> Bundles { get; set; } = new();
+    public required Dictionary<string, Bundle> Bundles { get; init; }
 
     public bool HasConfigForBundleId(string bundleId)
     {
@@ -43,22 +43,22 @@ public class ApnsConfiguration
     {
         [Required]
         [MinLength(1)]
-        public required string KeyName { get; set; }
+        public required string KeyName { get; init; }
     }
 
     public class Key
     {
         [Required]
         [MinLength(1)]
-        public required string TeamId { get; set; } = string.Empty;
+        public required string TeamId { get; init; }
 
         [Required]
         [MinLength(1)]
-        public required string KeyId { get; set; } = string.Empty;
+        public required string KeyId { get; init; }
 
         [Required]
         [MinLength(1)]
-        public required string PrivateKey { get; set; } = string.Empty;
+        public required string PrivateKey { get; init; }
     }
 }
 

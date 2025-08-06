@@ -63,7 +63,6 @@ public class FilesRepository : IFilesRepository
 
     public async Task Update(File file, CancellationToken cancellationToken)
     {
-        _files.Update(file);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

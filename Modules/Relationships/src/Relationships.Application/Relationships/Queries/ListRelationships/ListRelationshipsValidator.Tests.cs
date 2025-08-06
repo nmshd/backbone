@@ -14,7 +14,7 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), [RelationshipId.New().Value]));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [RelationshipId.New().Value] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,7 +27,7 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), null));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
@@ -43,7 +43,7 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), []));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(

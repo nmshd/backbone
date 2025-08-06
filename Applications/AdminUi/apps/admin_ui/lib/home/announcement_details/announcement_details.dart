@@ -4,7 +4,9 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 import '/core/core.dart';
 
@@ -86,6 +88,11 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
                           title: context.l10n.announcementDetails_sendAPushNotification,
                           value: announcementDetails.isSilent ? context.l10n.no : context.l10n.yes,
                         ),
+                        OutlinedButton.icon(
+                          onPressed: _deleteAnnouncement,
+                          label: Text(context.l10n.announcementDetails_delete),
+                          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+                        ),
                       ],
                     ),
                   ],
@@ -108,6 +115,37 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
     setState(() {
       _announcementDetails = announcementDetailsResponse.data;
     });
+  }
+
+  Future<void> _deleteAnnouncement() async {
+    final confirmation = await showConfirmationDialog(
+      context: context,
+      title: context.l10n.announcementDetails_delete_confirmationTitle,
+      message: context.l10n.announcementDetails_delete_confirmationMessage,
+      actionText: context.l10n.announcementDetails_delete,
+    );
+
+    if (!confirmation) return;
+
+    final response = await GetIt.I.get<AdminApiClient>().announcements.deleteAnnouncement(widget.announcementId);
+    if (!mounted) return;
+
+    if (!response.hasError) {
+      context.pop();
+
+      return;
+    }
+
+    GetIt.I.get<Logger>().e('Failed to delete announcement: ${response.error}');
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.l10n.announcementDetails_delete_errorMessage, style: const TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+        showCloseIcon: true,
+      ),
+    );
   }
 }
 

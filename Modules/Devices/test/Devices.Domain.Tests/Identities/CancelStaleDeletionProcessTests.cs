@@ -99,7 +99,7 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
 
         var domainEvent = deletionProcess.ShouldHaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
         domainEvent.DeletionProcessId.ShouldBe(deletionProcess.Id);
-        domainEvent.Address.ShouldBe(identity.Address);
+        domainEvent.DeletionProcessOwner.ShouldBe(identity.Address);
         domainEvent.Initiator.ShouldBe(null);
     }
 }

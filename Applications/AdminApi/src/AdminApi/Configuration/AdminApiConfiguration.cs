@@ -7,32 +7,36 @@ namespace Backbone.AdminApi.Configuration;
 public class AdminApiConfiguration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 
     public class AuthenticationConfiguration
     {
         [Required]
-        public string ApiKey { get; set; } = string.Empty;
+        public required string ApiKey { get; init; }
     }
 
     public class CorsConfiguration
     {
-        public string AllowedOrigins { get; set; } = string.Empty;
-        public string ExposedHeaders { get; set; } = string.Empty;
-        public bool AccessControlAllowCredentials { get; set; } = false;
+        [Required(AllowEmptyStrings = true)]
+        public string AllowedOrigins { get; init; } = "";
+
+        [Required(AllowEmptyStrings = true)]
+        public string ExposedHeaders { get; init; } = "";
+
+        public bool AccessControlAllowCredentials { get; init; } = false;
     }
 
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; init; }
 
         [Required]
-        public DatabaseConfiguration SqlDatabase { get; set; } = new();
+        public required DatabaseConfiguration SqlDatabase { get; init; }
     }
 }

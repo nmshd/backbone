@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletion
 
 public class StartDeletionProcessAsOwnerCommand : IRequest<StartDeletionProcessAsOwnerResponse>
 {
-    public double? LengthOfGracePeriodInDays { get; set; }
+    public double? LengthOfGracePeriodInDays { get; init; }
 }

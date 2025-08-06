@@ -18,13 +18,13 @@ public static class ServiceCollectionExtensions
     {
         switch (provider)
         {
-            case IServiceCollectionExtensions.SQLSERVER:
+            case DatabaseConfiguration.SQLSERVER:
                 services.AddHealthChecks().AddSqlServer(
                     connectionString,
                     name: $"{name}Database"
                 );
                 break;
-            case IServiceCollectionExtensions.POSTGRES:
+            case DatabaseConfiguration.POSTGRES:
                 services.AddHealthChecks().AddNpgSql(
                     connectionString: connectionString,
                     name: $"{name}Database"

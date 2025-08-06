@@ -26,11 +26,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
     {
         var identitiesToBeNotified = await ListIdentitiesToBeNotified(@event);
 
-        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent
-        {
-            PeerAddress = @event.IdentityAddress,
-            NotifiedIdentityAddress = i
-        }));
+        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent(@event.IdentityAddress, i)));
 
         await Task.WhenAll(publishEventTasks);
     }
@@ -40,7 +36,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
         var identitiesToBeNotified = new HashSet<IdentityAddress>();
 
         var activeAndPendingRelationshipAddressPairs = await
-            _relationshipsRepository.List(
+            _relationshipsRepository.ListWithoutContent(
                 Relationship.HasParticipant(@event.IdentityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutFeatureFlagsChange()),
                 r => new { r.From, r.To },
                 CancellationToken.None);

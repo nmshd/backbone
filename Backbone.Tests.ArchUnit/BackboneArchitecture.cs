@@ -14,7 +14,7 @@ public static class Backbone
             .Build();
 
     public static readonly IObjectProvider<IType> TEST_TYPES =
-        Types().That().ResideInAssembly(".*\\.Tests", true);
+        Types().That().ResideInAssemblyMatching(".*Tests.*");
 
     private static Assembly[] GetSolutionAssemblies()
     {

@@ -41,9 +41,9 @@ public class ExternalEvent : Entity
     public object Payload { get; }
 
     public byte SyncErrorCount { get; internal set; }
-    public SyncRun? SyncRun { get; private set; }
+    public virtual SyncRun? SyncRun { get; private set; }
     public SyncRunId? SyncRunId { get; private set; }
-    public IReadOnlyCollection<SyncError> Errors => _errors;
+    public virtual IReadOnlyCollection<SyncError> Errors => _errors;
 
     public string? Context { get; }
     public bool IsDeliveryBlocked { get; private set; }

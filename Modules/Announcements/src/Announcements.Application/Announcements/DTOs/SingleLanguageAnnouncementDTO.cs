@@ -20,7 +20,7 @@ public class SingleLanguageAnnouncementDTO
 
         Title = textInLanguage.Title;
         Body = textInLanguage.Body;
-        Actions = announcement.Actions.Select(a => new SingleLanguageAnnouncementActionDTO(a, language));
+        Actions = announcement.Actions.OrderBy(a => a.Order).Select(a => new SingleLanguageAnnouncementActionDTO(a, language));
 
         IqlQuery = announcement.IqlQuery?.ToString();
     }

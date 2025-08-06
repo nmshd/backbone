@@ -5,17 +5,18 @@ namespace Backbone.Modules.Messages.Application;
 
 public class ApplicationConfiguration
 {
+    [Required]
     [Range(1, 100)]
-    public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
+    public required int MaxNumberOfUnreceivedMessagesFromOneSender { get; init; }
 
     [Required]
-    public PaginationConfiguration Pagination { get; set; } = new();
+    public required PaginationConfiguration Pagination { get; init; }
 
     [Required]
     [MinLength(3)]
     [MaxLength(45)]
-    public string DidDomainName { get; set; } = null!;
+    public required string DidDomainName { get; init; }
 
     [Required]
-    public int MaxNumberOfMessageRecipients { get; set; }
+    public required int MaxNumberOfMessageRecipients { get; init; }
 }

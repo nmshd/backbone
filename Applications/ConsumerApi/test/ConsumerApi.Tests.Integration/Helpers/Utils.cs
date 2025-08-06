@@ -1,7 +1,7 @@
-﻿using Backbone.ConsumerApi.Sdk;
+﻿using System.Text.Json;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
@@ -12,7 +12,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -23,7 +22,7 @@ public static class Utils
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = identity.IdentityData!.KeyPair!;
 
-        var serializedChallenge = JsonConvert.SerializeObject(challenge);
+        var serializedChallenge = JsonSerializer.Serialize(challenge);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
 
         return new SignedChallenge(serializedChallenge, challengeSignature);
