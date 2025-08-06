@@ -205,7 +205,7 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
@@ -276,7 +276,7 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
