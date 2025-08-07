@@ -11,6 +11,8 @@ public interface IRelationshipsRepository
     Task<DbPaginationResult<Relationship>> ListRelationshipsWithContent(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
+    Task<IEnumerable<Relationship>> ListRelationshipsWithContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false);
+
     Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task<Relationship> GetRelationshipWithContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task<IdentityAddress> GetRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken);
@@ -25,4 +27,6 @@ public interface IRelationshipsRepository
 
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
+
+    Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken);
 }
