@@ -47,6 +47,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
+    public async Task<IEnumerable<Relationship>> ListRelationshipsWithContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _relationships : _readOnlyRelationships)
+            .IncludeAll(_dbContext)
+            .AsSplitQuery()
+            .Where(filter)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
@@ -115,6 +124,14 @@ public class RelationshipsRepository : IRelationshipsRepository
 #pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
         await _relationships.Where(filter).BatchDeleteAsync(cancellationToken);
 #pragma warning restore CS0618 // Type or member is obsolete
+    }
+
+    public async Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken)
+    {
+        foreach (var relationship in relationships)
+        {
+            await _dbContext.Entry(relationship).ReloadAsync(cancellationToken);
+        }
     }
 
     public async Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)

@@ -31,21 +31,18 @@ public class RelationshipTemplateAllocation : Entity
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }
 
-    public bool ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
-    {
-        if (AllocatedBy != oldIdentityAddress) return false;
-
-        AllocatedBy = newIdentityAddress;
-        return true;
-    }
-
     public static Expression<Func<RelationshipTemplateAllocation, bool>> WasAllocatedBy(IdentityAddress allocatedBy)
     {
-        return x => x.AllocatedBy == allocatedBy.ToString();
+        return x => x.AllocatedBy == allocatedBy;
     }
 
     public static Expression<Func<RelationshipTemplateAllocation, bool>> BelongsToTemplateCreatedBy(string identity)
     {
         return a => a.RelationshipTemplate.CreatedBy == identity;
+    }
+
+    public void Anonymize(string didDomainName)
+    {
+        AllocatedBy = IdentityAddress.GetAnonymized(didDomainName);
     }
 }
