@@ -20,7 +20,9 @@ IdentityDeletionProcessAuditLogEntry _$IdentityDeletionProcessAuditLogEntryFromJ
       oldStatus: json['oldStatus'] as String?,
     );
 
-Map<String, dynamic> _$IdentityDeletionProcessAuditLogEntryToJson(IdentityDeletionProcessAuditLogEntry instance) => <String, dynamic>{
+Map<String, dynamic> _$IdentityDeletionProcessAuditLogEntryToJson(
+  IdentityDeletionProcessAuditLogEntry instance,
+) => <String, dynamic>{
   'id': instance.id,
   'createdAt': instance.createdAt.toIso8601String(),
   'messageKey': instance.messageKey,
