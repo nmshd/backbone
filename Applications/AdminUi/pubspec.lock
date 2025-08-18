@@ -254,7 +254,7 @@ packages:
     description:
       path: "packages/enmeshed_ui_kit"
       ref: main
-      resolved-ref: "2957fdcfdbb33a4419eec0892bfe4c8493804155"
+      resolved-ref: "108042466d35d083bd58a727fa59eda236ad78d7"
       url: "https://github.com/nmshd/app"
     source: git
     version: "1.0.0"
