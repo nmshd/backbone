@@ -6,7 +6,9 @@ part of 'change_client_secret_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ChangeClientSecretResponse _$ChangeClientSecretResponseFromJson(Map<String, dynamic> json) => ChangeClientSecretResponse(
+ChangeClientSecretResponse _$ChangeClientSecretResponseFromJson(
+  Map<String, dynamic> json,
+) => ChangeClientSecretResponse(
   clientId: json['clientId'] as String,
   displayName: json['displayName'] as String,
   clientSecret: json['clientSecret'] as String,
@@ -15,7 +17,9 @@ ChangeClientSecretResponse _$ChangeClientSecretResponseFromJson(Map<String, dyna
   maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$ChangeClientSecretResponseToJson(ChangeClientSecretResponse instance) => <String, dynamic>{
+Map<String, dynamic> _$ChangeClientSecretResponseToJson(
+  ChangeClientSecretResponse instance,
+) => <String, dynamic>{
   'clientId': instance.clientId,
   'displayName': instance.displayName,
   'clientSecret': instance.clientSecret,
