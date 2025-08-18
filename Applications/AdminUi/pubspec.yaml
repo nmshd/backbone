@@ -10,3 +10,34 @@ environment:
 dev_dependencies:
   melos: ^6.1.0
   very_good_analysis: ^9.0.0
+
+melos:
+  ide:
+    intellij:
+      enabled: false
+
+  command:
+    format:
+      setExitIfChanged: true
+
+  scripts:
+    test:
+      # Only run the test command when the package has a test directory
+      run: melos exec --dir-exists=test --flutter -- "flutter test" && melos exec --dir-exists=test --no-flutter -- "dart test"
+      description: Run `flutter test` in all packages
+
+    integration_test:
+      run: melos exec --dir-exists=integration_test --flutter -- "flutter test --dart-define-from-file=../../config.json integration_test/suite_test.dart"
+      description: Run `integration tests` in all packages that have the folder `integration_test``
+
+    outdated:
+      run: melos exec -c 1 --no-flutter -- "dart pub outdated" && melos exec -c 1 --flutter -- "flutter pub outdated"
+      description: Run `dart pub outdated` in all packages
+
+    generate_translations:
+      run: melos exec --dir-exists=lib/l10n --flutter -- "flutter gen-l10n && dart format lib/generated/l10n"
+      description: Generate translations in all packages
+
+    build_runner:
+      run: melos exec --depends-on build_runner -- "dart run build_runner build --delete-conflicting-outputs && dart format ."
+      description: Run build runner in all packages that depend on it (e.g. for regenerating admin api types)
