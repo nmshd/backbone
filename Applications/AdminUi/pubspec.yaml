@@ -7,8 +7,13 @@ homepage: https://enmeshed.eu
 environment:
   sdk: "^3.9.0"
 
+workspace:
+  - apps/admin_ui
+  - packages/admin_api_sdk
+  - packages/admin_api_types
+
 dev_dependencies:
-  melos: ^6.1.0
+  melos: ^7.0.0
   very_good_analysis: ^9.0.0
 
 melos:
