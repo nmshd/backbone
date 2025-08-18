@@ -90,7 +90,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
               Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
               Gaps.h32,
               DropdownButtonFormField(
-                value: _selectedMetric,
+                initialValue: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.metric}*'),
@@ -109,7 +109,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
               ),
               Gaps.h24,
               DropdownButtonFormField(
-                value: _selectedPeriod,
+                initialValue: _selectedPeriod,
                 items: [
                   DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
                   DropdownMenuItem(value: 'Day', child: Text(context.l10n.day)),
