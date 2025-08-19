@@ -18,7 +18,7 @@ public interface IRelationshipsRepository
     Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
     Task Update(IEnumerable<Relationship> relationships);
-    Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false, bool ignoreCache = false);
 
     Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false);
