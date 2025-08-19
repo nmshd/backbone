@@ -6,7 +6,9 @@ part of 'update_client_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UpdateClientResponse _$UpdateClientResponseFromJson(Map<String, dynamic> json) => UpdateClientResponse(
+UpdateClientResponse _$UpdateClientResponseFromJson(
+  Map<String, dynamic> json,
+) => UpdateClientResponse(
   clientId: json['clientId'] as String,
   displayName: json['displayName'] as String,
   defaultTier: json['defaultTier'] as String,
@@ -14,7 +16,9 @@ UpdateClientResponse _$UpdateClientResponseFromJson(Map<String, dynamic> json) =
   maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$UpdateClientResponseToJson(UpdateClientResponse instance) => <String, dynamic>{
+Map<String, dynamic> _$UpdateClientResponseToJson(
+  UpdateClientResponse instance,
+) => <String, dynamic>{
   'clientId': instance.clientId,
   'displayName': instance.displayName,
   'defaultTier': instance.defaultTier,

@@ -70,7 +70,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
         content: SizedBox(
           width: 500,
           child: DropdownButtonFormField<String>(
-            value: _selectedTier,
+            initialValue: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue!),
             items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
