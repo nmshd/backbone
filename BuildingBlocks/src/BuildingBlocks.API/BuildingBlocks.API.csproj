@@ -11,7 +11,7 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="[1.12.0]" />
         <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.12.0]" />
         <PackageReference Include="Polly" Version="[8.6.2]" />
-        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="[2.0.0]" />
+        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="[9.0.0]" />
         <PackageReference Include="System.Data.SqlClient" Version="[4.9.0]" />
     </ItemGroup>
