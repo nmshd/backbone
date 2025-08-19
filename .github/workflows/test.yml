@@ -173,7 +173,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
         test-project:
           - display-name: admin-api
             path: Applications/AdminApi/test/AdminApi.Tests.Integration
@@ -255,7 +255,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository
@@ -357,3 +357,20 @@ jobs:
         run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.sln
       - name: Validate Licenses
         run: nuget-license --input ./Backbone.sln --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
+  
+  verify-identity-deletion:
+    name: Validate Identity deletion (on ${{matrix.database.type}})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database:
+          - type: postgres
+            env:
+              Database__Provider: Postgres
+              Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
+          - type: sqlserver
+            env:
+              Database__Provider: SqlServer
+              Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+    needs: image-test-builds
