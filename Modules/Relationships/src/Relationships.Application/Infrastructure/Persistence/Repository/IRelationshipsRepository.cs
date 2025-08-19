@@ -11,8 +11,6 @@ public interface IRelationshipsRepository
     Task<DbPaginationResult<Relationship>> ListRelationshipsWithContent(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
-    Task<IEnumerable<Relationship>> ListRelationshipsWithContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false);
-
     Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task<Relationship> GetRelationshipWithContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task<IdentityAddress> GetRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken);
@@ -20,13 +18,11 @@ public interface IRelationshipsRepository
     Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
     Task Update(IEnumerable<Relationship> relationships);
-    Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false, bool ignoreCache = false);
 
     Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false);
 
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
-
-    Task ReloadRelationships(IEnumerable<Relationship> relationships, CancellationToken cancellationToken);
 }
