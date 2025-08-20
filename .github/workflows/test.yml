@@ -435,4 +435,14 @@ jobs:
 
       - name: Check exported database file
         run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj check
-      
+
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
+
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{matrix.test-project.display-name}}-${{matrix.database}}
+          path: logs.txt
