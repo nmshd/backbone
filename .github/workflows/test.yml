@@ -444,11 +444,11 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{matrix.test-project.display-name}}-${{matrix.database}}
+          name: identity-deletion-verifier-docker-${{matrix.database.type}}
           path: logs.txt
 
       - name: Archive exported database and identity files
         uses: actions/upload-artifact@v4
         with:
-          name: exported-db
+          name: identity-deletion-verifier-exported-db-${{matrix.database.type}}
           path: /tmp/enmeshed/backbone
