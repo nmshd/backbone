@@ -438,7 +438,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database.type}}.yml logs > logs.txt
 
       - name: Archive logs
         if: failure()
@@ -448,6 +448,7 @@ jobs:
           path: logs.txt
 
       - name: Archive exported database and identity files
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: identity-deletion-verifier-exported-db-${{matrix.database.type}}
