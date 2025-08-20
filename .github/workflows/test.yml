@@ -446,3 +446,9 @@ jobs:
         with:
           name: ${{matrix.test-project.display-name}}-${{matrix.database}}
           path: logs.txt
+
+      - name: Archive exported database and identity files
+        uses: actions/upload-artifact@v4
+        with:
+          name: exported-db
+          path: /tmp/enmeshed/backbone
