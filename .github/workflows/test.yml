@@ -424,7 +424,7 @@ jobs:
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database.type}}.yml wait admin-cli
 
       - name: Create identities, relationships etc. and initiate deletion processes
-        run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj init --consumerBaseUrl http://localhost:8081 --adminBaseUrl http://localhost:8082
+        run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj init --consumerBaseUrl http://localhost:5000 --adminBaseUrl http://localhost:5173
 
       - name: Run Identity deletion job
         run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj --Worker ActualDeletionWorker
