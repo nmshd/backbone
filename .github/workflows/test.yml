@@ -374,3 +374,65 @@ jobs:
               Database__Provider: SqlServer
               Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
     needs: image-test-builds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v5
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images and build applications
+        run: |
+          {
+            ./.ci/loadDockerImages.sh
+          } &
+          {
+            # The following two lines are for the identity deletion job only
+            mv appsettings.override.json appsettings.override.json.bak
+            cp .ci/appsettings.override.${{matrix.database.type}}.local.json appsettings.override.json
+
+            dotnet restore ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj
+            dotnet restore ./Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj
+            dotnet restore ./Applications/AdminCli/src/AdminCli/AdminCli.csproj
+          
+            dotnet build --no-restore ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj
+            dotnet build --no-restore ./Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj
+            dotnet build --no-restore ./Applications/AdminCli/src/AdminCli/AdminCli.csproj
+          }
+          wait
+
+      - name: Start compose stack
+        run: |
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database.type}}.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database.type}}.yml up --no-build --wait -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database.type}}.yml wait admin-cli
+
+      - name: Create identities, relationships etc. and initiate deletion processes
+        run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj init --consumerBaseUrl http://localhost:8081 --adminBaseUrl http://localhost:8082
+
+      - name: Run Identity deletion job
+        run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj --Worker ActualDeletionWorker
+
+      - name: Export databse via Admin Cli
+        run: dotnet run --no-build --no-restore --project ./Applications/AdminCli/src/AdminCli/AdminCli.csproj database export --sensitive
+        env: ${{matrix.database.env}}
+
+      - name: Check exported database file
+        run: dotnet run --no-build --no-restore --project ./Applications/IdentityDeletionVerifier/src/IdentityDeletionVerifier/IdentityDeletionVerifier.csproj check
+      
