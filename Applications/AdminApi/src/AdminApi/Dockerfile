@@ -11,7 +11,7 @@ WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:1f7ccf88e076bc1cb1ddbd81959fb55b886b01851b092867bb7a638435fa1f1f AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:0b7186a7247bf8c07085fd700613bb0425a6f8f6467a0342c12a535e767da803 AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
@@ -117,7 +117,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.35.0@sha256:114f14a7cf973b08e4607d3e2fb4a3b2dc977c08877e651743f8cbed0e971046 AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.35.1@sha256:2e1797e00fe446551e84005587f7f2861ac443de441017b76e12c644d7d9dd9a AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
