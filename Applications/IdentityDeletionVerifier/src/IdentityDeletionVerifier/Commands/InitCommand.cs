@@ -256,6 +256,9 @@ public class InitCommand : Command
     {
         AnsiConsole.WriteLine("Writing identity addresses to a temp file...");
 
+        if (!Directory.Exists(FilePaths.PATH_TO_TEMP_DIR))
+            Directory.CreateDirectory(FilePaths.PATH_TO_TEMP_DIR);
+
         var file = new StreamWriter(new FileStream(FilePaths.PATH_TO_IDENTITIES_FILE, FileMode.Create), Encoding.UTF8);
 
         await file.WriteLineAsync(a.IdentityData!.Address);
