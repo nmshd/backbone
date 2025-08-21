@@ -11,15 +11,15 @@ public class SseController : ControllerBase
 {
     private readonly IEventQueue _eventQueue;
     private readonly IUserContext _userContext;
-    private readonly IMediator _mediator;
     private readonly ILogger<SseController> _logger;
+    private readonly IServiceProvider _serviceProvider;
 
-    public SseController(IEventQueue eventQueue, IUserContext userContext, IMediator mediator, ILogger<SseController> logger)
+    public SseController(IEventQueue eventQueue, IUserContext userContext, ILogger<SseController> logger, IServiceProvider serviceProvider)
     {
         _eventQueue = eventQueue;
         _userContext = userContext;
-        _mediator = mediator;
         _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     [HttpGet("/api/v1/sse")]
@@ -28,12 +28,17 @@ public class SseController : ControllerBase
     {
         var address = _userContext.GetAddress().Value;
 
-        await _mediator.Send(new UpdateDeviceRegistrationCommand
+        await using (var scope = _serviceProvider.CreateAsyncScope())
         {
-            Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
-            AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
-            Platform = "sse"
-        }, cancellationToken);
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+            await mediator.Send(new UpdateDeviceRegistrationCommand
+            {
+                Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
+                AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
+                Platform = "sse"
+            }, cancellationToken);
+        }
 
         Response.StatusCode = 200;
         Response.Headers.CacheControl = "no-cache";
@@ -45,9 +50,7 @@ public class SseController : ControllerBase
         try
         {
             _eventQueue.Register(address, cancellationToken);
-
             await streamWriter.SendServerSentEvent("ConnectionOpened");
-
             await foreach (var eventName in _eventQueue.DequeueFor(address, cancellationToken))
             {
                 _logger.LogDebug("Sending event '{EventName}'...", eventName);
@@ -70,8 +73,11 @@ public class SseController : ControllerBase
         finally
         {
             _eventQueue.Deregister(address);
+            await using var scope = _serviceProvider.CreateAsyncScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
             // we must NOT pass the cancellation token here, because otherwise the device registration would not be deleted in case the request was cancelled
-            await _mediator.Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
+            await mediator.Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
         }
     }
 }
