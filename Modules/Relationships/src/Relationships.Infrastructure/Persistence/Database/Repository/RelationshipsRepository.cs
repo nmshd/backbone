@@ -117,14 +117,20 @@ public class RelationshipsRepository : IRelationshipsRepository
 #pragma warning restore CS0618 // Type or member is obsolete
     }
 
-    public async Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false, bool ignoreCache = false)
     {
-        return await (track ? _relationships : _readOnlyRelationships)
+        var list = await (track ? _relationships : _readOnlyRelationships)
             .Include(r => r.RelationshipTemplate)
             .Include(r => r.AuditLog)
             .AsSplitQuery()
             .Where(filter)
             .ToListAsync(cancellationToken);
+
+        if (ignoreCache)
+            foreach (var relationship in list)
+                await _dbContext.Entry(relationship).ReloadAsync(cancellationToken);
+
+        return list;
     }
 
     public async Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
