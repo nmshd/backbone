@@ -14,7 +14,7 @@ public class SseController : ControllerBase
     private readonly ILogger<SseController> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    // CATION: DO NOT INJECT ANYTHING THAT IS BAD TO KEEP ALIVE DURING THE ENTIRE LIFETIME OF THE SSE CONNECTION.
+    // CAUTION: DO NOT INJECT ANYTHING THAT IS BAD TO KEEP ALIVE DURING THE ENTIRE LIFETIME OF THE SSE CONNECTION.
     // ALSO WATCH OUT FOR TRANSITIVE DEPENDENCIES.
     public SseController(IEventQueue eventQueue, IUserContext userContext, ILogger<SseController> logger, IServiceProvider serviceProvider)
     {
