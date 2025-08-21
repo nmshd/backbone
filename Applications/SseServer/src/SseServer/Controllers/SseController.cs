@@ -14,6 +14,8 @@ public class SseController : ControllerBase
     private readonly ILogger<SseController> _logger;
     private readonly IServiceProvider _serviceProvider;
 
+    // CATION: DO NOT INJECT ANYTHING THAT IS BAD TO KEEP ALIVE DURING THE ENTIRE LIFETIME OF THE SSE CONNECTION.
+    // ALSO WATCH OUT FOR TRANSITIVE DEPENDENCIES.
     public SseController(IEventQueue eventQueue, IUserContext userContext, ILogger<SseController> logger, IServiceProvider serviceProvider)
     {
         _eventQueue = eventQueue;
@@ -28,6 +30,8 @@ public class SseController : ControllerBase
     {
         var address = _userContext.GetAddress().Value;
 
+        // We need a separate scope here, so that all DbContext instances are disposed after the MediatR command is executed. Otherwise, 
+        // the DbContext would be kept alive until the SSE connection is closed.
         await using (var scope = _serviceProvider.CreateAsyncScope())
         {
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
