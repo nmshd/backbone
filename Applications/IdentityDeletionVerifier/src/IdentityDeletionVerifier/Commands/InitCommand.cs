@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.Net;
 using System.Text;
-using System.Text.Unicode;
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
@@ -10,7 +9,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
@@ -18,7 +16,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.Crypto;
 using Backbone.IdentityDeletionVerifier.Extensions;
-using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using Spectre.Console;
 using AdminClient = Backbone.AdminApi.Sdk.Client;
@@ -175,20 +172,28 @@ public class InitCommand : Command
             Password = null
         });
 
-        //var allocationResponse = tAllocatedByA.IsSuccess ? await a.Tokens.GetToken(tAllocatedByA.Result!.Id) : DummyErrorResponse<Token>();
+        var allocationResponse = tAllocatedByA.IsSuccess ? await a.Tokens.GetToken(tAllocatedByA.Result!.Id) : DummyErrorResponse<Token>();
 
-        return AnsiConsole.Console.WriteResult(tA, tForA, tAllocatedByA /*, allocationResponse*/);
+        return AnsiConsole.Console.WriteResult(tA, tForA, tAllocatedByA, allocationResponse);
     }
 
     private async Task<bool> CreateDatawallet(Client a)
     {
         AnsiConsole.WriteLine("Creating datawallet...");
-        AnsiConsole.WriteLine("Not yet implemented");
 
-        //TODO: Timo (How to create a datawallet?)
-        await Task.CompletedTask;
+        var createSyncRunResponse = await a.SyncRuns.StartSyncRun(new StartSyncRunRequest
+        {
+            Duration = null,
+            Type = SyncRunType.DatawalletVersionUpgrade
+        }, 1);
 
-        return true;
+        var finalizeDatawalletVersionUpgradeResponse = await a.SyncRuns.FinalizeDatawalletVersionUpgrade(createSyncRunResponse.Result!.SyncRun.Id, new FinalizeDatawalletVersionUpgradeRequest
+        {
+            NewDatawalletVersion = 1,
+            DatawalletModifications = []
+        });
+
+        return AnsiConsole.Console.WriteResult(createSyncRunResponse, finalizeDatawalletVersionUpgradeResponse);
     }
 
     private async Task<bool> StartSyncRun(Client a)
@@ -247,7 +252,7 @@ public class InitCommand : Command
 
         var responseA = await a.Identities.StartDeletionProcess(new StartDeletionProcessRequest { LengthOfGracePeriodInDays = 0 });
         var responseB = await b.Identities.StartDeletionProcess(new StartDeletionProcessRequest { LengthOfGracePeriodInDays = 0.1 });
-        //TODO Timo: Until the Identity Deletion Bug PR is merged, A and B can't be deleted at the same time (therefore the short grace period)
+        //We need a short grace period for B, so that the templates and tokens for A get anonymized instead of deleted
 
         return AnsiConsole.Console.WriteResult(responseA, responseB);
     }
