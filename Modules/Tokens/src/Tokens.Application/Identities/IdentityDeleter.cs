@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Application.Tokens.Commands.AnonymizeTokenAllocationsOfIdentity;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.AnonymizeTokensForIdentity;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokenAllocationsOfIdentity;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
 using MediatR;
 
@@ -22,7 +22,7 @@ public class IdentityDeleter : IIdentityDeleter
     {
         await _mediator.Send(new DeleteTokensOfIdentityCommand { IdentityAddress = identityAddress });
         await _mediator.Send(new AnonymizeTokensForIdentityCommand { IdentityAddress = identityAddress });
-        await _mediator.Send(new AnonymizeTokenAllocationsOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new DeleteTokenAllocationsOfIdentityCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Tokens");
     }
 }
