@@ -17,7 +17,7 @@ public class Identity : Entity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
-    private readonly object _latestExhaustionDateLock = new();
+    private readonly Lock _latestExhaustionDateLock = new();
 
     // ReSharper disable once UnusedMember.Local
     protected Identity()
