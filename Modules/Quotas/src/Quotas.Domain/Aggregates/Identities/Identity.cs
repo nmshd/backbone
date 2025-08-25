@@ -126,7 +126,7 @@ public class Identity : Entity
         {
             // if the quota allows 0, we don't need to calculate the usage, it's always exhausted
             // this is primarily an optimization for when an identity moves to the QueuedForDeletion tier, where all quotas are set to 0
-            var newUsage = quota.Max > 0
+            var newUsage = quota.Max == 0
                 ? 1
                 : await metricCalculator.CalculateUsage(
                     quota.Period.CalculateBegin(utcNow),
