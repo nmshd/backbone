@@ -155,13 +155,11 @@ public class Token : Entity
             throw new DomainException(DomainErrors.TokenNotPersonalized());
     }
 
-    public void AnonymizeTokenAllocation(IdentityAddress address, string didDomainName)
+    public void DeleteTokenAllocation(IdentityAddress address)
     {
         var tokenAllocation = _allocations.Find(a => a.AllocatedBy == address) ?? throw new DomainException(DomainErrors.NoAllocationForIdentity());
 
-        var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
-
-        tokenAllocation.AllocatedBy = anonymousIdentity;
+        _allocations.Remove(tokenAllocation);
     }
 
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
