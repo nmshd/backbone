@@ -298,6 +298,22 @@ public class IdentityTests : AbstractTestsBase
     }
 
     [Fact]
+    public async Task Updating_a_MetricStatus_with_Quota_with_max_0()
+    {
+        // Arrange
+        SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
+
+        var identity = CreateIdentity();
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 0, QuotaPeriod.Hour));
+
+        // Act
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(0), MetricUpdateType.All);
+
+        // Assert
+        identity.MetricStatuses.First().IsExhaustedUntil.ShouldBeEndOfHour();
+    }
+
+    [Fact]
     public async Task Updating_an_already_exhausted_MetricStatus_with_an_even_higher_usage_recalculates_exhaustion_date()
     {
         // Even though this case will probably never happen in reality (because once the MetricStatus is exhausted, there will be no more updates), we should still test it
