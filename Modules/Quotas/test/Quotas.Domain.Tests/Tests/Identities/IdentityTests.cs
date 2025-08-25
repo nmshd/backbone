@@ -301,8 +301,6 @@ public class IdentityTests : AbstractTestsBase
     public async Task Updating_a_MetricStatus_with_Quota_with_max_0()
     {
         // Arrange
-        SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
-
         var identity = CreateIdentity();
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 0, QuotaPeriod.Hour));
 
