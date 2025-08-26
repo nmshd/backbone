@@ -7,8 +7,8 @@
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.8]" />
-        <PackageReference Include="MyCSharp.HttpUserAgentParser" Version="[3.0.27]"/>
-        <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.27]"/>
+        <PackageReference Include="MyCSharp.HttpUserAgentParser" Version="[3.0.28]"/>
+        <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.28]"/>
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.1.0]" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.8]" />
