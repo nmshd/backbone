@@ -98,6 +98,7 @@ public class Identity : Entity
 
     public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     public virtual FeatureFlagSet FeatureFlags => EfCoreFeatureFlagSetDoNotUse;
+    public bool IsToBeDeleted => Status is IdentityStatus.ToBeDeleted or IdentityStatus.Deleting;
 
     public bool IsNew()
     {
@@ -207,8 +208,8 @@ public class Identity : Entity
 
     public void DeletionStarted()
     {
-        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Approved)
-                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status is DeletionProcessStatus.Approved or DeletionProcessStatus.Deleting)
+                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved, DeletionProcessStatus.Deleting));
 
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
@@ -349,7 +350,7 @@ public class Identity : Entity
 
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()
     {
-        return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+        return i => (i.Status == IdentityStatus.ToBeDeleted || i.Status == IdentityStatus.Deleting) && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     }
 
     public static Expression<Func<Identity, bool>> HasUser(string username)

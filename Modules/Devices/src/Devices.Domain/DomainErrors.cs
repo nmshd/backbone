@@ -53,10 +53,11 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed", "Only one active deletion process is allowed.");
     }
 
-    public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
+    public static DomainError DeletionProcessMustBeInStatus(params DeletionProcessStatus[] deletionProcessStatus)
     {
+        var statusList = string.Join("', '", deletionProcessStatus);
         return new DomainError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus",
-            $"The deletion process must be in status '{deletionProcessStatus}' for the operation to continue, but it was in another status.");
+            $"The deletion process must be in status [{statusList}] for the operation to continue, but it was in another status.");
     }
 
     public static DomainError GracePeriodHasNotYetExpired()
