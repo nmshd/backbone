@@ -17,7 +17,7 @@ public class Identity : Entity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
-    private readonly object _latestExhaustionDateLock = new();
+    private readonly Lock _latestExhaustionDateLock = new();
 
     // ReSharper disable once UnusedMember.Local
     protected Identity()
@@ -124,11 +124,15 @@ public class Identity : Entity
 
         await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>
         {
-            var newUsage = await metricCalculator.CalculateUsage(
-                quota.Period.CalculateBegin(utcNow),
-                quota.Period.CalculateEnd(utcNow),
-                Address,
-                cancellationToken);
+            // if the quota allows 0, we don't need to calculate the usage, it's always exhausted
+            // this is primarily an optimization for when an identity moves to the QueuedForDeletion tier, where all quotas are set to 0
+            var newUsage = quota.Max == 0
+                ? (uint)quota.Max
+                : await metricCalculator.CalculateUsage(
+                    quota.Period.CalculateBegin(utcNow),
+                    quota.Period.CalculateEnd(utcNow),
+                    Address,
+                    cancellationToken);
 
             var quotaExhaustion = quota.CalculateExhaustion(newUsage, utcNow);
 
