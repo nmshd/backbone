@@ -17,7 +17,7 @@ jobs:
     name: Run Admin UI Checks
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.21.0
       - name: Run checks
@@ -28,10 +28,10 @@ jobs:
     name: Check Formatting
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.17.1
+          node-version: 22.18.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -58,10 +58,10 @@ jobs:
     name: Run Unit Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.17.1
+          node-version: 22.18.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -115,11 +115,11 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.17.1
+          node-version: 22.18.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -184,11 +184,11 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.17.1
+          node-version: 22.18.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -205,7 +205,7 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
@@ -259,24 +259,24 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: backbone
 
       - name: Checkout runtime repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: nmshd/runtime
           path: runtime
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.17.1
+          node-version: 22.18.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
@@ -327,7 +327,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Install helm
@@ -342,7 +342,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
         with:

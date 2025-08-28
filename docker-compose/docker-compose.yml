@@ -4,7 +4,7 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite:3.34.0@sha256:0a47e12e3693483cef5c71f35468b91d751611f172d2f97414e9c69113b106d9
+    image: mcr.microsoft.com/azure-storage/azurite:3.35.0@sha256:647c63a91102a9d8e8000aab803436e1fc85fbb285e7ce830a82ee5d6661cf37
     command: azurite-blob -l /data --blobHost "0.0.0.0"
     ports:
       - "10000:10000"
@@ -14,7 +14,7 @@ services:
   ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:e2e5bcfe395924ff49694542191d3aefe86b6b3bd6c024f9ea01bf5a8856c56e
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:2fa59c23272a23dfd9600abf4ee52c0de6ae7ac640f14c617bc717ec139a5295
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres:17.5@sha256:4d89c904835259bc58876520e56267ca07a4ebd6a027f7814bbbf91b50d685be
+    image: postgres:17.6@sha256:29e0bb09c8e7e7fc265ea9f4367de9622e55bae6b0b97e7cce740c2d63c2ebc0
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.1.2-management-alpine@sha256:6a77282b9ac7dcc50566459702b905d67e66c24ad54bf05b47529af031cdc7ff
+    image: rabbitmq:4.1.3-management-alpine@sha256:7be3e8a1cf96af968cda654d7a80fd6e9faf036da6acb3927b784944c6502f58
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:2025.2@sha256:d223385ab18257f124b46994b4a1720e7fe96cb2d1f18634d715141470e10dfc
+    image: datalust/seq:2025.2@sha256:080ccf44e0593cd4698ba1404b90b4f8bf51ff342e45242f611c91e329554f50
     container_name: seq
     ports:
       - "8085:80"
@@ -55,6 +55,7 @@ services:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
     restart: unless-stopped
 
 networks:

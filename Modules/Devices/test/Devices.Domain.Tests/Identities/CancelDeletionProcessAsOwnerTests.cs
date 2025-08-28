@@ -24,7 +24,9 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         identity.TierId.ShouldBe(tierIdBeforeDeletion);
         identity.TierIdBeforeDeletion.ShouldBe(null);
         identity.Status.ShouldBe(IdentityStatus.Active);
+        identity.DeletionGracePeriodEndsAt.ShouldBeNull();
         deletionProcess.Status.ShouldBe(DeletionProcessStatus.Cancelled);
+        deletionProcess.GracePeriodEndsAt.ShouldBeNull();
         deletionProcess.CancelledAt.ShouldBe(DateTime.Parse("2024-01-01"));
         deletionProcess.CancelledByDevice.ShouldBe(identity.Devices[0].Id);
         AssertAuditLogEntryWasCreated(deletionProcess);

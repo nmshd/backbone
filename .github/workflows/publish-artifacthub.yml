@@ -9,7 +9,7 @@ jobs:
   upload-artifact-repo-config:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install oras
         run: |
           curl -L https://github.com/oras-project/oras/releases/download/v1.1.0/oras_1.1.0_linux_amd64.tar.gz -o oras.tar.gz
@@ -17,7 +17,7 @@ jobs:
           sudo mv oras /usr/local/bin
           rm oras.tar.gz
       - name: Docker Login
-        uses: docker/login-action@v3.4.0
+        uses: docker/login-action@v3.5.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}

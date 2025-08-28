@@ -142,7 +142,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.defaultTier}*'),
-                value: _chosenDefaultTier,
+                initialValue: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
                 items: widget.defaultTiers.map((tier) {
                   return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
