@@ -19,7 +19,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             modelBuilder
                 .HasDefaultSchema("Relationships")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -69,6 +69,11 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasAnnotation("SqlServer:Include", new[] { "CreatedBy" });
+
+                    NpgsqlIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt"), new[] { "CreatedBy" });
 
                     b.ToTable("RelationshipTemplates", "Relationships");
                 });
