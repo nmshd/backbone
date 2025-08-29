@@ -74,7 +74,7 @@ public class IdentityDeletionProcess : Entity
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= ApprovalPeriodEndsAt;
 
-    public bool HasGracePeriodExpired => SystemTime.UtcNow >= GracePeriodEndsAt;
+    public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {

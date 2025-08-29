@@ -176,7 +176,7 @@ public class RelationshipsController : ApiControllerBase
     {
         var peerIdentity = await _mediator.Send(new GetIdentityQuery { Address = peerAddress }, cancellationToken);
 
-        var response = peerIdentity.Status is IdentityStatus.ToBeDeleted or IdentityStatus.Deleting
+        var response = peerIdentity.Status is IdentityStatus.ToBeDeleted
             ? new CanEstablishRelationshipResponse { CanCreate = false, Code = ApplicationErrors.Relationship.PeerIsToBeDeleted().Code }
             : await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peerAddress }, cancellationToken);
 
@@ -186,7 +186,7 @@ public class RelationshipsController : ApiControllerBase
     private async Task EnsurePeerIsNotToBeDeleted(string peerIdentityAddress, CancellationToken cancellationToken)
     {
         var peerIdentity = await _mediator.Send(new GetIdentityQuery { Address = peerIdentityAddress }, cancellationToken);
-        if (peerIdentity.Status is IdentityStatus.ToBeDeleted or IdentityStatus.Deleting)
+        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
             throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted());
     }
 }

@@ -119,7 +119,7 @@ public class SyncRunsController : ApiControllerBase
 
     private static void EnsureIdentityIsNotToBeDeleted(GetIdentityResponse identityResponse)
     {
-        if (identityResponse.Status is IdentityStatus.ToBeDeleted or IdentityStatus.Deleting)
+        if (identityResponse.Status is IdentityStatus.ToBeDeleted)
             throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
     }
 }
