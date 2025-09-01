@@ -197,6 +197,21 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ErrorDuringDeletion(IdentityAddress identityAddress, string errorMessage)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            MessageKey.ErrorDuringDeletion,
+            Hasher.HashUtf8(identityAddress.Value),
+            null,
+            DeletionProcessStatus.Deleting,
+            DeletionProcessStatus.Deleting,
+            new Dictionary<string, string>
+            {
+                { "errorMessage", errorMessage }
+            }
+        );
+    }
+
     public static IdentityDeletionProcessAuditLogEntry DeletionCompleted(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
@@ -239,5 +254,6 @@ public enum MessageKey
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,
     DataDeleted = 14,
-    DeletionCompleted = 15
+    DeletionCompleted = 15,
+    ErrorDuringDeletion = 16
 }

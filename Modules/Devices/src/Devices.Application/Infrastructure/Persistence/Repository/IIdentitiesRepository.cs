@@ -36,7 +36,9 @@ public interface IIdentitiesRepository
 
     #endregion
 
-    #region Deletion Process Audit Logs
+    #region Deletion Processes
+
+    Task<List<IdentityAddress>> ListAddressesOfIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
 
     Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> ListIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false);

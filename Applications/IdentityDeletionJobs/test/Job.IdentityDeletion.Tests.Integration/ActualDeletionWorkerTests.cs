@@ -2,9 +2,6 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
@@ -67,10 +64,26 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Deletes_the_identity()
+    public async Task Deletes_the_identity_when_it_is_in_status_ToBeDeleted()
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
+
+        // Act
+        await _host.StartAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        var assertionContext = GetService<DevicesDbContext>();
+
+        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken);
+        identityAfterAct.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Deletes_the_identity_when_it_is_in_status_Deleting()
+    {
+        // Arrange
+        var identity = await SeedDatabaseWithIdentityInStatusDeleting();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -126,19 +139,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     #region Seeders
 
-    private async Task<Message> SeedDatabaseWithMessage(Relationship relationship, Identity from, Identity to)
-    {
-        var dbContext = GetService<MessagesDbContext>();
-
-        var recipient = new RecipientInformation(to.Address, RelationshipId.Parse(relationship.Id.Value), []);
-        var message = new Message(from.Address, from.Devices.First().Id, [], [], [recipient]);
-
-        await dbContext.SaveEntity(message);
-
-        return message;
-    }
-
-    private async Task<Relationship> SeedDatabaseWithActiveRelationshipBetween(Identity from, Identity to)
+    private async Task SeedDatabaseWithActiveRelationshipBetween(Identity from, Identity to)
     {
         var dbContext = GetService<RelationshipsDbContext>();
 
@@ -147,8 +148,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         relationship.Accept(to.Address, to.Devices.First().Id, []);
 
         await dbContext.SaveEntity(relationship);
-
-        return relationship;
     }
 
     private async Task SeedDatabaseWithRelationshipTemplateOf(IdentityAddress owner)
@@ -173,6 +172,24 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SystemTime.Set(SystemTime.UtcNow.AddMonths(-1));
         identity.StartDeletionProcessAsOwner(device.Id);
         SystemTime.Reset();
+
+        await dbContext.SaveEntity(identity);
+
+        return identity;
+    }
+
+    private async Task<Identity> SeedDatabaseWithIdentityInStatusDeleting()
+    {
+        var dbContext = GetService<DevicesDbContext>();
+
+        var tier = await dbContext.Tiers.FirstAsync(t => t.Id != Tier.QUEUED_FOR_DELETION.Id);
+
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], tier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+
+        var device = identity.Devices.First();
+
+        identity.StartDeletionProcessAsOwner(device.Id, 0);
+        identity.DeletionStarted();
 
         await dbContext.SaveEntity(identity);
 
