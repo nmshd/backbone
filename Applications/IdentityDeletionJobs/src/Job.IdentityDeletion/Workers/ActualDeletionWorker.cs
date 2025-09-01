@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDeletionProcess;
+using Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDuringIdentityDeletion;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
@@ -47,35 +48,58 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        var addressesWithTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
 
-        var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key);
-        var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
-
-        await ExecuteDeletion(addressesWithTriggeredDeletionProcesses, cancellationToken);
-        LogErroringDeletionTriggers(erroringDeletionTriggers);
+        await Delete(addressesWithTriggeredDeletionProcesses);
     }
 
-    private async Task ExecuteDeletion(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken)
+    private async Task<List<string>> TriggerRipeDeletionProcesses(CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+
+        var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key).ToList();
+        var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
+
+        await NotifyIdentitiesAboutStartingDeletion(addressesWithTriggeredDeletionProcesses, cancellationToken);
+        LogErroringDeletionTriggers(erroringDeletionTriggers);
+
+        return addressesWithTriggeredDeletionProcesses;
+    }
+
+    private async Task NotifyIdentitiesAboutStartingDeletion(IEnumerable<string> addresses, CancellationToken cancellationToken)
     {
         foreach (var identityAddress in addresses)
         {
-            await ExecuteDeletion(identityAddress, cancellationToken);
+            await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         }
     }
 
-    private async Task ExecuteDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    private async Task Delete(IEnumerable<string> addresses)
     {
-        await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
-        await Delete(identityAddress);
+        foreach (var identityAddress in addresses)
+        {
+            await TryDelete(identityAddress);
+        }
     }
 
-    private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
+    private async Task NotifyIdentityAboutStartingDeletion(string identityAddress, CancellationToken cancellationToken)
     {
         await _pushNotificationSender.SendNotification(
             new DeletionStartsPushNotification(),
             SendPushNotificationFilter.AllDevicesOf(identityAddress),
             cancellationToken);
+    }
+
+    private async Task TryDelete(string identityAddress)
+    {
+        try
+        {
+            await Delete(identityAddress);
+        }
+        catch (Exception ex)
+        {
+            await _mediator.Send(new HandleErrorDuringIdentityDeletionCommand { IdentityAddress = identityAddress, ErrorMessage = ex.Message });
+        }
     }
 
     private async Task Delete(IdentityAddress identityAddress)
