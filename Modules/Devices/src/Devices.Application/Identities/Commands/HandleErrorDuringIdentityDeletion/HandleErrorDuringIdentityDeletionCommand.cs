@@ -4,6 +4,6 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDu
 
 public class HandleErrorDuringIdentityDeletionCommand : IRequest
 {
-    public required string IdentityAddress { get; set; }
-    public required string ErrorMessage { get; set; }
+    public required string IdentityAddress { get; init; }
+    public required string ErrorMessage { get; init; }
 }
