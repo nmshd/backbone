@@ -15,6 +15,7 @@ public class Handler : IRequestHandler<LogDeletionProcessCommand>
 
     public async Task Handle(LogDeletionProcessCommand request, CancellationToken cancellationToken)
     {
-        await _identitiesRepository.AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry.DataDeleted(request.IdentityAddress, request.AggregateType));
+        var auditLogEntry = IdentityDeletionProcessAuditLogEntry.DataDeleted(request.IdentityAddress, request.AggregateType);
+        await _identitiesRepository.AddDeletionProcessAuditLogEntry(auditLogEntry);
     }
 }
