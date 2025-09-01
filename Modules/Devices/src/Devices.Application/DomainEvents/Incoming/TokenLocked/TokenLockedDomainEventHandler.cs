@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Tokens;
@@ -21,9 +20,9 @@ public class TokenLockedDomainEventHandler : IDomainEventHandler<TokenLockedDoma
 
     public async Task Handle(TokenLockedDomainEvent @event)
     {
-        var identity = await _identitiesRepository.Get(@event.CreatedBy, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(@event.CreatedBy, CancellationToken.None);
 
-        if (identity.Status is not IdentityStatus.ToBeDeleted)
+        if (identity is { Status: IdentityStatus.Active })
             await _pushNotificationSender.SendNotification(
                 new TokenLockedPushNotification(),
                 SendPushNotificationFilter.AllDevicesOf(identity.Address),

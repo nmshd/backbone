@@ -11,8 +11,6 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
     {
         base.Configure(builder);
 
-        base.Configure(builder);
-
         builder
             .HasMany(x => x.Relationships)
             .WithOne(x => x.RelationshipTemplate)
