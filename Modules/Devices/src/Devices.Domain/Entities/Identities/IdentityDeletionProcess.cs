@@ -26,7 +26,7 @@ public class IdentityDeletionProcess : Entity
         CreatedAt = SystemTime.UtcNow;
         Status = status;
 
-        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)];
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(createdBy)];
 
         RaiseDomainEvent(new IdentityDeletionProcessStartedDomainEvent(createdBy, Id, null));
     }
@@ -39,7 +39,7 @@ public class IdentityDeletionProcess : Entity
 
         ApproveInternally(createdBy, createdByDevice, lengthOfGracePeriodInDays);
 
-        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
+        _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(createdBy, createdByDevice)];
     }
 
     public IdentityDeletionProcessId Id { get; }
@@ -94,37 +94,37 @@ public class IdentityDeletionProcess : Entity
     public void ApprovalReminder1Sent(IdentityAddress address)
     {
         ApprovalReminder1SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder1Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder1Sent(address));
     }
 
     public void ApprovalReminder2Sent(IdentityAddress address)
     {
         ApprovalReminder2SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder2Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder2Sent(address));
     }
 
     public void ApprovalReminder3Sent(IdentityAddress address)
     {
         ApprovalReminder3SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder3Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ApprovalReminder3Sent(address));
     }
 
     public void GracePeriodReminder1Sent(IdentityAddress address)
     {
         GracePeriodReminder1SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder1Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder1Sent(address));
     }
 
     public void GracePeriodReminder2Sent(IdentityAddress address)
     {
         GracePeriodReminder2SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder2Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder2Sent(address));
     }
 
     public void GracePeriodReminder3Sent(IdentityAddress address)
     {
         GracePeriodReminder3SentAt = SystemTime.UtcNow;
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(address));
     }
 
     internal void DeletionStarted(IdentityAddress address)
@@ -147,7 +147,7 @@ public class IdentityDeletionProcess : Entity
         EnsureStatus(DeletionProcessStatus.WaitingForApproval);
 
         ApproveInternally(address, approvedByDevice);
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(address, approvedByDevice));
     }
 
     private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice, double? lengthOfGracePeriodInDays = null)
@@ -167,7 +167,7 @@ public class IdentityDeletionProcess : Entity
         RejectedAt = SystemTime.UtcNow;
         RejectedByDevice = rejectedByDevice;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(address, rejectedByDevice));
     }
 
     public void EnsureStatus(DeletionProcessStatus deletionProcessStatus)
@@ -189,7 +189,7 @@ public class IdentityDeletionProcess : Entity
         CancelledByDevice = cancelledByDevice;
         GracePeriodEndsAt = null;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(address, cancelledByDevice));
     }
 
     public void CancelAsSupport(IdentityAddress address)
@@ -200,7 +200,7 @@ public class IdentityDeletionProcess : Entity
         ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(address));
     }
 
     public void Cancel(IdentityAddress address)
@@ -210,7 +210,7 @@ public class IdentityDeletionProcess : Entity
         ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
-        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(address));
     }
 
     private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, string? initiator)

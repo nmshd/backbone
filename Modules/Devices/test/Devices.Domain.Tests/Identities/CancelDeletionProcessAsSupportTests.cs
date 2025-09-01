@@ -87,7 +87,6 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
         deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
         auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);
         auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Cancelled);
     }
