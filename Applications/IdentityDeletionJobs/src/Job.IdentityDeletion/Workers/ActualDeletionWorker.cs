@@ -121,7 +121,7 @@ public class ActualDeletionWorker : IHostedService
         await _mediator.Send(new HandleCompletedDeletionProcessCommand { IdentityAddress = identityAddress.Value, Usernames = usernames });
     }
 
-    private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
+    private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<string, UnitResult<DomainError>>> erroringDeletionTriggers)
     {
         foreach (var erroringDeletion in erroringDeletionTriggers)
         {

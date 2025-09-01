@@ -13,7 +13,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new LogDeletionProcessCommand { IdentityAddress = CreateRandomIdentityAddress(), AggregateType = "aggregateType" });
+        var validationResult = validator.TestValidate(new LogDeletionProcessCommand
+        {
+            IdentityAddress = CreateRandomIdentityAddress(),
+            AggregateType = "aggregateType"
+        });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
