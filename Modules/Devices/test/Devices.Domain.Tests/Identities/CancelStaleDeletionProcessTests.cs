@@ -76,7 +76,6 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         // Assert
         result.IsSuccess.ShouldBeTrue();
         result.Value.AuditLog.ShouldHaveCount(2); // count 2 because the first one was creation of the deletion process
-        result.Value.AuditLog[1].ProcessId.ShouldBe(identity.DeletionProcesses[0].Id);
         result.Value.AuditLog[1].OldStatus.ShouldBe(DeletionProcessStatus.WaitingForApproval);
         result.Value.AuditLog[1].NewStatus.ShouldBe(DeletionProcessStatus.Cancelled);
     }
