@@ -1,0 +1,5 @@
+﻿using MediatR;
+
+namespace Backbone.Modules.Devices.Application.Identities.Queries.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
+
+public class ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery : IRequest<ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingResponse>;

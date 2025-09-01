@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDe
 using Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDuringIdentityDeletion;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -48,9 +49,13 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var addressesWithTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
+        // In case there was an error during a previous run, we need to make sure we also process those identities again.
+        var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
+        var addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
 
-        await Delete(addressesWithTriggeredDeletionProcesses);
+        var allAddressesToProcess = addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast.Union(addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses).Distinct();
+
+        await Delete(allAddressesToProcess);
     }
 
     private async Task<List<string>> TriggerRipeDeletionProcesses(CancellationToken cancellationToken)

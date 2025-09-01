@@ -213,9 +213,16 @@ public class IdentityDeletionProcess : Entity
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(address));
     }
 
-    private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, string? initiator)
+    public void ErrorDuringDeletion(IdentityAddress address, string errorMessage)
+    {
+        EnsureStatus(DeletionProcessStatus.Deleting);
+
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ErrorDuringDeletion(address, errorMessage));
+    }
+
+    private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, IdentityAddress? initiator)
     {
         Status = newStatus;
-        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator));
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator?.Value));
     }
 }
