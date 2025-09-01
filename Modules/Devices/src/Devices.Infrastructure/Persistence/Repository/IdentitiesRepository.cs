@@ -68,6 +68,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<List<IdentityAddress>> ListAddressesOfIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _identities.Where(filter).Select(i => i.Address).ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> ListIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false)
     {
