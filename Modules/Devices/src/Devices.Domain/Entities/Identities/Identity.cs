@@ -315,6 +315,13 @@ public class Identity : Entity
         return deletionProcess;
     }
 
+    public void HandleErrorDuringDeletion(string errorMessage)
+    {
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Deleting)
+                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Deleting));
+        deletionProcess.ErrorDuringDeletion(Address, errorMessage);
+    }
+
     private IdentityDeletionProcess GetDeletionProcessWithId(IdentityDeletionProcessId deletionProcessId)
     {
         return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
@@ -355,6 +362,11 @@ public class Identity : Entity
     public static Expression<Func<Identity, bool>> HasUser(string username)
     {
         return i => i.Devices.Any(d => d.User.UserName == username);
+    }
+
+    public static Expression<Func<Identity, bool>> HasDeletionProcessInStatus(DeletionProcessStatus requiredStatus)
+    {
+        return i => i.DeletionProcesses.Any(p => p.Status == requiredStatus);
     }
 
     #endregion
