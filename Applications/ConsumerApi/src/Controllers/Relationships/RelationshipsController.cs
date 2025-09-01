@@ -186,7 +186,7 @@ public class RelationshipsController : ApiControllerBase
     private async Task EnsurePeerIsActive(string peerIdentityAddress, CancellationToken cancellationToken)
     {
         var peerIdentity = await _mediator.Send(new GetIdentityQuery { Address = peerIdentityAddress }, cancellationToken);
-        if (peerIdentity.Status != IdentityStatus.Active)
+        if (peerIdentity.Status is not IdentityStatus.Active)
             throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted());
     }
 }
