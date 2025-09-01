@@ -29,6 +29,10 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
             .HasMaxLength(RelationshipTemplate.MAX_PASSWORD_LENGTH);
 
         builder.HasOne(x => x.Details).WithOne().HasForeignKey<RelationshipTemplateDetails>(x => x.Id).IsRequired();
+
+        var indexBuilder = builder.HasIndex(x => x.CreatedAt);
+        SqlServerIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.CreatedBy);
+        NpgsqlIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.CreatedBy);
     }
 
     public void Configure(EntityTypeBuilder<RelationshipTemplateDetails> builder)
