@@ -27,7 +27,7 @@ public class Token : Entity
         Version = null!;
     }
 
-    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
+    public Token(IdentityAddress? createdBy, DeviceId? createdByDevice, byte[]? content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
     {
         Id = TokenId.New();
 
@@ -50,8 +50,8 @@ public class Token : Entity
 
     public TokenId Id { get; set; }
 
-    public IdentityAddress CreatedBy { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
+    public IdentityAddress? CreatedBy { get; set; }
+    public DeviceId? CreatedByDevice { get; set; }
 
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
@@ -216,5 +216,5 @@ public enum TokenAccessResult
 public class TokenDetails
 {
     public required TokenId Id { get; init; } = null!;
-    public required byte[] Content { get; init; }
+    public required byte[]? Content { get; init; }
 }

@@ -1,9 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+namespace Backbone.UnitTestTools.TestDoubles;
 
-internal class UserContextStub : IUserContext
+public class UserContextStub : IUserContext
 {
     public IdentityAddress GetAddress()
     {
@@ -12,7 +12,7 @@ internal class UserContextStub : IUserContext
 
     public IdentityAddress GetAddressOrNull()
     {
-        throw new NotSupportedException();
+        return IdentityAddress.Create([0], "prod.enmeshed.eu");
     }
 
     public DeviceId GetDeviceId()

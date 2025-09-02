@@ -22,4 +22,12 @@
         <ProjectReference Include="..\..\src\Quotas.Application\Quotas.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="TestDoubles\UserContextStub.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="TestDoubles\UserContextStub.cs" />
+    </ItemGroup>
+
 </Project>

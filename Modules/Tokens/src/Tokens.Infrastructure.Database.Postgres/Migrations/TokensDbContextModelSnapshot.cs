@@ -19,7 +19,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
             modelBuilder
                 .HasDefaultSchema("Tokens")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -42,14 +42,12 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -117,7 +115,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<uint>("_TableSharingConcurrencyTokenConvention_Version")

@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+﻿using System.Text.Json;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
@@ -13,9 +14,11 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
-    public async Task<ApiResponse<EmptyResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
+    public async Task<ApiResponse<CreateTokenResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
     {
-        return await _client.PostUnauthenticated<EmptyResponse>($"api/{API_VERSION}/Tokens", request);
+        var req = JsonSerializer.Serialize(request, JsonSerializerOptions.Web);
+        Console.Write(req);
+        return await _client.PostUnauthenticated<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)

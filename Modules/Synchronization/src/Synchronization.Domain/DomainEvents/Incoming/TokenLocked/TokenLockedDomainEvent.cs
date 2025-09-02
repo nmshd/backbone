@@ -5,5 +5,5 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.TokenLoc
 public class TokenLockedDomainEvent : DomainEvent
 {
     public required string TokenId { get; set; }
-    public required string CreatedBy { get; set; }
+    public required string? CreatedBy { get; set; }
 }

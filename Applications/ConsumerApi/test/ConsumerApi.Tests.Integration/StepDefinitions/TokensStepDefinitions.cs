@@ -104,9 +104,9 @@ internal class TokensStepDefinitions
     }
 
     [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
-    public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
+    public async Task WhenAnAnonymousUserSendsAPOSTRequestToTheTokensEndpoint()
     {
-        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1).ToUniversalTime() });
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint with the password ""([^""]*)""")]

@@ -8,9 +8,9 @@ public class TokenLockedDomainEvent : DomainEvent
     public TokenLockedDomainEvent(Token token) : base($"{token.Id}/Locked")
     {
         TokenId = token.Id;
-        CreatedBy = token.CreatedBy;
+        CreatedBy = token.CreatedBy?.Value;
     }
 
     public string TokenId { get; set; }
-    public string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 }

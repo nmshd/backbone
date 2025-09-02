@@ -1,8 +1,11 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
+using Backbone.UnitTestTools.TestDoubles;
+using FakeItEasy;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 
@@ -74,8 +77,29 @@ public class QuotaCheckerImplTests : AbstractTestsBase
         result.IsSuccess.ShouldBeFalse();
     }
 
+    [Fact]
+    public async Task Returns_success_if_there_is_no_active_identity()
+    {
+        var userContext = A.Fake<IUserContext>();
+        A.CallTo(() => userContext.GetAddressOrNull()).Returns(null);
+
+        // Arrange
+        var quotaChecker = CreateQuotaCheckerImpl(userContext);
+
+        // Act
+        var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY]);
+
+        // Assert
+        result.ExhaustedStatuses.ShouldHaveCount(0);
+    }
+
     private static QuotaCheckerImpl CreateQuotaCheckerImpl(params MetricStatus[] metricStatuses)
     {
-        return new QuotaCheckerImpl(new UserContextStub(), new MetricStatusesStubRepository(metricStatuses.ToList()));
+        return CreateQuotaCheckerImpl(new UserContextStub(), metricStatuses);
+    }
+
+    private static QuotaCheckerImpl CreateQuotaCheckerImpl(IUserContext userContext, params MetricStatus[] metricStatuses)
+    {
+        return new QuotaCheckerImpl(userContext, new MetricStatusesStubRepository(metricStatuses.ToList()));
     }
 }

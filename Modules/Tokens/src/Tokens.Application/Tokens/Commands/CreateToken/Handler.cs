@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
     public async Task<CreateTokenResponse> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
         var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
-        var newToken = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, forIdentity, request.Password);
+        var newToken = new Token(_userContext.GetAddressOrNull(), _userContext.GetDeviceIdOrNull(), request.Content, request.ExpiresAt, forIdentity, request.Password);
 
         await _tokensRepository.Add(newToken);
 
