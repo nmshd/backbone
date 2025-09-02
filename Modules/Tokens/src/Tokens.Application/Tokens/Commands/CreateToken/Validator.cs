@@ -32,7 +32,7 @@ public class Validator : AbstractValidator<CreateTokenCommand>
             RuleFor(t => t.Content).DetailedNull();
 
             RuleFor(t => t.ExpiresAt)
-                .LessThan(SystemTime.UtcNow.AddMinutes(2)).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+                .LessThan(SystemTime.UtcNow.AddMinutes(5)).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
         }
         else
         {
