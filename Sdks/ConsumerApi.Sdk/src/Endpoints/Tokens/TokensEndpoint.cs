@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
@@ -16,8 +15,6 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 
     public async Task<ApiResponse<CreateTokenResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
     {
-        var req = JsonSerializer.Serialize(request, JsonSerializerOptions.Web);
-        Console.Write(req);
         return await _client.PostUnauthenticated<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
