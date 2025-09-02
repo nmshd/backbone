@@ -18,7 +18,7 @@ public class TokenLockedDomainEventHandler : IDomainEventHandler<TokenLockedDoma
     {
         if (@event.CreatedBy == null)
             return;
-        
+
         var payload = new TokenLockedExternalEvent.EventPayload { TokenId = @event.TokenId };
         var externalEvent = new TokenLockedExternalEvent(@event.CreatedBy, payload);
 
