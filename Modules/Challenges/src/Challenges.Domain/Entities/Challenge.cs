@@ -27,7 +27,7 @@ public class Challenge : Entity
     public IdentityAddress? CreatedBy { get; set; }
     public DeviceId? CreatedByDevice { get; set; }
 
-    public static Expression<Func<Challenge, bool>> CanBeCleanedUp =>
+    public static Expression<Func<Challenge, bool>> CanBeDeleted =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
 
     public bool IsExpired()
