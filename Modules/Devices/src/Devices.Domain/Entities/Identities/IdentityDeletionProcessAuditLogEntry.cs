@@ -16,11 +16,10 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         IdentityAddressHash = null!;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
+    private IdentityDeletionProcessAuditLogEntry(MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
         DeletionProcessStatus? newStatus, Dictionary<string, string>? additionalData = null)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
-        ProcessId = processId;
         CreatedAt = SystemTime.UtcNow;
         MessageKey = messageKey;
         IdentityAddressHash = identityAddressHash;
@@ -41,10 +40,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public Dictionary<string, string>? AdditionalData { get; }
     public List<string>? UsernameHashesBase64 { get; private set; }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.StartedByOwner,
             Hasher.HashUtf8(identityAddress),
             Hasher.HashUtf8(deviceId),
@@ -53,10 +51,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.StartedBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -65,10 +62,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.Approved,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
@@ -77,10 +73,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.Rejected,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
@@ -89,10 +84,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledByOwner(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.CancelledByOwner,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
@@ -101,10 +95,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.CancelledBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -113,10 +106,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledAutomatically(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledAutomatically(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.CancelledAutomatically,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -125,10 +117,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.ApprovalReminder1Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -137,10 +128,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityAddress identityAddress)
     {
-        return new IdentityDeletionProcessAuditLogEntry(processId,
-            MessageKey.ApprovalReminder2Sent,
+        return new IdentityDeletionProcessAuditLogEntry(MessageKey.ApprovalReminder2Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -148,10 +138,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.ApprovalReminder3Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -160,10 +149,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder1Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder1Sent(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.GracePeriodReminder1Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -172,10 +160,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder2Sent(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.GracePeriodReminder2Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -184,10 +171,9 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder3Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    public static IdentityDeletionProcessAuditLogEntry GracePeriodReminder3Sent(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
             MessageKey.GracePeriodReminder3Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -199,7 +185,6 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityAddress identityAddress, string aggregateType)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            null,
             MessageKey.DataDeleted,
             Hasher.HashUtf8(identityAddress.Value),
             null,
@@ -212,10 +197,24 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ErrorDuringDeletion(IdentityAddress identityAddress, string errorMessage)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            MessageKey.ErrorDuringDeletion,
+            Hasher.HashUtf8(identityAddress.Value),
+            null,
+            DeletionProcessStatus.Deleting,
+            DeletionProcessStatus.Deleting,
+            new Dictionary<string, string>
+            {
+                { "errorMessage", errorMessage }
+            }
+        );
+    }
+
     public static IdentityDeletionProcessAuditLogEntry DeletionCompleted(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            processId: null,
             messageKey: MessageKey.DeletionCompleted,
             identityAddressHash: Hasher.HashUtf8(identityAddress.Value),
             deviceIdHash: null,
@@ -255,5 +254,6 @@ public enum MessageKey
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,
     DataDeleted = 14,
-    DeletionCompleted = 15
+    DeletionCompleted = 15,
+    ErrorDuringDeletion = 16
 }

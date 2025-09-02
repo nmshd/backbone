@@ -108,7 +108,6 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
         deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.ProcessId.ShouldBe(deletionProcess.Id);
         auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
         auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);

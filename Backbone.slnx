@@ -1,0 +1,246 @@
+<Solution>
+  <Folder Name="/Applications/" />
+  <Folder Name="/Applications/AdminApi/" />
+  <Folder Name="/Applications/AdminApi/src/">
+    <Project Path="Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Applications/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj" />
+    <Project Path="Applications/AdminApi/src/AdminApi/AdminApi.csproj" />
+  </Folder>
+  <Folder Name="/Applications/AdminApi/test/">
+    <Project Path="Applications/AdminApi/test/AdminApi.Tests.Integration/AdminApi.Tests.Integration.csproj" />
+  </Folder>
+  <Folder Name="/Applications/AdminCli/" />
+  <Folder Name="/Applications/AdminCli/src/">
+    <Project Path="Applications/AdminCli/src/AdminCli/AdminCli.csproj" />
+  </Folder>
+  <Folder Name="/Applications/AdminCli/test/" />
+  <Folder Name="/Applications/AdminUi/" />
+  <Folder Name="/Applications/AdminUi/src/">
+    <File Path="Applications/AdminUi/.gitignore" />
+    <File Path="Applications/AdminUi/analysis_options.yaml" />
+    <File Path="Applications/AdminUi/config.local.json" />
+    <File Path="Applications/AdminUi/melos.yaml" />
+    <File Path="Applications/AdminUi/pubspec.lock" />
+    <File Path="Applications/AdminUi/pubspec.yaml" />
+    <File Path="Applications/AdminUi/README.md" />
+  </Folder>
+  <Folder Name="/Applications/AdminUi/test/" />
+  <Folder Name="/Applications/ConsumerApi/" />
+  <Folder Name="/Applications/ConsumerApi/src/">
+    <Project Path="Applications/ConsumerApi/src/ConsumerApi.csproj" />
+  </Folder>
+  <Folder Name="/Applications/ConsumerApi/test/">
+    <Project Path="Applications/ConsumerApi/test/ConsumerApi.Tests.Integration/ConsumerApi.Tests.Integration.csproj" />
+    <Project Path="Applications/ConsumerApi/test/ConsumerApi.Tests.Performance/tools/snapshot-creator/ConsumerApi.Tests.Performance.SnapshotCreator.csproj" />
+  </Folder>
+  <Folder Name="/Applications/DatabaseMigrator/" />
+  <Folder Name="/Applications/DatabaseMigrator/src/">
+    <Project Path="Applications/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj" />
+  </Folder>
+  <Folder Name="/Applications/DatabaseMigrator/test/">
+    <Project Path="Applications/DatabaseMigrator/test/DatabaseMigrator.Tests/DatabaseMigrator.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Applications/EventHandlerService/" />
+  <Folder Name="/Applications/EventHandlerService/src/">
+    <Project Path="Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj" />
+  </Folder>
+  <Folder Name="/Applications/EventHandlerService/test/">
+    <Project Path="Applications/EventHandlerService/test/EventHandlerService.Tests/EventHandlerService.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Applications/HealthCheck/" />
+  <Folder Name="/Applications/HealthCheck/src/">
+    <Project Path="Applications/HealthCheck/src/HealthCheck.csproj" />
+  </Folder>
+  <Folder Name="/Applications/Housekeeper/" />
+  <Folder Name="/Applications/Housekeeper/src/">
+    <Project Path="Applications\Housekeeper\src\Housekeeper\Housekeeper.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Applications/IdentityDeletionJobs/" />
+  <Folder Name="/Applications/IdentityDeletionJobs/src/">
+    <Project Path="Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj" />
+  </Folder>
+  <Folder Name="/Applications/IdentityDeletionJobs/test/">
+    <Project Path="Applications/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration/Job.IdentityDeletion.Tests.Integration.csproj" />
+    <Project Path="Applications/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests/Job.IdentityDeletion.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Applications/SseServer/" />
+  <Folder Name="/Applications/SseServer/src/">
+    <Project Path="Applications/SseServer/src/SseServer/SseServer.csproj" />
+  </Folder>
+  <Folder Name="/Applications/SseServer/test/">
+    <Project Path="Applications/SseServer/test/SseServerTests/SseServerTests.csproj" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/" />
+  <Folder Name="/BuildingBlocks/src/">
+    <Project Path="BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.Module/BuildingBlocks.Module.csproj" />
+    <Project Path="BuildingBlocks/src/BuildingBlocks.SDK/BuildingBlocks.SDK.csproj" />
+    <Project Path="BuildingBlocks/src/Crypto/Crypto.csproj" />
+    <Project Path="BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj" />
+    <Project Path="BuildingBlocks/src/Tooling/Tooling.csproj" />
+    <Project Path="BuildingBlocks/src/UnitTestTools/UnitTestTools.csproj" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/test/">
+    <Project Path="BuildingBlocks/test/BuildingBlocks.Application.Tests/BuildingBlocks.Application.Tests.csproj" />
+    <Project Path="BuildingBlocks/test/BuildingBlocks.Infrastructure.Tests/BuildingBlocks.Infrastructure.Tests.csproj" />
+    <Project Path="BuildingBlocks/test/Crypto.Tests/Crypto.Tests.csproj" />
+    <Project Path="BuildingBlocks/test/DevelopmentKit.Identity.Tests/DevelopmentKit.Identity.Tests.csproj" />
+    <Project Path="BuildingBlocks/test/Tooling.Tests/Tooling.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Common/" />
+  <Folder Name="/Common/src/">
+    <Project Path="Common/src/Common.Infrastructure/Common.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Announcements/" />
+  <Folder Name="/Modules/Announcements/src/">
+    <Project Path="Modules/Announcements/src/Announcements.Application/Announcements.Application.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Domain/Announcements.Domain.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/Announcements.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Infrastructure.Database.SqlServer/Announcements.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Infrastructure/Announcements.Infrastructure.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Module/Announcements.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Announcements/test/">
+    <Project Path="Modules/Announcements/test/Announcements.Application.Tests/Announcements.Application.Tests.csproj" />
+    <Project Path="Modules/Announcements/test/Announcements.Domain.Tests/Announcements.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Challenges/" />
+  <Folder Name="/Modules/Challenges/src/">
+    <Project Path="Modules/Challenges/src/Challenges.Application/Challenges.Application.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Domain/Challenges.Domain.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Infrastructure/Challenges.Infrastructure.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Challenges/test/">
+    <Project Path="Modules/Challenges/test/Challenges.Application.Tests/Challenges.Application.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Devices/" />
+  <Folder Name="/Modules/Devices/src/">
+    <Project Path="Modules/Devices/src/Devices.Application/Devices.Application.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Domain/Devices.Domain.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Module/Devices.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Devices/test/">
+    <Project Path="Modules/Devices/test/Devices.Application.Tests/Devices.Application.Tests.csproj" />
+    <Project Path="Modules/Devices/test/Devices.Domain.Tests/Devices.Domain.Tests.csproj" />
+    <Project Path="Modules/Devices/test/Devices.Infrastructure.Tests/Devices.Infrastructure.Tests.csproj">
+      <BuildDependency Project="BuildingBlocks/src/UnitTestTools/UnitTestTools.csproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/Modules/Files/" />
+  <Folder Name="/Modules/Files/src/">
+    <Project Path="Modules/Files/src/Files.Application/Files.Application.csproj" />
+    <Project Path="Modules/Files/src/Files.Domain/Files.Domain.csproj" />
+    <Project Path="Modules/Files/src/Files.Infrastructure.Database.Postgres/Files.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Files/src/Files.Infrastructure.Database.SqlServer/Files.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Files/src/Files.Infrastructure/Files.Infrastructure.csproj" />
+    <Project Path="Modules/Files/src/Files.Module/Files.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Files/test/">
+    <Project Path="Modules/Files/test/Files.Application.Tests/Files.Application.Tests.csproj" />
+    <Project Path="Modules/Files/test/Files.Domain.Tests/Files.Domain.Tests.csproj" />
+    <Project Path="Modules/Files/test/Files.Infrastructure.Tests/Files.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Messages/" />
+  <Folder Name="/Modules/Messages/src/">
+    <Project Path="Modules/Messages/src/Messages.Application/Messages.Application.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Common/Messages.Common.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Domain/Messages.Domain.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Infrastructure.Database.Postgres/Messages.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Infrastructure.Database.SqlServer/Messages.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Infrastructure/Messages.Infrastructure.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Module/Messages.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Messages/test/">
+    <Project Path="Modules/Messages/test/Messages.Application.Tests/Messages.Application.Tests.csproj" />
+    <Project Path="Modules/Messages/test/Messages.Domain.Tests/Messages.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Quotas/" />
+  <Folder Name="/Modules/Quotas/src/">
+    <Project Path="Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/Quotas.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/Quotas.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Module/Quotas.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Quotas/test/">
+    <Project Path="Modules/Quotas/test/Quotas.Application.Tests/Quotas.Application.Tests.csproj" />
+    <Project Path="Modules/Quotas/test/Quotas.Domain.Tests/Quotas.Domain.Tests.csproj" />
+    <Project Path="Modules/Quotas/test/Quotas.Infrastructure.Tests/Quotas.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Relationships/" />
+  <Folder Name="/Modules/Relationships/src/">
+    <Project Path="Modules/Relationships/src/Relationships.Application/Relationships.Application.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Common/Relationships.Common.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Domain/Relationships.Domain.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Infrastructure.Database.Postgres/Relationships.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Infrastructure.Database.SqlServer/Relationships.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Infrastructure/Relationships.Infrastructure.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Module/Relationships.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Synchronization/" />
+  <Folder Name="/Modules/Synchronization/src/">
+    <Project Path="Modules/Synchronization/src/Synchronization.Application/Synchronization.Application.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Domain/Synchronization.Domain.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/Synchronization.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Infrastructure.Database.SqlServer/Synchronization.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Infrastructure/Synchronization.Infrastructure.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Module/Synchronization.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Synchronization/test/">
+    <Project Path="Modules/Synchronization/test/Synchronization.Application.Tests/Synchronization.Application.Tests.csproj" />
+    <Project Path="Modules/Synchronization/test/Synchronization.Domain.Tests/Synchronization.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Tags/" />
+  <Folder Name="/Modules/Tags/src/">
+    <Project Path="Modules/Tags/src/Tags.Application/Tags.Application.csproj" />
+    <Project Path="Modules/Tags/src/Tags.Domain/Tags.Domain.csproj" />
+    <Project Path="Modules/Tags/src/Tags.Infrastructure/Tags.Infrastructure.csproj" />
+    <Project Path="Modules/Tags/src/Tags.Module/Tags.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Tokens/" />
+  <Folder Name="/Modules/Tokens/src/">
+    <Project Path="Modules/Tokens/src/Tokens.Application/Tokens.Application.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Domain/Tokens.Domain.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrastructure.Database.Postgres.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/Tokens.Infrastructure.Database.SqlServer.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Infrastructure/Tokens.Infrastructure.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Module/Tokens.Module.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Tokens/test/">
+    <Project Path="Modules/Tokens/test/Tokens.Application.Tests/Tokens.Application.Tests.csproj" />
+    <Project Path="Modules/Tokens/test/Tokens.Domain.Tests/Tokens.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Others/">
+    <File Path=".editorconfig" />
+    <File Path="appsettings.override.json" />
+  </Folder>
+  <Folder Name="/Sdks/" />
+  <Folder Name="/Sdks/AdminApi.Sdk/" />
+  <Folder Name="/Sdks/AdminApi.Sdk/src/">
+    <Project Path="Sdks/AdminApi.Sdk/src/AdminApi.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/Sdks/ConsumerApi.Sdk/" />
+  <Folder Name="/Sdks/ConsumerApi.Sdk/src/">
+    <Project Path="Sdks/ConsumerApi.Sdk/src/ConsumerApi.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".env" />
+  </Folder>
+  <Project Path="Backbone.Tests.ArchUnit/Backbone.Tests.ArchUnit.csproj" />
+  <Project Path="docker-compose/docker-compose.dcproj" />
+</Solution>
