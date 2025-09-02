@@ -22,7 +22,7 @@ public class UtcDateTimeConverter : JsonConverter<DateTime>
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var stringValue = reader.GetString() ?? throw new Exception("Value cannot be null");
-        return DateTime.Parse(stringValue);
+        return DateTime.Parse(stringValue).ToUniversalTime();
     }
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
@@ -46,7 +46,7 @@ public class NullableUtcDateTimeConverter : JsonConverter<DateTime?>
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var stringValue = reader.GetString();
-        return stringValue == null ? null : DateTime.Parse(stringValue);
+        return stringValue == null ? null : DateTime.Parse(stringValue).ToUniversalTime();
     }
     public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
