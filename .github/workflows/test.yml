@@ -354,6 +354,6 @@ jobs:
       - name: Show Ignored Packages
         run: cat ./.ci/ignoredPackages.json
       - name: Restore Solution
-        run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.sln
+        run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.slnx
       - name: Validate Licenses
-        run: nuget-license --input ./Backbone.sln --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
+        run: nuget-license --input ./Backbone.slnx --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
