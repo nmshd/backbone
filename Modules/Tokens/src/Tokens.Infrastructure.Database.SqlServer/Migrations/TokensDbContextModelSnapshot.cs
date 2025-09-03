@@ -19,7 +19,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
             modelBuilder
                 .HasDefaultSchema("Tokens")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -42,14 +42,12 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -117,7 +115,6 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("_TableSharingConcurrencyTokenConvention_Version")

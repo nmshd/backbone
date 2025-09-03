@@ -30,6 +30,7 @@ public class TokensController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateTokenResponse>), StatusCodes.Status201Created)]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateToken(CreateTokenCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
