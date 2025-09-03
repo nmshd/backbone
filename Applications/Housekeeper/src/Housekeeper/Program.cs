@@ -10,6 +10,7 @@ using Backbone.Modules.Files.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Infrastructure;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -24,7 +25,7 @@ Log.Logger = new LoggerConfiguration()
 
 var app = CreateHostBuilder(args).Build();
 
-await app.Services.GetRequiredService<Executor>().Execute();
+await app.Services.GetRequiredService<Executor>().Execute(CancellationToken.None);
 return;
 
 static IHostBuilder CreateHostBuilder(string[] args)
@@ -61,7 +62,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                     Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
                     Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                .AddModule<TokensModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
             var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 

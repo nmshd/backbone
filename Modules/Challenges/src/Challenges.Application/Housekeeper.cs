@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Housekeeping;
-using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteExpiredChallenges;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 
@@ -22,7 +21,7 @@ public class Housekeeper : IHousekeeper
 
     private async Task<HousekeepingResponseItem> DeleteChallenges(CancellationToken cancellationToken)
     {
-        var deletedChallengesCount = await _challengesRepository.Delete(Challenge.CanBeDeleted, cancellationToken);
+        var deletedChallengesCount = await _challengesRepository.Delete(Challenge.CanBeCleanedUp, cancellationToken);
 
         return new HousekeepingResponseItem { EntityType = typeof(Challenge), NumberOfDeletedEntities = deletedChallengesCount };
     }

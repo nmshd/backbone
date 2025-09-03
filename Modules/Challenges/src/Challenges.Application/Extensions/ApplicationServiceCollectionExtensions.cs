@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using FluentValidation;
@@ -19,6 +20,8 @@ public static class ApplicationServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
         services.AddValidatorsFromAssembly(typeof(CreateChallengeCommandValidator).Assembly);
+
+        services.AddHousekeeper<Housekeeper>();
     }
 }
 
