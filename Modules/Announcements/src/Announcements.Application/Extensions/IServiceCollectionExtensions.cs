@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.MediatR;
+﻿using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,5 +17,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
+
+        services.AddHousekeeper<Housekeeper>();
     }
 }

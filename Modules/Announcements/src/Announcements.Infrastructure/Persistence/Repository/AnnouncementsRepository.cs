@@ -59,4 +59,9 @@ public class AnnouncementsRepository : IAnnouncementsRepository
     {
         return await _announcements.Where(a => a.Id == id).ExecuteDeleteAsync(cancellationToken);
     }
+
+    public async Task<int> Delete(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _announcements.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
 }
