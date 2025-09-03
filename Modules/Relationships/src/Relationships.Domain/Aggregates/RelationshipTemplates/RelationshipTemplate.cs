@@ -108,6 +108,8 @@ public class RelationshipTemplate : Entity
 
     #region Expressions
 
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCleanedUp => t => t.ExpiresAt <= SystemTime.UtcNow && t.Relationships.Count == 0;
+
     public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
     {
         return r => r.Id == id;

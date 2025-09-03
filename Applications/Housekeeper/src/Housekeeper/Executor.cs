@@ -23,6 +23,7 @@ public class Executor
         await _mediator.Send(new ExecuteChallengesHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteFilesHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteTokensHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteRelationshipsHousekeepingCommand(), cancellationToken);
 
         _logger.FinishedDeletion();
     }
