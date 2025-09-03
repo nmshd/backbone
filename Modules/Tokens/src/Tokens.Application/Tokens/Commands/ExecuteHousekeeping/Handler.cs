@@ -25,6 +25,6 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
     {
         var numberOfDeletedTokens = await _tokensRepository.Delete(Token.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {NumberOfDeletedChallenges} tokens", numberOfDeletedTokens);
+        _logger.LogInformation("Deleted {numberOfDeletedItems} tokens", numberOfDeletedTokens);
     }
 }

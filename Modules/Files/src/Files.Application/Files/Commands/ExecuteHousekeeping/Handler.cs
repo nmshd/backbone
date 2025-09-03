@@ -26,13 +26,13 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
     {
         var numberOfDeletedFiles = await _tokensRepository.Delete(File.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {NumberOfDeletedChallenges} challenges", numberOfDeletedFiles);
+        _logger.LogInformation("Deleted {numberOfDeletedItems} challenges", numberOfDeletedFiles);
     }
 
     private async Task DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
         var numberOfDeletedBlobs = await _tokensRepository.DeleteOrphanedBlobs(cancellationToken);
 
-        _logger.LogInformation("Deleted {NumberOfDeletedChallenges} orphaned blobs", numberOfDeletedBlobs);
+        _logger.LogInformation("Deleted {numberOfDeletedItems} orphaned blobs", numberOfDeletedBlobs);
     }
 }
