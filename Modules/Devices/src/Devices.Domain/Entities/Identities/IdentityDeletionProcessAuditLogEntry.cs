@@ -231,7 +231,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             .ToList();
     }
 
-    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> CanBeCleanedUp => t => t.CreatedAt <= SystemTime.UtcNow.AddDays(3650); // TODO: make it configurable
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> CanBeCleanedUp =>
+        t => t.CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.AuditLogRetentionPeriodInDays) <= SystemTime.UtcNow;
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
