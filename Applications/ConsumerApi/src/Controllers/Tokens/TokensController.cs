@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteToken;
+using Backbone.Modules.Tokens.Application.Tokens.Commands.UpdateTokenContent;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
@@ -79,6 +80,30 @@ public class TokensController : ApiControllerBase
         await _mediator.Send(new DeleteTokenCommand { Id = id }, cancellationToken);
         return NoContent();
     }
+
+    [HttpPost("{id}/UpdateContent")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateTokenContentResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateTokenContent([FromRoute] string id, [FromBody] UpdateTokenContentRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateTokenContentCommand
+        {
+            TokenId = id,
+            NewContent = request.NewContent,
+            Password = request.Password
+        };
+
+        var response = await _mediator.Send(command, cancellationToken);
+
+        return Ok(response);
+    }
+}
+
+public class UpdateTokenContentRequest
+{
+    public required byte[] NewContent { get; init; }
+    public byte[]? Password { get; init; }
 }
 
 public class ListTokensQueryItem
