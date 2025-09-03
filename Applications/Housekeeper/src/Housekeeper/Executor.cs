@@ -2,6 +2,8 @@
 using ExecuteChallengesHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteFilesHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteTokensHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteRelationshipsHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteDevicesHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 
 namespace Backbone.Housekeeper;
 
@@ -24,6 +26,7 @@ public class Executor
         await _mediator.Send(new ExecuteFilesHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteTokensHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteRelationshipsHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteDevicesHousekeepingCommand(), cancellationToken);
 
         _logger.FinishedDeletion();
     }

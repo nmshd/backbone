@@ -66,6 +66,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
+            services.AddCustomOpenIddict();
+
+            services.AddCustomIdentity(hostContext.HostingEnvironment);
+
             services.AddSingleton<Executor>();
 
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();

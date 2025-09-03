@@ -231,6 +231,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             .ToList();
     }
 
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> CanBeCleanedUp => t => t.CreatedAt <= SystemTime.UtcNow.AddDays(3650); // TODO: make it configurable
+
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
         var usernameHashBase64 = Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim()));

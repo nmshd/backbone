@@ -2,6 +2,4 @@
 
 namespace Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping;
 
-public class ExecuteHousekeepingCommand : IRequest
-{
-}
+public class ExecuteHousekeepingCommand : IRequest;
