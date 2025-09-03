@@ -7,7 +7,7 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
-public partial class TokenTryToAccessAccessTests : AbstractTestsBase
+public partial class TokenTryToAccessTests : AbstractTestsBase
 {
     private static readonly IdentityAddress IDENTITY_A = CreateRandomIdentityAddress();
     private static readonly IdentityAddress IDENTITY_B = CreateRandomIdentityAddress();
