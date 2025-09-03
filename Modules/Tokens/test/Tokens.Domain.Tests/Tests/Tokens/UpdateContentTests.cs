@@ -19,7 +19,7 @@ public class UpdateContentTests : AbstractTestsBase
         var accessResult = token.UpdateContent(updatedContent, activeIdentity, activeDevice, null);
 
         // Assert
-        accessResult.ShouldBe(UpdateTokenContentResult.Ok);
+        accessResult.ShouldBe(UpdateTokenContentResult.ContentUpdated);
         token.Details.Content.ShouldBe(updatedContent);
         token.CreatedBy.ShouldBe(activeIdentity);
         token.CreatedByDevice.ShouldBe(activeDevice);
@@ -41,7 +41,7 @@ public class UpdateContentTests : AbstractTestsBase
         var accessResult = token.UpdateContent(updatedContent, activeIdentity, activeDevice, password);
 
         // Assert
-        accessResult.ShouldBe(UpdateTokenContentResult.Ok);
+        accessResult.ShouldBe(UpdateTokenContentResult.ContentUpdated);
         token.Details.Content.ShouldBe(updatedContent);
         token.CreatedBy.ShouldBe(activeIdentity);
         token.CreatedByDevice.ShouldBe(activeDevice);
@@ -108,5 +108,28 @@ public class UpdateContentTests : AbstractTestsBase
         token.Details.Content.ShouldBe(null);
         token.CreatedBy.ShouldBe(null);
         token.CreatedByDevice.ShouldBe(null);
+    }
+
+    [Fact]
+    public void Content_already_exists()
+    {
+        // Arrange
+        var token = CreateToken();
+        var initialContent = token.Details.Content;
+        var initialCreatedBy = token.CreatedBy;
+        var initialCreatedByDevice = token.CreatedByDevice;
+
+        var activeIdentity = CreateRandomIdentityAddress();
+        var activeDevice = CreateRandomDeviceId();
+        var updatedContent = CreateRandomBytes();
+
+        // Act
+        var accessResult = token.UpdateContent(updatedContent, activeIdentity, activeDevice, null);
+
+        // Assert
+        accessResult.ShouldBe(UpdateTokenContentResult.ContentAlreadyExists);
+        token.Details.Content.ShouldBe(initialContent);
+        token.CreatedBy.ShouldBe(initialCreatedBy);
+        token.CreatedByDevice.ShouldBe(initialCreatedByDevice);
     }
 }

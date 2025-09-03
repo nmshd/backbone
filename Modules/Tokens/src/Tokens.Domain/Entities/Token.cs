@@ -195,11 +195,16 @@ public class Token : Entity
             return IsLocked ? UpdateTokenContentResult.Locked : UpdateTokenContentResult.WrongPassword;
         }
 
+        if (Details.Content != null)
+        {
+            return UpdateTokenContentResult.ContentAlreadyExists;
+        }
+
         CreatedBy = activeIdentity;
         CreatedByDevice = activeDevice;
         Details.Content = content;
 
-        return UpdateTokenContentResult.Ok;
+        return UpdateTokenContentResult.ContentUpdated;
     }
 
     #region Expressions
@@ -232,11 +237,12 @@ public class Token : Entity
 
 public enum UpdateTokenContentResult
 {
-    Ok,
+    ContentUpdated,
     WrongPassword,
     ForIdentityDoesNotMatch,
     Locked,
-    Expired
+    Expired,
+    ContentAlreadyExists
 }
 
 public enum TokenAccessResult

@@ -20,6 +20,7 @@ internal class TokensStepDefinitions
     private readonly TokensContext _tokensContext;
     private readonly ClientPool _clientPool;
 
+    private byte[]? _updatedContent;
     private ApiResponse<ListTokensResponse>? _listTokensResponse;
 
     public TokensStepDefinitions(ResponseContext responseContext, TokensContext tokensContext, ClientPool clientPool)
@@ -194,7 +195,9 @@ internal class TokensStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
-        _responseContext.WhenResponse = await client.Tokens.UpdateTokenContent(tokenId, new UpdateTokenContentRequest { NewContent = CreateRandomBytes() });
+        _updatedContent = CreateRandomBytes();
+
+        _responseContext.WhenResponse = await client.Tokens.UpdateTokenContent(tokenId, new UpdateTokenContentRequest { NewContent = _updatedContent });
     }
 
     #endregion
@@ -216,6 +219,15 @@ internal class TokensStepDefinitions
     }
 
     #endregion
+
+    [Then($"the Token {RegexFor.SINGLE_THING} has the new content")]
+    public async Task ThenTheTokenTHasTheNewContent(string tokenName)
+    {
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+        var client = _clientPool.Anonymous;
+        var response = await client.Tokens.GetTokenUnauthenticated(tokenId);
+        response.Result!.Content.ShouldBe(_updatedContent);
+    }
 }
 
 // ReSharper disable once ClassNeverInstantiated.Local

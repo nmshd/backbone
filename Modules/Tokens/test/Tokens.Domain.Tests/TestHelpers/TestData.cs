@@ -16,7 +16,7 @@ public class TestData
     {
         createdBy ??= CreateRandomIdentityAddress();
         var createdByDevice = CreateRandomDeviceId();
-        return new Token(createdBy, createdByDevice, [], SystemTime.UtcNow.AddDays(1), forIdentity, password);
+        return new Token(createdBy, createdByDevice, CreateRandomBytes(), SystemTime.UtcNow.AddDays(1), forIdentity, password);
     }
 
     public static Token CreateLockedToken()

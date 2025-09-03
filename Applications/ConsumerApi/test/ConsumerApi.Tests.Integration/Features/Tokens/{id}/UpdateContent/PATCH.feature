@@ -8,3 +8,4 @@ Update the content of a Token
         And Token t created by an anonymous user
         When i sends a PATCH request to the /Tokens/t.Id/UpdateContent endpoint
         Then the response status code is 200 (Ok)
+        And the Token t has the new content

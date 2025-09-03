@@ -37,8 +37,12 @@ public class Handler : IRequestHandler<UpdateTokenContentCommand, UpdateTokenCon
             case UpdateTokenContentResult.ForIdentityDoesNotMatch or UpdateTokenContentResult.Expired:
                 throw new NotFoundException(nameof(Token));
 
-            case UpdateTokenContentResult.Ok:
+            case UpdateTokenContentResult.ContentUpdated:
+                await _tokensRepository.Update(token, cancellationToken);
                 return new UpdateTokenContentResponse(token);
+
+            case UpdateTokenContentResult.ContentAlreadyExists:
+                throw new ApplicationException(ApplicationErrors.ContentUpdateNotPossibleBecauseContentIsNotNull());
 
             default:
                 throw new Exception("Unexpected token access result.");
