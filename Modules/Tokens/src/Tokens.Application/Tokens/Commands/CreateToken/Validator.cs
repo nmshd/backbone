@@ -5,15 +5,12 @@ using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Tooling;
-using Backbone.Tooling.Extensions;
 using FluentValidation;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
 public class Validator : AbstractValidator<CreateTokenCommand>
 {
-    private static readonly int MAX_CONTENT_LENGTH = 10.Mebibytes();
-
     public Validator(IUserContext userContext)
     {
         RuleFor(t => t.ForIdentity)
@@ -36,7 +33,7 @@ public class Validator : AbstractValidator<CreateTokenCommand>
         }
         else
         {
-            RuleFor(t => t.Content).NumberOfBytes(1, MAX_CONTENT_LENGTH);
+            RuleFor(t => t.Content).NumberOfBytes(1, Token.MAX_CONTENT_LENGTH);
         }
     }
 }
