@@ -17,12 +17,12 @@ public class UserContextStub : IUserContext
 
     public static UserContextStub ForAuthenticatedUser()
     {
-        return new UserContextStub(null, null);
+        return new UserContextStub(IdentityAddress.Create([0], "prod.enmeshed.eu"), DeviceId.New());
     }
 
     public static UserContextStub ForUnauthenticatedUser()
     {
-        return new UserContextStub(IdentityAddress.Create([0], "prod.enmeshed.eu"), DeviceId.New());
+        return new UserContextStub(null, null);
     }
 
     public IdentityAddress GetAddress()
