@@ -52,7 +52,16 @@ internal class TokensStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
 
         var response = await client.Tokens.CreateToken(
-            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = null });
+            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
+    [Given($@"Token {RegexFor.SINGLE_THING} created by an anonymous user")]
+    public async Task GivenTokenCreatedByAnAnonymousUser(string tokenName)
+    {
+        var response = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(
+            new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
 
         _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
     }
@@ -177,6 +186,15 @@ internal class TokensStepDefinitions
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
         _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Tokens/{RegexFor.SINGLE_THING}.Id/UpdateContent endpoint")]
+    public async Task WhenISendsApatchRequestToTheTokensTIdUpdateContentEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _responseContext.WhenResponse = await client.Tokens.UpdateTokenContent(tokenId, new UpdateTokenContentRequest { NewContent = CreateRandomBytes() });
     }
 
     #endregion

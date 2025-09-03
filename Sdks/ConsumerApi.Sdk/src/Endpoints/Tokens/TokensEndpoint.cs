@@ -58,4 +58,9 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
     {
         return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Tokens/{id}");
     }
+
+    public async Task<ApiResponse<UpdateTokenContentResponse>> UpdateTokenContent(string id, UpdateTokenContentRequest request)
+    {
+        return await _client.Patch<UpdateTokenContentResponse>($"api/{API_VERSION}/Tokens/{id}/UpdateContent", request);
+    }
 }
