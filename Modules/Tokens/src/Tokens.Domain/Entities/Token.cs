@@ -4,12 +4,14 @@ using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
+    public static readonly int MAX_CONTENT_LENGTH = 10.Mebibytes();
     public const int MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK = 100;
 
     private readonly List<TokenAllocation> _allocations;
@@ -96,7 +98,7 @@ public class Token : Entity
         if (IsLocked)
             return TokenAccessResult.Locked;
 
-        if (!CanBeAccessAccordingToForIdentity(activeIdentity))
+        if (!CanBeAccessedAccordingToForIdentity(activeIdentity))
             return TokenAccessResult.ForIdentityDoesNotMatch;
 
         if (!IsPasswordCorrect(password))
@@ -114,7 +116,7 @@ public class Token : Entity
         return TokenAccessResult.AllocationAdded;
     }
 
-    private bool CanBeAccessAccordingToForIdentity(IdentityAddress? address)
+    private bool CanBeAccessedAccordingToForIdentity(IdentityAddress? address)
     {
         return CreatedBy == address || ForIdentity == null || ForIdentity == address;
     }
@@ -170,6 +172,36 @@ public class Token : Entity
             throw new DomainActionForbiddenException();
     }
 
+    public void ResetAccessFailedCount()
+    {
+        AccessFailedCount = 0;
+    }
+
+    public UpdateTokenContentResult UpdateContent(byte[] content, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? password)
+    {
+        if (IsExpired)
+            return UpdateTokenContentResult.Expired;
+
+        if (IsLocked)
+            return UpdateTokenContentResult.Locked;
+
+        if (!CanBeAccessedAccordingToForIdentity(activeIdentity))
+            return UpdateTokenContentResult.ForIdentityDoesNotMatch;
+
+        if (!IsPasswordCorrect(password))
+        {
+            AccessFailedCount++;
+
+            return IsLocked ? UpdateTokenContentResult.Locked : UpdateTokenContentResult.WrongPassword;
+        }
+
+        CreatedBy = activeIdentity;
+        CreatedByDevice = activeDevice;
+        Details.Content = content;
+
+        return UpdateTokenContentResult.Ok;
+    }
+
     #region Expressions
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
@@ -196,11 +228,15 @@ public class Token : Entity
     }
 
     #endregion
+}
 
-    public void ResetAccessFailedCount()
-    {
-        AccessFailedCount = 0;
-    }
+public enum UpdateTokenContentResult
+{
+    Ok,
+    WrongPassword,
+    ForIdentityDoesNotMatch,
+    Locked,
+    Expired
 }
 
 public enum TokenAccessResult
@@ -216,5 +252,5 @@ public enum TokenAccessResult
 public class TokenDetails
 {
     public required TokenId Id { get; init; } = null!;
-    public required byte[]? Content { get; init; }
+    public byte[]? Content { get; internal set; }
 }
