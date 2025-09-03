@@ -7,12 +7,12 @@ namespace Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping;
 
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
-    private readonly IFilesRepository _tokensRepository;
+    private readonly IFilesRepository _filesRepository;
     private readonly ILogger<Handler> _logger;
 
-    public Handler(IFilesRepository tokensRepository, ILogger<Handler> logger)
+    public Handler(IFilesRepository filesRepository, ILogger<Handler> logger)
     {
-        _tokensRepository = tokensRepository;
+        _filesRepository = filesRepository;
         _logger = logger;
     }
 
@@ -24,14 +24,14 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteFiles(CancellationToken cancellationToken)
     {
-        var numberOfDeletedFiles = await _tokensRepository.Delete(File.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedFiles = await _filesRepository.Delete(File.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} challenges", numberOfDeletedFiles);
+        _logger.LogInformation("Deleted {numberOfDeletedItems} files", numberOfDeletedFiles);
     }
 
     private async Task DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
-        var numberOfDeletedBlobs = await _tokensRepository.DeleteOrphanedBlobs(cancellationToken);
+        var numberOfDeletedBlobs = await _filesRepository.DeleteOrphanedBlobs(cancellationToken);
 
         _logger.LogInformation("Deleted {numberOfDeletedItems} orphaned blobs", numberOfDeletedBlobs);
     }
