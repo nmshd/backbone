@@ -189,7 +189,7 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Tokens/{RegexFor.SINGLE_THING}.Id/UpdateContent endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens/{RegexFor.SINGLE_THING}.Id/UpdateContent endpoint")]
     public async Task WhenISendsApatchRequestToTheTokensTIdUpdateContentEndpoint(string identityName, string tokenName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

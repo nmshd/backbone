@@ -81,7 +81,7 @@ public class TokensController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id}/UpdateContent")]
+    [HttpPost("{id}/UpdateContent")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateTokenContentResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]

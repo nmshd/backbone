@@ -61,6 +61,6 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 
     public async Task<ApiResponse<UpdateTokenContentResponse>> UpdateTokenContent(string id, UpdateTokenContentRequest request)
     {
-        return await _client.Patch<UpdateTokenContentResponse>($"api/{API_VERSION}/Tokens/{id}/UpdateContent", request);
+        return await _client.Post<UpdateTokenContentResponse>($"api/{API_VERSION}/Tokens/{id}/UpdateContent", request);
     }
 }
