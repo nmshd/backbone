@@ -3,7 +3,7 @@ using static Backbone.Modules.Tokens.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
-public class UpdateContentTests
+public class UpdateContentTests : AbstractTestsBase
 {
     [Fact]
     public void Happy_path_without_forIdentity_and_without_password()
