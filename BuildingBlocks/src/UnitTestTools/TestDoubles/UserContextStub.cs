@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
@@ -5,24 +6,43 @@ namespace Backbone.UnitTestTools.TestDoubles;
 
 public class UserContextStub : IUserContext
 {
-    public IdentityAddress GetAddress()
+    private readonly IdentityAddress? _identityAddress;
+    private readonly DeviceId? _deviceId;
+
+    private UserContextStub(IdentityAddress? identityAddress, DeviceId? deviceId)
     {
-        return IdentityAddress.Create([0], "prod.enmeshed.eu");
+        _identityAddress = identityAddress;
+        _deviceId = deviceId;
     }
 
-    public IdentityAddress GetAddressOrNull()
+    public static UserContextStub ForAuthenticatedUser()
     {
-        return IdentityAddress.Create([0], "prod.enmeshed.eu");
+        return new UserContextStub(null, null);
+    }
+
+    public static UserContextStub ForUnauthenticatedUser()
+    {
+        return new UserContextStub(IdentityAddress.Create([0], "prod.enmeshed.eu"), DeviceId.New());
+    }
+
+    public IdentityAddress GetAddress()
+    {
+        return _identityAddress ?? throw new NotFoundException();
+    }
+
+    public IdentityAddress? GetAddressOrNull()
+    {
+        return _identityAddress;
     }
 
     public DeviceId GetDeviceId()
     {
-        throw new NotSupportedException();
+        return _deviceId ?? throw new NotFoundException();
     }
 
-    public DeviceId GetDeviceIdOrNull()
+    public DeviceId? GetDeviceIdOrNull()
     {
-        throw new NotSupportedException();
+        return _deviceId;
     }
 
     public string GetUserId()

@@ -5,7 +5,6 @@ using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles;
-using FakeItEasy;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 
@@ -80,11 +79,8 @@ public class QuotaCheckerImplTests : AbstractTestsBase
     [Fact]
     public async Task Returns_success_if_there_is_no_active_identity()
     {
-        var userContext = A.Fake<IUserContext>();
-        A.CallTo(() => userContext.GetAddressOrNull()).Returns(null);
-
         // Arrange
-        var quotaChecker = CreateQuotaCheckerImpl(userContext);
+        var quotaChecker = CreateQuotaCheckerImpl(UserContextStub.ForUnauthenticatedUser());
 
         // Act
         var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY]);
@@ -95,7 +91,7 @@ public class QuotaCheckerImplTests : AbstractTestsBase
 
     private static QuotaCheckerImpl CreateQuotaCheckerImpl(params MetricStatus[] metricStatuses)
     {
-        return CreateQuotaCheckerImpl(new UserContextStub(), metricStatuses);
+        return CreateQuotaCheckerImpl(UserContextStub.ForAuthenticatedUser(), metricStatuses);
     }
 
     private static QuotaCheckerImpl CreateQuotaCheckerImpl(IUserContext userContext, params MetricStatus[] metricStatuses)

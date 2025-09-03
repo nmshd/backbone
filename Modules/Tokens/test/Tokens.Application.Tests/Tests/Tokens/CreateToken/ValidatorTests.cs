@@ -167,7 +167,7 @@ public class ValidatorTests : AbstractTestsBase
 
     private static Validator CreateValidatorForAuthenticatedUser()
     {
-        return new Validator(new UserContextStub());
+        return new Validator(UserContextStub.ForAuthenticatedUser());
     }
 
     private static Validator CreateValidatorForUnauthenticatedUser()
