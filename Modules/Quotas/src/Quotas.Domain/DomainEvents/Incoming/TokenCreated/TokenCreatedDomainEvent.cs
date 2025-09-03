@@ -4,5 +4,5 @@ namespace Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TokenCreated;
 
 public class TokenCreatedDomainEvent : DomainEvent
 {
-    public required string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 }

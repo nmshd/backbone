@@ -20,6 +20,7 @@ internal class TokensStepDefinitions
     private readonly TokensContext _tokensContext;
     private readonly ClientPool _clientPool;
 
+    private byte[]? _updatedContent;
     private ApiResponse<ListTokensResponse>? _listTokensResponse;
 
     public TokensStepDefinitions(ResponseContext responseContext, TokensContext tokensContext, ClientPool clientPool)
@@ -52,7 +53,16 @@ internal class TokensStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
 
         var response = await client.Tokens.CreateToken(
-            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = null });
+            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
+    [Given($@"Token {RegexFor.SINGLE_THING} created by an anonymous user")]
+    public async Task GivenTokenCreatedByAnAnonymousUser(string tokenName)
+    {
+        var response = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(
+            new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
 
         _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
     }
@@ -104,9 +114,9 @@ internal class TokensStepDefinitions
     }
 
     [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
-    public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
+    public async Task WhenAnAnonymousUserSendsAPOSTRequestToTheTokensEndpoint()
     {
-        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1).ToUniversalTime() });
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint with the password ""([^""]*)""")]
@@ -179,6 +189,17 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens/{RegexFor.SINGLE_THING}.Id/UpdateContent endpoint")]
+    public async Task WhenISendsApatchRequestToTheTokensTIdUpdateContentEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _updatedContent = CreateRandomBytes();
+
+        _responseContext.WhenResponse = await client.Tokens.UpdateTokenContent(tokenId, new UpdateTokenContentRequest { NewContent = _updatedContent });
+    }
+
     #endregion
 
     #region Then
@@ -198,6 +219,15 @@ internal class TokensStepDefinitions
     }
 
     #endregion
+
+    [Then($"the Token {RegexFor.SINGLE_THING} has the new content")]
+    public async Task ThenTheTokenTHasTheNewContent(string tokenName)
+    {
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+        var client = _clientPool.Anonymous;
+        var response = await client.Tokens.GetTokenUnauthenticated(tokenId);
+        response.Result!.Content.ShouldBe(_updatedContent);
+    }
 }
 
 // ReSharper disable once ClassNeverInstantiated.Local

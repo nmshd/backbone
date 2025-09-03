@@ -1,3 +1,4 @@
+using Backbone.Tooling.Extensions;
 using FluentValidation.TestHelper;
 using Shouldly;
 
@@ -8,7 +9,7 @@ public static class ValidationTestExtensions
     public static void ShouldHaveValidationErrorForItem<T>(this TestValidationResult<T> testValidationResult, string propertyName, string expectedErrorCode, string expectedErrorMessage)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor(propertyName);
-        errorsForProperty.ShouldContain(r => r.ErrorCode == expectedErrorCode && r.ErrorMessage == expectedErrorMessage);
+        errorsForProperty.ShouldContain(r => r.ErrorCode == expectedErrorCode && r.ErrorMessage.MatchesRegex(expectedErrorMessage));
     }
 
     public static void ShouldHaveValidationErrorForItemInCollection<T>(this TestValidationResult<T> testValidationResult, string collectionWithInvalidId, int indexWithInvalidId,

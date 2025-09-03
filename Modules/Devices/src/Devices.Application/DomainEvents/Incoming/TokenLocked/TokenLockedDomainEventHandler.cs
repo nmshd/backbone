@@ -20,6 +20,9 @@ public class TokenLockedDomainEventHandler : IDomainEventHandler<TokenLockedDoma
 
     public async Task Handle(TokenLockedDomainEvent @event)
     {
+        if (@event.CreatedBy == null)
+            return;
+
         var identity = await _identitiesRepository.Get(@event.CreatedBy, CancellationToken.None);
 
         if (identity is { Status: IdentityStatus.Active })

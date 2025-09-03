@@ -9,9 +9,10 @@ User creates a Token
         Then the response status code is 201 (Created)
         And the response contains a CreateTokenResponse
 
-    Scenario: Creating a Token as an anonymous user
-        When an anonymous user sends a POST request to the /Tokens endpoint
-        Then the response status code is 401 (Unauthorized)
+	Scenario: Creating a Token as an unauthenticated user
+		When an anonymous user sends a POST request to the /Tokens endpoint
+		Then the response status code is 201 (Created)
+		And the response contains a CreateTokenResponse
 
     Scenario: Creating a Token with a password
 		Given Identity i
