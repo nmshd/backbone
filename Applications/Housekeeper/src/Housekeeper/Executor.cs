@@ -18,12 +18,19 @@ public class Executor
         _logger.StartingDeletion();
         foreach (var housekeeper in _housekeepers)
         {
-            var result = await housekeeper.Execute(cancellationToken);
+            await ExecuteHousekeeper(housekeeper, cancellationToken);
+        }
 
-            foreach (var resultItem in result.Items)
-            {
-                _logger.LogResult(resultItem.NumberOfDeletedEntities, resultItem.EntityType.Name);
-            }
+        _logger.FinishedDeletion();
+    }
+
+    private async Task ExecuteHousekeeper(IHousekeeper housekeeper, CancellationToken cancellationToken)
+    {
+        var result = await housekeeper.Execute(cancellationToken);
+
+        foreach (var resultItem in result.Items)
+        {
+            _logger.LogResult(resultItem.NumberOfDeletedEntities, resultItem.EntityType.Name);
         }
     }
 }
@@ -43,4 +50,11 @@ internal static partial class ExecutorLogs
         Level = LogLevel.Information,
         Message = "Deleted {count} items of type '{itemType}'.")]
     public static partial void LogResult(this ILogger logger, int count, string itemType);
+
+    [LoggerMessage(
+        EventId = 945132,
+        EventName = "Housekeeper.Executor.FinishedDeletion",
+        Level = LogLevel.Information,
+        Message = "Finished deletion")]
+    public static partial void FinishedDeletion(this ILogger logger);
 }
