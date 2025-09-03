@@ -105,6 +105,8 @@ public class File : Entity
 
     public DateTime? LastOwnershipClaimAt { get; private set; }
 
+    public static Expression<Func<File, bool>> CanBeCleanedUp => t => t.ExpiresAt < SystemTime.UtcNow;
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();

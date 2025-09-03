@@ -1,37 +1,30 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Housekeeping;
+﻿using MediatR;
+using ExecuteChallengesHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteFilesHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteTokensHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 
 namespace Backbone.Housekeeper;
 
 public class Executor
 {
-    private readonly IEnumerable<IHousekeeper> _housekeepers;
+    private readonly IMediator _mediator;
     private readonly ILogger<Executor> _logger;
 
-    public Executor(IEnumerable<IHousekeeper> housekeepers, ILogger<Executor> logger)
+    public Executor(IMediator mediator, ILogger<Executor> logger)
     {
-        _housekeepers = housekeepers;
+        _mediator = mediator;
         _logger = logger;
     }
 
     public async Task Execute(CancellationToken cancellationToken)
     {
         _logger.StartingDeletion();
-        foreach (var housekeeper in _housekeepers)
-        {
-            await ExecuteHousekeeper(housekeeper, cancellationToken);
-        }
+
+        await _mediator.Send(new ExecuteChallengesHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteFilesHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteTokensHousekeepingCommand(), cancellationToken);
 
         _logger.FinishedDeletion();
-    }
-
-    private async Task ExecuteHousekeeper(IHousekeeper housekeeper, CancellationToken cancellationToken)
-    {
-        var result = await housekeeper.Execute(cancellationToken);
-
-        foreach (var resultItem in result.Items)
-        {
-            _logger.LogResult(resultItem.NumberOfDeletedEntities, resultItem.EntityType.Name);
-        }
     }
 }
 
