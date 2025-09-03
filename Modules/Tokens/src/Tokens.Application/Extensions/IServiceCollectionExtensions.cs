@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;
@@ -17,5 +18,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(DbConcurrencyBehavior<,>))
         );
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
+
+        services.AddHousekeeper<Housekeeper>();
     }
 }

@@ -55,6 +55,13 @@ public class TokensRepository : ITokensRepository
         return dbPaginationResult;
     }
 
+    public async Task<int> Delete(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete
+        return await _tokensDbSet.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
+    }
+
     public async Task<Token?> GetWithoutContent(TokenId id, CancellationToken cancellationToken, bool track = false)
     {
         var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)

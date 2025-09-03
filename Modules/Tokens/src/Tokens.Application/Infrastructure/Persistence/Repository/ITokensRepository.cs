@@ -22,4 +22,5 @@ public interface ITokensRepository
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
     Task DeleteToken(Token token, CancellationToken cancellationToken);
     Task<DbPaginationResult<Token>> ListWithoutContent(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<int> Delete(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
 }
