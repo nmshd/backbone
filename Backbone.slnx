@@ -117,7 +117,6 @@
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure/Challenges.Infrastructure.csproj" />
-    <Project Path="Modules/Challenges/src/Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Challenges/test/">
