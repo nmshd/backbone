@@ -113,6 +113,9 @@ jobs:
           - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
             image: sse-server
 
+          - dockerfile: Applications/Housekeeper/src/Housekeeper/Dockerfile
+            image: housekeeper
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
