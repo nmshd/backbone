@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.Tooling.Extensions;
 
-namespace Backbone.BuildingBlocks.Application.Tests.Extensions;
+namespace Backbone.Tooling.Tests.Tests.Extensions;
 
-public class ExtensionsTests : AbstractTestsBase
+public class ExpressionExtensionsTests : AbstractTestsBase
 {
     [Fact]
     public void And_with_both_sides_true()

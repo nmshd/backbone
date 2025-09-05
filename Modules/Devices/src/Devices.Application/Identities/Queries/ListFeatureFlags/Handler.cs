@@ -1,10 +1,10 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling.Extensions;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListFeatureFlags;

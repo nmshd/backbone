@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using Backbone.Tooling.Extensions;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
