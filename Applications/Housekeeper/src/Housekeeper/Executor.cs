@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ExecuteChallengesHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteFilesHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteTokensHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteRelationshipsHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteDevicesHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 
 namespace Backbone.Housekeeper;
 
@@ -22,11 +22,11 @@ public class Executor
     {
         _logger.StartingDeletion();
 
-        await _mediator.Send(new ExecuteChallengesHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteFilesHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteTokensHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteRelationshipsHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteDevicesHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
 
         _logger.FinishedDeletion();
     }
