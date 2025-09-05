@@ -217,4 +217,9 @@ public class IdentitiesRepository : IIdentitiesRepository
         var featureFlags = await _dbContext.FeatureFlags.Where(f => f.OwnerAddress == identity).ToListAsync(cancellationToken);
         return FeatureFlagSet.Load(featureFlags);
     }
+
+    public async Task<int> DeleteDeletionProcesses(Expression<Func<IdentityDeletionProcess, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _dbContext.IdentityDeletionProcesses.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
 }

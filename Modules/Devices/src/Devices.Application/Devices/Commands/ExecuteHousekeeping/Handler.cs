@@ -18,7 +18,15 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
     {
+        await DeleteDeletionProcesses(cancellationToken);
         await DeleteDeletionProcessAuditLogEntries(cancellationToken);
+    }
+
+    private async Task DeleteDeletionProcesses(CancellationToken cancellationToken)
+    {
+        var numberOfDeletedDeletionProcesses = await _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, cancellationToken);
+
+        _logger.LogInformation("Deleted {numberOfDeletedItems} identity deletion processes", numberOfDeletedDeletionProcesses);
     }
 
     private async Task DeleteDeletionProcessAuditLogEntries(CancellationToken cancellationToken)
