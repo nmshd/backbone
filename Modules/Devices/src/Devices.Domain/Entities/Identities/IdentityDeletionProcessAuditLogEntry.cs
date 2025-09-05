@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
@@ -232,7 +233,12 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     }
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> CanBeCleanedUp =>
-        t => t.CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.AuditLogRetentionPeriodInDays) <= SystemTime.UtcNow;
+        ((Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>>)(t => t.CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.AuditLogRetentionPeriodInDays) <= SystemTime.UtcNow))
+        .And(BelongsToADeletedIdentity);
+
+    // The 'UsernameHashesBase64' property is only set after the identity was deleted. This is why we can do this check - even though it's kind of hacky.
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> BelongsToADeletedIdentity =>
+        t => t.UsernameHashesBase64 != null;
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
