@@ -108,7 +108,7 @@ public class RelationshipTemplate : Entity
 
     #region Expressions
 
-    public static Expression<Func<RelationshipTemplate, bool>> CanBeCleanedUp => t => t.ExpiresAt <= SystemTime.UtcNow && t.Relationships.Count == 0;
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCleanedUp => t => t.ExpiresAt != null && t.ExpiresAt.Value.AddDays(30) <= SystemTime.UtcNow && t.Relationships.Count == 0;
 
     public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
     {
