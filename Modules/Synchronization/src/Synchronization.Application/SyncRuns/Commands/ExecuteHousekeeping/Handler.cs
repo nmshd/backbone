@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +8,10 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.Execute
 
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
-    private readonly IDbContext _dbContext;
+    private readonly ISynchronizationDbContext _dbContext;
     private readonly ILogger<Handler> _logger;
 
-    public Handler(IDbContext dbContext, ILogger<Handler> logger)
+    public Handler(ISynchronizationDbContext dbContext, ILogger<Handler> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
