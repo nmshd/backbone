@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,16 +10,19 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly ILogger<Handler> _logger;
+    private readonly IRelationshipsRepository _relationshipsRepository;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, ILogger<Handler> logger)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IRelationshipsRepository relationshipsRepository, ILogger<Handler> logger)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
+        _relationshipsRepository = relationshipsRepository;
         _logger = logger;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
     {
         await DeleteRelationshipTemplates(cancellationToken);
+        await DeleteRelationships(cancellationToken);
     }
 
     private async Task DeleteRelationshipTemplates(CancellationToken cancellationToken)
@@ -26,5 +30,12 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         var numberOfDeletedTemplates = await _relationshipTemplatesRepository.Delete(RelationshipTemplate.CanBeCleanedUp, cancellationToken);
 
         _logger.LogInformation("Deleted {numberOfDeletedItems} relationship templates", numberOfDeletedTemplates);
+    }
+
+    private async Task DeleteRelationships(CancellationToken cancellationToken)
+    {
+        var numberOfDeletedRelationships = await _relationshipsRepository.Delete(Relationship.CanBeCleanedUp, cancellationToken);
+
+        _logger.LogInformation("Deleted {numberOfDeletedItems} relationships", numberOfDeletedRelationships);
     }
 }

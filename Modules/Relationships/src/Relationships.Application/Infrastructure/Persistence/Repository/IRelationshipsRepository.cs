@@ -22,4 +22,6 @@ public interface IRelationshipsRepository
 
     Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
         bool track = false);
+
+    Task<int> Delete(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
 }
