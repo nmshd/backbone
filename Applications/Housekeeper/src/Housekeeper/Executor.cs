@@ -4,6 +4,7 @@ using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Application
 using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Application.SyncRuns.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 
 namespace Backbone.Housekeeper;
 
@@ -27,6 +28,7 @@ public class Executor
         await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
 
         _logger.FinishedDeletion();
     }

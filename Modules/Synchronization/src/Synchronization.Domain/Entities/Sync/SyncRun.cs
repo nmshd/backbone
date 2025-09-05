@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
@@ -112,6 +113,12 @@ public class SyncRun : Entity
             ItemSyncFailed(item, "syncRunCanceled");
         }
     }
+
+    #region Expressions
+
+    public static Expression<Func<SyncRun, bool>> CanBeCleanedUp => r => r.FinalizedAt != null && r.FinalizedAt.Value.AddDays(30) <= SystemTime.UtcNow;
+
+    #endregion
 
     public enum SyncRunType
     {
