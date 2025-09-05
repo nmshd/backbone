@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -314,7 +314,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
-                        .HasForeignKey("SyncRunId");
+                        .HasForeignKey("SyncRunId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("SyncRun");
                 });
