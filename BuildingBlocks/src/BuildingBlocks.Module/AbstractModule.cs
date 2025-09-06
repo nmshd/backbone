@@ -31,7 +31,7 @@ public abstract class AbstractModule<TApplicationConfiguration, TInfrastructureC
 
         var infrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<TInfrastructureConfiguration>>().Value;
 
-        ConfigureServices(services, infrastructureConfiguration, moduleConfig.GetSection("Application"));
+        ConfigureServices(services, infrastructureConfiguration, moduleConfig);
     }
 
     protected abstract void ConfigureServices(IServiceCollection services, TInfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration);

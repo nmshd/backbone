@@ -44,7 +44,6 @@
         <ProjectReference Include="..\Applications\ConsumerApi\src\ConsumerApi.csproj" />
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Challenges\src\Challenges.Jobs.Cleanup\Challenges.Jobs.Cleanup.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />

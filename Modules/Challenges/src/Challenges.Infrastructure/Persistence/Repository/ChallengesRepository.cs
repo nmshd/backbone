@@ -31,13 +31,8 @@ public class ChallengesRepository : IChallengesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken)
+    public async Task<int> Delete(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
     {
-        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
-    }
-
-    public async Task Delete(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
-    {
-        await _challenges.Where(filter).ExecuteDeleteAsync(cancellationToken);
+        return await _challenges.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }

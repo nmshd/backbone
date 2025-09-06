@@ -25,17 +25,12 @@ public class Handler : IRequestHandler<DeleteClientCommand>
     }
 }
 
-file static class LoggerExtensions
+internal static partial class LoggerExtensions
 {
-    private static readonly Action<ILogger, string, Exception> DELETED_CLIENT_WITH_ID =
-        LoggerMessage.Define<string>(
-            LogLevel.Information,
-            new EventId(418943, "Devices.DeleteClient.DeletedClientWithId"),
-            "Successfully deleted client with id '{clientId}'."
-        );
-
-    public static void DeletedClientWithId(this ILogger logger, string clientId)
-    {
-        DELETED_CLIENT_WITH_ID(logger, clientId, default!);
-    }
+    [LoggerMessage(
+        EventId = 418943,
+        EventName = "Devices.DeleteClient.DeletedClientWithId",
+        Level = LogLevel.Information,
+        Message = "Successfully deleted client with id '{clientId}'.")]
+    public static partial void DeletedClientWithId(this ILogger logger, string clientId);
 }

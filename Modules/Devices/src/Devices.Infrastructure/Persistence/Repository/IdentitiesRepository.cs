@@ -207,6 +207,11 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public Task<int> DeleteDeletionProcessAuditLogEntries(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _identityDeletionProcessAuditLogs.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<FeatureFlagSet> ListFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken)
     {
         var featureFlags = await _dbContext.FeatureFlags.Where(f => f.OwnerAddress == identity).ToListAsync(cancellationToken);

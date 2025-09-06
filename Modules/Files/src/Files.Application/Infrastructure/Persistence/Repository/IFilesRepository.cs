@@ -15,4 +15,6 @@ public interface IFilesRepository
     Task Delete(File file, CancellationToken cancellationToken);
     Task DeleteFilesOfIdentity(Expression<Func<File, bool>> filter, CancellationToken cancellationToken);
     Task Update(File file, CancellationToken cancellationToken);
+    Task<int> Delete(Expression<Func<File, bool>> filter, CancellationToken cancellationToken);
+    Task<int> DeleteOrphanedBlobs(CancellationToken cancellationToken);
 }

@@ -52,6 +52,8 @@ public class Announcement : Entity
 
     public virtual List<AnnouncementAction> Actions { get; }
 
+    public static Expression<Func<Announcement, bool>> CanBeCleanedUp => a => a.ExpiresAt <= SystemTime.UtcNow;
+
     public static Expression<Func<Announcement, bool>> IsForRecipient(IdentityAddress recipientAddress) => a => a.Recipients.Count == 0 || a.Recipients.Any(r => r.Address == recipientAddress);
 }
 

@@ -47,6 +47,8 @@ public interface IIdentitiesRepository
 
     Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken);
 
+    Task<int> DeleteDeletionProcessAuditLogEntries(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter, CancellationToken cancellationToken);
+
     #endregion
 
     #region Feature Flags

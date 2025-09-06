@@ -33,10 +33,10 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task<int> Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
 #pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
-        await _templates.Where(filter).BatchDeleteAsync(cancellationToken);
+        return await _templates.Where(filter).BatchDeleteAsync(cancellationToken);
 #pragma warning restore CS0618 // Type or member is obsolete
     }
 
