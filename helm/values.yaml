@@ -310,7 +310,7 @@ eventhandler:
 housekeeper:
   name: "housekeeper"
 
-  schedule: "0 5 * * *"
+  schedule: "0 1 * * *"
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
   backoffLimit: 0
