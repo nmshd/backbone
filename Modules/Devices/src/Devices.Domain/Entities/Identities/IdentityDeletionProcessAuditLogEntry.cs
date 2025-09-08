@@ -237,8 +237,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         .And(BelongsToADeletedIdentity);
 
     // The 'UsernameHashesBase64' property is only set after the identity was deleted. This is why we can do this check - even though it's kind of hacky.
-    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> BelongsToADeletedIdentity =>
-        t => t.UsernameHashesBase64 != null;
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> BelongsToADeletedIdentity => t => t.UsernameHashesBase64 != null;
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
