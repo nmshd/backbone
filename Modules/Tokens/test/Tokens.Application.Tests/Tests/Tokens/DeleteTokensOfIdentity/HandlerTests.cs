@@ -4,7 +4,7 @@ using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity
 using Backbone.Modules.Tokens.Domain.Entities;
 using FakeItEasy;
 
-namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokenOfIdentity;
+namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokensOfIdentity;
 
 public class HandlerTests : AbstractTestsBase
 {
