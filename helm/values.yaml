@@ -312,7 +312,7 @@ housekeeper:
 
   schedule: "0 1 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -357,7 +357,7 @@ sendidentitydeletionreminders:
 
   schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -402,7 +402,7 @@ cancelstaledeletionprocesses:
 
   schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -447,7 +447,7 @@ actualidentitydeletion:
 
   schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
