@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
     {
         await DeleteSyncRuns(cancellationToken);
+        await DeleteDatawalletModifications(cancellationToken);
     }
 
     private async Task DeleteSyncRuns(CancellationToken cancellationToken)
@@ -27,5 +29,12 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         var numberOfDeletedSyncRuns = await _dbContext.Set<SyncRun>().Where(SyncRun.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
 
         _logger.LogInformation("Deleted {numberOfDeletedItems} sync runs", numberOfDeletedSyncRuns);
+    }
+
+    private async Task DeleteDatawalletModifications(CancellationToken cancellationToken)
+    {
+        var numberOfDeletedSyncRuns = await _dbContext.Set<DatawalletModification>().Where(DatawalletModification.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
+
+        _logger.LogInformation("Deleted {numberOfDeletedItems} datawallet modifications", numberOfDeletedSyncRuns);
     }
 }
