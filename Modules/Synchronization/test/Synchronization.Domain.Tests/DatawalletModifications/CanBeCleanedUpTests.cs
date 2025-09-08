@@ -3,6 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Tooling;
 using Xunit.Sdk;
+using static Backbone.Modules.Synchronization.Domain.Entities.DatawalletModificationType;
 
 namespace Backbone.Modules.Synchronization.Domain.Tests.DatawalletModifications;
 
@@ -46,102 +47,100 @@ public class TheoryData : TheoryData<TheoryData.TestData>
         var nowMinus29Days = SystemTime.UtcNow.AddDays(-29);
         Add("Does not delete modifications younger than 30 days",
         [
-            new DatawalletModificationData
-                { Type = DatawalletModificationType.Create, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData
-                { Type = DatawalletModificationType.Update, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
-            new DatawalletModificationData
-                { Type = DatawalletModificationType.Create, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData
-                { Type = DatawalletModificationType.Update, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = CacheChanged, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = CacheChanged, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
         ]);
 
         Add("Never deletes the last DELETE",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Deletes everything before the last DELETE",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.CacheChanged, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = CacheChanged, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
         ]);
 
         Add("Deletes all but the last UPDATE",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
         ]);
 
         Add("Deletes all but the last CREATE",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
         ]);
 
         Add("If the latest modification is an UPDATE, deletes all previous CREATEs/UPDATEs",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("If the latest modification is a CREATE, deletes all previous CREATEs/UPDATEs",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other CREATE/UPDATE is for different collection",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c2", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c3", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, Collection = "c2", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, Collection = "c3", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other DELETE is for different collection",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c2", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, Collection = "c2", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other CREATE/UPDATE is for different object identifier",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o2", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o3", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o2", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o3", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other DELETE is for different object identifier",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Delete, Collection = "c1", ObjectIdentifier = "o2", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o2", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other CREATE/UPDATE is for different payload category",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c3", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c2", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c3", CanBeCleanedUp = false }
         ]);
 
         Add("Does not touch CACHE_CHANGEDs",
         [
-            new DatawalletModificationData { Type = DatawalletModificationType.CacheChanged, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = DatawalletModificationType.Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
-            new DatawalletModificationData { Type = DatawalletModificationType.Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = CacheChanged, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Create, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
+            new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
     }
 
