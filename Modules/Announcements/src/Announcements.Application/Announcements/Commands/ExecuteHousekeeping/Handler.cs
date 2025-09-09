@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _announcementsRepository.Delete(Announcement.CanBeCleanedUp, cancellationToken);
         stopwatch.Stop();
-        
+
         _logger.DataDeleted(numberOfDeletedItems, "announcements", stopwatch.ElapsedMilliseconds);
     }
 }

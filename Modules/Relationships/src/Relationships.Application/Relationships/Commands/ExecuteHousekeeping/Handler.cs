@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         stopwatch.Stop();
 
         _logger.DataDeleted(numberOfDeletedItems, "relationship templates", stopwatch.ElapsedMilliseconds);
-        
+
     }
 
     private async Task DeleteRelationships(CancellationToken cancellationToken)
