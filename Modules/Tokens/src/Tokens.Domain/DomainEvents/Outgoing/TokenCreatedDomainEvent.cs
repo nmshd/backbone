@@ -8,9 +8,9 @@ public class TokenCreatedDomainEvent : DomainEvent
     public TokenCreatedDomainEvent(Token newToken) : base($"{newToken.Id}/Created")
     {
         TokenId = newToken.Id;
-        CreatedBy = newToken.CreatedBy;
+        CreatedBy = newToken.CreatedBy?.Value;
     }
 
     public string TokenId { get; set; }
-    public string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 }

@@ -35,6 +35,6 @@
         "editor.defaultFormatter": "Dart-Code.dart-code",
         "editor.rulers": [150]
     },
-    "dotnet.defaultSolution": "Backbone.sln",
+    "dotnet.defaultSolution": "Backbone.slnx",
     "arb-editor.suppressedWarnings": ["missing_metadata_for_key"]
 }
