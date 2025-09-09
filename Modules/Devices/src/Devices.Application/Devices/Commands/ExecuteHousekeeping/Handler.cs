@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -24,15 +25,15 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteDeletionProcesses(CancellationToken cancellationToken)
     {
-        var numberOfDeletedDeletionProcesses = await _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} identity deletion processes", numberOfDeletedDeletionProcesses);
+        _logger.DataDeleted(numberOfDeletedItems, "identity deletion processes");
     }
 
     private async Task DeleteDeletionProcessAuditLogEntries(CancellationToken cancellationToken)
     {
-        var numberOfDeletedAuditLogEntries = await _identitiesRepository.DeleteDeletionProcessAuditLogEntries(IdentityDeletionProcessAuditLogEntry.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _identitiesRepository.DeleteDeletionProcessAuditLogEntries(IdentityDeletionProcessAuditLogEntry.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} identity deletion process audit log entries", numberOfDeletedAuditLogEntries);
+        _logger.DataDeleted(numberOfDeletedItems, "identity deletion process audit log entries");
     }
 }

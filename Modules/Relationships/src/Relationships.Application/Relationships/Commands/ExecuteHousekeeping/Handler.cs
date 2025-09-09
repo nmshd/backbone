@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
@@ -27,15 +28,15 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteRelationshipTemplates(CancellationToken cancellationToken)
     {
-        var numberOfDeletedTemplates = await _relationshipTemplatesRepository.Delete(RelationshipTemplate.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _relationshipTemplatesRepository.Delete(RelationshipTemplate.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} relationship templates", numberOfDeletedTemplates);
+        _logger.DataDeleted(numberOfDeletedItems, "relationship templates");
     }
 
     private async Task DeleteRelationships(CancellationToken cancellationToken)
     {
-        var numberOfDeletedRelationships = await _relationshipsRepository.Delete(Relationship.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _relationshipsRepository.Delete(Relationship.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} relationships", numberOfDeletedRelationships);
+        _logger.DataDeleted(numberOfDeletedItems, "relationships");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
@@ -26,15 +27,15 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteSyncRuns(CancellationToken cancellationToken)
     {
-        var numberOfDeletedSyncRuns = await _dbContext.Set<SyncRun>().Where(SyncRun.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
+        var numberOfDeletedItems = await _dbContext.Set<SyncRun>().Where(SyncRun.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} sync runs", numberOfDeletedSyncRuns);
+        _logger.DataDeleted(numberOfDeletedItems, "sync runs");
     }
 
     private async Task DeleteDatawalletModifications(CancellationToken cancellationToken)
     {
-        var numberOfDeletedSyncRuns = await _dbContext.Set<DatawalletModification>().Where(DatawalletModification.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
+        var numberOfDeletedItems = await _dbContext.Set<DatawalletModification>().Where(DatawalletModification.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} datawallet modifications", numberOfDeletedSyncRuns);
+        _logger.DataDeleted(numberOfDeletedItems, "datawallet modifications");
     }
 }

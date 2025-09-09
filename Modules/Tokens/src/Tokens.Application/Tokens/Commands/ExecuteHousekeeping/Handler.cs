@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,8 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteTokens(CancellationToken cancellationToken)
     {
-        var numberOfDeletedTokens = await _tokensRepository.Delete(Token.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _tokensRepository.Delete(Token.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} tokens", numberOfDeletedTokens);
+        _logger.DataDeleted(numberOfDeletedItems, "tokens");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using File = Backbone.Modules.Files.Domain.Entities.File;
@@ -24,15 +25,15 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteFiles(CancellationToken cancellationToken)
     {
-        var numberOfDeletedFiles = await _filesRepository.Delete(File.CanBeCleanedUp, cancellationToken);
+        var numberOfDeletedItems = await _filesRepository.Delete(File.CanBeCleanedUp, cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} files", numberOfDeletedFiles);
+        _logger.DataDeleted(numberOfDeletedItems, "files");
     }
 
     private async Task DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
-        var numberOfDeletedBlobs = await _filesRepository.DeleteOrphanedBlobs(cancellationToken);
+        var numberOfDeletedItems = await _filesRepository.DeleteOrphanedBlobs(cancellationToken);
 
-        _logger.LogInformation("Deleted {numberOfDeletedItems} orphaned blobs", numberOfDeletedBlobs);
+        _logger.DataDeleted(numberOfDeletedItems, "orphaned file contents");
     }
 }
