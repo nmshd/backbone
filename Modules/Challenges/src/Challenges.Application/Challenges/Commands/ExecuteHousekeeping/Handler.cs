@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+﻿using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
@@ -24,8 +25,10 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteChallenges(CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _challengesRepository.Delete(Challenge.CanBeCleanedUp, cancellationToken);
+        stopwatch.Stop();
 
-        _logger.DataDeleted(numberOfDeletedItems, "challenges");
+        _logger.DataDeleted(numberOfDeletedItems, "challenges", stopwatch.ElapsedMilliseconds);
     }
 }

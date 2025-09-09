@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+﻿using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
@@ -25,15 +26,19 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteDeletionProcesses(CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, cancellationToken);
+        stopwatch.Stop();
 
-        _logger.DataDeleted(numberOfDeletedItems, "identity deletion processes");
+        _logger.DataDeleted(numberOfDeletedItems, "identity deletion processes", stopwatch.ElapsedMilliseconds);
     }
 
     private async Task DeleteDeletionProcessAuditLogEntries(CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _identitiesRepository.DeleteDeletionProcessAuditLogEntries(IdentityDeletionProcessAuditLogEntry.CanBeCleanedUp, cancellationToken);
+        stopwatch.Stop();
 
-        _logger.DataDeleted(numberOfDeletedItems, "identity deletion process audit log entries");
+        _logger.DataDeleted(numberOfDeletedItems, "identity deletion process audit log entries", stopwatch.ElapsedMilliseconds);
     }
 }

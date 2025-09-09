@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Housekeeping;
+﻿using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -28,15 +29,20 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteRelationshipTemplates(CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _relationshipTemplatesRepository.Delete(RelationshipTemplate.CanBeCleanedUp, cancellationToken);
+        stopwatch.Stop();
 
-        _logger.DataDeleted(numberOfDeletedItems, "relationship templates");
+        _logger.DataDeleted(numberOfDeletedItems, "relationship templates", stopwatch.ElapsedMilliseconds);
+        
     }
 
     private async Task DeleteRelationships(CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         var numberOfDeletedItems = await _relationshipsRepository.Delete(Relationship.CanBeCleanedUp, cancellationToken);
+        stopwatch.Stop();
 
-        _logger.DataDeleted(numberOfDeletedItems, "relationships");
+        _logger.DataDeleted(numberOfDeletedItems, "relationships", stopwatch.ElapsedMilliseconds);
     }
 }
