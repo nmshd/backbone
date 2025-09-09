@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Backbone.BuildingBlocks.Application.Extensions;
+namespace Backbone.Tooling.Extensions;
 
 public static class ExpressionExtensions
 {

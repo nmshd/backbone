@@ -6,6 +6,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Tooling.Extensions;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +56,13 @@ public class TokensRepository : ITokensRepository
         return dbPaginationResult;
     }
 
+    public async Task<int> Delete(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
+        return await _tokensDbSet.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
+    }
+
     public async Task<Token?> GetWithoutContent(TokenId id, CancellationToken cancellationToken, bool track = false)
     {
         var token = await (track ? _tokensDbSet : _readonlyTokensDbSet)
@@ -90,13 +98,6 @@ public class TokensRepository : ITokensRepository
     {
         _tokensDbSet.UpdateRange(tokens);
         await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
-    {
-#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
-        await _tokensDbSet.Where(filter).BatchDeleteAsync(cancellationToken);
-#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     public async Task DeleteToken(Token token, CancellationToken cancellationToken)

@@ -10,6 +10,7 @@ public interface IIdentitiesRepository
 {
     #region Identities
 
+    Task<List<IdentityAddress>> ListAddressesOfIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> Get(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
@@ -38,7 +39,7 @@ public interface IIdentitiesRepository
 
     #region Deletion Processes
 
-    Task<List<IdentityAddress>> ListAddressesOfIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
+    Task<int> DeleteDeletionProcesses(Expression<Func<IdentityDeletionProcess, bool>> filter, CancellationToken cancellationToken);
 
     Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> ListIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false);
@@ -46,6 +47,8 @@ public interface IIdentitiesRepository
     Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry);
 
     Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken);
+
+    Task<int> DeleteDeletionProcessAuditLogEntries(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter, CancellationToken cancellationToken);
 
     #endregion
 

@@ -11,4 +11,5 @@ public interface IAnnouncementsRepository
     Task DeleteRecipients(Expression<Func<AnnouncementRecipient, bool>> filter, CancellationToken cancellationToken);
     Task<Announcement?> Get(AnnouncementId id, CancellationToken cancellationToken);
     Task<int> Delete(AnnouncementId id, CancellationToken cancellationToken);
+    Task<int> Delete(Expression<Func<Announcement, bool>> filter, CancellationToken cancellationToken);
 }

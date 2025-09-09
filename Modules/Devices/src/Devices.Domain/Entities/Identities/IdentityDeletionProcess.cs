@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -75,6 +76,10 @@ public class IdentityDeletionProcess : Entity
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= ApprovalPeriodEndsAt;
 
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
+
+    public static Expression<Func<IdentityDeletionProcess, bool>> CanBeCleanedUp =>
+        p => p.Status == DeletionProcessStatus.Cancelled && p.CancelledAt!.Value.AddDays(30) < SystemTime.UtcNow ||
+             p.Status == DeletionProcessStatus.Rejected && p.RejectedAt!.Value.AddDays(30) < SystemTime.UtcNow;
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {

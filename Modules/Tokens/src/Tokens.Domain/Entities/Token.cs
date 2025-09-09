@@ -209,8 +209,7 @@ public class Token : Entity
 
     #region Expressions
 
-    public static Expression<Func<Token, bool>> IsNotExpired =>
-        challenge => challenge.ExpiresAt > SystemTime.UtcNow;
+    public static Expression<Func<Token, bool>> CanBeCleanedUp => t => t.ExpiresAt.AddDays(30) <= SystemTime.UtcNow;
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {

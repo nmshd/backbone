@@ -2,7 +2,9 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public record IdentityDeletionConfiguration
 {
-    public static IdentityDeletionConfiguration Instance { get; private set; } = new();
+    public static IdentityDeletionConfiguration Instance { get; } = new();
+
+    public int AuditLogRetentionPeriodInDays { get; set; } = 731;
 
     public double LengthOfApprovalPeriodInDays { get; set; } = 7;
     public double LengthOfGracePeriodInDays { get; set; } = 14;

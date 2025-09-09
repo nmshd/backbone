@@ -66,6 +66,43 @@ public class FilesRepository : IFilesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<int> Delete(Expression<Func<File, bool>> filter, CancellationToken cancellationToken)
+    {
+        var idsOfFilesToDelete = await _readOnlyFiles.Where(filter).Select(x => x.Id).ToListAsync(cancellationToken);
+
+        // In theory, the following command could delete more rows that we got ids for in the previous command.
+        // This is because some milliseconds pass between the two commands. During this time, additional files
+        // could become eligible for deletion. But this is acceptable, because we will run a sanity check as
+        // part of the same housekeeping job anyway
+        var numberOfDeletedItems = await _readOnlyFiles.Where(filter).ExecuteDeleteAsync(cancellationToken);
+
+        foreach (var id in idsOfFilesToDelete)
+        {
+            _blobStorage.Remove(_blobConfiguration.RootFolder, id);
+        }
+
+        await _blobStorage.SaveAsync();
+
+        return numberOfDeletedItems;
+    }
+
+    public async Task<int> DeleteOrphanedBlobs(CancellationToken cancellationToken)
+    {
+        var allBlobIds = await _blobStorage.ListAsync(_blobConfiguration.RootFolder);
+
+        var numberOfDeletedBlobs = 0;
+
+        await foreach (var blobId in allBlobIds.WithCancellation(cancellationToken))
+        {
+            _blobStorage.Remove(_blobConfiguration.RootFolder, blobId);
+            numberOfDeletedBlobs++;
+        }
+
+        await _blobStorage.SaveAsync();
+
+        return numberOfDeletedBlobs;
+    }
+
     public async Task<File?> Get(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var file = await (track ? _files : _readOnlyFiles)

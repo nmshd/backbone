@@ -305,14 +305,59 @@ eventhandler:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
+#=========================== Housekeeper ===========================
+
+housekeeper:
+  name: "housekeeper"
+
+  schedule: "0 1 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
+  backoffLimit: 0
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-housekeeper"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Housekeeper container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+  # securityContext - securityContext for the Housekeeper container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Housekeeper container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
 #=========================== Send Identity Deletion Reminders ===========================
 
 sendidentitydeletionreminders:
   name: "sendidentitydeletionreminders"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -355,9 +400,9 @@ sendidentitydeletionreminders:
 cancelstaledeletionprocesses:
   name: "cancelstaledeletionprocesses"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -400,9 +445,9 @@ cancelstaledeletionprocesses:
 actualidentitydeletion:
   name: "actualidentitydeletion"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:

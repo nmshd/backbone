@@ -133,6 +133,37 @@ jobs:
           TAG: ${{ github.ref_name }}
           PUSH: 1
 
+  publish-housekeeper:
+    name: Publish Housekeeper Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Docker Login
+        uses: docker/login-action@v3.5.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+      - name: Build and Push Container Image
+        run: ./.ci/hk/buildContainerImage.js
+        env:
+          TAG: ${{ github.ref_name }}
+          PUSH: 1
+
   publish-database-migrator:
     name: Publish Database Migrator Container Image
     runs-on: ubuntu-latest
@@ -234,6 +265,7 @@ jobs:
       - publish-admin-ui
       - publish-consumer-api
       - publish-event-handler
+      - publish-housekeeper
       - publish-database-migrator
       - publish-identity-deletion-jobs
       - publish-sse-server
