@@ -59,7 +59,7 @@ public class TheoryData : TheoryData<TheoryData.TestData>
 
         Add("Never deletes the last DELETE",
         [
-            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
             new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = true },
             new DatawalletModificationData { Type = Update, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
         ]);
@@ -112,8 +112,8 @@ public class TheoryData : TheoryData<TheoryData.TestData>
 
         Add("Does not delete when other DELETE is for different collection",
         [
-            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = Delete, Collection = "c2", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, Collection = "c2", ObjectIdentifier = "o1", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other CREATE/UPDATE is for different object identifier",
@@ -125,8 +125,8 @@ public class TheoryData : TheoryData<TheoryData.TestData>
 
         Add("Does not delete when other DELETE is for different object identifier",
         [
-            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o2", PayloadCategory = "c1", CanBeCleanedUp = false }
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, Collection = "c1", ObjectIdentifier = "o2", CanBeCleanedUp = false }
         ]);
 
         Add("Does not delete when other CREATE/UPDATE is for different payload category",
