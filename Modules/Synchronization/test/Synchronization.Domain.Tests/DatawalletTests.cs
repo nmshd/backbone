@@ -92,16 +92,6 @@ public class DatawalletTests : AbstractTestsBase
         datawallet.DomainEvents.ShouldHaveCount(1);
     }
 
-    private static Datawallet CreateDatawallet()
-    {
-        return new Datawallet(new Datawallet.DatawalletVersion(1), CreateRandomIdentityAddress());
-    }
-
-    private static Datawallet CreateDatawallet(Datawallet.DatawalletVersion version)
-    {
-        return new Datawallet(version, CreateRandomIdentityAddress());
-    }
-
     private static DatawalletModification AddModificationToDatawallet(Datawallet datawallet)
     {
         return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", CreateRandomBytes(),

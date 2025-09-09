@@ -41,10 +41,6 @@
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Controllers\Synchronization\" />
-    </ItemGroup>
-
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
         <Delete Files="$(ProjectDir)appsettings.override.json" />
         <Copy SourceFiles="..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />

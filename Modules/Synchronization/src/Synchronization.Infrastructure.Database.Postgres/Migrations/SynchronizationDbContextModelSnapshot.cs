@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -85,6 +85,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                         .IsFixedLength();
 
                     b.Property<string>("DatawalletId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -305,7 +306,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
                         .HasForeignKey("DatawalletId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Datawallet");
                 });
@@ -314,7 +316,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
-                        .HasForeignKey("SyncRunId");
+                        .HasForeignKey("SyncRunId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("SyncRun");
                 });
@@ -327,11 +330,13 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", null)
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("Errors")
                         .HasForeignKey("SyncRunId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("SyncRun");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>

@@ -14,7 +14,7 @@ public class RelationshipsModule : AbstractModule<ApplicationConfiguration, Infr
 {
     public override string Name => "Relationships";
 
-    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration)
+    protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
         services.AddApplication();
 

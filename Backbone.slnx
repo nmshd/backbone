@@ -52,6 +52,10 @@
   <Folder Name="/Applications/HealthCheck/src/">
     <Project Path="Applications/HealthCheck/src/HealthCheck.csproj" />
   </Folder>
+  <Folder Name="/Applications/Housekeeper/" />
+  <Folder Name="/Applications/Housekeeper/src/">
+    <Project Path="Applications\Housekeeper\src\Housekeeper\Housekeeper.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Applications/IdentityDeletionJobs/" />
   <Folder Name="/Applications/IdentityDeletionJobs/src/">
     <Project Path="Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj" />
@@ -113,7 +117,6 @@
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure/Challenges.Infrastructure.csproj" />
-    <Project Path="Modules/Challenges/src/Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Challenges/test/">
@@ -238,7 +241,5 @@
     <File Path=".env" />
   </Folder>
   <Project Path="Backbone.Tests.ArchUnit/Backbone.Tests.ArchUnit.csproj" />
-  <Project Path="docker-compose/docker-compose.dcproj">
-    <Build />
-  </Project>
+  <Project Path="docker-compose/docker-compose.dcproj" />
 </Solution>

@@ -27,16 +27,12 @@ public class Challenge : Entity
     public IdentityAddress? CreatedBy { get; set; }
     public DeviceId? CreatedByDevice { get; set; }
 
-    public static Expression<Func<Challenge, bool>> CanBeCleanedUp =>
-        challenge => challenge.ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
-
     public bool IsExpired()
     {
         return ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
     }
 
-    public static Expression<Func<Challenge, bool>> IsNotExpired =>
-        challenge => challenge.ExpiresAt > SystemTime.UtcNow.AddHours(-1);
+    public static Expression<Func<Challenge, bool>> CanBeCleanedUp => c => c.ExpiresAt.AddDays(30) <= SystemTime.UtcNow;
 
     public static Expression<Func<Challenge, bool>> WasCreatedBy(string identityAddress)
     {

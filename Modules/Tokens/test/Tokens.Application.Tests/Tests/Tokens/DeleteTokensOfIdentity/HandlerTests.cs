@@ -4,7 +4,7 @@ using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity
 using Backbone.Modules.Tokens.Domain.Entities;
 using FakeItEasy;
 
-namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokenOfIdentity;
+namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokensOfIdentity;
 
 public class HandlerTests : AbstractTestsBase
 {
@@ -21,6 +21,6 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockRelationshipTemplatesRepository.DeleteTokens(A<Expression<Func<Token, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockRelationshipTemplatesRepository.Delete(A<Expression<Func<Token, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
     }
 }

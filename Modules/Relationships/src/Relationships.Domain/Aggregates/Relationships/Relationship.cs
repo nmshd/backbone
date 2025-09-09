@@ -92,6 +92,11 @@ public class Relationship : Entity
     public bool FromHasDecomposed { get; private set; }
     public bool ToHasDecomposed { get; private set; }
 
+    public static Expression<Func<Relationship, bool>> CanBeCleanedUp => r =>
+        r.Status == RelationshipStatus.ReadyForDeletion &&
+        // the relationship has been in ReadyForDeletion status for at least 30 days
+        r.AuditLog.First(l => l.NewStatus == RelationshipStatus.ReadyForDeletion).CreatedAt.AddDays(30) <= SystemTime.UtcNow;
+
     public IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
     {
         return From == activeIdentity ? To : From;
