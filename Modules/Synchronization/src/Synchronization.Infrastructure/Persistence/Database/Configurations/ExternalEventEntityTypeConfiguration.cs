@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
@@ -26,5 +27,10 @@ public class ExternalEventEntityTypeConfiguration : EntityEntityTypeConfiguratio
         builder.Property(x => x.Context).HasMaxLength(20);
 
         builder.Property(x => x.IsDeliveryBlocked);
+
+        builder.HasMany(x => x.Errors)
+            .WithOne()
+            .HasForeignKey(x => x.ExternalEventId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

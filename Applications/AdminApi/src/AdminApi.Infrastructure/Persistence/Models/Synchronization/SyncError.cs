@@ -6,8 +6,8 @@ public class SyncError
 {
     public required string Id { get; init; }
     public virtual required ExternalEvent ExternalEvent { get; init; }
-    public virtual required SyncRun SyncRun { get; init; }
     public required string ErrorCode { get; init; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class ExternalEvent
