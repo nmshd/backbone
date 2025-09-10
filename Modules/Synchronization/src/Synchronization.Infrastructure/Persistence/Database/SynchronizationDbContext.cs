@@ -154,6 +154,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             .CreatedBy(createdBy)
             .Where(s => s.Id == syncRunId)
             .Include(s => s.ExternalEvents)
+            .ThenInclude(e => e.Errors)
             .GetFirst(cancellationToken);
     }
 
@@ -161,6 +162,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     {
         var previousSyncRun = await SyncRuns
             .Include(s => s.ExternalEvents)
+            .ThenInclude(e => e.Errors)
             .CreatedBy(createdBy)
             .OrderByDescending(s => s.Index)
             .FirstOrDefaultAsync(cancellationToken);
