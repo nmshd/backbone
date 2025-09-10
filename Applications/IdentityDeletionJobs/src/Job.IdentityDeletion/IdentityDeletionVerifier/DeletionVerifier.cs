@@ -1,7 +1,5 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier.Exporters;
 using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier.Extractors;
 
@@ -41,8 +39,6 @@ public class DeletionVerifier : IDeletionVerifier
 
     private async Task<DatabaseCheckResult> CheckExportedDatabase(List<string> addressesToCheck, CancellationToken cancellationToken)
     {
-        if (!FilePaths.DumpFileExists()) throw new FileNotFoundException($"The database dump file \"{FilePaths.PATH_TO_DUMP_FILE}\" doesn't exist.");
-
         var result = new DatabaseCheckResult
         {
             Success = true,
@@ -101,5 +97,4 @@ file static class FilePaths
     public static readonly string PATH_TO_FOUND_FILE = Path.Combine(PATH_TO_TEMP_DIR, FOUND_FILENAME);
 
     public static bool TempDirExists() => Directory.Exists(PATH_TO_TEMP_DIR);
-    public static bool DumpFileExists() => File.Exists(PATH_TO_DUMP_FILE);
 }
