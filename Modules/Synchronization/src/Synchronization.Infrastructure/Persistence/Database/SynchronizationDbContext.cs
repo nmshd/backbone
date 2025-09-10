@@ -151,6 +151,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public async Task<SyncRun> GetSyncRunWithExternalEvents(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         return await SyncRuns
+            .AsSplitQuery()
             .CreatedBy(createdBy)
             .Where(s => s.Id == syncRunId)
             .Include(s => s.ExternalEvents)
@@ -161,6 +162,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public async Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         var previousSyncRun = await SyncRuns
+            .AsSplitQuery()
             .Include(s => s.ExternalEvents)
             .ThenInclude(e => e.Errors)
             .CreatedBy(createdBy)
