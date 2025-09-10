@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -222,6 +222,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ErrorCode")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -234,19 +237,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("SyncRunId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalEventId");
-
-                    b.HasIndex("SyncRunId", "ExternalEventId")
-                        .IsUnique();
 
                     b.ToTable("SyncErrors", "Synchronization");
                 });
@@ -325,18 +318,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", null)
-                        .WithMany("Errors")
+                        .WithMany()
                         .HasForeignKey("ExternalEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
-                        .WithMany("Errors")
-                        .HasForeignKey("SyncRunId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("SyncRun");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>
@@ -344,15 +329,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.Navigation("Modifications");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
-                {
-                    b.Navigation("Errors");
-                });
-
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
                 {
-                    b.Navigation("Errors");
-
                     b.Navigation("ExternalEvents");
                 });
 #pragma warning restore 612, 618
