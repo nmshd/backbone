@@ -83,7 +83,9 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         _syncRun.FinalizeExternalEventSync(eventResults);
 
-        var syncErrors = request.ExternalEventResults.Select(r => new SyncError(ExternalEventId.Parse(r.ExternalEventId), r.ErrorCode ?? string.Empty));
+        var syncErrors = request.ExternalEventResults
+            .Where(r => !r.ErrorCode.IsNullOrEmpty())
+            .Select(r => new SyncError(ExternalEventId.Parse(r.ExternalEventId), r.ErrorCode!));
 
         _dbContext.Set<SyncError>().AddRange(syncErrors);
 
