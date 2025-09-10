@@ -7,7 +7,6 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun : Entity
 {
-    private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
     // ReSharper disable once UnusedMember.Local
@@ -42,7 +41,6 @@ public class SyncRun : Entity
     public DateTime? FinalizedAt { get; internal set; }
     public virtual IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
     public int EventCount { get; }
-    public virtual IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
 
 
     public bool IsFinalized => FinalizedAt != null;
