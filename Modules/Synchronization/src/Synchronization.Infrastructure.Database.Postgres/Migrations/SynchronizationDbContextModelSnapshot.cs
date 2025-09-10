@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -333,7 +333,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("Errors")
                         .HasForeignKey("SyncRunId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("SyncRun");
