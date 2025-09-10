@@ -89,6 +89,8 @@ FROM base AS final
 RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
+RUN apk add postgresql-client
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.Job.IdentityDeletion.dll"]
