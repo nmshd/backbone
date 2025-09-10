@@ -10,10 +10,9 @@ public class SyncErrorEntityTypeConfiguration : EntityEntityTypeConfiguration<Sy
     {
         base.Configure(builder);
 
-        builder.HasIndex(x => new { x.SyncRunId, x.ExternalEventId }).IsUnique();
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.ErrorCode).HasMaxLength(100);
+        builder.Property(x => x.CreatedAt);
     }
 }
