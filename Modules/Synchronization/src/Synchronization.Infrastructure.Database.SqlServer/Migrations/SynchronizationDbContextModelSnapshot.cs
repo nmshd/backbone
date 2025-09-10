@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -235,7 +235,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsFixedLength();
 
                     b.Property<string>("SyncRunId")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -245,8 +244,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.HasIndex("ExternalEventId");
 
-                    b.HasIndex("SyncRunId", "ExternalEventId")
-                        .IsUnique();
+                    b.HasIndex("SyncRunId", "ExternalEventId");
 
                     b.ToTable("SyncErrors", "Synchronization");
                 });
@@ -333,8 +331,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("Errors")
                         .HasForeignKey("SyncRunId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("SyncRun");
                 });

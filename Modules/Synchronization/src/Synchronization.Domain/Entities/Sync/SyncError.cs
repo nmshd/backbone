@@ -28,7 +28,7 @@ public class SyncError : Entity
     }
 
     public SyncErrorId Id { get; }
-    public SyncRunId SyncRunId { get; }
+    public SyncRunId? SyncRunId { get; }
     public ExternalEventId ExternalEventId { get; }
 
     public virtual SyncRun SyncRun { get; }
