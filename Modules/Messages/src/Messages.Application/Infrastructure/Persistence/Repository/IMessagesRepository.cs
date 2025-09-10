@@ -19,4 +19,5 @@ public interface IMessagesRepository
     Task Update(IEnumerable<Message> messages);
     Task<IEnumerable<Message>> ListWithoutContent(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken);
     Task Delete(MessageId messageId, CancellationToken cancellationToken);
+    Task<int> Delete(Expression<Func<Message, bool>> filter, CancellationToken cancellationToken);
 }

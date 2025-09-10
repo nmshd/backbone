@@ -105,6 +105,8 @@ public class Message : Entity
 
     #region Expressions
 
+    public static Expression<Func<Message, bool>> CanBeCleanedUp => m => m.Recipients.All(r => r.ReceivedAt != null && r.ReceivedAt.Value.AddDays(30) <= SystemTime.UtcNow);
+
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
         return i =>

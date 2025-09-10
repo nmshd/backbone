@@ -4,6 +4,7 @@ using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcem
 using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteMessagesModuleHousekeepingCommand = Backbone.Modules.Messages.Application.Messages.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Application.SyncRuns.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
@@ -30,6 +31,7 @@ public class Executor
         await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
+        await _mediator.Send(new ExecuteMessagesModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
         await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);

@@ -52,6 +52,7 @@
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure.Database.Postgres\Messages.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure.Database.SqlServer\Messages.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure.Database.Postgres\Quotas.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure.Database.SqlServer\Quotas.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
