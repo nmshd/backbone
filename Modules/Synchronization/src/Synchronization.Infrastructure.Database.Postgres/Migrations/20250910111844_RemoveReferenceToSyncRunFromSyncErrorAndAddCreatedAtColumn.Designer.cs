@@ -3,6 +3,7 @@ using System;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(SynchronizationDbContext))]
-    partial class SynchronizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250910111844_RemoveReferenceToSyncRunFromSyncErrorAndAddCreatedAtColumn")]
+    partial class RemoveReferenceToSyncRunFromSyncErrorAndAddCreatedAtColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
