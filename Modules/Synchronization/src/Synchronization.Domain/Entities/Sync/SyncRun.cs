@@ -7,6 +7,7 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun : Entity
 {
+    private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
     // ReSharper disable once UnusedMember.Local
@@ -41,6 +42,7 @@ public class SyncRun : Entity
     public DateTime? FinalizedAt { get; internal set; }
     public virtual IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
     public int EventCount { get; }
+    public virtual IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
 
 
     public bool IsFinalized => FinalizedAt != null;
@@ -78,17 +80,20 @@ public class SyncRun : Entity
     {
         if (itemResult == null)
         {
-            ItemSyncFailed(item);
+            ItemSyncFailed(item, "notProcessed");
             return;
         }
 
-        if (itemResult.IsError)
-            ItemSyncFailed(item);
+        var isErrorResult = !string.IsNullOrEmpty(itemResult.ErrorCode);
+        if (isErrorResult)
+            ItemSyncFailed(item, itemResult.ErrorCode);
     }
 
-    private void ItemSyncFailed(ExternalEvent item)
+    private void ItemSyncFailed(ExternalEvent item, string errorCode)
     {
-        item.SyncFailed();
+        var error = new SyncError(item, errorCode);
+
+        item.SyncFailed(error);
         _externalEvents.Remove(item);
     }
 
@@ -99,7 +104,7 @@ public class SyncRun : Entity
         var items = _externalEvents.ToArray();
         foreach (var item in items)
         {
-            ItemSyncFailed(item);
+            ItemSyncFailed(item, "syncRunCanceled");
         }
     }
 
@@ -118,6 +123,6 @@ public class SyncRun : Entity
 
 public record ExternalEventResult
 {
-    public required ExternalEventId ExternalEventId { get; init; }
-    public required bool IsError { get; init; }
+    public required ExternalEventId ExternalEventId { get; set; }
+    public required string ErrorCode { get; set; }
 }

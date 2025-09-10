@@ -66,7 +66,7 @@ public class ExternalEvent : Entity
         SyncRunId = syncRun.Id;
     }
 
-    public void SyncFailed()
+    public void SyncFailed(SyncError error)
     {
         SyncRunId = null;
         SyncErrorCount++;

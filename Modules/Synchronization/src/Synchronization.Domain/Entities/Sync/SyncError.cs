@@ -14,10 +14,10 @@ public class SyncError : Entity
         ErrorCode = null!;
     }
 
-    public SyncError(ExternalEventId externalEventId, string errorCode)
+    public SyncError(ExternalEvent externalEvent, string errorCode)
     {
         Id = SyncErrorId.New();
-        ExternalEventId = externalEventId;
+        ExternalEventId = externalEvent.Id;
 
         ErrorCode = errorCode;
         CreatedAt = SystemTime.UtcNow;

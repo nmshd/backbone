@@ -5,7 +5,6 @@ using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.Tooling.Extensions;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -77,17 +76,11 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var eventResults = request.ExternalEventResults.Select(e =>
             new ExternalEventResult
             {
-                IsError = !e.ErrorCode.IsNullOrEmpty(),
+                ErrorCode = e.ErrorCode ?? string.Empty,
                 ExternalEventId = ExternalEventId.Parse(e.ExternalEventId)
             }).ToArray();
 
         _syncRun.FinalizeExternalEventSync(eventResults);
-
-        var syncErrors = request.ExternalEventResults
-            .Where(r => !r.ErrorCode.IsNullOrEmpty())
-            .Select(r => new SyncError(ExternalEventId.Parse(r.ExternalEventId), r.ErrorCode!));
-
-        _dbContext.Set<SyncError>().AddRange(syncErrors);
 
         var newModifications = AddModificationsToDatawallet(request.DatawalletModifications);
 
