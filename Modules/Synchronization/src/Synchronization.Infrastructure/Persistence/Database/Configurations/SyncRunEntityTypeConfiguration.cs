@@ -26,8 +26,8 @@ public class SyncRunEntityTypeConfiguration : EntityEntityTypeConfiguration<Sync
         builder.HasMany(x => x.ExternalEvents).WithOne(x => x.SyncRun).OnDelete(DeleteBehavior.Cascade);
 
         // We have to configure SetNull because
-        // - sync errors with an error count < 2 are deleted automatically because the corresponding external events are deleted, which cascades to the related errors
-        // - sync errors with an error count = 2 are kept for inspection, but the foreign key to the sync run is removed
+        // - sync errors with an error count <= 2 are deleted automatically because the corresponding external events are deleted, which cascades to the related errors
+        // - sync errors with an error count = 3 are kept for inspection, but the foreign key to the sync run is removed
         builder.HasMany(x => x.Errors).WithOne(x => x.SyncRun).OnDelete(DeleteBehavior.SetNull);
     }
 }
