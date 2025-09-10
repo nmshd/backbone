@@ -19,7 +19,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             modelBuilder
                 .HasDefaultSchema("Synchronization")
                 .HasAnnotation("DbProvider", "Npgsql")
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -222,9 +222,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("ErrorCode")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -237,9 +234,19 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("SyncRunId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalEventId");
+
+                    b.HasIndex("SyncRunId", "ExternalEventId")
+                        .IsUnique();
 
                     b.ToTable("SyncErrors", "Synchronization");
                 });
@@ -318,10 +325,18 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", null)
-                        .WithMany()
+                        .WithMany("Errors")
                         .HasForeignKey("ExternalEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
+                        .WithMany("Errors")
+                        .HasForeignKey("SyncRunId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("SyncRun");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", b =>
@@ -329,8 +344,15 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                     b.Navigation("Modifications");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
+                {
+                    b.Navigation("Errors");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
                 {
+                    b.Navigation("Errors");
+
                     b.Navigation("ExternalEvents");
                 });
 #pragma warning restore 612, 618
