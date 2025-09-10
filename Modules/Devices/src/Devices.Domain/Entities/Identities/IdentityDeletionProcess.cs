@@ -78,8 +78,8 @@ public class IdentityDeletionProcess : Entity
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
 
     public static Expression<Func<IdentityDeletionProcess, bool>> CanBeCleanedUp =>
-        p => p.Status == DeletionProcessStatus.Cancelled && p.CancelledAt!.Value.AddDays(30) < SystemTime.UtcNow ||
-             p.Status == DeletionProcessStatus.Rejected && p.RejectedAt!.Value.AddDays(30) < SystemTime.UtcNow;
+        p => p.Status == DeletionProcessStatus.Cancelled && p.CancelledAt!.Value < SystemTime.UtcNow.AddDays(-30) ||
+             p.Status == DeletionProcessStatus.Rejected && p.RejectedAt!.Value < SystemTime.UtcNow.AddDays(-30);
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {

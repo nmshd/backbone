@@ -95,7 +95,7 @@ public class Relationship : Entity
     public static Expression<Func<Relationship, bool>> CanBeCleanedUp => r =>
         r.Status == RelationshipStatus.ReadyForDeletion &&
         // the relationship has been in ReadyForDeletion status for at least 30 days
-        r.AuditLog.First(l => l.NewStatus == RelationshipStatus.ReadyForDeletion).CreatedAt.AddDays(30) <= SystemTime.UtcNow;
+        r.AuditLog.First(l => l.NewStatus == RelationshipStatus.ReadyForDeletion).CreatedAt <= SystemTime.UtcNow.AddDays(-30);
 
     public IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
     {

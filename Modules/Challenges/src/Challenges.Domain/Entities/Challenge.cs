@@ -32,7 +32,7 @@ public class Challenge : Entity
         return ExpiresAt <= SystemTime.UtcNow.AddHours(-1);
     }
 
-    public static Expression<Func<Challenge, bool>> CanBeCleanedUp => c => c.ExpiresAt.AddDays(30) <= SystemTime.UtcNow;
+    public static Expression<Func<Challenge, bool>> CanBeCleanedUp => c => c.ExpiresAt <= SystemTime.UtcNow.AddDays(-30);
 
     public static Expression<Func<Challenge, bool>> WasCreatedBy(string identityAddress)
     {
