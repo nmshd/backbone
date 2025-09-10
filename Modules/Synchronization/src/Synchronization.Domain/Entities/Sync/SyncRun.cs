@@ -108,7 +108,7 @@ public class SyncRun : Entity
 
     #region Expressions
 
-    public static Expression<Func<SyncRun, bool>> CanBeCleanedUp => r => r.FinalizedAt != null && r.FinalizedAt.Value.AddDays(30) <= SystemTime.UtcNow;
+    public static Expression<Func<SyncRun, bool>> CanBeCleanedUp => r => r.FinalizedAt != null && r.FinalizedAt.Value <= SystemTime.UtcNow.AddDays(-30);
 
     #endregion
 
