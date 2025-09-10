@@ -28,7 +28,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-            
+
             migrationBuilder.Sql(
                 @"UPDATE ""Synchronization"".""SyncErrors""
                   SET ""CreatedAt"" = sr.""CreatedAt""
