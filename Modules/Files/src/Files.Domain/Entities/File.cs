@@ -110,7 +110,7 @@ public class File : Entity
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
     }
 
-    public static Expression<Func<File, bool>> CanBeCleanedUp => f => f.ExpiresAt.AddDays(30) <= SystemTime.UtcNow;
+    public static Expression<Func<File, bool>> CanBeCleanedUp => f => f.ExpiresAt <= SystemTime.UtcNow.AddDays(-30);
 
     public static Expression<Func<File, bool>> IsExpired =>
         file => file.ExpiresAt <= SystemTime.UtcNow;
