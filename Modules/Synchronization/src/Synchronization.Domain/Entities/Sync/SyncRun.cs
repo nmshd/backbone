@@ -7,7 +7,6 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun : Entity
 {
-    private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
     // ReSharper disable once UnusedMember.Local
@@ -42,7 +41,6 @@ public class SyncRun : Entity
     public DateTime? FinalizedAt { get; internal set; }
     public virtual IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
     public int EventCount { get; }
-    public virtual IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
 
 
     public bool IsFinalized => FinalizedAt != null;
@@ -80,27 +78,18 @@ public class SyncRun : Entity
     {
         if (itemResult == null)
         {
-            ItemSyncFailed(item, "notProcessed");
+            ItemSyncFailed(item);
             return;
         }
 
-        var isErrorResult = !string.IsNullOrEmpty(itemResult.ErrorCode);
-        if (isErrorResult)
-            ItemSyncFailed(item, itemResult.ErrorCode);
+        if (itemResult.IsError)
+            ItemSyncFailed(item);
     }
 
-    private void ItemSyncFailed(ExternalEvent item, string errorCode)
+    private void ItemSyncFailed(ExternalEvent item)
     {
-        var error = new SyncError(this, item, errorCode);
-
-        item.SyncFailed(error);
-        AddError(error);
+        item.SyncFailed();
         _externalEvents.Remove(item);
-    }
-
-    private void AddError(SyncError error)
-    {
-        _errors.Add(error);
     }
 
     public void Cancel()
@@ -110,7 +99,7 @@ public class SyncRun : Entity
         var items = _externalEvents.ToArray();
         foreach (var item in items)
         {
-            ItemSyncFailed(item, "syncRunCanceled");
+            ItemSyncFailed(item);
         }
     }
 
@@ -129,6 +118,6 @@ public class SyncRun : Entity
 
 public record ExternalEventResult
 {
-    public required ExternalEventId ExternalEventId { get; set; }
-    public required string ErrorCode { get; set; }
+    public required ExternalEventId ExternalEventId { get; init; }
+    public required bool IsError { get; init; }
 }
