@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class asd : Migration
+    public partial class RemoveReferenceToSyncRunFromSyncErrorAndAddCreatedAtColumn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,10 +25,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 name: "CreatedAt",
                 schema: "Synchronization",
                 table: "SyncErrors",
-                type: "datetime2",
+                type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-
+            
             migrationBuilder.Sql(
                 @"UPDATE ""Synchronization"".""SyncErrors""
                   SET ""CreatedAt"" = sr.""CreatedAt""
@@ -53,7 +53,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 name: "SyncRunId",
                 schema: "Synchronization",
                 table: "SyncErrors",
-                type: "char(20)",
+                type: "character(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
