@@ -54,7 +54,7 @@ public class IdentityDeletionProcess : Entity
     public static Expression<Func<IdentityDeletionProcess, bool>> CanBeCleanedUp =>
         p => p.Status == DeletionProcessStatus.Cancelled && p.CancelledAt!.Value < SystemTime.UtcNow.AddDays(-30);
 
-    public static IdentityDeletionProcess StartAsOwner(IdentityAddress createdBy, DeviceId createdByDeviceId, double? lengthOfGracePeriodInDays)
+    public static IdentityDeletionProcess Start(IdentityAddress createdBy, DeviceId createdByDeviceId, double? lengthOfGracePeriodInDays)
     {
         return new IdentityDeletionProcess(createdBy, createdByDeviceId, lengthOfGracePeriodInDays);
     }
@@ -110,7 +110,7 @@ public class IdentityDeletionProcess : Entity
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(deletionProcessStatus));
     }
 
-    public void CancelAsOwner(IdentityAddress address, DeviceId cancelledByDevice)
+    public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
     {
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));

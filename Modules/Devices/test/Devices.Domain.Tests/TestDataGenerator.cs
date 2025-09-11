@@ -41,7 +41,7 @@ public static class TestDataGenerator
     public static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+        identity.StartDeletionProcess(identity.Devices.First().Id);
         identity.ClearDomainEvents();
 
         foreach (var deletionProcess in identity.DeletionProcesses)

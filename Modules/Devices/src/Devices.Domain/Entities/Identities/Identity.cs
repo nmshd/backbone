@@ -121,14 +121,14 @@ public class Identity : Entity
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice, double? lengthOfGracePeriodInDays = null)
+    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice, double? lengthOfGracePeriodInDays = null)
     {
         EnsureNoActiveProcessExists();
         EnsureIdentityOwnsDevice(asDevice);
 
         TierIdBeforeDeletion = TierId;
 
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice, lengthOfGracePeriodInDays);
+        var deletionProcess = IdentityDeletionProcess.Start(Address, asDevice, lengthOfGracePeriodInDays);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
@@ -200,14 +200,14 @@ public class Identity : Entity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
     {
         EnsureIdentityOwnsDevice(cancelledByDeviceId);
 
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
 
-        deletionProcess.CancelAsOwner(Address, cancelledByDeviceId);
+        deletionProcess.Cancel(Address, cancelledByDeviceId);
         TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
         DeletionGracePeriodEndsAt = null;

@@ -51,15 +51,15 @@ public static class TestDataGenerator
     public static IdentityDeletionProcess CreateCancelledDeletionProcessFor(Identity identity)
     {
         var device = identity.Devices.First();
-        var deletionProcess = identity.StartDeletionProcessAsOwner(device.Id);
-        identity.CancelDeletionProcessAsOwner(deletionProcess.Id, device.Id);
+        var deletionProcess = identity.StartDeletionProcess(device.Id);
+        identity.CancelDeletionProcess(deletionProcess.Id, device.Id);
 
         return deletionProcess;
     }
 
     public static IdentityDeletionProcess CreateDeletingDeletionProcessFor(Identity identity, DeviceId deviceId)
     {
-        var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
+        var deletionProcess = identity.StartDeletionProcess(deviceId);
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
         identity.DeletionStarted();
@@ -75,7 +75,7 @@ public static class TestDataGenerator
         var identity = CreateIdentityWithOneDevice();
 
         SystemTime.Set(approvalDate.Value);
-        identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
+        identity.StartDeletionProcess(identity.Devices[0].Id);
         SystemTime.UndoSet();
 
         return identity;

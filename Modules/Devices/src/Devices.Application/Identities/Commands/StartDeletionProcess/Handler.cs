@@ -8,9 +8,9 @@ using Backbone.Modules.Devices.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 
-public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, StartDeletionProcessAsOwnerResponse>
+public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -23,11 +23,11 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
         _notificationSender = notificationSender;
     }
 
-    public async Task<StartDeletionProcessAsOwnerResponse> Handle(StartDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
+    public async Task<StartDeletionProcessResponse> Handle(StartDeletionProcessCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
-        var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId(), request.LengthOfGracePeriodInDays);
+        var deletionProcess = identity.StartDeletionProcess(_userContext.GetDeviceId(), request.LengthOfGracePeriodInDays);
 
         try
         {
@@ -44,6 +44,6 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
             cancellationToken
         );
 
-        return new StartDeletionProcessAsOwnerResponse(deletionProcess);
+        return new StartDeletionProcessResponse(deletionProcess);
     }
 }

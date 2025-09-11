@@ -2,13 +2,13 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcessAsOwner;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcess;
 
 public class HandlerTests : AbstractTestsBase
 {
@@ -31,7 +31,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
-        var response = await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
+        var response = await handler.Handle(new StartDeletionProcessCommand(), CancellationToken.None);
 
         // Assert
         response.ShouldNotBeNull();
@@ -70,7 +70,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(), CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

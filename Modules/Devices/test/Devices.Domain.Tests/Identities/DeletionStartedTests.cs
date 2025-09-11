@@ -69,7 +69,7 @@ public class DeletionStartedTests : AbstractTestsBase
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = TestDataGenerator.CreateIdentity();
-        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+        identity.StartDeletionProcess(identity.Devices.First().Id);
 
         return identity;
     }

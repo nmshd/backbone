@@ -9,7 +9,7 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
+public class StartDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Start_deletion_process()
@@ -23,7 +23,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
         // Act
-        var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        var deletionProcess = activeIdentity.StartDeletionProcess(activeDevice.Id);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
@@ -52,7 +52,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         identity.Devices.Add(device);
 
         // Act
-        var acting = () => identity.StartDeletionProcessAsOwner(DeviceId.Parse("DVC"));
+        var acting = () => identity.StartDeletionProcess(DeviceId.Parse("DVC"));
 
         // Assert
         acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.recordNotFound", "Device");
@@ -66,10 +66,10 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         var activeDevice = new Device(activeIdentity, CommunicationLanguage.DEFAULT_LANGUAGE);
         activeIdentity.Devices.Add(activeDevice);
 
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        activeIdentity.StartDeletionProcess(activeDevice.Id);
 
         // Act
-        var acting = () => activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        var acting = () => activeIdentity.StartDeletionProcess(activeDevice.Id);
 
         // Assert
         acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
@@ -84,7 +84,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         var activeDevice = activeIdentity.Devices[0];
 
         //Act
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+        activeIdentity.StartDeletionProcess(activeDevice.Id);
 
         //Assert
         var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.ShouldHaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
@@ -105,7 +105,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         SystemTime.Set("2000-01-01");
 
         //Act
-        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id, 1);
+        activeIdentity.StartDeletionProcess(activeDevice.Id, 1);
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-02"));

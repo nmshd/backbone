@@ -1,13 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsOwner;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcess;
 
 public class HandlerTests : AbstractTestsBase
 {
@@ -31,7 +31,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
-        var response = await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = deletionProcess.Id }, CancellationToken.None);
+        var response = await handler.Handle(new CancelDeletionProcessCommand { DeletionProcessId = deletionProcess.Id }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
@@ -65,7 +65,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(identitiesRepository, userContext);
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand { DeletionProcessId = IdentityDeletionProcessId.Generate() }, CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessCommand { DeletionProcessId = IdentityDeletionProcessId.Generate() }, CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

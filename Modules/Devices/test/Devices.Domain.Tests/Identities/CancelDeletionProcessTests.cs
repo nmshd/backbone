@@ -7,7 +7,7 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
+public class CancelDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Cancel_deletion_process()
@@ -18,7 +18,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
-        var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
         identity.TierId.ShouldBe(tierIdBeforeDeletion);
@@ -41,7 +41,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
+        var acting = () => identity.CancelDeletionProcess(deletionProcessId, deviceId);
 
         // Assert
         acting.ShouldThrow<DomainException>().ShouldContainMessage("IdentityDeletionProcess");
@@ -56,7 +56,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         SystemTime.Set(DateTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
 
         // Act
-        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
         acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.gracePeriodHasAlreadyExpired");
@@ -70,7 +70,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         identity.DeletionProcesses[0].ClearDomainEvents();
 
         // Act
-        var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
         var deletionProcessDomainEvent = deletionProcess.ShouldHaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();

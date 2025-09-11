@@ -7,9 +7,9 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Dele
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
+namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 
-public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, CancelDeletionProcessAsOwnerResponse>
+public class Handler : IRequestHandler<CancelDeletionProcessCommand, CancelDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
         _notificationSender = notificationSender;
     }
 
-    public async Task<CancelDeletionProcessAsOwnerResponse> Handle(CancelDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
+    public async Task<CancelDeletionProcessResponse> Handle(CancelDeletionProcessCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 
         var deletionProcessId = deletionProcessIdResult.Value;
 
-        var deletionProcess = identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
+        var deletionProcess = identity.CancelDeletionProcess(deletionProcessId, deviceId);
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
@@ -44,6 +44,6 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
             cancellationToken
         );
 
-        return new CancelDeletionProcessAsOwnerResponse(deletionProcess);
+        return new CancelDeletionProcessResponse(deletionProcess);
     }
 }
