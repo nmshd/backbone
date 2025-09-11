@@ -28,7 +28,6 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         deletionProcess.Status.ShouldBe(DeletionProcessStatus.Cancelled);
         deletionProcess.GracePeriodEndsAt.ShouldBeNull();
         deletionProcess.CancelledAt.ShouldBe(DateTime.Parse("2024-01-01"));
-        deletionProcess.CancelledByDevice.ShouldBe(identity.Devices[0].Id);
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
@@ -46,19 +45,6 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
 
         // Assert
         acting.ShouldThrow<DomainException>().ShouldContainMessage("IdentityDeletionProcess");
-    }
-
-    [Fact]
-    public void Throws_when_deletion_process_is_in_wrong_status()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-
-        // Act
-        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
-
-        // Assert
-        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]

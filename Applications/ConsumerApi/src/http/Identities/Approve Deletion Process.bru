@@ -1,15 +1,3 @@
-meta {
-  name: /Identities/Self/DeletionProcesses/{DeletionProcessId}/Approve
-  type: http
-  seq: 5
-}
-
-put {
-  url: {{baseUrl}}/Identities/Self/DeletionProcesses/{{DeletionProcessId}}/Approve
-  body: none
-  auth: inherit
-}
-
 vars:pre-request {
   DeletionProcessId: IDPsVw1dFyzmdfc3Xd2Q
 }

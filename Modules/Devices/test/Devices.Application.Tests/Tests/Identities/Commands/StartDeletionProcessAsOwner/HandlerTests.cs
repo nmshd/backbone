@@ -35,7 +35,6 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         response.ShouldNotBeNull();
-        response.ApprovedByDevice.ShouldNotBeNull();
 
         A.CallTo(() => mockIdentitiesRepository.Update(
                 A<Identity>.That.Matches(i => i.Address == activeIdentity.Address &&

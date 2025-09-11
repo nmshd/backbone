@@ -51,20 +51,6 @@ public class DeletionStartedTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Fails_to_start_if_no_approved_deletion_process_exists()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentity();
-        identity.StartDeletionProcessAsSupport();
-
-        // Act
-        var acting = identity.DeletionStarted;
-
-        // Assert
-        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
-    }
-
-    [Fact]
     public void Raises_domain_events()
     {
         //Arrange

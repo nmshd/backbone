@@ -50,24 +50,9 @@ public static class TestDataGenerator
 
     public static IdentityDeletionProcess CreateCancelledDeletionProcessFor(Identity identity)
     {
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.First().Id);
-        identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
-
-        return deletionProcess;
-    }
-
-    public static IdentityDeletionProcess CreateApprovedDeletionProcessFor(Identity identity, DeviceId deviceId)
-    {
-        var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
-
-        return deletionProcess;
-    }
-
-    public static IdentityDeletionProcess CreateRejectedDeletionProcessFor(Identity identity, DeviceId deviceId)
-    {
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.RejectDeletionProcess(deletionProcess.Id, deviceId);
+        var device = identity.Devices.First();
+        var deletionProcess = identity.StartDeletionProcessAsOwner(device.Id);
+        identity.CancelDeletionProcessAsOwner(deletionProcess.Id, device.Id);
 
         return deletionProcess;
     }
@@ -91,17 +76,6 @@ public static class TestDataGenerator
 
         SystemTime.Set(approvalDate.Value);
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
-        SystemTime.UndoSet();
-
-        return identity;
-    }
-
-    public static Identity CreateIdentityWithDeletionProcessWaitingForApproval(DateTime deletionProcessStartedAt)
-    {
-        var identity = CreateIdentityWithOneDevice();
-
-        SystemTime.Set(deletionProcessStartedAt);
-        identity.StartDeletionProcessAsSupport();
         SystemTime.UndoSet();
 
         return identity;

@@ -63,8 +63,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
-        TestDataGenerator.CreateRejectedDeletionProcessFor(identity, identity.Devices.First().Id);
-        TestDataGenerator.CreateApprovedDeletionProcessFor(identity, identity.Devices.First().Id);
+        TestDataGenerator.CreateDeletingDeletionProcessFor(identity, identity.Devices.First().Id);
 
         await _arrangeDbContext.SaveEntity(identity);
         await _arrangeDbContext.RemoveEntity(identity);

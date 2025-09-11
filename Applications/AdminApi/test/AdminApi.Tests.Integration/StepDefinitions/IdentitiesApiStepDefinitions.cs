@@ -17,7 +17,6 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     private ApiResponse<ListIdentitiesResponse>? _identityOverviewsResponse;
     private ApiResponse<GetIdentityResponse>? _identityResponse;
     private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
-    private ApiResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
     private ApiResponse<ListIdentityDeletionProcessAuditLogsResponse>? _identityDeletionProcessAuditLogsResponse;
     private IResponse? _whenResponse;
     private string _existingIdentity;
@@ -34,18 +33,6 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _createIdentityResponse.ShouldBeASuccess();
 
         _existingIdentity = _createIdentityResponse.Result!.Address;
-    }
-
-    [Given("an active deletion process for Identity i exists")]
-    public async Task GivenAnActiveDeletionProcessForIdentityAExists()
-    {
-        await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
-    }
-
-    [When("^a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint$")]
-    public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
-    {
-        _whenResponse = _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("^a GET request is sent to the /Identities endpoint$")]
@@ -86,14 +73,6 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityDeletionProcessAuditLogsResponse!.Result!.ShouldNotBeNull();
         _identityDeletionProcessAuditLogsResponse!.ContentType.ShouldStartWith("application/json");
         await _identityDeletionProcessAuditLogsResponse.ShouldComplyWithSchema();
-    }
-
-    [Then("the response contains a Deletion Process")]
-    public async Task ThenTheResponseContainsADeletionProcess()
-    {
-        _identityDeletionProcessResponse!.Result!.ShouldNotBeNull();
-        _identityDeletionProcessResponse!.ContentType.ShouldStartWith("application/json");
-        await _identityDeletionProcessResponse.ShouldComplyWithSchema();
     }
 
     [Then("the response contains Identity i")]

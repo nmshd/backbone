@@ -44,14 +44,4 @@ public class IdentitiesEndpoint(EndpointClient client) : AdminApiEndpoint(client
     {
         return await _client.Post<CreateIdentityResponse>($"api/{API_VERSION}/Identities", request);
     }
-
-    public async Task<ApiResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string address)
-    {
-        return await _client.Post<StartDeletionProcessAsSupportResponse>($"api/{API_VERSION}/Identities/{address}/DeletionProcesses");
-    }
-
-    public async Task<ApiResponse<CancelDeletionAsSupportResponse>> CancelDeletionProcess(string address, string deletionProcessId)
-    {
-        return await _client.Put<CancelDeletionAsSupportResponse>($"api/{API_VERSION}/Identities/{address}/DeletionProcesses/{deletionProcessId}/Cancel");
-    }
 }

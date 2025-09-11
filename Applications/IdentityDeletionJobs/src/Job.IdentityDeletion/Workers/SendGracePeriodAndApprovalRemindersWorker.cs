@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
-using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
+﻿using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
@@ -28,7 +27,6 @@ public class SendGracePeriodAndApprovalRemindersWorker : IHostedService
 
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendDeletionProcessApprovalRemindersCommand(), cancellationToken);
         await _mediator.Send(new SendDeletionProcessGracePeriodRemindersCommand(), cancellationToken);
 
         _logger.RemindersSent();
