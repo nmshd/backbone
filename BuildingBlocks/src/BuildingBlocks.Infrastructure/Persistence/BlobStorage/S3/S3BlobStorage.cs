@@ -196,12 +196,11 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             }
             catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                _logger.LogError("A blob with key '{blobId}' was not found.", blob.Name);
-                throw new NotFoundException($"Blob with key '{blob.Name}' was not found.", ex);
+                _logger.LogInformation("A blob with key '{blobId}' was not found and could therefore not be deleted.", blob.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting blob with key '{blobName}'.", blob.Name);
+                _logger.LogError(ex, "Error deleting blob with key '{blobId}'.", blob.Name);
                 throw;
             }
         }

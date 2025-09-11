@@ -56,7 +56,7 @@ public class DatawalletModification : Entity
     public static Expression<Func<DatawalletModification, bool>> CanBeCleanedUp =>
         currentMod =>
             // older than 30 days
-            currentMod.CreatedAt.AddDays(30) <= SystemTime.UtcNow &&
+            currentMod.CreatedAt <= SystemTime.UtcNow.AddDays(-30) &&
             currentMod.Datawallet.Modifications.Any(otherMod =>
                 // ignore itself
                 otherMod.Id != currentMod.Id &&

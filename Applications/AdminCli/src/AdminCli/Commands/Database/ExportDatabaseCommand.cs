@@ -316,7 +316,7 @@ public class ExportDatabaseCommand : AdminCliCommand
             {
                 ErrorId = e.Id,
                 SyncItemOwner = includeSensitiveData ? e.ExternalEvent.Owner : "",
-                CreatedAt = e.SyncRun.FinalizedAt,
+                CreatedAt = e.CreatedAt,
                 ErrorCode = e.ErrorCode,
                 SyncItemOwnerClientName =
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId) == null
