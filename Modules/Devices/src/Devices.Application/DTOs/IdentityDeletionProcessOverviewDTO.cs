@@ -9,7 +9,7 @@ public class IdentityDeletionProcessOverviewDTO
         Id = process.Id;
         Status = process.Status;
         CreatedAt = process.CreatedAt;
-        
+
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
         GracePeriodReminder1SentAt = process.GracePeriodReminder1SentAt;

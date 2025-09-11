@@ -52,17 +52,6 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.Approved,
-            Hasher.HashUtf8(identityAddress.Value),
-            Hasher.HashUtf8(deviceId),
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.Approved
-        );
-    }
-
     public static IdentityDeletionProcessAuditLogEntry ProcessCancelledByOwner(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(

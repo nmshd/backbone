@@ -5,7 +5,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -281,7 +280,6 @@ public enum DeletionProcessStatus
     WaitingForApproval = 0,
     Approved = 1,
     Cancelled = 2,
-    Rejected = 3,
     Deleting = 10
 }
 

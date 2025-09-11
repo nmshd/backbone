@@ -19,5 +19,5 @@ public class MessageReceivedExternalEvent : ExternalEvent
     public record EventPayload
     {
         public required string Id { get; init; }
-    };
+    }
 }

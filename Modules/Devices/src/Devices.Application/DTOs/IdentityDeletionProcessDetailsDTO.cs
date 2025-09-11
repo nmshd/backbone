@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
@@ -14,7 +13,7 @@ public class IdentityDeletionProcessDetailsDTO
             .ToList();
         Status = process.Status;
         CreatedAt = process.CreatedAt;
-        
+
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
         GracePeriodReminder1SentAt = process.GracePeriodReminder1SentAt;
@@ -27,7 +26,7 @@ public class IdentityDeletionProcessDetailsDTO
     public List<IdentityDeletionProcessAuditLogEntryDTO> AuditLog { get; set; }
     public DeletionProcessStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    
+
     public DateTime? GracePeriodEndsAt { get; set; }
 
     public DateTime? GracePeriodReminder1SentAt { get; set; }
