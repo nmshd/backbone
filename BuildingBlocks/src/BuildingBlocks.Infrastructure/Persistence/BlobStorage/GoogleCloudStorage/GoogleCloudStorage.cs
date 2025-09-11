@@ -18,7 +18,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     {
         _storageClient = storageClient;
         _changedBlobs = [];
-        _removedBlobs = new List<RemovedBlob>();
+        _removedBlobs = [];
         _logger = logger;
     }
 
@@ -54,9 +54,13 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
 
             return stream.ToArray();
         }
+        catch (GoogleApiException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
+        {
+            _logger.LogError("A blob with key '{blobId}' was not found.", blobId);
+            throw new NotFoundException("Blob", ex);
+        }
         catch (Exception ex)
         {
-            EliminateNotFound(ex, blobId);
             _logger.ErrorDownloadingBlobWithName(blobId, ex);
             throw;
         }
@@ -77,15 +81,6 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
         {
             _logger.ErrorListingAllBlobs(ex);
             throw;
-        }
-    }
-
-    private void EliminateNotFound(Exception ex, string blobId)
-    {
-        if (ex is GoogleApiException { HttpStatusCode: HttpStatusCode.NotFound })
-        {
-            _logger.LogError("A blob with key '{blobId}' was not found.", blobId);
-            throw new NotFoundException("Blob", ex);
         }
     }
 
@@ -157,9 +152,12 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
                 await _storageClient.DeleteObjectAsync(blob.Folder, blob.Name);
                 _removedBlobs.Remove(blob);
             }
+            catch (GoogleApiException ex) when (ex.HttpStatusCode is HttpStatusCode.NotFound)
+            {
+                _logger.LogInformation("A blob with key '{blobId}' was not found and could therefore not be deleted.", blob.Name);
+            }
             catch (Exception ex)
             {
-                EliminateNotFound(ex, blob.Name);
                 _logger.ErrorDeletingBlobWithName(blob.Name, ex);
                 throw;
             }

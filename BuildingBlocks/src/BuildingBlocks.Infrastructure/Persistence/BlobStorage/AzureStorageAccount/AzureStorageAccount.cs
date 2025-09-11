@@ -123,13 +123,13 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         foreach (var cloudBlockBlob in blobsToDelete)
             try
             {
-                await cloudBlockBlob.DeleteAsync();
+                await cloudBlockBlob.DeleteIfExistsAsync();
                 _removedBlobs.Remove(cloudBlockBlob);
             }
             catch (Exception ex)
             {
                 _logger.ErrorDeletingBlob(cloudBlockBlob.Name, ex);
-                throw new NotFoundException();
+                throw;
             }
 
         _logger.LogTrace("Deletion successful.");
