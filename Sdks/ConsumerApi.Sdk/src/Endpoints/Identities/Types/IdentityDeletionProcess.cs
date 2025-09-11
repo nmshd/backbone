@@ -6,13 +6,6 @@ public class IdentityDeletionProcess
     public required string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public DateTime? ApprovalReminder1SentAt { get; set; }
-    public DateTime? ApprovalReminder2SentAt { get; set; }
-    public DateTime? ApprovalReminder3SentAt { get; set; }
-
-    public DateTime? ApprovedAt { get; set; }
-    public string? ApprovedByDevice { get; set; }
-
     public DateTime? GracePeriodEndsAt { get; set; }
 
     public DateTime? GracePeriodReminder1SentAt { get; set; }

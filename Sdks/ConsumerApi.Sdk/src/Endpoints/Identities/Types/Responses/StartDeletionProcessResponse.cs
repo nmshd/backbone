@@ -6,8 +6,5 @@ public class StartDeletionProcessResponse
     public required string Status { get; set; }
     public required DateTime CreatedAt { get; set; }
 
-    public required DateTime ApprovedAt { get; set; }
-    public required string ApprovedByDevice { get; set; }
-
     public required DateTime GracePeriodEndsAt { get; set; }
 }
