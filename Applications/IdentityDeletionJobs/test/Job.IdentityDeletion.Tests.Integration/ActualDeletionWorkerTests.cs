@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Diagnostics;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -17,11 +18,13 @@ namespace Backbone.Job.IdentityDeletion.Tests.Integration;
 public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     private readonly IHost _host;
+    private readonly ITestOutputHelper _testOutputHelper;
 
-    public ActualDeletionWorkerTests()
+    public ActualDeletionWorkerTests(ITestOutputHelper testOutputHelper)
     {
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
         _host = hostBuilder.Build();
+        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]
@@ -29,6 +32,19 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
+
+        var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = "pg_dump",
+            UseShellExecute = false,
+            Arguments = "--version",
+            RedirectStandardOutput = true,
+        });
+
+        process.ShouldNotBeNull();
+
+        await process.WaitForExitAsync(TestContext.Current.CancellationToken);
+        _testOutputHelper.WriteLine(await process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken));
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
