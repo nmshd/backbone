@@ -93,6 +93,8 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 RUN apk add postgresql17-client
 
+RUN pg_dump --version
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.Job.IdentityDeletion.dll"]
