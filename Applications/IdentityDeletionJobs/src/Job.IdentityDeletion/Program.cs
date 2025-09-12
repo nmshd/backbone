@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
@@ -34,9 +33,6 @@ public class Program
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console()
             .CreateBootstrapLogger();
-
-        var process = Process.Start("pg_dump", "--version");
-        await process.WaitForExitAsync();
 
         try
         {
