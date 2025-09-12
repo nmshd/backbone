@@ -20,12 +20,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
-        <value>Ein Löschvorgang einer Ihrer Identitäten wurde bestätigt und wird in Kürze prozessiert.</value>
-    </data>
-    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
-        <value>Löschvorgang bestätigt</value>
-    </data>
     <data name="DeletionProcessCancelledByOwnerPushNotification.Title" xml:space="preserve">
         <value>Löschvorgang abgebrochen</value>
     </data>
@@ -49,12 +43,6 @@
     </data>
     <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
         <value>Löschvorgang gestartet</value>
-    </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
-        <value>Ein Löschvorgang einer Ihrer Identitäten wartet auf eine Bestätigung. Falls Sie diesen nicht innerhalb weniger Tage bestätigen, wird der Löschvorgang abgebrochen.</value>
-    </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
-        <value>Löschvorgang wartet auf Bestätigung</value>
     </data>
     <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
         <value>Die Löschung Ihrer Identität ist erfolgt.</value>

@@ -5,7 +5,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -122,85 +121,20 @@ public class Identity : Entity
         TierId = id;
     }
 
-    public IdentityDeletionProcess StartDeletionProcessAsSupport()
-    {
-        EnsureNoActiveProcessExists();
-
-        var deletionProcess = IdentityDeletionProcess.StartAsSupport(Address);
-        _deletionProcesses.Add(deletionProcess);
-
-        return deletionProcess;
-    }
-
-    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice, double? lengthOfGracePeriodInDays = null)
+    public IdentityDeletionProcess StartDeletionProcess(DeviceId asDevice, double? lengthOfGracePeriodInDays = null)
     {
         EnsureNoActiveProcessExists();
         EnsureIdentityOwnsDevice(asDevice);
 
         TierIdBeforeDeletion = TierId;
 
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice, lengthOfGracePeriodInDays);
+        var deletionProcess = IdentityDeletionProcess.Start(Address, asDevice, lengthOfGracePeriodInDays);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
         RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address, deletionProcess.GracePeriodEndsAt!.Value));
-
-        return deletionProcess;
-    }
-
-    public void DeletionProcessApprovalReminder1Sent()
-    {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
-
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        deletionProcess.ApprovalReminder1Sent(Address);
-    }
-
-    public void DeletionProcessApprovalReminder2Sent()
-    {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
-
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        deletionProcess.ApprovalReminder2Sent(Address);
-    }
-
-    public void DeletionProcessApprovalReminder3Sent()
-    {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.WaitingForApproval);
-
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        deletionProcess.ApprovalReminder3Sent(Address);
-    }
-
-    public Result<IdentityDeletionProcess, DomainError> CancelStaleDeletionProcess()
-    {
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval);
-
-        if (deletionProcess == null)
-            return Result.Failure<IdentityDeletionProcess, DomainError>(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.WaitingForApproval));
-        if (!deletionProcess.HasApprovalPeriodExpired)
-            return Result.Failure<IdentityDeletionProcess, DomainError>(DomainErrors.DeletionProcessMustBePastDueApproval());
-
-        deletionProcess.Cancel(Address);
-
-        return Result.Success<IdentityDeletionProcess, DomainError>(deletionProcess);
-    }
-
-    public IdentityDeletionProcess ApproveDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
-    {
-        EnsureIdentityOwnsDevice(deviceId);
-
-        TierIdBeforeDeletion = TierId;
-
-        var deletionProcess = GetDeletionProcess(deletionProcessId);
-        deletionProcess.Approve(Address, deviceId);
-
-        Status = IdentityStatus.ToBeDeleted;
-        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address, deletionProcess.GracePeriodEndsAt!.Value));
-        DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
-        TierId = Tier.QUEUED_FOR_DELETION.Id;
 
         return deletionProcess;
     }
@@ -213,22 +147,6 @@ public class Identity : Entity
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
         RaiseDomainEvent(new IdentityDeletedDomainEvent(Address));
-    }
-
-    private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
-    {
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
-        return deletionProcess;
-    }
-
-    public IdentityDeletionProcess RejectDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId deviceId)
-    {
-        EnsureIdentityOwnsDevice(deviceId);
-
-        var deletionProcess = GetDeletionProcess(deletionProcessId);
-        deletionProcess.Reject(Address, deviceId);
-
-        return deletionProcess;
     }
 
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
@@ -282,32 +200,17 @@ public class Identity : Entity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
     {
         EnsureIdentityOwnsDevice(cancelledByDeviceId);
 
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
 
-        deletionProcess.CancelAsOwner(Address, cancelledByDeviceId);
+        deletionProcess.Cancel(Address, cancelledByDeviceId);
         TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
         DeletionGracePeriodEndsAt = null;
-        Status = IdentityStatus.Active;
-
-        RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
-
-        return deletionProcess;
-    }
-
-    public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
-    {
-        var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
-        deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
-
-        deletionProcess.CancelAsSupport(Address);
-        TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
-        TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
         RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
@@ -374,10 +277,8 @@ public class Identity : Entity
 
 public enum DeletionProcessStatus
 {
-    WaitingForApproval = 0,
     Approved = 1,
     Cancelled = 2,
-    Rejected = 3,
     Deleting = 10
 }
 

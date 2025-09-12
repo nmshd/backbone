@@ -6,6 +6,4 @@ using Backbone.Modules.Tokens.Domain.Entities;
 namespace Backbone.Modules.Tokens.Application.Tokens.Queries.Shared;
 
 public class ListTokensResponse(DbPaginationResult<Token> dbPaginationResult, PaginationFilter previousPaginationFilter)
-    : PagedResponse<TokenDTO>(dbPaginationResult.ItemsOnPage.Select(t => new TokenDTO(t)), previousPaginationFilter, dbPaginationResult.TotalNumberOfItems)
-{
-}
+    : PagedResponse<TokenDTO>(dbPaginationResult.ItemsOnPage.Select(t => new TokenDTO(t)), previousPaginationFilter, dbPaginationResult.TotalNumberOfItems);

@@ -1,16 +1,16 @@
 {
-  "profiles": {
-    "Job.IdentityDeletion.CancelStaleDeletionProcesses": {
-      "commandName": "Project",
-      "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker"
-    },
-    "Job.IdentityDeletion.ActualDeletion": {
-      "commandName": "Project",
-      "commandLineArgs": "--Worker ActualDeletionWorker"
-    },
-    "Job.IdentityDeletion.SendGracePeriodAndApprovalReminders": {
-      "commandName": "Project",
-      "commandLineArgs": "--Worker SendGracePeriodAndApprovalRemindersWorker"
+    "profiles": {
+        "Job.IdentityDeletion.CancelStaleDeletionProcesses": {
+            "commandName": "Project",
+            "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker"
+        },
+        "Job.IdentityDeletion.ActualDeletion": {
+            "commandName": "Project",
+            "commandLineArgs": "--Worker ActualDeletionWorker"
+        },
+        "Job.IdentityDeletion.SendGracePeriodReminders": {
+            "commandName": "Project",
+            "commandLineArgs": "--Worker SendGracePeriodRemindersWorker"
+        }
     }
-  }
 }

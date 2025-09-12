@@ -52,39 +52,6 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry ProcessStartedBySupport(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.StartedBySupport,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            null,
-            DeletionProcessStatus.WaitingForApproval
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessApproved(IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.Approved,
-            Hasher.HashUtf8(identityAddress.Value),
-            Hasher.HashUtf8(deviceId),
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.Approved
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessRejected(IdentityAddress identityAddress, DeviceId deviceId)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.Rejected,
-            Hasher.HashUtf8(identityAddress.Value),
-            Hasher.HashUtf8(deviceId),
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.Rejected
-        );
-    }
-
     public static IdentityDeletionProcessAuditLogEntry ProcessCancelledByOwner(IdentityAddress identityAddress, DeviceId deviceId)
     {
         return new IdentityDeletionProcessAuditLogEntry(
@@ -93,60 +60,6 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Cancelled
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.CancelledBySupport,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.Approved,
-            DeletionProcessStatus.Cancelled
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledAutomatically(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.CancelledAutomatically,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.Cancelled
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder1Sent(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.ApprovalReminder1Sent,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.WaitingForApproval
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(MessageKey.ApprovalReminder2Sent,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.WaitingForApproval
-        );
-    }
-
-    public static IdentityDeletionProcessAuditLogEntry ApprovalReminder3Sent(IdentityAddress identityAddress)
-    {
-        return new IdentityDeletionProcessAuditLogEntry(
-            MessageKey.ApprovalReminder3Sent,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.WaitingForApproval,
-            DeletionProcessStatus.WaitingForApproval
         );
     }
 

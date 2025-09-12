@@ -19,7 +19,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -391,15 +391,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<DateTime?>("ApprovalReminder1SentAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ApprovalReminder2SentAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ApprovalReminder3SentAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<DateTime?>("ApprovedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -411,12 +402,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CancelledByDevice")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -442,15 +427,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
-
-                    b.Property<DateTime?>("RejectedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("RejectedByDevice")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");

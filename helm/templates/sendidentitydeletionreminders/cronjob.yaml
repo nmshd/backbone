@@ -51,7 +51,7 @@ spec:
                   readOnly: true
               args:
                 - --Worker
-                - SendGracePeriodAndApprovalRemindersWorker
+                - SendGracePeriodRemindersWorker
               env:
                 {{- if .Values.global.useBuiltInEventbus }}
                 - name: infrastructure__eventBus__productName

@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
@@ -152,7 +151,7 @@ internal class FilesStepDefinitions
         _responseContext.WhenResponse = _resetOwnershipTokenResponse = await identity.Files.RegenerateFileOwnershipToken(fileId);
 
         if (_resetOwnershipTokenResponse.Result != null)
-            _filesContext.FileNameToOwnershipToken[fileName] = _resetOwnershipTokenResponse.Result!.NewOwnershipToken ?? "";
+            _filesContext.FileNameToOwnershipToken[fileName] = _resetOwnershipTokenResponse.Result!.NewOwnershipToken;
     }
 
     [When($"{RegexFor.SINGLE_THING} tries to regenerate the OwnershipToken for an invalid FileId")]
@@ -253,7 +252,7 @@ internal class FilesStepDefinitions
     {
         var file = _filesContext.Files[fileName];
         file.ShouldNotBeNull();
-        file!.OwnershipIsLocked.ShouldBeFalse();
+        file.OwnershipIsLocked.ShouldBeFalse();
     }
 
     [Then($"the ValidateOwnershipTokenResponse contains {RegexFor.SINGLE_THING}")]

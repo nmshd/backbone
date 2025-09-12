@@ -73,13 +73,6 @@ internal class IdentityDeletionProcessesStepDefinitions
             await client.Identities.CancelDeletionProcess(_identitiesContext.StartDeletionProcessResponses[deletionProcessName].Id);
     }
 
-    [When($"^{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{{id}}/Approve endpoint with \"([^\"]*)\"$")]
-    public async Task WhenDeviceSendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string identityName, string nonExistentDeletionProcessId)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = await client.Identities.ApproveDeletionProcess(nonExistentDeletionProcessId);
-    }
-
     #endregion
 
     #region Then

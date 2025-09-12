@@ -3,9 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
-using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAsSupport;
@@ -109,16 +107,6 @@ public class IdentitiesController : ApiControllerBase
         return Created(response);
     }
 
-    [HttpPost("{address}/DeletionProcesses")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> StartDeletionProcess([FromRoute] string address, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand { IdentityAddress = address }, cancellationToken);
-        return Created("", response);
-    }
-
     [HttpGet("{identityAddress}/DeletionProcesses")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsSupportResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
@@ -135,15 +123,6 @@ public class IdentitiesController : ApiControllerBase
     {
         var response = await _mediator.Send(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identityAddress }, cancellationToken);
         return Ok(response);
-    }
-
-    [HttpPut("{address}/DeletionProcesses/{deletionProcessId}/Cancel")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionAsSupportResponse>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(new CancelDeletionAsSupportCommand { Address = address, DeletionProcessId = deletionProcessId }, cancellationToken);
-        return NoContent();
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]

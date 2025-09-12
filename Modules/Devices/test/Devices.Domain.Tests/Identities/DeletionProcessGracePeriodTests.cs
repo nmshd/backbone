@@ -118,7 +118,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
     {
         var identity = TestDataGenerator.CreateIdentity();
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+        identity.StartDeletionProcess(identity.Devices.First().Id);
 
         return identity;
     }

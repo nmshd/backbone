@@ -119,12 +119,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
-    <value>Um dos processos de eliminação de uma das suas identidades foi aprovado e será processado brevemente.</value>
-  </data>
-  <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
-    <value>Processo de eliminação aprovado</value>
-  </data>
   <data name="TestPushNotification.Body" xml:space="preserve">
     <value>Isto é uma notificação de teste.</value>
   </data>
@@ -154,12 +148,6 @@
   </data>
   <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
     <value>O processo de eliminação foi iniciado</value>
-  </data>
-  <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
-    <value>Há um processo de eliminação para a sua identidade que aguarda a sua aprovação. Se não o aprovar dentro de alguns dias, o processo será cancelado.</value>
-  </data>
-  <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
-    <value>Processo de eliminação a aguardar aprovação</value>
   </data>
   <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
     <value>A eliminação da sua identidade foi concluída.</value>

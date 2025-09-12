@@ -54,7 +54,7 @@ public class TheoryData : TheoryData<TheoryData.TestData>
             new DatawalletModificationData { Type = Create, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
             new DatawalletModificationData { Type = CacheChanged, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
             new DatawalletModificationData { Type = Update, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", PayloadCategory = "c1", CanBeCleanedUp = false },
-            new DatawalletModificationData { Type = Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false },
+            new DatawalletModificationData { Type = Delete, CreatedAt = nowMinus29Days, Collection = "c1", ObjectIdentifier = "o1", CanBeCleanedUp = false }
         ]);
 
         Add("Never deletes the last DELETE",

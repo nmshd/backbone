@@ -46,4 +46,14 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Features\IdentityDeletionProcess\AuditLogs\GET.feature" />
+        <UpToDateCheckInput Remove="Features\IdentityDeletionProcess\POST.feature" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckBuild Remove="Features\IdentityDeletionProcess\AuditLogs\GET.feature.cs" />
+        <UpToDateCheckBuild Remove="Features\IdentityDeletionProcess\POST.feature.cs" />
+    </ItemGroup>
 </Project>

@@ -15,15 +15,11 @@ public class IdentityDeletionProcessEntityTypeConfiguration : EntityEntityTypeCo
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Status);
         builder.Property(x => x.CreatedAt);
-        builder.Property(x => x.ApprovalReminder1SentAt);
-        builder.Property(x => x.ApprovalReminder2SentAt);
-        builder.Property(x => x.ApprovalReminder3SentAt);
 
         builder.HasIndex("IdentityAddress"); // we have to explicitly define the default foreign-key index because otherwise the filtered index below overrides the default index
         builder.HasIndex(["IdentityAddress"], "IX_only_one_active_deletion_process").IsUnique().HasFilter(@"""Status"" = 1");
 
         builder.HasMany(x => x.AuditLog).WithOne().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
-        builder.Ignore(x => x.HasApprovalPeriodExpired);
         builder.Ignore(x => x.HasGracePeriodExpired);
     }
 }
