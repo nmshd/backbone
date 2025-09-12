@@ -48,4 +48,12 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Features\Identities\Self\DeletionProcess\PUT.feature" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckBuild Remove="Features\Identities\Self\DeletionProcess\PUT.feature.cs" />
+    </ItemGroup>
 </Project>

@@ -7,10 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Backbone.Modules.Devices.Infrastructure.Translations {
+namespace Backbone.Modules.Devices.Infrastructure.Translations
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -21,220 +22,224 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources_de {
-        
+    internal class Resources_de
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources_de() {
+        internal Resources_de()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        internal static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resources.de", typeof(Resources_de).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
-            get {
+        internal static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Es sind Neuigkeiten in der App verfügbar..
         /// </summary>
-        internal static string DatawalletModificationsCreatedPushNotification_Body {
-            get {
+        internal static string DatawalletModificationsCreatedPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DatawalletModificationsCreatedPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Neuigkeiten verfügbar.
         /// </summary>
-        internal static string DatawalletModificationsCreatedPushNotification_Title {
-            get {
+        internal static string DatawalletModificationsCreatedPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DatawalletModificationsCreatedPushNotification.Title", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ein Löschvorgang einer deiner Identitäten wurde bestätigt und wird in Kürze prozessiert..
-        /// </summary>
-        internal static string DeletionProcessApprovedNotification_Body {
-            get {
-                return ResourceManager.GetString("DeletionProcessApprovedNotification.Body", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Löschvorgang bestätigt.
-        /// </summary>
-        internal static string DeletionProcessApprovedNotification_Title {
-            get {
-                return ResourceManager.GetString("DeletionProcessApprovedNotification.Title", resourceCulture);
-            }
-        }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Ein Löschvorgang einer deiner Identitäten wurde von dir abgebrochen..
         /// </summary>
-        internal static string DeletionProcessCancelledByOwnerNotification_Body {
-            get {
+        internal static string DeletionProcessCancelledByOwnerNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessCancelledByOwnerNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Löschvorgang abgebrochen.
         /// </summary>
-        internal static string DeletionProcessCancelledByOwnerNotification_Title {
-            get {
+        internal static string DeletionProcessCancelledByOwnerNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessCancelledByOwnerNotification.Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Ein Löschvorgang einer deiner Identitäten wurde von unserem Support Team abgebrochen..
         /// </summary>
-        internal static string DeletionProcessCancelledBySupportNotification_Body {
-            get {
+        internal static string DeletionProcessCancelledBySupportNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessCancelledBySupportNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Löschvorgang abgebrochen.
         /// </summary>
-        internal static string DeletionProcessCancelledBySupportNotification_Title {
-            get {
+        internal static string DeletionProcessCancelledBySupportNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessCancelledBySupportNotification.Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deine Identität wird in ein paar Tagen gelöscht. Bis dahin hast du die Möglichkeit, diesen Vorgang abzubrechen..
         /// </summary>
-        internal static string DeletionProcessGracePeriodReminderPushNotification_Body {
-            get {
+        internal static string DeletionProcessGracePeriodReminderPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessGracePeriodReminderPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deine Identität wird gelöscht.
         /// </summary>
-        internal static string DeletionProcessGracePeriodReminderPushNotification_Title {
-            get {
+        internal static string DeletionProcessGracePeriodReminderPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessGracePeriodReminderPushNotification.Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Ein Löschvorgang wurde für eine deiner Identitäten gestartet..
         /// </summary>
-        internal static string DeletionProcessStartedPushNotification_Body {
-            get {
+        internal static string DeletionProcessStartedPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessStartedPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Löschvorgang gestartet.
         /// </summary>
-        internal static string DeletionProcessStartedPushNotification_Title {
-            get {
+        internal static string DeletionProcessStartedPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionProcessStartedPushNotification.Title", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ein Löschvorgang einer deiner Identitäten wartet auf eine Bestätigung. Falls du nicht innerhalb weniger Tage bestätigst, wird der Löschvorgang abgebrochen..
-        /// </summary>
-        internal static string DeletionProcessWaitingForApprovalReminderPushNotification_Body {
-            get {
-                return ResourceManager.GetString("DeletionProcessWaitingForApprovalReminderPushNotification.Body", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Löschvorgang wartet auf Bestätigung.
-        /// </summary>
-        internal static string DeletionProcessWaitingForApprovalReminderPushNotification_Title {
-            get {
-                return ResourceManager.GetString("DeletionProcessWaitingForApprovalReminderPushNotification.Title", resourceCulture);
-            }
-        }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Die Löschung deiner Identität ist erfolgt..
         /// </summary>
-        internal static string DeletionStartsPushNotification_Body {
-            get {
+        internal static string DeletionStartsPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionStartsPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Deine Identität ist jetzt gelöscht..
         /// </summary>
-        internal static string DeletionStartsPushNotification_Title {
-            get {
+        internal static string DeletionStartsPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("DeletionStartsPushNotification.Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Es sind Neuigkeiten in der App verfügbar..
         /// </summary>
-        internal static string ExternalEventCreatedPushNotification_Body {
-            get {
+        internal static string ExternalEventCreatedPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("ExternalEventCreatedPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Neuigkeiten verfügbar.
         /// </summary>
-        internal static string ExternalEventCreatedPushNotification_Title {
-            get {
+        internal static string ExternalEventCreatedPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("ExternalEventCreatedPushNotification.Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Das ist ein Test..
         /// </summary>
-        internal static string TestPushNotification_Body {
-            get {
+        internal static string TestPushNotification_Body
+        {
+            get
+            {
                 return ResourceManager.GetString("TestPushNotification.Body", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
-        internal static string TestPushNotification_Title {
-            get {
+        internal static string TestPushNotification_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("TestPushNotification.Title", resourceCulture);
             }
         }

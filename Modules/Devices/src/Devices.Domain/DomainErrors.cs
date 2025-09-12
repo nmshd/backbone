@@ -71,11 +71,6 @@ public static class DomainErrors
             "You cannot perform this action, because the grace period of this deletion process has already expired.");
     }
 
-    public static DomainError DeletionProcessMustBePastDueApproval()
-    {
-        return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
-    }
-
     public static DomainError MaxIdentitiesLessThanCurrentIdentities(int requestedMaxIdentities, int identitiesCount)
     {
         return new DomainError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities",

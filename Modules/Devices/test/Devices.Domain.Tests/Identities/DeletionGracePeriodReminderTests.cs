@@ -123,7 +123,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         identity.Devices.Add(device);
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
-        identity.StartDeletionProcessAsOwner(device.Id);
+        identity.StartDeletionProcess(device.Id);
 
         return identity;
     }

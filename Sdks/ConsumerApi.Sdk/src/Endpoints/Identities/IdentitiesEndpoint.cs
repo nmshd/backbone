@@ -29,11 +29,6 @@ public class IdentitiesEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
         return await _client.Get<IdentityDeletionProcess>($"api/{API_VERSION}/Identities/Self/DeletionProcesses/{id}");
     }
 
-    public async Task<ApiResponse<ApproveDeletionProcessResponse>> ApproveDeletionProcess(string id)
-    {
-        return await _client.Put<ApproveDeletionProcessResponse>($"api/{API_VERSION}/Identities/Self/DeletionProcesses/{id}/Approve");
-    }
-
     public async Task<ApiResponse<CancelDeletionProcessResponse>> CancelDeletionProcess(string id)
     {
         return await _client.Put<CancelDeletionProcessResponse>($"api/{API_VERSION}/Identities/Self/DeletionProcesses/{id}/Cancel");

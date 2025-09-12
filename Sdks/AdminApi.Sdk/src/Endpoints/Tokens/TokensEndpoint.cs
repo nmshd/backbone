@@ -9,7 +9,7 @@ public class TokensEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
     public async Task<ApiResponse<ListTokensResponse>> ListTokensByIdentity(PaginationFilter paginationFilter, string createdBy, CancellationToken cancellationToken)
     {
-        var queryParameters = new NameValueCollection()
+        var queryParameters = new NameValueCollection
         {
             { "createdBy", createdBy }
         };

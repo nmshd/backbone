@@ -14,9 +14,8 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "PATCH /Tokens/{id}/ResetAccessFailedCount")]
 internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : BaseStepDefinitions(factory, options)
 {
-    private IResponse? _whenResponse = null;
+    private IResponse? _whenResponse;
     private ApiResponse<ListTokensResponse> _listTokensResponse = null!;
-    private ApiResponse<EmptyResponse> _resetAccesesFailedCountResponse = null!;
     private string _newIdentityAddress = string.Empty;
 
 
@@ -39,7 +38,7 @@ internal class TokensStepDefinitions(HttpClientFactory factory, IOptions<HttpCli
     [When("^a PATCH request is sent to the /Tokens/TOKANonExistingIdxxx/ResetAccessFailedCount endpoint$")]
     public async Task WhenAPATCHRequestIsSentToTheTokensTokaNonExistingIdxxxResetAccessFailedCountEndpoint()
     {
-        _whenResponse = _resetAccesesFailedCountResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);
+        _whenResponse = await _client.Tokens.ResetAccessFailedCount("TOKANonExistingIdxxx", CancellationToken.None);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

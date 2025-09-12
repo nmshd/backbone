@@ -4,10 +4,6 @@ public class OnlyOneActiveDeletionProcessAllowedException : Exception
 {
     private const string MESSAGE = "Only one active deletion process is allowed.";
 
-    public OnlyOneActiveDeletionProcessAllowedException() : base(MESSAGE)
-    {
-    }
-
     public OnlyOneActiveDeletionProcessAllowedException(Exception innerException) : base(MESSAGE, innerException)
     {
     }

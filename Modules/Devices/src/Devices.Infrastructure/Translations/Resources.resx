@@ -117,12 +117,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
-      <value>A deletion process of one of your identities has been was approved and will be processed shortly.</value>
-  </data>
-    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
-    <value>A deletion process has been approved</value>
-  </data>
     <data name="DeletionProcessCancelledByOwnerPushNotification.Body" xml:space="preserve">
       <value>A deletion process of one of your identities has been cancelled by you.</value>
   </data>
@@ -146,12 +140,6 @@
   </data>
     <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
     <value>Deletion process started</value>
-  </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
-      <value>There is a deletion process for your identity that waits for your approval. If you don't approve it within a few days, the process will be cancelled.</value>
-  </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
-    <value>Deletion process waiting for approval</value>
   </data>
     <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
       <value>The deletion of your identity is now complete.</value>
