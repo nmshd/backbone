@@ -53,8 +53,11 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var process = Process.Start("pg_dump", "--version");
-        await process.WaitForExitAsync(cancellationToken);
+        var versionProcess = Process.Start("pg_dump", "--version");
+        await versionProcess.WaitForExitAsync(cancellationToken);
+
+        var pathProcess = Process.Start("which", "pg_dump");
+        await pathProcess.WaitForExitAsync(cancellationToken);
 
         // In case there was an error during a previous run, we need to make sure we also process those identities again.
         var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
