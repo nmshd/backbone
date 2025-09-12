@@ -26,7 +26,11 @@ public class IdentityDeletionProcess : Entity
         IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
 
-        ApproveInternally(createdBy, lengthOfGracePeriodInDays);
+        lengthOfGracePeriodInDays ??= IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays;
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(lengthOfGracePeriodInDays.Value);
+        ChangeStatus(DeletionProcessStatus.Approved, createdBy, createdBy);
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(createdBy, createdByDevice)];
     }
@@ -40,6 +44,9 @@ public class IdentityDeletionProcess : Entity
     public DateTime CreatedAt { get; }
 
     public DateTime? CancelledAt { get; private set; }
+
+    public DateTime? ApprovedAt { get; private set; }
+    public DeviceId? ApprovedByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
@@ -95,13 +102,6 @@ public class IdentityDeletionProcess : Entity
     {
         if (!HasGracePeriodExpired)
             throw new DomainException(DomainErrors.GracePeriodHasNotYetExpired());
-    }
-
-    private void ApproveInternally(IdentityAddress address, double? lengthOfGracePeriodInDays = null)
-    {
-        lengthOfGracePeriodInDays ??= IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(lengthOfGracePeriodInDays.Value);
-        ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 
     public void EnsureStatus(DeletionProcessStatus deletionProcessStatus)

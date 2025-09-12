@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20250911132008_RemovePossibilityToStartDeletionProcessAsSupport")]
+    [Migration("20250912102256_RemovePossibilityToStartDeletionProcessAsSupport")]
     partial class RemovePossibilityToStartDeletionProcessAsSupport
     {
         /// <inheritdoc />
@@ -387,6 +387,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
                 {
                     b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")

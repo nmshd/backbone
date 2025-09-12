@@ -14,6 +14,9 @@ public class IdentityDeletionProcessDetailsDTO
         Status = process.Status;
         CreatedAt = process.CreatedAt;
 
+        ApprovedAt = process.ApprovedAt;
+        ApprovedByDevice = process.ApprovedByDevice?.Value;
+
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
         GracePeriodReminder1SentAt = process.GracePeriodReminder1SentAt;
@@ -26,6 +29,9 @@ public class IdentityDeletionProcessDetailsDTO
     public List<IdentityDeletionProcessAuditLogEntryDTO> AuditLog { get; set; }
     public DeletionProcessStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public DateTime? ApprovedAt { get; set; }
+    public string? ApprovedByDevice { get; set; }
 
     public DateTime? GracePeriodEndsAt { get; set; }
 

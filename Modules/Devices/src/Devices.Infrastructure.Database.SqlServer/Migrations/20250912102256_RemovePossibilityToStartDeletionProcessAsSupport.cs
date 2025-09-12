@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
     public partial class RemovePossibilityToStartDeletionProcessAsSupport : Migration
@@ -23,16 +23,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.DropColumn(
                 name: "ApprovalReminder3SentAt",
-                schema: "Devices",
-                table: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "ApprovedAt",
-                schema: "Devices",
-                table: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "ApprovedByDevice",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
@@ -59,45 +49,28 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "ApprovalReminder1SentAt",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "timestamp with time zone",
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ApprovalReminder2SentAt",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "timestamp with time zone",
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ApprovalReminder3SentAt",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "ApprovedAt",
-                schema: "Devices",
-                table: "IdentityDeletionProcesses",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ApprovedByDevice",
-                schema: "Devices",
-                table: "IdentityDeletionProcesses",
-                type: "character(20)",
-                unicode: false,
-                fixedLength: true,
-                maxLength: 20,
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CancelledByDevice",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "character(20)",
+                type: "char(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,
@@ -107,14 +80,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "RejectedAt",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "timestamp with time zone",
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "RejectedByDevice",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "character(20)",
+                type: "char(20)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 20,

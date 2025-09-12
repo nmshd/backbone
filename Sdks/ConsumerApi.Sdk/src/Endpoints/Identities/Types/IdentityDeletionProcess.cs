@@ -1,10 +1,14 @@
 ﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types;
+
 public class IdentityDeletionProcess
 {
     public required string Id { get; set; }
     public required List<IdentityDeletionProcessAuditLogEntry> AuditLog { get; set; }
     public required string Status { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public DateTime? ApprovedAt { get; set; }
+    public string? ApprovedByDevice { get; set; }
 
     public DateTime? GracePeriodEndsAt { get; set; }
 

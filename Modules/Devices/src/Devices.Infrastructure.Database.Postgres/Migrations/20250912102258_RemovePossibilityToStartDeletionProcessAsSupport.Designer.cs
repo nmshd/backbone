@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20250911132019_RemovePossibilityToStartDeletionProcessAsSupport")]
+    [Migration("20250912102258_RemovePossibilityToStartDeletionProcessAsSupport")]
     partial class RemovePossibilityToStartDeletionProcessAsSupport
     {
         /// <inheritdoc />
@@ -389,6 +389,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
                 {
                     b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ApprovedByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
