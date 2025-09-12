@@ -68,7 +68,7 @@ public class IdentityDeletionProcess : Entity
 
     public bool IsActive()
     {
-        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval or DeletionProcessStatus.Deleting;
+        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.Deleting;
     }
 
     public void GracePeriodReminder1Sent(IdentityAddress address)

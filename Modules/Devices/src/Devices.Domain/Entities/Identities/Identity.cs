@@ -277,7 +277,6 @@ public class Identity : Entity
 
 public enum DeletionProcessStatus
 {
-    WaitingForApproval = 0,
     Approved = 1,
     Cancelled = 2,
     Deleting = 10
