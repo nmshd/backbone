@@ -86,6 +86,8 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release --output /app/p
 
 FROM base AS final
 
+RUN apk update
+
 RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
