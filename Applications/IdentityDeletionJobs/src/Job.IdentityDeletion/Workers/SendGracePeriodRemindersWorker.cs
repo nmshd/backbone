@@ -3,15 +3,15 @@ using MediatR;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
-public class SendGracePeriodAndApprovalRemindersWorker : IHostedService
+public class SendGracePeriodRemindersWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
     private readonly IMediator _mediator;
-    private readonly ILogger<SendGracePeriodAndApprovalRemindersWorker> _logger;
+    private readonly ILogger<SendGracePeriodRemindersWorker> _logger;
 
-    public SendGracePeriodAndApprovalRemindersWorker(IHostApplicationLifetime host,
+    public SendGracePeriodRemindersWorker(IHostApplicationLifetime host,
         IMediator mediator,
-        ILogger<SendGracePeriodAndApprovalRemindersWorker> logger)
+        ILogger<SendGracePeriodRemindersWorker> logger)
     {
         _host = host;
         _mediator = mediator;
@@ -38,11 +38,11 @@ public class SendGracePeriodAndApprovalRemindersWorker : IHostedService
     }
 }
 
-internal static partial class SendGracePeriodAndApprovalRemindersWorkerLogs
+internal static partial class SendGracePeriodRemindersWorkerLogs
 {
     [LoggerMessage(
         EventId = 441001,
-        EventName = "Job.SendGracePeriodAndApprovalRemindersWorker.RemindersSent",
+        EventName = "Job.SendGracePeriodRemindersWorker.RemindersSent",
         Level = LogLevel.Information,
         Message = "Deletion process approval and grace period reminders sent.")]
     public static partial void RemindersSent(this ILogger logger);
