@@ -176,7 +176,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
         test-project:
           - display-name: admin-api
             path: Applications/AdminApi/test/AdminApi.Tests.Integration
@@ -258,7 +258,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository

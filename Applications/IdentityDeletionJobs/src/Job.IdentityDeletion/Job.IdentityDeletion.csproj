@@ -14,6 +14,8 @@
         <PackageReference Include="Serilog.Settings.Configuration" Version="[9.0.0]" />
         <PackageReference Include="Serilog.Sinks.Console" Version="[6.0.0]" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
+        <PackageReference Include="PgDump" Version="1.0.3" />
+        <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="172.76.0" />
     </ItemGroup>
 
     <ItemGroup>
