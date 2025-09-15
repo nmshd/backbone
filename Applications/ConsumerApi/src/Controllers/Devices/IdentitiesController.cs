@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
@@ -23,7 +24,9 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.ConsumerApi.Controllers.Devices;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class IdentitiesController : ApiControllerBase
 {

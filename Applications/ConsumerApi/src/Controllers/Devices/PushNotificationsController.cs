@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
@@ -11,7 +12,9 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.ConsumerApi.Controllers.Devices;
 
-[Route("api/v1/Devices/Self/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/Devices/Self/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class PushNotificationsController : ApiControllerBase
 {

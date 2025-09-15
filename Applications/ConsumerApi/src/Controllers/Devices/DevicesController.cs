@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
@@ -21,7 +22,9 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.ConsumerApi.Controllers.Devices;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class DevicesController : ApiControllerBase
 {
