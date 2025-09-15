@@ -89,10 +89,11 @@ public class FilesRepository : IFilesRepository
     public async Task<int> DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
         var allBlobIds = await _blobStorage.ListAsync(_blobConfiguration.RootFolder);
+        var orphanedBlobIds = allBlobIds.Where(b => _readOnlyFiles.All(f => f.Id != b));
 
         var numberOfDeletedBlobs = 0;
 
-        await foreach (var blobId in allBlobIds.WithCancellation(cancellationToken))
+        await foreach (var blobId in orphanedBlobIds.WithCancellation(cancellationToken))
         {
             _blobStorage.Remove(_blobConfiguration.RootFolder, blobId);
             numberOfDeletedBlobs++;

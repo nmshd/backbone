@@ -49,9 +49,6 @@ spec:
                   mountPath: /app/appsettings.override.json
                   subPath: appsettings.override.json
                   readOnly: true
-              args:
-                - --Worker
-                - SendGracePeriodAndApprovalRemindersWorker
               env:
                 {{- if .Values.global.useBuiltInEventbus }}
                 - name: infrastructure__eventBus__productName

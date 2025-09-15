@@ -46,7 +46,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
-        identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
+        identity.StartDeletionProcess(identity.Devices[0].Id);
 
         A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 

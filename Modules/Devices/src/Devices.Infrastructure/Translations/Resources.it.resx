@@ -20,12 +20,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
-        <value>Un processo di eliminazione di una delle Sue identità è stato approvato e verrà elaborato a breve.</value>
-    </data>
-    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
-        <value>Un processo di eliminazione è stato approvato.</value>
-    </data>
     <data name="DeletionProcessCancelledByOwnerPushNotification.Body" xml:space="preserve">
         <value>Un processo di eliminazione di una delle Sue identità è stato annullato da Lei.</value>
     </data>
@@ -49,12 +43,6 @@
     </data>
     <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
         <value>Il processo di eliminazione è stato iniziato.</value>
-    </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
-        <value>Il processo di eliminazione della Sua identità ha bisogno della Sua approvazione. Nel caso non venga approvato entro pochi giorni, sarà automaticamente annullato.</value>
-    </data>
-    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
-        <value>Processo di eliminazione in attesa di approvazione</value>
     </data>
     <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
         <value>La cancellazione della Sua identità è stato adesso completata.</value>

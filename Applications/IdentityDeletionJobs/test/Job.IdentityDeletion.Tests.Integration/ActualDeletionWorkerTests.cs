@@ -178,7 +178,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var device = identity.Devices.First();
 
         SystemTime.Set(SystemTime.UtcNow.AddMonths(-1));
-        identity.StartDeletionProcessAsOwner(device.Id);
+        identity.StartDeletionProcess(device.Id);
         SystemTime.Reset();
 
         await dbContext.SaveEntity(identity);
@@ -196,7 +196,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var device = identity.Devices.First();
 
-        identity.StartDeletionProcessAsOwner(device.Id, 0);
+        identity.StartDeletionProcess(device.Id, 0);
         identity.DeletionStarted();
 
         await dbContext.SaveEntity(identity);

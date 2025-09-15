@@ -32,7 +32,7 @@ public class HandlerTests : AbstractTestsBase
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+        anIdentity.StartDeletionProcess(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
 
@@ -51,7 +51,7 @@ public class HandlerTests : AbstractTestsBase
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+        anIdentity.StartDeletionProcess(anIdentity.Devices.First().Id);
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
 

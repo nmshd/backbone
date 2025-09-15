@@ -56,6 +56,6 @@ public class RelationshipCanEstablishTests : AbstractTestsBase
 
         // Assert
         error.ShouldNotBeNull();
-        error!.Code.ShouldBe("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
+        error.Code.ShouldBe("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
     }
 }

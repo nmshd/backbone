@@ -50,7 +50,6 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                         DataColumn2(label: Text(context.l10n.id)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvalReminders), size: ColumnSize.L),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedByDevice)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
@@ -82,14 +81,6 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                               Text(
                                 DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.createdAt),
                                 style: TextStyle(color: textColor),
-                              ),
-                            ),
-                            DataCell(
-                              _RemindersCell(
-                                name: context.l10n.deletionProcessTable_approvalRemindersCell_reminder,
-                                noDataText: context.l10n.deletionProcessTable_approvalRemindersCell_noData,
-                                reminders: deletionProcess.approvalReminders,
-                                textColor: textColor,
                               ),
                             ),
                             DataCell(
@@ -167,12 +158,6 @@ class _RemindersCell extends StatelessWidget {
 }
 
 extension _Reminders on IdentityDeletionProcess {
-  List<DateTime> get approvalReminders => [
-    if (approvalReminder1SentAt != null) approvalReminder1SentAt!,
-    if (approvalReminder2SentAt != null) approvalReminder2SentAt!,
-    if (approvalReminder3SentAt != null) approvalReminder3SentAt!,
-  ];
-
   List<DateTime> get gracePeriodReminders => [
     if (gracePeriodReminder1SentAt != null) gracePeriodReminder1SentAt!,
     if (gracePeriodReminder2SentAt != null) gracePeriodReminder2SentAt!,
