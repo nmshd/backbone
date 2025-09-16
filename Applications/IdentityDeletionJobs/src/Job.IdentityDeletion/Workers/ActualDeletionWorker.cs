@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier;
@@ -53,12 +52,6 @@ public class ActualDeletionWorker : IHostedService
 
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
-        var versionProcess = Process.Start("pg_dump", "--version");
-        await versionProcess.WaitForExitAsync(cancellationToken);
-
-        var pathProcess = Process.Start("which", "pg_dump");
-        await pathProcess.WaitForExitAsync(cancellationToken);
-
         // In case there was an error during a previous run, we need to make sure we also process those identities again.
         var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
         var addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -18,13 +17,11 @@ namespace Backbone.Job.IdentityDeletion.Tests.Integration;
 public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     private readonly IHost _host;
-    private readonly ITestOutputHelper _testOutputHelper;
 
-    public ActualDeletionWorkerTests(ITestOutputHelper testOutputHelper)
+    public ActualDeletionWorkerTests()
     {
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
         _host = hostBuilder.Build();
-        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]
@@ -32,7 +29,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        await LogPgDump();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -72,7 +68,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        await LogPgDump();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -89,7 +84,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityInStatusDeleting();
-        await LogPgDump();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -109,7 +103,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var peerOfIdentityToBeDeleted = await SeedDatabaseWithIdentity();
 
         await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted);
-        await LogPgDump();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -128,7 +121,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
 
         await SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address);
-        await LogPgDump();
 
         // Act
         await _host.StartAsync(TestContext.Current.CancellationToken);
@@ -215,33 +207,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await dbContext.SaveEntity(identity);
 
         return identity;
-    }
-
-    private async Task LogPgDump()
-    {
-        var versionProcess = Process.Start(new ProcessStartInfo
-        {
-            FileName = "pg_dump",
-            UseShellExecute = false,
-            Arguments = "--version",
-            RedirectStandardOutput = true,
-        });
-
-        versionProcess.ShouldNotBeNull();
-        await versionProcess.WaitForExitAsync(TestContext.Current.CancellationToken);
-        _testOutputHelper.WriteLine(await versionProcess.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken));
-
-        var pathProcess = Process.Start(new ProcessStartInfo
-        {
-            FileName = "which",
-            UseShellExecute = false,
-            Arguments = "pg_dump",
-            RedirectStandardOutput = true
-        });
-
-        pathProcess.ShouldNotBeNull();
-        await pathProcess.WaitForExitAsync(TestContext.Current.CancellationToken);
-        _testOutputHelper.WriteLine(await pathProcess.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken));
     }
 
     #endregion
