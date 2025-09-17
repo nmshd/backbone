@@ -2,7 +2,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="[8.4.0]" />
-        <PackageReference Include="AWSSDK.S3" Version="[4.0.7.1]" />
+        <PackageReference Include="AWSSDK.S3" Version="[4.0.7.2]" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
         <PackageReference Include="Azure.Storage.Blobs" Version="[12.25.0]" />
         <PackageReference Include="EFCore.BulkExtensions" Version="[9.0.1]" />
