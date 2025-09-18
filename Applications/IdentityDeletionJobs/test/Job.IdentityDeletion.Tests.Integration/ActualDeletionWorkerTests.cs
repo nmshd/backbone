@@ -228,13 +228,13 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     private async Task LogTime(Task task, string hint = "")
     {
-        _testOutputHelper.WriteLine($"Starting \"{hint}\"");
+        await Console.Error.WriteLineAsync($"Starting \"{hint}\"");
         var start = DateTime.UtcNow;
 
         await task;
 
         var duration = DateTime.UtcNow - start;
-        _testOutputHelper.WriteLine($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
+        await Console.Error.WriteLineAsync($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
     }
 
     #endregion
