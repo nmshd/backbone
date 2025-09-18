@@ -17,11 +17,13 @@ namespace Backbone.Job.IdentityDeletion.Tests.Integration;
 public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     private readonly IHost _host;
+    private readonly ITestOutputHelper _testOutputHelper;
 
-    public ActualDeletionWorkerTests()
+    public ActualDeletionWorkerTests(ITestOutputHelper testOutputHelper)
     {
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
         _host = hostBuilder.Build();
+        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]
@@ -96,21 +98,22 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Deletes_relationships()
+    public async Task Deletes_relationships() //TODO: Check deadlock
     {
         // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peerOfIdentityToBeDeleted = await SeedDatabaseWithIdentity();
+        var identityToBeDeleted = await LogTime(SeedDatabaseWithIdentityWithRipeDeletionProcess(), "Seed DB with identity with ripe deletion process");
+        var peerOfIdentityToBeDeleted = await LogTime(SeedDatabaseWithIdentity(), "Seed DB with identity");
 
-        await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted);
+        await LogTime(SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted), "Seed DB with relationship");
 
         // Act
-        await _host.StartAsync(TestContext.Current.CancellationToken);
+        await LogTime(_host.StartAsync(TestContext.Current.CancellationToken), "Run Deletion Job");
 
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
-        var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync(TestContext.Current.CancellationToken);
+        var relationshipsAfterAct = await LogTime(assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync(TestContext.Current.CancellationToken),
+            "Get relationships");
         relationshipsAfterAct.ShouldBeEmpty();
     }
 
@@ -207,6 +210,31 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await dbContext.SaveEntity(identity);
 
         return identity;
+    }
+
+    //Test method
+    private async Task<T> LogTime<T>(Task<T> task, string hint = "")
+    {
+        _testOutputHelper.WriteLine($"Starting \"{hint}\"");
+        var start = DateTime.UtcNow;
+
+        var result = await task;
+
+        var duration = DateTime.UtcNow - start;
+        _testOutputHelper.WriteLine($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
+
+        return result;
+    }
+
+    private async Task LogTime(Task task, string hint = "")
+    {
+        _testOutputHelper.WriteLine($"Starting \"{hint}\"");
+        var start = DateTime.UtcNow;
+
+        await task;
+
+        var duration = DateTime.UtcNow - start;
+        _testOutputHelper.WriteLine($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
     }
 
     #endregion
