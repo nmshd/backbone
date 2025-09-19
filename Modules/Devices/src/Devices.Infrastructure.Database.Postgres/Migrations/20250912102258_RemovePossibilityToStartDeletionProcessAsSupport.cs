@@ -40,6 +40,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "RejectedByDevice",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses");
+            
+            migrationBuilder.Sql("DELETE FROM \"Devices\".\"IdentityDeletionProcesses\" WHERE \"Status\" NOT IN (1, 2, 10)");
         }
 
         /// <inheritdoc />

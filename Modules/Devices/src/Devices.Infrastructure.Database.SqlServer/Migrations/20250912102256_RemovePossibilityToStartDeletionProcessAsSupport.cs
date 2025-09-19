@@ -40,6 +40,19 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 name: "RejectedByDevice",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses");
+            
+            migrationBuilder.Sql(
+                """
+                DELETE FROM "Devices"."IdentityDeletionProcesses" WHERE "Status" NOT IN (1, 2, 10)
+                """);
+            
+            migrationBuilder.Sql(
+                """
+                DELETE FROM "Devices"."IdentityDeletionProcessAuditLog" 
+                WHERE "MessageKey" IN ('StartedBySupport', 'Approved', 'Rejected', 'CancelledBySupport', 'CancelledAutomatically', 'ApprovalReminder1Sent', 'ApprovalReminder2Sent', 'ApprovalReminder3Sent')
+                    OR OldStatus NOT IN (1, 2, 10) 
+                    OR NewStatus NOT IN (1, 2, 10)
+                """);
         }
 
         /// <inheritdoc />
