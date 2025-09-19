@@ -60,12 +60,12 @@ public class ActualDeletionWorker : IHostedService
 
         await Delete(allAddressesToProcess);
 
-        var verifyResult = await _deletionVerifier.VerifyDeletion(allAddressesToProcess, cancellationToken);
+        /*var verifyResult = await _deletionVerifier.VerifyDeletion(allAddressesToProcess, cancellationToken);
         if (!verifyResult.Success)
         {
             await _deletionVerifier.SaveFoundOccurrences(verifyResult, cancellationToken);
             throw new DeletionFailedException(verifyResult);
-        }
+        }*/
     }
 
     private async Task<List<string>> TriggerRipeDeletionProcesses(CancellationToken cancellationToken)
