@@ -8,10 +8,3 @@ public class V1Attribute : ApiVersionAttribute
     {
     }
 }
-
-public class MapToV1Attribute : MapToApiVersionAttribute
-{
-    public MapToV1Attribute() : base("1")
-    {
-    }
-}
