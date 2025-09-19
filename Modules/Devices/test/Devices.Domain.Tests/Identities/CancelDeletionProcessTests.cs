@@ -14,7 +14,7 @@ public class CancelDeletionProcessTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2024-01-01"));
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
         var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
@@ -51,7 +51,7 @@ public class CancelDeletionProcessTests : AbstractTestsBase
     public void Throws_when_grace_period_has_expired()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
 
         SystemTime.Set(DateTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
 
@@ -66,7 +66,7 @@ public class CancelDeletionProcessTests : AbstractTestsBase
     public void Raises_domain_events()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
         identity.DeletionProcesses[0].ClearDomainEvents();
 
         // Act
@@ -92,7 +92,7 @@ public class CancelDeletionProcessTests : AbstractTestsBase
         deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
-        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Active);
         auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Cancelled);
     }
 }
