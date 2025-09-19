@@ -92,7 +92,7 @@ public static class IServiceCollectionExtensions
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ApiVersionReader = new UrlSegmentApiVersionReader();
         }).AddMvc();
-        
+
         if (configuration.Cors != null)
         {
             services.AddCors(options =>
