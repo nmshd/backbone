@@ -44,9 +44,6 @@ class IdentitiesEndpoint extends Endpoint {
   Future<ApiResponse<IdentityDeletionProcessDetail>> getIdentityDeletionProcess({required String address, required String deletionProcessId}) =>
       get('/api/v1/Identities/$address/DeletionProcesses/$deletionProcessId', transformer: IdentityDeletionProcessDetail.fromJson);
 
-  Future<ApiResponse<void>> cancelDeletionProcess({required String address, required String deletionProcessId}) =>
-      put('/api/v1/Identities/$address/DeletionProcesses/$deletionProcessId/Cancel', transformer: (e) {});
-
   Future<ApiResponse<List<IdentityDeletionProcessAuditLogEntry>>> getIdentityDeletionProcessAuditLogs({required String address}) => get(
     '/api/v1/Identities/$address/DeletionProcesses/AuditLogs',
     transformer: (e) => (e as List).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
