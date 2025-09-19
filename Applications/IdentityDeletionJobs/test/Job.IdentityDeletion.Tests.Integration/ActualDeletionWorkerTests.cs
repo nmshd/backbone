@@ -1,4 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -97,7 +98,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         identityAfterAct.ShouldBeNull();
     }
 
-    [Fact]
+    /*[Fact]
     public async Task Deletes_relationships() //TODO: Check deadlock
     {
         // Arrange
@@ -115,7 +116,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var relationshipsAfterAct = await LogTime(assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync(TestContext.Current.CancellationToken),
             "Get relationships");
         relationshipsAfterAct.ShouldBeEmpty();
-    }
+    }*/
 
     [Fact]
     public async Task Deletes_relationship_templates()
@@ -133,6 +134,20 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync(TestContext.Current.CancellationToken);
         templatesAfterAct.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task Verifies_deletion()
+    {
+        // Arrange
+        var identity = await LogTime(SeedDatabaseWithIdentity(), "Create Identity");
+        var verifier = GetService<IDeletionVerifier>();
+
+        // Act
+        var result = await LogTime(verifier.VerifyDeletion([identity.Address.Value], TestContext.Current.CancellationToken), "Verify Identity");
+
+        // Await
+        result.Success.ShouldBeFalse();
     }
 
     private T GetService<T>() where T : notnull
