@@ -50,8 +50,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 """
                 DELETE FROM "Devices"."IdentityDeletionProcessAuditLog" 
                 WHERE "MessageKey" IN ('StartedBySupport', 'Approved', 'Rejected', 'CancelledBySupport', 'CancelledAutomatically', 'ApprovalReminder1Sent', 'ApprovalReminder2Sent', 'ApprovalReminder3Sent')
-                    OR OldStatus NOT IN (1, 2, 10) 
-                    OR NewStatus NOT IN (1, 2, 10)
+                    OR "OldStatus" NOT IN (1, 2, 10) 
+                    OR "NewStatus" NOT IN (1, 2, 10)
                 """);
         }
 
