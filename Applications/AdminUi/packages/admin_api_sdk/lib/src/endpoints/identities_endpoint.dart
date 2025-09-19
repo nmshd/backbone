@@ -7,10 +7,10 @@ import 'endpoint.dart';
 class IdentitiesEndpoint extends Endpoint {
   IdentitiesEndpoint(super._dio);
 
-  Future<ApiResponse<Identity>> getIdentity(String address) => get('/api/v1/Identities/$address', transformer: Identity.fromJson);
+  Future<ApiResponse<Identity>> getIdentity(String address) => get('/api/v2/Identities/$address', transformer: Identity.fromJson);
 
   Future<ApiResponse<void>> updateIdentity(String address, {required String tierId}) =>
-      put('/api/v1/Identities/$address', data: {'tierId': tierId}, transformer: (e) {});
+      put('/api/v2/Identities/$address', data: {'tierId': tierId}, transformer: (e) {});
 
   Future<ApiResponse<List<IdentityOverview>>> getIdentities({
     String orderBy = 'address asc',
@@ -39,13 +39,13 @@ class IdentitiesEndpoint extends Endpoint {
   }
 
   Future<ApiResponse<List<IdentityDeletionProcess>>> getIdentityDeletionProcesses({required String address}) =>
-      get('/api/v1/Identities/$address/DeletionProcesses', transformer: (e) => (e as List).map(IdentityDeletionProcess.fromJson).toList());
+      get('/api/v2/Identities/$address/DeletionProcesses', transformer: (e) => (e as List).map(IdentityDeletionProcess.fromJson).toList());
 
   Future<ApiResponse<IdentityDeletionProcessDetail>> getIdentityDeletionProcess({required String address, required String deletionProcessId}) =>
-      get('/api/v1/Identities/$address/DeletionProcesses/$deletionProcessId', transformer: IdentityDeletionProcessDetail.fromJson);
+      get('/api/v2/Identities/$address/DeletionProcesses/$deletionProcessId', transformer: IdentityDeletionProcessDetail.fromJson);
 
   Future<ApiResponse<List<IdentityDeletionProcessAuditLogEntry>>> getIdentityDeletionProcessAuditLogs({required String address}) => get(
-    '/api/v1/Identities/$address/DeletionProcesses/AuditLogs',
+    '/api/v2/Identities/$address/DeletionProcesses/AuditLogs',
     transformer: (e) => (e as List).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
   );
 
@@ -55,8 +55,8 @@ class IdentitiesEndpoint extends Endpoint {
     required int max,
     required String period,
   }) =>
-      post('/api/v1/Identities/$address/Quotas', data: {'metricKey': metricKey, 'max': max, 'period': period}, transformer: IndividualQuota.fromJson);
+      post('/api/v2/Identities/$address/Quotas', data: {'metricKey': metricKey, 'max': max, 'period': period}, transformer: IndividualQuota.fromJson);
 
   Future<ApiResponse<void>> deleteIndividualQuota({required String address, required String individualQuotaId}) =>
-      delete('/api/v1/Identities/$address/Quotas/$individualQuotaId', expectedStatus: 204, transformer: (e) {}, allowEmptyResponse: true);
+      delete('/api/v2/Identities/$address/Quotas/$individualQuotaId', expectedStatus: 204, transformer: (e) {}, allowEmptyResponse: true);
 }
