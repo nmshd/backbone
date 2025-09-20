@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Synchronization.Application;
@@ -22,7 +23,9 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.ConsumerApi.Controllers.Synchronization;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class SyncRunsController : ApiControllerBase
 {

@@ -31,7 +31,7 @@ public class StartDeletionProcessTests : AbstractTestsBase
         activeIdentity.Status.ShouldBe(IdentityStatus.ToBeDeleted);
 
         AssertDeletionProcessWasStarted(activeIdentity);
-        deletionProcess.Status.ShouldBe(DeletionProcessStatus.Approved);
+        deletionProcess.Status.ShouldBe(DeletionProcessStatus.Active);
         deletionProcess.ApprovedAt.ShouldBe(SystemTime.UtcNow);
         deletionProcess.ApprovedByDevice.ShouldBe(activeDevice.Id);
         deletionProcess.GracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
@@ -40,7 +40,7 @@ public class StartDeletionProcessTests : AbstractTestsBase
         var auditLogEntry = deletionProcess.AuditLog[0];
         auditLogEntry.MessageKey.ShouldBe(MessageKey.StartedByOwner);
         auditLogEntry.DeviceIdHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Approved);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Active);
     }
 
     [Fact]

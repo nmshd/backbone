@@ -15,9 +15,9 @@ public class HandlerTests : AbstractTestsBase
     public async Task Happy_path()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var activeIdentity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
         var activeDevice = activeIdentity.Devices[0];
-        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
+        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Active)!;
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
@@ -41,7 +41,7 @@ public class HandlerTests : AbstractTestsBase
                 && i.DeletionProcesses[0].Id == deletionProcess.Id), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        response.Status.ShouldBe(DeletionProcessStatus.Cancelled);
+        response.Status.ShouldBe("Cancelled");
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
             A<DeletionProcessCancelledByOwnerPushNotification>._,

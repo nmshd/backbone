@@ -9,7 +9,7 @@ public class IsGracePeriodOverTests : AbstractTestsBase
     public void Returns_false_if_grace_period_is_not_over()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
 
         // Act
         var result = identity.IsGracePeriodOver;
@@ -22,7 +22,7 @@ public class IsGracePeriodOverTests : AbstractTestsBase
     public void Returns_true_if_grace_period_is_over()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var identity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays + 1));
 

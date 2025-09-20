@@ -48,7 +48,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             Hasher.HashUtf8(identityAddress),
             Hasher.HashUtf8(deviceId),
             null,
-            DeletionProcessStatus.Approved
+            DeletionProcessStatus.Active
         );
     }
 
@@ -58,7 +58,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             MessageKey.CancelledByOwner,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
-            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Active,
             DeletionProcessStatus.Cancelled
         );
     }
@@ -69,8 +69,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             MessageKey.GracePeriodReminder1Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
-            DeletionProcessStatus.Approved,
-            DeletionProcessStatus.Approved
+            DeletionProcessStatus.Active,
+            DeletionProcessStatus.Active
         );
     }
 
@@ -80,8 +80,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             MessageKey.GracePeriodReminder2Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
-            DeletionProcessStatus.Approved,
-            DeletionProcessStatus.Approved
+            DeletionProcessStatus.Active,
+            DeletionProcessStatus.Active
         );
     }
 
@@ -91,8 +91,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             MessageKey.GracePeriodReminder3Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
-            DeletionProcessStatus.Approved,
-            DeletionProcessStatus.Approved
+            DeletionProcessStatus.Active,
+            DeletionProcessStatus.Active
         );
     }
 
@@ -162,15 +162,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
 public enum MessageKey
 {
     StartedByOwner = 1,
-    StartedBySupport = 2,
-    Approved = 3,
-    Rejected = 4,
     CancelledByOwner = 5,
-    CancelledBySupport = 6,
-    CancelledAutomatically = 7,
-    ApprovalReminder1Sent = 8,
-    ApprovalReminder2Sent = 9,
-    ApprovalReminder3Sent = 10,
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,

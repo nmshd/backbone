@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="[9.0.9]" />

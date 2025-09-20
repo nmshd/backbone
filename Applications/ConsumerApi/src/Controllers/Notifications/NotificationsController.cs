@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.Notifications.Commands.SendNotification;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Controllers.Notifications;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class NotificationsController : ApiControllerBase
 {

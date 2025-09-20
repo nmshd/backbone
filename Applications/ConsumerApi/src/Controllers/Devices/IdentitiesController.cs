@@ -2,16 +2,12 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
-using Backbone.Modules.Devices.Application.DTOs;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.ChangeFeatureFlags;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
-using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcess;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListFeatureFlags;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -23,15 +19,15 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.ConsumerApi.Controllers.Devices;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class IdentitiesController : ApiControllerBase
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
 
-    public IdentitiesController(
-        IMediator mediator,
-        OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
+    public IdentitiesController(IMediator mediator, OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager) : base(mediator)
     {
         _applicationManager = applicationManager;
     }
@@ -65,44 +61,6 @@ public class IdentitiesController : ApiControllerBase
         var response = await _mediator.Send(command, cancellationToken);
 
         return Created(response);
-    }
-
-    [HttpPost("Self/DeletionProcesses")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartDeletionProcessResponse>), StatusCodes.Status201Created)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartDeletionProcess(StartDeletionProcessCommand? request, CancellationToken cancellationToken)
-    {
-        request ??= new StartDeletionProcessCommand();
-        var response = await _mediator.Send(request, cancellationToken);
-        return Created("", response);
-    }
-
-    [HttpGet("Self/DeletionProcesses/{id}")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<IdentityDeletionProcessOverviewDTO>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new GetDeletionProcessAsOwnerQuery { Id = id }, cancellationToken);
-        return Ok(response);
-    }
-
-    [HttpGet("Self/DeletionProcesses")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAsOwnerResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListDeletionProcesses(CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new ListDeletionProcessesAsOwnerQuery(), cancellationToken);
-        return Ok(response);
-    }
-
-    [HttpPut("Self/DeletionProcesses/{id}/Cancel")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionProcessResponse>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new CancelDeletionProcessCommand { DeletionProcessId = id }, cancellationToken);
-        return Ok(response);
     }
 
     [HttpGet("Self")]

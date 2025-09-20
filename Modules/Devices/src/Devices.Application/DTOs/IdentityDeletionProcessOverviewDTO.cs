@@ -7,7 +7,7 @@ public class IdentityDeletionProcessOverviewDTO
     public IdentityDeletionProcessOverviewDTO(IdentityDeletionProcess process)
     {
         Id = process.Id;
-        Status = process.Status;
+        Status = process.Status.ToString();
         CreatedAt = process.CreatedAt;
 
         ApprovedAt = process.ApprovedAt;
@@ -21,7 +21,7 @@ public class IdentityDeletionProcessOverviewDTO
     }
 
     public string Id { get; set; }
-    public DeletionProcessStatus Status { get; set; }
+    public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public DateTime? ApprovedAt { get; set; }

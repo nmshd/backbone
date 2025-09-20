@@ -14,7 +14,7 @@ public class IdentityDeletionProcessAuditLogEntry
 
 public enum DeletionProcessStatus
 {
-    Approved = 1,
+    Active = 1,
     Cancelled = 2,
     Deleting = 10
 }

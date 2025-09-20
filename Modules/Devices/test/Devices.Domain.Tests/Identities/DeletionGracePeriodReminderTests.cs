@@ -16,19 +16,19 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Arrange
         var currentDateTime = DateTime.Parse("2000-01-01");
         SystemTime.Set(currentDateTime);
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = CreateIdentityWithActiveDeletionProcess();
 
         // Act
         identity.DeletionGracePeriodReminder1Sent();
 
         // Assert
-        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
         deletionProcess.GracePeriodReminder1SentAt.ShouldBe(currentDateTime);
     }
 
     [Fact]
-    public void DeletionGracePeriodReminder1Sent_fails_when_no_approved_deletion_process_exists()
+    public void DeletionGracePeriodReminder1Sent_fails_when_no_active_deletion_process_exists()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -47,20 +47,19 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Arrange
         var currentDateTime = DateTime.Parse("2000-01-01");
         SystemTime.Set(currentDateTime);
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = CreateIdentityWithActiveDeletionProcess();
 
         // Act
         identity.DeletionGracePeriodReminder2Sent();
 
         // Assert
-        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
         deletionProcess.GracePeriodReminder2SentAt.ShouldBe(currentDateTime);
     }
 
-
     [Fact]
-    public void DeletionGracePeriodReminder2Sent_fails_when_no_approved_deletion_process_exists()
+    public void DeletionGracePeriodReminder2Sent_fails_when_no_active_deletion_process_exists()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -79,20 +78,20 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         // Arrange
         var currentDateTime = DateTime.Parse("2000-01-01");
         SystemTime.Set(currentDateTime);
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = CreateIdentityWithActiveDeletionProcess();
 
         // Act
         identity.DeletionGracePeriodReminder3Sent();
 
         // Assert
-        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
+        var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
         deletionProcess.GracePeriodReminder3SentAt.ShouldBe(currentDateTime);
     }
 
 
     [Fact]
-    public void DeletionGracePeriodReminder3Sent_fails_when_no_approved_deletion_process_exists()
+    public void DeletionGracePeriodReminder3Sent_fails_when_no_active_deletion_process_exists()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
@@ -112,11 +111,11 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         var auditLogEntry = deletionProcess.AuditLog[1];
         auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
         auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
-        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Approved);
-        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Approved);
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Active);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Active);
     }
 
-    private static Identity CreateIdentityWithApprovedDeletionProcess()
+    private static Identity CreateIdentityWithActiveDeletionProcess()
     {
         var identity = CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);

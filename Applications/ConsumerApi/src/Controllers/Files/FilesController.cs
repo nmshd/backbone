@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.ConsumerApi.Controllers.Files.DTOs;
 using Backbone.ConsumerApi.Controllers.Files.DTOs.Validators;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Files.Commands.ClaimFileOwnership;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
@@ -25,7 +26,9 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.ConsumerApi.Controllers.Files;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class FilesController : ApiControllerBase
 {

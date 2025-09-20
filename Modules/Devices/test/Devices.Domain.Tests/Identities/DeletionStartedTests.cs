@@ -12,7 +12,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void DeletionStarted_sets_status_and_creates_valid_DeletionProcess()
     {
         // Arrange
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = CreateIdentityWithActiveDeletionProcess();
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays).AddDays(1)); // past deletion grace period
 
@@ -28,7 +28,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Fails_to_start_if_GracePeriod_is_not_over()
     {
         // Arrange
-        var identity = CreateIdentityWithApprovedDeletionProcess();
+        var identity = CreateIdentityWithActiveDeletionProcess();
 
         // Act
         var acting = identity.DeletionStarted;
@@ -54,7 +54,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Raises_domain_events()
     {
         //Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var activeIdentity = TestDataGenerator.CreateIdentityWithActiveDeletionProcess();
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays).AddDays(1));
 
@@ -66,7 +66,7 @@ public class DeletionStartedTests : AbstractTestsBase
         domainEvent.IdentityAddress.ShouldBe(activeIdentity.Address);
     }
 
-    private static Identity CreateIdentityWithApprovedDeletionProcess()
+    private static Identity CreateIdentityWithActiveDeletionProcess()
     {
         var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcess(identity.Devices.First().Id);
