@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier;
 using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDeletionProcess;
 using Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDuringIdentityDeletion;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
@@ -19,19 +20,22 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly List<IIdentityDeleter> _identityDeleters;
+    private readonly IDeletionVerifier _deletionVerifier;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger)
+        ILogger<ActualDeletionWorker> logger,
+        IDeletionVerifier deletionVerifier)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
+        _deletionVerifier = deletionVerifier;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -52,9 +56,16 @@ public class ActualDeletionWorker : IHostedService
         var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
         var addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
 
-        var allAddressesToProcess = addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast.Union(addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses).Distinct();
+        var allAddressesToProcess = addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast.Union(addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses).Distinct().ToList();
 
         await Delete(allAddressesToProcess);
+
+        var verifyResult = await _deletionVerifier.VerifyDeletion(allAddressesToProcess, cancellationToken);
+        if (!verifyResult.Success)
+        {
+            await _deletionVerifier.SaveFoundOccurrences(verifyResult, cancellationToken);
+            throw new DeletionFailedException(verifyResult);
+        }
     }
 
     private async Task<List<string>> TriggerRipeDeletionProcesses(CancellationToken cancellationToken)
