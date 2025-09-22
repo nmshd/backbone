@@ -1,8 +1,7 @@
 {
     $schema: "https://docs.renovatebot.com/renovate-schema.json",
-    extends: ["config:recommended", "docker:pinDigests"],
+    extends: ["config:recommended", "docker:pinDigests", "schedule:earlyMondays"],
     labels: ["dependencies"],
-    schedule: ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
     ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     rangeStrategy: "pin",
     additionalReviewers: ["erbenjak"],
