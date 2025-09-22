@@ -21,6 +21,13 @@ spec:
                 name: {{ .Values.sseserver.name }}
                 port:
                   number: 8080
+          - path: "/api/v2/sse"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.sseserver.name }}
+                port:
+                  number: 8080
   {{- if .Values.sseserver.ingress.tls.enabled }}
   tls: 
     - hosts:

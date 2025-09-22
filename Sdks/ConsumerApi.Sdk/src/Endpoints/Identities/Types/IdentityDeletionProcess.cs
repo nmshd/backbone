@@ -6,9 +6,7 @@ public class IdentityDeletionProcess
     public required List<IdentityDeletionProcessAuditLogEntry> AuditLog { get; set; }
     public required string Status { get; set; }
     public DateTime CreatedAt { get; set; }
-
-    public DateTime? ApprovedAt { get; set; }
-    public string? ApprovedByDevice { get; set; }
+    public required string CreatedByDevice { get; set; }
 
     public DateTime? GracePeriodEndsAt { get; set; }
 
