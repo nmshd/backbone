@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -23,7 +25,7 @@ class _TiersOverviewState extends State<TiersOverview> {
   void initState() {
     super.initState();
 
-    _reloadTiers();
+    unawaited(_reloadTiers());
   }
 
   @override

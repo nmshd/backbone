@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +20,7 @@ extension UnregisterIfRegistered on GetIt {
 
 extension SetClipboardDataWithSnack on BuildContext {
   void setClipboardDataWithSuccessNotification({required String clipboardText, required String successMessage}) {
-    Clipboard.setData(ClipboardData(text: clipboardText));
+    unawaited(Clipboard.setData(ClipboardData(text: clipboardText)));
 
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(successMessage), showCloseIcon: true));
   }

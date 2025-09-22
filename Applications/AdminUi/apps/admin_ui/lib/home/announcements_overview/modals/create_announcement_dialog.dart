@@ -227,7 +227,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
       actions: [
         SizedBox(
           height: 40,
-          child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
+          child: OutlinedButton(onPressed: () => context.pop(), child: Text(context.l10n.cancel)),
         ),
         SizedBox(
           height: 40,
