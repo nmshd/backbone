@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -30,7 +32,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 
     _scrollController = ScrollController();
 
-    _loadAnnouncement();
+    unawaited(_loadAnnouncement());
   }
 
   @override

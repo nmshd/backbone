@@ -4,7 +4,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class AnnouncementsEndpoint extends Endpoint {
-  AnnouncementsEndpoint(super.dio);
+  AnnouncementsEndpoint(super._dio);
 
   Future<ApiResponse<List<Announcement>>> getAnnouncements() =>
       get('/api/v2/Announcements', transformer: (e) => (e as List).map(Announcement.fromJson).toList());

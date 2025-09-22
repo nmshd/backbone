@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../extensions.dart';
 
@@ -34,8 +35,8 @@ class _ConfirmationDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
       content: Text(message),
       actions: [
-        OutlinedButton(onPressed: () => Navigator.of(context).pop(false), child: Text(cancelActionText ?? context.l10n.cancel)),
-        FilledButton(onPressed: () => Navigator.of(context).pop(true), child: Text(actionText)),
+        OutlinedButton(onPressed: () => context.pop(false), child: Text(cancelActionText ?? context.l10n.cancel)),
+        FilledButton(onPressed: () => context.pop(true), child: Text(actionText)),
       ],
     );
   }

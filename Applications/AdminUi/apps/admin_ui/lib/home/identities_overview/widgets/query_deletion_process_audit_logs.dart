@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,7 +64,7 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                       ? () {
                           final address = textController.text.trim();
                           textController.clear();
-                          context.push('/identities/$address/deletion-process-audit-logs');
+                          unawaited(context.push('/identities/$address/deletion-process-audit-logs'));
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

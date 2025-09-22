@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
@@ -92,7 +94,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
   void initState() {
     super.initState();
 
-    _loadTiers();
+    unawaited(_loadTiers());
   }
 
   @override
@@ -159,7 +161,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
 
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    final defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
+    final defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient).toList();
     final tierItems = defaultTiers.map((tier) => (value: tier.id, label: tier.name)).toList();
     if (mounted) setState(() => _availableTiers = tierItems);
   }

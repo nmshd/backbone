@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   void initState() {
     super.initState();
 
-    _reloadIdentityDeletionProcessAuditLogs();
+    unawaited(_reloadIdentityDeletionProcessAuditLogs());
   }
 
   @override

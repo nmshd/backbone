@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -28,8 +30,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   void initState() {
     super.initState();
 
-    _reloadClients();
-    _reloadTiers();
+    unawaited(_reloadClients());
+    unawaited(_reloadTiers());
   }
 
   @override
@@ -155,7 +157,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
   Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
+    setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient).toList());
   }
 
   Future<void> _removeSelectedClients() async {
