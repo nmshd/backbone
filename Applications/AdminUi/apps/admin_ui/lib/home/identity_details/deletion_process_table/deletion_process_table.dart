@@ -53,8 +53,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                         DataColumn2(label: Text(context.l10n.id)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedByDevice)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_createdByDevice)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: ColumnSize.S),
                       ],
@@ -73,10 +72,8 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                             DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
                             DataCell(
                               Text(switch (deletionProcess.status) {
-                                DeletionProcessStatus.waitingForApproval => context.l10n.deletionProcessDetails_status_waitingForApproval,
-                                DeletionProcessStatus.approved => context.l10n.deletionProcessDetails_status_approved,
+                                DeletionProcessStatus.active => context.l10n.deletionProcessDetails_status_active,
                                 DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
-                                DeletionProcessStatus.rejected => context.l10n.deletionProcessDetails_status_rejected,
                                 DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
                               }, style: TextStyle(color: textColor)),
                             ),
@@ -86,15 +83,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                                 style: TextStyle(color: textColor),
                               ),
                             ),
-                            DataCell(
-                              Text(
-                                deletionProcess.approvedAt != null
-                                    ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.approvedAt!)} '
-                                    : '',
-                                style: TextStyle(color: textColor),
-                              ),
-                            ),
-                            DataCell(Text(deletionProcess.approvedByDevice ?? '', style: TextStyle(color: textColor))),
+                            DataCell(Text(deletionProcess.createdByDevice ?? '', style: TextStyle(color: textColor))),
                             DataCell(
                               _RemindersCell(
                                 name: context.l10n.deletionProcessTable_gracePeriodRemindersCell_reminder,

@@ -39,8 +39,8 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
                   ),
                 ),
                 DataCell(Text(_getMessageForDeletionProcessAuditLog(auditLog.messageKey, auditLog.additionalData))),
-                DataCell(auditLog.oldStatus == null ? const Text('') : Text(_getReformatedStatus(auditLog.oldStatus!))),
-                DataCell(Text(_getReformatedStatus(auditLog.newStatus))),
+                DataCell(auditLog.oldStatus == null ? const Text('') : Text(auditLog.oldStatus!)),
+                DataCell(Text(auditLog.newStatus)),
               ],
             );
           }).toList(),
@@ -49,20 +49,10 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
     );
   }
 
-  String _getReformatedStatus(String status) {
-    if (status == 'WaitingForApproval') return context.l10n.deletionProcessAuditLogsTable_auditLogs_waitingForApproval;
-    return status;
-  }
-
   String _getMessageForDeletionProcessAuditLog(String messageKey, Map<String, String> additionalData) {
     final messageTemplates = {
       'StartedByOwner': context.l10n.deletionProcessAuditLogsTable_startedByOwner,
-      'StartedBySupport': context.l10n.deletionProcessAuditLogsTable_startedBySupport,
-      'Approved': context.l10n.deletionProcessAuditLogsTable_approved,
-      'Rejected': context.l10n.deletionProcessAuditLogsTable_rejected,
       'CancelledByOwner': context.l10n.deletionProcessAuditLogsTable_cancelledByOwner,
-      'CancelledBySupport': context.l10n.deletionProcessAuditLogsTable_cancelledBySupport,
-      'CancelledAutomatically': context.l10n.deletionProcessAuditLogsTable_cancelledAutomatically,
       'GracePeriodReminder1Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder1Sent,
       'GracePeriodReminder2Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder2Sent,
       'GracePeriodReminder3Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder3Sent,

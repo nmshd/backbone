@@ -35,7 +35,7 @@ class AdminApiClient {
   }
 
   static Future<void> _setupXsrf(Dio dio) async {
-    final xsrf = await dio.get<String>('/api/v2/xsrf');
+    final xsrf = await dio.get<String>('/api/v1/xsrf');
     final xsrfToken = xsrf.data!;
     final xsrfCookie = xsrf.headers.value('Set-Cookie');
 
@@ -48,7 +48,7 @@ class AdminApiClient {
 
     await AdminApiClient._setupXsrf(dio);
 
-    final isValidResponse = await dio.post<Map<String, dynamic>>('/api/v2/validateApiKey', data: {'apiKey': apiKey});
+    final isValidResponse = await dio.post<Map<String, dynamic>>('/api/v1/validateApiKey', data: {'apiKey': apiKey});
 
     final isValid = isValidResponse.data!['isValid'] as bool;
     return isValid;

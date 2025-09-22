@@ -7,10 +7,10 @@ class AnnouncementsEndpoint extends Endpoint {
   AnnouncementsEndpoint(super._dio);
 
   Future<ApiResponse<List<Announcement>>> getAnnouncements() =>
-      get('/api/v2/Announcements', transformer: (e) => (e as List).map(Announcement.fromJson).toList());
+      get('/api/v1/Announcements', transformer: (e) => (e as List).map(Announcement.fromJson).toList());
 
   Future<ApiResponse<Announcement>> getAnnouncement(String announcementId) =>
-      get('/api/v2/Announcements/$announcementId', transformer: Announcement.fromJson);
+      get('/api/v1/Announcements/$announcementId', transformer: Announcement.fromJson);
 
   Future<ApiResponse<CreateAnnouncementResponse>> createAnnouncement({
     required AnnouncementSeverity severity,
@@ -21,7 +21,7 @@ class AnnouncementsEndpoint extends Endpoint {
     List<AnnouncementAction>? actions,
     String? iqlQuery,
   }) => post(
-    '/api/v2/Announcements',
+    '/api/v1/Announcements',
     data: {
       'expiresAt': expiresAt,
       'severity': severity.name,
@@ -35,7 +35,7 @@ class AnnouncementsEndpoint extends Endpoint {
   );
 
   Future<ApiResponse<void>> deleteAnnouncement(String announcementId) => delete(
-    '/api/v2/Announcements/$announcementId',
+    '/api/v1/Announcements/$announcementId',
     expectedStatus: 204,
     transformer: (e) {},
     allowEmptyResponse: true,

@@ -101,10 +101,8 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.deletionProcessDetails_status,
                         value: switch (deletionProcessDetails.status) {
-                          DeletionProcessStatus.waitingForApproval => context.l10n.deletionProcessDetails_status_waitingForApproval,
-                          DeletionProcessStatus.approved => context.l10n.deletionProcessDetails_status_approved,
+                          DeletionProcessStatus.active => context.l10n.deletionProcessDetails_status_active,
                           DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
-                          DeletionProcessStatus.rejected => context.l10n.deletionProcessDetails_status_rejected,
                           DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
                         },
                       ),

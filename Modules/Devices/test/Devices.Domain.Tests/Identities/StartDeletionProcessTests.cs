@@ -32,8 +32,7 @@ public class StartDeletionProcessTests : AbstractTestsBase
 
         AssertDeletionProcessWasStarted(activeIdentity);
         deletionProcess.Status.ShouldBe(DeletionProcessStatus.Active);
-        deletionProcess.ApprovedAt.ShouldBe(SystemTime.UtcNow);
-        deletionProcess.ApprovedByDevice.ShouldBe(activeDevice.Id);
+        deletionProcess.CreatedByDevice.ShouldBe(activeDevice.Id);
         deletionProcess.GracePeriodEndsAt.ShouldBe(DateTime.Parse("2000-01-15"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
