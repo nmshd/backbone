@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<SendNotificationCommand>
         var textFromConfiguration = _notifications?.Texts.FirstOrDefault(t => t.Code == request.Code);
 
         if (textFromConfiguration == null)
-            throw new ApplicationException(ApplicationErrors.Notifications.CodeDoesNotExist(_notifications!.Texts.Select(t => t.Code)));
+            throw new ApplicationException(ApplicationErrors.Notifications.CodeDoesNotExist(_notifications?.Texts.Select(t => t.Code) ?? []));
 
         return textFromConfiguration;
     }
