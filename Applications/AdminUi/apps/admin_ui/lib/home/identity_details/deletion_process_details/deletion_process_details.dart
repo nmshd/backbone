@@ -48,67 +48,9 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
           _DeletionProcessDetailsCard(address: widget.address, deletionProcessDetails: deletionProcessDetails),
           Gaps.h16,
           Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _deletionProcessesDetails!.auditLog)),
-          Gaps.h8,
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Tooltip(
-                message: deletionProcessDetails.status == DeletionProcessStatus.approved
-                    ? ''
-                    : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    textStyle: TextStyle(color: Theme.of(context).colorScheme.onError),
-                  ),
-                  onPressed: deletionProcessDetails.status != DeletionProcessStatus.approved ? null : _cancelDeletionProcess,
-                  child: Text(context.l10n.deletionProcessDetails_cancelDeletionProcess_title),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
-  }
-
-  Future<void> _cancelDeletionProcess() async {
-    final confirmed = await showConfirmationDialog(
-      actionText: context.l10n.cancel,
-      cancelActionText: context.l10n.close,
-      context: context,
-      message: context.l10n.deletionProcessDetails_cancelDeletionProcess_message,
-      title: context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
-    );
-
-    if (!confirmed) return;
-
-    final result = await GetIt.I.get<AdminApiClient>().identities.cancelDeletionProcess(
-      address: widget.address,
-      deletionProcessId: widget.deletionProcessId,
-    );
-
-    if (result.hasError) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(backgroundColor: Theme.of(context).colorScheme.error, content: Text(result.error.message), showCloseIcon: true));
-      }
-      return;
-    }
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Text(context.l10n.deletionProcessDetails_deletionProcessCancelledSuccessfully),
-          showCloseIcon: true,
-        ),
-      );
-
-      Navigator.of(context).pop(true);
-    }
   }
 
   Future<void> _reloadIdentityDeletionProcessAuditLogs() async {

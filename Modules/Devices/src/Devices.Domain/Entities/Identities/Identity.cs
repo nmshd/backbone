@@ -141,8 +141,8 @@ public class Identity : Entity
 
     public void DeletionStarted()
     {
-        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Approved)
-                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Active)
+                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Active));
 
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
@@ -159,7 +159,7 @@ public class Identity : Entity
 
     private void EnsureNoActiveProcessExists()
     {
-        var activeProcessExists = DeletionProcesses.Any(d => d.IsActive());
+        var activeProcessExists = DeletionProcesses.Any(d => d.IsAtLeastActive());
 
         if (activeProcessExists)
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
@@ -173,25 +173,25 @@ public class Identity : Entity
 
     public void DeletionGracePeriodReminder1Sent()
     {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Active);
 
-        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
+        var deletionProcess = GetDeletionProcessInStatus(DeletionProcessStatus.Active)!;
         deletionProcess.GracePeriodReminder1Sent(Address);
     }
 
     public void DeletionGracePeriodReminder2Sent()
     {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Active);
 
-        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Active);
         deletionProcess.GracePeriodReminder2Sent(Address);
     }
 
     public void DeletionGracePeriodReminder3Sent()
     {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Active);
 
-        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Active);
         deletionProcess.GracePeriodReminder3Sent(Address);
     }
 
@@ -205,7 +205,7 @@ public class Identity : Entity
         EnsureIdentityOwnsDevice(cancelledByDeviceId);
 
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
-        deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
+        deletionProcess.EnsureStatus(DeletionProcessStatus.Active);
 
         deletionProcess.Cancel(Address, cancelledByDeviceId);
         TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
@@ -277,7 +277,7 @@ public class Identity : Entity
 
 public enum DeletionProcessStatus
 {
-    Approved = 1,
+    Active = 1,
     Cancelled = 2,
     Deleting = 10
 }

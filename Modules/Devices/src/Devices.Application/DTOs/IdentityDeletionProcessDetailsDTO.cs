@@ -11,7 +11,7 @@ public class IdentityDeletionProcessDetailsDTO
             .Select(e => new IdentityDeletionProcessAuditLogEntryDTO(e))
             .OrderBy(e => e.CreatedAt)
             .ToList();
-        Status = process.Status;
+        Status = process.Status.ToString();
         CreatedAt = process.CreatedAt;
 
         ApprovedAt = process.ApprovedAt;
@@ -24,10 +24,9 @@ public class IdentityDeletionProcessDetailsDTO
         GracePeriodReminder3SentAt = process.GracePeriodReminder3SentAt;
     }
 
-
     public string Id { get; set; }
     public List<IdentityDeletionProcessAuditLogEntryDTO> AuditLog { get; set; }
-    public DeletionProcessStatus Status { get; set; }
+    public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public DateTime? ApprovedAt { get; set; }
@@ -46,16 +45,16 @@ public class IdentityDeletionProcessAuditLogEntryDTO
     {
         Id = entry.Id;
         CreatedAt = entry.CreatedAt;
-        OldStatus = entry.OldStatus;
-        NewStatus = entry.NewStatus;
+        OldStatus = entry.OldStatus.ToString();
+        NewStatus = entry.NewStatus.ToString();
         MessageKey = entry.MessageKey;
         AdditionalData = entry.AdditionalData ?? [];
     }
 
     public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DeletionProcessStatus? OldStatus { get; set; }
-    public DeletionProcessStatus? NewStatus { get; set; }
+    public string? OldStatus { get; set; }
+    public string? NewStatus { get; set; }
     public Dictionary<string, string> AdditionalData { get; set; }
     public MessageKey MessageKey { get; set; }
 }
