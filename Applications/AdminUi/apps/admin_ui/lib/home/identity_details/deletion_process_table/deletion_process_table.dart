@@ -53,8 +53,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                         DataColumn2(label: Text(context.l10n.id)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedByDevice)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_createdByDevice)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: ColumnSize.S),
                       ],
@@ -86,15 +85,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                                 style: TextStyle(color: textColor),
                               ),
                             ),
-                            DataCell(
-                              Text(
-                                deletionProcess.approvedAt != null
-                                    ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.approvedAt!)} '
-                                    : '',
-                                style: TextStyle(color: textColor),
-                              ),
-                            ),
-                            DataCell(Text(deletionProcess.approvedByDevice ?? '', style: TextStyle(color: textColor))),
+                            DataCell(Text(deletionProcess.createdByDevice ?? '', style: TextStyle(color: textColor))),
                             DataCell(
                               _RemindersCell(
                                 name: context.l10n.deletionProcessTable_gracePeriodRemindersCell_reminder,
