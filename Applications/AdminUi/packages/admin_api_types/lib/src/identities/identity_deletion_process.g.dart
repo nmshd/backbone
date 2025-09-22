@@ -33,9 +33,7 @@ Map<String, dynamic> _$IdentityDeletionProcessToJson(
 };
 
 const _$DeletionProcessStatusEnumMap = {
-  DeletionProcessStatus.waitingForApproval: 'WaitingForApproval',
-  DeletionProcessStatus.approved: 'Approved',
+  DeletionProcessStatus.active: 'Active',
   DeletionProcessStatus.cancelled: 'Cancelled',
-  DeletionProcessStatus.rejected: 'Rejected',
   DeletionProcessStatus.deleting: 'Deleting',
 };
