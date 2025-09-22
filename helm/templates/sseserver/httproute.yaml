@@ -22,6 +22,9 @@ spec:
         - path:
             type: PathPrefix
             value: /api/v1/sse
+        - path:
+            type: PathPrefix
+            value: /api/v2/sse
       backendRefs:
         - name: {{ .Values.sseserver.name }}
           port: 8080
