@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -12,13 +15,7 @@ class ClientsFilter {
   final (FilterOperator, DateTime)? createdAt;
   final (FilterOperator, int)? numberOfIdentities;
 
-  const ClientsFilter({
-    this.clientId,
-    this.displayName,
-    this.tiers,
-    this.createdAt,
-    this.numberOfIdentities,
-  });
+  const ClientsFilter({this.clientId, this.displayName, this.tiers, this.createdAt, this.numberOfIdentities});
 
   static const empty = ClientsFilter();
 
@@ -83,10 +80,7 @@ class ClientsFilter {
 class ClientsFilterRow extends StatefulWidget {
   final void Function(ClientsFilter filter) onFilterChanged;
 
-  const ClientsFilterRow({
-    required this.onFilterChanged,
-    super.key,
-  });
+  const ClientsFilterRow({required this.onFilterChanged, super.key});
 
   @override
   State<ClientsFilterRow> createState() => _ClientsFilterRowState();
@@ -100,7 +94,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
   void initState() {
     super.initState();
 
-    _loadTiers();
+    unawaited(_loadTiers());
   }
 
   @override
@@ -154,9 +148,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             DateFilter(
               label: context.l10n.createdAt,
               onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
-                filter = filter.copyWith(
-                  createdAt: selectedDate == null ? const Optional.absent() : Optional((operator, selectedDate)),
-                );
+                filter = filter.copyWith(createdAt: selectedDate == null ? const Optional.absent() : Optional((operator, selectedDate)));
 
                 widget.onFilterChanged(filter);
               },
@@ -169,7 +161,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
 
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    final defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
+    final defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient).toList();
     final tierItems = defaultTiers.map((tier) => (value: tier.id, label: tier.name)).toList();
     if (mounted) setState(() => _availableTiers = tierItems);
   }

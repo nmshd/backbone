@@ -7,26 +7,26 @@ public class TokenDTO
     public TokenDTO(Token token)
     {
         Id = token.Id;
-        CreatedBy = token.CreatedBy;
-        CreatedByDevice = token.CreatedByDevice;
+        CreatedBy = token.CreatedBy?.Value;
+        CreatedByDevice = token.CreatedByDevice?.Value;
         CreatedAt = token.CreatedAt;
         ExpiresAt = token.ExpiresAt;
-        Content = token.Content;
+        Content = token.Details.Content;
         ForIdentity = token.ForIdentity?.Value;
         IsPasswordProtected = token.Password is { Length: > 0 };
     }
 
-    public string Id { get; set; }
+    public string Id { get; }
 
-    public string CreatedBy { get; set; }
-    public string CreatedByDevice { get; set; }
+    public string? CreatedBy { get; }
+    public string? CreatedByDevice { get; }
 
-    public string? ForIdentity { get; set; }
+    public string? ForIdentity { get; }
 
-    public DateTime CreatedAt { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public DateTime CreatedAt { get; }
+    public DateTime ExpiresAt { get; }
 
-    public byte[] Content { get; set; }
+    public byte[]? Content { get; }
 
     public bool IsPasswordProtected { get; }
 }

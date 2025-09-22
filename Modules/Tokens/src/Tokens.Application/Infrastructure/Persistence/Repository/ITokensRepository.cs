@@ -10,15 +10,16 @@ public interface ITokensRepository
 {
     Task Add(Token token);
 
-    Task<DbPaginationResult<Token>> FindTokensAllocatedOrCreatedBy(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<Token>> ListTokensAllocatedOrCreatedByWithContent(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
-    Task<IEnumerable<Token>> FindTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Token>> ListWithoutContent(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
 
-    Task<Token?> Find(TokenId tokenId, CancellationToken cancellationToken, bool track = false);
+    Task<Token?> GetWithoutContent(TokenId tokenId, CancellationToken cancellationToken, bool track = false);
+    Task<Token?> GetWithContent(TokenId tokenId, CancellationToken cancellationToken, bool track = false);
     Task Update(Token token, CancellationToken cancellationToken);
     Task Update(IEnumerable<Token> tokens, CancellationToken cancellationToken);
-    Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
     Task DeleteToken(Token token, CancellationToken cancellationToken);
-    Task<DbPaginationResult<Token>> FindAllTokens(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<DbPaginationResult<Token>> ListWithoutContent(PaginationFilter paginationFilter, Expression<Func<Token, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<int> Delete(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
 }

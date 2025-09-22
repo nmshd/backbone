@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
 import '../../extensions.dart';
 import 'identities_data_table_source.dart';
 
@@ -13,12 +13,7 @@ class IdentitiesDataTable extends StatefulWidget {
   final bool hideClientColumn;
   final bool hideTierColumn;
 
-  const IdentitiesDataTable({
-    required this.dataSource,
-    this.hideTierColumn = false,
-    this.hideClientColumn = false,
-    super.key,
-  });
+  const IdentitiesDataTable({required this.dataSource, this.hideTierColumn = false, this.hideClientColumn = false, super.key});
 
   @override
   State<IdentitiesDataTable> createState() => _IdentitiesDataTableState();

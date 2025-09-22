@@ -1,27 +1,27 @@
-﻿using System.Reflection;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.EventHandlerService;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.ConsumerApi;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Files.ConsumerApi;
-using Backbone.Modules.Messages.ConsumerApi;
-using Backbone.Modules.Quotas.ConsumerApi;
-using Backbone.Modules.Relationships.ConsumerApi;
-using Backbone.Modules.Synchronization.ConsumerApi;
-using Backbone.Modules.Tokens.ConsumerApi;
+using Backbone.Modules.Challenges.Module;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Files.Module;
+using Backbone.Modules.Messages.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Relationships.Module;
+using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
-
+using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
+using OpenTelemetrySdk = OpenTelemetry.Sdk;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -36,7 +36,19 @@ try
     Log.Information("App created.");
     Log.Information("Starting app...");
 
+    var meterProvider = OpenTelemetrySdk.CreateMeterProviderBuilder()
+        .AddMeter(METER_NAME)
+        .AddMeter("Microsoft.EntityFrameworkCore")
+        .AddPrometheusHttpListener(options =>
+        {
+            var host = Environment.GetEnvironmentVariable("METRICS_HOST") ?? "localhost";
+            options.UriPrefixes = [$"http://{host}:9444/"];
+        })
+        .Build();
+
     await app.Build().RunAsync();
+
+    meterProvider.Dispose();
 
     return 0;
 }
@@ -64,44 +76,36 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
-            if (env.IsDevelopment())
-            {
-                var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                configuration.AddUserSecrets(appAssembly, optional: true);
-            }
-
             configuration.AddEnvironmentVariables();
             configuration.AddCommandLine(args);
         })
         .ConfigureServices((hostContext, services) =>
         {
             var configuration = hostContext.Configuration;
-            services.ConfigureAndValidate<EventServiceConfiguration>(configuration.Bind);
+            services.ConfigureAndValidate<EventHandlerServiceConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
             var parsedConfiguration =
-                services.BuildServiceProvider().GetRequiredService<IOptions<EventServiceConfiguration>>().Value;
+                services.BuildServiceProvider().GetRequiredService<IOptions<EventHandlerServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
             services.AddTransient<IHostedService, EventHandlerService>();
 
             services
-                .AddModule<DevicesModule>(configuration)
-                .AddModule<RelationshipsModule>(configuration)
-                .AddModule<ChallengesModule>(configuration)
-                .AddModule<FilesModule>(configuration)
-                .AddModule<MessagesModule>(configuration)
-                .AddModule<QuotasModule>(configuration)
-                .AddModule<SynchronizationModule>(configuration)
-                .AddModule<TokensModule>(configuration);
+                .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+                .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+                    Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+                    Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
-            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-            var devicesConfiguration = new DevicesConfiguration();
-            configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-            services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
+            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
@@ -114,4 +118,9 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks())
         );
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.eventhandler";
 }

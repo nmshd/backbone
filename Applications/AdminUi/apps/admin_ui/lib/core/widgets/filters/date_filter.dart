@@ -1,8 +1,8 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '/core/constants.dart';
 import 'to_filter_operator_dropdown_menu_item.dart';
 
 class DateFilter extends StatefulWidget {
@@ -62,8 +62,9 @@ class _DateFilterState extends State<DateFilter> {
                 controller: _controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  suffixIcon:
-                      _selectedDate == null ? const Icon(Icons.calendar_today) : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
+                  suffixIcon: _selectedDate == null
+                      ? const Icon(Icons.calendar_today)
+                      : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
                 ),
               ),
             ),

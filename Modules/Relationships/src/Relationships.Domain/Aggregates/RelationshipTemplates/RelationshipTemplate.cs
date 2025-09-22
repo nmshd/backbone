@@ -13,12 +13,13 @@ public class RelationshipTemplate : Entity
     public const int MAX_PASSWORD_LENGTH = 200;
 
     // ReSharper disable once UnusedMember.Local
-    private RelationshipTemplate()
+    protected RelationshipTemplate()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
+        Details = null!;
     }
 
     public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null,
@@ -31,7 +32,7 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = createdByDevice;
         MaxNumberOfAllocations = maxNumberOfAllocations;
         ExpiresAt = expiresAt;
-        Content = content;
+        Details = new RelationshipTemplateDetails { Id = Id, Content = content };
         ForIdentity = forIdentity;
         Password = password;
 
@@ -40,20 +41,21 @@ public class RelationshipTemplate : Entity
 
     public RelationshipTemplateId Id { get; set; }
 
-    public ICollection<Relationship> Relationships { get; set; } = [];
+    public virtual ICollection<Relationship> Relationships { get; set; } = [];
 
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
     public int? MaxNumberOfAllocations { get; set; }
     public DateTime? ExpiresAt { get; set; }
-    public byte[]? Content { get; private set; }
+
+    public virtual RelationshipTemplateDetails Details { get; }
 
     public DateTime CreatedAt { get; set; }
 
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
+    public virtual List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
     public void AllocateFor(IdentityAddress identity, DeviceId device)
     {
@@ -67,6 +69,9 @@ public class RelationshipTemplate : Entity
             throw new DomainException(DomainErrors.MaxNumberOfAllocationsExhausted());
 
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
+
+        if (Allocations.Count == MaxNumberOfAllocations)
+            RaiseDomainEvent(new RelationshipTemplateAllocationsExhaustedDomainEvent(this));
     }
 
     public void AnonymizeForIdentity(string didDomainName)
@@ -103,6 +108,8 @@ public class RelationshipTemplate : Entity
 
     #region Expressions
 
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCleanedUp => t => t.ExpiresAt != null && t.ExpiresAt.Value <= SystemTime.UtcNow.AddDays(-30) && t.Relationships.Count == 0;
+
     public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
     {
         return r => r.Id == id;
@@ -137,4 +144,10 @@ public class RelationshipTemplate : Entity
     }
 
     #endregion
+}
+
+public class RelationshipTemplateDetails
+{
+    public required RelationshipTemplateId Id { get; init; } = null!;
+    public required byte[] Content { get; init; } = null!;
 }

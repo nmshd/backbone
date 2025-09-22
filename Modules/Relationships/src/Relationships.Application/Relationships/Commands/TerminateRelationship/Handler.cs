@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 
-public class Handler : IRequestHandler<TerminateRelationshipCommand, RelationshipDTO>
+public class Handler : IRequestHandler<TerminateRelationshipCommand, RelationshipMetadataDTO>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -20,15 +20,15 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, Relationshi
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<RelationshipDTO> Handle(TerminateRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<RelationshipMetadataDTO> Handle(TerminateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
-        var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
+        var relationship = await _relationshipsRepository.GetRelationshipWithoutContent(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.Terminate(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
 
-        return new RelationshipDTO(relationship);
+        return new RelationshipMetadataDTO(relationship);
     }
 }

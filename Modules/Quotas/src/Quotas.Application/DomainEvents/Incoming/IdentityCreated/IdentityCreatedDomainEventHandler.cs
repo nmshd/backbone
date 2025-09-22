@@ -31,14 +31,14 @@ public class IdentityCreatedDomainEventHandler : IDomainEventHandler<IdentityCre
 
         var identity = new Identity(domainEvent.Address, TierId.Parse(domainEvent.Tier));
 
-        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
+        var tier = await _tiersRepository.Get(identity.TierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
 
         foreach (var tierQuotaDefinition in tier.Quotas)
         {
             identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
 
-        await identity.UpdateMetricStatuses(tier.Quotas.Select(q => q.MetricKey), _metricCalculatorFactory, CancellationToken.None);
+        await identity.UpdateMetricStatuses(tier.Quotas.Select(q => q.MetricKey), _metricCalculatorFactory, MetricUpdateType.All, CancellationToken.None);
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 

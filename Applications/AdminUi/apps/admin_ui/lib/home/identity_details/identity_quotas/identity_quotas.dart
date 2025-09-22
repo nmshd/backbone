@@ -45,12 +45,7 @@ class IdentityQuotasState extends State<IdentityQuotas> {
                     columns: [
                       DataColumn2(label: Text(context.l10n.metric)),
                       DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
-                      DataColumn2(
-                        label: Text(
-                          '${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})',
-                        ),
-                        size: ColumnSize.L,
-                      ),
+                      DataColumn2(label: Text('${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})'), size: ColumnSize.L),
                       DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
                       const DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],
@@ -72,65 +67,46 @@ class IdentityQuotasState extends State<IdentityQuotas> {
                             const DataCell(Text('')),
                           ],
                         ),
-                        ...quotas.map(
-                          (quota) {
-                            final isTierQuota = quota.source == 'Tier';
-                            final shouldDisable = isTierQuota && hasIndividualQuota;
-                            final tooltipMessage = shouldDisable ? context.l10n.identityQuotaTable_tierQuotaEffectMessage : null;
+                        ...quotas.map((quota) {
+                          final isTierQuota = quota.source == 'Tier';
+                          final shouldDisable = isTierQuota && hasIndividualQuota;
+                          final tooltipMessage = shouldDisable ? context.l10n.identityQuotaTable_tierQuotaEffectMessage : null;
 
-                            return DataRow2(
-                              selected: _selectedQuotas.contains(quota.id),
-                              color: shouldDisable ? WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright) : null,
-                              onSelectChanged: shouldDisable || isTierQuota ? null : (_) => _toggleSelection(quota.id),
-                              cells: [
-                                DataCell(Container()),
-                                DataCell(
-                                  Text(
-                                    quota.source,
-                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                  ),
-                                ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${quota.usage}/${quota.max}',
-                                        style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: LinearProgressIndicator(
-                                          value: quota.max > 0 ? quota.usage / quota.max : 0,
-                                          backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary),
-                                          minHeight: 8,
+                          return DataRow2(
+                            selected: _selectedQuotas.contains(quota.id),
+                            color: shouldDisable ? WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright) : null,
+                            onSelectChanged: shouldDisable || isTierQuota ? null : (_) => _toggleSelection(quota.id),
+                            cells: [
+                              DataCell(Container()),
+                              DataCell(Text(quota.source, style: TextStyle(color: shouldDisable ? Colors.grey : null))),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    Text('${quota.usage}/${quota.max}', style: TextStyle(color: shouldDisable ? Colors.grey : null)),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: LinearProgressIndicator(
+                                        value: quota.max > 0 ? quota.usage / quota.max : 0,
+                                        backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary,
                                         ),
+                                        minHeight: 8,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                DataCell(
-                                  Text(
-                                    quota.period,
-                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                  ),
+                              ),
+                              DataCell(Text(quota.period, style: TextStyle(color: shouldDisable ? Colors.grey : null))),
+                              DataCell(
+                                Tooltip(
+                                  message: tooltipMessage ?? '',
+                                  child: isTierQuota && shouldDisable ? Icon(Icons.info, color: shouldDisable ? Colors.grey : null) : null,
                                 ),
-                                DataCell(
-                                  Tooltip(
-                                    message: tooltipMessage ?? '',
-                                    child: isTierQuota && shouldDisable
-                                        ? Icon(
-                                            Icons.info,
-                                            color: shouldDisable ? Colors.grey : null,
-                                          )
-                                        : null,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                              ),
+                            ],
+                          );
+                        }),
                       ];
                     }).toList(),
                   ),

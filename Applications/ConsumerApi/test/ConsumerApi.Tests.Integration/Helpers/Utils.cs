@@ -1,8 +1,9 @@
-﻿using Backbone.ConsumerApi.Sdk;
+﻿using System.Text.Json;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
@@ -11,7 +12,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -22,26 +22,26 @@ public static class Utils
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = identity.IdentityData!.KeyPair;
 
-        var serializedChallenge = JsonConvert.SerializeObject(challenge);
+        var serializedChallenge = JsonSerializer.Serialize(challenge);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
 
         return new SignedChallenge(serializedChallenge, challengeSignature);
     }
 
-    public static async Task<Relationship> CreatePendingRelationshipBetween(Client client1, Client client2)
+    public static async Task<Relationship> CreatePendingRelationshipBetween(Client templator, Client requestor)
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
             Content = TestData.SOME_BYTES
         };
 
-        var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
-        relationshipTemplateResponse.Should().BeASuccess();
+        var relationshipTemplateResponse = await templator.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
+        relationshipTemplateResponse.ShouldBeASuccess();
 
-        return await CreatePendingRelationshipUsingTemplate(client2, relationshipTemplateResponse.Result!.Id);
+        return await CreatePendingRelationshipUsingTemplate(requestor, relationshipTemplateResponse.Result!.Id);
     }
 
-    public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client client2, string templateId)
+    public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client requestor, string templateId)
     {
         var createRelationshipRequest = new CreateRelationshipRequest
         {
@@ -49,11 +49,11 @@ public static class Utils
             Content = TestData.SOME_BYTES
         };
 
-        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
-        createRelationshipResponse.Should().BeASuccess();
+        var createRelationshipResponse = await requestor.Relationships.CreateRelationship(createRelationshipRequest);
+        createRelationshipResponse.ShouldBeASuccess();
 
-        var getRelationshipResponse = await client2.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        var getRelationshipResponse = await requestor.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -68,10 +68,10 @@ public static class Utils
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
-        acceptRelationshipResponse.Should().BeASuccess();
+        acceptRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -86,10 +86,10 @@ public static class Utils
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
-        acceptRelationshipResponse.Should().BeASuccess();
+        acceptRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -104,10 +104,10 @@ public static class Utils
         };
 
         var rejectRelationshipResponse = await client1.Relationships.RejectRelationship(relationshipMetadata.Id, rejectRelationshipRequest);
-        rejectRelationshipResponse.Should().BeASuccess();
+        rejectRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -117,10 +117,10 @@ public static class Utils
         var relationshipMetadata = await EstablishRelationshipBetween(client1, client2);
 
         var terminateRelationshipResponse = await client1.Relationships.TerminateRelationship(relationshipMetadata.Id);
-        terminateRelationshipResponse.Should().BeASuccess();
+        terminateRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
@@ -130,15 +130,15 @@ public static class Utils
         var relationshipMetadata = await CreateTerminatedRelationshipBetween(client1, client2);
 
         var reactivateRelationshipResponse = await client2.Relationships.ReactivateRelationship(relationshipMetadata.Id);
-        reactivateRelationshipResponse.Should().BeASuccess();
+        reactivateRelationshipResponse.ShouldBeASuccess();
 
         var getRelationshipResponse = await client2.Relationships.GetRelationship(relationshipMetadata.Id);
-        getRelationshipResponse.Should().BeASuccess();
+        getRelationshipResponse.ShouldBeASuccess();
 
         return getRelationshipResponse.Result!;
     }
 
-    public static async Task<FileMetadata> CreateFile(Client client)
+    public static async Task<CreateFileResponse> CreateFile(Client client)
     {
         var createFileRequest = new CreateFileRequest
         {
@@ -152,13 +152,8 @@ public static class Utils
 
         var createFileResponse = await client.Files.UploadFile(createFileRequest);
 
-        createFileResponse.Should().BeASuccess();
-
-        var getFileMetadataResponse = await client.Files.GetFileMetadata(createFileResponse.Result!.Id);
-
-        getFileMetadataResponse.Should().BeASuccess();
-
-        return getFileMetadataResponse.Result!;
+        createFileResponse.ShouldBeASuccess();
+        return createFileResponse.Result!;
     }
 
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
@@ -175,11 +170,11 @@ public static class Utils
         };
         var sendMessageResponse = await sender.Messages.SendMessage(sendMessageRequest);
 
-        sendMessageResponse.Should().BeASuccess();
+        sendMessageResponse.ShouldBeASuccess();
 
         var getMessageResponse = await sender.Messages.GetMessage(sendMessageResponse.Result!.Id);
 
-        getMessageResponse.Should().BeASuccess();
+        getMessageResponse.ShouldBeASuccess();
 
         return getMessageResponse.Result!;
     }

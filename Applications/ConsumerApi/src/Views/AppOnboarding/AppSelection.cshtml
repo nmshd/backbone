@@ -1,0 +1,73 @@
+﻿@model Backbone.ConsumerApi.Controllers.Onboarding.AppSelectionModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<head>
+    <title>Onboarding</title>
+    <link rel="stylesheet" href="~/style/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @foreach (var app in Model.Apps)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const link = document.getElementById('linkTo@(app.Id)');
+                const queryString = new URLSearchParams(window.location.search);
+                queryString.set('app', '@app.Id');
+                link.href = window.location.origin + window.location.pathname + "?" + queryString.toString() + window.location.hash;
+            });
+        </script>
+    }
+    <style>
+        :root {
+            --primary-color: @Model.Apps[0].PrimaryColor;
+            --secondary-color: @Model.Apps[0].SecondaryColor;
+            --background-color: @Model.Apps[0].BackgroundColor;
+        }
+
+        .container {
+            padding-top: 230px;
+        }
+
+        .step-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        img {
+            align-self: flex-end;
+        }
+
+        .step-content {
+            font-size: 20px;
+        }
+
+        .app-icon {
+            display: block;
+            width: 60px;
+            height: 60px;
+            border-radius: 20%;
+        }
+    </style>
+</head>
+<body>
+<div class="vertical-spacer"></div>
+<div class="container">
+    <div class="steps-container">
+        <div class="info-box">
+            <p>Bitte wählen Sie die von Ihrem Anbieter angegebene App aus und installieren Sie sie.</p>
+        </div>
+        @foreach (var app in Model.Apps)
+        {
+            <a class="step-box" id="linkTo@(app.Id)">
+                <div class="step-content">@app.DisplayName installieren</div>
+                <img src="@app.AppIconUrl" alt="Zur App Installation" class="app-icon" />
+            </a>
+        }
+    </div>
+</div>
+</body>
+

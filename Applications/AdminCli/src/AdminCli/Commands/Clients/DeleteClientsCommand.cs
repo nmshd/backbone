@@ -15,9 +15,13 @@ public class DeleteClientsCommand : AdminCliCommand
             Description = "The clientId's that should be deleted."
         };
 
-        AddArgument(clientIds);
+        Arguments.Add(clientIds);
 
-        this.SetHandler(DeleteClients, clientIds);
+        SetAction((ParseResult parseResult, CancellationToken token) =>
+        {
+            var clientIdsValue = parseResult.GetRequiredValue(clientIds);
+            return DeleteClients(clientIdsValue);
+        });
     }
 
     private async Task DeleteClients(string[] clientIds)
@@ -26,7 +30,7 @@ public class DeleteClientsCommand : AdminCliCommand
         {
             try
             {
-                await _mediator.Send(new DeleteClientCommand(clientId), CancellationToken.None);
+                await _mediator.Send(new DeleteClientCommand { ClientId = clientId }, CancellationToken.None);
                 Console.WriteLine($@"Successfully deleted client '{clientId}'");
             }
             catch (Exception ex)

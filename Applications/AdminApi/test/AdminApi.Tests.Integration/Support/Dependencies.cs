@@ -1,7 +1,7 @@
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SolidToken.SpecFlow.DependencyInjection;
+using Reqnroll.Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.AdminApi.Tests.Integration.Support;
 

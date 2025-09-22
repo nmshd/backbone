@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +11,7 @@ import '/core/core.dart';
 class DeletionProcessAuditLogDetails extends StatefulWidget {
   final String identityAddress;
 
-  const DeletionProcessAuditLogDetails({
-    required this.identityAddress,
-    super.key,
-  });
+  const DeletionProcessAuditLogDetails({required this.identityAddress, super.key});
 
   @override
   State<DeletionProcessAuditLogDetails> createState() => _DeletionProcessAuditLogDetailsState();
@@ -25,7 +24,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   void initState() {
     super.initState();
 
-    _reloadIdentityDeletionProcessAuditLogs();
+    unawaited(_reloadIdentityDeletionProcessAuditLogs());
   }
 
   @override
@@ -42,17 +41,16 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
           Row(
             children: [
               const BackButton(),
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: _reloadIdentityDeletionProcessAuditLogs,
-                tooltip: context.l10n.reload,
-              ),
+              IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadIdentityDeletionProcessAuditLogs, tooltip: context.l10n.reload),
             ],
           ),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Align(alignment: Alignment.centerLeft, child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress)),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress),
+            ),
           ),
         ),
         Expanded(child: DeletionProcessAuditLogsTable(auditLogs: identityDeletionProcessAuditLogs)),
@@ -61,9 +59,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   }
 
   Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
-    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(
-          address: widget.identityAddress,
-        );
+    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(address: widget.identityAddress);
 
     if (!mounted) return;
 

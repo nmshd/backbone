@@ -2,15 +2,17 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.DomainEvents.Out;
+using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File : Entity
 {
+    private bool _ownershipIsLocked;
+
     // ReSharper disable once UnusedMember.Local
-    private File()
+    protected File()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -23,19 +25,21 @@ public class File : Entity
         CipherHash = null!;
         Content = null!;
         EncryptedProperties = null!;
+        OwnershipToken = null!;
     }
 
-    public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
+    public File(IdentityAddress createdBy, DeviceId createdByDevice, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
         byte[] encryptedProperties)
     {
         Id = FileId.New();
 
         CreatedAt = ModifiedAt = SystemTime.UtcNow;
-        CreatedBy = ModifiedBy = createdBy;
+        Owner = CreatedBy = ModifiedBy = createdBy;
         CreatedByDevice = ModifiedByDevice = createdByDevice;
 
-        Owner = owner;
         OwnerSignature = ownerSignature;
+
+        OwnershipToken = RegenerateOwnershipToken(Owner);
 
         CipherHash = cipherHash;
         CipherSize = cipherSize;
@@ -85,10 +89,28 @@ public class File : Entity
 
     public byte[] EncryptedProperties { get; set; }
 
+    public FileOwnershipToken OwnershipToken { get; private set; }
+
+    public bool OwnershipIsLocked
+    {
+        get => _ownershipIsLocked;
+        private set
+        {
+            if (!_ownershipIsLocked && value)
+                RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+
+            _ownershipIsLocked = value;
+        }
+    }
+
+    public DateTime? LastOwnershipClaimAt { get; private set; }
+
     public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
     {
         if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
     }
+
+    public static Expression<Func<File, bool>> CanBeCleanedUp => f => f.ExpiresAt <= SystemTime.UtcNow.AddDays(-30);
 
     public static Expression<Func<File, bool>> IsExpired =>
         file => file.ExpiresAt <= SystemTime.UtcNow;
@@ -105,5 +127,63 @@ public class File : Entity
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public FileOwnershipToken RegenerateOwnershipToken(IdentityAddress activeIdentity)
+    {
+        if (Owner != activeIdentity)
+            throw new DomainActionForbiddenException();
+
+        OwnershipToken = FileOwnershipToken.New();
+        OwnershipIsLocked = false;
+        return OwnershipToken;
+    }
+
+    public ClaimFileOwnershipResult ClaimOwnership(FileOwnershipToken ownershipToken, IdentityAddress newOwnerAddress)
+    {
+        if (Owner == newOwnerAddress)
+            return ClaimFileOwnershipResult.CannotClaimOwnFile;
+
+        if (OwnershipIsLocked)
+            return ClaimFileOwnershipResult.Locked;
+
+        if (OwnershipToken != ownershipToken)
+        {
+            OwnershipIsLocked = true;
+            RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+            return ClaimFileOwnershipResult.IncorrectToken;
+        }
+
+        LastOwnershipClaimAt = SystemTime.UtcNow;
+
+        var oldOwnerAddress = Owner;
+
+        Owner = newOwnerAddress;
+        OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
+
+        RaiseDomainEvent(new FileOwnershipClaimedDomainEvent(this, oldOwnerAddress));
+        return ClaimFileOwnershipResult.Ok;
+    }
+
+    public bool ValidateFileOwnershipToken(FileOwnershipToken ownershipToken, IdentityAddress activeIdentity)
+    {
+        if (OwnershipIsLocked)
+            return false;
+
+        if (OwnershipToken == ownershipToken)
+            return true;
+
+        if (Owner != activeIdentity)
+            OwnershipIsLocked = true;
+
+        return false;
+    }
+
+    public enum ClaimFileOwnershipResult
+    {
+        Ok,
+        CannotClaimOwnFile,
+        IncorrectToken,
+        Locked
     }
 }

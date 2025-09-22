@@ -6,8 +6,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Microsoft.AspNetCore.Http.HttpResults;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -22,6 +20,7 @@ internal class TokensStepDefinitions
     private readonly TokensContext _tokensContext;
     private readonly ClientPool _clientPool;
 
+    private byte[]? _updatedContent;
     private ApiResponse<ListTokensResponse>? _listTokensResponse;
 
     public TokensStepDefinitions(ResponseContext responseContext, TokensContext tokensContext, ClientPool clientPool)
@@ -54,7 +53,16 @@ internal class TokensStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
 
         var response = await client.Tokens.CreateToken(
-            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = null });
+            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
+    [Given($@"Token {RegexFor.SINGLE_THING} created by an anonymous user")]
+    public async Task GivenTokenCreatedByAnAnonymousUser(string tokenName)
+    {
+        var response = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(
+            new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
 
         _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
     }
@@ -80,7 +88,7 @@ internal class TokensStepDefinitions
             {
                 var allocatedClient = _clientPool.FirstForIdentityName(allocatedIdentityName);
                 var allocatedResponse = password != null ? await allocatedClient.Tokens.GetToken(response.Result!.Id, password) : await allocatedClient.Tokens.GetToken(response.Result!.Id);
-                allocatedResponse.Status.Should().Be(HttpStatusCode.OK);
+                allocatedResponse.Status.ShouldBe(HttpStatusCode.OK);
             }
         }
     }
@@ -98,17 +106,17 @@ internal class TokensStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint")]
+    [When($"^{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint$")]
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
-    [When("an anonymous user sends a POST request to the /Tokens endpoint")]
-    public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
+    [When("^an anonymous user sends a POST request to the /Tokens endpoint$")]
+    public async Task WhenAnAnonymousUserSendsAPOSTRequestToTheTokensEndpoint()
     {
-        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { ExpiresAt = DateTime.UtcNow.AddMinutes(1).ToUniversalTime() });
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint with the password ""([^""]*)""")]
@@ -181,6 +189,17 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens/{RegexFor.SINGLE_THING}.Id/UpdateContent endpoint")]
+    public async Task WhenISendsApatchRequestToTheTokensTIdUpdateContentEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _updatedContent = CreateRandomBytes();
+
+        _responseContext.WhenResponse = await client.Tokens.UpdateTokenContent(tokenId, new UpdateTokenContentRequest { NewContent = _updatedContent });
+    }
+
     #endregion
 
     #region Then
@@ -188,11 +207,27 @@ internal class TokensStepDefinitions
     [Then($@"the response contains Token\(s\) {RegexFor.LIST_OF_THINGS}")]
     public void ThenTheResponseContainsTokens(string tokenNames)
     {
-        var tokens = tokenNames.Split(',').Select(item => _tokensContext.CreateTokenResponses[item.Trim()]).ToList();
-        _listTokensResponse!.Result!.Should().BeEquivalentTo(tokens, options => options.WithStrictOrdering());
+        var tokens = tokenNames
+            .Split(',')
+            .Select(item => _tokensContext.CreateTokenResponses[item.Trim()])
+            .Select(item => (item.Id, item.CreatedAt))
+            .ToList();
+
+        _listTokensResponse!.Result!
+            .Select(item => (item.Id, item.CreatedAt))
+            .ShouldBe(tokens, true);
     }
 
     #endregion
+
+    [Then($"the Token {RegexFor.SINGLE_THING} has the new content")]
+    public async Task ThenTheTokenTHasTheNewContent(string tokenName)
+    {
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+        var client = _clientPool.Anonymous;
+        var response = await client.Tokens.GetTokenUnauthenticated(tokenId);
+        response.Result!.Content.ShouldBe(_updatedContent);
+    }
 }
 
 // ReSharper disable once ClassNeverInstantiated.Local

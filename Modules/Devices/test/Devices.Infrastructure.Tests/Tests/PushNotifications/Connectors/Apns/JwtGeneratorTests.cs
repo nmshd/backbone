@@ -1,9 +1,12 @@
 using System.Collections.Concurrent;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
+[CollectionDefinition(nameof(JwtGeneratorTests), DisableParallelization = true)]
+[Collection(nameof(JwtGeneratorTests))]
 public class JwtGeneratorTests : AbstractTestsBase
 {
     private const string SOME_KEY =
@@ -19,8 +22,8 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt.Should().NotBeNull();
-        jwt.Value.Should().NotBeNull();
+        jwt.ShouldNotBeNull();
+        jwt.Value.ShouldNotBeNull();
     }
 
     [Fact]
@@ -35,7 +38,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt1.Should().BeSameAs(jwt2);
+        jwt1.ShouldBeSameAs(jwt2);
     }
 
     [Fact]
@@ -50,7 +53,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-other-bundle-id");
 
         // Assert
-        jwt1.Should().NotBeSameAs(jwt2);
+        jwt1.ShouldNotBeSameAs(jwt2);
     }
 
     [Fact]
@@ -66,7 +69,7 @@ public class JwtGeneratorTests : AbstractTestsBase
         var jwt2 = jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id");
 
         // Assert
-        jwt1.Should().NotBeSameAs(jwt2);
+        jwt1.ShouldNotBeSameAs(jwt2);
     }
 
     [Fact]
@@ -81,10 +84,10 @@ public class JwtGeneratorTests : AbstractTestsBase
         Parallel.For(0, 10000, _ => { results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id")); });
 
         // Assert
-        results.Should().NotBeNull();
-        results.Should().HaveCount(10000);
+        results.ShouldNotBeNull();
+        results.ShouldHaveCount(10000);
 
-        results.Distinct().Count().Should().Be(1);
+        results.Distinct().Count().ShouldBe(1);
     }
 
     [Fact]
@@ -103,18 +106,18 @@ public class JwtGeneratorTests : AbstractTestsBase
         {
             SystemTime.Set(expiredSystemTime); // we need to set the SystemTime in here, because Parallel executes each iteration in a different thread, and SystemTime sets the time only for the current thread
             results.Add(jwtGenerator.Generate(SOME_KEY, "some-key-id", "some-team-id", "some-bundle-id"));
+            SystemTime.Reset(); // we need to reset the SystemTime after each iteration because resetting it via AbstractTestsBase will only reset the SystemTime for the thread active at that time, leaving the other threads with the wrong time
         });
 
         // Assert
-        results.Should()
-            .NotBeNull().And
-            .HaveCount(10000);
+        results.ShouldNotBeNull();
+        results.ShouldHaveCount(10000);
 
-        results.Count(r => ReferenceEquals(initialJwt, r)).Should().Be(0);
+        results.Count(r => ReferenceEquals(initialJwt, r)).ShouldBe(0);
 
         foreach (var result in results)
         {
-            result.Value.Should().NotBeSameAs(initialJwt.Value);
+            result.Value.ShouldNotBeSameAs(initialJwt.Value);
         }
     }
 

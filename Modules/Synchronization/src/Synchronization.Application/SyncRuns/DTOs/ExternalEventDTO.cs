@@ -37,6 +37,15 @@ public class ExternalEventDTO
             ExternalEventType.PeerDeletionCancelled => "PeerDeletionCancelled",
             ExternalEventType.PeerDeleted => "PeerDeleted",
 
+            ExternalEventType.TokenLocked => "TokenLocked",
+
+            ExternalEventType.PeerFeatureFlagsChanged => "PeerFeatureFlagsChanged",
+
+            ExternalEventType.RelationshipTemplateAllocationsExhausted => "RelationshipTemplateAllocationsExhausted",
+
+            ExternalEventType.FileOwnershipLocked => "FileOwnershipLocked",
+            ExternalEventType.FileOwnershipClaimed => "FileOwnershipClaimed",
+
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         };
     }

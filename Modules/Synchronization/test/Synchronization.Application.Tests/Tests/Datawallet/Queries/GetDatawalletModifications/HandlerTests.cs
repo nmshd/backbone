@@ -1,12 +1,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
+using Backbone.Modules.Synchronization.Application.Datawallets.Queries.ListModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
-using FluentAssertions.Execution;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
@@ -22,8 +22,6 @@ public class HandlerTests : AbstractTestsBase
 
     public HandlerTests()
     {
-        AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-
         (_arrangeContext, _actContext, _) = FakeDbContextFactory.CreateDbContexts<SynchronizationDbContext>();
         _handler = CreateHandler();
     }
@@ -44,11 +42,11 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(1);
-        result.First().Id.Should().Be(latestCacheChangedModification.Id);
+        result.ShouldHaveCount(1);
+        result.First().Id.ShouldBe(latestCacheChangedModification.Id);
     }
 
     [Fact]
@@ -67,11 +65,11 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(1);
-        result.First().Id.Should().Be(latestUpdateModification.Id);
+        result.ShouldHaveCount(1);
+        result.First().Id.ShouldBe(latestUpdateModification.Id);
     }
 
     [Fact]
@@ -90,10 +88,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.ShouldHaveCount(2);
     }
 
     [Fact]
@@ -114,10 +112,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.ShouldHaveCount(2);
     }
 
     [Fact]
@@ -138,10 +136,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.ShouldHaveCount(2);
     }
 
     [Fact]
@@ -155,10 +153,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(0);
+        result.ShouldHaveCount(0);
     }
 
 
@@ -240,23 +238,23 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawalletOfActiveIdentity);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(9);
-        result.Should().NotContain(m => m.Id == modificationOfAnotherIdentity.Id);
-        result.Should().NotContain(m => m.Id == firstUpdateId1Category1.Id);
-        result.Should().NotContain(m => m.Id == secondUpdateId1Category1.Id);
+        result.ShouldHaveCount(9);
+        result.ShouldNotContain(m => m.Id == modificationOfAnotherIdentity.Id);
+        result.ShouldNotContain(m => m.Id == firstUpdateId1Category1.Id);
+        result.ShouldNotContain(m => m.Id == secondUpdateId1Category1.Id);
 
-        result.Should().Contain(m => m.Id == createId1Category1.Id);
-        result.Should().Contain(m => m.Id == createId1Category2.Id);
-        result.Should().Contain(m => m.Id == createId2Category1.Id);
-        result.Should().Contain(m => m.Id == createId2Category2.Id);
-        result.Should().Contain(m => m.Id == updateId1Category2.Id);
-        result.Should().Contain(m => m.Id == updateId2Category2.Id);
-        result.Should().Contain(m => m.Id == deleteId2.Id);
-        result.Should().Contain(m => m.Id == lastUpdateId1Category1.Id);
-        result.Should().Contain(m => m.Id == deleteId1.Id);
+        result.ShouldContain(m => m.Id == createId1Category1.Id);
+        result.ShouldContain(m => m.Id == createId1Category2.Id);
+        result.ShouldContain(m => m.Id == createId2Category1.Id);
+        result.ShouldContain(m => m.Id == createId2Category2.Id);
+        result.ShouldContain(m => m.Id == updateId1Category2.Id);
+        result.ShouldContain(m => m.Id == updateId2Category2.Id);
+        result.ShouldContain(m => m.Id == deleteId2.Id);
+        result.ShouldContain(m => m.Id == lastUpdateId1Category1.Id);
+        result.ShouldContain(m => m.Id == deleteId1.Id);
     }
 
     [Fact]
@@ -275,10 +273,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(0, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { LocalIndex = 0, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(1);
+        result.ShouldHaveCount(1);
     }
 
     [Fact]
@@ -303,21 +301,23 @@ public class HandlerTests : AbstractTestsBase
         const int pageSize = 2;
 
         // Act
-        var firstPage = await _handler.Handle(new GetModificationsQuery(new PaginationFilter(1, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
-        var secondPage = await _handler.Handle(new GetModificationsQuery(new PaginationFilter(2, pageSize), null, DATAWALLET_VERSION), CancellationToken.None);
+        var firstPage = await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(1, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION },
+            CancellationToken.None);
+        var secondPage = await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(2, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION },
+            CancellationToken.None);
 
         // Assert
-        firstPage.Should().HaveCount(2);
-        firstPage.Pagination.PageSize.Should().Be(2);
-        firstPage.Pagination.PageNumber.Should().Be(1);
-        firstPage.Pagination.TotalPages.Should().Be(2);
-        firstPage.Pagination.TotalRecords.Should().Be(3);
+        firstPage.ShouldHaveCount(2);
+        firstPage.Pagination.PageSize.ShouldBe(2);
+        firstPage.Pagination.PageNumber.ShouldBe(1);
+        firstPage.Pagination.TotalPages.ShouldBe(2);
+        firstPage.Pagination.TotalRecords.ShouldBe(3);
 
-        secondPage.Should().HaveCount(1);
-        secondPage.Pagination.PageSize.Should().Be(2);
-        secondPage.Pagination.PageNumber.Should().Be(2);
-        secondPage.Pagination.TotalPages.Should().Be(2);
-        secondPage.Pagination.TotalRecords.Should().Be(3);
+        secondPage.ShouldHaveCount(1);
+        secondPage.Pagination.PageSize.ShouldBe(2);
+        secondPage.Pagination.PageNumber.ShouldBe(2);
+        secondPage.Pagination.TotalPages.ShouldBe(2);
+        secondPage.Pagination.TotalRecords.ShouldBe(3);
     }
 
     [Fact]
@@ -336,10 +336,10 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new GetModificationsQuery(null, DATAWALLET_VERSION), CancellationToken.None);
+        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.ShouldHaveCount(2);
     }
 
     private static Domain.Entities.Datawallet CreateDatawalletForActiveIdentity(ushort version = DATAWALLET_VERSION)

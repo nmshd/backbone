@@ -12,10 +12,7 @@ Future<void> showChangeMaxIdentitiesDialog({
 }) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ShowChangeMaxIdentitiesDialog(
-      onMaxIdentitiesUpdated: onMaxIdentitiesUpdated,
-      clientDetails: clientDetails,
-    ),
+    builder: (BuildContext context) => _ShowChangeMaxIdentitiesDialog(onMaxIdentitiesUpdated: onMaxIdentitiesUpdated, clientDetails: clientDetails),
   );
 }
 
@@ -23,10 +20,7 @@ class _ShowChangeMaxIdentitiesDialog extends StatefulWidget {
   final VoidCallback onMaxIdentitiesUpdated;
   final Client clientDetails;
 
-  const _ShowChangeMaxIdentitiesDialog({
-    required this.onMaxIdentitiesUpdated,
-    required this.clientDetails,
-  });
+  const _ShowChangeMaxIdentitiesDialog({required this.onMaxIdentitiesUpdated, required this.clientDetails});
 
   @override
   State<_ShowChangeMaxIdentitiesDialog> createState() => _ShowChangeMaxIdentitiesDialogState();
@@ -99,26 +93,26 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
     }
 
     final response = await GetIt.I.get<AdminApiClient>().clients.updateClient(
-          widget.clientDetails.clientId,
-          defaultTier: widget.clientDetails.defaultTier,
-          maxIdentities: _maxIdentities,
-        );
+      widget.clientDetails.clientId,
+      defaultTier: widget.clientDetails.defaultTier,
+      maxIdentities: _maxIdentities,
+    );
 
     if (!mounted) return;
 
     if (response.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.maxIdentities_error_message), duration: const Duration(seconds: 3)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.maxIdentities_error_message), duration: const Duration(seconds: 3)));
 
       setState(() => _saving = false);
 
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.maxIdentities_success_message), duration: const Duration(seconds: 3)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(context.l10n.maxIdentities_success_message), duration: const Duration(seconds: 3)));
 
     widget.onMaxIdentitiesUpdated();
 

@@ -7,11 +7,11 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.F
 
 public class FirebaseMessagingFactory
 {
-    private readonly FcmOptions _options;
+    private readonly FcmConfiguration _configuration;
 
-    public FirebaseMessagingFactory(IOptions<FcmOptions> options)
+    public FirebaseMessagingFactory(IOptions<FcmConfiguration> options)
     {
-        _options = options.Value;
+        _configuration = options.Value;
     }
 
     public FirebaseMessaging CreateForAppId(string appId)
@@ -23,7 +23,7 @@ public class FirebaseMessagingFactory
 
     private FirebaseApp RegisterNewInstance(string appId)
     {
-        var serviceAccount = _options.GetServiceAccountForAppId(appId);
+        var serviceAccount = _configuration.GetServiceAccountForAppId(appId);
         var credential = GoogleCredential.FromJson(serviceAccount);
         var firebaseApp = FirebaseApp.Create(new AppOptions { Credential = credential }, appId);
 

@@ -17,11 +17,13 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
 
     public async Task<AnnouncementDTO> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
-        var announcementRecipients = request.Recipients.Select(r => new AnnouncementRecipient(IdentityAddress.Parse(r)));
-
+        var recipients = request.Recipients.Select(r => new AnnouncementRecipient(IdentityAddress.Parse(r)));
         var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
+        var actions = request.Actions.Select((a, i) => new AnnouncementAction(a.DisplayName.ToDictionary(kv => AnnouncementLanguage.Parse(kv.Key), kv => kv.Value), a.Link, (byte)i));
 
-        var announcement = new Announcement(request.Severity, texts, request.ExpiresAt, announcementRecipients);
+        var iqlQuery = string.IsNullOrEmpty(request.IqlQuery) ? null : AnnouncementIqlQuery.Parse(request.IqlQuery);
+
+        var announcement = new Announcement(request.Severity, request.IsSilent, texts, request.ExpiresAt, recipients, actions, iqlQuery);
 
         await _announcementsRepository.Add(announcement, cancellationToken);
 

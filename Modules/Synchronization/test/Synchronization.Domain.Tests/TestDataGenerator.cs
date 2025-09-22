@@ -1,24 +1,16 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.Entities;
 
 namespace Backbone.Modules.Synchronization.Domain.Tests;
 
 public static class TestDataGenerator
 {
-    public static IdentityAddress CreateRandomIdentityAddress()
+    public static Datawallet CreateDatawallet()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "prod.enmeshed.eu");
+        return new Datawallet(new Datawallet.DatawalletVersion(1), CreateRandomIdentityAddress());
     }
 
-    public static DeviceId CreateRandomDeviceId()
+    public static Datawallet CreateDatawallet(Datawallet.DatawalletVersion version)
     {
-        return DeviceId.New();
-    }
-
-    public static byte[] CreateRandomBytes()
-    {
-        var random = new Random();
-        var bytes = new byte[10];
-        random.NextBytes(bytes);
-        return bytes;
+        return new Datawallet(version, CreateRandomIdentityAddress());
     }
 }

@@ -22,7 +22,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         var acting = () => notificationTextProvider.GetNotificationTextForLanguage(typeof(PushNotificationWithoutExistingTexts), CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Assert
-        acting.Should().Throw<MissingPushNotificationTextException>();
+        acting.ShouldThrow<MissingPushNotificationTextException>();
     }
 
     [Theory, MemberData(nameof(NOTIFICATION_TYPES_DATA))]
@@ -35,7 +35,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         var acting = () => notificationTextProvider.GetNotificationTextForLanguage(notificationType, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Assert
-        acting.Should().NotThrow<MissingPushNotificationTextException>();
+        acting.ShouldNotThrow();
     }
 
     [Theory, ClassData(typeof(AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes))]
@@ -49,7 +49,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         var foreignTexts = notificationTextProvider.GetNotificationTextForLanguage(notificationType, language);
 
         // Assert
-        foreignTexts.Should().NotBe(englishText);
+        foreignTexts.ShouldNotBe(englishText);
     }
 
     private static PushNotificationTextProvider CreateNotificationTextProvider(PushNotificationResourceManager? resourceManager = null)

@@ -6,7 +6,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class TierQuotaDefinition : Entity
 {
-    private TierQuotaDefinition()
+    protected TierQuotaDefinition()
     {
         Id = null!;
         MetricKey = null!;

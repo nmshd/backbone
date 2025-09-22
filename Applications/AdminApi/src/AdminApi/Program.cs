@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
@@ -9,11 +8,16 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.Module;
+using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -23,7 +27,8 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using InfrastructureConfiguration = Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -95,11 +100,10 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSingleton<ApiKeyValidator>();
 
-    services.ConfigureAndValidate<AdminConfiguration>(configuration.Bind);
+    services.ConfigureAndValidate<AdminApiConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminConfiguration>>().Value;
-
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 #pragma warning restore ASP0000
 
     services.AddCustomAspNetCore(parsedConfiguration)
@@ -107,12 +111,15 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
-        .AddDevices(configuration.GetSection("Modules:Devices"))
-        .AddTokens(configuration.GetSection("Modules:Tokens"))
-        .AddQuotas(parsedConfiguration.Modules.Quotas)
-        .AddAnnouncements(parsedConfiguration.Modules.Announcements)
-        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
+
+
+    services
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
     services
         .AddOpenIddict()
@@ -123,13 +130,14 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
                 .UseDbContext<DevicesDbContext>()
                 .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
                     CustomOpenIddictEntityFrameworkCoreToken, string>();
-            options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
+            options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
+
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
@@ -142,18 +150,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
-    if (env.IsDevelopment())
-    {
-        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
-    }
-
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
 
 static void Configure(WebApplication app)
 {
+    app.MapPrometheusScrapingEndpoint();
+
     // the following headers are necessary to run the application in webassembly mode
     app.Use(async (context, next) =>
     {
@@ -169,7 +173,7 @@ static void Configure(WebApplication app)
         .UseMiddleware<TraceIdMiddleware>()
         .UseMiddleware<CorrelationIdMiddleware>();
 
-    var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
+    var configuration = app.Services.GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
     app.UseSerilogRequestLogging(opts =>
     {
@@ -184,7 +188,7 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny");
 
-        if (configuration.Cors.AccessControlAllowCredentials)
+        if (configuration.Cors is { AccessControlAllowCredentials: true })
             policies.AddCustomHeader("Access-Control-Allow-Credentials", "true");
     });
 
@@ -202,4 +206,9 @@ static void Configure(WebApplication app)
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
     app.MapHealthChecks("/health");
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.adminapi";
 }

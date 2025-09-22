@@ -9,6 +9,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
@@ -26,7 +27,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
+    public async Task<IdentityAddress> GetRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
         var relationship = await _readOnlyRelationships
             .WithParticipant(identityAddress)
@@ -35,8 +36,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship.GetPeerOf(identityAddress);
     }
 
-    public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
-        CancellationToken cancellationToken, bool track = false)
+    public async Task<Relationship> GetRelationshipWithContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var relationship = await (track ? _relationships : _readOnlyRelationships)
             .IncludeAll(_dbContext)
@@ -47,7 +47,19 @@ public class RelationshipsRepository : IRelationshipsRepository
         return relationship;
     }
 
-    public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
+    public async Task<Relationship> GetRelationshipWithoutContent(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    {
+        var relationship = await (track ? _relationships : _readOnlyRelationships)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
+            .AsSplitQuery()
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
+
+        return relationship;
+    }
+
+    public async Task<DbPaginationResult<Relationship>> ListRelationshipsWithContent(IEnumerable<RelationshipId> ids,
         IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _relationships : _readOnlyRelationships)
@@ -64,7 +76,6 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task Update(Relationship relationship)
     {
-        _relationships.Update(relationship);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -101,15 +112,43 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
+        await _relationships.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
-    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Relationship>> ListWithoutContent(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken, bool track = false, bool ignoreCache = false)
     {
-        return await (track ? _relationships : _readOnlyRelationships)
-            .IncludeAll(_dbContext)
+        var list = await (track ? _relationships : _readOnlyRelationships)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
             .AsSplitQuery()
             .Where(filter)
             .ToListAsync(cancellationToken);
+
+        if (ignoreCache)
+            foreach (var relationship in list)
+                await _dbContext.Entry(relationship).ReloadAsync(cancellationToken);
+
+        return list;
+    }
+
+    public async Task<IEnumerable<T>> ListWithoutContent<T>(Expression<Func<Relationship, bool>> filter, Expression<Func<Relationship, T>> selector, CancellationToken cancellationToken,
+        bool track = false)
+    {
+        return await (track ? _relationships : _readOnlyRelationships)
+            .Include(r => r.RelationshipTemplate)
+            .Include(r => r.AuditLog)
+            .AsSplitQuery()
+            .Where(filter)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<int> Delete(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
+        return await _relationships.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 }

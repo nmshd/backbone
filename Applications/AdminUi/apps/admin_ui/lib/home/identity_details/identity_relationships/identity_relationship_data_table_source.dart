@@ -12,10 +12,7 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
   final Locale locale;
   final String address;
 
-  IdentityRelationshipDataTableSource({
-    required this.address,
-    required this.locale,
-  });
+  IdentityRelationshipDataTableSource({required this.address, required this.locale});
 
   @override
   bool get isRowCountApproximate => false;
@@ -31,19 +28,14 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
     final pageNumber = startIndex ~/ count + 1;
     try {
       final response = await GetIt.I.get<AdminApiClient>().relationships.getRelationshipsByParticipantAddress(
-            address,
-            pageNumber: pageNumber,
-            pageSize: count,
-          );
+        address,
+        pageNumber: pageNumber,
+        pageSize: count,
+      );
 
       _pagination = response.isPaged
           ? response.pagination
-          : Pagination(
-              pageNumber: pageNumber,
-              pageSize: count,
-              totalPages: _totalPages(count, response.data),
-              totalRecords: response.data.length,
-            );
+          : Pagination(pageNumber: pageNumber, pageSize: count, totalPages: _totalPages(count, response.data), totalRecords: response.data.length);
 
       final rows = response.data.indexed
           .map(
@@ -52,7 +44,7 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
               cells: [
                 DataCell(Text(relationship.$2.peer)),
                 DataCell(Text(relationship.$2.requestedBy)),
-                DataCell(Text(relationship.$2.templateId)),
+                DataCell(Text(relationship.$2.templateId ?? '')),
                 DataCell(Text(relationship.$2.status)),
                 DataCell(
                   Tooltip(

@@ -77,7 +77,6 @@ file static class Extensions
     public static List<Migration> ExtractInitMigrations(this List<Migration> migrations)
     {
         return migrations
-            .FindAll(m => m.Name.EndsWith("Init"))
-            .ToList();
+            .FindAll(m => m.Name.EndsWith("Init"));
     }
 }

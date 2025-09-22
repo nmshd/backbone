@@ -305,14 +305,59 @@ eventhandler:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
+#=========================== Housekeeper ===========================
+
+housekeeper:
+  name: "housekeeper"
+
+  schedule: "0 1 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
+  backoffLimit: 0
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-housekeeper"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Housekeeper container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+  # securityContext - securityContext for the Housekeeper container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Housekeeper container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
 #=========================== Send Identity Deletion Reminders ===========================
 
 sendidentitydeletionreminders:
   name: "sendidentitydeletionreminders"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -355,9 +400,9 @@ sendidentitydeletionreminders:
 cancelstaledeletionprocesses:
   name: "cancelstaledeletionprocesses"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -400,9 +445,9 @@ cancelstaledeletionprocesses:
 actualidentitydeletion:
   name: "actualidentitydeletion"
 
-  schedule: "0 3 * * *"
+  schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 0
   backoffLimit: 0
 
   image:
@@ -551,7 +596,7 @@ global:
   env: []
         
   # provider - possible values: "Azure"/"GoogleCloud"
-  provider: ""
+  # provider: ""
 
   serviceAccount:
     create: false
@@ -562,9 +607,7 @@ global:
   configuration:
     authentication:
       jwtLifetimeInSeconds: 300
-      # jwtSigningCertificateSource - possible values: "config"/"file"
-      jwtSigningCertificateSource: "config"
-      # jwtSigningCertificateFile - only applicable if JwtSigningCertificateSource is "config"; should be set via environment variable
+      # jwtSigningCertificate - a base64 string containing the certificate that is used to sign the JWTs
       jwtSigningCertificate: ""
     cors:
       # allowedOrigins - a semicolon-separated list of origins that are allowed to access the API; if empty, no origin is allowed
@@ -573,69 +616,89 @@ global:
       exposedHeaders: "X-Request-Time;X-Response-Time;X-Response-Duration-ms;X-Trace-Id"
     infrastructure:
       eventBus:
-        # vendor - possible values: "RabbitMQ"/"Azure"/"GoogleCloud"
-        vendor: ""
-        # connectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
-        connectionInfo: ""
-        # subscriptionClientName - the name of the subscription that should be used to receive events
-        subscriptionClientName: "consumerapi"
-        # enableSsl - only applicable if Vendor is "RabbitMQ"; whether to use SSL to connect to the RabbitMQ service
-        rabbitMqEnableSsl: true
-        # rabbitMQPort - only applicable if Vendor is "RabbitMQ"; the port under which the RabbitMQ service is reachable
-        rabbitMqPort: 5672
-        # rabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMqUsername: ""
-        # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
-        rabbitMqPassword: ""
-        # rabbitMqExchangeName - only applicable if Vendor is "RabbitMQ"; the name of the exchange that should be used
-        rabbitMqExchangeName: ""
-        # rabbitMqQueueName - only applicable if Vendor is "RabbitMQ"; the name of the queue the Consumer API should listen to
-        rabbitMqQueueName: ""
-        # connectionRetryCount - only applicable if Vendor is "RabbitMQ"; specifies how often the Consumer API should retry to connect to the RabbitMQ service
-        connectionRetryCount: 5
-        # gcpPubSubProjectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
-        gcpPubSubProjectId: ""
-        # gcpPubSubTopicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
-        gcpPubSubTopicName: ""
+        # productName - possible values: "RabbitMQ"/"AzureServiceBus"/"GoogleCloudPubSub"
+        productName: ""
+        # # rabbitMq - only applicable if productName is "RabbitMQ"
+        # rabbitMq:
+        #   # enableSsl - whether to use SSL to connect to the RabbitMQ service
+        #   enableSsl: true
+        #   # hostName - the host name of the RabbitMQ service; 
+        #   hostName: ""
+        #   # port - the port under which the RabbitMQ service is reachable
+        #   port: 5672
+        #   # username - the username used to authenticate at the RabbitMQ instance
+        #   username: ""
+        #   # password - the password used to authenticate at the RabbitMQ instance
+        #   password: ""
+        #   # exchangeName - the name of the exchange that should be used
+        #   exchangeName: ""
+        # # azureServiceBus - only applicable if productName is "AzureServiceBus"
+        # azureServiceBus:
+        #   # connectionString - the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
+        # connectionString: ""
+        # # googleCloudPubSub - only applicable if productName is "GoogleCloudPubSub"
+        # googleCloudPubSub:
+        #   # projectId - only applicable if Vendor is "GoogleCloud"; the ID of the Google Cloud project the Pub/Sub service is running in
+        #   projectId: ""
+        #   # topicName - only applicable if Vendor is "GoogleCloud"; the name of the Pub/Sub topic the Consumer API should publish events to
+        #   topicName: ""
+        #   # serviceAccountJson - the content of the service account json file that should be used to authenticate; if left empty, the default credentials are used
+        #   serviceAccountJson: ""
       sqlDatabase:
         # provider - possible values: "Postgres"/"SqlServer"
         provider: ""
         # connectionString - should be set via environment variable
         connectionString: ""
+    # moduleDefaults - the default configuration for all modules; this is used if a module-specific configuration is not set
+    moduleDefaults:
+      application:
+        # didDomainName - the didDomainName that should be used when generating Identity Addresses
+        # didDomainName: ""
+        # pagination - the following options describe the default and maximum page size for the different endpoints
+        pagination:
+          defaultPageSize: 50
+          maxPageSize: 200
+      infrastructure:
+        sqlDatabase:
+          # provider - possible values: "Postgres"/"SqlServer"
+          provider: ""
+          # connectionString - should be set via environment variable
+          connectionString: ""
     modules:
-      announcements:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+      # announcements:
+      #   application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      challenges:
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # challenges:
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
       devices:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
+        infrastructure:
           pushNotifications:
             providers:
               sse:
@@ -672,33 +735,33 @@ global:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
       files:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
+        # application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
         infrastructure:
-          sqlDatabase:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-          blobStorage:
+            # connectionString: ""
+          blobStorage: {}
             # productName - possible values: "AzureStorageAccount"/"GoogleCloudStorage"
-            productName: ""
-            # azureStorageAccount - only applicable if ProductName is "AzureStorageAccount"
+            # productName: ""
+            # azureStorageAccount - only applicable if productName is "AzureStorageAccount"
             # azureStorageAccount:
               # containerName - the name of the container that should be used to store the files
               # containerName: ""
               # connectionString - should be set via environment variable
               # connectionString: ""
-            # googleCloudStorage - only applicable if ProductName is "GoogleCloudStorage"
+            # googleCloudStorage - only applicable if productName is "GoogleCloudStorage"
             # googleCloudStorage:
               # serviceAccountJson - the content of the service account json file that should be used to authenticate
               # serviceAccountJson: ""
               # bucketName - the name of the bucket that should be used to store the files
               # bucketName: ""
-            # s3Bucket - only applicable if ProductName is "S3Bucket"
+            # s3Bucket - only applicable if productName is "S3Bucket"
             # s3Bucket:
               # accessKeyId - the access key id that should be used to authenticate
               # accessKeyId: ""
@@ -711,71 +774,71 @@ global:
       messages:
         application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
+          # didDomainName: ""
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
           maxNumberOfUnreceivedMessagesFromOneSender: 20
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      quotas:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # quotas:
+        # application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      relationships:
-        application:
+            # connectionString: ""
+      # relationships:
+      #   application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      synchronization:
-        application:
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+            # connectionString: ""
+      # synchronization:
+      #   application:
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
-      tokens:
-        application:
+            # connectionString: ""
+      # tokens:
+      #   application:
           # didDomainName - the didDomainName that should be used when generating Identity Addresses
-          didDomainName: ""
-          # pagination - the following options describe the default and maximum page size for the different endpoints
-          pagination:
-            defaultPageSize: 50
-            maxPageSize: 200
-        infrastructure:
-          sqlDatabase:
+          # didDomainName: ""
+          # # pagination - the following options describe the default and maximum page size for the different endpoints
+          # pagination:
+          #   defaultPageSize: 50
+          #   maxPageSize: 200
+        # infrastructure:
+        #   sqlDatabase:
             # provider - possible values: "Postgres"/"SqlServer"
-            provider: ""
+            # provider: ""
             # connectionString - should be set via environment variable
-            connectionString: ""
+            # connectionString: ""
     logging:
       minimumLevel:
         default: Error

@@ -7,16 +7,9 @@ public class IdentityDeletionProcessOverviewDTO
     public IdentityDeletionProcessOverviewDTO(IdentityDeletionProcess process)
     {
         Id = process.Id;
-        Status = process.Status;
+        Status = process.Status.ToString();
         CreatedAt = process.CreatedAt;
-        ApprovalPeriodEndsAt = process.ApprovalPeriodEndsAt;
-
-        ApprovalReminder1SentAt = process.ApprovalReminder1SentAt;
-        ApprovalReminder2SentAt = process.ApprovalReminder2SentAt;
-        ApprovalReminder3SentAt = process.ApprovalReminder3SentAt;
-
-        ApprovedAt = process.ApprovedAt;
-        ApprovedByDevice = process.ApprovedByDevice?.Value;
+        CreatedByDevice = process.CreatedByDevice;
 
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
@@ -26,16 +19,17 @@ public class IdentityDeletionProcessOverviewDTO
     }
 
     public string Id { get; set; }
-    public DeletionProcessStatus Status { get; set; }
+    public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime ApprovalPeriodEndsAt { get; set; }
+    public string CreatedByDevice { get; set; }
 
-    public DateTime? ApprovalReminder1SentAt { get; set; }
-    public DateTime? ApprovalReminder2SentAt { get; set; }
-    public DateTime? ApprovalReminder3SentAt { get; set; }
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `createdAt` instead")]
+    public DateTime ApprovedAt => CreatedAt;
 
-    public DateTime? ApprovedAt { get; set; }
-    public string? ApprovedByDevice { get; set; }
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `CreatedByDevice` instead")]
+    public string ApprovedByDevice => CreatedByDevice;
 
     public DateTime? GracePeriodEndsAt { get; set; }
 

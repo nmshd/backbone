@@ -12,21 +12,21 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly ILogger<Handler> _logger;
-    private readonly ApplicationOptions _options;
+    private readonly ApplicationConfiguration _configuration;
     private readonly IUserContext _userContext;
     private readonly IMessagesRepository _messagesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
 
     public Handler(
         IUserContext userContext,
-        IOptionsSnapshot<ApplicationOptions> options,
+        IOptionsSnapshot<ApplicationConfiguration> options,
         ILogger<Handler> logger,
         IMessagesRepository messagesRepository,
         IRelationshipsRepository relationshipsRepository)
     {
         _userContext = userContext;
         _logger = logger;
-        _options = options.Value;
+        _configuration = options.Value;
         _messagesRepository = messagesRepository;
         _relationshipsRepository = relationshipsRepository;
     }
@@ -57,7 +57,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindYoungestRelationship(sender, recipientDto.Address, cancellationToken);
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetYoungestRelationship(sender, recipientDto.Address, cancellationToken);
 
             if (relationshipBetweenSenderAndRecipient == null)
             {
@@ -70,7 +70,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
                 _userContext.GetAddress(),
                 numberOfUnreceivedMessagesFromActiveIdentity,
-                _options.MaxNumberOfUnreceivedMessagesFromOneSender);
+                _configuration.MaxNumberOfUnreceivedMessagesFromOneSender);
 
             var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 

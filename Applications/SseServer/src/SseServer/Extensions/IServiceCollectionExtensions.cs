@@ -1,11 +1,12 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -65,17 +66,28 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
-        services.AddCors(options =>
+        services.AddApiVersioning(options =>
         {
-            options.AddDefaultPolicy(builder =>
+            options.DefaultApiVersion = new ApiVersion(1);
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+        }).AddMvc();
+
+        if (configuration.Cors != null)
+        {
+            services.AddCors(options =>
             {
-                builder
-                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-        });
+        }
 
         services.AddAuthentication().AddJwtBearer("default", options =>
         {

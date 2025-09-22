@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../extensions.dart';
 
@@ -11,12 +12,8 @@ Future<bool> showConfirmationDialog({
 }) async {
   final result = await showDialog<bool>(
     context: context,
-    builder: (BuildContext context) => _ConfirmationDialog(
-      title: title,
-      message: message,
-      actionText: actionText,
-      cancelActionText: cancelActionText,
-    ),
+    builder: (BuildContext context) =>
+        _ConfirmationDialog(title: title, message: message, actionText: actionText, cancelActionText: cancelActionText),
   );
 
   return result ?? false;
@@ -28,12 +25,7 @@ class _ConfirmationDialog extends StatelessWidget {
   final String actionText;
   final String? cancelActionText;
 
-  const _ConfirmationDialog({
-    required this.title,
-    required this.message,
-    required this.actionText,
-    this.cancelActionText,
-  });
+  const _ConfirmationDialog({required this.title, required this.message, required this.actionText, this.cancelActionText});
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +35,8 @@ class _ConfirmationDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
       content: Text(message),
       actions: [
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(cancelActionText ?? context.l10n.cancel),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(actionText),
-        ),
+        OutlinedButton(onPressed: () => context.pop(false), child: Text(cancelActionText ?? context.l10n.cancel)),
+        FilledButton(onPressed: () => context.pop(true), child: Text(actionText)),
       ],
     );
   }

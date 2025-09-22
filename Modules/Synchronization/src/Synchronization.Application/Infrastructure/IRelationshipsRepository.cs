@@ -4,5 +4,5 @@ namespace Backbone.Modules.Synchronization.Application.Infrastructure;
 
 public interface IRelationshipsRepository
 {
-    Task<List<Relationship>> GetRelationships(IEnumerable<RelationshipId> ids, CancellationToken cancellationToken);
+    Task<List<Relationship>> ListRelationships(IEnumerable<RelationshipId> ids, CancellationToken cancellationToken);
 }

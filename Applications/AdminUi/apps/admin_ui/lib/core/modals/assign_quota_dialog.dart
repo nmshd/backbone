@@ -1,18 +1,13 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-import '../constants.dart';
 import '../extensions.dart';
 
-Future<void> showAddQuotaDialog({
-  required BuildContext context,
-  required VoidCallback onQuotaAdded,
-  String? tierId,
-  String? identityAddress,
-}) async {
+Future<void> showAddQuotaDialog({required BuildContext context, required VoidCallback onQuotaAdded, String? tierId, String? identityAddress}) async {
   assert(tierId != null || identityAddress != null, 'Either tierId or address must be provided');
   assert(tierId == null || identityAddress == null, 'Only one of tierId or address can be provided');
 
@@ -29,10 +24,12 @@ Future<void> showAddQuotaDialog({
           return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
         }
 
-        return GetIt.I
-            .get<AdminApiClient>()
-            .identities
-            .createIndividualQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
+        return GetIt.I.get<AdminApiClient>().identities.createIndividualQuota(
+          address: identityAddress!,
+          metricKey: metricKey,
+          max: max,
+          period: period,
+        );
       },
       onQuotaAdded: onQuotaAdded,
     ),
@@ -44,11 +41,7 @@ class _AssignQuotaDialog extends StatefulWidget {
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AssignQuotaDialog({
-    required this.availableMetrics,
-    required this.addQuota,
-    required this.onQuotaAdded,
-  });
+  const _AssignQuotaDialog({required this.availableMetrics, required this.addQuota, required this.onQuotaAdded});
 
   @override
   State<_AssignQuotaDialog> createState() => _AssignQuotaDialogState();
@@ -94,19 +87,13 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text('*${context.l10n.required}'),
-              ),
+              Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
               Gaps.h32,
               DropdownButtonFormField(
-                value: _selectedMetric,
+                initialValue: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.metric}*',
-                ),
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.metric}*'),
               ),
               Gaps.h24,
               TextField(
@@ -122,19 +109,17 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
               ),
               Gaps.h24,
               DropdownButtonFormField(
-                value: _selectedPeriod,
+                initialValue: _selectedPeriod,
                 items: [
                   DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
                   DropdownMenuItem(value: 'Day', child: Text(context.l10n.day)),
                   DropdownMenuItem(value: 'Week', child: Text(context.l10n.week)),
                   DropdownMenuItem(value: 'Month', child: Text(context.l10n.month)),
                   DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
+                  DropdownMenuItem(value: 'Total', child: Text(context.l10n.total)),
                 ],
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.period}*',
-                ),
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.period}*'),
               ),
               if (_errorMessage != null)
                 Padding(
@@ -145,14 +130,8 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
           ),
         ),
         actions: [
-          OutlinedButton(
-            onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(context.l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: _isValid && !_saving ? _addQuota : null,
-            child: Text(context.l10n.assign),
-          ),
+          OutlinedButton(onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.cancel)),
+          FilledButton(onPressed: _isValid && !_saving ? _addQuota : null, child: Text(context.l10n.assign)),
         ],
       ),
     );
@@ -163,11 +142,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
 
     assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid State');
 
-    final response = await widget.addQuota(
-      metricKey: _selectedMetric!,
-      max: _maxAmount!,
-      period: _selectedPeriod!,
-    );
+    final response = await widget.addQuota(metricKey: _selectedMetric!, max: _maxAmount!, period: _selectedPeriod!);
 
     if (response.hasError) {
       setState(() {

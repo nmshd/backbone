@@ -1,42 +1,45 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.SseServer;
 
 public class Configuration
 {
     [Required]
-    public AuthenticationConfiguration Authentication { get; set; } = new();
+    public required AuthenticationConfiguration Authentication { get; init; }
 
-    public CorsConfiguration Cors { get; set; } = new();
-
-    [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public CorsConfiguration? Cors { get; init; }
 
     [Required]
-    public ModulesConfiguration Modules { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
+
+    [Required]
+    public required SseServerConfiguration SseServer { get; init; }
 
     public class AuthenticationConfiguration
     {
-        public string JwtSigningCertificate { get; set; } = "";
+        [Required]
+        public required string JwtSigningCertificate { get; init; }
     }
 
     public class CorsConfiguration
     {
-        public string AllowedOrigins { get; set; } = "";
-        public string ExposedHeaders { get; set; } = "";
+        [Required(AllowEmptyStrings = true)]
+        public string AllowedOrigins { get; init; } = "";
+
+        [Required(AllowEmptyStrings = true)]
+        public string ExposedHeaders { get; init; } = "";
     }
 
     public class InfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
+        public required EventBusConfiguration EventBus { get; init; }
     }
 
-    public class ModulesConfiguration
+    public class SseServerConfiguration
     {
         [Required]
-        public DevicesConfiguration Devices { get; set; } = new();
+        public required int KeepAliveEventIntervalInSeconds { get; init; }
     }
 }

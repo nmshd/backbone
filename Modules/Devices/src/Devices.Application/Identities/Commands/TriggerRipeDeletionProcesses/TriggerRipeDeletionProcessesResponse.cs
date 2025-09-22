@@ -1,28 +1,28 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+
 public class TriggerRipeDeletionProcessesResponse
 {
     public TriggerRipeDeletionProcessesResponse()
     {
-        Results = new Dictionary<IdentityAddress, UnitResult<DomainError>>();
+        Results = new Dictionary<string, UnitResult<DomainError>>();
     }
 
-    public TriggerRipeDeletionProcessesResponse(Dictionary<IdentityAddress, UnitResult<DomainError>> results)
+    public TriggerRipeDeletionProcessesResponse(Dictionary<string, UnitResult<DomainError>> results)
     {
         Results = results;
     }
 
-    public Dictionary<IdentityAddress, UnitResult<DomainError>> Results { get; }
+    public Dictionary<string, UnitResult<DomainError>> Results { get; }
 
-    public void AddSuccess(IdentityAddress address)
+    public void AddSuccess(string address)
     {
         Results.Add(address, UnitResult.Success<DomainError>());
     }
 
-    public void AddError(IdentityAddress address, DomainError error)
+    public void AddError(string address, DomainError error)
     {
         Results.Add(address, UnitResult.Failure(error));
     }

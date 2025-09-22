@@ -1,45 +1,47 @@
+using System.Diagnostics;
 using System.Text;
-using Autofac;
+using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Backbone.Tooling.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
-    private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
-    private const string AUTOFAC_SCOPE_NAME = "event_bus";
-    private readonly ILifetimeScope _autofac;
-    private readonly ILogger<EventBusAzureServiceBus> _logger;
-    private readonly ServiceBusProcessor _processor;
-    private readonly HandlerRetryBehavior _handlerRetryBehavior;
-    private readonly ServiceBusSender _sender;
-    private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
-    private readonly IEventBusSubscriptionsManager _subscriptionManager;
-    private readonly string _subscriptionName;
+    private const int MAX_DELIVERY_COUNT = 5;
 
-    public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
-        ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior,
-        string subscriptionClientName)
+    private readonly ServiceBusProcessorOptions _options = new()
     {
-        _serviceBusPersisterConnection = serviceBusPersisterConnection;
+        AutoCompleteMessages = false,
+        MaxConcurrentCalls = 1,
+        PrefetchCount = 10
+    };
+
+    private readonly IServiceProvider _serviceProvider;
+    private readonly EventBusMetrics _metrics;
+    private readonly ServiceBusClient _client;
+    private readonly ServiceBusAdministrationClient _adminClient;
+    private readonly ServiceBusSender _sender;
+    private readonly ILogger<EventBusAzureServiceBus> _logger;
+
+    private readonly List<ServiceBusProcessor> _processors = [];
+
+    public EventBusAzureServiceBus(ServiceBusClient client, ServiceBusAdministrationClient adminClient, ILogger<EventBusAzureServiceBus> logger, IServiceProvider serviceProvider,
+        EventBusMetrics metrics)
+    {
+        _client = client;
+        _adminClient = adminClient;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _subscriptionManager = subscriptionManager;
-        _autofac = autofac;
-        _subscriptionName = subscriptionClientName;
-        _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(TOPIC_NAME);
-        var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
-        _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
-        _handlerRetryBehavior = handlerRetryBehavior;
+        _serviceProvider = serviceProvider;
+        _metrics = metrics;
+        _sender = client.CreateSender(TOPIC_NAME);
     }
 
     public void Dispose()
@@ -49,18 +51,19 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        _subscriptionManager.Clear();
-        await _processor.CloseAsync();
+        foreach (var processor in _processors)
+        {
+            await processor.CloseAsync();
+        }
     }
 
     public async Task Publish(DomainEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
-        var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-        {
-            ContractResolver = new ContractResolverWithPrivates()
-        });
+        var eventName = @event.GetEventName();
+        var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+        _metrics.TrackHandledMessageSize(body.Length);
 
         var message = new ServiceBusMessage
         {
@@ -72,54 +75,39 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
         _logger.SendingDomainEvent(message.MessageId);
 
-        await _logger.TraceTime(async () =>
-            await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
+        try
+        {
+            var startedAt = Stopwatch.GetTimestamp();
+            await _sender.SendMessageAsync(message);
+            _metrics.TrackEventPublishingDuration(startedAt);
 
-        _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
+            _metrics.IncrementNumberOfPublishedEvents(eventName);
+
+            _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
+        }
+        catch (Exception)
+        {
+            _metrics.IncrementNumberOfPublishingErrors(eventName);
+            throw;
+        }
     }
 
     public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(DOMAIN_EVENT_SUFFIX, "");
+        var eventName = typeof(T).GetEventName();
+        var subscriptionName = GetSubscriptionName<TH, T>();
 
-        var containsKey = _subscriptionManager.HasSubscriptionsForEvent<T>();
-        if (!containsKey)
-            try
-            {
-                _logger.LogInformation("Trying to create subscription on Service Bus...");
+        await EnsureSubscriptionExists(subscriptionName);
 
-                await _serviceBusPersisterConnection.AdministrationClient.CreateRuleAsync(TOPIC_NAME, _subscriptionName,
-                    new CreateRuleOptions
-                    {
-                        Filter = new CorrelationRuleFilter { Subject = eventName },
-                        Name = eventName
-                    });
+        await RegisterSubscriptionForEvent(subscriptionName, eventName);
 
-                _logger.LogInformation("Successfully created subscription on Service Bus.");
-            }
-            catch (ServiceBusException)
-            {
-                _logger.LogInformation("The messaging entity '{eventName}' already exists.", eventName);
-            }
+        var processor = _client.CreateProcessor(TOPIC_NAME, subscriptionName, _options);
 
-        _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
-
-        _subscriptionManager.AddSubscription<T, TH>();
-    }
-
-    public async Task StartConsuming(CancellationToken cancellationToken)
-    {
-        await RegisterSubscriptionClientMessageHandlerAsync(cancellationToken);
-    }
-
-    private async Task RegisterSubscriptionClientMessageHandlerAsync(CancellationToken cancellationToken)
-    {
-        _processor.ProcessMessageAsync +=
+        processor.ProcessMessageAsync +=
             async args =>
             {
-                var eventName = $"{args.Message.Subject}{DOMAIN_EVENT_SUFFIX}";
                 var messageData = args.Message.Body.ToString();
                 var correlationId = args.Message.CorrelationId;
 
@@ -127,16 +115,73 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
                 using (CustomLogContext.SetCorrelationId(correlationId))
                 {
-                    // Complete the message so that it is not received again.
-                    if (await ProcessEvent(eventName, messageData))
+                    var processedSuccessfully = await ProcessEvent<T, TH>(messageData);
+
+                    if (processedSuccessfully)
                         await args.CompleteMessageAsync(args.Message);
                     else
+                    {
+                        await args.AbandonMessageAsync(args.Message);
+                        _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName<TH, T>());
                         _logger.EventWasNotProcessed(args.Message.MessageId);
+                    }
                 }
             };
 
-        _processor.ProcessErrorAsync += ErrorHandler;
-        await _processor.StartProcessingAsync(cancellationToken);
+        processor.ProcessErrorAsync += ErrorHandler;
+
+        _processors.Add(processor);
+    }
+
+    private async Task EnsureSubscriptionExists(string subscriptionName)
+    {
+        if (!await _adminClient.SubscriptionExistsAsync(TOPIC_NAME, subscriptionName))
+        {
+            _logger.LogInformation("Creating subscription on Service Bus...");
+
+            await _adminClient.CreateSubscriptionAsync(new CreateSubscriptionOptions(TOPIC_NAME, subscriptionName)
+            {
+                MaxDeliveryCount = MAX_DELIVERY_COUNT,
+                DeadLetteringOnMessageExpiration = true,
+            });
+
+            _logger.LogInformation("Successfully created subscription on Service Bus.");
+        }
+
+        if (await _adminClient.RuleExistsAsync(TOPIC_NAME, subscriptionName, "$Default"))
+        {
+            await _adminClient.DeleteRuleAsync(TOPIC_NAME, subscriptionName, "$Default");
+        }
+    }
+
+    private async Task RegisterSubscriptionForEvent(string subscriptionName, string eventName)
+    {
+        if (!await _adminClient.RuleExistsAsync(TOPIC_NAME, subscriptionName, eventName))
+        {
+            _logger.LogInformation("Creating rule on subscription...");
+
+            await _adminClient.CreateRuleAsync(TOPIC_NAME, subscriptionName,
+                new CreateRuleOptions
+                {
+                    Filter = new CorrelationRuleFilter { Subject = eventName },
+                    Name = eventName
+                });
+
+            _logger.LogInformation("Successfully created rule on subscription.");
+        }
+    }
+
+    public async Task StartConsuming(CancellationToken cancellationToken)
+    {
+        await RegisterSubscriptionClientMessageHandler(cancellationToken);
+    }
+
+    private async Task RegisterSubscriptionClientMessageHandler(CancellationToken cancellationToken)
+    {
+        foreach (var processor in _processors)
+        {
+            await processor.StartProcessingAsync(cancellationToken);
+        }
     }
 
     private Task ErrorHandler(ProcessErrorEventArgs args)
@@ -149,46 +194,30 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         return Task.CompletedTask;
     }
 
-    private async Task<bool> ProcessEvent(string eventName, string message)
+    private async Task<bool> ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        if (!_subscriptionManager.HasSubscriptionsForEvent(eventName))
+        var eventType = typeof(TEvent);
+
+        var domainEvent = JsonSerializer.Deserialize<TEvent>(message)!;
+        var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
+
+        try
         {
-            _logger.NoSubscriptionForEvent(eventName);
-            return false;
+            await using var scope = _serviceProvider.CreateAsyncScope();
+
+            if (scope.ServiceProvider.GetService(typeof(THandler)) is not IDomainEventHandler handler)
+                throw new Exception($"Domain event handler '{typeof(THandler).FullName}' could not be resolved from dependency container or it does not implement {nameof(IDomainEventHandler)}.");
+
+            var startedAt = Stopwatch.GetTimestamp();
+            await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+            _metrics.TrackEventProcessingDuration(startedAt, GetSubscriptionName<THandler, TEvent>());
+
+            _metrics.IncrementNumberOfHandledEvents(GetSubscriptionName<THandler, TEvent>());
         }
-
-        var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
-        foreach (var subscription in subscriptions)
+        catch (Exception ex)
         {
-            var eventType = subscription.EventType;
-            var domainEvent = (DomainEvent)JsonConvert.DeserializeObject(message, eventType,
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new ContractResolverWithPrivates()
-                })!;
-            var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
-
-            try
-            {
-                var policy = EventBusRetryPolicyFactory.Create(
-                    _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventType.Name, ex));
-
-                await policy.ExecuteAsync(async () =>
-                {
-                    await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
-
-                    if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
-                        throw new Exception(
-                            "Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
-
-                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
-                return false;
-            }
+            _logger.ErrorWhileProcessingDomainEvent(domainEvent.DomainEventId, ex);
+            return false;
         }
 
         return true;
@@ -196,7 +225,19 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        await _processor.StopProcessingAsync(cancellationToken);
+        foreach (var processor in _processors)
+        {
+            await processor.StopProcessingAsync(cancellationToken);
+        }
+    }
+
+    public static string GetSubscriptionName<THandler, TEvent>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var eventHandlerFullName = typeof(THandler).FullName!;
+
+        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
+
+        return $"{moduleName}.{typeof(TEvent).GetEventName()}".TruncateToXChars(50);
     }
 }
 
@@ -224,23 +265,9 @@ internal static partial class EventBusAzureServiceBusLogs
     public static partial void ErrorHandlingMessage(this ILogger logger, ServiceBusErrorSource exceptionContext, Exception exception);
 
     [LoggerMessage(
-        EventId = 341537,
-        EventName = "EventBusAzureServiceBus.NoSubscriptionForEvent",
-        Level = LogLevel.Warning,
-        Message = "No subscription for event: '{eventName}'.")]
-    public static partial void NoSubscriptionForEvent(this ILogger logger, string eventName);
-
-    [LoggerMessage(
-        EventId = 726744,
-        EventName = "EventBusAzureServiceBus.ErrorWhileExecutingEventHandlerCausingRetry",
-        Level = LogLevel.Warning,
-        Message = "An error was thrown while executing '{eventHandlerType}'. Attempting to retry...")]
-    public static partial void ErrorWhileExecutingEventHandlerType(this ILogger logger, string eventHandlerType, Exception exception);
-
-    [LoggerMessage(
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the '{domainEventName}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventName, Exception ex);
+        Message = "An error occurred while processing the event with id '{domainEventId}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
 }

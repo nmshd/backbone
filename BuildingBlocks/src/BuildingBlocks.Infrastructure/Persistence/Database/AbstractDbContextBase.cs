@@ -100,12 +100,28 @@ public class AbstractDbContextBase : DbContext, IDbContext
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
 
+        optionsBuilder.UseLazyLoadingProxies();
+
+        var evilEvents = new[]
+        {
+            RelationalEventId.MultipleCollectionIncludeWarning,
+
+            CoreEventId.NavigationLazyLoading,
+            CoreEventId.DetachedLazyLoadingWarning,
+            CoreEventId.LazyLoadOnDisposedContextWarning
+        };
 #if DEBUG
-        // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
-        // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
-        // multiple queries. See: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
-        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+        optionsBuilder.ConfigureWarnings(w => w.Throw(evilEvents));
+#else
+        optionsBuilder.ConfigureWarnings(w => w.Log(evilEvents.Select(lle => (lle, Microsoft.Extensions.Logging.LogLevel.Warning)).ToArray()));
 #endif
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Model.SetDbProvider(Database);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

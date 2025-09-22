@@ -1,7 +1,10 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
+using Backbone.UnitTestTools.TestDoubles;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
 
@@ -20,8 +23,8 @@ public class QuotaCheckerImplTests : AbstractTestsBase
         var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY]);
 
         // Assert
-        result.ExhaustedStatuses.Should().HaveCount(0);
-        result.IsSuccess.Should().BeTrue();
+        result.ExhaustedStatuses.ShouldHaveCount(0);
+        result.IsSuccess.ShouldBeTrue();
     }
 
     [Fact]
@@ -34,8 +37,8 @@ public class QuotaCheckerImplTests : AbstractTestsBase
         var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY]);
 
         // Assert
-        result.ExhaustedStatuses.Should().HaveCount(1);
-        result.IsSuccess.Should().BeFalse();
+        result.ExhaustedStatuses.ShouldHaveCount(1);
+        result.IsSuccess.ShouldBeFalse();
     }
 
     [Fact]
@@ -51,8 +54,8 @@ public class QuotaCheckerImplTests : AbstractTestsBase
         var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY]);
 
         // Assert
-        result.ExhaustedStatuses.Should().HaveCount(2);
-        result.IsSuccess.Should().BeFalse();
+        result.ExhaustedStatuses.ShouldHaveCount(2);
+        result.IsSuccess.ShouldBeFalse();
     }
 
     [Fact]
@@ -68,13 +71,31 @@ public class QuotaCheckerImplTests : AbstractTestsBase
         var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY]);
 
         // Assert
-        result.ExhaustedStatuses.Should().HaveCount(1);
-        result.ExhaustedStatuses.Single().MetricKey.Should().Be(ANOTHER_TEST_METRIC_KEY);
-        result.IsSuccess.Should().BeFalse();
+        result.ExhaustedStatuses.ShouldHaveCount(1);
+        result.ExhaustedStatuses.Single().MetricKey.ShouldBe(ANOTHER_TEST_METRIC_KEY);
+        result.IsSuccess.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Returns_success_if_there_is_no_active_identity()
+    {
+        // Arrange
+        var quotaChecker = CreateQuotaCheckerImpl(UserContextStub.ForUnauthenticatedUser());
+
+        // Act
+        var result = await quotaChecker.CheckQuotaExhaustion([TEST_METRIC_KEY, ANOTHER_TEST_METRIC_KEY]);
+
+        // Assert
+        result.ExhaustedStatuses.ShouldHaveCount(0);
     }
 
     private static QuotaCheckerImpl CreateQuotaCheckerImpl(params MetricStatus[] metricStatuses)
     {
-        return new QuotaCheckerImpl(new UserContextStub(), new MetricStatusesStubRepository(metricStatuses.ToList()));
+        return CreateQuotaCheckerImpl(UserContextStub.ForAuthenticatedUser(), metricStatuses);
+    }
+
+    private static QuotaCheckerImpl CreateQuotaCheckerImpl(IUserContext userContext, params MetricStatus[] metricStatuses)
+    {
+        return new QuotaCheckerImpl(userContext, new MetricStatusesStubRepository(metricStatuses.ToList()));
     }
 }

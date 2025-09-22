@@ -7,21 +7,23 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureSt
 
 public static class AzureStorageAccountServiceCollectionExtensions
 {
-    public static void AddAzureStorageAccount(this IServiceCollection services, AzureStorageAccountOptions options)
+    public static void AddAzureStorageAccount(this IServiceCollection services, AzureStorageAccountConfiguration configuration)
     {
-        services.AddSingleton<IOptions<AzureStorageAccountOptions>>(new OptionsWrapper<AzureStorageAccountOptions>(options));
-        services.Configure<AzureStorageAccountOptions>(opt =>
+        services.AddSingleton<IOptions<AzureStorageAccountConfiguration>>(new OptionsWrapper<AzureStorageAccountConfiguration>(configuration));
+        services.Configure<AzureStorageAccountConfiguration>(opt =>
         {
-            opt.ConnectionString = options.ConnectionString;
-            opt.ContainerName = options.ContainerName;
+            opt.ConnectionString = configuration.ConnectionString;
+            opt.ContainerName = configuration.ContainerName;
         });
         services.AddSingleton<AzureStorageAccountContainerClientFactory>();
         services.AddScoped<IBlobStorage, AzureStorageAccount>();
     }
 }
 
-public class AzureStorageAccountOptions
+public class AzureStorageAccountConfiguration
 {
+    [Required]
+    [MinLength(2)]
     public required string ConnectionString { get; set; }
 
     [Required]

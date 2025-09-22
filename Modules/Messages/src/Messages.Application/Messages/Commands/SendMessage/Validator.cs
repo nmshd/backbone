@@ -11,7 +11,7 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Validator : AbstractValidator<SendMessageCommand>
 {
-    public Validator(IOptions<ApplicationOptions> options)
+    public Validator(IOptions<ApplicationConfiguration> options)
     {
         RuleFor(m => m.Recipients)
             .DetailedNotNull()
@@ -22,7 +22,7 @@ public class Validator : AbstractValidator<SendMessageCommand>
                 .SetValidator(new SendMessageCommandRecipientInformationValidator()));
 
         RuleFor(m => m.Recipients.Count)
-            .LessThanOrEqualTo(options.Value.MaxNumberOfMessageRecipients)
+            .InclusiveBetween(1, options.Value.MaxNumberOfMessageRecipients)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Body).DetailedNotNull().NumberOfBytes(1, 10.Mebibytes());

@@ -11,12 +11,12 @@ public class ListTiersCommand : AdminCliCommand
 {
     public ListTiersCommand(IMediator mediator) : base(mediator, "list", "List all existing Tiers")
     {
-        this.SetHandler(ListTiers);
+        SetAction((ParseResult parseResult, CancellationToken token) => ListTiers());
     }
 
     private async Task ListTiers()
     {
-        var response = await _mediator.Send(new ListTiersQuery(new PaginationFilter()), CancellationToken.None);
+        var response = await _mediator.Send(new ListTiersQuery { PaginationFilter = new PaginationFilter() }, CancellationToken.None);
 
         Console.WriteLine(@"The following tiers are configured:");
 

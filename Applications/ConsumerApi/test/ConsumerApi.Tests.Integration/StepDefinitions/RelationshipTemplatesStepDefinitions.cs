@@ -5,7 +5,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -39,6 +38,15 @@ internal class RelationshipTemplatesStepDefinitions
             (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
     }
 
+    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with {RegexFor.SINGLE_THING} max allocations")]
+    public async Task GivenARelationshipTemplateCreatedByIdentityWithMaxAllocations(string templateName, string identityName, string maxAllocations)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var allocations = int.Parse(maxAllocations);
+        _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName] =
+            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, MaxNumberOfAllocations = allocations })).Result!;
+    }
+
     [Given($@"Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password ""([^""]*)"" and forIdentity {RegexFor.OPTIONAL_SINGLE_THING}")]
     public async Task GivenRelationshipTemplateCreatedByTokenOwnerWithPasswordAndForIdentity(string relationshipTemplateName, string identityName, string passwordString, string forIdentityName)
     {
@@ -68,6 +76,13 @@ internal class RelationshipTemplatesStepDefinitions
 
             _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.TemplateName] = response.Result!;
         }
+    }
+
+    [Given($@"Relationship Template {RegexFor.SINGLE_THING} was allocated by {RegexFor.SINGLE_THING}")]
+    public async Task GivenRelationshipTemplateWasAllocatedByIdentity(string templateName, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        await client.RelationshipTemplates.GetTemplate(_relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id);
     }
 
     #endregion
@@ -160,8 +175,15 @@ internal class RelationshipTemplatesStepDefinitions
     [Then($@"the response contains Relationship Template\(s\) {RegexFor.LIST_OF_THINGS}")]
     public void ThenTheResponseContainsRelationshipTemplates(string relationshipTemplateNames)
     {
-        var relationshipTemplates = relationshipTemplateNames.Split(',').Select(item => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[item.Trim()]).ToList();
-        _listRelationshipTemplatesResponse!.Result!.Should().BeEquivalentTo(relationshipTemplates, options => options.WithStrictOrdering());
+        var relationshipTemplates = relationshipTemplateNames
+            .Split(',')
+            .Select(item => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[item.Trim()])
+            .Select(response => (response.Id, response.CreatedAt))
+            .ToList();
+
+        _listRelationshipTemplatesResponse!.Result!
+            .Select(item => (item.Id, item.CreatedAt))
+            .ShouldBe(relationshipTemplates, true);
     }
 
     #endregion

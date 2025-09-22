@@ -1,21 +1,19 @@
-using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
-using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OpenIddict.Validation.AspNetCore;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
@@ -23,11 +21,10 @@ namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, BackboneConfiguration configuration)
+    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, ConsumerApiConfiguration configuration)
     {
         services
-            .AddControllers(
-                options =>
+            .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));
 
@@ -88,30 +85,38 @@ public static class IServiceCollectionExtensions
                 policy.RequireAuthenticatedUser();
             });
 
-        services.AddCors(options =>
+        services.AddApiVersioning(options =>
         {
-            options.AddDefaultPolicy(builder =>
+            options.DefaultApiVersion = new ApiVersion(1);
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+        }).AddMvc();
+
+        if (configuration.Cors != null)
+        {
+            services.AddCors(options =>
             {
-                builder
-                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-        });
+        }
 
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
-        if (configuration.Modules.Devices.Infrastructure.PushNotifications.Providers.Sse is { Enabled: true })
-            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
-
         return services;
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
-        BackboneConfiguration.AuthenticationConfiguration configuration)
+        ConsumerApiConfiguration.AuthenticationConfiguration configuration)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -164,28 +169,5 @@ public static class IServiceCollectionExtensions
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 
         return services;
-    }
-}
-
-public class SseServerHealthCheck : IHealthCheck
-{
-    private readonly HttpClient _client;
-
-    public SseServerHealthCheck(IHttpClientFactory clientFactory)
-    {
-        _client = clientFactory.CreateClient(nameof(SseServerClient));
-    }
-
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var result = await _client.GetAsync("health", cancellationToken);
-            return result.StatusCode == HttpStatusCode.OK ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
-        }
-        catch (Exception)
-        {
-            return HealthCheckResult.Unhealthy();
-        }
     }
 }

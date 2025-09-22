@@ -1,4 +1,5 @@
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
@@ -15,12 +16,12 @@ public class MetricStatusesService : IMetricStatusesService
         _metricCalculatorFactory = metricCalculatorFactory;
     }
 
-    public async Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, CancellationToken cancellationToken)
+    public async Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindByAddresses(identityAddresses, cancellationToken, track: true);
+        var identities = await _identitiesRepository.ListByAddresses(identityAddresses, cancellationToken, track: true);
         foreach (var identity in identities)
         {
-            await identity.UpdateMetricStatuses(metrics, _metricCalculatorFactory, cancellationToken);
+            await identity.UpdateMetricStatuses(metrics, _metricCalculatorFactory, updateType, cancellationToken);
         }
 
         await _identitiesRepository.Update(identities, cancellationToken);
@@ -29,5 +30,5 @@ public class MetricStatusesService : IMetricStatusesService
 
 public interface IMetricStatusesService
 {
-    Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, CancellationToken cancellationToken);
+    Task RecalculateMetricStatuses(List<string> identityAddresses, List<MetricKey> metrics, MetricUpdateType updateType, CancellationToken cancellationToken);
 }

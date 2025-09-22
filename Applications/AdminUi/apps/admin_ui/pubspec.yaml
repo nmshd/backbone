@@ -4,8 +4,10 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: "^3.9.0"
+  flutter: ">=3.35.0"
+
+resolution: workspace
 
 dependencies:
   admin_api_sdk: ^1.0.0
@@ -13,6 +15,11 @@ dependencies:
   collection: any
   data_table_2: ^2.5.15
   dropdown_button2: ^2.3.9
+  enmeshed_ui_kit:
+    git:
+      ref: main
+      url: https://github.com/nmshd/app
+      path: packages/enmeshed_ui_kit
   flex_seed_scheme: ^3.4.0
   flutter:
     sdk: flutter
@@ -22,10 +29,11 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   get_it: ^8.0.0
-  go_router: ^14.2.7
+  go_router: ^16.0.0
   intl: any
   logger: ^2.4.0
   shared_preferences: ^2.3.2
+  sn_progress_dialog: ^1.2.0
   watch_it: ^1.5.0
   window_size:
     git:
@@ -37,7 +45,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   translations_cleaner: ^0.0.5
-  very_good_analysis: ^7.0.0
+  very_good_analysis: ^10.0.0
 
 flutter:
   generate: true

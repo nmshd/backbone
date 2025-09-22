@@ -17,9 +17,9 @@ jobs:
     name: Run Admin UI Checks
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2.18.0
+        uses: subosito/flutter-action@v2.21.0
       - name: Run checks
         run: ./.ci/aui/runChecks.sh
 
@@ -28,10 +28,10 @@ jobs:
     name: Check Formatting
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22.4.1
+          node-version: 22.19.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -41,7 +41,7 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-npm-
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "9.x"
       - name: Cache NuGet packages
@@ -58,10 +58,10 @@ jobs:
     name: Run Unit Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22.4.1
+          node-version: 22.19.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -71,7 +71,7 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-npm-
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "9.x"
       - name: Cache NuGet packages
@@ -113,13 +113,16 @@ jobs:
           - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
             image: sse-server
 
+          - dockerfile: Applications/Housekeeper/src/Housekeeper/Dockerfile
+            image: housekeeper
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22.4.1
+          node-version: 22.19.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -129,7 +132,7 @@ jobs:
           driver: docker-container
 
       - name: Setup NuGet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.x
 
@@ -184,16 +187,16 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22.4.1
+          node-version: 22.19.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
       - name: Setup NuGet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.x
 
@@ -205,7 +208,7 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
@@ -259,24 +262,24 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: backbone
 
       - name: Checkout runtime repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: nmshd/runtime
           path: runtime
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22.4.1
+          node-version: 22.19.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: /tmp
           pattern: docker-*
@@ -327,9 +330,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+      - name: Install helm
+        uses: azure/setup-helm@v4
       - name: Build Helm Chart
         run: ./.ci/helm/buildChart.js
         env:
@@ -340,9 +345,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.x
       - name: Install nuget-licenses tool
@@ -352,6 +357,6 @@ jobs:
       - name: Show Ignored Packages
         run: cat ./.ci/ignoredPackages.json
       - name: Restore Solution
-        run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.sln
+        run: dotnet restore /p:ContinuousIntegrationBuild=true ./Backbone.slnx
       - name: Validate Licenses
-        run: nuget-license --input ./Backbone.sln --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
+        run: nuget-license --input ./Backbone.slnx --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only

@@ -1,7 +1,6 @@
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../constants.dart';
 
 class AppTitle extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
@@ -20,7 +19,10 @@ class AppTitle extends StatelessWidget {
         Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: 'enmeshed', style: textStyle.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(
+                text: 'enmeshed',
+                style: textStyle.copyWith(fontWeight: FontWeight.bold),
+              ),
               const TextSpan(text: ' Backbone Admin UI', style: textStyle),
             ],
           ),

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -27,8 +30,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   void initState() {
     super.initState();
 
-    _reloadClients();
-    _reloadTiers();
+    unawaited(_reloadClients());
+    unawaited(_reloadTiers());
   }
 
   @override
@@ -57,10 +60,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       tooltip: context.l10n.reload,
                     ),
                   IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-                    ),
+                    icon: Icon(Icons.delete, color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null),
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.resolveWith((states) {
                         return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
@@ -157,7 +157,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
   Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
+    setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient).toList());
   }
 
   Future<void> _removeSelectedClients() async {
@@ -173,12 +173,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     for (final clientId in _selectedClients) {
       final result = await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
       if (result.hasError && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.clientsOverview_removeSelectedClients_error),
-            showCloseIcon: true,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_error), showCloseIcon: true));
         return;
       }
 
@@ -188,12 +185,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     _selectedClients.clear();
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.clientsOverview_removeSelectedClients_success),
-          showCloseIcon: true,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_success), showCloseIcon: true));
     }
   }
 }

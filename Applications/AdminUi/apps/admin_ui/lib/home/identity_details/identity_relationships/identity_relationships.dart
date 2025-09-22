@@ -6,10 +6,7 @@ import 'identity_relationship_table.dart';
 class IdentityRelationships extends StatefulWidget {
   final String address;
 
-  const IdentityRelationships({
-    required this.address,
-    super.key,
-  });
+  const IdentityRelationships({required this.address, super.key});
 
   @override
   State<IdentityRelationships> createState() => _IdentityRelationshipsState();
@@ -22,10 +19,7 @@ class _IdentityRelationshipsState extends State<IdentityRelationships> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityRelationshipDataTableSource(
-      address: widget.address,
-      locale: Localizations.localeOf(context),
-    );
+    _dataSource = IdentityRelationshipDataTableSource(address: widget.address, locale: Localizations.localeOf(context));
   }
 
   @override
@@ -36,8 +30,6 @@ class _IdentityRelationshipsState extends State<IdentityRelationships> {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityRelationshipTable(
-      dataSource: _dataSource,
-    );
+    return IdentityRelationshipTable(dataSource: _dataSource);
   }
 }

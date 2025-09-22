@@ -1,15 +1,15 @@
-﻿using Backbone.BuildingBlocks.API;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Module;
 
 namespace Backbone.EventHandlerService;
 
 public class EventHandlerService : IHostedService
 {
     private readonly IEventBus _eventBus;
-    private readonly IEnumerable<AbstractModule> _modules;
+    private readonly IEnumerable<IEventBusConfigurator> _modules;
     private readonly ILogger<EventHandlerService> _logger;
 
-    public EventHandlerService(IEventBus eventBus, IEnumerable<AbstractModule> modules, ILogger<EventHandlerService> logger)
+    public EventHandlerService(IEventBus eventBus, IEnumerable<IEventBusConfigurator> modules, ILogger<EventHandlerService> logger)
     {
         _eventBus = eventBus;
         _modules = modules;
@@ -30,10 +30,10 @@ public class EventHandlerService : IHostedService
     private async Task SubscribeToEvents()
     {
         _logger.LogInformation("Subscribing to events...");
-        foreach (var module in _modules)
-        {
-            await module.ConfigureEventBus(_eventBus);
-        }
+
+        var configureEventBusTasks = _modules.Select(m => m.ConfigureEventBus(_eventBus));
+
+        await Task.WhenAll(configureEventBusTasks);
 
         _logger.LogInformation("Successfully subscribed to events.");
     }

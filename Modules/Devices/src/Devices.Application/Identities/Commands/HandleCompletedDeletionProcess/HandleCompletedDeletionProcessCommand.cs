@@ -4,12 +4,6 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.HandleComplet
 
 public class HandleCompletedDeletionProcessCommand : IRequest
 {
-    public HandleCompletedDeletionProcessCommand(string identityAddress, IEnumerable<string> usernames)
-    {
-        IdentityAddress = identityAddress;
-        Usernames = usernames;
-    }
-
-    public string IdentityAddress { get; }
-    public IEnumerable<string> Usernames { get; }
+    public required string IdentityAddress { get; init; }
+    public required IEnumerable<string> Usernames { get; init; }
 }

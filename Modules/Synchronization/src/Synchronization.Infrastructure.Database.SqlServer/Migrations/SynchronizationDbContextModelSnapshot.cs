@@ -18,7 +18,11 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,7 +42,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
-                    b.Property<ushort>("Version")
+                    b.Property<int>("Version")
                         .IsUnicode(false)
                         .HasColumnType("int");
 
@@ -81,12 +85,13 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsFixedLength();
 
                     b.Property<string>("DatawalletId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<ushort>("DatawalletVersion")
+                    b.Property<int>("DatawalletVersion")
                         .IsUnicode(false)
                         .HasColumnType("int");
 
@@ -126,8 +131,22 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
@@ -203,6 +222,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ErrorCode")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -215,19 +237,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("SyncRunId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalEventId");
-
-                    b.HasIndex("SyncRunId", "ExternalEventId")
-                        .IsUnique();
 
                     b.ToTable("SyncErrors", "Synchronization");
                 });
@@ -287,7 +299,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
                         .HasForeignKey("DatawalletId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Datawallet");
                 });
@@ -296,7 +309,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
-                        .HasForeignKey("SyncRunId");
+                        .HasForeignKey("SyncRunId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("SyncRun");
                 });
@@ -306,12 +320,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", null)
                         .WithMany("Errors")
                         .HasForeignKey("ExternalEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", null)
-                        .WithMany("Errors")
-                        .HasForeignKey("SyncRunId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -328,8 +336,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
                 {
-                    b.Navigation("Errors");
-
                     b.Navigation("ExternalEvents");
                 });
 #pragma warning restore 612, 618

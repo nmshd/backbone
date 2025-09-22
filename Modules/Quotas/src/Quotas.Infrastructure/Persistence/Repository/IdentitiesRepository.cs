@@ -32,7 +32,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _identitiesDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> Get(string address, CancellationToken cancellationToken, bool track = false)
     {
         var identity = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
@@ -42,7 +42,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return identity;
     }
 
-    public async Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> ListByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identitiesDbSet : _readOnlyIdentities)
             .Where(i => identityAddresses.Contains(i.Address))
@@ -51,10 +51,11 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> ListWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false)
     {
         var identities = await (track ? _identitiesDbSet : _readOnlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(i => i.TierId == tierId)
             .ToListAsync(cancellationToken);
 
@@ -69,7 +70,6 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
-        _dbContext.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

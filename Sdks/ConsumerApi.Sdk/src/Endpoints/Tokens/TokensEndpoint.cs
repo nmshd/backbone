@@ -13,9 +13,9 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
-    public async Task<ApiResponse<EmptyResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
+    public async Task<ApiResponse<CreateTokenResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
     {
-        return await _client.PostUnauthenticated<EmptyResponse>($"api/{API_VERSION}/Tokens", request);
+        return await _client.PostUnauthenticated<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)
@@ -57,5 +57,10 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
     public async Task<ApiResponse<EmptyResponse>> DeleteToken(string id)
     {
         return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Tokens/{id}");
+    }
+
+    public async Task<ApiResponse<UpdateTokenContentResponse>> UpdateTokenContent(string id, UpdateTokenContentRequest request)
+    {
+        return await _client.Post<UpdateTokenContentResponse>($"api/{API_VERSION}/Tokens/{id}/UpdateContent", request);
     }
 }

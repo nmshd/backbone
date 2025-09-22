@@ -8,8 +8,6 @@
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-
-        <MetalamaLicense>112591-ZU658QQQXEAETFQCB88YNBFRY2EWBBJFF4JX3YHRW87WNTFR46ULX7HRZDATQASR28MWN7JFS6ZTZ9QGMJHBKCL4GUAFN7768NAMQ6K8V4R3EWTHJP6A6EKXC46SYPT5TMW9QQGD9AZSNSQQBU9RGDWQHEQKPZUXVDVKBJKP</MetalamaLicense>
     </PropertyGroup>
 
     <!-- TODO: remove this PropertyGroup once the following Rider bug was fixed: https://youtrack.jetbrains.com/issue/RIDER-119965/NuGetAuditSuppress-ignored-->
@@ -31,19 +29,17 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+        <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.4]">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-        <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.1]" />
+        <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
-
-        <Using Include="FluentAssertions" />
+        <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />
@@ -51,13 +47,12 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
-        <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
+        <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <Using Include="FluentAssertions" />
+        <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />

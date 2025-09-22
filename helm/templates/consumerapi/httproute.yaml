@@ -19,8 +19,36 @@ spec:
   rules:
     - matches:
         - path:
+            type: Exact
+            value: /connect/token
+        - path:
+            type: Exact
+            value: /health
+        - path:
             type: PathPrefix
-            value: /
+            value: /api
+        - path:
+            type: PathPrefix
+            value: /style
+        - path:
+            type: PathPrefix
+            value: /r
+      backendRefs:
+        - name: {{ .Values.consumerapi.name }}
+          port: 8080
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/assetlinks.json
+        - path:
+            type: Exact
+            value: /.well-known/apple-app-site-association
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration
+        - path:
+            type: Exact
+            value: /.well-known/jwks
       backendRefs:
         - name: {{ .Values.consumerapi.name }}
           port: 8080

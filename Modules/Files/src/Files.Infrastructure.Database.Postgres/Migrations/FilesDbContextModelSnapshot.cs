@@ -18,7 +18,11 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Files")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("DbProvider", "Npgsql")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -77,6 +81,9 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("LastOwnershipClaimAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -104,6 +111,18 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
                         .HasColumnType("bytea");
+
+                    b.Property<bool>("OwnershipIsLocked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("OwnershipToken")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
                     b.HasKey("Id");
 

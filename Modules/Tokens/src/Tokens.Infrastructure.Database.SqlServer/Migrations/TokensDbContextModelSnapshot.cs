@@ -18,7 +18,11 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Tokens")
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,21 +38,16 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -66,6 +65,12 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                     b.Property<byte[]>("Password")
                         .HasMaxLength(200)
                         .HasColumnType("varbinary(200)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -101,6 +106,29 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("TokenAllocations", "Tokens");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("_TableSharingConcurrencyTokenConvention_Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("Version");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens", "Tokens");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenAllocation", b =>
                 {
                     b.HasOne("Backbone.Modules.Tokens.Domain.Entities.Token", null)
@@ -110,9 +138,21 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Tokens.Domain.Entities.Token", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Tokens.Domain.Entities.TokenDetails", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Tokens.Domain.Entities.Token", b =>
                 {
                     b.Navigation("Allocations");
+
+                    b.Navigation("Details")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

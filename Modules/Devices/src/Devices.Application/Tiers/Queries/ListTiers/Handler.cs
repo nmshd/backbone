@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
 
     public async Task<ListTiersResponse> Handle(ListTiersQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _tierRepository.FindAll(request.PaginationFilter, cancellationToken);
+        var dbPaginationResult = await _tierRepository.List(request.PaginationFilter, cancellationToken);
         return new ListTiersResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

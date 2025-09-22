@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
-  var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
+  ({bool sortAscending, int sortColumnIndex}) _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
   IdentityOverviewFilter? _filter;
   set filter(IdentityOverviewFilter? newFilter) {
     if (_filter != newFilter) {
@@ -48,11 +48,11 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     final orderBy = _getODataOrderBy();
     try {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
-            pageNumber: pageNumber,
-            pageSize: count,
-            filter: _filter,
-            orderBy: orderBy,
-          );
+        pageNumber: pageNumber,
+        pageSize: count,
+        filter: _filter,
+        orderBy: orderBy,
+      );
       _pagination = response.pagination;
 
       final rows = response.data.indexed
@@ -76,9 +76,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                     message: identity.$2.lastLoginAt != null
                         ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
                         : '',
-                    child: Text(
-                      identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : '',
-                    ),
+                    child: Text(identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : ''),
                   ),
                 ),
                 DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
@@ -102,13 +100,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   }
 
   String _getFieldNameByIndex(int index) => switch (index) {
-        0 => 'address',
-        2 => 'createdWithClient',
-        3 => 'numberOfDevices',
-        4 => 'createdAt',
-        5 => 'lastLoginAt',
-        6 => 'datawalletVersion',
-        7 => 'identityVersion',
-        _ => throw Exception('Invalid column index')
-      };
+    0 => 'address',
+    2 => 'createdWithClient',
+    3 => 'numberOfDevices',
+    4 => 'createdAt',
+    5 => 'lastLoginAt',
+    6 => 'datawalletVersion',
+    7 => 'identityVersion',
+    _ => throw Exception('Invalid column index'),
+  };
 }

@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 
@@ -15,11 +15,11 @@ public class SseMessageBuilderTests : AbstractTestsBase
         var request = sseMessageBuilder.Build();
 
         // Assert
-        request.Method.Should().Be(HttpMethod.Post);
-        request.RequestUri.Should().Be("recipient-address/events");
+        request.Method.ShouldBe(HttpMethod.Post);
+        request.RequestUri?.ToString().ShouldBe("recipient-address/events");
 
-        request.Content.Should().NotBeNull();
-        var actualContent = await request.Content!.ReadAsStringAsync();
-        actualContent.Should().BeEquivalentToJson("""{ "eventName": "Test" }""");
+        request.Content.ShouldNotBeNull();
+        var actualContent = await request.Content!.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        actualContent.ShouldBeEquivalentToJson("""{ "eventName": "Test" }""");
     }
 }

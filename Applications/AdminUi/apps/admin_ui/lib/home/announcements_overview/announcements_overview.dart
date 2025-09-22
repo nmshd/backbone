@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -23,7 +25,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
   void initState() {
     super.initState();
 
-    _reloadAnnouncements();
+    unawaited(_reloadAnnouncements());
   }
 
   @override
@@ -41,11 +43,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (kIsDesktop)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async => _reloadAnnouncements(),
-                      tooltip: context.l10n.reload,
-                    ),
+                    IconButton(icon: const Icon(Icons.refresh), onPressed: () async => _reloadAnnouncements(), tooltip: context.l10n.reload),
                   IconButton.filled(
                     icon: const Icon(Icons.add),
                     onPressed: () => showCreateAnnouncementDialog(context: context, onAnnouncementCreated: _reloadAnnouncements),
@@ -64,7 +62,10 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   rows: _announcements
                       .map(
                         (announcement) => DataRow2(
-                          onTap: () => context.go('/announcements/${announcement.id}'),
+                          onTap: () async {
+                            await context.push('/announcements/${announcement.id}');
+                            await _reloadAnnouncements();
+                          },
                           cells: [
                             DataCell(Text(_getAnnouncementTitle(announcement, 'en'))),
                             DataCell(

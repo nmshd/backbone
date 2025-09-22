@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
-        <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.1.0" />
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\Tooling\Tooling.csproj" />
     </ItemGroup>
 </Project>

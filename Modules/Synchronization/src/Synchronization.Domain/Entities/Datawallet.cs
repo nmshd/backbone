@@ -8,7 +8,7 @@ namespace Backbone.Modules.Synchronization.Domain.Entities;
 public class Datawallet : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Datawallet()
+    protected Datawallet()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -28,7 +28,7 @@ public class Datawallet : Entity
     public DatawalletId Id { get; }
     public IdentityAddress Owner { get; }
     public DatawalletVersion Version { get; private set; }
-    public List<DatawalletModification> Modifications { get; }
+    public virtual List<DatawalletModification> Modifications { get; }
     public DatawalletModification? LatestModification => Modifications.MaxBy(m => m.Index);
 
     public void Upgrade(DatawalletVersion targetVersion)

@@ -18,12 +18,32 @@ public class SingleLanguageAnnouncementDTO
         var textInLanguage = announcement.Texts.SingleOrDefault(t => t.Language == language) ??
                              announcement.Texts.Single(t => t.Language == AnnouncementLanguage.DEFAULT_LANGUAGE);
 
-        Text = new AnnouncementTextDTO(textInLanguage);
+        Title = textInLanguage.Title;
+        Body = textInLanguage.Body;
+        Actions = announcement.Actions.OrderBy(a => a.Order).Select(a => new SingleLanguageAnnouncementActionDTO(a, language));
+
+        IqlQuery = announcement.IqlQuery?.ToString();
     }
 
     public string Id { get; }
     public DateTime CreatedAt { get; }
     public DateTime? ExpiresAt { get; }
     public AnnouncementSeverity Severity { get; }
-    public AnnouncementTextDTO Text { get; }
+    public string Title { get; set; }
+    public string Body { get; set; }
+    public IEnumerable<SingleLanguageAnnouncementActionDTO> Actions { get; set; }
+    public string? IqlQuery { get; set; }
+}
+
+public class SingleLanguageAnnouncementActionDTO
+{
+    public SingleLanguageAnnouncementActionDTO(AnnouncementAction announcementAction, AnnouncementLanguage language)
+    {
+        DisplayName = announcementAction.DisplayName.TryGetValue(language, out var displayName) ? displayName : announcementAction.DisplayName[AnnouncementLanguage.DEFAULT_LANGUAGE];
+        Link = announcementAction.Link;
+    }
+
+    public string DisplayName { get; }
+    public string Link { get; }
+    public string? IqlQuery { get; set; }
 }

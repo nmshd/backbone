@@ -19,6 +19,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     private ApiResponse<TierDetails>? _getTierResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
     private ApiResponse<ListTiersResponse>? _tiersResponse;
+    private IResponse? _whenResponse;
     private string _existingTierName;
     private string _existingTierId;
 
@@ -32,7 +33,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenATier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _existingTierName = response.Result!.Name;
         _existingTierId = response.Result.Id;
@@ -42,109 +43,92 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenTheBasicTierAsT()
     {
         var response = await _client.Tiers.ListTiers();
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         var basicTier = response.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
         _existingTierId = basicTier.Id;
     }
 
-    [When("a GET request is sent to the /Tiers endpoint")]
+    [When("^a GET request is sent to the /Tiers endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
-        _tiersResponse = await _client.Tiers.ListTiers();
+        _whenResponse = _tiersResponse = await _client.Tiers.ListTiers();
     }
 
-    [When("a GET request is sent to the /Tiers/{t.id} endpoint")]
+    [When("^a GET request is sent to the /Tiers/{t.id} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersByIdEndpoint()
     {
-        _getTierResponse = await _client.Tiers.GetTier(_existingTierId);
+        _whenResponse = _getTierResponse = await _client.Tiers.GetTier(_existingTierId);
     }
 
-    [When("a GET request is sent to the /Tiers/{nonExistentTierId} endpoint")]
+    [When("^a GET request is sent to the /Tiers/{nonExistentTierId} endpoint$")]
     public async Task WhenAGETRequestIsSentToTheTiersByIdEndpointWithANonExistentId()
     {
-        _getTierResponse = await _client.Tiers.GetTier("TIRNonExistentId1231");
+        _whenResponse = _getTierResponse = await _client.Tiers.GetTier("TIRNonExistentId1231");
     }
 
-    [When("a POST request is sent to the /Tiers endpoint")]
+    [When("^a POST request is sent to the /Tiers endpoint$")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpoint()
     {
-        _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
+        _whenResponse = _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
     }
 
-    [When("a POST request is sent to the /Tiers endpoint with the name t.Name")]
+    [When("^a POST request is sent to the /Tiers endpoint with the name t.Name$")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpointWithAnAlreadyExistingName()
     {
-        _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = _existingTierName });
+        _whenResponse = _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = _existingTierName });
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint")]
+    [When("^a DELETE request is sent to the /Tiers/{t.Id} endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheTiersTierIdEndpoint()
     {
-        _deleteResponse = await _client.Tiers.DeleteTier(_existingTierId);
+        _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier(_existingTierId);
     }
 
-    [When(@"a DELETE request is sent to the /Tiers/\{t\.Id} endpoint with an inexistent id")]
+    [When("^a DELETE request is sent to the /Tiers/{t.Id} endpoint with an inexistent id$")]
     public async Task WhenADeleteRequestIsSentToTheTiersT_IdEndpointWithAnInexistentId()
     {
-        _deleteResponse = await _client.Tiers.DeleteTier("TIR00000000000000000");
+        _whenResponse = _deleteResponse = await _client.Tiers.DeleteTier("TIR00000000000000000");
     }
 
     [Then("the response contains a paginated list of Tiers")]
     public async Task ThenTheResponseContainsAListOfTiers()
     {
-        _tiersResponse!.Should().BeASuccess();
-        _tiersResponse!.ContentType.Should().StartWith("application/json");
-        await _tiersResponse.Should().ComplyWithSchema();
+        _tiersResponse!.ShouldBeASuccess();
+        _tiersResponse!.ContentType.ShouldStartWith("application/json");
+        await _tiersResponse.ShouldComplyWithSchema();
     }
 
     [Then("the response contains a Tier")]
     public async Task ThenTheResponseContainsATier()
     {
-        _tierResponse!.Should().BeASuccess();
-        _tierResponse!.ContentType.Should().StartWith("application/json");
-        await _tierResponse.Should().ComplyWithSchema();
+        _tierResponse!.ShouldBeASuccess();
+        _tierResponse!.ContentType.ShouldStartWith("application/json");
+        await _tierResponse.ShouldComplyWithSchema();
     }
 
     [Then("the response contains Tier t")]
     public async Task ThenTheResponseContainsTierT()
     {
-        _getTierResponse!.Should().BeASuccess();
-        _getTierResponse!.ContentType.Should().StartWith("application/json");
-        await _getTierResponse.Should().ComplyWithSchema();
-        _getTierResponse.Result!.Id.Should().Be(_existingTierId);
+        _getTierResponse!.ShouldBeASuccess();
+        _getTierResponse!.ContentType.ShouldStartWith("application/json");
+        await _getTierResponse.ShouldComplyWithSchema();
+        _getTierResponse.Result!.Id.ShouldBe(_existingTierId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_tierResponse != null)
-            ((int)_tierResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_tiersResponse != null)
-            ((int)_tiersResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_deleteResponse != null)
-            ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_getTierResponse != null)
-            ((int)_getTierResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_tierResponse != null)
-        {
-            _tierResponse!.Error.Should().NotBeNull();
-            _tierResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_getTierResponse != null)
-        {
-            _getTierResponse!.Error.Should().NotBeNull();
-            _getTierResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
     }
 }

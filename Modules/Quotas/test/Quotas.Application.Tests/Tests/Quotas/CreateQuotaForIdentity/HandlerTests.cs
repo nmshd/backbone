@@ -20,10 +20,10 @@ public class HandlerTests : AbstractTestsBase
         var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tierId = TierId.Parse("TIRsomeTierId1111111");
         var identity = new Identity(CreateRandomIdentityAddress(), tierId);
-        var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand { IdentityAddress = identity.Address, MetricKey = metricKey.Value, Max = 5, Period = QuotaPeriod.Month };
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number Of Sent Messages"));
         var metricStatusesService = A.Fake<IMetricStatusesService>();
         var handler = CreateHandler(identitiesRepository, metricsRepository, metricStatusesService);
@@ -34,7 +34,8 @@ public class HandlerTests : AbstractTestsBase
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
             A<List<string>>.That.Matches(x => x.Contains(identity.Address)),
-            A<List<MetricKey>>.That.Contains(metricKey),
+            A<List<MetricKey>>.That.Contains(metricKey)
+            , MetricUpdateType.All,
             A<CancellationToken>._)
         ).MustHaveHappened();
     }

@@ -1,7 +1,7 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:56cbdd25b168276871f8f4916efebde4d10e69250bb6b3e8a4f6f95db8d65ac2 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:f47429a125e38d83f5231a78dde18106cb447d541f7ffdc5b8af4d227a323d95 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -94,6 +94,8 @@ FROM build AS publish
 RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release --output /app/publish --no-restore "DatabaseMigrator.csproj"
 
 FROM base AS final
+
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
 RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0

@@ -4,14 +4,14 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.24 AS chisel
+FROM golang:1.25@sha256:8305f5fa8ea63c7b5bc85bd223ccc62941f852318ebfbd22f53bbd0b358c07e1 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:9.0-noble AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:802e64ab9e113bdfa5d476ae00c7b40ab5c42da1792731c41a47f43bc4e74bdb AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/runtime:9.0-noble-chiseled / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/runtime:9.0-noble-chiseled@sha256:3d79d14818d5fd6c24947da60700bb2787739b28cec3512e285086093519cf65 / /runtime-ref
 
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-24.04" --root /rootfs \
@@ -60,7 +60,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
 
 ### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled@sha256:337593691c082d42622df10ae86bb2dc5467be6313ff79d4ab4e91a063516600
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]

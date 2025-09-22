@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +25,7 @@ class _TiersOverviewState extends State<TiersOverview> {
   void initState() {
     super.initState();
 
-    _reloadTiers();
+    unawaited(_reloadTiers());
   }
 
   @override
@@ -38,12 +41,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (kIsDesktop)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: _reloadTiers,
-                      tooltip: context.l10n.reload,
-                    ),
+                  if (kIsDesktop) IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadTiers, tooltip: context.l10n.reload),
                   Gaps.w8,
                   IconButton.filled(
                     icon: const Icon(Icons.add),
@@ -66,11 +64,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                       .map(
                         (tier) => DataRow2(
                           onTap: () => context.go('/tiers/${tier.id}'),
-                          cells: [
-                            DataCell(Text(tier.id)),
-                            DataCell(Text(tier.name)),
-                            DataCell(Text('${tier.numberOfIdentities}')),
-                          ],
+                          cells: [DataCell(Text(tier.id)), DataCell(Text(tier.name)), DataCell(Text('${tier.numberOfIdentities}'))],
                         ),
                       )
                       .toList(),

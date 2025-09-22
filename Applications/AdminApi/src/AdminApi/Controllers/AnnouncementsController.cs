@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
+using Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
 using Backbone.Modules.Announcements.Application.Announcements.DTOs;
-using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAllAnnouncements;
 using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAnnouncementById;
+using Backbone.Modules.Announcements.Application.Announcements.Queries.ListAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +15,27 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class AnnouncementsController : ApiControllerBase
 {
-    private readonly ILogger<AnnouncementsController> _logger;
-
-    public AnnouncementsController(IMediator mediator, ILogger<AnnouncementsController> logger) : base(mediator)
+    public AnnouncementsController(IMediator mediator) : base(mediator)
     {
-        _logger = logger;
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(AnnouncementDTO), StatusCodes.Status201Created)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAnnouncement([FromBody] CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Created(response);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAnnouncement(string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteAnnouncementByIdCommand { Id = id }, cancellationToken);
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -33,15 +43,15 @@ public class AnnouncementsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAnnouncement(string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetAnnouncementByIdQuery(id), cancellationToken);
+        var response = await _mediator.Send(new GetAnnouncementByIdQuery { Id = id }, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetAllAnnouncementsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ListAnnouncementsResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListAnnouncements(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetAllAnnouncementsQuery(), cancellationToken);
+        var response = await _mediator.Send(new ListAnnouncementsQuery(), cancellationToken);
         return Ok(response);
     }
 }

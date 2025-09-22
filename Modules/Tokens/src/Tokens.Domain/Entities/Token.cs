@@ -2,31 +2,34 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Domain.DomainEvents;
+using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
-    private const int MAX_FAILED_ACCESS_ATTEMPTS = 100;
+    public static readonly int MAX_CONTENT_LENGTH = 10.Mebibytes();
+    public const int MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK = 100;
 
     private readonly List<TokenAllocation> _allocations;
     private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
-    private Token()
+    protected Token()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
-        Content = null!;
+        Details = null!;
         _allocations = null!;
+        Version = null!;
     }
 
-    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
+    public Token(IdentityAddress? createdBy, DeviceId? createdByDevice, byte[]? content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
     {
         Id = TokenId.New();
 
@@ -36,45 +39,49 @@ public class Token : Entity
         CreatedAt = SystemTime.UtcNow;
         ExpiresAt = expiresAt;
 
-        Content = content;
+        Details = new TokenDetails { Id = Id, Content = content };
         ForIdentity = forIdentity;
         Password = password;
 
         _allocations = [];
+
+        Version = null!; // This property is handled and initialized by the database
 
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
 
     public TokenId Id { get; set; }
 
-    public IdentityAddress CreatedBy { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
+    public IdentityAddress? CreatedBy { get; set; }
+    public DeviceId? CreatedByDevice { get; set; }
 
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public byte[] Content { get; private set; }
+    public virtual TokenDetails Details { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+
+    public object Version { get; set; }
 
     public int AccessFailedCount
     {
         get => _accessFailedCount;
         private set
         {
-            if (IsLocked) return;
+            var wasLockedBeforeChange = IsLocked;
 
             _accessFailedCount = value;
 
-            if (IsLocked)
-            {
+            // since the access failed count can become higher than the limit from which on the token is considered
+            // locked, we have to perform this check to avoid a TokenLockedDomainEvent being raised multiple times
+            if (IsLocked && !wasLockedBeforeChange)
                 RaiseDomainEvent(new TokenLockedDomainEvent(this));
-            }
         }
     }
 
-    public IReadOnlyList<TokenAllocation> Allocations => _allocations;
-    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS;
+    public virtual IReadOnlyList<TokenAllocation> Allocations => _allocations;
+    public bool IsLocked => AccessFailedCount >= MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK;
     public bool IsExpired => ExpiresAt < SystemTime.UtcNow;
 
     public TokenAccessResult TryToAccess(IdentityAddress? activeIdentity, DeviceId? device, byte[]? password)
@@ -91,7 +98,7 @@ public class Token : Entity
         if (IsLocked)
             return TokenAccessResult.Locked;
 
-        if (!CanBeAccessAccordingToForIdentity(activeIdentity))
+        if (!CanBeAccessedAccordingToForIdentity(activeIdentity))
             return TokenAccessResult.ForIdentityDoesNotMatch;
 
         if (!IsPasswordCorrect(password))
@@ -109,7 +116,7 @@ public class Token : Entity
         return TokenAccessResult.AllocationAdded;
     }
 
-    private bool CanBeAccessAccordingToForIdentity(IdentityAddress? address)
+    private bool CanBeAccessedAccordingToForIdentity(IdentityAddress? address)
     {
         return CreatedBy == address || ForIdentity == null || ForIdentity == address;
     }
@@ -165,10 +172,44 @@ public class Token : Entity
             throw new DomainActionForbiddenException();
     }
 
+    public void ResetAccessFailedCount()
+    {
+        AccessFailedCount = 0;
+    }
+
+    public UpdateTokenContentResult UpdateContent(byte[] content, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? password)
+    {
+        if (IsExpired)
+            return UpdateTokenContentResult.Expired;
+
+        if (IsLocked)
+            return UpdateTokenContentResult.Locked;
+
+        if (!CanBeAccessedAccordingToForIdentity(activeIdentity))
+            return UpdateTokenContentResult.ForIdentityDoesNotMatch;
+
+        if (!IsPasswordCorrect(password))
+        {
+            AccessFailedCount++;
+
+            return IsLocked ? UpdateTokenContentResult.Locked : UpdateTokenContentResult.WrongPassword;
+        }
+
+        if (Details.Content != null)
+        {
+            return UpdateTokenContentResult.ContentAlreadyExists;
+        }
+
+        CreatedBy = activeIdentity;
+        CreatedByDevice = activeDevice;
+        Details.Content = content;
+
+        return UpdateTokenContentResult.ContentUpdated;
+    }
+
     #region Expressions
 
-    public static Expression<Func<Token, bool>> IsNotExpired =>
-        challenge => challenge.ExpiresAt > SystemTime.UtcNow;
+    public static Expression<Func<Token, bool>> CanBeCleanedUp => t => t.ExpiresAt <= SystemTime.UtcNow.AddDays(-30);
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
@@ -193,6 +234,16 @@ public class Token : Entity
     #endregion
 }
 
+public enum UpdateTokenContentResult
+{
+    ContentUpdated,
+    WrongPassword,
+    ForIdentityDoesNotMatch,
+    Locked,
+    Expired,
+    ContentAlreadyExists
+}
+
 public enum TokenAccessResult
 {
     Ok,
@@ -201,4 +252,10 @@ public enum TokenAccessResult
     ForIdentityDoesNotMatch,
     Locked,
     Expired
+}
+
+public class TokenDetails
+{
+    public required TokenId Id { get; init; } = null!;
+    public byte[]? Content { get; internal set; }
 }

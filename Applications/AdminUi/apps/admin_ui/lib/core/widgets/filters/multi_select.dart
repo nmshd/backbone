@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
-
-import '/core/core.dart';
 
 typedef MultiSelectFilterOption = ({String label, String value});
 
@@ -10,12 +9,7 @@ class MultiSelectFilter extends StatefulWidget {
   final List<MultiSelectFilterOption> options;
   final void Function(List<String> selectedOptions) onOptionSelected;
 
-  const MultiSelectFilter({
-    required this.label,
-    required this.options,
-    required this.onOptionSelected,
-    super.key,
-  });
+  const MultiSelectFilter({required this.label, required this.options, required this.onOptionSelected, super.key});
 
   @override
   State<MultiSelectFilter> createState() => _MultiSelectFilterState();
@@ -61,14 +55,7 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
                               children: [
                                 if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
                                 const SizedBox(width: 16),
-                                Expanded(
-                                  child: Text(
-                                    item.label,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
+                                Expanded(child: Text(item.label, style: const TextStyle(fontSize: 14))),
                               ],
                             ),
                           ),

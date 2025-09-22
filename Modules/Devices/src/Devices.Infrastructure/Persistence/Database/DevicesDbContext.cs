@@ -4,9 +4,9 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -19,10 +19,11 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using OpenIddict.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
-public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
+public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IOpenIddictEntityFrameworkCoreContext
 {
     private const int MAX_RETRY_COUNT = 50000;
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -51,6 +52,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
     public DbSet<IdentityDeletionProcessAuditLogEntry> IdentityDeletionProcessAuditLogs { get; set; } = null!;
 
+    public DbSet<IdentityDeletionProcess> IdentityDeletionProcesses { get; set; } = null!;
+
     public DbSet<Identity> Identities { get; set; } = null!;
 
     public DbSet<Device> Devices { get; set; } = null!;
@@ -60,6 +63,12 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     public DbSet<Tier> Tiers { get; set; } = null!;
 
     public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
+
+    public DbSet<FeatureFlag> FeatureFlags { get; set; } = null!;
+
+    public DbSet<RelationshipTemplateAllocation> RelationshipTemplateAllocations { get; set; } = null!;
+
+    public DbSet<Relationship> Relationships { get; set; } = null!;
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
@@ -128,12 +137,20 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
 
+        optionsBuilder.UseLazyLoadingProxies();
 
+        var evilEvents = new[]
+        {
+            RelationalEventId.MultipleCollectionIncludeWarning,
+
+            CoreEventId.NavigationLazyLoading,
+            CoreEventId.DetachedLazyLoadingWarning,
+            CoreEventId.LazyLoadOnDisposedContextWarning
+        };
 #if DEBUG
-        // Note: That option raises an exception when multiple collections are included in a query. It should help while debugging to
-        // find out where the issue is. In case of such exception you should use the .AsSplitQuery() method to split the query into
-        // multiple queries. See: https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries#split-queries
-        optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+        optionsBuilder.ConfigureWarnings(w => w.Throw(evilEvents));
+#else
+        optionsBuilder.ConfigureWarnings(w => w.Log(evilEvents.Select(lle => (lle, Microsoft.Extensions.Logging.LogLevel.Warning)).ToArray()));
 #endif
     }
 
@@ -209,6 +226,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(IdentityDeletionProcessAuditLogEntryId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<FeatureFlagName>().AreUnicode().AreFixedLength(false)
+            .HaveMaxLength(FeatureFlagName.MAX_LENGTH).HaveConversion<FeatureFlagNameEntityFrameworkValueConverter>();
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
@@ -236,5 +255,10 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             await _eventBus.Publish(e.DomainEvents);
             e.ClearDomainEvents();
         }
+    }
+
+    public ValueTask<DbContext> GetDbContextAsync(CancellationToken cancellationToken)
+    {
+        return new ValueTask<DbContext>(this);
     }
 }

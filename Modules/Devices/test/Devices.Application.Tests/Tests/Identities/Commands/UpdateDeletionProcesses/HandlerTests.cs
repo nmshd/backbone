@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeleti
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateDeletionProcesses;
@@ -21,7 +22,7 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.Results.Should().BeEmpty();
+        response.Results.ShouldBeEmpty();
     }
 
     [Fact]
@@ -31,7 +32,7 @@ public class HandlerTests : AbstractTestsBase
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+        anIdentity.StartDeletionProcess(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
 
@@ -39,8 +40,8 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.Results.Should().HaveCount(1);
-        response.Results.Single().Key.Should().Be(anIdentity.Address);
+        response.Results.ShouldHaveCount(1);
+        response.Results.Single().Key.ShouldBe(anIdentity.Address);
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class HandlerTests : AbstractTestsBase
         var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
 
         var anIdentity = identities.First();
-        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+        anIdentity.StartDeletionProcess(anIdentity.Devices.First().Id);
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
 
@@ -60,8 +61,8 @@ public class HandlerTests : AbstractTestsBase
         var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        response.Results.Should().HaveCount(1);
-        identities.First().Status.Should().Be(IdentityStatus.Deleting);
+        response.Results.ShouldHaveCount(1);
+        identities.First().Status.ShouldBe(IdentityStatus.Deleting);
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
@@ -77,7 +78,7 @@ public class HandlerTests : AbstractTestsBase
             returnedIdentities.Add(TestDataGenerator.CreateIdentityWithOneDevice());
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
+        A.CallTo(() => identitiesRepository.List(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._, A<bool>._)).Returns(returnedIdentities);
 
         return identitiesRepository;
     }

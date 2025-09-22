@@ -5,7 +5,6 @@ using FakeItEasy;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
@@ -24,12 +23,12 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
         _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, A.Fake<ILogger<GoogleCloudStorage>>());
     }
 
-    public Task InitializeAsync()
+    public ValueTask InitializeAsync()
     {
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         var blobs = _storageClient.ListObjectsAsync(BUCKET_NAME);
 
@@ -48,8 +47,8 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
         _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, blobName);
-        retrievedBlobContent.Should().Equal(blobContent);
+        var retrievedBlobContent = await _blobStorageUnderTest.GetAsync(BUCKET_NAME, blobName);
+        retrievedBlobContent.ShouldBe(blobContent);
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -63,11 +62,11 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
 
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlob1Content = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName1");
-        var retrievedBlob2Content = await _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName2");
+        var retrievedBlob1Content = await _blobStorageUnderTest.GetAsync(BUCKET_NAME, "BlobName1");
+        var retrievedBlob2Content = await _blobStorageUnderTest.GetAsync(BUCKET_NAME, "BlobName2");
 
-        retrievedBlob1Content.Should().Equal(blob1Content);
-        retrievedBlob2Content.Should().Equal(blob2Content);
+        retrievedBlob1Content.ShouldBe(blob1Content);
+        retrievedBlob2Content.ShouldBe(blob2Content);
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -82,7 +81,7 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
         _blobStorageUnderTest.Add(BUCKET_NAME, blobName, blobContent);
 
         var acting = _blobStorageUnderTest.SaveAsync;
-        await acting.Should().ThrowAsync<BlobAlreadyExistsException>();
+        await acting.ShouldThrowAsync<BlobAlreadyExistsException>();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -94,8 +93,8 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
         _blobStorageUnderTest.Remove(BUCKET_NAME, "BlobName");
         await _blobStorageUnderTest.SaveAsync();
 
-        var acting = () => _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobName");
-        await acting.Should().ThrowAsync<NotFoundException>();
+        var acting = () => _blobStorageUnderTest.GetAsync(BUCKET_NAME, "BlobName");
+        await acting.ShouldThrowAsync<NotFoundException>();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -103,8 +102,8 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
     {
         _blobStorageUnderTest.Remove(BUCKET_NAME, "BlobNameThatDoesNotExist");
 
-        var acting = () => _blobStorageUnderTest.FindAsync(BUCKET_NAME, "BlobNameThatDoesNotExist");
-        await acting.Should().ThrowAsync<NotFoundException>();
+        var acting = () => _blobStorageUnderTest.GetAsync(BUCKET_NAME, "BlobNameThatDoesNotExist");
+        await acting.ShouldThrowAsync<NotFoundException>();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -118,9 +117,9 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
 
         await _blobStorageUnderTest.SaveAsync();
 
-        var retrievedBlobContent = await (await _blobStorageUnderTest.FindAllAsync(BUCKET_NAME)).ToListAsync();
+        var retrievedBlobContent = await (await _blobStorageUnderTest.ListAsync(BUCKET_NAME)).ToListAsync(TestContext.Current.CancellationToken);
 
-        retrievedBlobContent.Should().Contain("BlobName1");
-        retrievedBlobContent.Should().Contain("BlobName2");
+        retrievedBlobContent.ShouldContain("BlobName1");
+        retrievedBlobContent.ShouldContain("BlobName2");
     }
 }

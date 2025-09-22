@@ -12,14 +12,14 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly ILogger<RelationshipStatusChangedDomainEventHandler> _logger;
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
 
-    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions,
+    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationConfiguration> applicationOptions,
         ILogger<RelationshipStatusChangedDomainEventHandler> logger)
     {
         _messagesRepository = messagesRepository;
         _logger = logger;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
     }
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
@@ -30,11 +30,19 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
             return;
         }
 
-        var anonymizedIdentityAddress = IdentityAddress.GetAnonymized(_applicationOptions.DidDomainName);
-        var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
+        var anonymizedIdentityAddress = IdentityAddress.GetAnonymized(_applicationConfiguration.DidDomainName);
+        var messagesExchangedBetweenRelationshipParticipants =
+            (await _messagesRepository.ListWithoutContent(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
+
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
-            message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
+            // If the status was changed due to identity deletion, we are forced to anonymize the address of the identity that deleted itself.
+            // If it was a manual status change though, we only want to mark the identity as decomposed on this message. Only after both
+            // participants have decomposed the relationship the message will be anonymized/deleted.
+            if (@event.WasDueToIdentityDeletion)
+                message.AnonymizeParticipant(@event.Initiator, anonymizedIdentityAddress);
+            else
+                message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
         }
 
         await _messagesRepository.Update(messagesExchangedBetweenRelationshipParticipants);

@@ -33,21 +33,21 @@ internal class RelationshipsStepDefinitions
     #region Given
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
-    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string requestorName, string templatorName, string creatorName)
     {
         var creator = _clientPool.FirstForIdentityName(creatorName);
-        var peer = _clientPool.FirstForIdentityName(creatorName == participant1Name ? participant2Name : participant1Name);
+        var peer = _clientPool.FirstForIdentityName(creatorName == requestorName ? templatorName : requestorName);
 
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
     }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
-    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name)
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string requestorName, string templatorName)
     {
-        var creator = _clientPool.FirstForIdentityName(participant1Name);
-        var peer = _clientPool.FirstForIdentityName(participant2Name);
+        var templator = _clientPool.FirstForIdentityName(requestorName);
+        var requestor = _clientPool.FirstForIdentityName(templatorName);
 
-        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(templator, requestor);
     }
 
     [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
@@ -134,7 +134,7 @@ internal class RelationshipsStepDefinitions
         var decomposer = _clientPool.FirstForIdentityName(decomposerName);
 
         var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
     }
 
     #endregion
@@ -213,7 +213,7 @@ internal class RelationshipsStepDefinitions
         _responseContext.WhenResponse = await client.Relationships.DecomposeRelationship(_relationshipsContext.Relationships[relationshipName].Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Relationships/CanCreate\\?peer={{id}} endpoint with id={RegexFor.SINGLE_THING}.id")]
+    [When($"^{RegexFor.SINGLE_THING} sends a GET request to the /Relationships/CanCreate\\?peer={{id}} endpoint with id={RegexFor.SINGLE_THING}.id$")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string activeIdentityName, string peerName)
     {
         var client = _clientPool.FirstForIdentityName(activeIdentityName);
@@ -228,25 +228,25 @@ internal class RelationshipsStepDefinitions
     [Then("a Relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeTrue();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.ShouldBeTrue();
     }
 
     [Then("a Relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeFalse();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.ShouldBeFalse();
     }
 
     [Then(@"the relationship creation check code is ""(.+)""")]
     public void ThenTheCodeIs(string code)
     {
-        _canEstablishRelationshipResponse!.Result!.Code.Should().Be(code);
+        _canEstablishRelationshipResponse!.Result!.Code.ShouldBe(code);
     }
 
     [Then(@"the response does not contain a relationship creation check code")]
     public void ThenThereIsNoCode()
     {
-        _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
+        _canEstablishRelationshipResponse!.Result!.Code.ShouldBeNull();
     }
 
     [Then($"the Relationship {RegexFor.SINGLE_THING} still exists")]
@@ -256,7 +256,7 @@ internal class RelationshipsStepDefinitions
         var client = _clientPool.FirstForIdentityAddress(relationship.From);
 
         var getRelationshipResponse = await client.Relationships.GetRelationship(relationship.Id);
-        getRelationshipResponse.Status.Should().Be(HttpStatusCode.OK);
+        getRelationshipResponse.Status.ShouldBe(HttpStatusCode.OK);
 
         _relationshipsContext.Relationships[relationshipName] = getRelationshipResponse.Result!;
     }
@@ -265,7 +265,7 @@ internal class RelationshipsStepDefinitions
     public void ThenTheRelationshipDoesNotHaveARelationshipTemplate(string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        relationship.RelationshipTemplateId.Should().BeNull();
+        relationship.RelationshipTemplateId.ShouldBeNull();
     }
 
     #endregion

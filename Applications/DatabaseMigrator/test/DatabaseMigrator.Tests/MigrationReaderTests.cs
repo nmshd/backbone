@@ -1,4 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
@@ -18,7 +20,7 @@ public class MigrationReaderTests : AbstractTestsBase
         // Assert
         var migrationNames = migrations.Select(m => m.Name);
 
-        migrationNames.Should().ContainInOrder(
+        migrationNames.ShouldContainInOrder([
             "20240701073944_Init",
             "20240701074627_Init",
             "20240701074820_Init",
@@ -42,7 +44,7 @@ public class MigrationReaderTests : AbstractTestsBase
             "20240904100328_IncreaseMaxSizeOfSyncErrorErrorCodeTo100",
             "20240906075221_PersonalizedRelationshipTemplates",
             "20240909071633_AddUniqueIndexOnActiveDeletionProcesses"
-        );
+        ]);
     }
 
     private static async Task<MigrationReader> CreateMigrationReader()
@@ -52,7 +54,7 @@ public class MigrationReaderTests : AbstractTestsBase
         var services = new ServiceCollection();
 
         services.AddSingleton<IEventBus, DummyEventBus>();
-        services.AddAllDbContexts(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = dbConnectionString });
+        services.AddAllDbContexts(new DatabaseConfiguration { Provider = "Postgres", ConnectionString = dbConnectionString });
         services.AddSingleton<DbContextProvider>();
         services.AddSingleton<MigrationReader>();
 

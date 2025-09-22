@@ -17,10 +17,11 @@ spec:
       app: {{ .Values.eventhandler.name }}
   template:
     metadata:
-      {{- with .Values.eventhandler.podAnnotations }}
       annotations:
+        checksum/config: {{ .Values.global.configuration | toString | sha256sum }}
+        {{- with .Values.eventhandler.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         app: {{ .Values.eventhandler.name }}
     spec:
@@ -49,22 +50,28 @@ spec:
             {{- toYaml .Values.eventhandler.resources | nindent 12 }}
           image: "{{ .Values.eventhandler.image.repository }}:{{- default .Chart.AppVersion .Values.eventhandler.image.tagOverride }}"
           imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
+          ports:
+            - name: metrics
+              containerPort: 9444
+              protocol: TCP
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
               subPath: appsettings.override.json
               readOnly: true
           env:
+            - name: METRICS_HOST
+              value: +
             {{- if .Values.global.useBuiltInEventbus }}
-            - name: infrastructure__eventBus__vendor
+            - name: infrastructure__eventBus__productName
               value: RabbitMQ
-            - name: infrastructure__eventBus__rabbitMqEnableSsl
+            - name: infrastructure__eventBus__rabbitMq__enableSsl
               value: "false"
-            - name: infrastructure__eventBus__connectionInfo
+            - name: infrastructure__eventBus__rabbitMq__hostName
               value: "rabbitmq"
-            - name: infrastructure__eventBus__rabbitMQUsername
+            - name: infrastructure__eventBus__rabbitMq__username
               value: "admin"
-            - name: infrastructure__eventBus__rabbitMQPassword
+            - name: infrastructure__eventBus__rabbitMq__password
               valueFrom:
                 secretKeyRef:
                   name: rabbitmq-password

@@ -9,12 +9,7 @@ class IdentityDeletionProcess {
   final String id;
   final DeletionProcessStatus status;
   final DateTime createdAt;
-  final DateTime approvalPeriodEndsAt;
-  final DateTime? approvalReminder1SentAt;
-  final DateTime? approvalReminder2SentAt;
-  final DateTime? approvalReminder3SentAt;
-  final DateTime? approvedAt;
-  final String? approvedByDevice;
+  final String? createdByDevice;
   final DateTime? gracePeriodEndsAt;
   final DateTime? gracePeriodReminder1SentAt;
   final DateTime? gracePeriodReminder2SentAt;
@@ -24,12 +19,7 @@ class IdentityDeletionProcess {
     required this.id,
     required this.status,
     required this.createdAt,
-    required this.approvalPeriodEndsAt,
-    this.approvalReminder1SentAt,
-    this.approvalReminder2SentAt,
-    this.approvalReminder3SentAt,
-    this.approvedAt,
-    this.approvedByDevice,
+    this.createdByDevice,
     this.gracePeriodEndsAt,
     this.gracePeriodReminder1SentAt,
     this.gracePeriodReminder2SentAt,

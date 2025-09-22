@@ -33,28 +33,28 @@ public class AuthorizationController : ApiControllerBase
         _userManager = userManager;
     }
 
-    [HttpPost("~/connect/token"), IgnoreAntiforgeryToken, Produces("application/json"),
-     Consumes("application/x-www-form-urlencoded")]
+    [HttpPost("~/connect/token")]
+    [Produces("application/json")]
+    [Consumes("application/x-www-form-urlencoded")]
     [AllowAnonymous]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Exchange()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() ?? throw new OperationFailedException(
-            ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
+        var request = HttpContext.GetOpenIddictServerRequest() ??
+                      throw new OperationFailedException(ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
+
         if (!request.IsPasswordGrantType())
-            throw new OperationFailedException(
-                ApplicationErrors.Authentication.InvalidOAuthRequest("the specified grant type is not implemented"));
+            throw new OperationFailedException(ApplicationErrors.Authentication.InvalidOAuthRequest("the specified grant type is not implemented"));
 
         if (request.Username.IsNullOrEmpty())
-            throw new OperationFailedException(
-                ApplicationErrors.Authentication.InvalidOAuthRequest("missing username"));
+            throw new OperationFailedException(ApplicationErrors.Authentication.InvalidOAuthRequest("missing username"));
 
         var user = await _userManager.FindByNameAsync(request.Username!);
         if (user == null || user.Device.Identity.IsGracePeriodOver)
             return InvalidUserCredentials();
 
         if (request.Password.IsNullOrEmpty())
-            throw new OperationFailedException(
-                ApplicationErrors.Authentication.InvalidOAuthRequest("missing password"));
+            throw new OperationFailedException(ApplicationErrors.Authentication.InvalidOAuthRequest("missing password"));
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
         if (result.IsLockedOut)
@@ -67,7 +67,7 @@ public class AuthorizationController : ApiControllerBase
             [
                 new(Claims.Subject, user.Id),
                 new(Claims.Name, user.UserName!.Trim()),
-                new("address", user.Device.Identity.Address),
+                new("nmshd_address", user.Device.IdentityAddress),
                 new("device_id", user.Device.Id)
             ],
             authenticationType: TokenValidationParameters.DefaultAuthenticationType);

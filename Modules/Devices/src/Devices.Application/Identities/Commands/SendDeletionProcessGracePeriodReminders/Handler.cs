@@ -24,13 +24,13 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     public async Task Handle(SendDeletionProcessGracePeriodRemindersCommand request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithDeletionProcessInStatus(DeletionProcessStatus.Approved, cancellationToken, track: true);
+        var identities = await _identitiesRepository.ListWithDeletionProcessInStatus(DeletionProcessStatus.Active, cancellationToken, track: true);
 
-        _logger.LogTrace("Processing identities with deletion process in status 'Approved' ...");
+        _logger.LogTrace("Processing identities with deletion process in status 'Active' ...");
 
         foreach (var identity in identities)
         {
-            var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
+            var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Active) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
             var daysUntilDeletion = (deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).TotalDays;
 
             if (deletionProcess.GracePeriodReminder3SentAt != null)

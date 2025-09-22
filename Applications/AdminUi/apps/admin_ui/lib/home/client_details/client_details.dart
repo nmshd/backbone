@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -29,8 +32,8 @@ class _ClientDetailsState extends State<ClientDetails> {
 
     _scrollController = ScrollController();
 
-    _reloadClient();
-    _reloadTiers();
+    unawaited(_reloadClient());
+    unawaited(_reloadTiers());
   }
 
   @override
@@ -66,12 +69,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                   ),
                 ],
               ),
-            _ClientDetailsCard(
-              clientDetails: clientDetails,
-              selectedTier: _selectedTier,
-              availableTiers: _tiers!,
-              updateClient: _reloadClient,
-            ),
+            _ClientDetailsCard(clientDetails: clientDetails, selectedTier: _selectedTier, availableTiers: _tiers!, updateClient: _reloadClient),
             Gaps.h16,
             IdentitiesTable(clientDetails: clientDetails),
           ],
@@ -105,12 +103,7 @@ class _ClientDetailsCard extends StatelessWidget {
   final List<TierOverview> availableTiers;
   final VoidCallback updateClient;
 
-  const _ClientDetailsCard({
-    required this.clientDetails,
-    required this.availableTiers,
-    required this.updateClient,
-    this.selectedTier,
-  });
+  const _ClientDetailsCard({required this.clientDetails, required this.availableTiers, required this.updateClient, this.selectedTier});
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +127,8 @@ class _ClientDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.maxIdentities,
                         value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
-                        onIconPressed: () => showChangeMaxIdentitiesDialog(
-                          context: context,
-                          clientDetails: clientDetails,
-                          onMaxIdentitiesUpdated: updateClient,
-                        ),
+                        onIconPressed: () =>
+                            showChangeMaxIdentitiesDialog(context: context, clientDetails: clientDetails, onMaxIdentitiesUpdated: updateClient),
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
                       ),
@@ -152,11 +142,11 @@ class _ClientDetailsCard extends StatelessWidget {
                         value: currentTier.name,
                         onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
                             ? () => showChangeTierDialog(
-                                  context: context,
-                                  onTierUpdated: updateClient,
-                                  clientDetails: clientDetails,
-                                  availableTiers: availableTiers,
-                                )
+                                context: context,
+                                onTierUpdated: updateClient,
+                                clientDetails: clientDetails,
+                                availableTiers: availableTiers,
+                              )
                             : null,
                         icon: Icons.edit,
                         tooltipMessage: context.l10n.changeTier,

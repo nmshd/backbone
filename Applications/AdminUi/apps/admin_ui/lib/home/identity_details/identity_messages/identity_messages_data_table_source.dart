@@ -17,11 +17,7 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
   final String participant;
   final MessageType type;
 
-  IdentityMessagesDataTableSource({
-    required this.participant,
-    required this.type,
-    required this.locale,
-  });
+  IdentityMessagesDataTableSource({required this.participant, required this.type, required this.locale});
 
   @override
   bool get isRowCountApproximate => false;
@@ -37,20 +33,15 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
     final pageNumber = startIndex ~/ count + 1;
     try {
       final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipant(
-            participant: participant,
-            type: type,
-            pageNumber: pageNumber,
-            pageSize: count,
-          );
+        participant: participant,
+        type: type,
+        pageNumber: pageNumber,
+        pageSize: count,
+      );
 
       _pagination = response.isPaged
           ? response.pagination
-          : Pagination(
-              pageNumber: pageNumber,
-              pageSize: count,
-              totalPages: _totalPages(count, response.data),
-              totalRecords: response.data.length,
-            );
+          : Pagination(pageNumber: pageNumber, pageSize: count, totalPages: _totalPages(count, response.data), totalRecords: response.data.length);
 
       final rows = response.data.indexed
           .map(
@@ -59,14 +50,11 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
               specificRowHeight: message.$2.recipients.length > 3 && type == MessageType.outgoing
                   ? 100.0
                   : message.$2.recipients.length == 3 && type == MessageType.outgoing
-                      ? 65.0
-                      : null,
+                  ? 65.0
+                  : null,
               cells: [
                 if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
-                if (type == MessageType.incoming) ...[
-                  DataCell(Text(message.$2.senderAddress)),
-                  DataCell(Text(message.$2.senderDevice)),
-                ],
+                if (type == MessageType.incoming) ...[DataCell(Text(message.$2.senderAddress)), DataCell(Text(message.$2.senderDevice))],
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
                   Tooltip(
@@ -104,10 +92,7 @@ class _RecipientsCell extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...displayedRecipients.map(
-          (recipient) => InkWell(
-            onTap: () => context.push('/identities/${recipient.address}'),
-            child: Text(recipient.address),
-          ),
+          (recipient) => InkWell(onTap: () => context.push('/identities/${recipient.address}'), child: Text(recipient.address)),
         ),
         if (recipients.length > 3)
           FilledButton(

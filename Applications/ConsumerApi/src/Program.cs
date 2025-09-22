@@ -1,48 +1,48 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Announcements.ConsumerApi;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.ConsumerApi;
+using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.ConsumerApi;
+using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Files.ConsumerApi;
+using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.ConsumerApi;
+using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.ConsumerApi;
+using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.ConsumerApi;
+using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.ConsumerApi;
+using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tags.ConsumerApi;
-using Backbone.Modules.Tokens.ConsumerApi;
+using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tags.Module;
+using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
+using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
+using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -121,11 +121,6 @@ static WebApplication CreateApp(string[] args)
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
         .SeedDbContext<QuotasDbContext, QuotasDbContextSeeder>();
 
-    foreach (var module in app.Services.GetRequiredService<IEnumerable<AbstractModule>>())
-    {
-        module.PostStartupValidation(app.Services);
-    }
-
     return app;
 }
 
@@ -197,6 +192,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
+    services.ConfigureAndValidate<ConsumerApiConfiguration>(configuration.Bind);
 
     services.AddSingleton<VersionService>();
 
@@ -206,27 +202,34 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
-        .AddModule<AnnouncementsModule>(configuration)
-        .AddModule<ChallengesModule>(configuration)
-        .AddModule<DevicesModule>(configuration)
-        .AddModule<FilesModule>(configuration)
-        .AddModule<MessagesModule>(configuration)
-        .AddModule<QuotasModule>(configuration)
-        .AddModule<RelationshipsModule>(configuration)
-        .AddModule<SynchronizationModule>(configuration)
-        .AddModule<TagsModule>(configuration)
-        .AddModule<TokensModule>(configuration);
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+            Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+            Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
-    var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+    var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value;
+    var parsedQuotasInfrastructureConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<InfrastructureConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+    var quotasSqlDatabaseConfiguration = parsedQuotasInfrastructureConfiguration.SqlDatabase;
     services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);
 
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
     services
-        .AddCustomAspNetCore(parsedConfiguration)
+        .AddCustomAspNetCore(parsedBackboneConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication);
+        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -236,21 +239,26 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
 
-    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
+    services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
+    services.AddHttpUserAgentParser();
 }
 
 static void Configure(WebApplication app)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+  
+    app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>
     {
         opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
         opts.GetLevel = LogHelper.GetLevel;
     });
+
+    app.UseStaticFiles();
 
     app.UseForwardedHeaders();
 
@@ -266,15 +274,12 @@ static void Configure(WebApplication app)
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
 
-    var configuration = app.Services.GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
-
     app.MapControllers();
     app.MapHealthChecks("/health");
 
@@ -291,12 +296,11 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
-    if (env.IsDevelopment())
-    {
-        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
-    }
-
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.consumerapi";
 }

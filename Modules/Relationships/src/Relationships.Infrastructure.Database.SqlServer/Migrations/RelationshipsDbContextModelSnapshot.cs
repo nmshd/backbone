@@ -18,7 +18,11 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,9 +34,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -68,6 +69,11 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("varbinary(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasAnnotation("Npgsql:IndexInclude", new[] { "CreatedBy" });
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt"), new[] { "CreatedBy" });
 
                     b.ToTable("RelationshipTemplates", "Relationships");
                 });
@@ -111,6 +117,23 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("RelationshipTemplateAllocations", "Relationships");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RelationshipTemplates", "Relationships");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
                 {
                     b.Property<string>("Id")
@@ -121,12 +144,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("CreationContent")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("CreationResponseContent")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("From")
                         .IsRequired()
@@ -216,11 +233,41 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("RelationshipAuditLog", "Relationships");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipDetails", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("CreationContent")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("CreationResponseContent")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", null)
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Allocations")
                         .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateDetails", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -243,9 +290,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipDetails", b =>
+                {
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", null)
+                        .WithOne("Details")
+                        .HasForeignKey("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipDetails", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", b =>
                 {
                     b.Navigation("Allocations");
+
+                    b.Navigation("Details")
+                        .IsRequired();
 
                     b.Navigation("Relationships");
                 });
@@ -253,6 +312,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
                 {
                     b.Navigation("AuditLog");
+
+                    b.Navigation("Details")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

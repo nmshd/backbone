@@ -1,9 +1,9 @@
 using Backbone.Modules.Tokens.Domain.Entities;
-using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
-public partial class TokenTryToAccessAccessTests
+public partial class TokenTryToAccessTests
 {
     public class TokenAccessTestData : TheoryData<int, TokenProperties>
     {

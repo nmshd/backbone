@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 
@@ -28,7 +28,7 @@ public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<I
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
     {
         var relationships = (await _relationshipsRepository
-            .FindRelationships(
+            .ListWithoutContent(
                 Relationship.HasParticipant(identityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()),
                 CancellationToken.None)).ToList();
         return relationships;

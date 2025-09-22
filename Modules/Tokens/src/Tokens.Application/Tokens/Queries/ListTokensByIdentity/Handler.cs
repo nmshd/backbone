@@ -9,7 +9,7 @@ public class Handler(ITokensRepository tokensRepository) : IRequestHandler<ListT
 {
     public async Task<ListTokensResponse> Handle(ListTokensByIdentityQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await tokensRepository.FindAllTokens(request.PaginationFilter, Token.WasCreatedBy(request.CreatedBy), cancellationToken);
+        var dbPaginationResult = await tokensRepository.ListWithoutContent(request.PaginationFilter, Token.WasCreatedBy(request.CreatedBy), cancellationToken);
         var pagedResult = new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
 
         return pagedResult;

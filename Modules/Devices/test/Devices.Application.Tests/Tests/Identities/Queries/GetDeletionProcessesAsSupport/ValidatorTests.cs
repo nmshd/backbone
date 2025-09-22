@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
+﻿using Backbone.Modules.Devices.Application.Identities.Queries.ListDeletionProcessesAsSupport;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 
@@ -13,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessesAsSupportQuery(CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new ListDeletionProcessesAsSupportQuery { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,9 +26,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessesAsSupportQuery("some-invalid-address"));
+        var validationResult = validator.TestValidate(new ListDeletionProcessesAsSupportQuery { IdentityAddress = "some-invalid-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessesAsSupportQuery.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(ListDeletionProcessesAsSupportQuery.IdentityAddress));
     }
 }

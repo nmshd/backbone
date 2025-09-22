@@ -12,17 +12,17 @@ public class FindMetricsStubRepository : IMetricsRepository
         _metric = metric;
     }
 
-    public Task<Metric> Find(MetricKey key, CancellationToken cancellationToken, bool track = false)
+    public Task<Metric> Get(MetricKey key, CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult(_metric);
     }
 
-    public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Metric>> List(CancellationToken cancellationToken, bool track = false)
     {
         throw new NotSupportedException();
     }
 
-    public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Metric>> List(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotSupportedException();
     }

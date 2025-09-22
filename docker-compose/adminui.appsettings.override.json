@@ -9,16 +9,14 @@
     },
     "Infrastructure": {
         "EventBus": {
-            "Vendor": "RabbitMQ", // possible values: InMemory, RabbitMQ, GoogleCloud, Azure
-            "ConnectionInfo": "rabbitmq",
+            "ProductName": "RabbitMQ",
 
-            "RabbitMQEnableSsl": false,
-            "RabbitMQUsername": "guest", // only available for RabbitMQ
-            "RabbitMQPassword": "guest", // only available for RabbitMQ
-            "ConnectionRetryCount": 5, // only available for RabbitMQ
-
-            "GcpPubSubProjectId": "", // only available for Google Cloud Pub/Sub
-            "GcpPubSubTopicName": "" // only available for Google Cloud Pub/Sub
+            "RabbitMQ": {
+                "EnableSsl": false,
+                "HostName": "rabbitmq",
+                "Username": "guest",
+                "Password": "guest"
+            }
         },
         "SqlDatabase": {
             "Provider": "Postgres",
@@ -26,41 +24,27 @@
             // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
         }
     },
-    "Modules": {
-        "Challenges": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=challenges;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
-                    // "ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
-                }
-            }
+    "ModuleDefaults": {
+        "Application": {
+            "DidDomainName": "localhost"
         },
+        "Infrastructure": {
+            "SqlDatabase": {
+                "Provider": "Postgres",
+                "ConnectionString": "User ID=challenges;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
+                // "ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
+            }
+        }
+    },
+    "Modules": {
         "Devices": {
-            "Application": {
-                "DidDomainName": "localhost"
-            },
             "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=devices;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;" // postgres
-                    // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
-                },
                 "PushNotifications": {
                     "Providers": {
                         "dummy": {
                             "enabled": true
                         }
                     }
-                }
-            }
-        },
-        "Quotas": {
-            "Infrastructure": {
-                "SqlDatabase": {
-                    "Provider": "Postgres",
-                    "ConnectionString": "User ID=quotas;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;" // postgres
-                    // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
                 }
             }
         }

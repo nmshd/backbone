@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.UnitTestTools.Behaviors;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using MediatR;
 
 namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
@@ -27,11 +28,11 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
         await Task.Run(acting, CancellationToken.None);
 
         // Assert
-        nextMock.WasCalled.Should().BeTrue();
+        nextMock.WasCalled.ShouldBeTrue();
     }
 
     [Fact]
-    public void Throws_QuotaExhaustedException_when_exactly_one_metric_is_exhausted()
+    public async Task Throws_QuotaExhaustedException_when_exactly_one_metric_is_exhausted()
     {
         var exhaustionDate = DateTime.UtcNow.AddDays(1);
         var exhaustedMetricStatus = new MetricStatus(new MetricKey("exhausted"), exhaustionDate);
@@ -48,14 +49,14 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
 
         // Assert
         var exceptionExhaustedMetrics =
-            acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.Should().HaveCount(1);
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(new MetricKey("exhausted"));
-        exceptionExhaustedMetrics.First().IsExhaustedUntil.Should().Be(exhaustionDate);
+            (await acting.ShouldThrowAsync<QuotaExhaustedException>()).ExhaustedMetricStatuses;
+        exceptionExhaustedMetrics.ShouldHaveCount(1);
+        exceptionExhaustedMetrics.First().MetricKey.ShouldBe(new MetricKey("exhausted"));
+        exceptionExhaustedMetrics.First().IsExhaustedUntil.ShouldBe(exhaustionDate);
     }
 
     [Fact]
-    public void Thrown_QuotaExhaustedException_contains_information_about_each_exhausted_MetricStatus()
+    public async Task Thrown_QuotaExhaustedException_contains_information_about_each_exhausted_MetricStatus()
     {
         // Arrange
         var exhaustionDate1 = DateTime.UtcNow.AddDays(1);
@@ -73,13 +74,13 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
 
         // Assert
         var exceptionExhaustedMetrics =
-            acting.Should().AwaitThrowAsync<QuotaExhaustedException>().Which.ExhaustedMetricStatuses;
-        exceptionExhaustedMetrics.Should().HaveCount(2);
-        exceptionExhaustedMetrics.First().MetricKey.Should().Be(new MetricKey("exhausted1"));
-        exceptionExhaustedMetrics.First().IsExhaustedUntil.Should().Be(exhaustionDate1);
+            (await acting.ShouldThrowAsync<QuotaExhaustedException>()).ExhaustedMetricStatuses;
+        exceptionExhaustedMetrics.ShouldHaveCount(2);
+        exceptionExhaustedMetrics.First().MetricKey.ShouldBe(new MetricKey("exhausted1"));
+        exceptionExhaustedMetrics.First().IsExhaustedUntil.ShouldBe(exhaustionDate1);
 
-        exceptionExhaustedMetrics.Second().MetricKey.Should().Be(new MetricKey("exhausted2"));
-        exceptionExhaustedMetrics.Second().IsExhaustedUntil.Should().Be(exhaustionDate2);
+        exceptionExhaustedMetrics.Second().MetricKey.ShouldBe(new MetricKey("exhausted2"));
+        exceptionExhaustedMetrics.Second().IsExhaustedUntil.ShouldBe(exhaustionDate2);
     }
 
     private static QuotaEnforcerBehavior<TestCommand, Unit> CreateQuotaEnforcerBehavior(

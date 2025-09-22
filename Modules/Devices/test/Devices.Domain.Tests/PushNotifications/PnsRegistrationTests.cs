@@ -20,13 +20,13 @@ public class PnsRegistrationTests : AbstractTestsBase
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         // Assert
-        pnsRegistration.IdentityAddress.Should().Be(identityAddress);
-        pnsRegistration.DeviceId.Should().NotBeNull();
-        pnsRegistration.DevicePushIdentifier.Should().NotBeNull();
-        pnsRegistration.Handle.Should().Be(pnsHandle);
-        pnsRegistration.UpdatedAt.Should().Be(SystemTime.UtcNow);
-        pnsRegistration.AppId.Should().Be("someAppId");
-        pnsRegistration.Environment.Should().Be(PushEnvironment.Development);
+        pnsRegistration.IdentityAddress.ShouldBe(identityAddress);
+        pnsRegistration.DeviceId.ShouldNotBeNull();
+        pnsRegistration.DevicePushIdentifier.ShouldNotBeNull();
+        pnsRegistration.Handle.ShouldBe(pnsHandle);
+        pnsRegistration.UpdatedAt.ShouldBe(SystemTime.UtcNow);
+        pnsRegistration.AppId.ShouldBe("someAppId");
+        pnsRegistration.Environment.ShouldBe(PushEnvironment.Development);
     }
 
     [Fact]
@@ -43,6 +43,6 @@ public class PnsRegistrationTests : AbstractTestsBase
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         // Assert
-        pnsRegistration.DevicePushIdentifier.Value.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.Value);
+        pnsRegistration.DevicePushIdentifier.Value.ShouldNotBe(otherPnsRegistration.DevicePushIdentifier.Value);
     }
 }

@@ -1,4 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -54,11 +55,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                           ..refreshDatasource();
                       },
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async => _dataSource.refreshDatasource(),
-                      tooltip: context.l10n.reload,
-                    ),
+                    IconButton(icon: const Icon(Icons.refresh), onPressed: () async => _dataSource.refreshDatasource(), tooltip: context.l10n.reload),
                     Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
                   ],
                 ),

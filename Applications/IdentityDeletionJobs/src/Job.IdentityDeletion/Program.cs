@@ -3,30 +3,30 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.Infrastructure.EventBus;
-using Backbone.Modules.Announcements.ConsumerApi;
-using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.ConsumerApi;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Files.ConsumerApi;
-using Backbone.Modules.Messages.ConsumerApi;
-using Backbone.Modules.Quotas.ConsumerApi;
-using Backbone.Modules.Relationships.ConsumerApi;
-using Backbone.Modules.Synchronization.ConsumerApi;
-using Backbone.Modules.Tokens.ConsumerApi;
-using FluentValidation.AspNetCore;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.Module;
+using Backbone.Modules.Challenges.Module;
+using Backbone.Modules.Devices.Module;
+using Backbone.Modules.Files.Module;
+using Backbone.Modules.Messages.Module;
+using Backbone.Modules.Quotas.Module;
+using Backbone.Modules.Relationships.Module;
+using Backbone.Modules.Synchronization.Module;
+using Backbone.Modules.Tokens.Application;
+using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using Configuration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.Job.IdentityDeletion;
 
 public class Program
 {
+    private const string METER_NAME = "enmeshed.backbone.jobs.identitydeletion";
+
     public static async Task<int> Main(params string[] args)
     {
         Log.Logger = new LoggerConfiguration()
@@ -70,12 +70,6 @@ public class Program
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                     .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
-                if (env.IsDevelopment())
-                {
-                    var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                    configuration.AddUserSecrets(appAssembly, optional: true);
-                }
-
                 configuration.AddEnvironmentVariables();
                 configuration.AddCommandLine(args);
             })
@@ -94,30 +88,27 @@ public class Program
                 services.AddTransient(typeof(IHostedService), worker);
 
                 services
-                    .AddModule<AnnouncementsModule>(configuration)
-                    .AddModule<DevicesModule>(configuration)
-                    .AddModule<RelationshipsModule>(configuration)
-                    .AddModule<ChallengesModule>(configuration)
-                    .AddModule<FilesModule>(configuration)
-                    .AddModule<MessagesModule>(configuration)
-                    .AddModule<QuotasModule>(configuration)
-                    .AddModule<SynchronizationModule>(configuration)
-                    .AddModule<TokensModule>(configuration);
+                    .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<FilesModule, Modules.Files.Application.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<MessagesModule, Modules.Messages.Application.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<QuotasModule, Modules.Quotas.Application.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration,
+                        Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
+                        Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
                 services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
-                services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
                 services.AddCustomIdentity(hostContext.HostingEnvironment);
 
                 services.RegisterIdentityDeleters();
 
-                services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
-
-                var devicesConfiguration = new Configuration();
-                configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-                services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
+                services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration

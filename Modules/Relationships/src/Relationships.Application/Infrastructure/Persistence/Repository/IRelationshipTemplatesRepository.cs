@@ -9,21 +9,26 @@ namespace Backbone.Modules.Relationships.Application.Infrastructure.Persistence.
 
 public interface IRelationshipTemplatesRepository
 {
-    Task<DbPaginationResult<RelationshipTemplate>> FindTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
-    Task<IEnumerable<RelationshipTemplate>> FindTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
+    Task<IEnumerable<RelationshipTemplate>> ListWithoutContent(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
 
-    Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
+    Task<RelationshipTemplate?> GetWithContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
+    Task<RelationshipTemplate?> GetWithoutContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
     Task Update(IEnumerable<RelationshipTemplate> templates, CancellationToken cancellationToken);
-    Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
+    Task<int> Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
     Task Delete(RelationshipTemplate template, CancellationToken cancellationToken);
 
     #region RelationshipTemplateAllocations
 
-    Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken);
+    Task<IEnumerable<RelationshipTemplateAllocation>> ListRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken);
+
+    Task<IEnumerable<TResult>> ListRelationshipTemplateAllocations<TResult>(
+        Expression<Func<RelationshipTemplateAllocation, bool>> filter, Expression<Func<RelationshipTemplateAllocation, TResult>> selector, CancellationToken cancellationToken);
+
     Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken);
 
     #endregion RelationshipTemplateAllocations

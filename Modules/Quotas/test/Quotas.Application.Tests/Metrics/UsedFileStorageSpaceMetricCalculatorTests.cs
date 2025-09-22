@@ -16,7 +16,7 @@ public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
         var acting = async () => await metricCalculator.CalculateUsage(DateTime.UtcNow, DateTime.UtcNow, "some-address", CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<OverflowException>();
+        await acting.ShouldThrowAsync<OverflowException>();
     }
 
     private class FileMetadataRepositoryStub : IFilesRepository
@@ -28,12 +28,12 @@ public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
             _aggregateUsedSpace = size;
         }
 
-        public Task<long> AggregateUsedSpace(string uploader, DateTime from, DateTime to, CancellationToken cancellationToken)
+        public Task<long> AggregateUsedSpace(string owner, DateTime from, DateTime to, CancellationToken cancellationToken)
         {
             return Task.FromResult(_aggregateUsedSpace);
         }
 
-        public Task<uint> Count(string uploader, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
+        public Task<uint> Count(string owner, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

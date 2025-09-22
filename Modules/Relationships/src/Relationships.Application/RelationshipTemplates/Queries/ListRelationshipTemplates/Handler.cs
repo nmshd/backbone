@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelat
 
     public async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplates(request.QueryItems, _userContext.GetAddress(), request.PaginationFilter,
+        var dbPaginationResult = await _relationshipTemplatesRepository.ListWithContent(request.QueryItems, _userContext.GetAddress(), request.PaginationFilter,
             cancellationToken, track: false);
 
         return new ListRelationshipTemplatesResponse(dbPaginationResult, request.PaginationFilter);

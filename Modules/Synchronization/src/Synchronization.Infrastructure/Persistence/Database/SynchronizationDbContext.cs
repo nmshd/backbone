@@ -151,16 +151,20 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public async Task<SyncRun> GetSyncRunWithExternalEvents(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         return await SyncRuns
+            .AsSplitQuery()
             .CreatedBy(createdBy)
             .Where(s => s.Id == syncRunId)
             .Include(s => s.ExternalEvents)
+            .ThenInclude(e => e.Errors)
             .GetFirst(cancellationToken);
     }
 
     public async Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         var previousSyncRun = await SyncRuns
+            .AsSplitQuery()
             .Include(s => s.ExternalEvents)
+            .ThenInclude(e => e.Errors)
             .CreatedBy(createdBy)
             .OrderByDescending(s => s.Index)
             .FirstOrDefaultAsync(cancellationToken);
@@ -168,16 +172,25 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return previousSyncRun;
     }
 
+    public async Task<bool> DoNewUnsyncedExternalEventsExist(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken)
+    {
+        return await UnsyncedExternalEventsQuery(owner, maxErrorCount).AnyAsync(cancellationToken);
+    }
+
     public async Task<List<ExternalEvent>> GetUnsyncedExternalEvents(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken)
     {
-        var unsyncedEvents = await ExternalEvents
+        var unsyncedEvents = await UnsyncedExternalEventsQuery(owner, maxErrorCount).ToListAsync(cancellationToken);
+
+        return unsyncedEvents;
+    }
+
+    private IQueryable<ExternalEvent> UnsyncedExternalEventsQuery(IdentityAddress owner, byte maxErrorCount)
+    {
+        return ExternalEvents
             .WithOwner(owner)
             .Unsynced()
             .NotBlocked()
-            .WithErrorCountBelow(maxErrorCount)
-            .ToListAsync(cancellationToken);
-
-        return unsyncedEvents;
+            .WithErrorCountBelow(maxErrorCount);
     }
 
     public async Task DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken)

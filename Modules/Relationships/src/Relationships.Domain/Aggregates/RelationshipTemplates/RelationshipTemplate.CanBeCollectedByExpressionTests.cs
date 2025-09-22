@@ -30,7 +30,7 @@ public class RelationshipTemplateCanBeCollectedBy : AbstractTestsBase
         var result = EvaluateCanBeCollectedByExpression(token, collectorAddress);
 
         // Assert
-        result.Should().Be(expectedResult);
+        result.ShouldBe(expectedResult);
     }
 
     private static bool EvaluateCanBeCollectedByExpression(RelationshipTemplate relationshipTemplate, IdentityAddress identityAddress)

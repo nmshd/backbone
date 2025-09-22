@@ -36,13 +36,13 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
         }
     }
 
-    public async Task<PnsRegistration?> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    public async Task<PnsRegistration?> Get(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .FirstOrDefaultAsync(registration => registration.DeviceId == deviceId, cancellationToken);
     }
 
-    public async Task<PnsRegistration[]> FindByDeviceIds(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
+    public async Task<PnsRegistration[]> List(DeviceId[] deviceIds, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
             .Where(r => deviceIds.Contains(r.DeviceId))
@@ -57,7 +57,6 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
 
     public async Task Update(PnsRegistration registration, CancellationToken cancellationToken)
     {
-        _registrations.Update(registration);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

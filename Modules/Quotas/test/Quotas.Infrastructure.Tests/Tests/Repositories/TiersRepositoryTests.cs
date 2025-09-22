@@ -25,19 +25,19 @@ public class TiersRepositoryTests : AbstractTestsBase
         var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month).Value;
         var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_FILES, 5, QuotaPeriod.Month).Value;
 
-        await arrangeContext.Tiers.AddAsync(arrangedTier);
-        await arrangeContext.SaveChangesAsync();
+        await arrangeContext.Tiers.AddAsync(arrangedTier, TestContext.Current.CancellationToken);
+        await arrangeContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var repository = new TiersRepository(actContext);
 
-        var actTier = (await repository.Find(arrangedTier.Id, CancellationToken.None, true))!;
+        var actTier = (await repository.Get(arrangedTier.Id, CancellationToken.None, true))!;
         actTier.DeleteQuota(tierQuotaDefinitionToBeDeleted.Id);
 
         // Act
         await repository.Update(actTier, CancellationToken.None);
 
         // Assert
-        assertContext.Set<TierQuotaDefinition>().Should().NotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
-        assertContext.Set<TierQuotaDefinition>().Should().Contain(q => q.Id == otherTierQuotaDefinition.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldNotContain(q => q.Id == tierQuotaDefinitionToBeDeleted.Id);
+        assertContext.Set<TierQuotaDefinition>().ShouldContain(q => q.Id == otherTierQuotaDefinition.Id);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.SseServer.Versions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.SseServer.Controllers;
 
+[V1]
+[V2]
 public class SseController : ControllerBase
 {
     private readonly IEventQueue _eventQueue;
@@ -22,7 +25,7 @@ public class SseController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("/api/v1/sse")]
+    [HttpGet("/api/v{v:apiVersion}/sse")]
     [Authorize]
     public async Task Subscribe(CancellationToken cancellationToken)
     {
@@ -44,11 +47,11 @@ public class SseController : ControllerBase
 
         try
         {
-            _eventQueue.Register(address);
+            _eventQueue.Register(address, cancellationToken);
 
             await streamWriter.SendServerSentEvent("ConnectionOpened");
 
-            await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
+            await foreach (var eventName in _eventQueue.DequeueFor(address, cancellationToken))
             {
                 _logger.LogDebug("Sending event '{EventName}'...", eventName);
                 await streamWriter.SendServerSentEvent(eventName);

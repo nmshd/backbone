@@ -16,7 +16,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
     private readonly IList<RemovedBlob> _removedBlobs;
     private readonly ILogger<S3BlobStorage> _logger;
 
-    public S3BlobStorage(IOptions<S3BucketOptions> config, ILogger<S3BlobStorage> logger)
+    public S3BlobStorage(IOptions<S3BucketConfiguration> config, ILogger<S3BlobStorage> logger)
     {
         var s3Config = new AmazonS3Config
         {
@@ -46,7 +46,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         _removedBlobs.Clear();
     }
 
-    public async Task<byte[]> FindAsync(string folder, string id)
+    public async Task<byte[]> GetAsync(string folder, string id)
     {
         _logger.LogTrace("Reading blob with key '{blobId}'...", id);
 
@@ -77,12 +77,12 @@ public class S3BlobStorage : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAsync(string folder, string? prefix = null)
     {
-        return Task.FromResult(FindAllBlobsAsync(folder, prefix));
+        return Task.FromResult(ListBlobsAsync(folder, prefix));
     }
 
-    private async IAsyncEnumerable<string> FindAllBlobsAsync(string folder, string? prefix)
+    private async IAsyncEnumerable<string> ListBlobsAsync(string folder, string? prefix)
     {
         _logger.LogTrace("Listing all blobs...");
 
@@ -103,7 +103,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             }
 
             request.ContinuationToken = response.NextContinuationToken;
-        } while (response.IsTruncated);
+        } while (response.IsTruncated == true);
 
         _logger.LogTrace("Found all blobs.");
     }
@@ -196,12 +196,11 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             }
             catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                _logger.LogError("A blob with key '{blobId}' was not found.", blob.Name);
-                throw new NotFoundException($"Blob with key '{blob.Name}' was not found.", ex);
+                _logger.LogInformation("A blob with key '{blobId}' was not found and could therefore not be deleted.", blob.Name);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting blob with key '{blobName}'.", blob.Name);
+                _logger.LogError(ex, "Error deleting blob with key '{blobId}'.", blob.Name);
                 throw;
             }
         }

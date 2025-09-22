@@ -6,12 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.2" />
-        <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
+        <PackageReference Include="Serilog.Exceptions" Version="[8.4.0]" />
+        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="[9.0.0]" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="[6.0.0]" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,25 +21,24 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
-        <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.ConsumerApi\Announcements.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Module\Announcements.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Module\Challenges.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Application\Messages.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.ConsumerApi\Messages.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Module\Quotas.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Application\Relationships.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Module\Relationships.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Module\Synchronization.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Module\Devices.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
     </ItemGroup>
 

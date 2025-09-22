@@ -17,10 +17,10 @@ public class Identity : Entity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
-    private readonly object _latestExhaustionDateLock = new();
+    private readonly Lock _latestExhaustionDateLock = new();
 
     // ReSharper disable once UnusedMember.Local
-    private Identity()
+    protected Identity()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Address = null!;
@@ -43,11 +43,11 @@ public class Identity : Entity
 
     public TierId TierId { get; private set; }
 
-    public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
+    public virtual IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
 
-    public IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
-    public IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
-    internal IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
+    public virtual IReadOnlyCollection<TierQuota> TierQuotas => _tierQuotas.AsReadOnly();
+    public virtual IReadOnlyCollection<IndividualQuota> IndividualQuotas => _individualQuotas.AsReadOnly();
+    internal virtual IReadOnlyCollection<Quota> AllQuotas => new List<Quota>(_individualQuotas).Concat(new List<Quota>(_tierQuotas)).ToList().AsReadOnly();
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
@@ -89,20 +89,19 @@ public class Identity : Entity
         _tierQuotas.Remove(tierQuota);
     }
 
-    public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory,
-        CancellationToken cancellationToken)
+    public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
         foreach (var metric in metrics)
         {
             var metricCalculator = factory.CreateFor(metric);
-            await UpdateMetricStatus(metric, metricCalculator, cancellationToken);
+            await UpdateMetricStatus(metric, metricCalculator, updateType, cancellationToken);
         }
     }
 
-    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, CancellationToken cancellationToken)
+    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
         var metricKeys = _tierQuotas.Select(q => q.MetricKey).Union(_individualQuotas.Select(q => q.MetricKey)).Distinct();
-        await UpdateMetricStatuses(metricKeys, factory, cancellationToken);
+        await UpdateMetricStatuses(metricKeys, factory, updateType, cancellationToken);
     }
 
     private bool IndividualQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)
@@ -110,9 +109,13 @@ public class Identity : Entity
         return _individualQuotas.Any(q => q.MetricKey == metricKey && q.Period == period);
     }
 
-    private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator,
-        CancellationToken cancellationToken)
+    private async Task UpdateMetricStatus(MetricKey metric, IMetricCalculator metricCalculator, MetricUpdateType updateType, CancellationToken cancellationToken)
     {
+        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metric);
+
+        if (updateType == MetricUpdateType.OnlyExhausted && metricStatus is { IsExhausted: false })
+            return;
+
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
 
         var latestExhaustionDate = ExhaustionDate.UNEXHAUSTED;
@@ -121,11 +124,15 @@ public class Identity : Entity
 
         await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>
         {
-            var newUsage = await metricCalculator.CalculateUsage(
-                quota.Period.CalculateBegin(utcNow),
-                quota.Period.CalculateEnd(utcNow),
-                Address,
-                cancellationToken);
+            // if the quota allows 0, we don't need to calculate the usage, it's always exhausted
+            // this is primarily an optimization for when an identity moves to the QueuedForDeletion tier, where all quotas are set to 0
+            var newUsage = quota.Max == 0
+                ? (uint)quota.Max
+                : await metricCalculator.CalculateUsage(
+                    quota.Period.CalculateBegin(utcNow),
+                    quota.Period.CalculateEnd(utcNow),
+                    Address,
+                    cancellationToken);
 
             var quotaExhaustion = quota.CalculateExhaustion(newUsage, utcNow);
 
@@ -136,7 +143,6 @@ public class Identity : Entity
             }
         });
 
-        var metricStatus = _metricStatuses.SingleOrDefault(m => m.MetricKey == metric);
         if (metricStatus != null)
             metricStatus.Update(latestExhaustionDate);
         else
@@ -169,7 +175,7 @@ public class Identity : Entity
             AssignTierQuotaFromDefinition(tierQuotaDefinition);
         }
 
-        await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
+        await UpdateAllMetricStatuses(metricCalculatorFactory, MetricUpdateType.All, cancellationToken);
     }
 
     #region Selectors
@@ -180,4 +186,10 @@ public class Identity : Entity
     }
 
     #endregion
+}
+
+public enum MetricUpdateType
+{
+    All,
+    OnlyExhausted
 }

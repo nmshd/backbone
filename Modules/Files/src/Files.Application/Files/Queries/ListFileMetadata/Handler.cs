@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataRe
 
     public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids.Select(FileId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
+        var dbPaginationResult = await _filesRepository.ListFilesByCreator(request.Ids.Select(FileId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
         return new ListFileMetadataResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

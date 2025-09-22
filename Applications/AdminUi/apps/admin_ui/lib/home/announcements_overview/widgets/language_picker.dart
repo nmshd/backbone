@@ -7,13 +7,7 @@ class LanguagePicker extends StatelessWidget {
   final ValueChanged<String> onLanguageChanged;
   final double? width;
 
-  const LanguagePicker({
-    required this.labelText,
-    required this.onLanguageChanged,
-    super.key,
-    this.validator,
-    this.width,
-  });
+  const LanguagePicker({required this.labelText, required this.onLanguageChanged, super.key, this.validator, this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +32,12 @@ class LanguagePicker extends StatelessWidget {
                       border: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                       enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                     )
-                  : const InputDecorationTheme(
-                      border: OutlineInputBorder(),
-                    ),
-              label: Text(
-                labelText,
-                style: fieldState.hasError ? TextStyle(color: Theme.of(context).colorScheme.error) : null,
-              ),
+                  : const InputDecorationTheme(border: OutlineInputBorder()),
+              label: Text(labelText, style: fieldState.hasError ? TextStyle(color: Theme.of(context).colorScheme.error) : null),
               requestFocusOnTap: true,
               enableFilter: true,
               dropdownMenuEntries: languageOptions.map((language) {
-                return DropdownMenuEntry(
-                  value: language.isoCode,
-                  label: language.name,
-                );
+                return DropdownMenuEntry(value: language.isoCode, label: language.name);
               }).toList(),
               onSelected: (String? selectedLanguageIsoCode) {
                 if (selectedLanguageIsoCode != null) {

@@ -18,7 +18,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -65,6 +68,85 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.HasKey("DeviceId");
 
                     b.ToTable("PnsRegistrations", "Devices");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RelationshipTemplates", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AllocatedBy")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipTemplateId");
+
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
@@ -223,6 +305,30 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("Devices", "Devices");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)")
+                        .IsFixedLength(false);
+
+                    b.Property<string>("OwnerAddress")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Name", "OwnerAddress");
+
+                    b.HasIndex("OwnerAddress");
+
+                    b.ToTable("FeatureFlags", "Devices");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
@@ -283,35 +389,18 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<DateTime?>("ApprovalReminder1SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ApprovalReminder2SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ApprovalReminder3SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ApprovedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ApprovedByDevice")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
                     b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CancelledByDevice")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByDevice")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
                         .IsFixedLength();
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletionStartedAt")
                         .HasColumnType("datetime2");
@@ -334,15 +423,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(80)")
                         .IsFixedLength(false);
-
-                    b.Property<DateTime?>("RejectedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RejectedByDevice")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -615,8 +695,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -764,6 +844,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.ToTable("AspNetUserTokens", "Devices");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplateAllocation", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", "RelationshipTemplate")
+                        .WithMany("Allocations")
+                        .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.ApplicationUser", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Device", "Device")
@@ -784,6 +875,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired();
 
                     b.Navigation("Identity");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.FeatureFlag", b =>
+                {
+                    b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
+                        .WithMany("EfCoreFeatureFlagSetDoNotUse")
+                        .HasForeignKey("OwnerAddress")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>
@@ -887,6 +987,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
+                {
+                    b.Navigation("Allocations");
+                });
+
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Device", b =>
                 {
                     b.Navigation("User")
@@ -898,6 +1003,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Navigation("DeletionProcesses");
 
                     b.Navigation("Devices");
+
+                    b.Navigation("EfCoreFeatureFlagSetDoNotUse");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>

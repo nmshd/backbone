@@ -16,24 +16,25 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     {
     }
 
-    [When("a GET request is sent to the /Metrics endpoint")]
+    [When("^a GET request is sent to the /Metrics endpoint$")]
     public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
-        _metricsResponse = await _client.Metrics.GetAllMetrics();
-        _metricsResponse.Should().BeASuccess();
+        _metricsResponse = await _client.Metrics.ListMetrics();
+        _metricsResponse.ShouldBeASuccess();
     }
 
     [Then("the response contains a list of Metrics")]
     public async Task ThenTheResponseContainsAListOfMetrics()
     {
-        _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
-        _metricsResponse!.ContentType.Should().StartWith("application/json");
-        await _metricsResponse.Should().ComplyWithSchema();
+        _metricsResponse!.Result.ShouldNotBeNull();
+        _metricsResponse.Result.Count.ShouldBeGreaterThan(0);
+        _metricsResponse!.ContentType.ShouldStartWith("application/json");
+        await _metricsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_metricsResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_metricsResponse!.Status).ShouldBe(expectedStatusCode);
     }
 }

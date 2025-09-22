@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -57,15 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (index) {
-              context.go(
-                switch (index) {
-                  0 => '/identities',
-                  1 => '/tiers',
-                  2 => '/clients',
-                  3 => '/announcements',
-                  _ => throw Exception(),
-                },
-              );
+              context.go(switch (index) {
+                0 => '/identities',
+                1 => '/tiers',
+                2 => '/clients',
+                3 => '/announcements',
+                _ => throw Exception(),
+              });
             },
           ),
           Expanded(child: widget.child),

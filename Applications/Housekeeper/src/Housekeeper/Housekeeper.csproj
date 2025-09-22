@@ -1,0 +1,76 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="[9.0.9]">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="[9.0.9]" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[9.0.9]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
+        <PackageReference Include="Serilog" Version="[4.3.0]" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
+        <PackageReference Include="Serilog.Exceptions" Version="[8.4.0]" />
+        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="[9.0.0]" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="[9.0.0]" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="[6.0.0]" />
+        <PackageReference Include="Serilog.Sinks.Debug" Version="[3.0.0]" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="[9.2.0]" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="[9.0.0]" />
+        <PackageReference Include="System.Data.SqlClient" Version="[4.9.0]" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.Postgres\Announcements.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.SqlServer\Announcements.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Module\Announcements.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure.Database.Postgres\Challenges.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure.Database.SqlServer\Challenges.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Module\Challenges.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Module\Devices.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Infrastructure.Database.Postgres\Files.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Infrastructure.Database.SqlServer\Files.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure.Database.Postgres\Messages.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure.Database.SqlServer\Messages.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure.Database.Postgres\Quotas.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure.Database.SqlServer\Quotas.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Infrastructure.Database.Postgres\Relationships.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Infrastructure.Database.SqlServer\Relationships.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Module\Relationships.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Infrastructure.Database.Postgres\Synchronization.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Infrastructure.Database.SqlServer\Synchronization.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Module\Synchronization.Module.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
+    </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
+    </Target>
+</Project>

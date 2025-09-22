@@ -27,12 +27,12 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
+        A.CallTo(() => _tiersRepository.Get(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfClientsWithDefaultTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
         // Act
-        await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
+        await _handler.Handle(new DeleteTierCommand { TierId = tier.Id }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<TierDeletedDomainEvent>._)).MustHaveHappened();
@@ -45,15 +45,15 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
 
-        A.CallTo(() => _tiersRepository.FindById(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
+        A.CallTo(() => _tiersRepository.Get(tier.Id, A<CancellationToken>._)).Returns(Task.FromResult<Tier?>(tier));
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
 
         // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
+        var acting = async () => await _handler.Handle(new DeleteTierCommand { TierId = tier.Id }, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<DomainException>();
+        await acting.ShouldThrowAsync<DomainException>();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustNotHaveHappened();
     }
 

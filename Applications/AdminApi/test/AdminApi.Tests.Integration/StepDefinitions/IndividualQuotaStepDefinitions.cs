@@ -17,6 +17,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     private string _quotaId;
     private ApiResponse<IndividualQuota>? _createQuotaResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
+    private IResponse? _whenResponse;
 
     public IndividualQuotaStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
@@ -41,33 +42,33 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
             Max = 2,
             Period = "Week"
         });
-        response.Should().BeASuccess();
+        response.ShouldBeASuccess();
 
         _quotaId = response.Result!.Id;
     }
 
-    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
+    [When("^a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpoint()
     {
-        _deleteResponse = await _client.Identities.DeleteIndividualQuota(_identityAddress, _quotaId);
+        _whenResponse = _deleteResponse = await _client.Identities.DeleteIndividualQuota(_identityAddress, _quotaId);
     }
 
-    [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint")]
+    [When("^a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithAnInexistentQuotaId()
     {
-        _deleteResponse = await _client.Identities.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx");
+        _whenResponse = _deleteResponse = await _client.Identities.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx");
     }
 
-    [When("a DELETE request is sent to the /Identities/{nonExistentAddress}/Quotas/{q.id} endpoint")]
+    [When("^a DELETE request is sent to the /Identities/{nonExistentAddress}/Quotas/{q.id} endpoint$")]
     public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithANonExistentIdentityAddress()
     {
-        _deleteResponse = await _client.Identities.DeleteIndividualQuota("someNonExistentIdentityAddress", _quotaId);
+        _whenResponse = _deleteResponse = await _client.Identities.DeleteIndividualQuota("someNonExistentIdentityAddress", _quotaId);
     }
 
-    [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
+    [When("^a POST request is sent to the /Identity/{i.id}/Quotas endpoint$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpoint()
     {
-        _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
+        _whenResponse = _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -75,10 +76,10 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
+    [When("^a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInexistentIdentityAddress()
     {
-        _createQuotaResponse = await _client.Identities.CreateIndividualQuota("some-inexistent-identity-address", new CreateQuotaForIdentityRequest
+        _whenResponse = _createQuotaResponse = await _client.Identities.CreateIndividualQuota("some-inexistent-identity-address", new CreateQuotaForIdentityRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -86,10 +87,10 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
-    [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint with an invalid metric key")]
+    [When("^a POST request is sent to the /Identity/{i.id}/Quotas endpoint with an invalid metric key$")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInvalidMetricKey()
     {
-        _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
+        _whenResponse = _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
         {
             MetricKey = "someInvalidMetricKey",
             Max = 2,
@@ -100,19 +101,17 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_createQuotaResponse != null)
-            ((int)_createQuotaResponse!.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
 
-        if (_deleteResponse != null)
-            ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then("the response contains an IndividualQuota")]
     public async Task ThenTheResponseContainsAnIndividualQuota()
     {
-        _createQuotaResponse!.Result!.Should().NotBeNull();
-        _createQuotaResponse!.ContentType.Should().StartWith("application/json");
-        await _createQuotaResponse.Should().ComplyWithSchema();
+        _createQuotaResponse!.Result!.ShouldNotBeNull();
+        _createQuotaResponse!.ContentType.ShouldStartWith("application/json");
+        await _createQuotaResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
@@ -120,21 +119,21 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     {
         if (_createQuotaResponse != null)
         {
-            _createQuotaResponse!.Error.Should().NotBeNull();
-            _createQuotaResponse.Error!.Code.Should().Be(errorCode);
+            _createQuotaResponse!.Error.ShouldNotBeNull();
+            _createQuotaResponse.Error!.Code.ShouldBe(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Error.Should().NotBeNull();
-            _deleteResponse.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Error.ShouldNotBeNull();
+            _deleteResponse.Error!.Code.ShouldBe(errorCode);
         }
     }
 
     private async Task CreateIdentity()
     {
         var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
-        createIdentityResponse.Should().BeASuccess();
+        createIdentityResponse.ShouldBeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
 

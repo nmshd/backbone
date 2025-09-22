@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 
     private async Task<Token> GetToken(string tokenId, byte[]? password, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Find(TokenId.Parse(tokenId), cancellationToken, track: true) ??
+        var token = await _tokensRepository.GetWithContent(TokenId.Parse(tokenId), cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(Token));
 
         var activeIdentity = _userContext.GetAddressOrNull();

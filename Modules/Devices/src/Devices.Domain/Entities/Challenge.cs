@@ -6,7 +6,7 @@ namespace Backbone.Modules.Devices.Domain.Entities;
 public class Challenge : Entity
 {
     // ReSharper disable once UnusedMember.Local
-    private Challenge()
+    protected Challenge()
     {
         Id = null!;
     }

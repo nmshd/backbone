@@ -18,7 +18,11 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Announcements")
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("DbProvider", "SqlServer")
+                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -37,12 +41,55 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IqlQuery")
+                        .HasMaxLength(1000)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(1000)")
+                        .IsFixedLength(false);
+
+                    b.Property<bool>("IsSilent")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Announcements", "Announcements");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("AnnouncementId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<byte>("Order")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnnouncementId");
+
+                    b.ToTable("AnnouncementActions", "Announcements");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
@@ -94,6 +141,14 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
                     b.ToTable("AnnouncementText", "Announcements");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementAction", b =>
+                {
+                    b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("AnnouncementId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.AnnouncementRecipient", b =>
                 {
                     b.HasOne("Backbone.Modules.Announcements.Domain.Entities.Announcement", null)
@@ -114,6 +169,8 @@ namespace Backbone.Modules.Announcements.Infrastructure.Database.SqlServer.Migra
 
             modelBuilder.Entity("Backbone.Modules.Announcements.Domain.Entities.Announcement", b =>
                 {
+                    b.Navigation("Actions");
+
                     b.Navigation("Recipients");
 
                     b.Navigation("Texts");

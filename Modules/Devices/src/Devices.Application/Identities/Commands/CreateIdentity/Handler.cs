@@ -12,18 +12,18 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentit
 
 public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
 {
-    private readonly ApplicationOptions _applicationOptions;
+    private readonly ApplicationConfiguration _applicationConfiguration;
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository,
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IOptions<ApplicationConfiguration> applicationOptions, IIdentitiesRepository identitiesRepository,
         IOAuthClientsRepository oAuthClientsRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
-        _applicationOptions = applicationOptions.Value;
+        _applicationConfiguration = applicationOptions.Value;
         _identitiesRepository = identitiesRepository;
         _oAuthClientsRepository = oAuthClientsRepository;
     }
@@ -45,7 +45,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
     private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
     {
-        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+        var client = await _oAuthClientsRepository.Get(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
         if (clientIdentityCount >= client.MaxIdentities)
@@ -58,7 +58,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
     private async Task<IdentityAddress> CreateIdentityAddress(PublicKey publicKey, CancellationToken cancellationToken)
     {
-        var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
+        var address = IdentityAddress.Create(publicKey.Key, _applicationConfiguration.DidDomainName);
 
         var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
         if (addressAlreadyExists)

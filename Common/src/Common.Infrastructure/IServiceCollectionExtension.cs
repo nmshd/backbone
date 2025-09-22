@@ -1,14 +1,13 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Common.Infrastructure.Persistence.Context;
 using Backbone.Common.Infrastructure.Persistence.Repository;
 using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Common.Infrastructure;
+
 public static class IServiceCollectionExtension
 {
-    private const string SQLSERVER = "SqlServer";
-    private const string POSTGRES = "Postgres";
-
     public static IServiceCollection AddMetricStatusesRepository(this IServiceCollection services, string provider, string connectionString)
     {
         services.Configure<MetricStatusesRepositoryOptions>(options => options.ConnectionString = connectionString);
@@ -17,10 +16,10 @@ public static class IServiceCollectionExtension
 
         switch (provider)
         {
-            case SQLSERVER:
+            case DatabaseConfiguration.SQLSERVER:
                 services.AddTransient<IMetricStatusesRepository, SqlServerMetricStatusesRepository>();
                 break;
-            case POSTGRES:
+            case DatabaseConfiguration.POSTGRES:
                 services.AddTransient<IMetricStatusesRepository, PostgresMetricStatusesRepository>();
                 break;
         }

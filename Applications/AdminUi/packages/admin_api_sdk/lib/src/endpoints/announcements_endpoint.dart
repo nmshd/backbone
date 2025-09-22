@@ -4,27 +4,40 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class AnnouncementsEndpoint extends Endpoint {
-  AnnouncementsEndpoint(super.dio);
+  AnnouncementsEndpoint(super._dio);
 
-  Future<ApiResponse<List<Announcement>>> getAnnouncements() => get(
-        '/api/v1/Announcements',
-        transformer: (e) => (e as List).map(Announcement.fromJson).toList(),
-      );
+  Future<ApiResponse<List<Announcement>>> getAnnouncements() =>
+      get('/api/v1/Announcements', transformer: (e) => (e as List).map(Announcement.fromJson).toList());
 
-  Future<ApiResponse<Announcement>> getAnnouncement(String announcementId) => get(
-        '/api/v1/Announcements/$announcementId',
-        transformer: Announcement.fromJson,
-      );
+  Future<ApiResponse<Announcement>> getAnnouncement(String announcementId) =>
+      get('/api/v1/Announcements/$announcementId', transformer: Announcement.fromJson);
 
   Future<ApiResponse<CreateAnnouncementResponse>> createAnnouncement({
     required AnnouncementSeverity severity,
     required List<AnnouncementText> announcementTexts,
+    required bool isSilent,
     String? expiresAt,
     List<String>? recipients,
-  }) =>
-      post(
-        '/api/v1/Announcements',
-        data: {'expiresAt': expiresAt, 'severity': severity.name, 'texts': announcementTexts, 'recipients': recipients},
-        transformer: CreateAnnouncementResponse.fromJson,
-      );
+    List<AnnouncementAction>? actions,
+    String? iqlQuery,
+  }) => post(
+    '/api/v1/Announcements',
+    data: {
+      'expiresAt': expiresAt,
+      'severity': severity.name,
+      'texts': announcementTexts,
+      'recipients': recipients,
+      'isSilent': isSilent,
+      'iqlQuery': iqlQuery,
+      'actions': actions,
+    },
+    transformer: CreateAnnouncementResponse.fromJson,
+  );
+
+  Future<ApiResponse<void>> deleteAnnouncement(String announcementId) => delete(
+    '/api/v1/Announcements/$announcementId',
+    expectedStatus: 204,
+    transformer: (e) {},
+    allowEmptyResponse: true,
+  );
 }

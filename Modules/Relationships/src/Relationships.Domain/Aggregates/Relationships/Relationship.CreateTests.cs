@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -18,14 +18,14 @@ public class RelationshipCreateTests : AbstractTestsBase
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [0, 1, 2], []);
 
         // Assert
-        relationship.Id.Should().NotBeNull();
-        relationship.From.Should().Be(IDENTITY_1);
-        relationship.To.Should().Be(IDENTITY_2);
-        relationship.Status.Should().Be(RelationshipStatus.Pending);
-        relationship.RelationshipTemplateId.Should().Be(RELATIONSHIP_TEMPLATE_OF_2.Id);
-        relationship.RelationshipTemplate.Should().Be(RELATIONSHIP_TEMPLATE_OF_2);
-        relationship.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
-        relationship.CreationContent.Should().Equal(0, 1, 2);
+        relationship.Id.ShouldNotBeNull();
+        relationship.From.ShouldBe(IDENTITY_1);
+        relationship.To.ShouldBe(IDENTITY_2);
+        relationship.Status.ShouldBe(RelationshipStatus.Pending);
+        relationship.RelationshipTemplateId.ShouldBe(RELATIONSHIP_TEMPLATE_OF_2.Id);
+        relationship.RelationshipTemplate.ShouldBe(RELATIONSHIP_TEMPLATE_OF_2);
+        relationship.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
+        relationship.Details.CreationContent.ShouldBe([0, 1, 2]);
     }
 
     [Fact]
@@ -38,11 +38,11 @@ public class RelationshipCreateTests : AbstractTestsBase
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [0, 1, 2], []);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
-        domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.NewStatus.Should().Be("Pending");
-        domainEvent.Initiator.Should().Be(IDENTITY_1);
-        domainEvent.Peer.Should().Be(IDENTITY_2);
+        var domainEvent = relationship.ShouldHaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
+        domainEvent.RelationshipId.ShouldBe(relationship.Id);
+        domainEvent.NewStatus.ShouldBe("Pending");
+        domainEvent.Initiator.ShouldBe(IDENTITY_1);
+        domainEvent.Peer.ShouldBe(IDENTITY_2);
     }
 
     [Fact]
@@ -55,17 +55,17 @@ public class RelationshipCreateTests : AbstractTestsBase
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(1);
+        relationship.AuditLog.ShouldHaveCount(1);
 
         var auditLogEntry = relationship.AuditLog.First();
 
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Creation);
-        auditLogEntry.OldStatus.Should().Be(null);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Pending);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_1);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_1);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+        auditLogEntry.Id.ShouldNotBeNull();
+        auditLogEntry.Reason.ShouldBe(RelationshipAuditLogEntryReason.Creation);
+        auditLogEntry.OldStatus.ShouldBe(null);
+        auditLogEntry.NewStatus.ShouldBe(RelationshipStatus.Pending);
+        auditLogEntry.CreatedBy.ShouldBe(IDENTITY_1);
+        auditLogEntry.CreatedByDevice.ShouldBe(DEVICE_1);
+        auditLogEntry.CreatedAt.ShouldBe(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_1, DEVICE_1, null, []);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotCreateRelationshipWithYourself");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.cannotCreateRelationshipWithYourself");
     }
 
     [Theory]
@@ -95,7 +95,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
     }
 
     [Fact]
@@ -113,6 +113,6 @@ public class RelationshipCreateTests : AbstractTestsBase
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        acting.Should().NotThrow<DomainException>();
+        acting.ShouldNotThrow();
     }
 }

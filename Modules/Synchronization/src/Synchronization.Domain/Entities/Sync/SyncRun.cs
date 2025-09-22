@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
@@ -6,11 +7,10 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun : Entity
 {
-    private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
     // ReSharper disable once UnusedMember.Local
-    private SyncRun()
+    protected SyncRun()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
@@ -39,9 +39,8 @@ public class SyncRun : Entity
     public IdentityAddress CreatedBy { get; }
     public DeviceId CreatedByDevice { get; }
     public DateTime? FinalizedAt { get; internal set; }
-    public IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
+    public virtual IReadOnlyList<ExternalEvent> ExternalEvents => _externalEvents;
     public int EventCount { get; }
-    public IReadOnlyList<SyncError> Errors => _errors.AsReadOnly();
 
 
     public bool IsFinalized => FinalizedAt != null;
@@ -90,16 +89,10 @@ public class SyncRun : Entity
 
     private void ItemSyncFailed(ExternalEvent item, string errorCode)
     {
-        var error = new SyncError(this, item, errorCode);
+        var error = new SyncError(item, errorCode);
 
         item.SyncFailed(error);
-        AddError(error);
         _externalEvents.Remove(item);
-    }
-
-    private void AddError(SyncError error)
-    {
-        _errors.Add(error);
     }
 
     public void Cancel()
@@ -112,6 +105,12 @@ public class SyncRun : Entity
             ItemSyncFailed(item, "syncRunCanceled");
         }
     }
+
+    #region Expressions
+
+    public static Expression<Func<SyncRun, bool>> CanBeCleanedUp => r => r.FinalizedAt != null && r.FinalizedAt.Value <= SystemTime.UtcNow.AddDays(-30);
+
+    #endregion
 
     public enum SyncRunType
     {

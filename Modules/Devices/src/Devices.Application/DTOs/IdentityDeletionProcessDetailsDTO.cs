@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
@@ -12,16 +11,9 @@ public class IdentityDeletionProcessDetailsDTO
             .Select(e => new IdentityDeletionProcessAuditLogEntryDTO(e))
             .OrderBy(e => e.CreatedAt)
             .ToList();
-        Status = process.Status;
+        Status = process.Status.ToString();
         CreatedAt = process.CreatedAt;
-        ApprovalPeriodEndsAt = process.ApprovalPeriodEndsAt;
-
-        ApprovalReminder1SentAt = process.ApprovalReminder1SentAt;
-        ApprovalReminder2SentAt = process.ApprovalReminder2SentAt;
-        ApprovalReminder3SentAt = process.ApprovalReminder3SentAt;
-
-        ApprovedAt = process.ApprovedAt;
-        ApprovedByDevice = process.ApprovedByDevice;
+        CreatedByDevice = process.CreatedByDevice.Value;
 
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
@@ -30,20 +22,19 @@ public class IdentityDeletionProcessDetailsDTO
         GracePeriodReminder3SentAt = process.GracePeriodReminder3SentAt;
     }
 
-
     public string Id { get; set; }
     public List<IdentityDeletionProcessAuditLogEntryDTO> AuditLog { get; set; }
-    public DeletionProcessStatus Status { get; set; }
+    public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime ApprovalPeriodEndsAt { get; set; }
+    public string CreatedByDevice { get; set; }
 
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `createdAt` instead")]
+    public DateTime ApprovedAt => CreatedAt;
 
-    public DateTime? ApprovalReminder1SentAt { get; set; }
-    public DateTime? ApprovalReminder2SentAt { get; set; }
-    public DateTime? ApprovalReminder3SentAt { get; set; }
-
-    public DateTime? ApprovedAt { get; set; }
-    public DeviceId? ApprovedByDevice { get; set; }
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `CreatedByDevice` instead")]
+    public string ApprovedByDevice => CreatedByDevice;
 
     public DateTime? GracePeriodEndsAt { get; set; }
 
@@ -58,16 +49,16 @@ public class IdentityDeletionProcessAuditLogEntryDTO
     {
         Id = entry.Id;
         CreatedAt = entry.CreatedAt;
-        OldStatus = entry.OldStatus;
-        NewStatus = entry.NewStatus;
+        OldStatus = entry.OldStatus.ToString();
+        NewStatus = entry.NewStatus.ToString();
         MessageKey = entry.MessageKey;
         AdditionalData = entry.AdditionalData ?? [];
     }
 
     public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DeletionProcessStatus? OldStatus { get; set; }
-    public DeletionProcessStatus? NewStatus { get; set; }
+    public string? OldStatus { get; set; }
+    public string? NewStatus { get; set; }
     public Dictionary<string, string> AdditionalData { get; set; }
     public MessageKey MessageKey { get; set; }
 }

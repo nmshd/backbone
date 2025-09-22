@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
     public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
         if (command.IsBackupDevice && await _identitiesRepository.HasBackupDevice(identity.Address, cancellationToken))
             throw new ApplicationException(ApplicationErrors.Devices.BackupDeviceAlreadyExists());

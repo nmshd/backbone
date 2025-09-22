@@ -7,8 +7,6 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class ExternalEvent : Entity
 {
-    private readonly List<SyncError> _errors = [];
-
     // ReSharper disable once UnusedMember.Local
     protected ExternalEvent()
     {
@@ -17,6 +15,7 @@ public class ExternalEvent : Entity
         Id = null!;
         Owner = null!;
         Payload = null!;
+        Errors = null!;
     }
 
     protected ExternalEvent(ExternalEventType type, IdentityAddress owner, object payload, string? context = null)
@@ -27,6 +26,7 @@ public class ExternalEvent : Entity
         CreatedAt = SystemTime.UtcNow;
         Payload = payload;
         Context = context;
+        Errors = [];
 
         RaiseDomainEvent(new ExternalEventCreatedDomainEvent(this));
     }
@@ -41,9 +41,9 @@ public class ExternalEvent : Entity
     public object Payload { get; }
 
     public byte SyncErrorCount { get; internal set; }
-    public SyncRun? SyncRun { get; private set; }
+    public virtual SyncRun? SyncRun { get; private set; }
     public SyncRunId? SyncRunId { get; private set; }
-    public IReadOnlyCollection<SyncError> Errors => _errors;
+    public virtual List<SyncError> Errors { get; }
 
     public string? Context { get; }
     public bool IsDeliveryBlocked { get; private set; }
@@ -73,7 +73,7 @@ public class ExternalEvent : Entity
     {
         SyncRunId = null;
         SyncErrorCount++;
-        _errors.Add(error);
+        Errors.Add(error);
     }
 }
 
@@ -91,5 +91,12 @@ public enum ExternalEventType
     PeerDeletionCancelled = 23,
     PeerDeleted = 24,
 
-    TokenLocked = 30
+    TokenLocked = 30,
+
+    PeerFeatureFlagsChanged = 40,
+
+    RelationshipTemplateAllocationsExhausted = 50,
+
+    FileOwnershipLocked = 60,
+    FileOwnershipClaimed = 61
 }

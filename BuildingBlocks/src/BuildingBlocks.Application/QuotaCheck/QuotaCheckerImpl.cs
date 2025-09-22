@@ -16,7 +16,12 @@ public class QuotaCheckerImpl : IQuotaChecker
 
     public async Task<CheckQuotaResult> CheckQuotaExhaustion(IEnumerable<MetricKey> metricKeys)
     {
-        var statuses = await _metricStatusesRepository.GetMetricStatuses(_userContext.GetAddress(), metricKeys);
+        var activeIdentity = _userContext.GetAddressOrNull();
+
+        if (activeIdentity == null)
+            return CheckQuotaResult.Success();
+
+        var statuses = await _metricStatusesRepository.GetMetricStatuses(activeIdentity, metricKeys);
 
         var exhaustedStatuses = statuses.Where(m => m.IsExhausted);
 

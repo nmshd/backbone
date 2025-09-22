@@ -8,10 +8,12 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages;
+using Backbone.ConsumerApi.Sdk.Endpoints.Notifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
@@ -45,8 +47,10 @@ public class Client
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
         Files = new FilesEndpoint(endpointClient);
+        FeatureFlags = new FeatureFlagsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Messages = new MessagesEndpoint(endpointClient);
+        Notifications = new NotificationsEndpoint(endpointClient);
         PushNotifications = new PushNotificationsEndpoint(endpointClient);
         Quotas = new QuotasEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
@@ -64,9 +68,11 @@ public class Client
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }
+    public FeatureFlagsEndpoint FeatureFlags { get; }
     public FilesEndpoint Files { get; }
     public IdentitiesEndpoint Identities { get; }
     public MessagesEndpoint Messages { get; }
+    public NotificationsEndpoint Notifications { get; }
     public PushNotificationsEndpoint PushNotifications { get; }
     public QuotasEndpoint Quotas { get; }
     public RelationshipsEndpoint Relationships { get; }
@@ -74,6 +80,7 @@ public class Client
     public SyncRunsEndpoint SyncRuns { get; }
     public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
+
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
     public static Client CreateUnauthenticated(string baseUrl, ClientCredentials clientCredentials)

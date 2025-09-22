@@ -1,28 +1,34 @@
 {
     $schema: "https://docs.renovatebot.com/renovate-schema.json",
-    extends: ["config:recommended"],
+    extends: ["config:recommended", "docker:pinDigests"],
     labels: ["dependencies"],
     schedule: ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
     ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
+    rangeStrategy: "pin",
+    additionalReviewers: ["erbenjak"],
     packageRules: [
         {
-            // we don't want to update ArchUnitNET currently, because there is a bug in the latest version (see https://github.com/TNG/ArchUnitNET/issues/320)
-            matchDatasources: ["nuget"],
-            packageNames: ["TngTech.ArchUnitNET.xUnit", "FluentAssertions", "FluentAssertions.Json"],
+            // dart seems to have problems when pinning to a specific version, so we use the "auto" strategy for dart packages
+            matchDatasources: ["dart"],
+            rangeStrategy: "auto"
+        },
+
+        {
+            // do not upgrade the dart sdk as it may not be compatible with the version that flutter ships
+            matchDatasources: ["dart-version"],
             enabled: false
         },
 
         {
-            // we don't want to update eslint currently, because there is a breaking change in its config
-            matchDatasources: ["npm"],
-            packageNames: ["eslint"],
+            // we want to manually control the version of the flutter sdk
+            matchDatasources: ["flutter-version"],
             enabled: false
         },
 
         {
             // the docker images in this list are created and used by our pipelines and can therefore not to be updated by renovate
             matchDatasources: ["docker"],
-            packageNames: [
+            matchPackageNames: [
                 "ghcr.io/nmshd/backbone-consumer-api",
                 "ghcr.io/nmshd/backbone-admin-ui",
                 "ghcr.io/nmshd/backbone-event-handler",
@@ -33,16 +39,16 @@
             enabled: false
         },
         {
-            // the dart packages in this list is fetched directly from git and therefore doesn't have a version
+            // the dart packages in this list are fetched directly from git and therefore don't have a version
             matchDatasources: ["dart"],
-            packageNames: ["window_size"],
+            matchPackageNames: ["window_size", "enmeshed_ui_kit"],
             enabled: false
         },
 
         {
             // these packages are from our Admin UI monorepo and can therefore not be updated by renovate
             matchDatasources: ["dart"],
-            packageNames: ["admin_api_sdk", "admin_api_types"],
+            matchPackageNames: ["admin_api_sdk", "admin_api_types"],
             enabled: false
         },
 

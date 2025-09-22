@@ -7,15 +7,15 @@ part of 'individual_quota.dart';
 // **************************************************************************
 
 IndividualQuota _$IndividualQuotaFromJson(Map<String, dynamic> json) => IndividualQuota(
-      id: json['id'] as String,
-      metric: Metric.fromJson(json['metric']),
-      max: (json['max'] as num).toInt(),
-      period: json['period'] as String,
-    );
+  id: json['id'] as String,
+  metric: Metric.fromJson(json['metric']),
+  max: (json['max'] as num).toInt(),
+  period: json['period'] as String,
+);
 
 Map<String, dynamic> _$IndividualQuotaToJson(IndividualQuota instance) => <String, dynamic>{
-      'id': instance.id,
-      'metric': instance.metric,
-      'max': instance.max,
-      'period': instance.period,
-    };
+  'id': instance.id,
+  'metric': instance.metric,
+  'max': instance.max,
+  'period': instance.period,
+};

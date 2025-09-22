@@ -7,6 +7,8 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using Backbone.Tooling.Extensions;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
@@ -32,9 +34,11 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task<int> Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
-        await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
+#pragma warning disable CS0618 // Type or member is obsolete; While it's true that there is an ExecuteDeleteAsync method in EF Core, it cannot be used here because it cannot be used in scenarios where table splitting is used. See https://github.com/dotnet/efcore/issues/28521 for the feature request that would allow this.
+        return await _templates.Where(filter).BatchDeleteAsync(cancellationToken);
+#pragma warning restore CS0618 // Type or member is obsolete
     }
 
     public async Task Delete(RelationshipTemplate template, CancellationToken cancellationToken)
@@ -43,7 +47,19 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    public async Task<RelationshipTemplate?> GetWithContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    {
+        var template = await (track ? _templates : _readOnlyTemplates)
+            .Include(r => r.Allocations)
+            .Include(r => r.Details)
+            .NotExpiredFor(identityAddress)
+            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
+            .FirstWithIdOrDefault(id, cancellationToken);
+
+        return template;
+    }
+
+    public async Task<RelationshipTemplate?> GetWithoutContent(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
             .Include(r => r.Allocations)
@@ -54,7 +70,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
@@ -70,6 +86,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         }
 
         var query = (track ? _templates : _readOnlyTemplates)
+            .Include(t => t.Details)
             .NotExpiredFor(activeIdentity)
             .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
             .Where(idAndPasswordFilter);
@@ -79,14 +96,13 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
-    public async Task<IEnumerable<RelationshipTemplate>> FindTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RelationshipTemplate>> ListWithoutContent(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
         return await _templates.Where(filter).ToListAsync(cancellationToken);
     }
 
     public async Task Update(RelationshipTemplate template)
     {
-        _templates.Update(template);
         await _dbContext.SaveChangesAsync();
     }
 
@@ -96,10 +112,16 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
+    public async Task<IEnumerable<RelationshipTemplateAllocation>> ListRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
         CancellationToken cancellationToken)
     {
         return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<TResult>> ListRelationshipTemplateAllocations<TResult>(
+        Expression<Func<RelationshipTemplateAllocation, bool>> filter, Expression<Func<RelationshipTemplateAllocation, TResult>> selector, CancellationToken cancellationToken)
+    {
+        return await _relationshipTemplateAllocations.Where(filter).Select(selector).ToListAsync(cancellationToken);
     }
 
     public async Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken)

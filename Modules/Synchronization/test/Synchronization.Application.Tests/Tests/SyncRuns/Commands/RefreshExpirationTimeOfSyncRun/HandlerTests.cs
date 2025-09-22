@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
@@ -23,11 +24,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
-        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.syncRun.cannotRefreshExpirationTimeOfSyncRunStartedByAnotherDevice");
+        await acting.ShouldThrowAsync<OperationFailedException>().ShouldHaveErrorCode("error.platform.validation.syncRun.cannotRefreshExpirationTimeOfSyncRunStartedByAnotherDevice");
     }
 
     [Fact]
@@ -43,11 +44,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*SyncRun*");
+        await acting.ShouldThrowAsync<NotFoundException>().ShouldContainMessage("SyncRun");
     }
 
     [Fact]
@@ -66,11 +67,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
-        response.ExpiresAt.Should().BeAfter(utcNow);
+        response.ExpiresAt.ShouldBeAfter(utcNow);
     }
 
     [Fact]
@@ -89,11 +90,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand(syncRun.Id), CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
-        response.ExpiresAt.Should().BeAfter(utcNow);
+        response.ExpiresAt.ShouldBeAfter(utcNow);
     }
 
     #region CreateHandler

@@ -36,7 +36,9 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
 
     private async Task CreateMessageReceivedExternalEvents(MessageCreatedDomainEvent @event)
     {
-        var relationships = await _relationshipsRepository.GetRelationships(@event.Recipients.Select(r => RelationshipId.Parse(r.RelationshipId)), CancellationToken.None);
+        var idsOfRelationshipsToMessageRecipients = @event.Recipients.Select(r => RelationshipId.Parse(r.RelationshipId));
+
+        var relationships = await _relationshipsRepository.ListRelationships(idsOfRelationshipsToMessageRecipients, CancellationToken.None);
 
         foreach (var recipient in @event.Recipients)
         {

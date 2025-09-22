@@ -23,9 +23,9 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
         if (@event.IsDeliveryBlocked)
             return;
 
-        var identity = await _identitiesRepository.FindByAddress(@event.Owner, CancellationToken.None);
+        var identity = await _identitiesRepository.Get(@event.Owner, CancellationToken.None);
 
-        if (identity != null && identity.Status != IdentityStatus.ToBeDeleted)
+        if (identity is { Status: IdentityStatus.Active })
             await _pushSenderService.SendNotification(new ExternalEventCreatedPushNotification(), SendPushNotificationFilter.AllDevicesOf(@event.Owner), CancellationToken.None);
     }
 }

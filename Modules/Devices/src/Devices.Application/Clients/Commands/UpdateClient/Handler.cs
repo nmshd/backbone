@@ -6,6 +6,7 @@ using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
+
 public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
@@ -21,7 +22,7 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
 
     public async Task<UpdateClientResponse> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
     {
-        var client = await _oAuthClientsRepository.Find(request.ClientId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(OAuthClient));
+        var client = await _oAuthClientsRepository.Get(request.ClientId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var tierIdResult = TierId.Create(request.DefaultTier);
         if (tierIdResult.IsFailure)

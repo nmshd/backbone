@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +29,7 @@ class _TierDetailState extends State<TierDetail> {
 
     _scrollController = ScrollController();
 
-    _reload();
+    unawaited(_reload());
   }
 
   @override
@@ -52,11 +55,7 @@ class _TierDetailState extends State<TierDetail> {
               Row(
                 children: [
                   const BackButton(),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: _reload,
-                    tooltip: context.l10n.reload,
-                  ),
+                  IconButton(icon: const Icon(Icons.refresh), onPressed: _reload, tooltip: context.l10n.reload),
                 ],
               ),
             Card(
@@ -123,11 +122,7 @@ class _QuotaListState extends State<_QuotaList> {
             child: Column(
               children: [
                 if (!isQueuedForDeletionTier)
-                  QuotasButtonGroup(
-                    selectedQuotas: _selectedQuotas,
-                    onQuotasChanged: widget.onQuotasChanged,
-                    tierId: widget.tierDetails.id,
-                  ),
+                  QuotasButtonGroup(selectedQuotas: _selectedQuotas, onQuotasChanged: widget.onQuotasChanged, tierId: widget.tierDetails.id),
                 SizedBox(
                   width: double.infinity,
                   height: 500,
@@ -141,11 +136,7 @@ class _QuotaListState extends State<_QuotaList> {
                     rows: widget.tierDetails.quotas
                         .map(
                           (quota) => DataRow2(
-                            cells: [
-                              DataCell(Text(quota.metric.displayName)),
-                              DataCell(Text(quota.max.toString())),
-                              DataCell(Text(quota.period)),
-                            ],
+                            cells: [DataCell(Text(quota.metric.displayName)), DataCell(Text(quota.max.toString())), DataCell(Text(quota.period))],
                             onSelectChanged: isQueuedForDeletionTier ? null : (_) => _toggleSelection(quota.id),
                             selected: _selectedQuotas.contains(quota.id),
                           ),

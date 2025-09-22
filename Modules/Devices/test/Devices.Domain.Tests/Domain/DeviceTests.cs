@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 
@@ -19,7 +20,7 @@ public class DeviceTests : AbstractTestsBase
         device.Update(expectedCommunicationLanguage);
 
         // Assert
-        device.CommunicationLanguage.Should().Be(expectedCommunicationLanguage);
+        device.CommunicationLanguage.ShouldBe(expectedCommunicationLanguage);
     }
 
     [Fact]
@@ -33,7 +34,7 @@ public class DeviceTests : AbstractTestsBase
         var result = device.Update(CommunicationLanguage.Create("de").Value);
 
         // Assert
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class DeviceTests : AbstractTestsBase
         var result = device.Update(CommunicationLanguage.Create("en").Value);
 
         // Assert
-        result.Should().BeFalse();
+        result.ShouldBeFalse();
     }
 
     [Fact]
@@ -61,7 +62,7 @@ public class DeviceTests : AbstractTestsBase
         var isOnboarded = device.IsOnboarded;
 
         // Assert
-        isOnboarded.Should().BeFalse();
+        isOnboarded.ShouldBeFalse();
     }
 
     [Fact]
@@ -77,7 +78,7 @@ public class DeviceTests : AbstractTestsBase
         var isOnboarded = device.IsOnboarded;
 
         // Assert
-        isOnboarded.Should().BeTrue();
+        isOnboarded.ShouldBeTrue();
     }
 
     [Fact]
@@ -93,7 +94,7 @@ public class DeviceTests : AbstractTestsBase
         var acting = () => unOnboardedDevice.EnsureCanBeDeleted(identity.Address);
 
         // Assert
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -109,8 +110,8 @@ public class DeviceTests : AbstractTestsBase
         var acting = () => onboardedDevice.EnsureCanBeDeleted(identity.Address);
 
         // Assert
-        var domainException = acting.Should().Throw<DomainException>().Which;
-        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
+        var domainException = acting.ShouldThrow<DomainException>();
+        domainException.Code.ShouldBe("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
     [Fact]
@@ -127,8 +128,8 @@ public class DeviceTests : AbstractTestsBase
         var action = () => unonboardedDeviceOfOtherIdentity.EnsureCanBeDeleted(activeIdentity.Address);
 
         // Assert
-        var domainException = action.Should().Throw<DomainException>().Which;
-        domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
+        var domainException = action.ShouldThrow<DomainException>();
+        domainException.Code.ShouldBe("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
     [Fact]
@@ -142,7 +143,7 @@ public class DeviceTests : AbstractTestsBase
         device.LoginOccurred();
 
         // Assert
-        device.IsBackupDevice.Should().BeFalse();
+        device.IsBackupDevice.ShouldBeFalse();
     }
 
     [Fact]
@@ -158,7 +159,7 @@ public class DeviceTests : AbstractTestsBase
         device.LoginOccurred();
 
         // Assert
-        device.User.LastLoginAt.Should().Be(utcNow);
+        device.User.LastLoginAt.ShouldBe(utcNow);
     }
 
     [Fact]
@@ -172,8 +173,8 @@ public class DeviceTests : AbstractTestsBase
         device.LoginOccurred();
 
         // Assert
-        var domainEvent = device.Should().HaveASingleDomainEvent<BackupDeviceUsedDomainEvent>();
-        domainEvent.IdentityAddress.Should().Be(identity.Address);
+        var domainEvent = device.ShouldHaveASingleDomainEvent<BackupDeviceUsedDomainEvent>();
+        domainEvent.IdentityAddress.ShouldBe(identity.Address);
     }
 
     private static Device CreateUnonboardedDevice(Identity identity)

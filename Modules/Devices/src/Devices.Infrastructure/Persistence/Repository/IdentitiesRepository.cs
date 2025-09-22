@@ -37,7 +37,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         _userManager = userManager;
     }
 
-    public async Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> Get(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
@@ -45,7 +45,7 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
-    public async Task<T[]> FindDevices<T>(Expression<Func<Device, bool>> filter, Expression<Func<Device, T>> selector, CancellationToken cancellationToken, bool track = false)
+    public async Task<T[]> ListDevices<T>(Expression<Func<Device, bool>> filter, Expression<Func<Device, T>> selector, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
             .IncludeAll(_dbContext)
@@ -68,7 +68,12 @@ public class IdentitiesRepository : IIdentitiesRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
+    public async Task<List<IdentityAddress>> ListAddressesOfIdentities(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _identities.Where(filter).Select(i => i.Address).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> ListIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false)
     {
         // Clearing the change tracker needs to be done because in case of the actual identity deletion, the deletion
@@ -90,7 +95,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await _readonlyIdentities.AnyAsync(i => i.Address == address, cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> ListWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
@@ -119,7 +124,7 @@ public class IdentitiesRepository : IIdentitiesRepository
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
 
-    public async Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<Device>> ListDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         var query = _readonlyDevices
             .IncludeAll(_dbContext)
@@ -132,7 +137,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
 
-    public async Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
+    public async Task<Device?> Get(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
             .IncludeAll(_dbContext)
@@ -140,7 +145,7 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
 
-    public async Task<IEnumerable<Device>> GetDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Device>> ListDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _devices : _readonlyDevices)
             .IncludeAll(_dbContext)
@@ -150,13 +155,11 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Update(Device device, CancellationToken cancellationToken)
     {
-        _devices.Update(device);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
-        _identities.Update(identity);
         try
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -169,7 +172,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         }
     }
 
-    public async Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<IEnumerable<Identity>> List(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
@@ -178,10 +181,11 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Identity?> FindFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    public async Task<Identity?> GetFirst(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
+            .AsSplitQuery()
             .Where(filter)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -201,5 +205,21 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identityDeletionProcessAuditLogs.UpdateRange(auditLogEntries);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<int> DeleteDeletionProcessAuditLogEntries(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter, CancellationToken cancellationToken)
+    {
+        return _identityDeletionProcessAuditLogs.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task<FeatureFlagSet> ListFeatureFlagsOfIdentity(IdentityAddress identity, CancellationToken cancellationToken)
+    {
+        var featureFlags = await _dbContext.FeatureFlags.Where(f => f.OwnerAddress == identity).ToListAsync(cancellationToken);
+        return FeatureFlagSet.Load(featureFlags);
+    }
+
+    public async Task<int> DeleteDeletionProcesses(Expression<Func<IdentityDeletionProcess, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _dbContext.IdentityDeletionProcesses.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }

@@ -9,13 +9,7 @@ class CopyToClipboardButton extends StatelessWidget {
   final ButtonStyle? style;
   final String? tooltip;
 
-  const CopyToClipboardButton({
-    required this.clipboardText,
-    required this.successMessage,
-    this.style,
-    this.tooltip,
-    super.key,
-  });
+  const CopyToClipboardButton({required this.clipboardText, required this.successMessage, this.style, this.tooltip, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +17,7 @@ class CopyToClipboardButton extends StatelessWidget {
       icon: const Icon(Icons.copy),
       style: style,
       tooltip: tooltip,
-      onPressed: () => context.setClipboardDataWithSuccessNotification(
-        clipboardText: clipboardText,
-        successMessage: successMessage,
-      ),
+      onPressed: () => context.setClipboardDataWithSuccessNotification(clipboardText: clipboardText, successMessage: successMessage),
     );
   }
 }

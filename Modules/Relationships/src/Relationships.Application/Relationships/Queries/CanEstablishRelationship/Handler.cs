@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 
     public async Task<CanEstablishRelationshipResponse> Handle(CanEstablishRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var existingRelationships = await _relationshipsRepository.FindRelationships(
+        var existingRelationships = await _relationshipsRepository.ListWithoutContent(
             Relationship.IsBetween(request.PeerAddress, _userContext.GetAddress()),
             cancellationToken
         );

@@ -1,14 +1,12 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-Future<void> showChangeClientSecretDialog({
-  required BuildContext context,
-  required String clientId,
-}) async {
+Future<void> showChangeClientSecretDialog({required BuildContext context, required String clientId}) async {
   await showDialog<void>(
     context: context,
     builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId),
@@ -95,18 +93,12 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
               if (_saveSucceeded)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    context.l10n.clientSecret_save_message,
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
+                  child: Text(context.l10n.clientSecret_save_message, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                 ),
               if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
+                  child: Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
             ],
           ),

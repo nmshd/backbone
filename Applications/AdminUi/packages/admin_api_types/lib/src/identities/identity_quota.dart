@@ -13,14 +13,7 @@ class IdentityQuota {
   final int usage;
   final String period;
 
-  IdentityQuota({
-    required this.id,
-    required this.source,
-    required this.metric,
-    required this.max,
-    required this.usage,
-    required this.period,
-  });
+  IdentityQuota({required this.id, required this.source, required this.metric, required this.max, required this.usage, required this.period});
 
   factory IdentityQuota.fromJson(dynamic json) => _$IdentityQuotaFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityQuotaToJson(this);

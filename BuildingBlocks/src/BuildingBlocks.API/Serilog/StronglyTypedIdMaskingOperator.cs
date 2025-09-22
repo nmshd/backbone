@@ -1,12 +1,23 @@
 ﻿using Serilog.Enrichers.Sensitive;
 
 namespace Backbone.BuildingBlocks.API.Serilog;
+
 public class StronglyTypedIdMaskingOperator : RegexMaskingOperator
 {
-    public StronglyTypedIdMaskingOperator(string prefix, int maxLength = -1) : base(IsStringOfConstantLength(maxLength) ? RegexPattern(prefix, maxLength) : RegexPattern(prefix)) { }
+    public StronglyTypedIdMaskingOperator(string prefix, int maxLength) : base(GetRegex(prefix, maxLength))
+    {
+    }
 
-    private static string RegexPattern(string initials) => $@"{initials}[a-zA-Z0-9]*";
-    private static string RegexPattern(string prefix, int maxLength) => $@"{prefix}[a-zA-Z0-9]{{{maxLength - prefix.Length}}}";
+    private static string GetRegex(string prefix, int maxLength)
+    {
+        const string idCharacters = "a-zA-Z0-9";
+        const string forbiddenLeadingCharacters = $"(?<![{idCharacters}])";
+        const string forbiddenTrailingCharacters = $"(?![{idCharacters}])";
 
-    private static bool IsStringOfConstantLength(int maxLength) => maxLength != -1;
+        var lengthWithoutPrefix = maxLength - prefix.Length;
+
+        var potentialId = $"{prefix}[{idCharacters}]{{{lengthWithoutPrefix}}}";
+
+        return $"{forbiddenLeadingCharacters}{potentialId}{forbiddenTrailingCharacters}";
+    }
 }

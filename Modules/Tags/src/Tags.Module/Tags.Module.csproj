@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Module\BuildingBlocks.Module.csproj" />
+        <ProjectReference Include="..\Tags.Application\Tags.Application.csproj" />
+        <ProjectReference Include="..\Tags.Infrastructure\Tags.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
+    </ItemGroup>
+</Project>

@@ -2,8 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
+using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Filters;
-using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
@@ -28,7 +28,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        AdminConfiguration configuration)
+        AdminApiConfiguration configuration)
     {
         services
             .AddControllersWithViews(options =>
@@ -59,17 +59,20 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
 
-        services.AddCors(options =>
+        if (configuration.Cors != null)
         {
-            options.AddDefaultPolicy(builder =>
+            services.AddCors(options =>
             {
-                builder
-                    .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                    .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
-        });
+        }
 
         services.AddAuthentication("ApiKey")
             .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
@@ -90,36 +93,6 @@ public static class IServiceCollectionExtensions
             o.Cookie.Name = "X-XSRF-COOKIE";
             o.Cookie.HttpOnly = false;
         });
-
-        var modules = configuration.Modules.GetType().GetProperties();
-        foreach (var moduleProperty in modules)
-        {
-            var moduleName = moduleProperty.Name;
-            var module = configuration.Modules.GetType().GetProperty(moduleName)!.GetValue(configuration.Modules, null)!;
-            var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
-            var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString");
-            var enableHealthCheck = Convert.ToBoolean(GetPropertyValue(module, "Infrastructure.SqlDatabase.EnableHealthCheck"));
-
-            if (!enableHealthCheck)
-                continue;
-
-            switch (provider)
-            {
-                case "SqlServer":
-                    services.AddHealthChecks().AddSqlServer(
-                        connectionString,
-                        name: moduleName
-                    );
-                    break;
-                case "Postgres":
-                    services.AddHealthChecks().AddNpgSql(
-                        connectionString,
-                        name: moduleName);
-                    break;
-                default:
-                    throw new Exception($"Unsupported database provider: {provider}");
-            }
-        }
 
         services.AddHttpContextAccessor();
 
@@ -153,22 +126,12 @@ public static class IServiceCollectionExtensions
         return new BadRequestObjectResult(responsePayload);
     };
 
-    private static object GetPropertyValue(object source, string propertyPath)
-    {
-        foreach (var property in propertyPath.Split('.').Select(s => source.GetType().GetProperty(s)))
-            source = property!.GetValue(source, null)!;
-
-        return source;
-    }
-
     public static IServiceCollection AddOData(this IServiceCollection services)
     {
         var builder = new ODataConventionModelBuilder()
             .EnableLowerCamelCase();
 
-        builder.EntitySet<IdentityOverview>("Identities")
-            .EntityType.HasKey(identity => identity.Address);
-
+        builder.EntitySet<IdentityOverviewDTO>("Identities").EntityType.HasKey(identity => identity.Address);
 
         services.AddControllers().AddOData(opt => opt.Count().Filter().Expand().Select().OrderBy().SetMaxTop(100)
             .AddRouteComponents("odata", builder.GetEdmModel()));

@@ -10,12 +10,12 @@ public class TagsRepository : ITagsRepository
     private readonly List<string> _supportedLanguages;
     private readonly Dictionary<string, Dictionary<string, TagInfo>> _attributes;
 
-    public TagsRepository(IOptions<ApplicationOptions> options)
+    public TagsRepository(IOptions<ApplicationConfiguration> options)
     {
         _supportedLanguages = options.Value.SupportedLanguages;
         _attributes = options.Value.TagsForAttributeValueTypes;
     }
 
-    public IEnumerable<string> GetSupportedLanguages() => _supportedLanguages;
-    public Dictionary<string, Dictionary<string, TagInfo>> GetAttributes() => _attributes;
+    public IEnumerable<string> ListSupportedLanguages() => _supportedLanguages;
+    public Dictionary<string, Dictionary<string, TagInfo>> ListAttributes() => _attributes;
 }

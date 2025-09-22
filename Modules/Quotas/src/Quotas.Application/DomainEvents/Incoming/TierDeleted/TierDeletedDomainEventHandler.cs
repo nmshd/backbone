@@ -20,7 +20,7 @@ public class TierDeletedDomainEventHandler : IDomainEventHandler<TierDeletedDoma
 
     public async Task Handle(TierDeletedDomainEvent domainEvent)
     {
-        var tier = await _tiersRepository.Find(domainEvent.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Tier));
+        var tier = await _tiersRepository.Get(domainEvent.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Tier));
 
         await _tiersRepository.RemoveById(tier.Id);
 

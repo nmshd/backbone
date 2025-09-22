@@ -1,11 +1,13 @@
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Metrics;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
 
@@ -16,13 +18,13 @@ public static class ServiceCollectionExtensions
     {
         switch (provider)
         {
-            case "SqlServer":
+            case DatabaseConfiguration.SQLSERVER:
                 services.AddHealthChecks().AddSqlServer(
                     connectionString,
                     name: $"{name}Database"
                 );
                 break;
-            case "Postgres":
+            case DatabaseConfiguration.POSTGRES:
                 services.AddHealthChecks().AddNpgSql(
                     connectionString: connectionString,
                     name: $"{name}Database"
@@ -33,20 +35,18 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    public static IServiceCollection AddModule<TModule>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : AbstractModule, new()
+    public static IServiceCollection AddModule<TModule, TApplicationConfiguration, TInfrastructureConfiguration>(this IServiceCollection services, IConfiguration configuration)
+        where TModule : AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>, new()
+        where TApplicationConfiguration : class
+        where TInfrastructureConfiguration : class
     {
-        // Register assembly in MVC so it can find controllers of the module
-        services.AddControllers().ConfigureApplicationPartManager(manager =>
-            manager.ApplicationParts.Add(new AssemblyPart(typeof(TModule).Assembly)));
-
         var module = new TModule();
 
         var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
 
-        module.ConfigureServices(services, moduleConfiguration);
+        module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
 
-        services.AddSingleton<AbstractModule>(module);
+        services.AddSingleton<IEventBusConfigurator>(module);
 
         return services;
     }
@@ -87,6 +87,23 @@ public static class ServiceCollectionExtensions
             .AddUserStore<CustomUserStore>();
 
         services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddOpenTelemetryWithPrometheusExporter(this IServiceCollection services, string name)
+    {
+        services.AddOpenTelemetry()
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .AddPrometheusExporter()
+                    .AddMeter(name)
+                    .AddMeter("Microsoft.EntityFrameworkCore")
+                    .AddMeter("Microsoft.AspNetCore.Hosting")
+                    .AddMeter("Microsoft.AspNetCore.Diagnostics")
+                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+            });
 
         return services;
     }

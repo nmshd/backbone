@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
         Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address)) &&
                                                        (request.Status == null || i.Status == request.Status);
 
-        var identities = await _identitiesRepository.Find(filter, cancellationToken);
+        var identities = await _identitiesRepository.List(filter, cancellationToken);
         return new ListIdentitiesResponse(identities);
     }
 }

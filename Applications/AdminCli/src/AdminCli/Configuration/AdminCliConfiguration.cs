@@ -1,25 +1,20 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 namespace Backbone.AdminCli.Configuration;
 
 public class AdminCliConfiguration
 {
     [Required]
-    public AdminInfrastructureConfiguration Infrastructure { get; set; } = new();
-
-    [Required]
-    public ModulesConfiguration Modules { get; set; } = new();
+    public required AdminInfrastructureConfiguration Infrastructure { get; init; }
 
     public class AdminInfrastructureConfiguration
     {
         [Required]
-        public EventBusConfiguration EventBus { get; set; } = new();
-    }
+        public required EventBusConfiguration EventBus { get; init; }
 
-    public class ModulesConfiguration
-    {
         [Required]
-        public DevicesConfiguration Devices { get; set; } = new();
+        public required DatabaseConfiguration SqlDatabase { get; init; }
     }
 }

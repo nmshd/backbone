@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
@@ -22,7 +22,7 @@ public class RelationshipTemplateAnonymizeForIdentityTests : AbstractTestsBase
         relationshipTemplate.AnonymizeForIdentity(DID_DOMAIN_NAME);
 
         // Assert
-        relationshipTemplate.ForIdentity.Should().Be(IdentityAddress.GetAnonymized(DID_DOMAIN_NAME));
+        relationshipTemplate.ForIdentity.ShouldBe(IdentityAddress.GetAnonymized(DID_DOMAIN_NAME));
     }
 
     [Fact]
@@ -38,6 +38,6 @@ public class RelationshipTemplateAnonymizeForIdentityTests : AbstractTestsBase
         var acting = () => relationshipTemplate.AnonymizeForIdentity(DID_DOMAIN_NAME);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipTemplateNotPersonalized");
+        acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.relationship.relationshipTemplateNotPersonalized");
     }
 }

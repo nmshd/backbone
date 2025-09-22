@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.Job.IdentityDeletion;
+
 public class IdentityDeletionJobConfiguration
 {
     [Required]
-    public InfrastructureConfiguration Infrastructure { get; set; } = new();
+    public required InfrastructureConfiguration Infrastructure { get; init; }
 
     [Required]
-    public string Worker { get; set; } = null!;
+    public required string Worker { get; init; }
 }
 
 public class InfrastructureConfiguration
 {
     [Required]
-    public EventBusConfiguration EventBus { get; set; } = new();
+    public required EventBusConfiguration EventBus { get; init; }
 }

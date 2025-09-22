@@ -20,6 +20,7 @@ public interface ISynchronizationDbContext : IDbContext
     Task<SyncRun> GetSyncRunAsNoTracking(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<SyncRun> GetSyncRunWithExternalEvents(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken);
+    Task<bool> DoNewUnsyncedExternalEventsExist(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken);
     Task<List<ExternalEvent>> GetUnsyncedExternalEvents(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken);
     Task<List<ExternalEvent>> GetBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken);
     Task DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken);

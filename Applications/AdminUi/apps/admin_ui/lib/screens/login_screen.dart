@@ -1,4 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -40,11 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      appBar: AppBar(
-        title: const AppTitle(),
-        centerTitle: false,
-        leading: Gaps.w40,
-      ),
+      appBar: AppBar(title: const AppTitle(), centerTitle: false, leading: Gaps.w40),
       body: Center(
         child: SizedBox(
           width: 400,

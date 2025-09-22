@@ -21,7 +21,6 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
         var file = new File(
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
-            request.Owner,
             request.OwnerSignature,
             request.CipherHash,
             request.FileContent,

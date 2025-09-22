@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -34,8 +37,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
     _scrollController = ScrollController();
 
-    _reloadIdentity();
-    _reloadTiers();
+    unawaited(_reloadIdentity());
+    unawaited(_reloadTiers());
   }
 
   @override
@@ -186,11 +189,11 @@ class _IdentityDetailsCard extends StatelessWidget {
                   value: currentTier.name,
                   onIconPressed: currentTier.canBeManuallyAssigned
                       ? () => showChangeTierDialog(
-                            context: context,
-                            onTierUpdated: updateTierOfIdentity,
-                            identityDetails: identityDetails,
-                            availableTiers: availableTiers,
-                          )
+                          context: context,
+                          onTierUpdated: updateTierOfIdentity,
+                          identityDetails: identityDetails,
+                          availableTiers: availableTiers,
+                        )
                       : null,
                   icon: Icons.edit,
                   tooltipMessage: context.l10n.changeTier,

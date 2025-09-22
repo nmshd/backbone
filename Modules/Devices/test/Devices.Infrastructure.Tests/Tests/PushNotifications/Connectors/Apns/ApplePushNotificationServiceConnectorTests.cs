@@ -29,18 +29,18 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         await connector.Send(registration, new TestPushNotification { Data = "test-notification-payload" }, new NotificationText("Test Title", "Test Body"));
 
         // Assert
-        client.SendAsyncCalls.Should().Be(1);
+        client.SendAsyncCalls.ShouldBe(1);
     }
 
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
     {
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
-        var options = new OptionsWrapper<ApnsOptions>(new ApnsOptions
+        var options = new OptionsWrapper<ApnsConfiguration>(new ApnsConfiguration
         {
-            Keys = new Dictionary<string, ApnsOptions.Key>
+            Keys = new Dictionary<string, ApnsConfiguration.Key>
             {
                 {
-                    "test-key-name", new ApnsOptions.Key
+                    "test-key-name", new ApnsConfiguration.Key
                     {
                         PrivateKey = "some-private-key",
                         TeamId = "some-team-id",
@@ -48,15 +48,16 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
                     }
                 }
             },
-            Bundles = new Dictionary<string, ApnsOptions.Bundle>
+            Bundles = new Dictionary<string, ApnsConfiguration.Bundle>
             {
-                { APP_ID, new ApnsOptions.Bundle { KeyName = "test-key-name" } }
+                { APP_ID, new ApnsConfiguration.Bundle { KeyName = "test-key-name" } }
             }
         });
         var jwtGenerator = A.Dummy<IJwtGenerator>();
         var logger = A.Dummy<ILogger<ApplePushNotificationServiceConnector>>();
+        var pushNotificationMetrics = A.Dummy<PushNotificationMetrics>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger, pushNotificationMetrics);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)

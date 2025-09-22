@@ -1,6 +1,6 @@
 using System.Collections;
 using ArchUnitNET.Domain;
-using ArchUnitNET.xUnit;
+using ArchUnitNET.xUnitV3;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Backbone.Backbone.Tests.ArchUnit;
@@ -9,22 +9,22 @@ public class CleanArchitecture
 {
     private static readonly IObjectProvider<IType> MODULES =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.*")
             .As("All Modules");
 
     private static readonly IObjectProvider<IType> CONSUMER_API_ASSEMBLIES =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.*.ConsumerApi", true)
+            .ResideInAssemblyMatching("Backbone.Modules.*.ConsumerApi")
             .As("ConsumerApi Assemblies");
 
     private static readonly IObjectProvider<IType> APPLICATION_ASSEMBLIES =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.*.Application", true)
+            .ResideInAssemblyMatching("Backbone.Modules.*.Application")
             .As("Application Assemblies");
 
     private static readonly IObjectProvider<IType> INFRASTRUCTURE_ASSEMBLIES =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.*.Infrastructure", true)
+            .ResideInAssemblyMatching("Backbone.Modules.*.Infrastructure")
             .As("Infrastructure Assemblies");
 
     [Theory]
@@ -71,8 +71,8 @@ public class CleanArchitecture
     {
         Types()
             .That().Are(APPLICATION_ASSEMBLIES)
-            .And().DoNotResideInAssembly("Backbone.Modules.Devices.Application", true)
-            .Should().NotDependOnAnyTypesThat().ResideInNamespace("Microsoft.AspNetCore.*", true)
+            .And().DoNotResideInAssemblyMatching("Backbone.Modules.Devices.Application")
+            .Should().NotDependOnAnyTypesThat().ResideInNamespaceMatching("Microsoft.AspNetCore.*")
             .Because("this would violate Clean Architecture")
             .Check(Backbone.ARCHITECTURE);
     }
@@ -82,42 +82,42 @@ public class Modules : IEnumerable<object[]>
 {
     private static readonly IObjectProvider<IType> CHALLENGES_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Challenges.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Challenges.*")
             .As("Challenges Module");
 
     private static readonly IObjectProvider<IType> DEVICES_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Devices.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Devices.*")
             .As("Devices Module");
 
     private static readonly IObjectProvider<IType> FILES_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Files.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Files.*")
             .As("Files Module");
 
     private static readonly IObjectProvider<IType> MESSAGES_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Messages.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Messages.*")
             .As("Messages Module");
 
     private static readonly IObjectProvider<IType> QUOTAS_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Quotas.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Quotas.*")
             .As("Quotas Module");
 
     private static readonly IObjectProvider<IType> RELATIONSHIPS_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Relationships.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Relationships.*")
             .As("Relationships Module");
 
     private static readonly IObjectProvider<IType> SYNCHRONIZATION_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Synchronization.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Synchronization.*")
             .As("Synchronization Module");
 
     private static readonly IObjectProvider<IType> TOKENS_MODULE =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.Tokens.*", true)
+            .ResideInAssemblyMatching("Backbone.Modules.Tokens.*")
             .As("Tokens Module");
 
     public IEnumerator<object[]> GetEnumerator()

@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
@@ -32,10 +33,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<NotFoundException>().WithMessage("*SyncRun*");
+        await acting.ShouldThrowAsync<NotFoundException>().ShouldContainMessage("SyncRun");
     }
 
     [Fact]
@@ -53,10 +54,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () =>
+            await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, DatawalletModifications = [], ExternalEventResults = [] }, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.syncRun.syncRunAlreadyFinalized");
+        await acting.ShouldThrowAsync<OperationFailedException>().ShouldHaveErrorCode("error.platform.validation.syncRun.syncRunAlreadyFinalized");
     }
 
     [Fact]
@@ -74,7 +76,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, ExternalEventResults = [], DatawalletModifications = [] }, CancellationToken.None);
 
         // Assert
         // No Exception means success
@@ -100,10 +102,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         // Act
         var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id, "some-random-error-code") };
 
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, DatawalletModifications = [], ExternalEventResults = results }, CancellationToken.None);
         // Assert
         var externalEvent = _assertionContext.ExternalEvents.First(i => i.Id == item.Id);
-        externalEvent.SyncRunId.Should().BeNull();
+        externalEvent.SyncRunId.ShouldBeNull();
     }
 
     [Fact]
@@ -127,10 +129,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
         // Act
         var eventResults = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item1.Id) { ExternalEventId = item1.Id } };
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, eventResults), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, ExternalEventResults = eventResults }, CancellationToken.None);
 
         // Assert
-        _assertionContext.SyncErrors.Should().Contain(e => e.ExternalEventId == item2.Id).Which.ErrorCode.Should().Be("notProcessed");
+        _assertionContext.SyncErrors.ShouldContain(e => e.ExternalEventId == item2.Id && e.ErrorCode == "notProcessed");
     }
 
     [Fact]
@@ -161,10 +163,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
             }
         };
 
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, datawalletModifications), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, DatawalletModifications = datawalletModifications }, CancellationToken.None);
 
         // Assert
-        _assertionContext.DatawalletModifications.Should().HaveCount(1);
+        _assertionContext.DatawalletModifications.ShouldHaveCount(1);
     }
 
     [Fact]
@@ -187,10 +189,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         // Act
         var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id) };
 
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, ExternalEventResults = results }, CancellationToken.None);
         // Assert
         var externalEvent = _assertionContext.ExternalEvents.First(i => i.Id == item.Id);
-        externalEvent.SyncRunId.Should().Be(syncRun.Id);
+        externalEvent.SyncRunId.ShouldBe(syncRun.Id);
     }
 
     [Fact]
@@ -212,12 +214,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
         // Act
         var results = new List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> { new(item.Id, "some-random-error-code") };
-        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, results), CancellationToken.None);
+        await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, ExternalEventResults = results }, CancellationToken.None);
 
         // Assert
         _assertionContext.SyncErrors
-            .Should().Contain(e => e.ExternalEventId == item.Id)
-            .Which.ErrorCode.Should().Be("some-random-error-code");
+            .ShouldContain(e => e.ExternalEventId == item.Id && e.ErrorCode == "some-random-error-code");
     }
 
     [Fact]
@@ -235,10 +236,10 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
         // Assert
-        await acting.Should().ThrowAsync<OperationFailedException>().WithErrorCode("error.platform.validation.syncRun.cannotFinalizeSyncRunStartedByAnotherDevice");
+        await acting.ShouldThrowAsync<OperationFailedException>().ShouldHaveErrorCode("error.platform.validation.syncRun.cannotFinalizeSyncRunStartedByAnotherDevice");
     }
 
     #region CreateHandler

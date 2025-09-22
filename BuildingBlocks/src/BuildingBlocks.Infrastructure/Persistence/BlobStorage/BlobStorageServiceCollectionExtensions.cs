@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -32,15 +31,10 @@ public static class BlobStorageServiceCollectionExtensions
             case BlobStorageOptions.S3_BUCKET:
                 services.AddS3(options.S3Bucket!);
                 break;
-
+            case "":
+                throw new NotSupportedException("No blob storage product name was specified.");
             default:
-            {
-                if (options.ProductName.IsNullOrEmpty())
-                    throw new NotSupportedException("No cloud provider was specified.");
-
-                throw new NotSupportedException(
-                    $"{options.ProductName} is not a currently supported cloud provider.");
-            }
+                throw new NotSupportedException($"{options.ProductName} is not a currently supported blob storage product name.");
         }
 
         services.AddHealthChecks().Add(
@@ -62,11 +56,17 @@ public class BlobStorageOptions : IValidatableObject
     [RegularExpression($"{AZURE_STORAGE_ACCOUNT}|{GOOGLE_CLOUD_STORAGE}|{S3_BUCKET}")]
     public string ProductName { get; set; } = null!;
 
-    public AzureStorageAccountOptions? AzureStorageAccount { get; set; }
 
-    public GoogleCloudStorageOptions? GoogleCloudStorage { get; set; }
+    [RequiredIf(nameof(ProductName), AZURE_STORAGE_ACCOUNT)]
+    public AzureStorageAccountConfiguration? AzureStorageAccount { get; set; }
 
-    public S3BucketOptions? S3Bucket { get; set; }
+
+    [RequiredIf(nameof(ProductName), GOOGLE_CLOUD_STORAGE)]
+    public GoogleCloudStorageConfiguration? GoogleCloudStorage { get; set; }
+
+
+    [RequiredIf(nameof(ProductName), S3_BUCKET)]
+    public S3BucketConfiguration? S3Bucket { get; set; }
 
     public string RootFolder => ProductName switch
     {

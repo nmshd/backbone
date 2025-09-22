@@ -33,33 +33,31 @@ class IdentityDevices extends StatelessWidget {
                       DataColumn2(label: Text(context.l10n.lastLoginAt)),
                       DataColumn2(label: Text(context.l10n.identityDevices_communicationLanguage)),
                     ],
-                    rows: devices.map(
-                      (device) {
-                        final textColor = Theme.of(context).colorScheme.onSecondaryContainer;
+                    rows: devices.map((device) {
+                      final textColor = Theme.of(context).colorScheme.onSecondaryContainer;
 
-                        return DataRow2(
-                          cells: [
-                            DataCell(Text(device.id, style: TextStyle(color: textColor))),
-                            DataCell(Text(device.username, style: TextStyle(color: textColor))),
-                            DataCell(
-                              Text(
-                                DateFormat.yMd(Localizations.localeOf(context).languageCode).format(device.createdAt),
-                                style: TextStyle(color: textColor),
-                              ),
+                      return DataRow2(
+                        cells: [
+                          DataCell(Text(device.id, style: TextStyle(color: textColor))),
+                          DataCell(Text(device.username, style: TextStyle(color: textColor))),
+                          DataCell(
+                            Text(
+                              DateFormat.yMd(Localizations.localeOf(context).languageCode).format(device.createdAt),
+                              style: TextStyle(color: textColor),
                             ),
-                            DataCell(
-                              Text(
-                                device.lastLogin != null
-                                    ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(device.lastLogin!.time)
-                                    : '-',
-                                style: TextStyle(color: textColor),
-                              ),
+                          ),
+                          DataCell(
+                            Text(
+                              device.lastLogin != null
+                                  ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(device.lastLogin!.time)
+                                  : '-',
+                              style: TextStyle(color: textColor),
                             ),
-                            DataCell(Text(device.communicationLanguage, style: TextStyle(color: textColor))),
-                          ],
-                        );
-                      },
-                    ).toList(),
+                          ),
+                          DataCell(Text(device.communicationLanguage, style: TextStyle(color: textColor))),
+                        ],
+                      );
+                    }).toList(),
                   ),
                 ),
               ],

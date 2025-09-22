@@ -4,5 +4,5 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 
 public interface IChallengesRepository
 {
-    Task<Challenge?> FindById(string id, CancellationToken cancellationToken, bool track = false);
+    Task<Challenge?> GetById(string id, CancellationToken cancellationToken, bool track = false);
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +7,9 @@ import 'package:go_router/go_router.dart';
 import '/core/extensions.dart';
 
 Future<void> showAllRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) => showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => _AllRecipientsDialog(recipients: recipients),
-    );
+  context: context,
+  builder: (BuildContext context) => _AllRecipientsDialog(recipients: recipients),
+);
 
 class _AllRecipientsDialog extends StatefulWidget {
   final List<MessageRecipient> recipients;
@@ -34,8 +36,8 @@ class _AllRecipientsDialogState extends State<_AllRecipientsDialog> {
                   padding: const EdgeInsets.all(4),
                   child: InkWell(
                     onTap: () {
-                      context.push('/identities/${recipient.address}');
-                      Navigator.of(context).pop();
+                      context.pop();
+                      unawaited(context.push('/identities/${recipient.address}'));
                     },
                     child: Text(recipient.address),
                   ),
@@ -44,12 +46,7 @@ class _AllRecipientsDialogState extends State<_AllRecipientsDialog> {
               .toList(),
         ),
       ),
-      actions: [
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.l10n.close),
-        ),
-      ],
+      actions: [OutlinedButton(onPressed: () => context.pop(), child: Text(context.l10n.close))],
     );
   }
 }

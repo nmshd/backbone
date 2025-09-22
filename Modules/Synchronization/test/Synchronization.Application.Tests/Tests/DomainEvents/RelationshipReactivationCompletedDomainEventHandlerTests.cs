@@ -51,7 +51,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
         await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
 
         // Assert
-        messageReceivedExternalEvent.IsDeliveryBlocked.Should().BeFalse();
+        messageReceivedExternalEvent.IsDeliveryBlocked.ShouldBeFalse();
         A.CallTo(() => mockDbContext.SaveChangesAsync(A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 

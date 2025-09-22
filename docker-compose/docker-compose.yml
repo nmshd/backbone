@@ -4,30 +4,30 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite
+    image: mcr.microsoft.com/azure-storage/azurite:3.35.0@sha256:647c63a91102a9d8e8000aab803436e1fc85fbb285e7ce830a82ee5d6661cf37
     command: azurite-blob -l /data --blobHost "0.0.0.0"
     ports:
       - "10000:10000"
     volumes:
       - azure-storage-emulator-volume:/data
 
-  # ms-sql-server:
-  #   container_name: bkb-mssql_server
-  #   hostname: ms-sql-server
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   environment:
-  #     - MSSQL_SA_PASSWORD=Passw0rd
-  #     - ACCEPT_EULA=Y
-  #     - MSSQL_PID=Express
-  #   volumes:
-  #     - mssql-server-volume:/var/opt/mssql
-  #   ports:
-  #     - 1433:1433
+  ms-sql-server:
+    container_name: bkb-mssql_server
+    hostname: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:2c80e548ef65fb65a8ca23c3a74ed60e0964ea709f46d07c97ccaf7c437e2cc6
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    volumes:
+      - mssql-server-volume:/var/opt/mssql
+    ports:
+      - 1433:1433
 
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres
+    image: postgres:17.6@sha256:feff5b24fedd610975a1f5e743c51a4b360437f4dc3a11acf740dcd708f413f6
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.0-management-alpine
+    image: rabbitmq:4.1.4-management-alpine@sha256:603089229e6060279f1b5db7fb5d844d1f259dd7a73fca8e3b15bb93713ad27c
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq:2025.2@sha256:080ccf44e0593cd4698ba1404b90b4f8bf51ff342e45242f611c91e329554f50
     container_name: seq
     ports:
       - "8085:80"
@@ -55,44 +55,8 @@ services:
       - seq-data:/data
     environment:
       - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
     restart: unless-stopped
-
-  #elasticsearch:
-  #  image: elasticsearch:${ELK_VERSION}
-  #  container_name: elasticsearch
-  #  restart: always
-  #  volumes:
-  #    - elastic-data:/usr/share/elasticsearch/data/
-  #  environment:
-  #    - xpack.watcher.enabled=false
-  #    - xpack.security.enabled=false
-  #    - ES_JAVA_OPTS=-Xms512m -Xmx512m
-  #    - discovery.type=single-node
-
-  #logstash:
-  #  image: logstash:${ELK_VERSION}
-  #  container_name: logstash
-  #  restart: always
-  #  volumes:
-  #    - ./logstash:/etc/logstash/conf.d
-  #  command: logstash -f /etc/logstash/conf.d/logstash.conf
-  #  depends_on:
-  #    - elasticsearch
-  #  environment:
-  #    - LS_JAVA_OPTS=-Xmx256m -Xms256m
-  #    - ES_LOGSTASH_PORT=${ES_LOGSTASH_PORT}
-  #    - ES_ELASTICSEARCH_PORT=${ES_ELASTICSEARCH_PORT}
-
-  #kibana:
-  #  image: kibana:${ELK_VERSION}
-  #  container_name: kibana
-  #  restart: always
-  #  ports:
-  #    - ${ES_KIBANA_PORT}:5601
-  #  environment:
-  #    - ELASTICSEARCH_URL=http://elasticsearch:${ES_ELASTICSEARCH_PORT}
-  #  depends_on:
-  #    - elasticsearch
 
 networks:
   default:
@@ -106,5 +70,4 @@ volumes:
     external: true
   azure-storage-emulator-volume:
     external: true
-  elastic-data:
   seq-data:

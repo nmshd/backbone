@@ -38,24 +38,11 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static Identity CreateIdentityWithApprovedDeletionProcess()
+    public static Identity CreateIdentityWithActiveDeletionProcess()
     {
         var identity = CreateIdentity();
-        identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+        identity.StartDeletionProcess(identity.Devices.First().Id);
         identity.ClearDomainEvents();
-
-        foreach (var deletionProcess in identity.DeletionProcesses)
-        {
-            deletionProcess.ClearDomainEvents();
-        }
-
-        return identity;
-    }
-
-    public static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
-    {
-        var identity = CreateIdentity();
-        identity.StartDeletionProcessAsSupport();
 
         foreach (var deletionProcess in identity.DeletionProcesses)
         {

@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRe
     public async Task<DecomposeRelationshipResponse> Handle(DecomposeRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
-        var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
+        var relationship = await _relationshipsRepository.GetRelationshipWithoutContent(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.Decompose(_activeIdentity, _activeDevice);
 

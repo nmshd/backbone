@@ -5,17 +5,20 @@ using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET /Announcements")]
+[Scope(Feature = "DELETE /Announcements/{id}")]
 [Scope(Feature = "POST /Announcements")]
 internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
-    private ApiResponse<Announcement>? _announcementResponse;
-    private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private ApiResponse<Announcement>? _createAnnouncementResponse;
+    private ApiResponse<ListAnnouncementsResponse>? _announcementsResponse;
+    private IResponse? _whenResponse;
     private Announcement? _givenAnnouncement;
 
     public AnnouncementsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
@@ -27,6 +30,8 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     {
         var response = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
+            Severity = AnnouncementSeverity.Medium,
+            IsSilent = false,
             Texts =
             [
                 new CreateAnnouncementRequestText
@@ -36,25 +41,26 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Body = "Body"
                 }
             ],
-            Severity = AnnouncementSeverity.Medium,
-            ExpiresAt = DateTime.UtcNow
+            ExpiresAt = DateTime.UtcNow,
+            Actions = []
         });
 
         _givenAnnouncement = response.Result;
     }
 
-    [When(@"a GET request is sent to the /Announcements endpoint")]
+    [When("^a GET request is sent to the /Announcements endpoint$")]
     public async Task WhenAGETRequestIsSentToTheAnnouncementsEndpoint()
     {
-        _announcementsResponse = await _client.Announcements.GetAllAnnouncements();
+        _whenResponse = _announcementsResponse = await _client.Announcements.ListAnnouncements();
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint with a valid content")]
+    [When("^a POST request is sent to the /Announcements endpoint with a valid content$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAValidContent()
     {
-        _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
@@ -64,16 +70,18 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Title = "Title",
                     Body = "Body"
                 }
-            ]
+            ],
+            Actions = []
         });
     }
 
-    [When(@"a POST request is sent to the /Announcements endpoint without an English translation")]
+    [When("^a POST request is sent to the /Announcements endpoint without an English translation$")]
     public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
     {
-        _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
         {
             Severity = AnnouncementSeverity.High,
+            IsSilent = false,
             ExpiresAt = SystemTime.UtcNow.AddDays(1),
             Texts =
             [
@@ -83,53 +91,125 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
                     Title = "Titel",
                     Body = "Inhalt"
                 }
+            ],
+            Actions = []
+        });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint with an action$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithAnAction()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = true,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Please provide feedback",
+                    Body = "We would like to hear your thoughts on our service."
+                }
+            ],
+            Actions =
+            [
+                new CreateAnnouncementRequestAction
+                {
+                    DisplayName = new Dictionary<string, string>
+                    {
+                        { "en", "Give feedback" }
+                    },
+                    Link = "https://enmeshed.eu/feedback"
+                }
             ]
         });
+    }
+
+    [When("^a POST request is sent to the /Announcements endpoint with isSilent=false and a non-empty IQL query$")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithIsSilentFalseAndANonEmptyIqlQuery()
+    {
+        _whenResponse = _createAnnouncementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            IsSilent = false,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            Actions = [],
+            IqlQuery = "StreetAddress.city='Heidelberg' && #'Primary Address'"
+        });
+    }
+
+    [When("^a DELETE request is sent to the /Announcements/{id} endpoint with a.Id$")]
+    public async Task WhenADeleteRequestIsSentToTheAnnouncementsAIdEndpoint()
+    {
+        _whenResponse = await _client.Announcements.DeleteById(_givenAnnouncement!.Id);
+    }
+
+    [When("^a DELETE request is sent to the /Announcements/{id} endpoint with a non existing id$")]
+    public async Task WhenADeleteRequestIsSentToTheAnnouncementsIdEndpointWithANonExistingId()
+    {
+        _whenResponse = await _client.Announcements.DeleteById("ANCnonExistingId0000");
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_announcementResponse != null)
-            ((int)_announcementResponse.Status).Should().Be(expectedStatusCode);
-
-        if (_announcementsResponse != null)
-            ((int)_announcementsResponse.Status).Should().Be(expectedStatusCode);
+        _whenResponse.ShouldNotBeNull();
+        ((int)_whenResponse!.Status).ShouldBe(expectedStatusCode);
     }
 
     [Then(@"the response contains an Announcement")]
     public async Task ThenTheResponseContainsAnAnnouncement()
     {
-        _announcementResponse!.Result.Should().NotBeNull();
-        await _announcementResponse.Should().ComplyWithSchema();
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        await _createAnnouncementResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains a list of Announcements")]
     public async Task ThenTheResponseContainsAListOfAnnouncements()
     {
-        _announcementsResponse!.Result.Should().NotBeNull();
-        await _announcementsResponse.Should().ComplyWithSchema();
+        _announcementsResponse!.Result.ShouldNotBeNull();
+        await _announcementsResponse.ShouldComplyWithSchema();
     }
 
     [Then(@"the response contains the Announcement a")]
     public void ThenTheResponseContainsTheAnnouncementA()
     {
-        _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
+        _announcementsResponse!.Result!.ShouldContain(a => a.Id == _givenAnnouncement!.Id);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_announcementResponse != null)
-        {
-            _announcementResponse!.Error.Should().NotBeNull();
-            _announcementResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _whenResponse.ShouldNotBeNull();
+        _whenResponse!.Error.ShouldNotBeNull();
+        _whenResponse.Error!.Code.ShouldBe(errorCode);
+    }
 
-        if (_announcementsResponse != null)
-        {
-            _announcementsResponse.Error.Should().NotBeNull();
-            _announcementsResponse.Error!.Code.Should().Be(errorCode);
-        }
+    [Then("the response contains the action")]
+    public void ThenTheResponseContainsTheAction()
+    {
+        _createAnnouncementResponse!.Result.ShouldNotBeNull();
+        _createAnnouncementResponse.Result!.Actions.ShouldHaveCount(1);
+        _createAnnouncementResponse.Result.Actions.First().DisplayName.ShouldContainKey("en");
+        _createAnnouncementResponse.Result.Actions.First().DisplayName["en"].ShouldBe("Give feedback");
+        _createAnnouncementResponse.Result.Actions.First().Link.ShouldBe("https://enmeshed.eu/feedback");
+    }
+
+    [Then("the Announcement a does not exist anymore")]
+    public async Task ThenTheAnnouncementADoesNotExistAnymore()
+    {
+        var announcements = await _client.Announcements.ListAnnouncements();
+        announcements.Result!.ShouldNotContain(a => a.Id == _givenAnnouncement!.Id);
     }
 }

@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
 
     public async Task Handle(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new Exception("Active device could not be found.");
+        var currentDevice = await _identitiesRepository.Get(_activeDevice, cancellationToken, track: true) ?? throw new Exception("Active device could not be found.");
 
         var communicationLanguage = CommunicationLanguage.Create(request.CommunicationLanguage);
         if (communicationLanguage.IsFailure)

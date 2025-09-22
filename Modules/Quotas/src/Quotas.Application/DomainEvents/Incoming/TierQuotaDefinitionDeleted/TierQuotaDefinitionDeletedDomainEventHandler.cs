@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
@@ -30,11 +31,12 @@ public class TierQuotaDefinitionDeletedDomainEventHandler : IDomainEventHandler<
 
     private async Task RecalculateMetricStatuses(TierQuotaDefinitionDeletedDomainEvent @event)
     {
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(TierId.Parse(@event.TierId), CancellationToken.None);
+        var identitiesWithTier = await _identitiesRepository.ListWithTier(TierId.Parse(@event.TierId), CancellationToken.None);
 
         await _metricStatusesService.RecalculateMetricStatuses(
             identitiesWithTier.Select(i => i.Address).ToList(),
             MetricKey.GetSupportedMetricKeys().ToList(),
+            MetricUpdateType.OnlyExhausted,
             CancellationToken.None
         );
     }

@@ -2,13 +2,11 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,81 +31,68 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
 
         // Act
-        await _host.StartAsync();
+        await _host.StartAsync(TestContext.Current.CancellationToken);
 
         // Assert
         var assertionContext = GetService<DevicesDbContext>();
 
-        var auditLogEntries = await assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address)).ToListAsync();
+        var auditLogEntries = await assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address))
+            .ToListAsync(TestContext.Current.CancellationToken);
 
         var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
 
-        auditLogEntriesForDeletedData.Should().HaveCount(14);
+        auditLogEntriesForDeletedData.ShouldHaveCount(13);
 
-        auditLogEntriesForDeletedData.Should().AllSatisfy(e =>
-        {
-            e.AdditionalData.Should().HaveCount(1);
-            e.AdditionalData!.First().Key.Should().Be("aggregateType");
-        });
+        auditLogEntriesForDeletedData.ShouldAllBe(e =>
+            e.AdditionalData != null && e.AdditionalData.Count == 1 && e.AdditionalData.First().Key == "aggregateType"
+        );
 
         var deletedAggregates = auditLogEntriesForDeletedData.SelectMany(e => e.AdditionalData!.Values).ToList();
-        deletedAggregates.Should().Contain("Challenges");
-        deletedAggregates.Should().Contain("PnsRegistrations");
-        deletedAggregates.Should().Contain("Identities");
-        deletedAggregates.Should().Contain("Files");
-        deletedAggregates.Should().Contain("Messages");
-        deletedAggregates.Should().Contain("QuotaIdentities");
-        deletedAggregates.Should().Contain("Relationships");
-        deletedAggregates.Should().Contain("RelationshipTemplates");
-        deletedAggregates.Should().Contain("RelationshipTemplateAllocations");
-        deletedAggregates.Should().Contain("ExternalEvents");
-        deletedAggregates.Should().Contain("SyncRuns");
-        deletedAggregates.Should().Contain("Datawallets");
-        deletedAggregates.Should().Contain("Tokens");
-        deletedAggregates.Should().Contain("AnnouncementRecipients");
+        deletedAggregates.ShouldContain("Challenges");
+        deletedAggregates.ShouldContain("PnsRegistrations");
+        deletedAggregates.ShouldContain("Identities");
+        deletedAggregates.ShouldContain("Files");
+        deletedAggregates.ShouldContain("QuotaIdentities");
+        deletedAggregates.ShouldContain("Relationships");
+        deletedAggregates.ShouldContain("RelationshipTemplates");
+        deletedAggregates.ShouldContain("RelationshipTemplateAllocations");
+        deletedAggregates.ShouldContain("ExternalEvents");
+        deletedAggregates.ShouldContain("SyncRuns");
+        deletedAggregates.ShouldContain("Datawallets");
+        deletedAggregates.ShouldContain("Tokens");
+        deletedAggregates.ShouldContain("AnnouncementRecipients");
     }
 
     [Fact]
-    public async Task Deletes_the_identity()
+    public async Task Deletes_the_identity_when_it_is_in_status_ToBeDeleted()
     {
         // Arrange
         var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
 
         // Act
-        await _host.StartAsync();
+        await _host.StartAsync(TestContext.Current.CancellationToken);
 
         // Assert
         var assertionContext = GetService<DevicesDbContext>();
 
-        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address);
-        identityAfterAct.Should().BeNull();
+        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken);
+        identityAfterAct.ShouldBeNull();
     }
 
     [Fact]
-    public async Task Anonymizes_the_identity_in_all_messages_instead_of_deleting_the_message()
+    public async Task Deletes_the_identity_when_it_is_in_status_Deleting()
     {
         // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = await SeedDatabaseWithIdentity();
-        var relationship = await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peer);
-
-        var sentMessage = await SeedDatabaseWithMessage(relationship, from: identityToBeDeleted, to: peer);
-        var receivedMessage = await SeedDatabaseWithMessage(relationship, from: peer, to: identityToBeDeleted);
+        var identity = await SeedDatabaseWithIdentityInStatusDeleting();
 
         // Act
-        await _host.StartAsync();
+        await _host.StartAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        var assertionContext = GetService<MessagesDbContext>();
+        var assertionContext = GetService<DevicesDbContext>();
 
-        var messagesOfIdentityAfterAct = await assertionContext.Messages.Where(Message.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
-        messagesOfIdentityAfterAct.Should().BeEmpty();
-
-        var sentMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == sentMessage.Id);
-        sentMessageAfterAct.Should().NotBeNull();
-
-        var receivedMessageAfterAct = await assertionContext.Messages.FirstOrDefaultAsync(m => m.Id == receivedMessage.Id);
-        receivedMessageAfterAct.Should().NotBeNull();
+        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken);
+        identityAfterAct.ShouldBeNull();
     }
 
     [Fact]
@@ -120,13 +105,13 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await SeedDatabaseWithActiveRelationshipBetween(identityToBeDeleted, peerOfIdentityToBeDeleted);
 
         // Act
-        await _host.StartAsync();
+        await _host.StartAsync(TestContext.Current.CancellationToken);
 
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
-        var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync();
-        relationshipsAfterAct.Should().BeEmpty();
+        var relationshipsAfterAct = await assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync(TestContext.Current.CancellationToken);
+        relationshipsAfterAct.ShouldBeEmpty();
     }
 
     [Fact]
@@ -138,13 +123,13 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address);
 
         // Act
-        await _host.StartAsync();
+        await _host.StartAsync(TestContext.Current.CancellationToken);
 
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
-        var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync();
-        templatesAfterAct.Should().BeEmpty();
+        var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync(TestContext.Current.CancellationToken);
+        templatesAfterAct.ShouldBeEmpty();
     }
 
     private T GetService<T>() where T : notnull
@@ -154,19 +139,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     #region Seeders
 
-    private async Task<Message> SeedDatabaseWithMessage(Relationship relationship, Identity from, Identity to)
-    {
-        var dbContext = GetService<MessagesDbContext>();
-
-        var recipient = new RecipientInformation(to.Address, RelationshipId.Parse(relationship.Id.Value), []);
-        var message = new Message(from.Address, from.Devices.First().Id, [], [], [recipient]);
-
-        await dbContext.SaveEntity(message);
-
-        return message;
-    }
-
-    private async Task<Relationship> SeedDatabaseWithActiveRelationshipBetween(Identity from, Identity to)
+    private async Task SeedDatabaseWithActiveRelationshipBetween(Identity from, Identity to)
     {
         var dbContext = GetService<RelationshipsDbContext>();
 
@@ -175,8 +148,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         relationship.Accept(to.Address, to.Devices.First().Id, []);
 
         await dbContext.SaveEntity(relationship);
-
-        return relationship;
     }
 
     private async Task SeedDatabaseWithRelationshipTemplateOf(IdentityAddress owner)
@@ -199,8 +170,26 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var device = identity.Devices.First();
 
         SystemTime.Set(SystemTime.UtcNow.AddMonths(-1));
-        identity.StartDeletionProcessAsOwner(device.Id);
+        identity.StartDeletionProcess(device.Id);
         SystemTime.Reset();
+
+        await dbContext.SaveEntity(identity);
+
+        return identity;
+    }
+
+    private async Task<Identity> SeedDatabaseWithIdentityInStatusDeleting()
+    {
+        var dbContext = GetService<DevicesDbContext>();
+
+        var tier = await dbContext.Tiers.FirstAsync(t => t.Id != Tier.QUEUED_FOR_DELETION.Id);
+
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], tier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+
+        var device = identity.Devices.First();
+
+        identity.StartDeletionProcess(device.Id, 0);
+        identity.DeletionStarted();
 
         await dbContext.SaveEntity(identity);
 

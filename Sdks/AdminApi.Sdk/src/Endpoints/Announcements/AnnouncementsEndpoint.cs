@@ -13,8 +13,13 @@ public class AnnouncementsEndpoint(EndpointClient client) : AdminApiEndpoint(cli
         return await _client.Post<Announcement>($"api/{API_VERSION}/Announcements", request);
     }
 
-    public async Task<ApiResponse<GetAllAnnouncementsResponse>> GetAllAnnouncements()
+    public async Task<ApiResponse<ListAnnouncementsResponse>> ListAnnouncements()
     {
-        return await _client.Get<GetAllAnnouncementsResponse>($"api/{API_VERSION}/Announcements");
+        return await _client.Get<ListAnnouncementsResponse>($"api/{API_VERSION}/Announcements");
+    }
+
+    public async Task<ApiResponse<EmptyResponse>> DeleteById(string id)
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Announcements/{id}");
     }
 }

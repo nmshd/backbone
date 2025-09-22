@@ -1,7 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
-using Backbone.Modules.Tokens.Domain.DomainEvents;
+using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
+using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests.Tokens;
 
@@ -20,9 +21,9 @@ public class TokenTests : AbstractTestsBase
         var token = new Token(address, deviceId, content, expiresAt);
 
         // Assert
-        var domainEvent = token.Should().HaveASingleDomainEvent<TokenCreatedDomainEvent>();
-        domainEvent.TokenId.Should().Be(token.Id);
-        domainEvent.CreatedBy.Should().Be(address);
+        var domainEvent = token.ShouldHaveASingleDomainEvent<TokenCreatedDomainEvent>();
+        domainEvent.TokenId.ShouldBe(token.Id);
+        domainEvent.CreatedBy.ShouldBe(address);
     }
 
     private const string I1 = "did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f";
@@ -37,7 +38,7 @@ public class TokenTests : AbstractTestsBase
 
         var acting = () => token.EnsureCanBeDeletedBy(identityAddress);
 
-        acting.Should().NotThrow();
+        acting.ShouldNotThrow();
     }
 
     [Fact]
@@ -49,6 +50,6 @@ public class TokenTests : AbstractTestsBase
 
         var acting = () => token.EnsureCanBeDeletedBy(otherIdentity);
 
-        acting.Should().Throw<DomainActionForbiddenException>();
+        acting.ShouldThrow<DomainActionForbiddenException>();
     }
 }

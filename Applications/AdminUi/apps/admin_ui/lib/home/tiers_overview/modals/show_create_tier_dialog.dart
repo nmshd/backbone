@@ -1,15 +1,14 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-Future<Tier?> showCreateTierDialog({required BuildContext context}) => showDialog<Tier>(
-      context: context,
-      builder: (BuildContext context) => const _CreateTierDialog(),
-    );
+Future<Tier?> showCreateTierDialog({required BuildContext context}) =>
+    showDialog<Tier>(context: context, builder: (BuildContext context) => const _CreateTierDialog());
 
 class _CreateTierDialog extends StatefulWidget {
   const _CreateTierDialog();
@@ -58,10 +57,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Text('*${context.l10n.required}'),
-                    ),
+                    Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
                     Gaps.h32,
                     TextField(
                       controller: _tierNameController,
@@ -88,14 +84,8 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                 ),
               ),
         actions: <Widget>[
-          OutlinedButton(
-            onPressed: _isLoading ? null : () => context.pop(),
-            child: Text(context.l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
-            child: Text(context.l10n.create),
-          ),
+          OutlinedButton(onPressed: _isLoading ? null : () => context.pop(), child: Text(context.l10n.cancel)),
+          FilledButton(onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text), child: Text(context.l10n.create)),
         ],
       ),
     );
@@ -123,16 +113,13 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
   }
 
   void _setErrorMessage(String message) => setState(() {
-        _errorMessage = message;
-        _isLoading = false;
-      });
+    _errorMessage = message;
+    _isLoading = false;
+  });
 
   void _showSuccessSnackbar() {
     final snackBar = SnackBar(
-      content: Text(
-        context.l10n.createTierDialog_tierCreatedSuccess,
-        style: const TextStyle(color: Colors.white),
-      ),
+      content: Text(context.l10n.createTierDialog_tierCreatedSuccess, style: const TextStyle(color: Colors.white)),
       backgroundColor: Colors.green,
       duration: const Duration(seconds: 3),
       showCloseIcon: true,

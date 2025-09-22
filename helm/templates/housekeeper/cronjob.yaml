@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.housekeeper.name }}
+spec:
+  schedule: "{{ .Values.housekeeper.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.housekeeper.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.housekeeper.failedJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      {{- with .Values.housekeeper.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.housekeeper.name }}
+    spec:
+      backoffLimit: {{ .Values.housekeeper.backoffLimit }}
+      template:
+        spec:
+          {{- with .Values.global.serviceAccount.name}}
+          serviceAccountName: {{ . }}
+          {{- end }}
+          restartPolicy: Never
+          {{- with .Values.housekeeper.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.housekeeper.image.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: settings-override
+              configMap:
+                name: configuration
+          containers:
+            - name: {{ .Values.housekeeper.name }}
+              {{- with .Values.housekeeper.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.housekeeper.resources | nindent 16 }}
+              image: "{{ .Values.housekeeper.image.repository }}:{{- default .Chart.AppVersion .Values.housekeeper.image.tagOverride }}"
+              imagePullPolicy: {{ .Values.housekeeper.image.pullPolicy }}
+              volumeMounts:
+                - name: settings-override
+                  mountPath: /app/appsettings.override.json
+                  subPath: appsettings.override.json
+                  readOnly: true
+              env:
+                {{- if .Values.global.useBuiltInEventbus }}
+                - name: infrastructure__eventBus__productName
+                  value: RabbitMQ
+                - name: infrastructure__eventBus__rabbitMq__enableSsl
+                  value: "false"
+                - name: infrastructure__eventBus__rabbitMq__hostName
+                  value: "rabbitmq"
+                - name: infrastructure__eventBus__rabbitMq__username
+                  value: "admin"
+                - name: infrastructure__eventBus__rabbitMq__password
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-password
+                      key: "VALUE" 
+                {{- end }}
+                {{- include "generateEnvVars" (list .Values.global.env .Values.housekeeper.env) | nindent 16 }}
+          {{- with .Values.housekeeper.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.housekeeper.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.housekeeper.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}

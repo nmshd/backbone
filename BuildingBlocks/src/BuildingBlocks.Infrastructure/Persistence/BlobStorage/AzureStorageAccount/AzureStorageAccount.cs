@@ -35,7 +35,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         _removedBlobs.Add(blob);
     }
 
-    public async Task<byte[]> FindAsync(string folder, string blobId)
+    public async Task<byte[]> GetAsync(string folder, string blobId)
     {
         _logger.LogTrace("Reading blob with id '{blobId}'...", blobId);
 
@@ -60,7 +60,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         }
     }
 
-    public Task<IAsyncEnumerable<string>> FindAllAsync(string folder, string? prefix = null)
+    public Task<IAsyncEnumerable<string>> ListAsync(string folder, string? prefix = null)
     {
         _logger.LogTrace("Listing all blobs...");
         var container = _containerClientFactory.GetContainerClient(folder);
@@ -123,13 +123,13 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         foreach (var cloudBlockBlob in blobsToDelete)
             try
             {
-                await cloudBlockBlob.DeleteAsync();
+                await cloudBlockBlob.DeleteIfExistsAsync();
                 _removedBlobs.Remove(cloudBlockBlob);
             }
             catch (Exception ex)
             {
                 _logger.ErrorDeletingBlob(cloudBlockBlob.Name, ex);
-                throw new NotFoundException();
+                throw;
             }
 
         _logger.LogTrace("Deletion successful.");

@@ -2,19 +2,21 @@
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="12.4.1" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-        <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.11.0" />
-        <PackageReference Include="FluentAssertions" Version="7.0.0" />
-        <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
+        <PackageReference Include="MediatR" Version="[12.5.0]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.1]" />
+        <PackageReference Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.12.1]" />
+        <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+        <PackageReference Include="xunit.v3" Version="[3.0.1]">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="xunit.runner.visualstudio" Version="[3.1.4]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -42,7 +44,6 @@
         <ProjectReference Include="..\Applications\ConsumerApi\src\ConsumerApi.csproj" />
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Challenges\src\Challenges.Jobs.Cleanup\Challenges.Jobs.Cleanup.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />

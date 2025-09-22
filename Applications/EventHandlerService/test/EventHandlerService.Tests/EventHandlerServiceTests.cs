@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Module;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 
@@ -26,7 +26,7 @@ public class EventHandlerServiceTests : AbstractTestsBase
     {
         return new EventHandlerService(
             eventBus,
-            A.Dummy<IEnumerable<AbstractModule>>(),
+            A.Dummy<IEnumerable<IEventBusConfigurator>>(),
             A.Dummy<ILogger<EventHandlerService>>());
     }
 }
