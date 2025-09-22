@@ -6,5 +6,5 @@ import 'endpoint.dart';
 class MetricsEndpoint extends Endpoint {
   MetricsEndpoint(super._dio);
 
-  Future<ApiResponse<List<Metric>>> getMetrics() => get('/api/v2/Metrics', transformer: (e) => (e as List).map(Metric.fromJson).toList());
+  Future<ApiResponse<List<Metric>>> getMetrics() => get('/api/v1/Metrics', transformer: (e) => (e as List).map(Metric.fromJson).toList());
 }

@@ -13,7 +13,7 @@ class MessagesEndpoint extends Endpoint {
     required int pageNumber,
     required int pageSize,
   }) => get(
-    '/api/v2/Messages',
+    '/api/v1/Messages',
     query: {'participant': participant, 'type': type.name, 'PageNumber': pageNumber, 'PageSize': pageSize},
     transformer: (e) => (e as List).map(MessageOverview.fromJson).toList(),
   );
