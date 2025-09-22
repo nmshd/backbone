@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.SseServer.Versions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ public class SseController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("/api/v2/sse")]
+    [HttpGet("/api/v{v:apiVersion}/sse")]
     [Authorize]
     public async Task Subscribe(CancellationToken cancellationToken)
     {

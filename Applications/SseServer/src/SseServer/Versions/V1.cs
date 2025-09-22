@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 
-namespace Backbone.ConsumerApi.Versions;
+namespace Backbone.SseServer.Versions;
 
 public class V1Attribute : ApiVersionAttribute
 {
