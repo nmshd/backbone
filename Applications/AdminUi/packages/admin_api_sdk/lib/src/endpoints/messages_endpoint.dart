@@ -5,7 +5,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class MessagesEndpoint extends Endpoint {
-  MessagesEndpoint(super.dio);
+  MessagesEndpoint(super._dio);
 
   Future<ApiResponse<List<MessageOverview>>> getMessagesByParticipant({
     required String participant,

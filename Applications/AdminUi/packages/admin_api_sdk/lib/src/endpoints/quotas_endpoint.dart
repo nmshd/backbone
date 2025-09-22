@@ -4,7 +4,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class QuotasEndpoint extends Endpoint {
-  QuotasEndpoint(super.dio);
+  QuotasEndpoint(super._dio);
 
   Future<ApiResponse<TierQuotaDefinition>> createTierQuota({
     required String tierId,

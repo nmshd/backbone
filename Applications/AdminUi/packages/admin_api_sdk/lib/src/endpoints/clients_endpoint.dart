@@ -4,7 +4,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class ClientsEndpoint extends Endpoint {
-  ClientsEndpoint(super.dio);
+  ClientsEndpoint(super._dio);
 
   Future<ApiResponse<List<ClientOverview>>> getClients() =>
       get('/api/v2/Clients', transformer: (e) => (e as List).map(ClientOverview.fromJson).toList());
