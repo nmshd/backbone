@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ import '../../extensions.dart';
 import '../filters/filters.dart';
 
 class IdentitiesFilter extends StatefulWidget {
-  final Future<void> Function({IdentityOverviewFilter? filter}) onFilterChanged;
+  final void Function({IdentityOverviewFilter? filter}) onFilterChanged;
   final String? fixedTierId;
   final String? fixedClientId;
 
@@ -32,8 +34,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
       _filter = _filter.copyWith(tiers: Optional([widget.fixedTierId!]));
     }
 
-    _loadTiers();
-    _loadClients();
+    unawaited(_loadTiers());
+    unawaited(_loadClients());
   }
 
   @override

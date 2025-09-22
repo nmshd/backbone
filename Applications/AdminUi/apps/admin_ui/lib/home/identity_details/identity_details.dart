@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
@@ -35,8 +37,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
     _scrollController = ScrollController();
 
-    _reloadIdentity();
-    _reloadTiers();
+    unawaited(_reloadIdentity());
+    unawaited(_reloadTiers());
   }
 
   @override
