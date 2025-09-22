@@ -10,7 +10,7 @@ class RelationshipsEndpoint extends Endpoint {
     assert(pageNumber == null || pageNumber > 0, 'pageNumber must be greater than 0 when defined');
 
     return get(
-      '/api/v1/Relationships',
+      '/api/v2/Relationships',
       query: {'participant': participant, 'PageNumber': pageNumber, 'PageSize': pageSize},
       transformer: (e) => (e as List).map(Relationship.fromJson).toList(),
     );

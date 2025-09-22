@@ -30,7 +30,7 @@ public class IdentityDeletionProcess : Entity
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(lengthOfGracePeriodInDays.Value);
-        ChangeStatus(DeletionProcessStatus.Approved, createdBy, createdBy);
+        ChangeStatus(DeletionProcessStatus.Active, createdBy, createdBy);
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(createdBy, createdByDevice)];
     }
@@ -56,7 +56,7 @@ public class IdentityDeletionProcess : Entity
 
     public DateTime? DeletionStartedAt { get; private set; }
 
-    public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
+    public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Active && SystemTime.UtcNow >= GracePeriodEndsAt;
 
     public static Expression<Func<IdentityDeletionProcess, bool>> CanBeCleanedUp =>
         p => p.Status == DeletionProcessStatus.Cancelled && p.CancelledAt!.Value < SystemTime.UtcNow.AddDays(-30);
@@ -66,9 +66,9 @@ public class IdentityDeletionProcess : Entity
         return new IdentityDeletionProcess(createdBy, createdByDeviceId, lengthOfGracePeriodInDays);
     }
 
-    public bool IsActive()
+    public bool IsAtLeastActive()
     {
-        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.Deleting;
+        return Status is DeletionProcessStatus.Active or DeletionProcessStatus.Deleting;
     }
 
     public void GracePeriodReminder1Sent(IdentityAddress address)
@@ -91,7 +91,7 @@ public class IdentityDeletionProcess : Entity
 
     internal void DeletionStarted(IdentityAddress address)
     {
-        EnsureStatus(DeletionProcessStatus.Approved);
+        EnsureStatus(DeletionProcessStatus.Active);
         EnsureGracePeriodHasExpired();
 
         ChangeStatus(DeletionProcessStatus.Deleting, address, address);
@@ -112,8 +112,8 @@ public class IdentityDeletionProcess : Entity
 
     public void Cancel(IdentityAddress address, DeviceId cancelledByDevice)
     {
-        if (Status != DeletionProcessStatus.Approved)
-            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+        if (Status != DeletionProcessStatus.Active)
+            throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Active));
 
         if (GracePeriodEndsAt < SystemTime.UtcNow)
             throw new DomainException(DomainErrors.GracePeriodHasAlreadyExpired());
