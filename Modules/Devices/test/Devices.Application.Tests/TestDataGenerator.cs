@@ -68,7 +68,7 @@ public static class TestDataGenerator
         return deletionProcess;
     }
 
-    public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
+    public static Identity CreateIdentityWithActiveDeletionProcess(DateTime? approvalDate = null)
     {
         approvalDate ??= SystemTime.UtcNow;
 

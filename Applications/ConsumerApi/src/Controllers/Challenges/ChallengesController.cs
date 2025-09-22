@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
@@ -10,7 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Controllers.Challenges;
 
-[Route("api/v1/[controller]")]
+[V1]
+[V2]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class ChallengesController : ApiControllerBase
 {

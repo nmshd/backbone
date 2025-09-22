@@ -38,7 +38,7 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static Identity CreateIdentityWithApprovedDeletionProcess()
+    public static Identity CreateIdentityWithActiveDeletionProcess()
     {
         var identity = CreateIdentity();
         identity.StartDeletionProcess(identity.Devices.First().Id);
