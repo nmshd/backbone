@@ -9,9 +9,7 @@ public class IdentityDeletionProcessOverviewDTO
         Id = process.Id;
         Status = process.Status.ToString();
         CreatedAt = process.CreatedAt;
-
-        ApprovedAt = process.ApprovedAt;
-        ApprovedByDevice = process.ApprovedByDevice?.Value;
+        CreatedByDevice = process.CreatedByDevice;
 
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
@@ -23,9 +21,15 @@ public class IdentityDeletionProcessOverviewDTO
     public string Id { get; set; }
     public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string CreatedByDevice { get; set; }
 
-    public DateTime? ApprovedAt { get; set; }
-    public string? ApprovedByDevice { get; set; }
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `createdAt` instead")]
+    public DateTime ApprovedAt => CreatedAt;
+
+    [Obsolete(
+        "There is no reason to use this property anymore since the possibility to start a deletion process as support was removed. It only stays for backwards compatibility reasons and will be removed in the future. Use `CreatedByDevice` instead")]
+    public string ApprovedByDevice => CreatedByDevice;
 
     public DateTime? GracePeriodEndsAt { get; set; }
 

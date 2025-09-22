@@ -15,9 +15,10 @@ public class IdentityDeletionProcess : Entity
     protected IdentityDeletionProcess()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        IdentityAddress = null!;
-        _auditLog = null!;
         Id = null!;
+        IdentityAddress = null!;
+        CreatedByDevice = null!;
+        _auditLog = null!;
     }
 
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice, double? lengthOfGracePeriodInDays)
@@ -27,8 +28,7 @@ public class IdentityDeletionProcess : Entity
         CreatedAt = SystemTime.UtcNow;
 
         lengthOfGracePeriodInDays ??= IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays;
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
+        CreatedByDevice = createdByDevice;
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(lengthOfGracePeriodInDays.Value);
         ChangeStatus(DeletionProcessStatus.Active, createdBy, createdBy);
 
@@ -38,6 +38,7 @@ public class IdentityDeletionProcess : Entity
     public IdentityDeletionProcessId Id { get; }
 
     private IdentityAddress IdentityAddress { get; }
+    public DeviceId CreatedByDevice { get; private set; }
 
     public virtual IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
@@ -45,8 +46,6 @@ public class IdentityDeletionProcess : Entity
 
     public DateTime? CancelledAt { get; private set; }
 
-    public DateTime? ApprovedAt { get; private set; }
-    public DeviceId? ApprovedByDevice { get; private set; }
 
     public DateTime? GracePeriodEndsAt { get; private set; }
 
