@@ -8,6 +8,9 @@ public class ConsumerApiConfiguration
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
+    [Required]
+    public SwaggerUiConfiguration SwaggerUi { get; init; } = new();
+
     public CorsConfiguration? Cors { get; init; }
 
     [Required]
@@ -121,5 +124,10 @@ public class ConsumerApiConfiguration
                 public string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
+    }
+
+    public class SwaggerUiConfiguration
+    {
+        public bool Enabled { get; init; }
     }
 }
