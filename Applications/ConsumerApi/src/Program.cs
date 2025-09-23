@@ -33,7 +33,6 @@ using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.OpenApi.Models;
 using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
@@ -100,7 +99,7 @@ static WebApplication CreateApp(string[] args)
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
-    Configure(app);
+    Configure(app, app.Services.GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value);
 
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
@@ -126,72 +125,6 @@ static WebApplication CreateApp(string[] args)
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
-    services.AddEndpointsApiExplorer();
-
-    services.AddSwaggerGen(c =>
-    {
-        c.CustomSchemaIds(t =>
-        {
-            static string GetReadableName(Type type)
-            {
-                if (!type.IsGenericType)
-                {
-                    return type.Name
-                        .Replace("DTO", string.Empty)
-                        .Replace("Command", "Request")
-                        .Replace("Query", "Request");
-                }
-
-                var typeName = type.Name
-                    .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
-                    .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
-                var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
-                return name;
-            }
-
-            return GetReadableName(t);
-        });
-
-        c.AddServer(new OpenApiServer { Url = "https://nmshd-bkb.demo.meinbildungsraum.de" });
-        c.AddServer(new OpenApiServer { Url = "https://nmshd-bkb.meinbildungsraum.de" });
-        c.AddServer(new OpenApiServer { Url = "https://pilot.enmeshed.eu" });
-
-        c.AddSecurityDefinition(
-            "oauth2",
-            new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    Password = new OpenApiOAuthFlow
-                    {
-                        TokenUrl = new Uri("/connect/token", UriKind.Relative)
-                    }
-                }
-            });
-
-        c.AddSecurityRequirement(
-            new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Id = "oauth2", //The name of the previously defined security scheme.
-                            Type = ReferenceType.SecurityScheme
-                        }
-                    },
-                    new List<string>()
-                }
-            });
-    });
-
-    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
-
-#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-#pragma warning restore ASP0000
     services.ConfigureAndValidate<ConsumerApiConfiguration>(configuration.Bind);
 
     services.AddSingleton<VersionService>();
@@ -229,7 +162,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomAspNetCore(parsedBackboneConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication);
+        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication)
+        .AddCustomSwaggerUi(parsedBackboneConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -245,11 +179,25 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddHttpUserAgentParser();
 }
 
-static void Configure(WebApplication app)
+static void Configure(WebApplication app, ConsumerApiConfiguration configuration)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-  
+    if (configuration.SwaggerUi.Enabled)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            var descriptions = app.DescribeApiVersions();
+
+            // build a swagger endpoint for each discovered API version
+            foreach (var description in descriptions)
+            {
+                var url = $"/swagger/{description.GroupName}/swagger.json";
+                var name = description.GroupName.ToUpperInvariant();
+                options.SwaggerEndpoint(url, name);
+            }
+        });
+    }
+
     app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>

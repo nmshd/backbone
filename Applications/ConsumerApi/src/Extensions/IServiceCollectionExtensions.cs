@@ -14,6 +14,7 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
@@ -159,6 +160,72 @@ public static class IServiceCollectionExtensions
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+
+        return services;
+    }
+
+
+    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services, ConsumerApiConfiguration.SwaggerUiConfiguration swaggerUi)
+    {
+        if (!swaggerUi.Enabled)
+            return services;
+
+        services.AddEndpointsApiExplorer();
+
+        services.AddSwaggerGen(c =>
+        {
+            c.CustomSchemaIds(t =>
+            {
+                static string GetReadableName(Type type)
+                {
+                    if (!type.IsGenericType)
+                    {
+                        return type.Name
+                            .Replace("DTO", string.Empty)
+                            .Replace("Command", "Request")
+                            .Replace("Query", "Request");
+                    }
+
+                    var typeName = type.Name
+                        .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
+                        .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
+                    var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
+                    return name;
+                }
+
+                return GetReadableName(t);
+            });
+
+            c.AddSecurityDefinition(
+                "oauth2",
+                new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Password = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri("/connect/token", UriKind.Relative)
+                        }
+                    }
+                });
+
+            c.AddSecurityRequirement(
+                new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "oauth2", //The name of the previously defined security scheme.
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+        });
 
         return services;
     }
