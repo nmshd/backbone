@@ -98,7 +98,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         identityAfterAct.ShouldBeNull();
     }
 
-    /*[Fact]
+    [Fact]
     public async Task Deletes_relationships() //TODO: Check deadlock
     {
         // Arrange
@@ -116,7 +116,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var relationshipsAfterAct = await LogTime(assertionContext.Relationships.Where(Relationship.HasParticipant(identityToBeDeleted.Address)).ToListAsync(TestContext.Current.CancellationToken),
             "Get relationships");
         relationshipsAfterAct.ShouldBeEmpty();
-    }*/
+    }
 
     [Fact]
     public async Task Deletes_relationship_templates()
