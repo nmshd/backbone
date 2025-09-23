@@ -183,15 +183,16 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
 {
     if (configuration.SwaggerUi.Enabled)
     {
-        app.UseSwagger();
+        app.UseSwagger(options => { options.RouteTemplate = "docs/{documentName}/openapi.json"; });
         app.UseSwaggerUI(options =>
         {
-            var descriptions = app.DescribeApiVersions();
+            options.RoutePrefix = "docs";
 
+            options.SwaggerEndpoint("/docs/v2/openapi.json", "vX");
             // build a swagger endpoint for each discovered API version
-            foreach (var description in descriptions)
+            foreach (var description in app.DescribeApiVersions())
             {
-                var url = $"/swagger/{description.GroupName}/swagger.json";
+                var url = $"/docs/{description.GroupName}/openapi.json";
                 var name = description.GroupName.ToUpperInvariant();
                 options.SwaggerEndpoint(url, name);
             }
