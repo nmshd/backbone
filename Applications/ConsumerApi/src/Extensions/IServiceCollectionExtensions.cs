@@ -86,13 +86,26 @@ public static class IServiceCollectionExtensions
                 policy.RequireAuthenticatedUser();
             });
 
-        services.AddApiVersioning(options =>
+        var apiVersioningBuilder = services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1);
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            })
+            .AddMvc();
+
+        if (configuration.SwaggerUi.Enabled)
         {
-            options.DefaultApiVersion = new ApiVersion(1);
-            options.ReportApiVersions = true;
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.ApiVersionReader = new UrlSegmentApiVersionReader();
-        }).AddMvc();
+            apiVersioningBuilder
+                .AddApiExplorer(options =>
+                {
+                    // The specified format code will format the version as "'v'major[.minor][-status]"
+                    options.GroupNameFormat = "'v'VVV";
+
+                    options.SubstituteApiVersionInUrl = true;
+                });
+        }
 
         if (configuration.Cors != null)
         {
