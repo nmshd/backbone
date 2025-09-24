@@ -31,16 +31,16 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Logs_that_data_was_deleted()
     {
         // Arrange
-        var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
+        var identity = await LogTime(SeedDatabaseWithIdentityWithRipeDeletionProcess(), "Seed DB");
 
         // Act
-        await _host.StartAsync(TestContext.Current.CancellationToken);
+        await LogTime(_host.StartAsync(TestContext.Current.CancellationToken), "Run Deletion process");
 
         // Assert
         var assertionContext = GetService<DevicesDbContext>();
 
-        var auditLogEntries = await assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address))
-            .ToListAsync(TestContext.Current.CancellationToken);
+        var auditLogEntries = await LogTime(assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address))
+            .ToListAsync(TestContext.Current.CancellationToken), "Get audit log entries");
 
         var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
 
@@ -70,15 +70,15 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Deletes_the_identity_when_it_is_in_status_ToBeDeleted()
     {
         // Arrange
-        var identity = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
+        var identity = await LogTime(SeedDatabaseWithIdentityWithRipeDeletionProcess(), "Seed DB");
 
         // Act
-        await _host.StartAsync(TestContext.Current.CancellationToken);
+        await LogTime(_host.StartAsync(TestContext.Current.CancellationToken), "Run Deletion process");
 
         // Assert
         var assertionContext = GetService<DevicesDbContext>();
 
-        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken);
+        var identityAfterAct = await LogTime(assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken), "Get identity after act");
         identityAfterAct.ShouldBeNull();
     }
 
@@ -86,15 +86,15 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Deletes_the_identity_when_it_is_in_status_Deleting()
     {
         // Arrange
-        var identity = await SeedDatabaseWithIdentityInStatusDeleting();
+        var identity = await LogTime(SeedDatabaseWithIdentityInStatusDeleting(), "Seed DB");
 
         // Act
-        await _host.StartAsync(TestContext.Current.CancellationToken);
+        await LogTime(_host.StartAsync(TestContext.Current.CancellationToken), "Run Deletion process");
 
         // Assert
         var assertionContext = GetService<DevicesDbContext>();
 
-        var identityAfterAct = await assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken);
+        var identityAfterAct = await LogTime(assertionContext.Identities.FirstOrDefaultAsync(i => i.Address == identity.Address, TestContext.Current.CancellationToken), "Get identity after act");
         identityAfterAct.ShouldBeNull();
     }
 
@@ -122,17 +122,18 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Deletes_relationship_templates()
     {
         // Arrange
-        var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
+        var identityToBeDeleted = await LogTime(SeedDatabaseWithIdentityWithRipeDeletionProcess(), "Seed DB with identity with ripe deletion process");
 
-        await SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address);
+        await LogTime(SeedDatabaseWithRelationshipTemplateOf(identityToBeDeleted.Address), "Seed DB with relationship template");
 
         // Act
-        await _host.StartAsync(TestContext.Current.CancellationToken);
+        await LogTime(_host.StartAsync(TestContext.Current.CancellationToken), "Run Deletion Job");
 
         // Assert
         var assertionContext = GetService<RelationshipsDbContext>();
 
-        var templatesAfterAct = await assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync(TestContext.Current.CancellationToken);
+        var templatesAfterAct = await LogTime(assertionContext.RelationshipTemplates.Where(rt => rt.CreatedBy == identityToBeDeleted.Address).ToListAsync(TestContext.Current.CancellationToken),
+            "Get relationship templates");
         templatesAfterAct.ShouldBeEmpty();
     }
 
@@ -243,13 +244,13 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     private async Task LogTime(Task task, string hint = "")
     {
-        await Console.Error.WriteLineAsync($"Starting \"{hint}\"");
+        _testOutputHelper.WriteLine($"Starting \"{hint}\"");
         var start = DateTime.UtcNow;
 
         await task;
 
         var duration = DateTime.UtcNow - start;
-        await Console.Error.WriteLineAsync($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
+        _testOutputHelper.WriteLine($"Completed \"{hint}\" (took {duration.TotalSeconds} s)");
     }
 
     #endregion
