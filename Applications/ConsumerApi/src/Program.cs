@@ -99,7 +99,7 @@ static WebApplication CreateApp(string[] args)
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
-    Configure(app);
+    Configure(app, app.Services.GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value);
 
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
@@ -162,7 +162,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomAspNetCore(parsedBackboneConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication);
+        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication)
+        .AddCustomSwaggerUi(parsedBackboneConfiguration.SwaggerUi);
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -178,8 +179,26 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddHttpUserAgentParser();
 }
 
-static void Configure(WebApplication app)
+static void Configure(WebApplication app, ConsumerApiConfiguration configuration)
 {
+    if (configuration.SwaggerUi.Enabled)
+    {
+        app.UseSwagger(options => { options.RouteTemplate = "docs/{documentName}/openapi.json"; });
+        app.UseSwaggerUI(options =>
+        {
+            options.RoutePrefix = "docs";
+
+            options.SwaggerEndpoint("/docs/v2/openapi.json", "vX");
+            // build a swagger endpoint for each discovered API version
+            foreach (var description in app.DescribeApiVersions())
+            {
+                var url = $"/docs/{description.GroupName}/openapi.json";
+                var name = description.GroupName.ToUpperInvariant();
+                options.SwaggerEndpoint(url, name);
+            }
+        });
+    }
+
     app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>
