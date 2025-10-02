@@ -9,6 +9,7 @@ using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -31,7 +32,7 @@ public enum EventPublishingDurationStage
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    private const int PUBLISH_RETRY_COUNT = 5;
+    private const int PUBLISH_RETRY_COUNT = 6;
     private const int HANDLER_RETRY_COUNT = 5;
 
     private readonly ILogger<EventBusRabbitMq> _logger;
@@ -45,6 +46,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly string _deadLetterExchangeName;
     private readonly string _deadLetterQueueName;
     private readonly SubscriptionManager _subscriptionManager = new();
+    private readonly AsyncRetryPolicy _publishRetryPolicy;
 
     private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName, EventBusMetrics metrics)
     {
@@ -56,6 +58,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
         _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
         _channelPool = new ChannelPool(persistentConnection);
+
+        _publishRetryPolicy = Policy.Handle<BrokerUnreachableException>()
+            .Or<SocketException>()
+            .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
+                _ => 2.Seconds(),
+                (ex, _) => _logger.ErrorOnPublish(ex));
     }
 
     public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName,
@@ -229,12 +237,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public async Task Publish(DomainEvent @event)
     {
-        var policy = Policy.Handle<BrokerUnreachableException>()
-            .Or<SocketException>()
-            .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
-                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.ErrorOnPublish(ex));
-
         var eventName = @event.GetEventName();
 
         _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
@@ -245,7 +247,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _metrics.TrackHandledMessageSize(body.Length);
 
-        await policy.ExecuteAsync(async () =>
+        await _publishRetryPolicy.ExecuteAsync(async () =>
         {
             _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
 
@@ -256,6 +258,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 MessageId = @event.DomainEventId,
                 CorrelationId = CustomLogContext.GetCorrelationId()
             };
+
             try
             {
                 var startedAt = Stopwatch.GetTimestamp();
