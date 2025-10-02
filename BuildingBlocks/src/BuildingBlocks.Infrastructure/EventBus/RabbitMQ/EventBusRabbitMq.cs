@@ -61,6 +61,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _publishRetryPolicy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
+            .Or<AlreadyClosedException>()
             .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
                 _ => 2.Seconds(),
                 (ex, _) => _logger.ErrorOnPublish(ex));
