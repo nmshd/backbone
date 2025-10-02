@@ -16,20 +16,6 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public enum EventProcessingDurationStage
-{
-    Deserialize,
-    Handle,
-    Acknowledge,
-    Reject
-}
-
-public enum EventPublishingDurationStage
-{
-    Serialize,
-    Publish
-}
-
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
     private const int PUBLISH_RETRY_COUNT = 6;
