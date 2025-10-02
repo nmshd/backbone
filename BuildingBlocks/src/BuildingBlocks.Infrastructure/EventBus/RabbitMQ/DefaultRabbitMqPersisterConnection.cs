@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Net.Sockets;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -16,6 +18,7 @@ public class DefaultRabbitMqPersistentConnection
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<DefaultRabbitMqPersistentConnection> _logger;
+    private readonly AsyncRetryPolicy _connectionRetryPolicy;
 
     private IConnection? _connection;
     private bool _disposed;
@@ -24,6 +27,18 @@ public class DefaultRabbitMqPersistentConnection
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        _connectionRetryPolicy = Policy.Handle<SocketException>()
+            .Or<BrokerUnreachableException>()
+            .WaitAndRetryAsync(CONNECTION_RETRY_COUNT,
+                _ => 2.Seconds(),
+                (ex, _, attempt, _) =>
+                {
+                    var logLevel = attempt % 10 == 1 ? LogLevel.Warning : LogLevel.Debug;
+
+                    _logger.ConnectionError(attempt, ex, logLevel);
+                }
+            );
     }
 
     public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
@@ -52,13 +67,7 @@ public class DefaultRabbitMqPersistentConnection
     {
         _logger.LogInformation("RabbitMQ Client is trying to connect");
 
-        var policy = Policy.Handle<SocketException>()
-            .Or<BrokerUnreachableException>()
-            .WaitAndRetryAsync(CONNECTION_RETRY_COUNT,
-                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, _) => _logger.ConnectionError(ex));
-
-        await policy.ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync());
+        await _connectionRetryPolicy.ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync());
 
         if (!IsConnected)
         {
@@ -123,9 +132,8 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
     [LoggerMessage(
         EventId = 715507,
         EventName = "DefaultRabbitMqPersistentConnection.ConnectionError",
-        Level = LogLevel.Warning,
-        Message = "There was an error while trying to connect to RabbitMQ. Attempting to retry...")]
-    public static partial void ConnectionError(this ILogger logger, Exception exception);
+        Message = "There was an error while trying to connect to RabbitMQ. Making retry attempt number {retryAttempt}...")]
+    public static partial void ConnectionError(this ILogger logger, int retryAttempt, Exception exception, LogLevel logLevel = LogLevel.Error);
 
     [LoggerMessage(
         EventId = 953485,
