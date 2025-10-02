@@ -92,7 +92,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 try
                 {
                     var channel = await _channelPool.Get();
-                    await channel.ExchangeDeclareAsync(exchangeName, exchangeType);
+                    await channel.ExchangeDeclareAsync(exchangeName, exchangeType, durable: true);
                     _channelPool.Return(channel);
                 }
                 catch (Exception)
