@@ -67,7 +67,6 @@ public class DefaultRabbitMqPersistentConnection
         }
 
         _connection!.ConnectionShutdownAsync += OnConnectionShutdown;
-        _connection.CallbackExceptionAsync += OnCallbackException;
         _connection.ConnectionBlockedAsync += OnConnectionBlocked;
 
         _logger.LogInformation("RabbitMQ persistent connection acquired a connection to '{hostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
@@ -106,15 +105,6 @@ public class DefaultRabbitMqPersistentConnection
             return;
 
         _logger.ConnectionIsBlocked();
-        await Connect();
-    }
-
-    private async Task OnCallbackException(object sender, CallbackExceptionEventArgs e)
-    {
-        if (_disposed)
-            return;
-
-        _logger.ConnectionThrewAnException();
         await Connect();
     }
 
