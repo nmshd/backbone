@@ -10,20 +10,18 @@ public static class RabbitMqServiceCollectionExtensions
 {
     public static void AddRabbitMq(this IServiceCollection services, RabbitMqConfiguration configuration)
     {
-        services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
+        services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
-
-            var factory = new ConnectionFactory
+            var connectionFactory = new ConnectionFactory
             {
                 HostName = configuration.HostName,
                 Port = configuration.Port,
-                AutomaticRecoveryEnabled = false
+                AutomaticRecoveryEnabled = true,
             };
 
             if (configuration.EnableSsl)
             {
-                factory.Ssl = new SslOption
+                connectionFactory.Ssl = new SslOption
                 {
                     Enabled = true,
                     ServerName = configuration.HostName
@@ -31,21 +29,15 @@ public static class RabbitMqServiceCollectionExtensions
             }
 
             if (!string.IsNullOrEmpty(configuration.Username))
-                factory.UserName = configuration.Username;
+                connectionFactory.UserName = configuration.Username;
 
             if (!string.IsNullOrEmpty(configuration.Password))
-                factory.Password = configuration.Password;
+                connectionFactory.Password = configuration.Password;
 
-            return new DefaultRabbitMqPersistentConnection(factory, logger);
-        });
-
-        services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
-        {
-            var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
             var metrics = sp.GetRequiredService<EventBusMetrics>();
 
-            return EventBusRabbitMq.Create(rabbitMqPersistentConnection, logger, sp, configuration.ExchangeName, metrics).GetAwaiter().GetResult();
+            return EventBusRabbitMq.Create(connectionFactory, logger, sp, configuration.ExchangeName, metrics).GetAwaiter().GetResult();
         });
     }
 }

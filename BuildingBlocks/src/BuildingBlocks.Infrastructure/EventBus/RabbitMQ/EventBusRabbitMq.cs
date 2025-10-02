@@ -19,11 +19,12 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
     private const int PUBLISH_RETRY_COUNT = 6;
+    private const int CONNECTION_RETRY_COUNT = 6;
     private const int HANDLER_RETRY_COUNT = 5;
 
     private readonly ILogger<EventBusRabbitMq> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IRabbitMqPersistentConnection _persistentConnection;
+    private readonly IConnection _connection;
 
     private readonly ChannelPool _channelPool;
 
@@ -34,16 +35,16 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private readonly SubscriptionManager _subscriptionManager = new();
     private readonly AsyncRetryPolicy _publishRetryPolicy;
 
-    private EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName, EventBusMetrics metrics)
+    private EventBusRabbitMq(IConnection connection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName, EventBusMetrics metrics)
     {
-        _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
         _exchangeName = exchangeName;
         _metrics = metrics;
         _deadLetterExchangeName = $"deadletterexchange.{exchangeName}";
         _deadLetterQueueName = $"deadletterqueue.{exchangeName}";
-        _channelPool = new ChannelPool(persistentConnection);
+        _connection = connection;
+        _channelPool = new ChannelPool(connection);
 
         _publishRetryPolicy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
@@ -51,12 +52,39 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
                 _ => 2.Seconds(),
                 (ex, _) => _logger.ErrorOnPublish(ex));
+
+        _connection.ConnectionShutdownAsync += (_, args) =>
+        {
+            _logger.ConnectionShutdown(args.Initiator, args.ReplyCode, args.ReplyText);
+            return Task.CompletedTask;
+        };
+
+        _connection.ConnectionRecoveryErrorAsync += (_, args) =>
+        {
+            _logger.ConnectionRecoveryError(args.Exception.Message);
+            return Task.CompletedTask;
+        };
+
+        _connection.RecoverySucceededAsync += (_, _) =>
+        {
+            _logger.RecoverySucceeded();
+            return Task.CompletedTask;
+        };
     }
 
-    public static async Task<EventBusRabbitMq> Create(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName,
+    public static async Task<EventBusRabbitMq> Create(IConnectionFactory connectionFactory, ILogger<EventBusRabbitMq> logger, IServiceProvider serviceProvider, string exchangeName,
         EventBusMetrics metrics)
     {
-        var eventBus = new EventBusRabbitMq(persistentConnection, logger, serviceProvider, exchangeName, metrics);
+        var connectionRetryPolicy = Policy.Handle<BrokerUnreachableException>()
+            .Or<SocketException>()
+            .Or<AlreadyClosedException>()
+            .WaitAndRetryAsync(CONNECTION_RETRY_COUNT,
+                _ => 2.Seconds(),
+                (ex, _) => logger.RetryingInitialConnect(ex.Message));
+
+        var connection = await connectionRetryPolicy.ExecuteAsync(() => connectionFactory.CreateConnectionAsync());
+
+        var eventBus = new EventBusRabbitMq(connection, logger, serviceProvider, exchangeName, metrics);
 
         await eventBus.Init();
 
@@ -65,16 +93,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private async Task Init()
     {
-        await ConnectToRabbitMq();
         await EnsureExchangeExists(_exchangeName);
         await EnsureExchangeExists(_deadLetterExchangeName, "fanout");
         await EnsureDeadLetterQueueExists();
-    }
-
-    private async Task ConnectToRabbitMq()
-    {
-        if (!_persistentConnection.IsConnected)
-            await _persistentConnection.Connect();
     }
 
     private async Task EnsureExchangeExists(string exchangeName, string exchangeType = "direct")
@@ -164,7 +185,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     private async Task<AsyncEventingBasicConsumer> CreateConsumer<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var channel = await _persistentConnection.CreateChannel();
+        var channel = await _connection.CreateChannelAsync();
         var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
@@ -267,7 +288,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public async Task StartConsuming(CancellationToken cancellationToken)
     {
-        foreach (var subscription in _subscriptionManager.Subscriptions)
+        foreach (var subscription in _subscriptionManager)
         {
             await subscription.Consumer.Channel.BasicConsumeAsync(subscription.QueueName, autoAck: false, subscription.Consumer, cancellationToken);
         }
@@ -275,7 +296,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        foreach (var consumerData in _subscriptionManager.Subscriptions)
+        foreach (var consumerData in _subscriptionManager)
         {
             var channel = consumerData.Consumer.Channel;
             foreach (var tag in consumerData.Consumer.ConsumerTags)
@@ -302,6 +323,34 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
 internal static partial class EventBusRabbitMqLogs
 {
+    [LoggerMessage(
+        EventId = 746534,
+        EventName = "EventBusRabbitMQ.RetryingInitialConnect",
+        Level = LogLevel.Warning,
+        Message = "There was an error while trying to initially connect to RabbitMQ: '{errorMessage}'. Attempting to retry...")]
+    public static partial void RetryingInitialConnect(this ILogger logger, string errorMessage);
+
+    [LoggerMessage(
+        EventId = 900001,
+        EventName = "EventBusRabbitMQ.ConnectionShutdown",
+        Level = LogLevel.Error,
+        Message = "A shutdown of the connection was initiated. Initiator: {shutdownInitiator}, ReplyCode: {replyCode}, ReplyText: {replyText}")]
+    public static partial void ConnectionShutdown(this ILogger logger, ShutdownInitiator shutdownInitiator, ushort replyCode, string replyText);
+
+    [LoggerMessage(
+        EventId = 900002,
+        EventName = "EventBusRabbitMQ.ConnectionRecoveryError",
+        Level = LogLevel.Warning,
+        Message = "An error occurred while trying to recover the connection: {errorMessage}")]
+    public static partial void ConnectionRecoveryError(this ILogger logger, string errorMessage);
+
+    [LoggerMessage(
+        EventId = 900003,
+        EventName = "EventBusRabbitMQ.RecoverySucceeded",
+        Level = LogLevel.Information,
+        Message = "The connection was successfully recovered.")]
+    public static partial void RecoverySucceeded(this ILogger logger);
+
     [LoggerMessage(
         EventId = 411326,
         EventName = "EventBusRabbitMQ.ErrorOnPublish",
