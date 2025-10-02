@@ -133,6 +133,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
         _processors.Add(processor);
     }
 
+    public bool IsConnected => !_client.IsClosed;
+
     private async Task EnsureSubscriptionExists(string subscriptionName)
     {
         if (!await _adminClient.SubscriptionExistsAsync(TOPIC_NAME, subscriptionName))

@@ -319,6 +319,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         return $"{moduleName}.{typeof(TEvent).GetEventName()}";
     }
+
+    public bool IsConnected => _connection.IsOpen;
 }
 
 internal static partial class EventBusRabbitMqLogs

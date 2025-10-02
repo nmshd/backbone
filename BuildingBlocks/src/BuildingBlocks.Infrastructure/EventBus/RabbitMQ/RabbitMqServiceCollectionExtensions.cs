@@ -10,6 +10,8 @@ public static class RabbitMqServiceCollectionExtensions
 {
     public static void AddRabbitMq(this IServiceCollection services, RabbitMqConfiguration configuration)
     {
+        services.AddHealthChecks().AddCheck<EventBusHealthCheck>("EventBus");
+
         services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
         {
             var connectionFactory = new ConnectionFactory
