@@ -115,6 +115,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         _subscriptions.Add(new Subscription(subscriberClient, typeof(T), typeof(TH)));
     }
 
+    // We currently don't know how to properly implement this for Pub/Sub. So for now, we just return true.
+    public bool IsConnected => true;
+
     private async Task EnsureSubscriptionExists(SubscriptionName subscriptionName, string eventName)
     {
         try

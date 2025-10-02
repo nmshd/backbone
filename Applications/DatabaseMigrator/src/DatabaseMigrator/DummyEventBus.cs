@@ -24,4 +24,6 @@ public class DummyEventBus : IEventBus
     {
         return Task.CompletedTask;
     }
+
+    public bool IsConnected => true;
 }

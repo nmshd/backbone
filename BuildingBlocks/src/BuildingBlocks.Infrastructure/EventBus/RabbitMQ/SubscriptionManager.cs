@@ -1,8 +1,9 @@
-﻿using RabbitMQ.Client.Events;
+﻿using System.Collections;
+using RabbitMQ.Client.Events;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
-public class SubscriptionManager
+public class SubscriptionManager : IEnumerable<Subscription>
 {
     private readonly IList<Subscription> _subscriptions = [];
 
@@ -11,5 +12,13 @@ public class SubscriptionManager
         _subscriptions.Add(new Subscription(consumer, queueName));
     }
 
-    public IReadOnlyList<Subscription> Subscriptions => _subscriptions.AsReadOnly();
+    public IEnumerator<Subscription> GetEnumerator()
+    {
+        return _subscriptions.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
