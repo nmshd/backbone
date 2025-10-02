@@ -19,4 +19,6 @@ public interface IEventBus
     Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>;
+
+    bool IsConnected { get; }
 }
