@@ -13,7 +13,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 public class DefaultRabbitMqPersistentConnection
     : IRabbitMqPersistentConnection
 {
-    private const int CONNECTION_RETRY_COUNT = 5;
+    private const int CONNECTION_RETRY_COUNT = int.MaxValue;
 
     private readonly SemaphoreSlim _semaphore = new(1);
     private readonly IConnectionFactory _connectionFactory;
@@ -67,12 +67,14 @@ public class DefaultRabbitMqPersistentConnection
     {
         _logger.LogInformation("RabbitMQ Client is trying to connect");
 
-        await _connectionRetryPolicy.ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync());
-
-        if (!IsConnected)
+        try
         {
-            _logger.LogCritical("FATAL ERROR: RabbitMQ connections could not be created and opened");
-            throw new Exception("RabbitMQ connections could not be created and opened");
+            await _connectionRetryPolicy.ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync());
+        }
+        catch (Exception ex)
+        {
+            _logger.ConnectionImpossible(ex);
+            throw;
         }
 
         _connection!.ConnectionShutdownAsync += OnConnectionShutdown;
@@ -151,10 +153,10 @@ internal static partial class DefaultRabbitMqPersistentConnectionLogs
 
     [LoggerMessage(
         EventId = 143946,
-        EventName = "DefaultRabbitMqPersistentConnection.ConnectionThrewAnException",
-        Level = LogLevel.Warning,
-        Message = "A RabbitMQ connection threw an exception. Trying to re-connect...")]
-    public static partial void ConnectionThrewAnException(this ILogger logger);
+        EventName = "DefaultRabbitMqPersistentConnection.ConnectionImpossible",
+        Level = LogLevel.Critical,
+        Message = "It was not possible to connect to RabbitMQ. No more attempts will be made.")]
+    public static partial void ConnectionImpossible(this ILogger logger, Exception exception);
 
     [LoggerMessage(
         EventId = 454129,
