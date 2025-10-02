@@ -116,7 +116,6 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
     }
 
     // We currently don't know how to properly implement this for Pub/Sub. So for now, we just return true.
-    // See: https://cloud.google.com/pubsub/docs/health-checks
     public bool IsConnected => true;
 
     private async Task EnsureSubscriptionExists(SubscriptionName subscriptionName, string eventName)
