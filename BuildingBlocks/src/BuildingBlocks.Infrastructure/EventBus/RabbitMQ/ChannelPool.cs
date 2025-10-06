@@ -5,16 +5,16 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class ChannelPool : ObjectPool<IChannel>, IDisposable
 {
-    private readonly IRabbitMqPersistentConnection _connection;
+    private readonly IConnection _connection;
 
-    public ChannelPool(IRabbitMqPersistentConnection connection)
+    public ChannelPool(IConnection connection)
     {
         _connection = connection;
     }
 
     protected override async Task<IChannel> CreateObject()
     {
-        return await _connection.CreateChannel();
+        return await _connection.CreateChannelAsync();
     }
 
     public void Dispose()
