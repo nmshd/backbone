@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.ConsumerApi.Configuration;
@@ -124,10 +125,5 @@ public class ConsumerApiConfiguration
                 public string NoLinkText { get; init; } = "This app is not officially available in this store yet. Please check back later.";
             }
         }
-    }
-
-    public class SwaggerUiConfiguration
-    {
-        public bool Enabled { get; init; }
     }
 }

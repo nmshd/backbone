@@ -2,7 +2,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
@@ -15,11 +14,7 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
@@ -168,157 +163,11 @@ public static class IServiceCollectionExtensions
     }
 
 
-    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services, ConsumerApiConfiguration.SwaggerUiConfiguration swaggerUi)
-    {
-        if (!swaggerUi.Enabled)
-            return services;
-
-        services.AddEndpointsApiExplorer();
-
-        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-
-        services.AddSwaggerGen(options =>
-        {
-            options.OperationFilter<SwaggerDefaultValues>();
-
-            options.CustomSchemaIds(t =>
-            {
-                static string GetReadableName(Type type)
-                {
-                    if (!type.IsGenericType)
-                    {
-                        return type.Name
-                            .Replace("DTO", string.Empty)
-                            .Replace("Command", "Request")
-                            .Replace("Query", "Request");
-                    }
-
-                    var typeName = type.Name
-                        .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
-                        .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
-                    var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
-                    return name;
-                }
-
-                return GetReadableName(t);
-            });
-
-            options.AddSecurityDefinition(
-                "oauth2",
-                new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Password = new OpenApiOAuthFlow
-                        {
-                            TokenUrl = new Uri("/connect/token", UriKind.Relative)
-                        }
-                    }
-                });
-
-            options.AddSecurityRequirement(
-                new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "oauth2", //The name of the previously defined security scheme.
-                                Type = ReferenceType.SecurityScheme
-                            }
-                        },
-                        new List<string>()
-                    }
-                });
-        });
-
-        services.AddApiVersioning().AddApiExplorer(options =>
-        {
-            // The specified format code will format the version as "'v'major[.minor][-status]"
-            options.GroupNameFormat = "'v'VVV";
-            options.SubstituteApiVersionInUrl = true;
-        });
-
-        return services;
-    }
-
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 
         return services;
-    }
-}
-
-public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
-{
-    private readonly IApiVersionDescriptionProvider _provider;
-
-    public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider)
-    {
-        _provider = provider;
-    }
-
-    public void Configure(SwaggerGenOptions options)
-    {
-        foreach (var description in _provider.ApiVersionDescriptions)
-        {
-            options.SwaggerDoc(
-                description.GroupName,
-                new OpenApiInfo
-                {
-                    Title = "Consumer API",
-                    Version = description.ApiVersion.ToString(),
-                });
-        }
-    }
-}
-
-public class SwaggerDefaultValues : IOperationFilter
-{
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
-    {
-        var apiDescription = context.ApiDescription;
-
-        operation.Deprecated |= apiDescription.IsDeprecated();
-
-        foreach (var responseType in context.ApiDescription.SupportedResponseTypes)
-        {
-            var responseKey = responseType.IsDefaultResponse
-                ? "default"
-                : responseType.StatusCode.ToString();
-            var response = operation.Responses[responseKey];
-
-            foreach (var contentType in response.Content.Keys)
-            {
-                if (responseType.ApiResponseFormats.All(x => x.MediaType != contentType))
-                {
-                    response.Content.Remove(contentType);
-                }
-            }
-        }
-
-        if (operation.Parameters == null)
-        {
-            return;
-        }
-
-        foreach (var parameter in operation.Parameters)
-        {
-            var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
-
-            parameter.Description ??= description.ModelMetadata.Description;
-
-            if (parameter.Schema.Default == null && description.DefaultValue != null)
-            {
-                var json = JsonSerializer.Serialize(description.DefaultValue, description.ModelMetadata.ModelType);
-                parameter.Schema.Default = OpenApiAnyFactory.CreateFromJson(json);
-            }
-
-            parameter.Required |= description.IsRequired;
-        }
     }
 }
