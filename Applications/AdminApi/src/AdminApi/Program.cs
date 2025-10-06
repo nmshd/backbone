@@ -86,7 +86,7 @@ static WebApplication CreateApp(string[] args)
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
-    Configure(app);
+    Configure(app, app.Services.GetRequiredService<IOptions<AdminApiConfiguration>>().Value);
 
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
         app.MigrateDbContext<AdminApiDbContext>();
@@ -111,8 +111,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
+        .AddCustomSwaggerUi(parsedConfiguration.SwaggerUi, "Admin API")
         .AddHealthChecks();
-
 
     services
         .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
@@ -154,8 +154,11 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     webApplicationBuilder.Configuration.AddCommandLine(strings);
 }
 
-static void Configure(WebApplication app)
+static void Configure(WebApplication app, AdminApiConfiguration configuration)
 {
+    if (configuration.SwaggerUi.Enabled)
+        app.UseCustomSwaggerUi();
+
     app.MapPrometheusScrapingEndpoint();
 
     // the following headers are necessary to run the application in webassembly mode
@@ -172,8 +175,6 @@ static void Configure(WebApplication app)
         .UseMiddleware<ResponseDurationMiddleware>()
         .UseMiddleware<TraceIdMiddleware>()
         .UseMiddleware<CorrelationIdMiddleware>();
-
-    var configuration = app.Services.GetRequiredService<IOptions<AdminApiConfiguration>>().Value;
 
     app.UseSerilogRequestLogging(opts =>
     {
