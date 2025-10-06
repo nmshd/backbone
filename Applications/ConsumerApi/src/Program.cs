@@ -188,9 +188,9 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
         {
             options.RoutePrefix = "docs";
 
-            options.SwaggerEndpoint("/docs/v2/openapi.json", "vX");
             // build a swagger endpoint for each discovered API version
-            foreach (var description in app.DescribeApiVersions())
+            // we reverse the order so that the highest version is shown first
+            foreach (var description in app.DescribeApiVersions().Reverse())
             {
                 var url = $"/docs/{description.GroupName}/openapi.json";
                 var name = description.GroupName.ToUpperInvariant();
