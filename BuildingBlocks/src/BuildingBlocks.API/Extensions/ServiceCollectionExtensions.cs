@@ -155,8 +155,10 @@ public static class ServiceCollectionExtensions
                 return GetReadableName(t);
             });
 
+            const string securityDefinitionName = "oauth2";
+
             options.AddSecurityDefinition(
-                "oauth2",
+                securityDefinitionName,
                 new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -177,7 +179,7 @@ public static class ServiceCollectionExtensions
                         {
                             Reference = new OpenApiReference
                             {
-                                Id = "oauth2", //The name of the previously defined security scheme.
+                                Id = securityDefinitionName,
                                 Type = ReferenceType.SecurityScheme
                             }
                         },

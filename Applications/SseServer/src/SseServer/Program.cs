@@ -121,9 +121,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 static void Configure(WebApplication app, Configuration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
-    {
         app.UseCustomSwaggerUi();
-    }
 
     app.MapPrometheusScrapingEndpoint();
 

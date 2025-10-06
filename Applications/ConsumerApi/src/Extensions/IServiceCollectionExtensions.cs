@@ -162,7 +162,6 @@ public static class IServiceCollectionExtensions
         return services;
     }
 
-
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>

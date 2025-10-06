@@ -12,8 +12,8 @@ public static class WebApplicationExtensions
         {
             options.RoutePrefix = "docs";
 
-            // build a swagger endpoint for each discovered API version
-            // we reverse the order so that the highest version is shown first
+            // Build a endpoint for serving the openapi documents for each discovered API version
+            // We reverse the order so that the highest version is shown first
             foreach (var description in app.DescribeApiVersions().Reverse())
             {
                 var url = $"/docs/{description.GroupName}/openapi.json";
