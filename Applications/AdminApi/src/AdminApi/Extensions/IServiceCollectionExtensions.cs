@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
 using Backbone.AdminApi.DTOs;
@@ -58,6 +59,13 @@ public static class IServiceCollectionExtensions
                 options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
             });
+
+        services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            })
+            .AddMvc();
 
         if (configuration.Cors != null)
         {

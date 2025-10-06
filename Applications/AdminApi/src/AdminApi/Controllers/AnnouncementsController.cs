@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.API.Mvc;
+﻿using Backbone.AdminApi.Versions;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
 using Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
@@ -11,8 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("ApiKey")]
+[V1]
 public class AnnouncementsController : ApiControllerBase
 {
     public AnnouncementsController(IMediator mediator) : base(mediator)

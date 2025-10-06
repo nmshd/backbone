@@ -1,3 +1,4 @@
+using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -20,8 +21,9 @@ using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Application.Identities.Qu
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("ApiKey")]
+[V1]
 public class IdentitiesController : ApiControllerBase
 {
     public IdentitiesController(IMediator mediator) : base(mediator)

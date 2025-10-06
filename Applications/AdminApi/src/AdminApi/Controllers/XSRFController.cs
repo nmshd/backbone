@@ -1,11 +1,13 @@
+using Backbone.AdminApi.Versions;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/xsrf")]
+[Route("api/v{v:apiVersion}/xsrf")]
 [Authorize("ApiKey")]
+[V1]
 public class XsrfController : ControllerBase
 {
     [HttpGet]
