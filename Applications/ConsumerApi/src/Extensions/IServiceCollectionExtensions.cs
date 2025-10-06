@@ -2,6 +2,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
@@ -14,8 +15,11 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
@@ -171,7 +175,9 @@ public static class IServiceCollectionExtensions
 
         services.AddEndpointsApiExplorer();
 
-        services.AddSwaggerGen(c =>
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
+        services.AddSwaggerGen(options =>
         {
             options.OperationFilter<SwaggerDefaultValues>();
 
@@ -244,5 +250,75 @@ public static class IServiceCollectionExtensions
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
 
         return services;
+    }
+}
+
+public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+{
+    private readonly IApiVersionDescriptionProvider _provider;
+
+    public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider)
+    {
+        _provider = provider;
+    }
+
+    public void Configure(SwaggerGenOptions options)
+    {
+        foreach (var description in _provider.ApiVersionDescriptions)
+        {
+            options.SwaggerDoc(
+                description.GroupName,
+                new OpenApiInfo
+                {
+                    Title = "Consumer API",
+                    Version = description.ApiVersion.ToString(),
+                });
+        }
+    }
+}
+
+public class SwaggerDefaultValues : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        var apiDescription = context.ApiDescription;
+
+        operation.Deprecated |= apiDescription.IsDeprecated();
+
+        foreach (var responseType in context.ApiDescription.SupportedResponseTypes)
+        {
+            var responseKey = responseType.IsDefaultResponse
+                ? "default"
+                : responseType.StatusCode.ToString();
+            var response = operation.Responses[responseKey];
+
+            foreach (var contentType in response.Content.Keys)
+            {
+                if (responseType.ApiResponseFormats.All(x => x.MediaType != contentType))
+                {
+                    response.Content.Remove(contentType);
+                }
+            }
+        }
+
+        if (operation.Parameters == null)
+        {
+            return;
+        }
+
+        foreach (var parameter in operation.Parameters)
+        {
+            var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
+
+            parameter.Description ??= description.ModelMetadata.Description;
+
+            if (parameter.Schema.Default == null && description.DefaultValue != null)
+            {
+                var json = JsonSerializer.Serialize(description.DefaultValue, description.ModelMetadata.ModelType);
+                parameter.Schema.Default = OpenApiAnyFactory.CreateFromJson(json);
+            }
+
+            parameter.Required |= description.IsRequired;
+        }
     }
 }
