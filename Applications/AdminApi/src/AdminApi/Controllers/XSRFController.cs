@@ -7,6 +7,7 @@ namespace Backbone.AdminApi.Controllers;
 
 [Route("api/v{v:apiVersion}/xsrf")]
 [Authorize("ApiKey")]
+[ApiController]
 [V1]
 public class XsrfController : ControllerBase
 {

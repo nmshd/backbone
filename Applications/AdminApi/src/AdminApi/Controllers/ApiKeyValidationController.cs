@@ -7,6 +7,7 @@ namespace Backbone.AdminApi.Controllers;
 
 [Route("api/v{v:apiVersion}/ValidateApiKey")]
 [Authorize("ApiKey")]
+[ApiController]
 [V1]
 public class ApiKeyValidationController : ControllerBase
 {
