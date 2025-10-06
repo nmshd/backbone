@@ -86,24 +86,12 @@ public static class IServiceCollectionExtensions
                 policy.RequireAuthenticatedUser();
             });
 
-        var apiVersioningBuilder = services.AddApiVersioning(options =>
+        services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
             })
             .AddMvc();
-
-        if (configuration.SwaggerUi.Enabled)
-        {
-            apiVersioningBuilder
-                .AddApiExplorer(options =>
-                {
-                    // The specified format code will format the version as "'v'major[.minor][-status]"
-                    options.GroupNameFormat = "'v'VVV";
-
-                    options.SubstituteApiVersionInUrl = true;
-                });
-        }
 
         if (configuration.Cors != null)
         {
@@ -185,7 +173,9 @@ public static class IServiceCollectionExtensions
 
         services.AddSwaggerGen(c =>
         {
-            c.CustomSchemaIds(t =>
+            options.OperationFilter<SwaggerDefaultValues>();
+
+            options.CustomSchemaIds(t =>
             {
                 static string GetReadableName(Type type)
                 {
@@ -207,7 +197,7 @@ public static class IServiceCollectionExtensions
                 return GetReadableName(t);
             });
 
-            c.AddSecurityDefinition(
+            options.AddSecurityDefinition(
                 "oauth2",
                 new OpenApiSecurityScheme
                 {
@@ -221,7 +211,7 @@ public static class IServiceCollectionExtensions
                     }
                 });
 
-            c.AddSecurityRequirement(
+            options.AddSecurityRequirement(
                 new OpenApiSecurityRequirement
                 {
                     {
@@ -236,6 +226,13 @@ public static class IServiceCollectionExtensions
                         new List<string>()
                     }
                 });
+        });
+
+        services.AddApiVersioning().AddApiExplorer(options =>
+        {
+            // The specified format code will format the version as "'v'major[.minor][-status]"
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
         });
 
         return services;
