@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Docs;
 using Backbone.ConsumerApi.Sdk.Endpoints.FeatureFlags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities;
@@ -46,6 +47,7 @@ public class Client
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
+        Docs = new DocsEndpoint(httpClient);
         Files = new FilesEndpoint(endpointClient);
         FeatureFlags = new FeatureFlagsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
@@ -80,6 +82,7 @@ public class Client
     public SyncRunsEndpoint SyncRuns { get; }
     public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
+    public DocsEndpoint Docs { get; set; }
 
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
