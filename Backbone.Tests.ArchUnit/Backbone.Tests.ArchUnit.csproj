@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="[12.5.0]" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.14.1]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.0.0]" />
         <PackageReference Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.12.3]" />
         <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
