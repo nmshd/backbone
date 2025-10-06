@@ -14,8 +14,8 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.0.0]" />
         <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="[11.5.1]" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
-        <PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.0.3]" />
-        <PackageReference Include="Reqnroll.xUnit" Version="[3.0.3]">
+        <PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.1.1]" />
+        <PackageReference Include="Reqnroll.xUnit" Version="[3.1.1]">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="xunit" Version="[2.9.3]">
