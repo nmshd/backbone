@@ -76,7 +76,7 @@ static WebApplication CreateApp(string[] args)
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
-    Configure(app);
+    Configure(app, app.Services.GetRequiredService<IOptions<Configuration>>().Value);
 
     return app;
 }
@@ -96,6 +96,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddSingleton<IEventQueue, EventQueue>();
 
     services.AddCustomAspNetCore(parsedConfiguration);
+    services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi, "SSE Server");
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
@@ -117,8 +118,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.Configure(parsedConfiguration.SseServer);
 }
 
-static void Configure(WebApplication app)
+static void Configure(WebApplication app, Configuration configuration)
 {
+    if (configuration.SwaggerUi.Enabled)
+        app.UseCustomSwaggerUi();
+
     app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>

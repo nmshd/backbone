@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Backbone.ConsumerApi.Configuration;
@@ -7,6 +8,9 @@ public class ConsumerApiConfiguration
 {
     [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
+
+    [Required]
+    public SwaggerUiConfiguration SwaggerUi { get; init; } = new();
 
     public CorsConfiguration? Cors { get; init; }
 

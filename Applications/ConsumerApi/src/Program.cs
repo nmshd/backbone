@@ -99,7 +99,7 @@ static WebApplication CreateApp(string[] args)
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
-    Configure(app);
+    Configure(app, app.Services.GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value);
 
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
@@ -162,7 +162,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomAspNetCore(parsedBackboneConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication);
+        .AddCustomOpenIddict(parsedBackboneConfiguration.Authentication)
+        .AddCustomSwaggerUi(parsedBackboneConfiguration.SwaggerUi, "Consumer API");
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -178,8 +179,11 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddHttpUserAgentParser();
 }
 
-static void Configure(WebApplication app)
+static void Configure(WebApplication app, ConsumerApiConfiguration configuration)
 {
+    if (configuration.SwaggerUi.Enabled)
+        app.UseCustomSwaggerUi();
+
     app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>

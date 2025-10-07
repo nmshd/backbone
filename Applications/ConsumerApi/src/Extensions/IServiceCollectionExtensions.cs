@@ -86,12 +86,11 @@ public static class IServiceCollectionExtensions
             });
 
         services.AddApiVersioning(options =>
-        {
-            options.DefaultApiVersion = new ApiVersion(1);
-            options.ReportApiVersions = true;
-            options.AssumeDefaultVersionWhenUnspecified = true;
-            options.ApiVersionReader = new UrlSegmentApiVersionReader();
-        }).AddMvc();
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            })
+            .AddMvc();
 
         if (configuration.Cors != null)
         {

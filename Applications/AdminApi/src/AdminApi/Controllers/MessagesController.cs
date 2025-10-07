@@ -1,5 +1,6 @@
 ﻿using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -16,8 +17,9 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("ApiKey")]
+[V1]
 public class MessagesController : ApiControllerBase
 {
     private readonly AdminApiDbContext _adminUiDbContext;

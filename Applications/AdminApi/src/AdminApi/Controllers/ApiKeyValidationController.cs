@@ -1,11 +1,14 @@
 using Backbone.AdminApi.Authentication;
+using Backbone.AdminApi.Versions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/ValidateApiKey")]
+[Route("api/v{v:apiVersion}/ValidateApiKey")]
 [Authorize("ApiKey")]
+[ApiController]
+[V1]
 public class ApiKeyValidationController : ControllerBase
 {
     [HttpPost]

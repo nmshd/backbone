@@ -1,3 +1,4 @@
+using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.Modules.Quotas.Application.Metrics.Queries.ListMetrics;
@@ -7,8 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.AdminApi.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("ApiKey")]
+[V1]
 public class MetricsController : ApiControllerBase
 {
     public MetricsController(IMediator mediator) : base(mediator)

@@ -4,6 +4,7 @@ using Backbone.AdminApi.Sdk.Endpoints.Announcements;
 using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
 using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
+using Backbone.AdminApi.Sdk.Endpoints.Docs;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
 using Backbone.AdminApi.Sdk.Endpoints.Messages;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
@@ -29,6 +30,7 @@ public class Client
         ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
         Announcements = new AnnouncementsEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);
+        Docs = new DocsEndpoint(httpClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Metrics = new MetricsEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
@@ -41,13 +43,13 @@ public class Client
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
     public AnnouncementsEndpoint Announcements { get; }
     public ClientsEndpoint Clients { get; }
+    public DocsEndpoint Docs { get; }
     public IdentitiesEndpoint Identities { get; }
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
     public ChallengesEndpoint Challenges { get; }
     public MessagesEndpoint Messages { get; }
-
     public TokensEndpoint Tokens { get; }
 
     public static Client Create(string baseUrl, string apiKey)

@@ -30,20 +30,20 @@ public class HttpResponseEnvelopeResult<T> : HttpResponseEnvelope
 
 public class PagedHttpResponseEnvelope<T> : HttpResponseEnvelopeResult<IEnumerable<T>>
 {
-    public PagedHttpResponseEnvelope(IEnumerable<T> result, PaginationData paginationData) : base(result)
+    public PagedHttpResponseEnvelope(IEnumerable<T> result, PagedHttpResponseEnvelopePaginationData paginationData) : base(result)
     {
         Pagination = paginationData;
     }
 
-    public PaginationData Pagination { get; set; }
+    public PagedHttpResponseEnvelopePaginationData Pagination { get; set; }
+}
 
-    public class PaginationData
-    {
-        public int PageNumber { get; set; }
-        public int? PageSize { get; set; }
-        public int TotalPages { get; set; }
-        public int TotalRecords { get; set; }
-    }
+public class PagedHttpResponseEnvelopePaginationData
+{
+    public int PageNumber { get; set; }
+    public int? PageSize { get; set; }
+    public int TotalPages { get; set; }
+    public int TotalRecords { get; set; }
 }
 
 public class HttpResponseEnvelopeError : HttpResponseEnvelope
