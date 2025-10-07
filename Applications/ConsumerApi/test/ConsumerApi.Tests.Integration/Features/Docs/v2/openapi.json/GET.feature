@@ -1,7 +1,7 @@
 ﻿@Integration
-Feature: GET /docs/v1/openapi.json
+Feature: GET /docs/v2/openapi.json
 
-User gets openapi.json v1
+User gets openapi.json v2
 
     Scenario: Getting Swagger UI v2
         When a GET request is sent to the /docs/v2/openapi.json endpoint
