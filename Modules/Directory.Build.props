@@ -10,11 +10,6 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
-    <!-- TODO: remove this PropertyGroup once the following Rider bug was fixed: https://youtrack.jetbrains.com/issue/RIDER-119965/NuGetAuditSuppress-ignored-->
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <NuGetAuditMode>direct</NuGetAuditMode>
-    </PropertyGroup>
-
     <ItemGroup>
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
