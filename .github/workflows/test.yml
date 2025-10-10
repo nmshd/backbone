@@ -309,6 +309,7 @@ jobs:
           NMSHD_TEST_ADMIN_API_KEY: test
           APPSETTINGS_OVERRIDE_LOCATION: ${{ github.workspace }}/backbone/.ci/appsettings.override.${{matrix.database}}.docker.json
           BACKBONE_VERSION: 0.0.1
+          BACKBONE_NETWORK: backbone
         run: npm run test:local:lokijs
 
       - name: Save Docker Logs

@@ -18,7 +18,7 @@ public static class RabbitMqServiceCollectionExtensions
             {
                 HostName = configuration.HostName,
                 Port = configuration.Port,
-                AutomaticRecoveryEnabled = true,
+                AutomaticRecoveryEnabled = true
             };
 
             if (configuration.EnableSsl)
