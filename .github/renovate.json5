@@ -7,6 +7,13 @@
     additionalReviewers: ["erbenjak"],
     packageRules: [
         {
+            groupName: "dont-update-mediatr-due-to-license-issues",
+            matchDatasources: ["nuget"],
+            matchUpdateTypes: ["major"],
+            matchPackageNames: ["MediatR"]
+        },
+
+        {
             // dart seems to have problems when pinning to a specific version, so we use the "auto" strategy for dart packages
             matchDatasources: ["dart"],
             rangeStrategy: "auto"
@@ -95,11 +102,6 @@
         {
             groupName: "minor-updates-kubernetes-api",
             matchDatasources: ["kubernetes-api"],
-            matchUpdateTypes: ["minor"]
-        },
-        {
-            groupName: "minor-updates-terraform-and-provider",
-            matchDatasources: ["terraform-module", "terraform-provider"],
             matchUpdateTypes: ["minor"]
         }
     ]
