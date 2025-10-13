@@ -6,7 +6,7 @@
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
         <PackageReference Include="Azure.Storage.Blobs" Version="[12.25.1]" />
         <PackageReference Include="EFCore.BulkExtensions" Version="[9.0.2]" />
-        <PackageReference Include="Google.Cloud.PubSub.V1" Version="[3.27.0]" />
+        <PackageReference Include="Google.Cloud.PubSub.V1" Version="[3.28.0]" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="[9.0.9]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.9]" />
