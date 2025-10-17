@@ -23,7 +23,7 @@ public class FilesRepositoryTests : AbstractTestsBase
         var repository = CreateFilesRepository(files, mockBlobStorage);
 
         // Act
-        await repository.DeleteFilesOfIdentity(File.WasCreatedBy(identityAddress), CancellationToken.None);
+        await repository.DeleteFilesOfIdentity(File.IsOwnedBy(identityAddress), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockBlobStorage.Remove(A<string>._, A<string>.That.Matches(fileId => files.Any(f => f.Id == fileId)))).MustHaveHappenedANumberOfTimesMatching(x => x == files.Count);
