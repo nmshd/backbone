@@ -126,7 +126,7 @@ public class File : Entity
 
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress.ToString();
+        return i => i.Owner == identityAddress.ToString();
     }
 
     public FileOwnershipToken RegenerateOwnershipToken(IdentityAddress activeIdentity)
