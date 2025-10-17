@@ -121,7 +121,7 @@ public class ActualDeletionWorker : IHostedService
                 _logger.LogError(ex, "Failed to execute {identityDeleterName}.", identityDeleter);
                 await _mediator.Send(new HandleErrorDuringIdentityDeletionCommand { IdentityAddress = identityAddress, ErrorMessage = ex.Message });
 
-                // as soon as there is one error, we stop the deletion process for this identity, because otherwise things might get out of order
+                // as soon as there is one error, we stop the deletion of this identity, because otherwise the deletion process will get deleted even though not all data has been deleted
                 return;
             }
         }
