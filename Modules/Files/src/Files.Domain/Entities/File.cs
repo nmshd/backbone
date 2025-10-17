@@ -129,6 +129,11 @@ public class File : Entity
         return i => i.Owner == identityAddress.ToString();
     }
 
+    public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return i => i.CreatedBy == identityAddress.ToString();
+    }
+
     public FileOwnershipToken RegenerateOwnershipToken(IdentityAddress activeIdentity)
     {
         if (Owner != activeIdentity)

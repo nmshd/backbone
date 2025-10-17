@@ -139,4 +139,9 @@ public class FilesRepository : IFilesRepository
 
         return await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
     }
+
+    public async Task AnonymizeCreatedByOfFiles(Expression<Func<File, bool>> filter, IdentityAddress anonymizedAddress, CancellationToken cancellationToken)
+    {
+        await _readOnlyFiles.Where(filter).ExecuteUpdateAsync(f => f.SetProperty(x => x.CreatedBy, anonymizedAddress), cancellationToken);
+    }
 }
