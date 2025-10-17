@@ -11,6 +11,7 @@ public interface IFilesRepository
 {
     Task<File?> Get(FileId id, CancellationToken cancellationToken, bool track = false, bool fillContent = true);
     Task<DbPaginationResult<File>> ListFilesByCreator(IEnumerable<FileId> fileIds, IdentityAddress creatorAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task AnonymizeCreatedByOfFiles(Expression<Func<File, bool>> filter, IdentityAddress anonymizedAddress, CancellationToken cancellationToken);
     Task Add(File file, CancellationToken cancellationToken);
     Task Delete(File file, CancellationToken cancellationToken);
     Task DeleteFilesOfIdentity(Expression<Func<File, bool>> filter, CancellationToken cancellationToken);

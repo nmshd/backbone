@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Files.Application.Identities.Commands.AnonymizeCreatedByOfFiles;
 using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 using MediatR;
 
@@ -19,6 +20,7 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteFilesOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeCreatedByOfFilesCommand { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Files");
     }
 }

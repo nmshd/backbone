@@ -112,7 +112,16 @@ public class ActualDeletionWorker : IHostedService
 
         foreach (var identityDeleter in _identityDeleters)
         {
-            await identityDeleter.Delete(identityAddress);
+            try
+            {
+                await identityDeleter.Delete(identityAddress);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to execute {identityDeleterName}.", identityDeleter);
+                // as soon as there is one error, we stop the deletion of this identity, because otherwise the deletion process will get deleted even though not all data has been deleted
+                throw;
+            }
         }
 
         var usernames = identity.Devices.Select(d => d.Username);

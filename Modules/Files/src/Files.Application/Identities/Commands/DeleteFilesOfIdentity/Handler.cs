@@ -15,6 +15,6 @@ public class Handler : IRequestHandler<DeleteFilesOfIdentityCommand>
 
     public async Task Handle(DeleteFilesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _filesRepository.DeleteFilesOfIdentity(WasCreatedBy(request.IdentityAddress), cancellationToken);
+        await _filesRepository.DeleteFilesOfIdentity(IsOwnedBy(request.IdentityAddress), cancellationToken);
     }
 }

@@ -124,6 +124,11 @@ public class File : Entity
     public static Expression<Func<File, bool>> IsNotDeleted =>
         file => file.DeletedAt == null;
 
+    public static Expression<Func<File, bool>> IsOwnedBy(IdentityAddress identityAddress)
+    {
+        return i => i.Owner == identityAddress.ToString();
+    }
+
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
