@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
         <PackageReference Include="Serilog.Exceptions" Version="[8.4.0]" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
         <PackageReference Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />

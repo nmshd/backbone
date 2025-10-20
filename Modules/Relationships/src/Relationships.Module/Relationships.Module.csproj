@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.9]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
         <PackageReference Include="xunit.v3" Version="[3.1.0]">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
