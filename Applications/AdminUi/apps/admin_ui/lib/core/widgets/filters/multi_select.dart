@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 typedef MultiSelectFilterOption = ({String label, String value});
@@ -22,9 +21,9 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
         Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gaps.h8,
         SizedBox(
           width: 250,
           child: DropdownButtonFormField2<String>(

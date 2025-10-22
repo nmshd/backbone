@@ -1,4 +1,3 @@
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -23,9 +22,9 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 4,
         children: [
           Text(context.l10n.theme, style: Theme.of(context).textTheme.bodyLarge),
-          Gaps.h4,
           SegmentedButton(
             showSelectedIcon: false,
             segments: [

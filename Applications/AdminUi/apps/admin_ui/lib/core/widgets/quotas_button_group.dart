@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sn_progress_dialog/enums/progress_types.dart';
@@ -31,6 +30,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
+        spacing: 8,
         children: [
           IconButton(
             icon: Icon(Icons.delete, color: widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null),
@@ -41,7 +41,6 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
             ),
             onPressed: widget.selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
           ),
-          Gaps.w8,
           IconButton.filled(
             icon: const Icon(Icons.add),
             onPressed: () => showAddQuotaDialog(

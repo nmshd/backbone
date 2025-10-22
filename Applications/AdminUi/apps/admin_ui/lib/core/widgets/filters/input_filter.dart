@@ -1,4 +1,3 @@
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
@@ -11,9 +10,9 @@ class InputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
         Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gaps.h8,
         SizedBox(
           width: 180,
           child: TextField(

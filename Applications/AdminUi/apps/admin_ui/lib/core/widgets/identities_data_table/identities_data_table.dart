@@ -1,5 +1,4 @@
 import 'package:data_table_2/data_table_2.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../extensions.dart';
@@ -43,9 +42,9 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       errorBuilder: (error) => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          spacing: 16,
           children: [
             Text(context.l10n.identitiesDataTable_failedToLoadData),
-            Gaps.h16,
             FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
           ],
         ),
