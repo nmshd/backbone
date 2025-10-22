@@ -1,5 +1,4 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,10 +37,11 @@ class _DateFilterState extends State<DateFilter> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
         Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gaps.h8,
         Row(
+          spacing: 8,
           children: [
             DropdownButton<FilterOperator>(
               value: _operator,
@@ -52,7 +52,6 @@ class _DateFilterState extends State<DateFilter> {
               },
               items: FilterOperator.values.toDropdownMenuItems(),
             ),
-            Gaps.w8,
             SizedBox(
               width: 160,
               child: TextField(

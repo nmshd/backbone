@@ -1,4 +1,3 @@
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,9 +12,9 @@ class AppTitle extends StatelessWidget {
 
     final row = Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: 8,
       children: [
         SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
-        Gaps.w8,
         Text.rich(
           TextSpan(
             children: [

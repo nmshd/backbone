@@ -1,5 +1,4 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,10 +22,11 @@ class _NumberFilterState extends State<NumberFilter> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
         Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
-        Gaps.h8,
         Row(
+          spacing: 16,
           children: [
             DropdownButton<FilterOperator>(
               value: _operator,
@@ -37,7 +37,6 @@ class _NumberFilterState extends State<NumberFilter> {
               },
               items: FilterOperator.values.toDropdownMenuItems(),
             ),
-            Gaps.w16,
             SizedBox(
               width: 120,
               child: TextField(

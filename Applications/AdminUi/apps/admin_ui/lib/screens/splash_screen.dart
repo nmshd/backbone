@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:enmeshed_ui_kit/enmeshed_ui_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,9 +31,9 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          spacing: 40,
           children: [
             SvgPicture.asset('assets/logo.svg', width: 200, height: 200),
-            Gaps.h40,
             const SizedBox(width: 300, child: LinearProgressIndicator()),
           ],
         ),
