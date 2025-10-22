@@ -24,7 +24,7 @@ public class FirebaseMessagingFactory
     private FirebaseApp RegisterNewInstance(string appId)
     {
         var serviceAccount = _configuration.GetServiceAccountForAppId(appId);
-        var credential = GoogleCredential.FromJson(serviceAccount);
+        var credential = GoogleCredential.FromServiceAccountCredential(CredentialFactory.FromJson<ServiceAccountCredential>(serviceAccount));
         var firebaseApp = FirebaseApp.Create(new AppOptions { Credential = credential }, appId);
 
         return firebaseApp;

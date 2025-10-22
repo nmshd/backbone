@@ -14,11 +14,11 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
     private readonly StorageClient _storageClient;
     private readonly GoogleCloudStorage _blobStorageUnderTest;
 
-    public GoogleCloudStorageTests(ITestOutputHelper output)
+    public GoogleCloudStorageTests()
     {
         const string authJson = "";
 
-        _storageClient = StorageClient.Create(GoogleCredential.FromJson(authJson));
+        _storageClient = StorageClient.Create(GoogleCredential.FromServiceAccountCredential(CredentialFactory.FromJson<ServiceAccountCredential>(authJson)));
 
         _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, A.Fake<ILogger<GoogleCloudStorage>>());
     }
