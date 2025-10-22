@@ -47,7 +47,7 @@
         {
             // the dart packages in this list are fetched directly from git and therefore don't have a version
             matchDatasources: ["dart"],
-            matchPackageNames: ["window_size", "enmeshed_ui_kit"],
+            matchPackageNames: ["window_size"],
             enabled: false
         },
 
