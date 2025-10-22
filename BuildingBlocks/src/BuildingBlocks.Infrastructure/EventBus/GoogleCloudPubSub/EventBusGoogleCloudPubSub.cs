@@ -51,7 +51,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider;
 
-        _gcpCredentials = connectionInfo.IsEmpty() ? GoogleCredential.GetApplicationDefault() : GoogleCredential.FromJson(connectionInfo);
+        _gcpCredentials = connectionInfo.IsEmpty()
+            ? GoogleCredential.GetApplicationDefault()
+            : GoogleCredential.FromServiceAccountCredential(CredentialFactory.FromJson<ServiceAccountCredential>(connectionInfo));
         _subscriberService = new SubscriberServiceApiClientBuilder { GoogleCredential = _gcpCredentials, EmulatorDetection = EmulatorDetection.EmulatorOrProduction }.Build();
 
         _publisherClient = new PublisherClientBuilder

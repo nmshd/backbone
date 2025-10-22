@@ -15,7 +15,7 @@ public static class GoogleCloudStorageServiceCollectionExtensions
         {
             var storageClient = configuration.ServiceAccountJson.IsNullOrEmpty()
                 ? StorageClient.Create()
-                : StorageClient.Create(GoogleCredential.FromJson(configuration.ServiceAccountJson));
+                : StorageClient.Create(GoogleCredential.FromServiceAccountCredential(CredentialFactory.FromJson<ServiceAccountCredential>(configuration.ServiceAccountJson)));
             return storageClient;
         });
 
