@@ -27,4 +27,4 @@ Log event IDs are random 6-digit numbers and can be generated using `./scripts/l
 
 ## License
 
-[MIT](LICENSE)
+[AGPL-3.0-or-later](LICENSE)
