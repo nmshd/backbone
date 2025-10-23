@@ -8,7 +8,7 @@
         "start": "node src/main.js"
     },
     "author": "",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "dependencies": {
         "csv-parse": "6.1.0"
     },
