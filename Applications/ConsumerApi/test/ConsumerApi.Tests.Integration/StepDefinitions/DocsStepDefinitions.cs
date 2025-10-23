@@ -23,14 +23,6 @@ public class DocsStepDefinitions
         _responseContext.WhenResponse = await client.Docs.GetSwaggerUi();
     }
 
-    [When("^a GET request is sent to the /docs/v1/openapi.json endpoint$")]
-    public async Task WhenAGETRequestIsSentToTheDocsV1OpenApiJsonEndpoint()
-    {
-        var client = _clientPool.Anonymous;
-
-        _responseContext.WhenResponse = await client.Docs.GetOpenApiSpecV1();
-    }
-
     [When("^a GET request is sent to the /docs/v2/openapi.json endpoint$")]
     public async Task WhenAGETRequestIsSentToTheDocsV2OpenApiJsonEndpoint()
     {

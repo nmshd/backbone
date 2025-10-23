@@ -51,9 +51,11 @@
 
     <ItemGroup>
         <UpToDateCheckInput Remove="Features\Identities\Self\DeletionProcess\PUT.feature" />
+        <UpToDateCheckInput Remove="Features\Docs\v1\openapi.json\GET.feature" />
     </ItemGroup>
 
     <ItemGroup>
         <UpToDateCheckBuild Remove="Features\Identities\Self\DeletionProcess\PUT.feature.cs" />
+        <UpToDateCheckBuild Remove="Features\Docs\v1\openapi.json\GET.feature.cs" />
     </ItemGroup>
 </Project>

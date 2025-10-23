@@ -16,11 +16,6 @@ public class DocsEndpoint
         return await GetStringContent("/docs/index.html");
     }
 
-    public async Task<ApiResponse<string>> GetOpenApiSpecV1()
-    {
-        return await GetStringContent("/docs/v1/openapi.json");
-    }
-
     public async Task<ApiResponse<string>> GetOpenApiSpecV2()
     {
         return await GetStringContent("/docs/v2/openapi.json");
