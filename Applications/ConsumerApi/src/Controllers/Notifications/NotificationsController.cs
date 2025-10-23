@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Controllers.Notifications;
 
-[V1]
 [V2]
 [Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

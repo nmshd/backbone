@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Controllers;
 
-[V1]
 [V2]
 [ApiController]
 [Route("api/v{v:apiVersion}/[controller]")]

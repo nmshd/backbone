@@ -17,7 +17,6 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.ConsumerApi.Controllers.Synchronization;
 
-[V1]
 [V2]
 [Route("api/v{v:apiVersion}/[controller]")]
 [Authorize("OpenIddict.Validation.AspNetCore")]

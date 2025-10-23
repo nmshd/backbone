@@ -19,7 +19,6 @@ using OpenIddict.Validation.AspNetCore;
 
 namespace Backbone.ConsumerApi.Controllers.Devices;
 
-[V1]
 [V2]
 [Route("api/v{v:apiVersion}/[controller]")]
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
