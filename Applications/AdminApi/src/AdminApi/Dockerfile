@@ -4,7 +4,7 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.25@sha256:6ea52a02734dd15e943286b048278da1e04eca196a564578d718c7720433dbbe AS chisel
+FROM golang:1.25@sha256:6bac879c5b77e0fc9c556a5ed8920e89dab1709bd510a854903509c828f67f96 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
@@ -117,7 +117,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.35.6@sha256:d268f4fdc50c2d7c55d2f6e5823725db0d424dd6b50502fe4ee0533d5c6afe1f AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.35.6@sha256:156db524674acafe79b67a06ec3e8adbe3265fbb7680af81a7ee35e6d9060fe7 AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
