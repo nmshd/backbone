@@ -332,7 +332,7 @@ public class ExportDatabaseCommand : AdminCliCommand
 
     private async Task ExportTokens(bool includeSensitiveData, ProgressTask progressReporter)
     {
-        var modifications = _adminApiDbContext
+        var tokens = _adminApiDbContext
             .Tokens
             .Select(t => new TokenExport
             {
@@ -351,7 +351,7 @@ public class ExportDatabaseCommand : AdminCliCommand
             })
             .ToAsyncEnumerable();
 
-        await StreamToCSV(modifications, "tokens.csv", progressReporter);
+        await StreamToCSV(tokens, "tokens.csv", progressReporter);
     }
 
     private async Task StreamToCSV<T>(IAsyncEnumerable<T> objects, string filename, ProgressTask progressReporter) where T : notnull
