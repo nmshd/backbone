@@ -339,14 +339,15 @@ public class ExportDatabaseCommand : AdminCliCommand
                 TokenId = includeSensitiveData ? t.Id : "",
                 CreatedAt = t.CreatedAt,
                 CreatedBy = includeSensitiveData ? t.CreatedBy : "",
-                CipherSize = t.Content.Length,
+                CipherSize = t.Content == null ? 0 : t.Content.Length,
                 ExpiresAt = t.ExpiresAt,
                 CreatedByClientName =
+                    t.CreatedBy == null ||
                     _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId) == null
                         ? null
                         : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId)!
                             .DisplayName,
-                CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
+                CreatedByClientId = t.CreatedBy == null ? null : _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
             .ToAsyncEnumerable();
 
