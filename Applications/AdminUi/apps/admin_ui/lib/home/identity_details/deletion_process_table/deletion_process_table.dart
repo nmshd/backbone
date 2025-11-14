@@ -150,9 +150,5 @@ class _RemindersCell extends StatelessWidget {
 }
 
 extension _Reminders on IdentityDeletionProcess {
-  List<DateTime> get gracePeriodReminders => [
-    if (gracePeriodReminder1SentAt != null) gracePeriodReminder1SentAt!,
-    if (gracePeriodReminder2SentAt != null) gracePeriodReminder2SentAt!,
-    if (gracePeriodReminder3SentAt != null) gracePeriodReminder3SentAt!,
-  ];
+  List<DateTime> get gracePeriodReminders => [?gracePeriodReminder1SentAt, ?gracePeriodReminder2SentAt, ?gracePeriodReminder3SentAt];
 }
