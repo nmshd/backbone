@@ -52,22 +52,14 @@ class IdentityOverviewFilterBuilder {
     _filter += '($filter)';
   }
 
-  String _getOperatorString(FilterOperator operator) {
-    switch (operator) {
-      case FilterOperator.equal:
-        return 'eq';
-      case FilterOperator.notEqual:
-        return 'ne';
-      case FilterOperator.greaterThan:
-        return 'gt';
-      case FilterOperator.greaterThanOrEqual:
-        return 'ge';
-      case FilterOperator.lessThan:
-        return 'lt';
-      case FilterOperator.lessThanOrEqual:
-        return 'le';
-    }
-  }
+  String _getOperatorString(FilterOperator operator) => switch (operator) {
+    .equal => 'eq',
+    .notEqual => 'ne',
+    .greaterThan => 'gt',
+    .greaterThanOrEqual => 'ge',
+    .lessThan => 'lt',
+    .lessThanOrEqual => 'le',
+  };
 }
 
 enum FilterOperator {
@@ -76,7 +68,8 @@ enum FilterOperator {
   greaterThan('>'),
   greaterThanOrEqual('>='),
   lessThan('<'),
-  lessThanOrEqual('<=');
+  lessThanOrEqual('<=')
+  ;
 
   final String userFriendlyOperator;
 

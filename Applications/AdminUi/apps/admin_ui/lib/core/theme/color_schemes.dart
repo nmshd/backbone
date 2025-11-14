@@ -28,7 +28,7 @@ ThemeData _generateColorScheme({
   required ThemeExtension<dynamic> customColors,
   bool lightsOut = false,
 }) {
-  assert(!lightsOut || brightness == Brightness.dark, 'lightsOut can only be used with dark theme');
+  assert(!lightsOut || brightness == .dark, 'lightsOut can only be used with dark theme');
 
   final colorScheme = SeedColorScheme.fromSeeds(
     brightness: brightness,

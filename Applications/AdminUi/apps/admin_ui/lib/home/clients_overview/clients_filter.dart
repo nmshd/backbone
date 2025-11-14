@@ -53,25 +53,23 @@ class ClientsFilter {
     final filterDateAtMidnight = DateTime(filterDate.year, filterDate.month, filterDate.day);
 
     return switch (filterOperator) {
-      FilterOperator.equal => clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
-      FilterOperator.lessThan => clientDateAtMidnight.isBefore(filterDateAtMidnight),
-      FilterOperator.greaterThan => clientDateAtMidnight.isAfter(filterDateAtMidnight),
-      FilterOperator.lessThanOrEqual =>
-        clientDateAtMidnight.isBefore(filterDateAtMidnight) || clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
-      FilterOperator.greaterThanOrEqual =>
-        clientDateAtMidnight.isAfter(filterDateAtMidnight) || clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
-      FilterOperator.notEqual => !clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
+      .equal => clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
+      .lessThan => clientDateAtMidnight.isBefore(filterDateAtMidnight),
+      .greaterThan => clientDateAtMidnight.isAfter(filterDateAtMidnight),
+      .lessThanOrEqual => clientDateAtMidnight.isBefore(filterDateAtMidnight) || clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
+      .greaterThanOrEqual => clientDateAtMidnight.isAfter(filterDateAtMidnight) || clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
+      .notEqual => !clientDateAtMidnight.isAtSameMomentAs(filterDateAtMidnight),
     };
   }
 
   bool _applyNumberFilter(int clientNumber, int filterNumber, FilterOperator filterOperator) {
     return switch (filterOperator) {
-      FilterOperator.equal => clientNumber == filterNumber,
-      FilterOperator.lessThan => clientNumber < filterNumber,
-      FilterOperator.greaterThan => clientNumber > filterNumber,
-      FilterOperator.lessThanOrEqual => clientNumber <= filterNumber,
-      FilterOperator.greaterThanOrEqual => clientNumber >= filterNumber,
-      FilterOperator.notEqual => clientNumber != filterNumber,
+      .equal => clientNumber == filterNumber,
+      .lessThan => clientNumber < filterNumber,
+      .greaterThan => clientNumber > filterNumber,
+      .lessThanOrEqual => clientNumber <= filterNumber,
+      .greaterThanOrEqual => clientNumber >= filterNumber,
+      .notEqual => clientNumber != filterNumber,
     };
   }
 }
