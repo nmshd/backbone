@@ -1,3 +1,9 @@
 server:
   host: "0.0.0.0"
   port: 9000
+
+  proxy:
+    - target: "http://localhost:8091/api"
+      prefix: "/api"
+    - target: "http://localhost:8091/odata"
+      prefix: "/odata"
