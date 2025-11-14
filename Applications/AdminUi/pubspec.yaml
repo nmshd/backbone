@@ -13,7 +13,7 @@ workspace:
   - packages/admin_api_types
 
 dev_dependencies:
-  melos: ^7.0.0
+  melos: ^7.3.0
   very_good_analysis: ^10.0.0
 
 melos:

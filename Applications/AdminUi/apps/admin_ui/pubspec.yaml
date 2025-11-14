@@ -15,21 +15,21 @@ dependencies:
   collection: any
   data_table_2: ^2.5.15
   dropdown_button2: ^2.3.9
-  flex_seed_scheme: ^3.4.0
+  flex_seed_scheme: ^3.6.1
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_svg: ^2.0.10
+  flutter_svg: ^2.2.2
   flutter_web_plugins:
     sdk: flutter
-  get_it: ^8.0.0
-  go_router: ^16.0.0
+  get_it: ^9.0.5
+  go_router: ^17.0.0
   intl: any
-  logger: ^2.4.0
+  logger: ^2.6.2
   shared_preferences: ^2.3.2
   sn_progress_dialog: ^1.2.0
-  watch_it: ^1.5.0
+  watch_it: ^2.1.0
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
