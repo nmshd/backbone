@@ -38,3 +38,4 @@ README.md
 ## config.json for connecting to the admin api
 **/config.json
 **/config.local.json
+global.json
