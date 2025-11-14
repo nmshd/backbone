@@ -53,8 +53,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
     return AlertDialog(
       scrollable: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      title: Text(context.l10n.createAnnouncementDialog_title, textAlign: TextAlign.center),
+      shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+      title: Text(context.l10n.createAnnouncementDialog_title, textAlign: .center),
       contentPadding: const EdgeInsets.only(top: 20, bottom: 32),
       content: SizedBox(
         height: MediaQuery.sizeOf(context).height * .7,
@@ -65,8 +65,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: .start,
+                mainAxisSize: .min,
                 children: [
                   Text(context.l10n.createAnnouncementDialog_explanation),
                   Gaps.h32,
@@ -91,9 +91,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                         onPressed: () async {
                           final selectedDate = await showDatePicker(
                             context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(const Duration(days: 365)),
+                            initialDate: .now(),
+                            firstDate: .now(),
+                            lastDate: .now().add(const Duration(days: 365)),
                           );
 
                           if (selectedDate != null) {
@@ -105,9 +105,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     onTap: () async {
                       final selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                        initialDate: .now(),
+                        firstDate: .now(),
+                        lastDate: .now().add(const Duration(days: 365)),
                       );
 
                       if (selectedDate != null) {
@@ -120,8 +120,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     title: Text(context.l10n.createAnnouncementDialog_sendAPushNotification),
                     value: _sendAPushNotification,
                     onChanged: (value) => setState(() => _sendAPushNotification = value ?? false),
-                    contentPadding: EdgeInsets.zero,
-                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: .zero,
+                    controlAffinity: .leading,
                   ),
                   Gaps.h16,
                   TextFormField(
@@ -179,10 +179,10 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: .start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: .spaceBetween,
                             children: [
                               Text(context.l10n.createAnnouncementDialog_actions_heading, style: Theme.of(context).textTheme.bodyLarge),
                               FloatingActionButton.small(
@@ -376,7 +376,7 @@ class _ActionRowState extends State<_ActionRow> {
           IconButton(icon: const Icon(Icons.delete), onPressed: widget.remove),
           Expanded(
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: .start,
               children: [
                 SizedBox(
                   width: 200,

@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppTitle(padding: EdgeInsets.only(left: 80)),
+        title: const AppTitle(padding: .only(left: 80)),
         actions: [
           OutlinedButton.icon(
             style: OutlinedButton.styleFrom(minimumSize: const Size(120, 35)),
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           NavigationRail(
-            labelType: NavigationRailLabelType.all,
+            labelType: .all,
             destinations: const [
               NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
             trailing: Expanded(
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: .bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: IconButton(onPressed: () => openSettingsDialog(context), icon: const Icon(Icons.settings)),

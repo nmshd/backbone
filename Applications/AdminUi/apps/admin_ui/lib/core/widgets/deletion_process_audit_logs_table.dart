@@ -23,11 +23,11 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
         child: DataTable2(
           empty: Text(context.l10n.deletionProcessAuditLogsDetails_noDataFound),
           columns: const <DataColumn2>[
-            DataColumn2(label: Text('ID'), size: ColumnSize.S),
-            DataColumn2(label: Text('Created At'), size: ColumnSize.S),
-            DataColumn2(label: Text('Message'), size: ColumnSize.L),
-            DataColumn2(label: Text('Old Status'), size: ColumnSize.S),
-            DataColumn2(label: Text('New Status'), size: ColumnSize.S),
+            DataColumn2(label: Text('ID'), size: .S),
+            DataColumn2(label: Text('Created At'), size: .S),
+            DataColumn2(label: Text('Message'), size: .L),
+            DataColumn2(label: Text('Old Status'), size: .S),
+            DataColumn2(label: Text('New Status'), size: .S),
           ],
           rows: widget.auditLogs.map((auditLog) {
             return DataRow(

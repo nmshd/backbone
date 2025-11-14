@@ -64,8 +64,8 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.changeTier, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.changeTier, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,

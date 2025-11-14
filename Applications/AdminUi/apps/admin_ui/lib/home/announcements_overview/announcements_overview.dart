@@ -36,11 +36,11 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: .end,
+                mainAxisAlignment: .end,
                 children: [
                   if (kIsDesktop)
                     IconButton(icon: const Icon(Icons.refresh), onPressed: () async => _reloadAnnouncements(), tooltip: context.l10n.reload),

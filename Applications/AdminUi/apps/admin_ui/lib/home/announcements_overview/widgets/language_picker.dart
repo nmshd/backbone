@@ -21,11 +21,11 @@ class LanguagePicker extends StatelessWidget {
       validator: validator,
       builder: (fieldState) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             DropdownMenu(
               menuHeight: MediaQuery.of(context).size.height * 0.3,
-              expandedInsets: EdgeInsets.zero,
+              expandedInsets: .zero,
               errorText: fieldState.errorText,
               inputDecorationTheme: fieldState.hasError
                   ? InputDecorationTheme(

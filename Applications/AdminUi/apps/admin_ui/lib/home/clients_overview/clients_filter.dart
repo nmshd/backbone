@@ -99,11 +99,11 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: .horizontal,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             InputField(
               label: context.l10n.clientID,

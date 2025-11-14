@@ -51,11 +51,11 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                       empty: Text(context.l10n.deletionProcessTable_noDeletionProcessFound),
                       columns: [
                         DataColumn2(label: Text(context.l10n.id)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: .S),
+                        DataColumn2(label: Text(context.l10n.createdAt), size: .S),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_createdByDevice)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: .L),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: .S),
                       ],
                       rows: _deletionProcesses!.map((deletionProcess) {
                         final textColor = Theme.of(context).colorScheme.onSecondaryContainer;
@@ -137,8 +137,8 @@ class _RemindersCell extends StatelessWidget {
     if (reminders.isEmpty) return Text(noDataText, style: TextStyle(color: textColor));
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children: reminders.mapIndexed((index, date) {
         return Text(
           '$name ${index + 1}: ${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(date)} ${DateFormat.Hms().format(date)}',

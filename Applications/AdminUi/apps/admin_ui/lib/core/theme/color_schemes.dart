@@ -8,21 +8,17 @@ const _secondarySeedColor = Color(0xFF1A80D9);
 const _tertiarySeedColor = Color(0xFFFF7600);
 const _errorSeedColor = Color(0xFF8C1742);
 
-final ThemeData lightTheme = _generateColorScheme(
-  tonesConstructor: FlexTones.material,
-  brightness: Brightness.light,
-  customColors: lightCustomColors,
-);
-final ThemeData darkTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: Brightness.dark, customColors: darkCustomColors);
+final ThemeData lightTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: .light, customColors: lightCustomColors);
+final ThemeData darkTheme = _generateColorScheme(tonesConstructor: FlexTones.material, brightness: .dark, customColors: darkCustomColors);
 
 final ThemeData highContrastTheme = _generateColorScheme(
   tonesConstructor: FlexTones.ultraContrast,
-  brightness: Brightness.light,
+  brightness: .light,
   customColors: lightHighContrastCustomColors,
 );
 final ThemeData highContrastDarkTheme = _generateColorScheme(
   tonesConstructor: FlexTones.ultraContrast,
-  brightness: Brightness.dark,
+  brightness: .dark,
   customColors: darkHighContrastCustomColors,
 );
 

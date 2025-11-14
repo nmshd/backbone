@@ -44,8 +44,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: .end,
+                  mainAxisSize: .min,
                   children: [
                     IdentitiesFilter(
                       onFilterChanged: ({IdentityOverviewFilter? filter}) async {

@@ -46,7 +46,7 @@ class EntityDetails extends StatelessWidget {
           children: [
             TextSpan(
               text: '$title ',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: .bold),
             ),
             TextSpan(text: ellipsize != null ? value.ellipsize(ellipsize!) : value, style: Theme.of(context).textTheme.bodyLarge),
           ],

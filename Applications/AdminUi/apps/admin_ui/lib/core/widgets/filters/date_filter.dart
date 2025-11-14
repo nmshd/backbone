@@ -36,10 +36,10 @@ class _DateFilterState extends State<DateFilter> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       spacing: 8,
       children: [
-        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: .bold)),
         Row(
           spacing: 8,
           children: [
@@ -82,9 +82,9 @@ class _DateFilterState extends State<DateFilter> {
   Future<void> _selectNewDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      initialDate: _selectedDate ?? .now(),
+      firstDate: .new(2000),
+      lastDate: .now(),
       locale: Localizations.localeOf(context),
     );
 

@@ -57,7 +57,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             if (kIsDesktop)
               Row(
@@ -93,7 +93,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityMessages(
               participant: widget.address,
-              type: MessageType.incoming,
+              type: .incoming,
               title: context.l10n.identityDetails_receivedMessages_title,
               subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
               emptyTableMessage: context.l10n.identityDetails_noReceivedMessagesFound,
@@ -101,7 +101,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityMessages(
               participant: widget.address,
-              type: MessageType.outgoing,
+              type: .outgoing,
               title: context.l10n.identityDetails_sentMessages_title,
               subtitle: context.l10n.identityDetails_sentMessages_subtitle,
               emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,
@@ -158,7 +158,7 @@ class _IdentityDetailsCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Row(
               children: [
@@ -172,7 +172,7 @@ class _IdentityDetailsCard extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
+              crossAxisAlignment: .center,
               spacing: 8,
               runSpacing: 8,
               children: [

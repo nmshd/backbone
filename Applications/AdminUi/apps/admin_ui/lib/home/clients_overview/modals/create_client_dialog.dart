@@ -63,13 +63,13 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.createClientDialog_title, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.createClientDialog_title, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               TextField(
                 controller: _clientIdController,
@@ -92,7 +92,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: .min,
                       children: [
                         IconButton(
                           icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
@@ -135,7 +135,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                       '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.number,
+                keyboardType: .number,
               ),
               Gaps.h24,
               DropdownButtonFormField<String>(

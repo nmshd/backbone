@@ -9,10 +9,10 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       spacing: 8,
       children: [
-        Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text('$label:', style: const TextStyle(fontWeight: .bold)),
         SizedBox(
           width: 180,
           child: TextField(

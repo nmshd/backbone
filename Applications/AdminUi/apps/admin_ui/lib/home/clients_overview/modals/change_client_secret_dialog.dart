@@ -52,13 +52,13 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.changeClientSecret, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               TextField(
                 controller: _newClientSecretController,
@@ -72,7 +72,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: .min,
                       children: [
                         IconButton(
                           icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),

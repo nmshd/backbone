@@ -20,10 +20,10 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       spacing: 8,
       children: [
-        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: .bold)),
         SizedBox(
           width: 250,
           child: DropdownButtonFormField2<String>(
@@ -71,12 +71,12 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
                   (_) => Text(
                     widget.options.where((item) => selectedItems.contains(item.value)).map((item) => item.label).join(', '),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                   ),
                 )
                 .toList(),
-            buttonStyleData: const ButtonStyleData(padding: EdgeInsets.zero),
-            menuItemStyleData: const MenuItemStyleData(padding: EdgeInsets.zero),
+            buttonStyleData: const ButtonStyleData(padding: .zero),
+            menuItemStyleData: const MenuItemStyleData(padding: .zero),
             decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
         ),

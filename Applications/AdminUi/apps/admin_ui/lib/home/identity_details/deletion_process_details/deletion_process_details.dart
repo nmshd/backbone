@@ -37,7 +37,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           if (kIsDesktop)
             Row(
@@ -83,10 +83,10 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                    crossAxisAlignment: .center,
                     spacing: 8,
                     runSpacing: 8,
                     children: [

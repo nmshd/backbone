@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: 40,
           children: [
             SvgPicture.asset('assets/logo.svg', width: 200, height: 200),

@@ -41,13 +41,13 @@ class _ClientsOverviewState extends State<ClientsOverview> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
               Gaps.h16,
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: .end,
+                mainAxisAlignment: .end,
                 children: [
                   if (kIsDesktop)
                     IconButton(
@@ -61,7 +61,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                   IconButton(
                     icon: Icon(Icons.delete, color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null),
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      backgroundColor: .resolveWith((states) {
                         return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                       }),
                     ),
@@ -90,12 +90,12 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     });
                   },
                   columns: <DataColumn2>[
-                    DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.clientID), size: .L),
+                    DataColumn2(label: Text(context.l10n.displayName), size: .L),
                     DataColumn2(label: Text(context.l10n.defaultTier)),
-                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: .L),
                     DataColumn2(label: Text(context.l10n.createdAt)),
-                    const DataColumn2(label: Text(''), size: ColumnSize.L),
+                    const DataColumn2(label: Text(''), size: .L),
                   ],
                   rows: _originalClients
                       .where((e) => _filter.matches(e))
@@ -132,7 +132,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                 child: Text(
                                   context.l10n.changeClientSecret,
                                   style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                                  textAlign: TextAlign.center,
+                                  textAlign: .center,
                                 ),
                               ),
                             ),

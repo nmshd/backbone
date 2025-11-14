@@ -51,7 +51,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             if (kIsDesktop)
               Row(
@@ -64,12 +64,12 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: .stretch,
                   children: [
                     Text(context.l10n.announcementDetails, style: Theme.of(context).textTheme.headlineLarge),
                     const SizedBox(height: 32),
                     Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                      crossAxisAlignment: .center,
                       spacing: 8,
                       runSpacing: 8,
                       children: [
@@ -195,12 +195,12 @@ class _AnnouncementActionsCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(context.l10n.announcementDetails_actions, style: Theme.of(context).textTheme.titleMedium),
             Gaps.h12,
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
+              crossAxisAlignment: .center,
               spacing: 8,
               runSpacing: 8,
               children: announcementActions
@@ -223,7 +223,7 @@ class _AnnouncementActionsCard extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
                                     child: Text(
                                       context.l10n.announcementDetails_actions_englishName,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      style: const TextStyle(fontWeight: .bold),
                                     ),
                                   ),
                                   Padding(
@@ -238,7 +238,7 @@ class _AnnouncementActionsCard extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
                                     child: Text(
                                       context.l10n.announcementDetails_actions_germanName,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      style: const TextStyle(fontWeight: .bold),
                                     ),
                                   ),
                                   Padding(
@@ -251,7 +251,7 @@ class _AnnouncementActionsCard extends StatelessWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                    child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                    child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: .bold)),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),

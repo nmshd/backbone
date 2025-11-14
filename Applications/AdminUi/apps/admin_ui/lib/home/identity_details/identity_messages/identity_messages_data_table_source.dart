@@ -89,7 +89,7 @@ class _RecipientsCell extends StatelessWidget {
     final displayedRecipients = recipients.length > 3 ? recipients.sublist(0, 3) : recipients;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         ...displayedRecipients.map(
           (recipient) => InkWell(onTap: () => context.push('/identities/${recipient.address}'), child: Text(recipient.address)),

@@ -35,7 +35,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
 
     final identityDeletionProcessAuditLogs = _identityDeletionProcessAuditLogs!;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: .stretch,
       children: [
         if (kIsDesktop)
           Row(
@@ -48,7 +48,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: .centerLeft,
               child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress),
             ),
           ),

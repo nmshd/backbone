@@ -41,7 +41,7 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
                 empty: Text(context.l10n.identityRelationshipTable_emptyRelationshipTable),
                 errorBuilder: (error) => Center(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
                       Text(context.l10n.identityRelationshipTable_errorLoadingData),
                       Gaps.h16,
@@ -50,14 +50,14 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
                   ),
                 ),
                 columns: <DataColumn2>[
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_peer), size: ColumnSize.L),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_requestedBy), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_templateId), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_status), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_creationDate), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_answeredAt), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_createdByDevice), size: ColumnSize.S),
-                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_answeredByDevice), size: ColumnSize.S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_peer), size: .L),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_requestedBy), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_templateId), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_status), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_creationDate), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_answeredAt), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_createdByDevice), size: .S),
+                  DataColumn2(label: Text(context.l10n.identityRelationshipTable_answeredByDevice), size: .S),
                 ],
               ),
             ),
