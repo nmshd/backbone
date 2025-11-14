@@ -7,5 +7,5 @@ cd Applications/AdminUi
 dart pub global activate melos
 melos bootstrap
 melos generate_translations
-dart analyze
+flutter analyze
 melos format

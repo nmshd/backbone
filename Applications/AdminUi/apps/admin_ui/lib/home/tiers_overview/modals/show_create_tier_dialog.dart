@@ -42,19 +42,19 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.createTierDialog_title, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.createTierDialog_title, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: _isLoading
             ? const Padding(
-                padding: EdgeInsets.all(16),
-                child: Wrap(alignment: WrapAlignment.center, children: [CircularProgressIndicator()]),
+                padding: .all(16),
+                child: Wrap(alignment: .center, children: [CircularProgressIndicator()]),
               )
             : SizedBox(
                 width: 500,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: <Widget>[
                     Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
                     Gaps.h32,
@@ -74,7 +74,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                             ? Text(
                                 _errorMessage!,
                                 style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                                textAlign: TextAlign.left,
+                                textAlign: .left,
                               )
                             : null,
                       ),

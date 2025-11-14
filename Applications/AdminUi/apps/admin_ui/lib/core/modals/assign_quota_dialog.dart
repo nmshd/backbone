@@ -78,14 +78,14 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.addQuota, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.addQuota, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
             children: [
               Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
               Gaps.h32,
@@ -105,7 +105,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
                   helperText: context.l10n.addQuotaDialog_maxAmount_message,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.number,
+                keyboardType: .number,
               ),
               Gaps.h24,
               DropdownButtonFormField(

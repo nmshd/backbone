@@ -37,7 +37,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           if (kIsDesktop)
             Row(
@@ -83,10 +83,10 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: .start,
                 children: [
                   Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                    crossAxisAlignment: .center,
                     spacing: 8,
                     runSpacing: 8,
                     children: [
@@ -100,9 +100,9 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
                       EntityDetails(
                         title: context.l10n.deletionProcessDetails_status,
                         value: switch (deletionProcessDetails.status) {
-                          DeletionProcessStatus.active => context.l10n.deletionProcessDetails_status_active,
-                          DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
-                          DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
+                          .active => context.l10n.deletionProcessDetails_status_active,
+                          .cancelled => context.l10n.deletionProcessDetails_status_cancelled,
+                          .deleting => context.l10n.deletionProcessDetails_status_deleting,
                         },
                       ),
                     ],

@@ -41,7 +41,7 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       empty: Text(context.l10n.identitiesDataTable_noIdentitiesFound),
       errorBuilder: (error) => Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           spacing: 16,
           children: [
             Text(context.l10n.identitiesDataTable_failedToLoadData),
@@ -50,12 +50,12 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
         ),
       ),
       columns: <DataColumn2>[
-        DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
-        if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
+        DataColumn2(label: Text(context.l10n.address), size: .L, onSort: _sort),
+        if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: .S),
         if (!widget.hideClientColumn) DataColumn2(label: Text(context.l10n.identitiesDataTable_createdWithClient), onSort: _sort),
         DataColumn2(label: Text(context.l10n.numberOfDevices), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: Text(context.l10n.lastLoginAt), size: ColumnSize.S, onSort: _sort),
+        DataColumn2(label: Text(context.l10n.createdAt), size: .S, onSort: _sort),
+        DataColumn2(label: Text(context.l10n.lastLoginAt), size: .S, onSort: _sort),
         DataColumn2(label: Text(context.l10n.datawalletVersion), onSort: _sort),
         DataColumn2(label: Text(context.l10n.identityVersion), onSort: _sort),
       ],

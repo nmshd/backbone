@@ -48,7 +48,7 @@ class _TierDetailState extends State<TierDetail> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             if (kIsDesktop)
               Row(
@@ -61,7 +61,7 @@ class _TierDetailState extends State<TierDetail> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                  crossAxisAlignment: .center,
                   spacing: 8,
                   runSpacing: 8,
                   children: [

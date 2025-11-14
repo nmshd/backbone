@@ -51,11 +51,11 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                       empty: Text(context.l10n.deletionProcessTable_noDeletionProcessFound),
                       columns: [
                         DataColumn2(label: Text(context.l10n.id)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: .S),
+                        DataColumn2(label: Text(context.l10n.createdAt), size: .S),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_createdByDevice)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: .L),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: .S),
                       ],
                       rows: _deletionProcesses!.map((deletionProcess) {
                         final textColor = Theme.of(context).colorScheme.onSecondaryContainer;
@@ -72,9 +72,9 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                             DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
                             DataCell(
                               Text(switch (deletionProcess.status) {
-                                DeletionProcessStatus.active => context.l10n.deletionProcessDetails_status_active,
-                                DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
-                                DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
+                                .active => context.l10n.deletionProcessDetails_status_active,
+                                .cancelled => context.l10n.deletionProcessDetails_status_cancelled,
+                                .deleting => context.l10n.deletionProcessDetails_status_deleting,
                               }, style: TextStyle(color: textColor)),
                             ),
                             DataCell(
@@ -137,8 +137,8 @@ class _RemindersCell extends StatelessWidget {
     if (reminders.isEmpty) return Text(noDataText, style: TextStyle(color: textColor));
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: .center,
+      crossAxisAlignment: .start,
       children: reminders.mapIndexed((index, date) {
         return Text(
           '$name ${index + 1}: ${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(date)} ${DateFormat.Hms().format(date)}',
@@ -150,9 +150,5 @@ class _RemindersCell extends StatelessWidget {
 }
 
 extension _Reminders on IdentityDeletionProcess {
-  List<DateTime> get gracePeriodReminders => [
-    if (gracePeriodReminder1SentAt != null) gracePeriodReminder1SentAt!,
-    if (gracePeriodReminder2SentAt != null) gracePeriodReminder2SentAt!,
-    if (gracePeriodReminder3SentAt != null) gracePeriodReminder3SentAt!,
-  ];
+  List<DateTime> get gracePeriodReminders => [?gracePeriodReminder1SentAt, ?gracePeriodReminder2SentAt, ?gracePeriodReminder3SentAt];
 }

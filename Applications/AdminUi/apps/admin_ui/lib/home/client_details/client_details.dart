@@ -52,7 +52,7 @@ class _ClientDetailsState extends State<ClientDetails> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             if (kIsDesktop)
               Row(
@@ -117,7 +117,7 @@ class _ClientDetailsCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                    crossAxisAlignment: .center,
                     spacing: 8,
                     runSpacing: 8,
                     children: [

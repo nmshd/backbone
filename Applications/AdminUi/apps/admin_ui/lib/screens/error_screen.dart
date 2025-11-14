@@ -14,31 +14,31 @@ class ErrorScreen extends StatelessWidget {
       color: Theme.of(context).colorScheme.tertiaryContainer,
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             Text(
               '404',
               style: TextStyle(
                 fontSize: 82,
-                fontWeight: FontWeight.w400,
+                fontWeight: .w400,
                 color: Theme.of(context).colorScheme.onTertiaryContainer,
-                decoration: TextDecoration.none,
+                decoration: .none,
               ),
             ),
             Text(
               context.l10n.errorScreen_notFound,
               style: TextStyle(
                 fontSize: 30,
-                fontWeight: FontWeight.w400,
+                fontWeight: .w400,
                 color: Theme.of(context).colorScheme.onTertiaryContainer,
-                decoration: TextDecoration.none,
+                decoration: .none,
               ),
             ),
             Gaps.h16,
             Text(
               errorMessage,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.tertiary, decoration: TextDecoration.none),
+              textAlign: .center,
+              style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.tertiary, decoration: .none),
             ),
             Gaps.h16,
             FilledButton(

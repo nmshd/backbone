@@ -36,7 +36,7 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Text(context.l10n.deletionProcessAuditLogs_title, style: const TextStyle(fontSize: 24)),
             Gaps.h16,
@@ -68,7 +68,7 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isButtonEnabled ? Theme.of(context).colorScheme.primary : Colors.grey,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: .circular(10)),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   ),
                   child: Text(context.l10n.find, style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.white)),

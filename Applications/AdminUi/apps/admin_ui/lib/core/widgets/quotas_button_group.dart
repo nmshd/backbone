@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sn_progress_dialog/enums/progress_types.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
 import '../extensions.dart';
@@ -29,13 +28,13 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: .end,
         spacing: 8,
         children: [
           IconButton(
             icon: Icon(Icons.delete, color: widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.resolveWith((states) {
+              backgroundColor: .resolveWith((states) {
                 return widget.selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
               }),
             ),
@@ -75,7 +74,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
         progressDialog.show(
           max: widget.selectedQuotas.length,
           msg: context.l10n.quotaButtonGroup_deletingMessage,
-          progressType: ProgressType.determinate,
+          progressType: .determinate,
         ),
       );
     }

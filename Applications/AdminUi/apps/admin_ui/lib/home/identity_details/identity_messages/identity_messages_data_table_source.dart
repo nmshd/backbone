@@ -47,14 +47,14 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
           .map(
             (message) => DataRow2.byIndex(
               index: pageNumber * count + message.$1,
-              specificRowHeight: message.$2.recipients.length > 3 && type == MessageType.outgoing
+              specificRowHeight: message.$2.recipients.length > 3 && type == .outgoing
                   ? 100.0
-                  : message.$2.recipients.length == 3 && type == MessageType.outgoing
+                  : message.$2.recipients.length == 3 && type == .outgoing
                   ? 65.0
                   : null,
               cells: [
-                if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
-                if (type == MessageType.incoming) ...[DataCell(Text(message.$2.senderAddress)), DataCell(Text(message.$2.senderDevice))],
+                if (type == .outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
+                if (type == .incoming) ...[DataCell(Text(message.$2.senderAddress)), DataCell(Text(message.$2.senderDevice))],
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
                   Tooltip(
@@ -89,7 +89,7 @@ class _RecipientsCell extends StatelessWidget {
     final displayedRecipients = recipients.length > 3 ? recipients.sublist(0, 3) : recipients;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         ...displayedRecipients.map(
           (recipient) => InkWell(onTap: () => context.push('/identities/${recipient.address}'), child: Text(recipient.address)),

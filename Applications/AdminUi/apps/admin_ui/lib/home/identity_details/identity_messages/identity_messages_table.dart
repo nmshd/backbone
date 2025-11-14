@@ -53,7 +53,7 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                 empty: Text(widget.emptyTableMessage),
                 errorBuilder: (error) => Center(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
                       Text(context.l10n.identityMessageTable_errorLoadingData),
                       Gaps.h16,
@@ -62,13 +62,13 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                   ),
                 ),
                 columns: <DataColumn2>[
-                  if (widget.type == MessageType.outgoing) DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: ColumnSize.L),
-                  if (widget.type == MessageType.incoming) ...[
+                  if (widget.type == .outgoing) DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: .L),
+                  if (widget.type == .incoming) ...[
                     DataColumn2(label: Text(context.l10n.identityMessageTable_senderAddress)),
-                    DataColumn2(label: Text(context.l10n.identityMessageTable_senderDevice), size: ColumnSize.S),
+                    DataColumn2(label: Text(context.l10n.identityMessageTable_senderDevice), size: .S),
                   ],
                   DataColumn2(label: Text(context.l10n.identityMessageTable_numberOfAttachments)),
-                  DataColumn2(label: Text(context.l10n.identityMessageTable_sendDate), size: ColumnSize.S),
+                  DataColumn2(label: Text(context.l10n.identityMessageTable_sendDate), size: .S),
                 ],
               ),
             ),

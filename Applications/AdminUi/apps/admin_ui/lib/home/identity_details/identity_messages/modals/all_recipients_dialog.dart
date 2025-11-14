@@ -23,13 +23,13 @@ class _AllRecipientsDialogState extends State<_AllRecipientsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(context.l10n.recipientsDialog_listOfAllRecipients, textAlign: TextAlign.center),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Text(context.l10n.recipientsDialog_listOfAllRecipients, textAlign: .center),
+      shape: RoundedRectangleBorder(borderRadius: .circular(8)),
       contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
       content: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: widget.recipients
               .map(
                 (recipient) => Padding(

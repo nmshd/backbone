@@ -15,16 +15,16 @@ class NumberFilter extends StatefulWidget {
 }
 
 class _NumberFilterState extends State<NumberFilter> {
-  late FilterOperator _operator = FilterOperator.equal;
+  late FilterOperator _operator = .equal;
   late String _value = '';
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       spacing: 8,
       children: [
-        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: .bold)),
         Row(
           spacing: 16,
           children: [
@@ -46,7 +46,7 @@ class _NumberFilterState extends State<NumberFilter> {
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.number,
+                keyboardType: .number,
               ),
             ),
           ],

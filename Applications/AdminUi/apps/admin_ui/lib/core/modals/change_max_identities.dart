@@ -43,13 +43,13 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        title: Text(context.l10n.maxIdentities_title, textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+        title: Text(context.l10n.maxIdentities_title, textAlign: .center),
         contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               TextFormField(
                 controller: _textController,
@@ -60,7 +60,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
                   alignLabelWithHint: true,
                   border: const OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: .number,
                 onChanged: _saving ? null : (String? newValue) => setState(() => _maxIdentities = int.tryParse(newValue ?? '0')),
               ),
             ],

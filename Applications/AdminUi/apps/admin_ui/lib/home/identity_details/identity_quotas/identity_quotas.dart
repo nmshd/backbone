@@ -44,10 +44,10 @@ class IdentityQuotasState extends State<IdentityQuotas> {
                   child: DataTable2(
                     columns: [
                       DataColumn2(label: Text(context.l10n.metric)),
-                      DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
-                      DataColumn2(label: Text('${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})'), size: ColumnSize.L),
-                      DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
-                      const DataColumn2(label: Text(''), size: ColumnSize.S),
+                      DataColumn2(label: Text(context.l10n.source), size: .S),
+                      DataColumn2(label: Text('${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})'), size: .L),
+                      DataColumn2(label: Text(context.l10n.period), size: .S),
+                      const DataColumn2(label: Text(''), size: .S),
                     ],
                     empty: Text(context.l10n.identityQuotaTable_noQuotaApplied),
                     rows: groupedQuotas.entries.expand((entry) {
@@ -58,7 +58,7 @@ class IdentityQuotasState extends State<IdentityQuotas> {
 
                       return [
                         DataRow2(
-                          color: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright),
+                          color: .all(Theme.of(context).colorScheme.surfaceBright),
                           cells: [
                             DataCell(Text(metricName)),
                             const DataCell(Text('')),

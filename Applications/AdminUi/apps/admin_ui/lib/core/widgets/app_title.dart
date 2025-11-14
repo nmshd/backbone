@@ -11,7 +11,7 @@ class AppTitle extends StatelessWidget {
     const textStyle = TextStyle(fontSize: 25);
 
     final row = Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       spacing: 8,
       children: [
         SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
@@ -20,7 +20,7 @@ class AppTitle extends StatelessWidget {
             children: [
               TextSpan(
                 text: 'enmeshed',
-                style: textStyle.copyWith(fontWeight: FontWeight.bold),
+                style: textStyle.copyWith(fontWeight: .bold),
               ),
               const TextSpan(text: ' Backbone Admin UI', style: textStyle),
             ],

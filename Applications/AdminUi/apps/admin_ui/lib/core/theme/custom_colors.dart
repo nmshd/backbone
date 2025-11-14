@@ -7,7 +7,7 @@ const _decorativeSeedColor = Color(0xFF61178C);
 const _decorative2SeedColor = Color(0xFF8EB0E9);
 
 final lightCustomColors = CustomColors.generate(
-  brightness: Brightness.light,
+  brightness: .light,
   tonesConstructor: FlexTones.material,
   successSeedColor: _successSeedColor,
   warningSeedColor: _warningSeedColor,
@@ -16,7 +16,7 @@ final lightCustomColors = CustomColors.generate(
 );
 
 final darkCustomColors = CustomColors.generate(
-  brightness: Brightness.dark,
+  brightness: .dark,
   tonesConstructor: FlexTones.material,
   successSeedColor: _successSeedColor,
   warningSeedColor: _warningSeedColor,
@@ -25,7 +25,7 @@ final darkCustomColors = CustomColors.generate(
 );
 
 final lightHighContrastCustomColors = CustomColors.generate(
-  brightness: Brightness.light,
+  brightness: .light,
   tonesConstructor: FlexTones.ultraContrast,
   successSeedColor: _successSeedColor,
   warningSeedColor: _warningSeedColor,
@@ -34,7 +34,7 @@ final lightHighContrastCustomColors = CustomColors.generate(
 );
 
 final darkHighContrastCustomColors = CustomColors.generate(
-  brightness: Brightness.dark,
+  brightness: .dark,
   tonesConstructor: FlexTones.ultraContrast,
   successSeedColor: _successSeedColor,
   warningSeedColor: _warningSeedColor,
@@ -168,23 +168,23 @@ class CustomColors extends ThemeExtension<CustomColors> {
     }
 
     return CustomColors(
-      success: Color.lerp(success, other.success, t) ?? success,
-      onSuccess: Color.lerp(onSuccess, other.onSuccess, t) ?? onSuccess,
-      successContainer: Color.lerp(successContainer, other.successContainer, t) ?? successContainer,
-      onSuccessContainer: Color.lerp(onSuccessContainer, other.onSuccessContainer, t) ?? onSuccessContainer,
-      warningFixed: Color.lerp(warningFixed, other.warningFixed, t) ?? warningFixed,
-      warning: Color.lerp(warning, other.warning, t) ?? warning,
-      onWarning: Color.lerp(onWarning, other.onWarning, t) ?? onWarning,
-      warningContainer: Color.lerp(warningContainer, other.warningContainer, t) ?? warningContainer,
-      onWarningContainer: Color.lerp(onWarningContainer, other.onWarningContainer, t) ?? onWarningContainer,
-      decorative: Color.lerp(decorative, other.decorative, t) ?? decorative,
-      onDecorative: Color.lerp(onDecorative, other.onDecorative, t) ?? onDecorative,
-      decorativeContainer: Color.lerp(decorativeContainer, other.decorativeContainer, t) ?? decorativeContainer,
-      onDecorativeContainer: Color.lerp(onDecorativeContainer, other.onDecorativeContainer, t) ?? onDecorativeContainer,
-      decorative2: Color.lerp(decorative2, other.decorative2, t) ?? decorative2,
-      onDecorative2: Color.lerp(onDecorative2, other.onDecorative2, t) ?? onDecorative2,
-      decorative2Container: Color.lerp(decorative2Container, other.decorative2Container, t) ?? decorative2Container,
-      onDecorative2Container: Color.lerp(onDecorative2Container, other.onDecorative2Container, t) ?? onDecorative2Container,
+      success: .lerp(success, other.success, t) ?? success,
+      onSuccess: .lerp(onSuccess, other.onSuccess, t) ?? onSuccess,
+      successContainer: .lerp(successContainer, other.successContainer, t) ?? successContainer,
+      onSuccessContainer: .lerp(onSuccessContainer, other.onSuccessContainer, t) ?? onSuccessContainer,
+      warningFixed: .lerp(warningFixed, other.warningFixed, t) ?? warningFixed,
+      warning: .lerp(warning, other.warning, t) ?? warning,
+      onWarning: .lerp(onWarning, other.onWarning, t) ?? onWarning,
+      warningContainer: .lerp(warningContainer, other.warningContainer, t) ?? warningContainer,
+      onWarningContainer: .lerp(onWarningContainer, other.onWarningContainer, t) ?? onWarningContainer,
+      decorative: .lerp(decorative, other.decorative, t) ?? decorative,
+      onDecorative: .lerp(onDecorative, other.onDecorative, t) ?? onDecorative,
+      decorativeContainer: .lerp(decorativeContainer, other.decorativeContainer, t) ?? decorativeContainer,
+      onDecorativeContainer: .lerp(onDecorativeContainer, other.onDecorativeContainer, t) ?? onDecorativeContainer,
+      decorative2: .lerp(decorative2, other.decorative2, t) ?? decorative2,
+      onDecorative2: .lerp(onDecorative2, other.onDecorative2, t) ?? onDecorative2,
+      decorative2Container: .lerp(decorative2Container, other.decorative2Container, t) ?? decorative2Container,
+      onDecorative2Container: .lerp(onDecorative2Container, other.onDecorative2Container, t) ?? onDecorative2Container,
     );
   }
 }

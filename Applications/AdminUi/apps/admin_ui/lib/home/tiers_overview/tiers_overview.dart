@@ -37,8 +37,8 @@ class _TiersOverviewState extends State<TiersOverview> {
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: .end,
+                mainAxisAlignment: .end,
                 children: [
                   if (kIsDesktop) IconButton(icon: const Icon(Icons.refresh), onPressed: _reloadTiers, tooltip: context.l10n.reload),
                   Gaps.w8,
@@ -55,9 +55,9 @@ class _TiersOverviewState extends State<TiersOverview> {
                   showCheckboxColumn: false,
                   empty: Text(context.l10n.tiersOverview_noTiersFound),
                   columns: [
-                    DataColumn2(label: Text(context.l10n.id), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.id), size: .L),
+                    DataColumn2(label: Text(context.l10n.name), size: .L),
+                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: .L),
                   ],
                   rows: _tiers
                       .map(

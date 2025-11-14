@@ -1,11 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-final bool kIsDesktop =
-    !kIsWeb &&
-    (defaultTargetPlatform == TargetPlatform.linux ||
-        defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.windows);
+final bool kIsDesktop = !kIsWeb && (defaultTargetPlatform == .linux || defaultTargetPlatform == .macOS || defaultTargetPlatform == .windows);
 
 class Gaps {
   Gaps._();
