@@ -20,7 +20,7 @@ class ClientsOverview extends StatefulWidget {
 }
 
 class _ClientsOverviewState extends State<ClientsOverview> {
-  ClientsFilter _filter = ClientsFilter.empty;
+  ClientsFilter _filter = .empty;
   List<ClientOverview> _originalClients = [];
   final Set<String> _selectedClients = {};
   List<TierOverview> _defaultTiers = [];

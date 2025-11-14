@@ -15,7 +15,7 @@ class NumberFilter extends StatefulWidget {
 }
 
 class _NumberFilterState extends State<NumberFilter> {
-  late FilterOperator _operator = FilterOperator.equal;
+  late FilterOperator _operator = .equal;
   late String _value = '';
 
   @override

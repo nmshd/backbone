@@ -21,7 +21,7 @@ class IdentitiesFilter extends StatefulWidget {
 }
 
 class _IdentitiesFilterState extends State<IdentitiesFilter> {
-  IdentityOverviewFilter _filter = IdentityOverviewFilter();
+  IdentityOverviewFilter _filter = .new();
 
   List<MultiSelectFilterOption> _availableTiers = [];
   List<MultiSelectFilterOption> _availableClients = [];

@@ -87,7 +87,7 @@ class ClientsFilterRow extends StatefulWidget {
 
 class _ClientsFilterRowState extends State<ClientsFilterRow> {
   List<MultiSelectFilterOption> _availableTiers = [];
-  ClientsFilter filter = ClientsFilter.empty;
+  ClientsFilter filter = .empty;
 
   @override
   void initState() {

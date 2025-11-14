@@ -29,10 +29,10 @@ class _CreateClientDialog extends StatefulWidget {
 }
 
 class _CreateClientDialogState extends State<_CreateClientDialog> {
-  final TextEditingController _clientIdController = TextEditingController();
-  final TextEditingController _displayNameController = TextEditingController();
-  final TextEditingController _clientSecretController = TextEditingController();
-  final TextEditingController _maxIdentitiesController = TextEditingController();
+  final TextEditingController _clientIdController = .new();
+  final TextEditingController _displayNameController = .new();
+  final TextEditingController _clientSecretController = .new();
+  final TextEditingController _maxIdentitiesController = .new();
   String? _chosenDefaultTier;
 
   bool _isClientSecretVisible = true;

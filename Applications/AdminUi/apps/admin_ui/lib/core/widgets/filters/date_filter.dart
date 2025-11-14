@@ -16,7 +16,7 @@ class DateFilter extends StatefulWidget {
 
 class _DateFilterState extends State<DateFilter> {
   late final TextEditingController _controller;
-  FilterOperator _operator = FilterOperator.equal;
+  FilterOperator _operator = .equal;
   DateTime? _selectedDate;
 
   @override
