@@ -9,8 +9,8 @@
         </PackageReference>
         <PackageReference Include="FluentValidation" Version="[12.1.0]" />
         <PackageReference Include="MediatR" Version="[12.5.0]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.0.0]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
         <PackageReference Include="Polly" Version="[8.6.4]" />
     </ItemGroup>
 

@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.2.0-management-alpine@sha256:b8169028ea0dfd5963ecea451efbdc049d0d39b83ba8af2faa5d4d42865e8202
+    image: rabbitmq:4.2.0-management-alpine@sha256:304c771246b261babf09677f27b82c99b5c05330b0e8c73fcc133498cb021aec
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -46,7 +46,7 @@ services:
       - rabbitmq-volume:/var/lib/rabbitmq # default data dir
 
   seq:
-    image: datalust/seq:2025.2@sha256:2f4da53ae3e1b8ad22cd0e6a11493cb8c9b0478e3b6d623eee4ba6752f660287
+    image: datalust/seq:2025.2@sha256:3cfad751637b869617ff7fc296495681f5365a8c3046b36ab654a0f5a8ff04e5
     container_name: seq
     ports:
       - "8085:80"

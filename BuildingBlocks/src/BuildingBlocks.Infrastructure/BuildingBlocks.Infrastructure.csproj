@@ -2,22 +2,22 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="[8.4.0]" />
-        <PackageReference Include="AWSSDK.S3" Version="[4.0.11.1]" />
+        <PackageReference Include="AWSSDK.S3" Version="[4.0.11.3]" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
         <PackageReference Include="Azure.Storage.Blobs" Version="[12.26.0]" />
         <PackageReference Include="EFCore.BulkExtensions" Version="[9.0.2]" />
         <PackageReference Include="Google.Cloud.PubSub.V1" Version="[3.30.0]" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[9.0.10]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[9.0.11]" />
         <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.13.0]" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[9.0.10]" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[9.0.11]" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.10.0]" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[9.0.10]" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="[9.0.10]" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[9.0.11]" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="[9.0.11]" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" />
         <PackageReference Include="Polly" Version="[8.6.4]" />
         <PackageReference Include="RabbitMQ.Client" Version="[7.2.0]" />
