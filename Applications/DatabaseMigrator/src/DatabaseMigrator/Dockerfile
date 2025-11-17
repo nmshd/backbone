@@ -1,7 +1,7 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:07c48612ac44393b15e741734761cf1f30cdb8f7e645e66e25b4563681ceef99 AS base
+﻿﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:2a325357e7315a0ea014931e3b89d6feeba56d692c586746059901158fae339d AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:512f8347b0d2f9848f099a8c31be07286955ceea337cadb1114057ed0b15862f AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:033283403fc5b8789467bb6a0f9670ebe0bc8f2276710cc99f1820f01789bafe AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
