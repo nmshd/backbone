@@ -15,7 +15,6 @@ public class Token : Entity
     public const int MAX_FAILED_ACCESS_ATTEMPTS_BEFORE_LOCK = 100;
 
     private readonly List<TokenAllocation> _allocations;
-    private int _accessFailedCount;
 
     // ReSharper disable once UnusedMember.Local
     protected Token()
@@ -66,12 +65,12 @@ public class Token : Entity
 
     public int AccessFailedCount
     {
-        get => _accessFailedCount;
+        get;
         private set
         {
             var wasLockedBeforeChange = IsLocked;
 
-            _accessFailedCount = value;
+            field = value;
 
             // since the access failed count can become higher than the limit from which on the token is considered
             // locked, we have to perform this check to avoid a TokenLockedDomainEvent being raised multiple times
