@@ -31,7 +31,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
-      - postgres-volume:/var/lib/postgresql/data
+      - postgres-volume:/var/lib/postgresql
     ports:
       - 5432:5432
 
