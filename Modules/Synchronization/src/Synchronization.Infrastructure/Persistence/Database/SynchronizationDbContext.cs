@@ -47,7 +47,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         IQueryable<DatawalletModification> query;
 
         localIndex ??= -1;
-        
+
         if (Database.IsNpgsql())
         {
             var activeIdentityParam = new NpgsqlParameter("createdBy", NpgsqlDbType.Char, IdentityAddress.MAX_LENGTH, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default,
