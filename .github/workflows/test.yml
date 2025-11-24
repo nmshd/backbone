@@ -17,7 +17,7 @@ jobs:
     name: Run Admin UI Checks
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.21.0
       - name: Run checks
@@ -28,7 +28,7 @@ jobs:
     name: Check Formatting
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24.11.1
@@ -58,7 +58,7 @@ jobs:
     name: Run Unit Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24.11.1
@@ -118,7 +118,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -187,7 +187,7 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -262,12 +262,12 @@ jobs:
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: backbone
 
       - name: Checkout runtime repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: nmshd/runtime
           path: runtime
@@ -331,7 +331,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Install helm
@@ -346,7 +346,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v5
         with:
