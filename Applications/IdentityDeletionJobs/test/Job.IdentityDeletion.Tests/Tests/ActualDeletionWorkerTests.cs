@@ -2,6 +2,8 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier;
+using Backbone.Job.IdentityDeletion.Tests.Tests.DummyClasses;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
@@ -97,6 +99,38 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         }
     }
 
+    [Fact]
+    public async Task Not_deleted_identities_throw_an_error_when_verifying()
+    {
+        // Arrange
+        var fakeMediator = A.Fake<IMediator>();
+        var identity1 = CreateIdentity();
+        var identity2 = CreateIdentity();
+        SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address);
+
+        A.CallTo(() => fakeMediator.Send(A<ListRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new ListRelationshipsOfIdentityResponse([]));
+
+        A.CallTo(() => fakeMediator.Send(A<GetIdentityQuery>.That.Matches(q => q.Address == identity1.Address.Value), A<CancellationToken>._))
+            .Returns(new GetIdentityResponse(identity1));
+
+        A.CallTo(() => fakeMediator.Send(A<GetIdentityQuery>.That.Matches(q => q.Address == identity2.Address.Value), A<CancellationToken>._))
+            .Returns(new GetIdentityResponse(identity2));
+
+        var notDeletedIdentities = new Dictionary<string, int>
+        {
+            { identity1.Address.Value, 1 },
+            { identity2.Address.Value, 2 }
+        };
+
+        var worker = CreateWorker(fakeMediator, null, null, notDeletedIdentities);
+
+        // Act
+        var acting = async () => await worker.StartProcessing(CancellationToken.None);
+
+        // Assert
+        await acting.ShouldThrowAsync<DeletionFailedException>();
+    }
+
     private static void SetupRipeDeletionProcessesCommand(IMediator mediator, params IdentityAddress[] identityAddresses)
     {
         var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses.ToDictionary(x => x.Value, _ => UnitResult.Success<DomainError>()));
@@ -105,13 +139,17 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
-        IPushNotificationSender? pushNotificationSender = null)
+        IPushNotificationSender? pushNotificationSender = null,
+        Dictionary<string, int>? notDeletedIdentities = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
+
+        notDeletedIdentities ??= [];
+        var dummyVerifier = new DummyDeletionVerifier(notDeletedIdentities);
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger, dummyVerifier);
     }
 
     private static Identity CreateIdentity()

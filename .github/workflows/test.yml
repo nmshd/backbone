@@ -176,7 +176,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
         test-project:
           - display-name: admin-api
             path: Applications/AdminApi/test/AdminApi.Tests.Integration
@@ -207,6 +207,14 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
+      - name: Install Postgres 17
+        run: |
+          sudo apt update
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'  # Add Postgres APT Repo
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg       # Add GPG Key
+          sudo apt update
+          sudo apt install postgresql-17
+
       - name: Download cached Docker images
         uses: actions/download-artifact@v6
         with:
@@ -236,7 +244,7 @@ jobs:
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
 
       - name: Run integration tests
-        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=true" --blame-hang-timeout 60s ${{matrix.test-project.path}}
         env:
           ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
@@ -258,7 +266,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        database: [sqlserver, postgres]
+        database: [ sqlserver, postgres ]
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository

@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.Job.IdentityDeletion.IdentityDeletionVerifier;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Module;
@@ -107,6 +108,10 @@ public class Program
                 services.AddCustomIdentity(hostContext.HostingEnvironment);
 
                 services.RegisterIdentityDeleters();
+
+                services.RegisterDbExporterAndExtractor(parsedConfiguration);
+
+                services.AddTransient<IDeletionVerifier, DeletionVerifier>();
 
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })
