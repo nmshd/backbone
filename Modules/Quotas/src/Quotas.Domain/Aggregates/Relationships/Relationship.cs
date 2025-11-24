@@ -1,4 +1,5 @@
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+
 public class Relationship : ICreatedAt
 {
     public required string Id { get; set; }

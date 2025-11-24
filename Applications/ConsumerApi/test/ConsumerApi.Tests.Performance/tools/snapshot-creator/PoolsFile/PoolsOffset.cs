@@ -1,4 +1,5 @@
 ﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+
 internal record PoolsOffset
 {
     public OffsetDirections? MessagesOffsetPendingTo { get; private set; }
