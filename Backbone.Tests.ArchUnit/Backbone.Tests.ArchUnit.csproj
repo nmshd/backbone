@@ -26,8 +26,6 @@
         <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
-        <ProjectReference Include="..\Applications\AdminApi\src\AdminApi\AdminApi.csproj" />
-        <ProjectReference Include="..\Applications\AdminCli\src\AdminCli\AdminCli.csproj" />
         <ProjectReference Include="..\Applications\DatabaseMigrator\src\DatabaseMigrator\DatabaseMigrator.csproj" />
         <ProjectReference Include="..\Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj" />
         <ProjectReference Include="..\Applications\HealthCheck\src\HealthCheck.csproj" />
@@ -41,7 +39,6 @@
         <ProjectReference Include="..\BuildingBlocks\test\Crypto.Tests\Crypto.Tests.csproj" />
         <ProjectReference Include="..\BuildingBlocks\test\DevelopmentKit.Identity.Tests\DevelopmentKit.Identity.Tests.csproj" />
         <ProjectReference Include="..\BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj" />
-        <ProjectReference Include="..\Applications\ConsumerApi\src\ConsumerApi.csproj" />
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj" />
