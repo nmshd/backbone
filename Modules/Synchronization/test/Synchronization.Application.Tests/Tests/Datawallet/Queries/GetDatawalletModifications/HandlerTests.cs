@@ -301,10 +301,10 @@ public class HandlerTests : AbstractTestsBase
         const int pageSize = 2;
 
         // Act
-        var firstPage = await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(1, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION },
-            CancellationToken.None);
-        var secondPage = await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(2, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION },
-            CancellationToken.None);
+        var firstPage =
+            await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(1, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var secondPage =
+            await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(2, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         firstPage.ShouldHaveCount(2);
