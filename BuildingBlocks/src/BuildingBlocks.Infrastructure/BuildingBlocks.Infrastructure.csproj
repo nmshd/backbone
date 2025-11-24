@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="[8.4.0]" />
-        <PackageReference Include="AWSSDK.S3" Version="[4.0.11.3]" />
+        <PackageReference Include="Autofac" Version="[9.0.0]" />
+        <PackageReference Include="AWSSDK.S3" Version="[4.0.12]" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
         <PackageReference Include="Azure.Storage.Blobs" Version="[12.26.0]" />
         <PackageReference Include="EFCore.BulkExtensions.Core" Version="9.0.2" />
@@ -15,7 +15,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="[10.0.0]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.0]" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[10.0.0]" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.13.0]" />
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="[1.13.1]" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.0]" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.10.0]" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="[10.0.0]" />
