@@ -12,7 +12,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="[9.0.11]" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
         <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="[11.5.2]" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
         <PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.2.1]" />
         <PackageReference Include="Reqnroll.xUnit.v3" Version="[3.2.1]">
             <PrivateAssets>all</PrivateAssets>
