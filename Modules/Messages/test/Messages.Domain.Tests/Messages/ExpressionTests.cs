@@ -117,15 +117,18 @@ public class ExpressionTests : AbstractTestsBase
 
 file static class MessageExtensions
 {
-    public static bool EvaluateWasExchangedBetweenExpression(this Message message, IdentityAddress identityAddressOne, IdentityAddress identityAddressTwo)
+    extension(Message message)
     {
-        var expression = Message.WasExchangedBetween(identityAddressOne, identityAddressTwo);
-        return expression.Compile()(message);
-    }
+        public bool EvaluateWasExchangedBetweenExpression(IdentityAddress identityAddressOne, IdentityAddress identityAddressTwo)
+        {
+            var expression = Message.WasExchangedBetween(identityAddressOne, identityAddressTwo);
+            return expression.Compile()(message);
+        }
 
-    public static bool EvaluateHasParticipantExpression(this Message message, IdentityAddress address)
-    {
-        var expression = Message.HasParticipant(address);
-        return expression.Compile()(message);
+        public bool EvaluateHasParticipantExpression(IdentityAddress address)
+        {
+            var expression = Message.HasParticipant(address);
+            return expression.Compile()(message);
+        }
     }
 }

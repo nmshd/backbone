@@ -4,17 +4,21 @@ namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public static class ApplicationDbContextExtensions
 {
-    public static TEntity[] SaveEntities<TEntity>(this SynchronizationDbContext dbContext, params TEntity[] entities) where TEntity : class
+    extension(SynchronizationDbContext dbContext)
     {
-        dbContext.Set<TEntity>().AddRange(entities);
-        dbContext.SaveChanges();
-        return entities;
-    }
+        public TEntity[] SaveEntities<TEntity>(TEntity entity1, TEntity entity2) where TEntity : class
+        {
+            dbContext.Set<TEntity>().Add(entity1);
+            dbContext.Set<TEntity>().Add(entity2);
+            dbContext.SaveChanges();
+            return [entity1, entity2];
+        }
 
-    public static TEntity SaveEntity<TEntity>(this SynchronizationDbContext dbContext, TEntity entity) where TEntity : class
-    {
-        dbContext.Set<TEntity>().Add(entity);
-        dbContext.SaveChanges();
-        return entity;
+        public TEntity SaveEntity<TEntity>(TEntity entity) where TEntity : class
+        {
+            dbContext.Set<TEntity>().Add(entity);
+            dbContext.SaveChanges();
+            return entity;
+        }
     }
 }

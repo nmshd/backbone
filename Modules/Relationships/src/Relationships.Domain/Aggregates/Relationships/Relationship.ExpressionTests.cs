@@ -174,27 +174,30 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
 
 file static class RelationshipExtensions
 {
-    public static bool EvaluateHasParticipantExpression(this Relationship relationship, string identity)
+    extension(Relationship relationship)
     {
-        var expression = Relationship.HasParticipant(identity);
-        return expression.Compile()(relationship);
-    }
+        public bool EvaluateHasParticipantExpression(string identity)
+        {
+            var expression = Relationship.HasParticipant(identity);
+            return expression.Compile()(relationship);
+        }
 
-    public static bool EvaluateCountsAsActiveExpression(this Relationship relationship)
-    {
-        var expression = Relationship.CountsAsActive();
-        return expression.Compile()(relationship);
-    }
+        public bool EvaluateCountsAsActiveExpression()
+        {
+            var expression = Relationship.CountsAsActive();
+            return expression.Compile()(relationship);
+        }
 
-    public static bool EvaluateHasStatusInWhichPeerShouldBeNotifiedAboutDeletion(this Relationship relationship)
-    {
-        var expression = Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion();
-        return expression.Compile()(relationship);
-    }
+        public bool EvaluateHasStatusInWhichPeerShouldBeNotifiedAboutDeletion()
+        {
+            var expression = Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion();
+            return expression.Compile()(relationship);
+        }
 
-    public static bool EvaluateIsBetween(this Relationship relationship, IdentityAddress identity1, IdentityAddress identity2)
-    {
-        var expression = Relationship.IsBetween(identity1, identity2);
-        return expression.Compile()(relationship);
+        public bool EvaluateIsBetween(IdentityAddress identity1, IdentityAddress identity2)
+        {
+            var expression = Relationship.IsBetween(identity1, identity2);
+            return expression.Compile()(relationship);
+        }
     }
 }

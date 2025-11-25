@@ -7,29 +7,32 @@ namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipQueryableExtensions
 {
-    public static IQueryable<Relationship> BetweenParticipants(this IQueryable<Relationship> query, IdentityAddress participant1, IdentityAddress participant2)
+    extension(IQueryable<Relationship> query)
     {
-        return query.WithParticipant(participant1).WithParticipant(participant2);
-    }
+        public IQueryable<Relationship> BetweenParticipants(IdentityAddress participant1, IdentityAddress participant2)
+        {
+            return query.WithParticipant(participant1).WithParticipant(participant2);
+        }
 
-    public static IQueryable<Relationship> WithParticipant(this IQueryable<Relationship> query, IdentityAddress participantAddress)
-    {
-        return query.Where(Relationship.HasParticipant(participantAddress));
-    }
+        public IQueryable<Relationship> WithParticipant(IdentityAddress participantAddress)
+        {
+            return query.Where(Relationship.HasParticipant(participantAddress));
+        }
 
-    public static IQueryable<Relationship> WithIdIn(this IQueryable<Relationship> query, IEnumerable<RelationshipId> ids)
-    {
-        return query.Where(r => ids.Contains(r.Id));
-    }
+        public IQueryable<Relationship> WithIdIn(IEnumerable<RelationshipId> ids)
+        {
+            return query.Where(r => ids.Contains(r.Id));
+        }
 
-    public static async Task<Relationship?> FirstWithIdOrDefault(this IQueryable<Relationship> query, RelationshipId relationshipId, CancellationToken cancellationToken)
-    {
-        return await query.FirstOrDefaultAsync(r => r.Id == relationshipId, cancellationToken);
-    }
+        public async Task<Relationship?> FirstWithIdOrDefault(RelationshipId relationshipId, CancellationToken cancellationToken)
+        {
+            return await query.FirstOrDefaultAsync(r => r.Id == relationshipId, cancellationToken);
+        }
 
-    public static async Task<Relationship> FirstWithId(this IQueryable<Relationship> query, RelationshipId relationshipId, CancellationToken cancellationToken)
-    {
-        var relationship = await query.FirstWithIdOrDefault(relationshipId, cancellationToken) ?? throw new NotFoundException(nameof(Relationship));
-        return relationship;
+        public async Task<Relationship> FirstWithId(RelationshipId relationshipId, CancellationToken cancellationToken)
+        {
+            var relationship = await query.FirstWithIdOrDefault(relationshipId, cancellationToken) ?? throw new NotFoundException(nameof(Relationship));
+            return relationship;
+        }
     }
 }

@@ -6,13 +6,16 @@ namespace Backbone.Modules.Quotas.Domain.Tests;
 [ShouldlyMethods]
 public static class ExhaustionDateExtensions
 {
-    public static void ShouldBeEndOfHour(this ExhaustionDate instance, string? customMessage = null)
+    extension(ExhaustionDate instance)
     {
-        instance.AssertAwesomely(v => v.Value == v.Value.EndOfHour(), instance.Value, instance.Value.EndOfHour(), customMessage);
-    }
+        public void ShouldBeEndOfHour(string? customMessage = null)
+        {
+            instance.AssertAwesomely(v => v.Value == v.Value.EndOfHour(), instance.Value, instance.Value.EndOfHour(), customMessage);
+        }
 
-    public static void ShouldBeEndOfDay(this ExhaustionDate instance, string? customMessage = null)
-    {
-        instance.AssertAwesomely(v => v.Value == v.Value.EndOfDay(), instance.Value, instance.Value.EndOfDay(), customMessage);
+        public void ShouldBeEndOfDay(string? customMessage = null)
+        {
+            instance.AssertAwesomely(v => v.Value == v.Value.EndOfDay(), instance.Value, instance.Value.EndOfDay(), customMessage);
+        }
     }
 }

@@ -15,39 +15,42 @@ namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static async Task AddDevicesDomainEventSubscriptions(this IEventBus eventBus)
+    extension(IEventBus eventBus)
     {
-        await Task.WhenAll(new List<Task>
+        public async Task AddDevicesDomainEventSubscriptions()
         {
-            eventBus.SubscribeToAnnouncementsEvents(),
-            eventBus.SubscribeToDevicesEvents(),
-            eventBus.SubscribeToSynchronizationEvents(),
-            eventBus.SubscribeToTokensEvents()
-        });
-    }
+            await Task.WhenAll(new List<Task>
+            {
+                eventBus.SubscribeToAnnouncementsEvents(),
+                eventBus.SubscribeToDevicesEvents(),
+                eventBus.SubscribeToSynchronizationEvents(),
+                eventBus.SubscribeToTokensEvents()
+            });
+        }
 
-    private static async Task SubscribeToAnnouncementsEvents(this IEventBus eventBus)
-    {
-        await eventBus.Subscribe<AnnouncementCreatedDomainEvent, AnnouncementCreatedDomainEventHandler>();
-    }
-
-    private static async Task SubscribeToDevicesEvents(this IEventBus eventBus)
-    {
-        await eventBus.Subscribe<BackupDeviceUsedDomainEvent, BackupDeviceUsedDomainEventHandler>();
-    }
-
-    private static async Task SubscribeToSynchronizationEvents(this IEventBus eventBus)
-    {
-        await Task.WhenAll(new List<Task>
+        private async Task SubscribeToAnnouncementsEvents()
         {
-            eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>(),
-            eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>(),
-            eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>()
-        });
-    }
+            await eventBus.Subscribe<AnnouncementCreatedDomainEvent, AnnouncementCreatedDomainEventHandler>();
+        }
 
-    private static async Task SubscribeToTokensEvents(this IEventBus eventBus)
-    {
-        await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
+        private async Task SubscribeToDevicesEvents()
+        {
+            await eventBus.Subscribe<BackupDeviceUsedDomainEvent, BackupDeviceUsedDomainEventHandler>();
+        }
+
+        private async Task SubscribeToSynchronizationEvents()
+        {
+            await Task.WhenAll(new List<Task>
+            {
+                eventBus.Subscribe<DatawalletModifiedDomainEvent, DatawalletModifiedDomainEventHandler>(),
+                eventBus.Subscribe<ExternalEventCreatedDomainEvent, ExternalEventCreatedDomainEventHandler>(),
+                eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>()
+            });
+        }
+
+        private async Task SubscribeToTokensEvents()
+        {
+            await eventBus.Subscribe<TokenLockedDomainEvent, TokenLockedDomainEventHandler>();
+        }
     }
 }
