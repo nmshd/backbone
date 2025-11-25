@@ -510,25 +510,28 @@ public class SolutionRepresentation : ICloneable
 
 public static class RandomMethodExtensions
 {
-    public static bool NextBoolean(this Random random)
+    extension(Random random)
     {
-        return random.NextDouble() <= 0.5;
-    }
+        public bool NextBoolean()
+        {
+            return random.NextDouble() <= 0.5;
+        }
 
-    public static TU GetRandomElement<TU>(this Random random, IList<TU> list)
-    {
-        var randomElementIndex = Convert.ToInt32(random.NextInt64() % list.Count);
-        return list[randomElementIndex];
-    }
+        public TU GetRandomElement<TU>(IList<TU> list)
+        {
+            var randomElementIndex = Convert.ToInt32((int)(random.NextInt64() % list.Count));
+            return list[randomElementIndex];
+        }
 
-    public static T GetRandomElement<T, TU>(this Random random, IDictionary<TU, T> dictionary)
-    {
-        var randomElementIndex = Convert.ToInt32(random.NextInt64() % dictionary.Count);
-        return dictionary[dictionary.Keys.Skip(randomElementIndex - 1).First()];
-    }
+        public T GetRandomElement<T, TU>(IDictionary<TU, T> dictionary)
+        {
+            var randomElementIndex = Convert.ToInt32((int)(random.NextInt64() % dictionary.Count));
+            return dictionary[dictionary.Keys.Skip(randomElementIndex - 1).First()];
+        }
 
-    public static TK GetRandomKey<TK, TV>(this Random random, IDictionary<TK, TV> dictionary)
-    {
-        return random.GetRandomElement(dictionary.Select(r => r.Key).ToList());
+        public TK GetRandomKey<TK, TV>(IDictionary<TK, TV> dictionary)
+        {
+            return random.GetRandomElement(dictionary.Select(r => r.Key).ToList());
+        }
     }
 }

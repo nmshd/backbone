@@ -144,16 +144,19 @@ public class Executor
 
 file static class Extensions
 {
-    public static async Task MigrateTo(this DbContext dbContext, string? targetMigration = null)
+    extension(DbContext dbContext)
     {
-        var migrator = dbContext.GetInfrastructure().GetRequiredService<IMigrator>();
-        await migrator.MigrateAsync(targetMigration);
-    }
+        public async Task MigrateTo(string? targetMigration = null)
+        {
+            var migrator = dbContext.GetInfrastructure().GetRequiredService<IMigrator>();
+            await migrator.MigrateAsync(targetMigration);
+        }
 
-    public static async Task<string?> GetLastAppliedMigration(this DbContext dbContext)
-    {
-        var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
-        return appliedMigrations.LastOrDefault();
+        public async Task<string?> GetLastAppliedMigration()
+        {
+            var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
+            return appliedMigrations.LastOrDefault();
+        }
     }
 }
 
