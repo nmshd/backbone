@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
@@ -6,7 +6,7 @@
   </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
+        <PackageReference Include="CSharpFunctionalExtensions" />
     </ItemGroup>
 
 </Project>

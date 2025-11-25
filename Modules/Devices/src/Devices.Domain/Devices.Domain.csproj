@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[9.0.11]" />
-        <PackageReference Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="CSharpFunctionalExtensions" />
     </ItemGroup>
 
     <ItemGroup>
