@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
@@ -9,14 +9,6 @@
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
-
-    <ItemGroup>
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m5vv-6r4h-3vj9" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x674-v45j-fwxw" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wvxc-855f-jvrv" />
-    </ItemGroup>
 
     <!-- Relationships Module is currently the only one with its respective unit tests next to the production (within the same project, as opposed to on a separate one) -->
     <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
@@ -51,5 +43,10 @@
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
     </ItemGroup>
 </Project>

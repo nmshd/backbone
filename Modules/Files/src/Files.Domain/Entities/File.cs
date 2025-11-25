@@ -9,8 +9,6 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File : Entity
 {
-    private bool _ownershipIsLocked;
-
     // ReSharper disable once UnusedMember.Local
     protected File()
     {
@@ -93,13 +91,13 @@ public class File : Entity
 
     public bool OwnershipIsLocked
     {
-        get => _ownershipIsLocked;
+        get;
         private set
         {
-            if (!_ownershipIsLocked && value)
+            if (!field && value)
                 RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
 
-            _ownershipIsLocked = value;
+            field = value;
         }
     }
 

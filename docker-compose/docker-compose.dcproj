@@ -8,7 +8,6 @@
     <ProjectVersion>2.1</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Include=".env" />
     <None Include="docker-compose.yml" />
   </ItemGroup>
   <PropertyGroup>

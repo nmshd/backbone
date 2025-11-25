@@ -5,6 +5,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain;
+
 public class Identity
 {
     public readonly UserCredentials UserCredentials;

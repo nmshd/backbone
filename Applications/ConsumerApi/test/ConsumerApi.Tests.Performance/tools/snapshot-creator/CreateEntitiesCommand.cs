@@ -51,11 +51,10 @@ public class CreateEntitiesCommand : Command
         var res = new SolutionRepresentation();
 
         using var reader = new StreamReader(configurationFilePath);
-        await reader.ReadLineAsync(); // read header line
-        while (!reader.EndOfStream)
+        await reader.ReadLineAsync(); // we purposely ignore the first line, because it's the header line
+        var line = await reader.ReadLineAsync();
+        while (line != null)
         {
-            var line = await reader.ReadLineAsync();
-            if (line is null) break;
             var values = line.Split(';');
             uint from, to, count;
             if (values.Length == 3)
@@ -76,6 +75,8 @@ public class CreateEntitiesCommand : Command
             {
                 res.SendMessage(from, to);
             }
+
+            line = await reader.ReadLineAsync();
         }
 
         return res;

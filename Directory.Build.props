@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
@@ -9,14 +9,6 @@
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
-
-    <ItemGroup>
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m5vv-6r4h-3vj9" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x674-v45j-fwxw" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wvxc-855f-jvrv" />
-    </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
         <PackageReference Include="GitHubActionsTestLogger" Version="[2.4.1]">
@@ -28,5 +20,10 @@
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
     </ItemGroup>
 </Project>
