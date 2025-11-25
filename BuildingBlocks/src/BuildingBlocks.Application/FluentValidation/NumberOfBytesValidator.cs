@@ -51,19 +51,20 @@ public class NumberOfBytesValidator<T> : PropertyValidator<T, byte[]?>, ILengthV
 
 public static class NumberOfBytesValidatorRuleBuilderExtensions
 {
-    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]?> ruleBuilder,
-        int minNumberOfBytes, int maxNumberOfBytes)
+    extension<T>(IRuleBuilder<T, byte[]?> ruleBuilder)
     {
-        return ruleBuilder
-            .SetValidator(new NumberOfBytesValidator<T>(minNumberOfBytes, maxNumberOfBytes))
-            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
-    }
+        public IRuleBuilderOptions<T, byte[]?> NumberOfBytes(int minNumberOfBytes, int maxNumberOfBytes)
+        {
+            return ruleBuilder
+                .SetValidator(new NumberOfBytesValidator<T>(minNumberOfBytes, maxNumberOfBytes))
+                .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+        }
 
-    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]?> ruleBuilder,
-        int numberOfBytes)
-    {
-        return ruleBuilder
-            .SetValidator(new NumberOfBytesValidator<T>(numberOfBytes))
-            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+        public IRuleBuilderOptions<T, byte[]?> NumberOfBytes(int numberOfBytes)
+        {
+            return ruleBuilder
+                .SetValidator(new NumberOfBytesValidator<T>(numberOfBytes))
+                .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+        }
     }
 }

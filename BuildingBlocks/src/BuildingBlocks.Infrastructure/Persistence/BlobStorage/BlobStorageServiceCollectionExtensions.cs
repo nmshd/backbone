@@ -10,40 +10,43 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 
 public static class BlobStorageServiceCollectionExtensions
 {
-    public static void AddBlobStorage(this IServiceCollection services, Action<BlobStorageOptions> setupOptions)
+    extension(IServiceCollection services)
     {
-        var options = new BlobStorageOptions();
-        setupOptions.Invoke(options);
-
-        AddBlobStorage(services, options);
-    }
-
-    public static void AddBlobStorage(this IServiceCollection services, BlobStorageOptions options)
-    {
-        switch (options.ProductName)
+        public void AddBlobStorage(Action<BlobStorageOptions> setupOptions)
         {
-            case BlobStorageOptions.AZURE_STORAGE_ACCOUNT:
-                services.AddAzureStorageAccount(options.AzureStorageAccount!);
-                break;
-            case BlobStorageOptions.GOOGLE_CLOUD_STORAGE:
-                services.AddGoogleCloudStorage(options.GoogleCloudStorage!);
-                break;
-            case BlobStorageOptions.S3_BUCKET:
-                services.AddS3(options.S3Bucket!);
-                break;
-            case "":
-                throw new NotSupportedException("No blob storage product name was specified.");
-            default:
-                throw new NotSupportedException($"{options.ProductName} is not a currently supported blob storage product name.");
+            var options = new BlobStorageOptions();
+            setupOptions.Invoke(options);
+
+            AddBlobStorage(services, options);
         }
 
-        services.AddHealthChecks().Add(
-            new HealthCheckRegistration(
-                "blob_storage",
-                sp => new BlobStorageHealthCheck(sp.GetRequiredService<IBlobStorage>(), options.RootFolder),
-                HealthStatus.Unhealthy, null
-            )
-        );
+        public void AddBlobStorage(BlobStorageOptions options)
+        {
+            switch (options.ProductName)
+            {
+                case BlobStorageOptions.AZURE_STORAGE_ACCOUNT:
+                    services.AddAzureStorageAccount(options.AzureStorageAccount!);
+                    break;
+                case BlobStorageOptions.GOOGLE_CLOUD_STORAGE:
+                    services.AddGoogleCloudStorage(options.GoogleCloudStorage!);
+                    break;
+                case BlobStorageOptions.S3_BUCKET:
+                    services.AddS3(options.S3Bucket!);
+                    break;
+                case "":
+                    throw new NotSupportedException("No blob storage product name was specified.");
+                default:
+                    throw new NotSupportedException($"{options.ProductName} is not a currently supported blob storage product name.");
+            }
+
+            services.AddHealthChecks().Add(
+                new HealthCheckRegistration(
+                    "blob_storage",
+                    sp => new BlobStorageHealthCheck(sp.GetRequiredService<IBlobStorage>(), options.RootFolder),
+                    HealthStatus.Unhealthy, null
+                )
+            );
+        }
     }
 }
 

@@ -8,38 +8,41 @@ namespace Backbone.UnitTestTools.Shouldly.Extensions;
 [ShouldlyMethods]
 public static class EntityExtensions
 {
-    public static TEvent ShouldHaveASingleDomainEvent<TEvent>(this Entity instance, string? customMessage = null) where TEvent : DomainEvent
+    extension(Entity instance)
     {
-        if (instance.DomainEvents.Count != 1)
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), instance.DomainEvents.Count, customMessage).ToString());
+        public TEvent ShouldHaveASingleDomainEvent<TEvent>(string? customMessage = null) where TEvent : DomainEvent
+        {
+            if (instance.DomainEvents.Count != 1)
+                throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), instance.DomainEvents.Count, customMessage).ToString());
 
-        var domainEvent = instance.DomainEvents[0];
+            var domainEvent = instance.DomainEvents[0];
 
-        if (domainEvent is TEvent) return (TEvent)instance.DomainEvents[0];
+            if (domainEvent is TEvent) return (TEvent)instance.DomainEvents[0];
 
-        throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), domainEvent.GetType(), customMessage).ToString());
-    }
+            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), domainEvent.GetType(), customMessage).ToString());
+        }
 
-    public static (TEvent1 event1, TEvent2 event2) ShouldHaveDomainEvents<TEvent1, TEvent2>(this Entity entity, string? customMessage = null) where TEvent1 : DomainEvent where TEvent2 : DomainEvent
-    {
-        if (entity.DomainEvents.Count != 2)
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent1), entity.DomainEvents.Count, customMessage).ToString());
+        public (TEvent1 event1, TEvent2 event2) ShouldHaveDomainEvents<TEvent1, TEvent2>(string? customMessage = null) where TEvent1 : DomainEvent where TEvent2 : DomainEvent
+        {
+            if (instance.DomainEvents.Count != 2)
+                throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent1), instance.DomainEvents.Count, customMessage).ToString());
 
-        if (entity.DomainEvents.All(e => e.GetType() != typeof(TEvent1)))
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent1), entity.DomainEvents.Select(e => e.GetType()), customMessage).ToString());
+            if (instance.DomainEvents.All(e => e.GetType() != typeof(TEvent1)))
+                throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent1), instance.DomainEvents.Select(e => e.GetType()), customMessage).ToString());
 
-        if (entity.DomainEvents.All(e => e.GetType() != typeof(TEvent2)))
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent2), entity.DomainEvents.Select(e => e.GetType()), customMessage).ToString());
+            if (instance.DomainEvents.All(e => e.GetType() != typeof(TEvent2)))
+                throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent2), instance.DomainEvents.Select(e => e.GetType()), customMessage).ToString());
 
-        return (
-            (TEvent1)entity.DomainEvents.Single(e => e.GetType() == typeof(TEvent1)),
-            (TEvent2)entity.DomainEvents.Single(e => e.GetType() == typeof(TEvent2))
-        );
-    }
+            return (
+                (TEvent1)instance.DomainEvents.Single(e => e.GetType() == typeof(TEvent1)),
+                (TEvent2)instance.DomainEvents.Single(e => e.GetType() == typeof(TEvent2))
+            );
+        }
 
-    public static void ShouldNotHaveADomainEvent<TEvent>(this Entity entity, string? customMessage = null) where TEvent : DomainEvent
-    {
-        if (entity.DomainEvents.Any(e => e.GetType() == typeof(TEvent)))
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), customMessage).ToString());
+        public void ShouldNotHaveADomainEvent<TEvent>(string? customMessage = null) where TEvent : DomainEvent
+        {
+            if (instance.DomainEvents.Any(e => e.GetType() == typeof(TEvent)))
+                throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), customMessage).ToString());
+        }
     }
 }

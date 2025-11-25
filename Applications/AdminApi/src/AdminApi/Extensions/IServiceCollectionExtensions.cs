@@ -20,93 +20,95 @@ namespace Backbone.AdminApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
-            member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        AdminApiConfiguration configuration)
-    {
-        services
-            .AddControllersWithViews(options =>
-            {
-                options.Filters.Add(typeof(CustomExceptionFilter));
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
-            })
-            .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory())
-            .AddJsonOptions(options =>
-            {
-                var jsonConverters =
-                    AppDomain.CurrentDomain
-                        .GetAssemblies()
-                        .SelectMany(x => x.ExportedTypes)
-                        .Where(x => !x.IsAbstract)
-                        .Where(x => !x.ContainsGenericParameters)
-                        .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
-
-                foreach (var jsonConverter in jsonConverters)
-                {
-                    if (jsonConverter == typeof(DynamicJsonConverter)) continue;
-                    var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
-                    options.JsonSerializerOptions.Converters.Add(instance);
-                }
-
-                options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
-                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-            });
-
-        services.AddApiVersioning(options =>
-            {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.ApiVersionReader = new UrlSegmentApiVersionReader();
-            })
-            .AddMvc();
-
-        if (configuration.Cors != null)
+        public IServiceCollection AddCustomFluentValidation()
         {
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder
-                        .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
-                        .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+            ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
+                member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
+
+            return services;
         }
 
-        services.AddAuthentication("ApiKey")
-            .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
-                "ApiKey",
-                opts => opts.ApiKey = configuration.Authentication.ApiKey
-            );
+        public IServiceCollection AddCustomAspNetCore(AdminApiConfiguration configuration)
+        {
+            services
+                .AddControllersWithViews(options =>
+                {
+                    options.Filters.Add(typeof(CustomExceptionFilter));
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.Filters.Add(new RedirectAntiforgeryValidationFailedResultFilter());
+                })
+                .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponseFactory())
+                .AddJsonOptions(options =>
+                {
+                    var jsonConverters =
+                        AppDomain.CurrentDomain
+                            .GetAssemblies()
+                            .SelectMany(x => x.ExportedTypes)
+                            .Where(x => !x.IsAbstract)
+                            .Where(x => !x.ContainsGenericParameters)
+                            .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
 
-        services.AddAuthorizationBuilder()
-            .AddPolicy("ApiKey", policy =>
+                    foreach (var jsonConverter in jsonConverters)
+                    {
+                        if (jsonConverter == typeof(DynamicJsonConverter)) continue;
+                        var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
+                        options.JsonSerializerOptions.Converters.Add(instance);
+                    }
+
+                    options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                });
+
+            services.AddApiVersioning(options =>
+                {
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                })
+                .AddMvc();
+
+            if (configuration.Cors != null)
             {
-                policy.AddAuthenticationSchemes("ApiKey");
-                policy.RequireAuthenticatedUser();
+                services.AddCors(options =>
+                {
+                    options.AddDefaultPolicy(builder =>
+                    {
+                        builder
+                            .WithOrigins(configuration.Cors.AllowedOrigins.Split(";"))
+                            .WithExposedHeaders(configuration.Cors.ExposedHeaders.Split(";"))
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+                });
+            }
+
+            services.AddAuthentication("ApiKey")
+                .AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationSchemeHandler>(
+                    "ApiKey",
+                    opts => opts.ApiKey = configuration.Authentication.ApiKey
+                );
+
+            services.AddAuthorizationBuilder()
+                .AddPolicy("ApiKey", policy =>
+                {
+                    policy.AddAuthenticationSchemes("ApiKey");
+                    policy.RequireAuthenticatedUser();
+                });
+
+            services.AddAntiforgery(o =>
+            {
+                o.HeaderName = "X-XSRF-TOKEN";
+                o.Cookie.Name = "X-XSRF-COOKIE";
+                o.Cookie.HttpOnly = false;
             });
 
-        services.AddAntiforgery(o =>
-        {
-            o.HeaderName = "X-XSRF-TOKEN";
-            o.Cookie.Name = "X-XSRF-COOKIE";
-            o.Cookie.HttpOnly = false;
-        });
+            services.AddHttpContextAccessor();
 
-        services.AddHttpContextAccessor();
+            services.AddTransient<IUserContext, AnonymousUserContext>();
 
-        services.AddTransient<IUserContext, AnonymousUserContext>();
-
-        return services;
+            return services;
+        }
     }
 
     private static Func<ActionContext, IActionResult> InvalidModelStateResponseFactory() => context =>

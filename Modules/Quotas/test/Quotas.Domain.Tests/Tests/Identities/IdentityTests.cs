@@ -536,22 +536,25 @@ public class MetricCalculatorStub : IMetricCalculator
 
 public static class IdentityExtensions
 {
-    public static async Task UpdateMetricStatuses(this Identity identity, IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, MetricUpdateType updateType)
+    extension(Identity identity)
     {
-        await identity.UpdateMetricStatuses(metrics, factory, updateType, CancellationToken.None);
-    }
+        public async Task UpdateMetricStatuses(IEnumerable<MetricKey> metrics, MetricCalculatorFactory factory, MetricUpdateType updateType)
+        {
+            await identity.UpdateMetricStatuses(metrics, factory, updateType, CancellationToken.None);
+        }
 
-    public static async Task AddUnexhaustedTierQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
-    {
-        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
-        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
-        await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(0), MetricUpdateType.All);
-    }
+        public async Task AddUnexhaustedTierQuotaToIdentity(MetricKey metricKey, int max)
+        {
+            var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
+            identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+            await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(0), MetricUpdateType.All);
+        }
 
-    public static async Task AddExhaustedTierQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
-    {
-        var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
-        identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
-        await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(max), MetricUpdateType.All);
+        public async Task AddExhaustedTierQuotaToIdentity(MetricKey metricKey, int max)
+        {
+            var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
+            identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
+            await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(max), MetricUpdateType.All);
+        }
     }
 }

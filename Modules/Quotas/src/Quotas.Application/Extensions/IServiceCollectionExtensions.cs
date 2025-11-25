@@ -10,37 +10,39 @@ namespace Backbone.Modules.Quotas.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddApplication(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommand>()
-            .AddOpenBehavior(typeof(LoggingBehavior<,>))
-            .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
-            .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
-        );
-
-        services.AddScoped<IMetricStatusesService, MetricStatusesService>();
-        services.AddEventHandlers();
-        services.AddMetricCalculators();
-    }
-
-    private static void AddEventHandlers(this IServiceCollection services)
-    {
-        foreach (var eventHandler in GetAllDomainEventHandlers())
+        public void AddApplication()
         {
-            services.AddTransient(eventHandler);
+            services.AddMediatR(c => c
+                .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommand>()
+                .AddOpenBehavior(typeof(LoggingBehavior<,>))
+                .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
+                .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+            );
+
+            services.AddScoped<IMetricStatusesService, MetricStatusesService>();
+            services.AddEventHandlers();
+            services.AddMetricCalculators();
         }
-    }
 
-    private static void AddMetricCalculators(this IServiceCollection services)
-    {
-        var lookupType = typeof(IMetricCalculator);
-        var types = Assembly.GetExecutingAssembly().GetTypes().Where(
-            t => lookupType.IsAssignableFrom(t) && !t.IsInterface);
-
-        foreach (var type in types)
+        private void AddEventHandlers()
         {
-            services.AddTransient(type);
+            foreach (var eventHandler in GetAllDomainEventHandlers())
+            {
+                services.AddTransient(eventHandler);
+            }
+        }
+
+        private void AddMetricCalculators()
+        {
+            var lookupType = typeof(IMetricCalculator);
+            var types = Assembly.GetExecutingAssembly().GetTypes().Where(t => lookupType.IsAssignableFrom(t) && !t.IsInterface);
+
+            foreach (var type in types)
+            {
+                services.AddTransient(type);
+            }
         }
     }
 

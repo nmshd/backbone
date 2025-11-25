@@ -14,65 +14,68 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddPushNotifications(this IServiceCollection services, PushNotificationConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddSingleton<PushNotificationResourceManager>();
-
-        services.AddSingleton<PushNotificationMetrics>();
-
-        services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
-
-        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
-
-        services.AddTransient<IPushNotificationRegistrationService, PushService>();
-        services.AddTransient<IPushNotificationSender, PushService>();
-
-        if (configuration.Providers.Fcm is { Enabled: true })
-            services.AddFcm(configuration.Providers.Fcm);
-
-        if (configuration.Providers.Apns is { Enabled: true })
-            services.AddApns(configuration.Providers.Apns);
-
-        if (configuration.Providers.Dummy is { Enabled: true })
-            services.AddDummy();
-
-        if (configuration.Providers.Sse is { Enabled: true })
+        public void AddPushNotifications(PushNotificationConfiguration configuration)
         {
-            services.AddSse(configuration.Providers.Sse);
+            services.AddSingleton<PushNotificationResourceManager>();
+
+            services.AddSingleton<PushNotificationMetrics>();
+
+            services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
+
+            services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
+
+            services.AddTransient<IPushNotificationRegistrationService, PushService>();
+            services.AddTransient<IPushNotificationSender, PushService>();
+
+            if (configuration.Providers.Fcm is { Enabled: true })
+                services.AddFcm(configuration.Providers.Fcm);
+
+            if (configuration.Providers.Apns is { Enabled: true })
+                services.AddApns(configuration.Providers.Apns);
+
+            if (configuration.Providers.Dummy is { Enabled: true })
+                services.AddDummy();
+
+            if (configuration.Providers.Sse is { Enabled: true })
+            {
+                services.AddSse(configuration.Providers.Sse);
+            }
         }
-    }
 
-    private static void AddFcm(this IServiceCollection services, FcmConfiguration configuration)
-    {
-        services.AddSingleton<FirebaseMessagingFactory>();
-        services.AddTransient<FirebaseCloudMessagingConnector>();
-        services.Configure<FcmConfiguration, FcmConfigurationValidator>(configuration);
-    }
+        private void AddFcm(FcmConfiguration configuration)
+        {
+            services.AddSingleton<FirebaseMessagingFactory>();
+            services.AddTransient<FirebaseCloudMessagingConnector>();
+            services.Configure<FcmConfiguration, FcmConfigurationValidator>(configuration);
+        }
 
-    private static void AddApns(this IServiceCollection services, ApnsConfiguration configuration)
-    {
-        services.AddHttpClient();
-        services.AddTransient<ApplePushNotificationServiceConnector>();
-        services.AddTransient<IJwtGenerator, JwtGenerator>();
-        services.AddSingleton<ApnsJwtCache>();
-        services.Configure<ApnsConfiguration, ApnsConfigurationValidator>(configuration);
-    }
+        private void AddApns(ApnsConfiguration configuration)
+        {
+            services.AddHttpClient();
+            services.AddTransient<ApplePushNotificationServiceConnector>();
+            services.AddTransient<IJwtGenerator, JwtGenerator>();
+            services.AddSingleton<ApnsJwtCache>();
+            services.Configure<ApnsConfiguration, ApnsConfigurationValidator>(configuration);
+        }
 
-    private static void AddDummy(this IServiceCollection services)
-    {
-        services.AddTransient<DummyConnector>();
-    }
+        private void AddDummy()
+        {
+            services.AddTransient<DummyConnector>();
+        }
 
-    private static void AddSse(this IServiceCollection services, SseConfiguration configuration)
-    {
-        services.AddSingleton<ISseServerClient, SseServerClient>();
+        private void AddSse(SseConfiguration configuration)
+        {
+            services.AddSingleton<ISseServerClient, SseServerClient>();
 
-        services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(configuration.SseServerBaseAddress));
+            services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(configuration.SseServerBaseAddress));
 
-        services.AddScoped<ServerSentEventsConnector>();
+            services.AddScoped<ServerSentEventsConnector>();
 
-        if (configuration.EnableHealthCheck)
-            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
+            if (configuration.EnableHealthCheck)
+                services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
+        }
     }
 }
 
