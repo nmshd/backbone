@@ -10,23 +10,26 @@ public static class IMutableModelExtensions
     private const string PROVIDER_POSTGRES = "Npgsql";
     private const string PROVIDER_SQLSERVER = "SqlServer";
 
-    public static void SetDbProvider(this IMutableModel model, DatabaseFacade database)
+    extension(IMutableModel model)
     {
-        model.AddAnnotation(PROVIDER_ANNOTATION, database.IsNpgsql() ? PROVIDER_POSTGRES : PROVIDER_SQLSERVER);
-    }
+        public void SetDbProvider(DatabaseFacade database)
+        {
+            model.AddAnnotation(PROVIDER_ANNOTATION, database.IsNpgsql() ? PROVIDER_POSTGRES : PROVIDER_SQLSERVER);
+        }
 
-    public static string? GetDbProvider(this IMutableModel model)
-    {
-        return model.FindAnnotation(PROVIDER_ANNOTATION)?.Value as string;
-    }
+        public string? GetDbProvider()
+        {
+            return model.FindAnnotation(PROVIDER_ANNOTATION)?.Value as string;
+        }
 
-    public static bool IsNpgsql(this IMutableModel model)
-    {
-        return model.GetDbProvider() is PROVIDER_POSTGRES;
-    }
+        public bool IsNpgsql()
+        {
+            return model.GetDbProvider() is PROVIDER_POSTGRES;
+        }
 
-    public static bool IsSqlServer(this IMutableModel model)
-    {
-        return model.GetDbProvider() is PROVIDER_SQLSERVER;
+        public bool IsSqlServer()
+        {
+            return model.GetDbProvider() is PROVIDER_SQLSERVER;
+        }
     }
 }
