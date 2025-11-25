@@ -106,7 +106,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        Func<Task> acting = async () =>
+        var acting = async () =>
             await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 

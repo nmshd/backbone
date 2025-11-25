@@ -138,7 +138,7 @@ public class TierTests : AbstractTestsBase
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
         // Act
-        Action act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
+        var act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
 
         // Assert
         act.ShouldThrow<InvalidOperationException>().Message.ShouldBe("Method can only be called for the 'Queued for Deletion' tier");
