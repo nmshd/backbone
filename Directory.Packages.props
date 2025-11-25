@@ -111,12 +111,4 @@
     <PackageVersion Include="xunit.v3" Version="[3.2.0]" />
     <PackageVersion Include="xunit.v3.core" Version="[3.2.0]" />
   </ItemGroup>
-  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
-    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
-    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="[3.1.5]" />
-  </ItemGroup>
 </Project>
