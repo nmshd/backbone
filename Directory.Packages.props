@@ -1,0 +1,125 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="[8.1.0]" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[8.1.0]" />
+    <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
+    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
+    <PackageVersion Include="Autofac" Version="[9.0.0]" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
+    <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
+    <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.13.1]" />
+    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="[12.26.0]" />
+    <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
+    <PackageVersion Include="coverlet.collector" Version="[6.0.4]" />
+    <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
+    <PackageVersion Include="Dapper" Version="[2.1.66]" />
+    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="9.0.2" />
+    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="9.0.2" />
+    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="9.0.2" />
+    <PackageVersion Include="FakeItEasy" Version="[8.3.0]" />
+    <PackageVersion Include="FirebaseAdmin" Version="[3.4.0]" />
+    <PackageVersion Include="FluentValidation" Version="[12.1.0]" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.0]" />
+    <PackageVersion Include="FluentValidation.Validators.UnitTestExtension" Version="[1.12.0.2]" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
+    <PackageVersion Include="Google.Cloud.PubSub.V1" Version="[3.30.0]" />
+    <PackageVersion Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
+    <PackageVersion Include="JWT" Version="[11.0.0]" />
+    <PackageVersion Include="MediatR" Version="[12.5.0]" />
+    <PackageVersion Include="MediatR.Contracts" Version="[2.0.1]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.AspNetCore.OData" Version="[9.4.1]" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[9.0.11]" />
+    <PackageVersion Include="Microsoft.Extensions.Azure" Version="[1.13.1]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[9.10.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[10.0.0]" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
+    <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="[3.0.28]" />
+    <PackageVersion Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.28]" />
+    <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.3.0]" />
+    <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.5.2]" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" />
+    <PackageVersion Include="NSec.Cryptography" Version="[25.4.0]" />
+    <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.1.0]" />
+    <PackageVersion Include="OpenIddict.Core" Version="[7.1.0]" />
+    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.1.0]" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="[1.11.2-beta.1]" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="[1.11.2-beta.1]" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.14.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.14.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.14.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.14.0]" />
+    <PackageVersion Include="Polly" Version="[8.6.5]" />
+    <PackageVersion Include="RabbitMQ.Client" Version="[7.2.0]" />
+    <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
+    <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.2.1]" />
+    <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.2.1]" />
+    <PackageVersion Include="Serilog" Version="[4.3.0]" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.7.0]" />
+    <PackageVersion Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
+    <PackageVersion Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
+    <PackageVersion Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
+    <PackageVersion Include="Serilog.Exceptions" Version="[8.4.0]" />
+    <PackageVersion Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="[6.1.1]" />
+    <PackageVersion Include="Serilog.Sinks.Debug" Version="[3.0.0]" />
+    <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.0]" />
+    <PackageVersion Include="Serilog.Sinks.Seq" Version="[9.0.0]" />
+    <PackageVersion Include="Shouldly" Version="[4.3.0]" />
+    <PackageVersion Include="SimpleBase" Version="[5.6.0]" />
+    <PackageVersion Include="Spectre.Console" Version="[0.54.0]" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[9.0.6]" />
+    <PackageVersion Include="System.CommandLine" Version="[2.0.0]" />
+    <PackageVersion Include="System.Data.SqlClient" Version="[4.9.0]" />
+    <PackageVersion Include="System.Interactive.Async" Version="[6.0.3]" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.9.0]" />
+    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.12.3]" />
+    <PackageVersion Include="UrlBase64" Version="[2.0.0]" />
+    <PackageVersion Include="xunit" Version="[2.9.3]" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="[3.1.5]" />
+    <PackageVersion Include="xunit.v3" Version="[3.2.0]" />
+    <PackageVersion Include="xunit.v3.core" Version="[3.2.0]" />
+  </ItemGroup>
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
+    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
+    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="[3.1.5]" />
+  </ItemGroup>
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
+    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
+  </ItemGroup>
+</Project>
