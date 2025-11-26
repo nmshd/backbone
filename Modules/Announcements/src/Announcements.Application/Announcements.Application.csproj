@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.0]" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
   </ItemGroup>
 
 </Project>

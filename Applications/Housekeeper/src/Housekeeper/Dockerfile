@@ -7,6 +7,8 @@ WORKDIR /src
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
 
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/Housekeeper/src/Housekeeper/Housekeeper.csproj", "Applications/Housekeeper/src/Housekeeper/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/"]

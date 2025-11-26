@@ -6,6 +6,9 @@ WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
+
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "Applications/EventHandlerService/src/EventHandlerService/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
