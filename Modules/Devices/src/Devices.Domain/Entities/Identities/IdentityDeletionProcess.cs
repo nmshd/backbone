@@ -11,10 +11,9 @@ public class IdentityDeletionProcess : Entity
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected IdentityDeletionProcess()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         IdentityAddress = null!;
         CreatedByDevice = null!;

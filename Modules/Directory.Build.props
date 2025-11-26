@@ -30,7 +30,11 @@
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
         <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
         <Using Include="Xunit" />
+    </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" />
+        <Using Include="JetBrains.Annotations;" />
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">

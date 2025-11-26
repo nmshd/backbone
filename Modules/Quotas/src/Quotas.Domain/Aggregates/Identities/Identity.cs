@@ -19,10 +19,9 @@ public class Identity : Entity
 
     private readonly Lock _latestExhaustionDateLock = new();
 
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Identity()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Address = null!;
         _tierQuotas = null!;
         _individualQuotas = null!;

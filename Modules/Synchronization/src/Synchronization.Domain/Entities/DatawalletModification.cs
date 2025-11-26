@@ -8,10 +8,9 @@ namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 public class DatawalletModification : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected DatawalletModification()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         Datawallet = null!;
         DatawalletVersion = null!;

@@ -7,11 +7,10 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class ExternalEvent : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected ExternalEvent()
     {
         Context = null!;
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         Owner = null!;
         Payload = null!;

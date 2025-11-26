@@ -11,10 +11,9 @@ public class Tier : Entity
 {
     public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Parse("TIR00000000000000001"), "Queued For Deletion");
 
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Tier()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         Name = null!;
         Quotas = null!;

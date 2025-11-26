@@ -9,10 +9,9 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 public class PnsRegistration : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected PnsRegistration()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         IdentityAddress = null!;
         DeviceId = null!;
         DevicePushIdentifier = null!;

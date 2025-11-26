@@ -34,6 +34,6 @@ public class RelationshipTemplateDeleteTests : AbstractTestsBase
         var deviceId = CreateRandomDeviceId();
         var content = UrlBase64.Decode("AAAA");
 
-        return new RelationshipTemplate(identity, deviceId, null, null, content, null, null);
+        return new RelationshipTemplate(identity, deviceId, null, null, content);
     }
 }

@@ -5,10 +5,9 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public abstract class Quota : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Quota()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         ApplyTo = null!;
     }

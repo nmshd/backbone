@@ -9,10 +9,9 @@ namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected File()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;

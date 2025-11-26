@@ -19,10 +19,9 @@ public class Identity : Entity
     private TierId? _tierId;
 #pragma warning restore IDE0032
 
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Identity()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         ClientId = null!;
         Address = null!;
         PublicKey = null!;

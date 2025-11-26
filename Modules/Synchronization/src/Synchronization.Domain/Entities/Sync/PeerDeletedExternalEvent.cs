@@ -4,10 +4,9 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class PeerDeletedExternalEvent : ExternalEvent
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected PeerDeletedExternalEvent()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
     public PeerDeletedExternalEvent(IdentityAddress owner, EventPayload payload)

@@ -5,10 +5,9 @@ namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class Attachment : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Attachment()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         MessageId = null!;
     }

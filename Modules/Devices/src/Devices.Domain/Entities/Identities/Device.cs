@@ -10,10 +10,9 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class Device : Entity
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected Device()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         IdentityAddress = null!;
         Identity = null!;

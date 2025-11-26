@@ -4,10 +4,9 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class RelationshipReactivationCompletedExternalEvent : ExternalEvent
 {
-    // ReSharper disable once UnusedMember.Local
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected RelationshipReactivationCompletedExternalEvent()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
     public RelationshipReactivationCompletedExternalEvent(IdentityAddress owner, EventPayload payload)
