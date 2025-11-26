@@ -27,7 +27,7 @@ public class TierTests : AbstractTestsBase
 
         // Assert
         error.ShouldNotBeNull();
-        error!.Code.ShouldBe("error.platform.validation.device.basicTierCannotBeDeleted");
+        error.Code.ShouldBe("error.platform.validation.device.basicTierCannotBeDeleted");
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class TierTests : AbstractTestsBase
 
         // Assert
         error.ShouldNotBeNull();
-        error!.Code.ShouldBe("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted");
+        error.Code.ShouldBe("error.platform.validation.device.queuedForDeletionTierCannotBeDeleted");
     }
 
     [Fact]

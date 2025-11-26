@@ -30,7 +30,7 @@ public class TokenTests : AbstractTestsBase
     public void Token_can_be_deleted_by_its_owner()
     {
         var identityAddress = CreateRandomIdentityAddress();
-        var token = TestData.CreateToken(identityAddress, null);
+        var token = TestData.CreateToken(identityAddress);
 
         var acting = () => token.EnsureCanBeDeletedBy(identityAddress);
 
@@ -42,7 +42,7 @@ public class TokenTests : AbstractTestsBase
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
-        var token = TestData.CreateToken(creatorIdentity, null);
+        var token = TestData.CreateToken(creatorIdentity);
 
         var acting = () => token.EnsureCanBeDeletedBy(otherIdentity);
 

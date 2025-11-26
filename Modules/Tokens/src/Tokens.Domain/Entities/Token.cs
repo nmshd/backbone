@@ -56,7 +56,7 @@ public class Token : Entity
     public IdentityAddress? ForIdentity { get; private set; }
     public byte[]? Password { get; set; }
 
-    public virtual TokenDetails Details { get; private set; }
+    public virtual TokenDetails Details { get; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 

@@ -70,7 +70,7 @@ public class UserContextStub : IUserContext
         throw new NotSupportedException();
     }
 
-    public string? GetClientIdOrNull()
+    public string GetClientIdOrNull()
     {
         throw new NotSupportedException();
     }

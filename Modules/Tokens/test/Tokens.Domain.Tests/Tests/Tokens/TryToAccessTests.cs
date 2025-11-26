@@ -56,7 +56,7 @@ public partial class TokenTryToAccessTests : AbstractTestsBase
     public void A_token_without_password_can_always_be_accessed()
     {
         // Arrange
-        var token = TestData.CreateToken(CreateRandomIdentityAddress(), null);
+        var token = TestData.CreateToken(CreateRandomIdentityAddress());
         var identityAddress = CreateRandomIdentityAddress();
         var deviceId = CreateRandomDeviceId();
 
@@ -221,12 +221,11 @@ public partial class TokenTryToAccessTests : AbstractTestsBase
 
         var numberOfAllocationsAfterAct = token.Allocations.Count;
 
-        var numberOfAddedAllocations = numberOfAllocationsAfterAct - numberOfAllocationsBeforeAct;
+        var actual = numberOfAllocationsAfterAct - numberOfAllocationsBeforeAct;
 
-        if (result == TokenAccessResult.AllocationAdded)
-            numberOfAddedAllocations.ShouldBe(1);
-        else
-            numberOfAddedAllocations.ShouldBe(0);
+        var expected = result == TokenAccessResult.AllocationAdded ? 1 : 0;
+
+        actual.ShouldBe(expected);
     }
 
     private static IdentityAddress? TranslateIdentity(Identity identityName)
