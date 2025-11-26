@@ -6,6 +6,7 @@ public class MetricStatus
 {
     public bool IsExhausted => IsExhaustedUntil.HasValue && IsExhaustedUntil > SystemTime.UtcNow;
 
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     private MetricStatus()
     {
         MetricKey = null!;

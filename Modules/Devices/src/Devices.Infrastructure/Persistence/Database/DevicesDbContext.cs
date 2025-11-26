@@ -33,9 +33,9 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IOpenIddictE
 
     private readonly IServiceProvider? _serviceProvider;
 
+    [UsedImplicitly(Reason = "This constructor is used by EF Core only")]
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options) : base(options)
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         _eventBus = null!;
     }
 

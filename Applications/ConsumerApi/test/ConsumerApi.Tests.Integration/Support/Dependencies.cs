@@ -8,11 +8,13 @@ using Reqnroll.Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Support;
 
+[UsedImplicitly(Reason = "This is used by Reqnroll.")]
 public static class Dependencies
 {
     private const string APP_SETTINGS_FILE = "appsettings.json";
 
     [ScenarioDependencies]
+    [UsedImplicitly(Reason = "This is used by Reqnroll.")]
     public static IServiceCollection CreateServices()
     {
         var services = new ServiceCollection();

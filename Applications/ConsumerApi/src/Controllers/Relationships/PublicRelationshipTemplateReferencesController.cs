@@ -32,11 +32,14 @@ public class PublicRelationshipTemplateReferencesController : ApiControllerBase
 public class PublicRelationshipTemplateReferenceDefinition
 {
     [Required]
+    [UsedImplicitly(Reason = "Objects of this class are serialized to JSON and thus the properties are required.")]
     public string Title { get; set; } = string.Empty;
 
     [Required]
+    [UsedImplicitly(Reason = "Objects of this class are serialized to JSON and thus the properties are required.")]
     public string Description { get; set; } = string.Empty;
 
     [Required]
+    [UsedImplicitly(Reason = "Objects of this class are serialized to JSON and thus the properties are required.")]
     public string TruncatedReference { get; set; } = string.Empty;
 }

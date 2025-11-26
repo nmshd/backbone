@@ -22,9 +22,9 @@ public class AbstractDbContextBase : DbContext, IDbContext
     private readonly IEventBus _eventBus;
     private readonly IServiceProvider? _serviceProvider;
 
+    [UsedImplicitly(Reason = "This constructor is for EF Core only")]
     protected AbstractDbContextBase()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         _eventBus = null!;
     }
 
