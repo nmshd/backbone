@@ -5,6 +5,10 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:033283403fc5b8789467bb6a0f9
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
+COPY ["Modules/Directory.Build.props", "Modules/"]
+
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj", "Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]

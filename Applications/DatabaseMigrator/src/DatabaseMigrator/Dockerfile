@@ -7,6 +7,8 @@ WORKDIR /src
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
 
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj", "Applications/DatabaseMigrator/src/DatabaseMigrator/"]
 
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/"]

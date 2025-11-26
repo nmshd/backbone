@@ -5,6 +5,10 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:32cd7d97e0814307e594f9f3e33aa039dd
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
+COPY ["Modules/Directory.Build.props", "Modules/"]
+
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/AdminCli/src/AdminCli/AdminCli.csproj", "Applications/AdminCli/src/AdminCli/"]
 
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/"]
