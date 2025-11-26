@@ -26,10 +26,6 @@ public class TokenTests : AbstractTestsBase
         domainEvent.CreatedBy.ShouldBe(address);
     }
 
-    private const string I1 = "did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f";
-    private const string I2 = "did:e:prod.enmeshed.eu:dids:cdef0d1a1f2545703f40ca";
-    private const string I3 = "did:e:prod.enmeshed.eu:dids:998351a946063fa1c28e04";
-
     [Fact]
     public void Token_can_be_deleted_by_its_owner()
     {

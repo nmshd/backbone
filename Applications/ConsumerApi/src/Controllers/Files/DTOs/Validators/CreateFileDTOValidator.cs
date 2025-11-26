@@ -5,8 +5,6 @@ namespace Backbone.ConsumerApi.Controllers.Files.DTOs.Validators;
 
 public class CreateFileDTOValidator : AbstractValidator<CreateFileDTO>
 {
-    private const string MIME_TYPE = "application/octet-stream";
-
     public CreateFileDTOValidator()
     {
         ClassLevelCascadeMode = CascadeMode.Stop;

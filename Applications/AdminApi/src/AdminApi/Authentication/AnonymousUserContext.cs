@@ -30,7 +30,7 @@ public class AnonymousUserContext : IUserContext
         throw new NotSupportedException();
     }
 
-    public string? GetUserIdOrNull()
+    public string GetUserIdOrNull()
     {
         throw new NotSupportedException();
     }
@@ -40,7 +40,7 @@ public class AnonymousUserContext : IUserContext
         throw new NotSupportedException();
     }
 
-    public string? GetUsernameOrNull()
+    public string GetUsernameOrNull()
     {
         throw new NotSupportedException();
     }

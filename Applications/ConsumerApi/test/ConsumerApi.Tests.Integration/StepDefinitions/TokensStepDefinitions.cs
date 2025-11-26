@@ -93,15 +93,6 @@ internal class TokensStepDefinitions
         }
     }
 
-    private async Task SendInvalidPasswordsToToken(string tokenName, int numberOfInvalidRequests)
-    {
-        var client = _clientPool.Anonymous;
-        var token = _tokensContext.CreateTokenResponses[tokenName];
-
-        for (var i = 0; i < numberOfInvalidRequests; i++)
-            await client.Tokens.GetTokenUnauthenticated(token.Id);
-    }
-
     #endregion
 
     #region When
