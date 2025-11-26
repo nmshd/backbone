@@ -17,9 +17,9 @@ public static class EntityExtensions
 
             var domainEvent = instance.DomainEvents[0];
 
-            if (domainEvent is TEvent) return (TEvent)instance.DomainEvents[0];
-
-            throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), domainEvent.GetType(), customMessage).ToString());
+            return domainEvent is TEvent
+                ? (TEvent)instance.DomainEvents[0]
+                : throw new ShouldAssertException(new DomainEventShouldlyMessage(typeof(TEvent), domainEvent.GetType(), customMessage).ToString());
         }
 
         public (TEvent1 event1, TEvent2 event2) ShouldHaveDomainEvents<TEvent1, TEvent2>(string? customMessage = null) where TEvent1 : DomainEvent where TEvent2 : DomainEvent

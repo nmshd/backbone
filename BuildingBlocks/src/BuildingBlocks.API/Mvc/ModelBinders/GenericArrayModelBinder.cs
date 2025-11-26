@@ -21,7 +21,7 @@ public class GenericArrayModelBinder : IModelBinder
         var items = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
         var query = bindingContext.HttpContext.Request.Query;
 
-        for (var i = 0; ; i++)
+        for (var i = 0;; i++)
         {
             var instance = Activator.CreateInstance(elementType);
             var properties = elementType.GetProperties();
@@ -34,12 +34,9 @@ public class GenericArrayModelBinder : IModelBinder
                 if (!query.TryGetValue(key, out var queryValue))
                     continue;
 
-                object? value;
-
-                if (property.PropertyType.IsAssignableTo(typeof(byte[])))
-                    value = Base64.Decode(queryValue.ToString());
-                else
-                    value = Convert.ChangeType(queryValue.ToString(), property.PropertyType);
+                var value = property.PropertyType.IsAssignableTo(typeof(byte[]))
+                    ? Base64.Decode(queryValue.ToString())
+                    : Convert.ChangeType(queryValue.ToString(), property.PropertyType);
 
                 property.SetValue(instance, value);
 

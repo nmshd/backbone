@@ -17,14 +17,9 @@ public class CorrelationIdMiddleware
     {
         var correlationId = context.Request.Headers["X-Correlation-ID"].FirstOrDefault();
 
-        if (string.IsNullOrEmpty(correlationId))
-        {
-            correlationId = CustomLogContext.GenerateCorrelationId();
-        }
-        else
-        {
-            correlationId = correlationId.Trim().ReplaceLineEndings("").TruncateToXChars(100);
-        }
+        correlationId = string.IsNullOrEmpty(correlationId)
+            ? CustomLogContext.GenerateCorrelationId()
+            : correlationId.Trim().ReplaceLineEndings("").TruncateToXChars(100);
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
 

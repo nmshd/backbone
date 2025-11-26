@@ -39,7 +39,7 @@ public static class IServiceCollectionExtensions
         var domainEventHandlerTypes =
             from t in Assembly.GetExecutingAssembly().GetTypes()
             from i in t.GetInterfaces()
-            where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+            where t.IsClass && t is { IsAbstract: false, IsGenericType: true } && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
             select t;
 
         return domainEventHandlerTypes;
