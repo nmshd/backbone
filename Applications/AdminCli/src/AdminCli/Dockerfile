@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/runtime:10.0@sha256:889de038b962009dbea9f92c7b54ed7f6dfe5ff495905d13ea12b21b866a22ba AS base
+FROM mcr.microsoft.com/dotnet/runtime:10.0@sha256:d13bea17080a4fea1a7295a4fe29240123b1bf955a78ae08480d07bdf09496db AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:32cd7d97e0814307e594f9f3e33aa039ddcf125191fd7add32c7370d2a6118b9 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:c7445f141c04f1a6b454181bd098dcfa606c61ba0bd213d0a702489e5bd4cd71 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]

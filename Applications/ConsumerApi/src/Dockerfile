@@ -11,7 +11,7 @@ WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:10.0-noble@sha256:32cd7d97e0814307e594f9f3e33aa039ddcf125191fd7add32c7370d2a6118b9 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0-noble@sha256:c7445f141c04f1a6b454181bd098dcfa606c61ba0bd213d0a702489e5bd4cd71 AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/runtime:10.0-noble-chiseled@sha256:edc829adf6e3bb44c120f4c5e9fc39273359b03e6414cb7b5835de6ad618c77e / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/runtime:10.0-noble-chiseled@sha256:de0fd88b573b73c9d877cc7585840b363590361045d3c55d02228486c83671a4 / /runtime-ref
 
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-24.04" --root /rootfs \
@@ -60,7 +60,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
 
 ### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled@sha256:63301b532a5be8153cde99023e2ba5e49146003b7fc9763ad3caff5b1290c048
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled@sha256:5730fa91fab5ec91f69661b86897249ad6a01c8da6da557695e9da4c6bc83621
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
