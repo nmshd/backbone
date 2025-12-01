@@ -67,9 +67,9 @@
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.5.2]" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" />
     <PackageVersion Include="NSec.Cryptography" Version="[25.4.0]" />
-    <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.1.0]" />
-    <PackageVersion Include="OpenIddict.Core" Version="[7.1.0]" />
-    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.1.0]" />
+    <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.2.0]" />
+    <PackageVersion Include="OpenIddict.Core" Version="[7.2.0]" />
+    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.2.0]" />
     <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="[1.11.2-beta.1]" />
     <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="[1.11.2-beta.1]" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.14.0]" />
