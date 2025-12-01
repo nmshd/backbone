@@ -19,9 +19,9 @@
     <PackageVersion Include="coverlet.collector" Version="[6.0.4]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
     <PackageVersion Include="Dapper" Version="[2.1.66]" />
-    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="9.0.2" />
-    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="9.0.2" />
-    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="9.0.2" />
+    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[9.0.2]" />
+    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[9.0.2]" />
+    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[9.0.2]" />
     <PackageVersion Include="FakeItEasy" Version="[8.3.0]" />
     <PackageVersion Include="FirebaseAdmin" Version="[3.4.0]" />
     <PackageVersion Include="FluentValidation" Version="[12.1.0]" />
