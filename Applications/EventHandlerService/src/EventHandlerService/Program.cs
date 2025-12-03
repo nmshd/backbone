@@ -73,7 +73,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             configuration
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
             configuration.AddEnvironmentVariables();

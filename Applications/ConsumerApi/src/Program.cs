@@ -227,7 +227,6 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
