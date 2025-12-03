@@ -7,9 +7,11 @@ namespace Backbone.Modules.Tags.Domain;
 public class TagInfo
 {
     [Required]
+    [UsedImplicitly(Reason = "Objects of this class are serialized to JSON and thus the properties are required.")]
     public Dictionary<string, string> DisplayNames { get; set; } = [];
 
     [JsonConverter(typeof(PascalCaseDictionaryConverter<TagInfo>))]
+    [UsedImplicitly(Reason = "Objects of this class are (de-)serialized to/from JSON and thus the properties are required.")]
     public Dictionary<string, TagInfo> Children { get; set; } = [];
 }
 
