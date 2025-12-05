@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 
@@ -16,12 +17,28 @@ public class DeletionStartedTests : AbstractTestsBase
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays).AddDays(1)); // past deletion grace period
 
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
+
         // Act
         identity.DeletionStarted();
 
         // Assert
         identity.Status.ShouldBe(IdentityStatus.Deleting);
-        identity.DeletionProcesses[0].DeletionStartedAt.ShouldBe(SystemTime.UtcNow);
+        var deletionProcess = identity.DeletionProcesses.First();
+        deletionProcess.DeletionStartedAt.ShouldBe(SystemTime.UtcNow);
+        AssertAuditLogEntryWasCreated(deletionProcess);
+    }
+
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
+    {
+        deletionProcess.AuditLog.ShouldHaveCount(2);
+
+        var auditLogEntry = deletionProcess.AuditLog[1];
+        auditLogEntry.MessageKey.ShouldBe(MessageKey.DeletionStarted);
+        auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
+        auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Active);
+        auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Deleting);
     }
 
     [Fact]
@@ -72,5 +89,11 @@ public class DeletionStartedTests : AbstractTestsBase
         identity.StartDeletionProcess(identity.Devices.First().Id);
 
         return identity;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
     }
 }

@@ -130,6 +130,7 @@ public class StartDeletionProcessTests : AbstractTestsBase
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         var auditLogEntry = deletionProcess.AuditLog[0];
+        auditLogEntry.MessageKey.ShouldBe(MessageKey.StartedByOwner);
         auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
         auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.ShouldBeNull();
