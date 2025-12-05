@@ -95,6 +95,7 @@ public class IdentityDeletionProcess : Entity
 
         ChangeStatus(DeletionProcessStatus.Deleting, address, address);
         DeletionStartedAt = SystemTime.UtcNow;
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.DeletionStarted(address));
     }
 
     private void EnsureGracePeriodHasExpired()
