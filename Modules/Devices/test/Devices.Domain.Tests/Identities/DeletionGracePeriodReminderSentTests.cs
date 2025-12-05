@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Exceptions;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
@@ -21,7 +21,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder1Sent);
         deletionProcess.GracePeriodReminder1SentAt.ShouldBe(currentDateTime);
     }
 
@@ -52,7 +52,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder2Sent);
         deletionProcess.GracePeriodReminder2SentAt.ShouldBe(currentDateTime);
     }
 
@@ -84,7 +84,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder3Sent);
         deletionProcess.GracePeriodReminder3SentAt.ShouldBe(currentDateTime);
     }
 
@@ -103,12 +103,13 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
         acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
-    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess, MessageKey expectedMessageKey)
     {
         deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
         auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.MessageKey.ShouldBe(expectedMessageKey);
         auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Active);
         auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Active);
