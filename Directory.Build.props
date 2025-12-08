@@ -11,7 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
-        <PackageReference Include="GitHubActionsTestLogger" />
+        <PackageReference Include="GitHubActionsTestLogger">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
 
         <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />

@@ -17,7 +17,10 @@
 
     <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="GitHubActionsTestLogger" />
+        <PackageReference Include="GitHubActionsTestLogger">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
 
         <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
@@ -27,7 +30,10 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="GitHubActionsTestLogger" />
+        <PackageReference Include="GitHubActionsTestLogger">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
 
         <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
