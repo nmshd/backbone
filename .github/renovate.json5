@@ -7,10 +7,11 @@
     additionalReviewers: ["erbenjak"],
     packageRules: [
         {
-            groupName: "dont-update-mediatr-due-to-license-issues",
+            // don't update MediatR due to license issues
             matchDatasources: ["nuget"],
             matchUpdateTypes: ["major"],
-            matchPackageNames: ["MediatR"]
+            matchPackageNames: ["MediatR"],
+            enabled: false
         },
 
         {
