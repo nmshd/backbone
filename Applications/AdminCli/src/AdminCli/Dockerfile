@@ -1,10 +1,14 @@
-FROM mcr.microsoft.com/dotnet/runtime:9.0@sha256:7f41d4da3c757aa5d0a6ded3696534e8130225e4c53dcdc0a5ead46b3026918d AS base
+FROM mcr.microsoft.com/dotnet/runtime:10.0@sha256:d13bea17080a4fea1a7295a4fe29240123b1bf955a78ae08480d07bdf09496db AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0@sha256:1ea5b7f2154cbd1e20a336cb56957dba30a7ce30ef5c1c032a37c42801594713 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:c7445f141c04f1a6b454181bd098dcfa606c61ba0bd213d0a702489e5bd4cd71 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
+COPY ["Modules/Directory.Build.props", "Modules/"]
+
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/AdminCli/src/AdminCli/AdminCli.csproj", "Applications/AdminCli/src/AdminCli/"]
 
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/"]

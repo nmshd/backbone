@@ -41,7 +41,7 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
         var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: exhaustedMetricStatus);
 
         // Act
-        Func<Task> acting = async () => await behavior.Handle(
+        var acting = async () => await behavior.Handle(
             new TestCommand(),
             new NextMock<Unit>().Value,
             CancellationToken.None
@@ -67,7 +67,7 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
         );
 
         // Act
-        Func<Task> acting = async () => await behavior.Handle(
+        var acting = async () => await behavior.Handle(
             new TestCommand(),
             new NextMock<Unit>().Value,
             CancellationToken.None);

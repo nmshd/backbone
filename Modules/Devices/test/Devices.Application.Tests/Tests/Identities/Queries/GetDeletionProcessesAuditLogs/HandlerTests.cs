@@ -7,6 +7,8 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAuditLogs;
 
@@ -117,7 +119,31 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(DevicesDbContext actDbContext)
     {
-        var repository = new IdentitiesRepository(actDbContext, A.Fake<UserManager<ApplicationUser>>());
+        var repository = new IdentitiesRepository(actDbContext, new FakeUserManager());
         return new Handler(repository);
     }
 }
+
+public class FakeUserManager : UserManager<ApplicationUser>
+{
+    public FakeUserManager() : base(
+        A.Fake<IUserStore<ApplicationUser>>(),
+        A.Fake<IOptions<IdentityOptions>>(),
+        A.Fake<IPasswordHasher<ApplicationUser>>(),
+        [],
+        [],
+        A.Fake<ILookupNormalizer>(),
+        A.Fake<IdentityErrorDescriber>(),
+        GetServiceProvider(),
+        A.Fake<ILogger<UserManager<ApplicationUser>>>())
+    {
+    }
+
+    private static IServiceProvider GetServiceProvider()
+    {
+        var services = A.Fake<IServiceProvider>();
+        A.CallTo(services).WithNonVoidReturnType().Returns(null);
+        return services;
+    }
+}
+

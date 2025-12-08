@@ -1,30 +1,29 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <UserSecretsId>f114fba8-95dd-4fee-8385-af8e8a343c68</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.11]" />
-        <PackageReference Include="MyCSharp.HttpUserAgentParser" Version="[3.0.28]" />
-        <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.28]" />
-        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.2.0]" />
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.11]" />
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
-        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[9.0.11]" />
-        <PackageReference Include="Serilog" Version="[4.3.0]" />
-        <PackageReference Include="Serilog.AspNetCore" Version="[9.0.0]" />
-        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="[2.6.0]" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
-        <PackageReference Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
-        <PackageReference Include="Serilog.Exceptions" Version="[8.4.0]" />
-        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
-        <PackageReference Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
-        <PackageReference Include="Serilog.Sinks.Http" Version="[9.2.0]" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="[9.0.0]" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="MyCSharp.HttpUserAgentParser" />
+        <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" />
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" />
+        <PackageReference Include="Serilog.Enrichers.Sensitive" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="Serilog.Enrichers.ClientInfo" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" />
+        <PackageReference Include="Serilog.Enrichers.Environment" />
+        <PackageReference Include="Serilog.Exceptions" />
+        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
+        <PackageReference Include="Serilog.Formatting.Compact" />
+        <PackageReference Include="Serilog.Sinks.Http" />
+        <PackageReference Include="Serilog.Sinks.Seq" />
     </ItemGroup>
 
     <ItemGroup>

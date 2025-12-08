@@ -88,7 +88,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq-test
     hostname: rabbitmq
-    image: rabbitmq:4.2.0-management-alpine@sha256:304c771246b261babf09677f27b82c99b5c05330b0e8c73fcc133498cb021aec
+    image: rabbitmq:4.2.1-management-alpine@sha256:395e21feb54d07af2f913d317e40221855ae5848d120b585bc58ab9644a909e3
     ports:
       - "5672:5672"
 

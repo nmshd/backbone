@@ -13,7 +13,11 @@ public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
     protected virtual EfCoreFeatureFlagSet EfCoreFeatureFlagSetDoNotUse { get; } = [];
+
+    // ReSharper disable once ReplaceWithFieldKeyword
+#pragma warning disable IDE0032
     private TierId? _tierId;
+#pragma warning restore IDE0032
 
     // ReSharper disable once UnusedMember.Local
     protected Identity()

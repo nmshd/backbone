@@ -16,19 +16,22 @@ public static class StringExtensions
         return string.IsNullOrEmpty(@string);
     }
 
-    public static bool MatchesRegex(this string text, string regexString)
+    extension(string text)
     {
-        var regex = new Regex(regexString);
-        return regex.IsMatch(text);
-    }
+        public bool MatchesRegex(string regexString)
+        {
+            var regex = new Regex(regexString);
+            return regex.IsMatch(text);
+        }
 
-    public static string TruncateToXChars(this string text, int maxLength)
-    {
-        return text[..Math.Min(text.Length, maxLength)];
-    }
+        public string TruncateToXChars(int maxLength)
+        {
+            return text[..Math.Min(text.Length, maxLength)];
+        }
 
-    public static byte[] GetBytes(this string text)
-    {
-        return Encoding.UTF8.GetBytes(text);
+        public byte[] GetBytes()
+        {
+            return Encoding.UTF8.GetBytes(text);
+        }
     }
 }

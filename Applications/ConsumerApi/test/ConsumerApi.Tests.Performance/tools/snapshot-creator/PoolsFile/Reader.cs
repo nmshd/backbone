@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+
 public static class Reader
 {
     public static async Task<PoolFileRoot> ReadPools(string poolsFilePath)

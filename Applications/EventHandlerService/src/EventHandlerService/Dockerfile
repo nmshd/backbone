@@ -1,11 +1,14 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:07c48612ac44393b15e741734761cf1f30cdb8f7e645e66e25b4563681ceef99 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:049f2d7d7acfcbf09e1d15eb4faccec6453b0a98f0cb54d53bcbdc3ed91e96c8 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine@sha256:512f8347b0d2f9848f099a8c31be07286955ceea337cadb1114057ed0b15862f AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:7d98d5883675c6bca25b1db91f393b24b85125b5b00b405e55404fd6b8d2aead AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
+
+COPY ["Directory.Packages.props", "."]
+
 COPY ["Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "Applications/EventHandlerService/src/EventHandlerService/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]

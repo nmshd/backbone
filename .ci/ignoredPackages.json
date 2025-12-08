@@ -1,1 +1,1 @@
-﻿["MyCSharp.HttpUserAgentParser", "MyCSharp.HttpUserAgentParser.AspNetCore", "EFCore.BulkExtensions"]
+﻿["MyCSharp.HttpUserAgentParser", "MyCSharp.HttpUserAgentParser.AspNetCore", "EFCore.BulkExtensions.Core", "EFCore.BulkExtensions.PostgreSql", "EFCore.BulkExtensions.SqlServer"]

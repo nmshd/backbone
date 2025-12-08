@@ -7,19 +7,22 @@ namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class SyncRunsQueryableExtensions
 {
-    public static IQueryable<SyncRun> CreatedBy(this IQueryable<SyncRun> query, IdentityAddress createdBy)
+    extension(IQueryable<SyncRun> query)
     {
-        return query.Where(d => d.CreatedBy == createdBy);
-    }
+        public IQueryable<SyncRun> CreatedBy(IdentityAddress createdBy)
+        {
+            return query.Where(d => d.CreatedBy == createdBy);
+        }
 
-    public static IQueryable<SyncRun> NotFinalized(this IQueryable<SyncRun> query)
-    {
-        return query.Where(d => d.FinalizedAt == null);
-    }
+        public IQueryable<SyncRun> NotFinalized()
+        {
+            return query.Where(d => d.FinalizedAt == null);
+        }
 
-    public static async Task<SyncRun> GetFirst(this IQueryable<SyncRun> query, CancellationToken cancellationToken)
-    {
-        var syncRun = await query.FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(nameof(SyncRun));
-        return syncRun;
+        public async Task<SyncRun> GetFirst(CancellationToken cancellationToken)
+        {
+            var syncRun = await query.FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException(nameof(SyncRun));
+            return syncRun;
+        }
     }
 }

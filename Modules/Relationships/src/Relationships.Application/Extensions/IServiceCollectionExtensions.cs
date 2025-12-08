@@ -9,25 +9,28 @@ namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddApplication(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateRelationshipTemplateCommand>()
-            .AddOpenBehavior(typeof(LoggingBehavior<,>))
-            .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
-            .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
-        );
-
-        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
-
-        services.AddEventHandlers();
-    }
-
-    private static void AddEventHandlers(this IServiceCollection services)
-    {
-        foreach (var eventHandler in GetAllDomainEventHandlers())
+        public void AddApplication()
         {
-            services.AddTransient(eventHandler);
+            services.AddMediatR(c => c
+                .RegisterServicesFromAssemblyContaining<CreateRelationshipTemplateCommand>()
+                .AddOpenBehavior(typeof(LoggingBehavior<,>))
+                .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
+                .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+            );
+
+            services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
+
+            services.AddEventHandlers();
+        }
+
+        private void AddEventHandlers()
+        {
+            foreach (var eventHandler in GetAllDomainEventHandlers())
+            {
+                services.AddTransient(eventHandler);
+            }
         }
     }
 

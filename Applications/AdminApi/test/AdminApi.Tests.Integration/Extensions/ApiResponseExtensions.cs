@@ -7,21 +7,24 @@ namespace Backbone.AdminApi.Tests.Integration.Extensions;
 [ShouldlyMethods]
 public static class ApiResponseExtensions
 {
-    public static async Task ShouldComplyWithSchema<T>(this ApiResponse<T> response, string? customMessage = null)
+    extension<T>(ApiResponse<T> response)
     {
-        if (response.Result == null)
-            throw new ShouldAssertException(new ActualShouldlyMessage(null, customMessage).ToString());
+        public async Task ShouldComplyWithSchema(string? customMessage = null)
+        {
+            if (response.Result == null)
+                throw new ShouldAssertException(new ActualShouldlyMessage(null, customMessage).ToString());
 
-        var resultJson = JsonSerializer.Serialize(response.Result);
-        var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
+            var resultJson = JsonSerializer.Serialize(response.Result);
+            var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
 
-        if (!isValid)
-            throw new ShouldAssertException(new ActualShouldlyMessage(string.Join(", ", errors), customMessage).ToString());
-    }
+            if (!isValid)
+                throw new ShouldAssertException(new ActualShouldlyMessage(string.Join(", ", errors), customMessage).ToString());
+        }
 
-    public static void ShouldBeASuccess<T>(this ApiResponse<T> response, string? customMessage = null)
-    {
-        if (response.IsError)
-            throw new ShouldAssertException(new ActualShouldlyMessage($"Code: {response.Error.Code}, Message: {response.Error.Message}", customMessage).ToString());
+        public void ShouldBeASuccess(string? customMessage = null)
+        {
+            if (response.IsError)
+                throw new ShouldAssertException(new ActualShouldlyMessage($"Code: {response.Error.Code}, Message: {response.Error.Message}", customMessage).ToString());
+        }
     }
 }

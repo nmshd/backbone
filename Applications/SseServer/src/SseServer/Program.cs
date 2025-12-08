@@ -107,7 +107,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-        options.KnownNetworks.Clear();
+        options.KnownIPNetworks.Clear();
         options.KnownProxies.Clear();
     });
 
@@ -160,8 +160,7 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
     webApplicationBuilder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
-        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);

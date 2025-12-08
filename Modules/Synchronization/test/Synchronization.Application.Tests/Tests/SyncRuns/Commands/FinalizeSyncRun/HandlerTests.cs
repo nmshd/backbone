@@ -33,7 +33,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
+        var acting = async () => await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
 
         // Assert
         await acting.ShouldThrowAsync<NotFoundException>().ShouldContainMessage("SyncRun");
@@ -54,7 +54,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        Func<Task> acting = async () =>
+        var acting = async () =>
             await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand { SyncRunId = syncRun.Id, DatawalletModifications = [], ExternalEventResults = [] }, CancellationToken.None);
 
         // Assert

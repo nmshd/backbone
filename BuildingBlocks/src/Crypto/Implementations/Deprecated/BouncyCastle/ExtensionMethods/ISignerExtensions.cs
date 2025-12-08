@@ -6,18 +6,21 @@ namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMetho
 // ReSharper disable once InconsistentNaming
 internal static class ISignerExtensions
 {
-    public static void InitForSigning(this ISigner signer, ECPrivateKeyParameters publicKeyParameters)
+    extension(ISigner signer)
     {
-        signer.Init(true, publicKeyParameters);
-    }
+        public void InitForSigning(ECPrivateKeyParameters publicKeyParameters)
+        {
+            signer.Init(true, publicKeyParameters);
+        }
 
-    public static void InitForValidation(this ISigner signer, ECPublicKeyParameters publicKeyParameters)
-    {
-        signer.Init(false, publicKeyParameters);
-    }
+        public void InitForValidation(ECPublicKeyParameters publicKeyParameters)
+        {
+            signer.Init(false, publicKeyParameters);
+        }
 
-    public static void BlockUpdate(this ISigner signer, byte[] input)
-    {
-        signer.BlockUpdate(input, 0, input.Length);
+        public void BlockUpdate(byte[] input)
+        {
+            signer.BlockUpdate(input, 0, input.Length);
+        }
     }
 }

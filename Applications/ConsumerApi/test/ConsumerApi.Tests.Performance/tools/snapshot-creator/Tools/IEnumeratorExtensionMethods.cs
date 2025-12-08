@@ -1,4 +1,5 @@
 ﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
+
 public static class IEnumeratorExtensionMethods
 {
     public static T NextOrFirst<T>(this IEnumerator<T> enumerator)

@@ -11,6 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" />
     </ItemGroup>
 </Project>

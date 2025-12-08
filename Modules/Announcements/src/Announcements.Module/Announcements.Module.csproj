@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="[9.0.10]" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" />
     </ItemGroup>
 
 </Project>

@@ -10,29 +10,32 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddDatabase(this IServiceCollection services, DatabaseConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        services.AddDbContextForModule<DevicesDbContext>(configuration, "Devices", setupDbContextOptions: dbContextOptions =>
+        public void AddDatabase(DatabaseConfiguration configuration)
         {
-            dbContextOptions.UseOpenIddict<
-                CustomOpenIddictEntityFrameworkCoreApplication,
-                CustomOpenIddictEntityFrameworkCoreAuthorization,
-                CustomOpenIddictEntityFrameworkCoreScope,
-                CustomOpenIddictEntityFrameworkCoreToken,
-                string>();
-        });
+            services.AddDbContextForModule<DevicesDbContext>(configuration, "Devices", setupDbContextOptions: dbContextOptions =>
+            {
+                dbContextOptions.UseOpenIddict<
+                    CustomOpenIddictEntityFrameworkCoreApplication,
+                    CustomOpenIddictEntityFrameworkCoreAuthorization,
+                    CustomOpenIddictEntityFrameworkCoreScope,
+                    CustomOpenIddictEntityFrameworkCoreToken,
+                    string>();
+            });
 
-        services.AddRepositories();
-    }
+            services.AddRepositories();
+        }
 
-    public static void AddRepositories(this IServiceCollection services)
-    {
-        services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
-        services.AddTransient<ITiersRepository, TiersRepository>();
-        services.AddTransient<IChallengesRepository, ChallengesRepository>();
-        services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
-        services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
-        services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
-        services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
+        public void AddRepositories()
+        {
+            services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+            services.AddTransient<ITiersRepository, TiersRepository>();
+            services.AddTransient<IChallengesRepository, ChallengesRepository>();
+            services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();
+            services.AddTransient<IPnsRegistrationsRepository, PnsRegistrationsRepository>();
+            services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
+            services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
+        }
     }
 }

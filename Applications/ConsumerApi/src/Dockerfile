@@ -4,14 +4,14 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.25@sha256:e68f6a00e88586577fafa4d9cefad1349c2be70d21244321321c407474ff9bf2 AS chisel
+FROM golang:1.25@sha256:20b91eda7a9627c127c0225b0d4e8ec927b476fa4130c6760928b849d769c149 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:9.0-noble@sha256:5643129f0c9f09bab23387c57bfeea1e3e42f47c7370fd9e389a5739e5ef383c AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0-noble@sha256:c7445f141c04f1a6b454181bd098dcfa606c61ba0bd213d0a702489e5bd4cd71 AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/runtime:9.0-noble-chiseled@sha256:7c0320827dafdd5d9e9512291c02fb9e601793b9a8b9750d01d1f24eb6585ac2 / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/runtime:10.0-noble-chiseled@sha256:de0fd88b573b73c9d877cc7585840b363590361045d3c55d02228486c83671a4 / /runtime-ref
 
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-24.04" --root /rootfs \
@@ -60,7 +60,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
 
 ### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled@sha256:2b1b632112286928b15bddd27dd8e90bc0a73ada19c812562b5112dbe5daafb6
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled@sha256:5730fa91fab5ec91f69661b86897249ad6a01c8da6da557695e9da4c6bc83621
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]

@@ -90,7 +90,7 @@ public class Program
 
         configurationBuilder
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+            .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
 
         configurationBuilder.AddEnvironmentVariables();
         configurationBuilder.AddCommandLine(strings);

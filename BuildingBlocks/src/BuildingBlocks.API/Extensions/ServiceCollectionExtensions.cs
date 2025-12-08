@@ -19,183 +19,186 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddSqlDatabaseHealthCheck(this IServiceCollection services, string name, string provider, string connectionString)
+    extension(IServiceCollection services)
     {
-        switch (provider)
+        public void AddSqlDatabaseHealthCheck(string name, string provider, string connectionString)
         {
-            case DatabaseConfiguration.SQLSERVER:
-                services.AddHealthChecks().AddSqlServer(
-                    connectionString,
-                    name: $"{name}Database"
-                );
-                break;
-            case DatabaseConfiguration.POSTGRES:
-                services.AddHealthChecks().AddNpgSql(
-                    connectionString: connectionString,
-                    name: $"{name}Database"
-                );
-                break;
-            default:
-                throw new Exception($"Unsupported database provider: {provider}");
-        }
-    }
-
-    public static IServiceCollection AddModule<TModule, TApplicationConfiguration, TInfrastructureConfiguration>(this IServiceCollection services, IConfiguration configuration)
-        where TModule : AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>, new()
-        where TApplicationConfiguration : class
-        where TInfrastructureConfiguration : class
-    {
-        var module = new TModule();
-
-        var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
-
-        module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
-
-        services.AddSingleton<IEventBusConfigurator>(module);
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomIdentity(this IServiceCollection services, IHostEnvironment environment)
-    {
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            switch (provider)
             {
-                if (environment.IsDevelopment() || environment.IsLocal())
-                {
-                    options.Password.RequiredLength = 1;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireNonAlphanumeric = false;
-
-                    options.User.AllowedUserNameCharacters += " ";
-
-                    options.Lockout.AllowedForNewUsers = true;
-                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-                    options.Lockout.MaxFailedAccessAttempts = 3;
-                }
-                else
-                {
-                    options.Password.RequiredLength = 10;
-                    options.Password.RequireUppercase = true;
-                    options.Password.RequireLowercase = true;
-                    options.Password.RequireDigit = true;
-                    options.Password.RequireNonAlphanumeric = true;
-
-                    options.Lockout.AllowedForNewUsers = true;
-                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                    options.Lockout.MaxFailedAccessAttempts = 3;
-                }
-            })
-            .AddEntityFrameworkStores<DevicesDbContext>()
-            .AddSignInManager<CustomSigninManager>()
-            .AddUserStore<CustomUserStore>();
-
-        services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddOpenTelemetryWithPrometheusExporter(this IServiceCollection services, string name)
-    {
-        services.AddOpenTelemetry()
-            .WithMetrics(metrics =>
-            {
-                metrics
-                    .AddPrometheusExporter()
-                    .AddMeter(name)
-                    .AddMeter("Microsoft.EntityFrameworkCore")
-                    .AddMeter("Microsoft.AspNetCore.Hosting")
-                    .AddMeter("Microsoft.AspNetCore.Diagnostics")
-                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
-            });
-
-        return services;
-    }
-
-    public static IServiceCollection AddCustomSwaggerUi(this IServiceCollection services, SwaggerUiConfiguration swaggerUi, string title)
-    {
-        if (!swaggerUi.Enabled)
-            return services;
-
-        services.AddEndpointsApiExplorer();
-
-        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-        services.Configure<SwaggerGenOptions>(options =>
-        {
-            foreach (var doc in options.SwaggerGeneratorOptions.SwaggerDocs.Values)
-            {
-                doc.Title = title;
+                case DatabaseConfiguration.SQLSERVER:
+                    services.AddHealthChecks().AddSqlServer(
+                        connectionString,
+                        name: $"{name}Database"
+                    );
+                    break;
+                case DatabaseConfiguration.POSTGRES:
+                    services.AddHealthChecks().AddNpgSql(
+                        connectionString: connectionString,
+                        name: $"{name}Database"
+                    );
+                    break;
+                default:
+                    throw new Exception($"Unsupported database provider: {provider}");
             }
-        });
+        }
 
-        services.AddSwaggerGen(options =>
+        public IServiceCollection AddModule<TModule, TApplicationConfiguration, TInfrastructureConfiguration>(IConfiguration configuration)
+            where TModule : AbstractModule<TApplicationConfiguration, TInfrastructureConfiguration>, new()
+            where TApplicationConfiguration : class
+            where TInfrastructureConfiguration : class
         {
-            options.OperationFilter<SwaggerDefaultValues>();
+            var module = new TModule();
 
-            options.CustomSchemaIds(t =>
-            {
-                static string GetReadableName(Type type)
+            var moduleConfiguration = configuration.GetSection($"Modules:{module.Name}");
+
+            module.ConfigureServices(services, moduleConfiguration, configuration.GetSection("ModuleDefaults"));
+
+            services.AddSingleton<IEventBusConfigurator>(module);
+
+            return services;
+        }
+
+        public IServiceCollection AddCustomIdentity(IHostEnvironment environment)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
-                    if (!type.IsGenericType)
+                    if (environment.IsDevelopment() || environment.IsLocal())
                     {
-                        return type.Name
-                            .Replace("DTO", string.Empty)
-                            .Replace("Command", "Request")
-                            .Replace("Query", "Request");
+                        options.Password.RequiredLength = 1;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireDigit = false;
+                        options.Password.RequireNonAlphanumeric = false;
+
+                        options.User.AllowedUserNameCharacters += " ";
+
+                        options.Lockout.AllowedForNewUsers = true;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                        options.Lockout.MaxFailedAccessAttempts = 3;
                     }
+                    else
+                    {
+                        options.Password.RequiredLength = 10;
+                        options.Password.RequireUppercase = true;
+                        options.Password.RequireLowercase = true;
+                        options.Password.RequireDigit = true;
+                        options.Password.RequireNonAlphanumeric = true;
 
-                    var typeName = type.Name
-                        .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
-                        .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
-                    var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
-                    return name;
+                        options.Lockout.AllowedForNewUsers = true;
+                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                        options.Lockout.MaxFailedAccessAttempts = 3;
+                    }
+                })
+                .AddEntityFrameworkStores<DevicesDbContext>()
+                .AddSignInManager<CustomSigninManager>()
+                .AddUserStore<CustomUserStore>();
+
+            services.AddScoped<ILookupNormalizer, CustomLookupNormalizer>();
+
+            return services;
+        }
+
+        public IServiceCollection AddOpenTelemetryWithPrometheusExporter(string name)
+        {
+            services.AddOpenTelemetry()
+                .WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddPrometheusExporter()
+                        .AddMeter(name)
+                        .AddMeter("Microsoft.EntityFrameworkCore")
+                        .AddMeter("Microsoft.AspNetCore.Hosting")
+                        .AddMeter("Microsoft.AspNetCore.Diagnostics")
+                        .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+                });
+
+            return services;
+        }
+
+        public IServiceCollection AddCustomSwaggerUi(SwaggerUiConfiguration swaggerUi, string title)
+        {
+            if (!swaggerUi.Enabled)
+                return services;
+
+            services.AddEndpointsApiExplorer();
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.Configure<SwaggerGenOptions>(options =>
+            {
+                foreach (var doc in options.SwaggerGeneratorOptions.SwaggerDocs.Values)
+                {
+                    doc.Title = title;
                 }
-
-                return GetReadableName(t);
             });
 
-            const string securityDefinitionName = "oauth2";
+            services.AddSwaggerGen(options =>
+            {
+                options.OperationFilter<SwaggerDefaultValues>();
 
-            options.AddSecurityDefinition(
-                securityDefinitionName,
-                new OpenApiSecurityScheme
+                options.CustomSchemaIds(t =>
                 {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
+                    static string GetReadableName(Type type)
                     {
-                        Password = new OpenApiOAuthFlow
+                        if (!type.IsGenericType)
                         {
-                            TokenUrl = new Uri("/connect/token", UriKind.Relative)
+                            return type.Name
+                                .Replace("DTO", string.Empty)
+                                .Replace("Command", "Request")
+                                .Replace("Query", "Request");
                         }
+
+                        var typeName = type.Name
+                            .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
+                            .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
+                        var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
+                        return name;
                     }
+
+                    return GetReadableName(t);
                 });
 
-            options.AddSecurityRequirement(
-                new OpenApiSecurityRequirement
-                {
+                const string securityDefinitionName = "oauth2";
+
+                options.AddSecurityDefinition(
+                    securityDefinitionName,
+                    new OpenApiSecurityScheme
                     {
-                        new OpenApiSecurityScheme
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
                         {
-                            Reference = new OpenApiReference
+                            Password = new OpenApiOAuthFlow
                             {
-                                Id = securityDefinitionName,
-                                Type = ReferenceType.SecurityScheme
+                                TokenUrl = new Uri("/connect/token", UriKind.Relative)
                             }
-                        },
-                        new List<string>()
-                    }
-                });
-        });
+                        }
+                    });
 
-        services.AddApiVersioning().AddApiExplorer(options =>
-        {
-            // The specified format code will format the version as "'v'major[.minor][-status]"
-            options.GroupNameFormat = "'v'VVV";
-            options.SubstituteApiVersionInUrl = true;
-        });
+                options.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Id = securityDefinitionName,
+                                    Type = ReferenceType.SecurityScheme
+                                }
+                            },
+                            new List<string>()
+                        }
+                    });
+            });
 
-        return services;
+            services.AddApiVersioning().AddApiExplorer(options =>
+            {
+                // The specified format code will format the version as "'v'major[.minor][-status]"
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+
+            return services;
+        }
     }
 }
 

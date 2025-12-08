@@ -5,18 +5,21 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.Queryable
 
 public static class DeviceQueryableExtensions
 {
-    public static IQueryable<Device> WithId(this IQueryable<Device> query, DeviceId id)
+    extension(IQueryable<Device> query)
     {
-        return query.Where(d => d.Id == id);
-    }
+        public IQueryable<Device> WithId(DeviceId id)
+        {
+            return query.Where(d => d.Id == id);
+        }
 
-    public static IQueryable<Device> OfIdentity(this IQueryable<Device> query, IdentityAddress address)
-    {
-        return query.Where(d => d.IdentityAddress == address);
-    }
+        public IQueryable<Device> OfIdentity(IdentityAddress address)
+        {
+            return query.Where(d => d.IdentityAddress == address);
+        }
 
-    public static IQueryable<Device> WithIdIn(this IQueryable<Device> query, IEnumerable<DeviceId> ids)
-    {
-        return query.Where(d => ids.Contains(d.Id));
+        public IQueryable<Device> WithIdIn(IEnumerable<DeviceId> ids)
+        {
+            return query.Where(d => ids.Contains(d.Id));
+        }
     }
 }

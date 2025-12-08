@@ -1,6 +1,4 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
@@ -8,7 +6,7 @@ using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionGracePeriodReminderTests : AbstractTestsBase
+public class DeletionProcessGracePeriodTests : AbstractTestsBase
 {
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
@@ -23,7 +21,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder1Sent);
         deletionProcess.GracePeriodReminder1SentAt.ShouldBe(currentDateTime);
     }
 
@@ -32,7 +30,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder1Sent;
@@ -54,16 +52,17 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder2Sent);
         deletionProcess.GracePeriodReminder2SentAt.ShouldBe(currentDateTime);
     }
+
 
     [Fact]
     public void DeletionGracePeriodReminder2Sent_fails_when_no_active_deletion_process_exists()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder2Sent;
@@ -85,7 +84,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
 
         // Assert
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Active)!;
-        AssertAuditLogEntryWasCreated(deletionProcess);
+        AssertAuditLogEntryWasCreated(deletionProcess, MessageKey.GracePeriodReminder3Sent);
         deletionProcess.GracePeriodReminder3SentAt.ShouldBe(currentDateTime);
     }
 
@@ -95,7 +94,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder3Sent;
@@ -104,12 +103,13 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         acting.ShouldThrow<DomainException>().ShouldHaveError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
-    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
+    private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess, MessageKey expectedMessageKey)
     {
         deletionProcess.AuditLog.ShouldHaveCount(2);
 
         var auditLogEntry = deletionProcess.AuditLog[1];
         auditLogEntry.CreatedAt.ShouldBe(SystemTime.UtcNow);
+        auditLogEntry.MessageKey.ShouldBe(expectedMessageKey);
         auditLogEntry.IdentityAddressHash.ShouldBeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.OldStatus.ShouldBe(DeletionProcessStatus.Active);
         auditLogEntry.NewStatus.ShouldBe(DeletionProcessStatus.Active);
@@ -117,20 +117,11 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
 
     private static Identity CreateIdentityWithActiveDeletionProcess()
     {
-        var identity = CreateIdentity();
-        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        identity.Devices.Add(device);
+        var identity = TestDataGenerator.CreateIdentity();
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
-
-        identity.StartDeletionProcess(device.Id);
+        identity.StartDeletionProcess(identity.Devices.First().Id);
 
         return identity;
-    }
-
-    private static Identity CreateIdentity()
-    {
-        var address = IdentityAddress.Create([], "prod.enmeshed.eu");
-        return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
     public override void Dispose()
