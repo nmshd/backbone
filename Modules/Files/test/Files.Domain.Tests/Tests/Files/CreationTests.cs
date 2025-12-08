@@ -2,7 +2,7 @@ using Backbone.Modules.Files.Domain.Tests.Helpers;
 
 namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
 
-public class CreationTests
+public class CreationTests : AbstractTestsBase
 {
     [Fact]
     public void A_files_ownership_is_not_locked_after_creation()

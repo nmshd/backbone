@@ -6,7 +6,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Domain.Tests.Tests.Files;
 
-public class ClaimOwnershipTests
+public class ClaimOwnershipTests : AbstractTestsBase
 {
     [Fact]
     public void File_ownership_can_be_claimed_using_the_correct_token()
