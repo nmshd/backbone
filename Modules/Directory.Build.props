@@ -21,10 +21,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="GitHubActionsTestLogger">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="GitHubActionsTestLogger" />
 
         <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
@@ -34,10 +31,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="GitHubActionsTestLogger">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="GitHubActionsTestLogger" />
 
         <Using Include="Shouldly" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
