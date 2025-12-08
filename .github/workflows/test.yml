@@ -236,7 +236,7 @@ jobs:
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
 
       - name: Run integration tests
-        run: dotnet test --no-restore --no-build --project ${{matrix.test-project.path}}
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" --project ${{matrix.test-project.path}}
         env:
           ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
