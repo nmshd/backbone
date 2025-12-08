@@ -108,14 +108,14 @@ static IHostBuilder CreateHostBuilder(string[] args)
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
-            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithDemystifiedStackTraces()
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty("service", "eventHandlerService")
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-                .WithDefaultDestructurers()
-                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
-            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks())
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .Enrich.WithDemystifiedStackTraces()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("service", "eventHandlerService")
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                    .WithDefaultDestructurers()
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()]))
+                .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()), preserveStaticLogger: true
         );
 }
 

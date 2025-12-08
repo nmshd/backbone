@@ -80,7 +80,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
                 .WithDestructurers([new DbUpdateExceptionDestructurer()]))
-            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
+            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()), preserveStaticLogger: true)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
