@@ -12,7 +12,7 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.13.1]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.14.1]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.26.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
@@ -24,8 +24,8 @@
     <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[9.0.2]" />
     <PackageVersion Include="FakeItEasy" Version="[8.3.0]" />
     <PackageVersion Include="FirebaseAdmin" Version="[3.4.0]" />
-    <PackageVersion Include="FluentValidation" Version="[12.1.0]" />
-    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.0]" />
+    <PackageVersion Include="FluentValidation" Version="[12.1.1]" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.1]" />
     <PackageVersion Include="FluentValidation.Validators.UnitTestExtension" Version="[1.12.0.2]" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
     <PackageVersion Include="Google.Cloud.PubSub.V1" Version="[3.30.0]" />
