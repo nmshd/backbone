@@ -7,6 +7,20 @@
     additionalReviewers: ["erbenjak"],
     packageRules: [
         {
+            // don't update EF Core and depending libraries for the following reason:
+            matchDatasources: ["nuget"],
+            matchUpdateTypes: ["major", "minor"],
+            matchPackageNames: [
+                "/^OpenIddict..*/",
+                "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+                "/Microsoft.EntityFrameworkCore.*/",
+                "Microsoft.Extensions.Diagnostics.HealthChecks.Common",
+                "Npgsql.EntityFrameworkCore.PostgreSQL"
+            ],
+            enabled: false
+        },
+
+        {
             groupName: "dont-update-mediatr-due-to-license-issues",
             matchDatasources: ["nuget"],
             matchUpdateTypes: ["major"],
