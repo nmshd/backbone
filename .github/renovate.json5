@@ -7,6 +7,23 @@
     additionalReviewers: ["erbenjak"],
     packageRules: [
         {
+            // don't update EF Core and depending libraries for the following reason:
+            // The BulkExtensions packages are not compatible with EF Core 10 yet. So we cannot upgrade to EF Core 10. And since "OpenIddict.*",
+            // "Microsoft.AspNetCore.Identity.EntityFrameworkCore", "Microsoft.Extensions.Diagnostics.HealthChecks.Common" and
+            // "Npgsql.EntityFrameworkCore.PostgreSQL" depend on EF Core 10, we cannot update those either.
+            matchDatasources: ["nuget"],
+            matchUpdateTypes: ["major", "minor"],
+            matchPackageNames: [
+                "/^OpenIddict..*/",
+                "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+                "/Microsoft.EntityFrameworkCore.*/",
+                "Microsoft.Extensions.Diagnostics.HealthChecks.Common",
+                "Npgsql.EntityFrameworkCore.PostgreSQL"
+            ],
+            enabled: false
+        },
+
+        {
             groupName: "dont-update-mediatr-due-to-license-issues",
             matchDatasources: ["nuget"],
             matchUpdateTypes: ["major"],
