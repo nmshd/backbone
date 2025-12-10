@@ -18,7 +18,7 @@ public class PushDatawalletModificationItemValidator : AbstractValidator<PushDat
     public PushDatawalletModificationItemValidator()
     {
         RuleFor(i => i.Type).DetailedNotNull();
-        RuleFor(j => j.PayloadCategory).DetailedMaximumLength(50);
+        RuleFor(i => i.PayloadCategory).DetailedMaximumLength(50);
         RuleFor(i => i.Collection).DetailedNotNull().DetailedMaximumLength(50);
         RuleFor(i => i.ObjectIdentifier).DetailedNotNull().DetailedMaximumLength(100);
     }
