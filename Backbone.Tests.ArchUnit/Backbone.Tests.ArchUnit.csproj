@@ -6,32 +6,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="GitHubActionsTestLogger" />
         <PackageReference Include="MediatR" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
         <PackageReference Include="TngTech.ArchUnitNET.xUnitV3" />
-        <PackageReference Include="GitHubActionsTestLogger">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="xunit.v3">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="xunit.runner.visualstudio">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="xunit.v3.mtp-v2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
-        <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
-        <ProjectReference Include="..\Applications\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
-        <ProjectReference Include="..\Applications\DatabaseMigrator\src\DatabaseMigrator\DatabaseMigrator.csproj" />
-        <ProjectReference Include="..\Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj" />
-        <ProjectReference Include="..\Applications\HealthCheck\src\HealthCheck.csproj" />
-        <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests.Integration\Job.IdentityDeletion.Tests.Integration.csproj" />
-        <ProjectReference Include="..\Applications\SseServer\src\SseServer\SseServer.csproj" />
-        <ProjectReference Include="..\Applications\SseServer\test\SseServerTests\SseServerTests.csproj" />
         <ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
         <ProjectReference Include="..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
         <ProjectReference Include="..\BuildingBlocks\test\BuildingBlocks.Application.Tests\BuildingBlocks.Application.Tests.csproj" />
@@ -41,11 +23,14 @@
         <ProjectReference Include="..\BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj" />
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Announcements\test\Announcements.Application.Tests\Announcements.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Announcements\test\Announcements.Domain.Tests\Announcements.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Application.Tests\Files.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Files\test\Files.Domain.Tests\Files.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Messages\src\Messages.Common\Messages.Common.csproj" />
         <ProjectReference Include="..\Modules\Messages\test\Messages.Application.Tests\Messages.Application.Tests.csproj" />
@@ -55,6 +40,10 @@
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Application.Tests\Synchronization.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Tags\src\Tags.Application\Tags.Application.csproj" />
+        <ProjectReference Include="..\Modules\Tags\src\Tags.Domain\Tags.Domain.csproj" />
+        <ProjectReference Include="..\Modules\Tags\src\Tags.Infrastructure\Tags.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Tags\src\Tags.Module\Tags.Module.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj" />
     </ItemGroup>

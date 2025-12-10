@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Concurrent;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
 using NJsonSchema.NewtonsoftJson.Generation;
@@ -8,7 +9,7 @@ namespace Backbone.AdminApi.Tests.Integration.Support;
 
 public class JsonValidator
 {
-    private static readonly Dictionary<Type, JsonSchema> CACHED_SCHEMAS = new();
+    private static readonly ConcurrentDictionary<Type, JsonSchema> CACHED_SCHEMAS = new();
 
     public static async Task<(bool IsValid, IList<string> Errors)> ValidateJsonSchema<T>(string json)
     {
@@ -40,7 +41,7 @@ public class JsonValidator
 
         schema.AllowAdditionalProperties = true;
 
-        CACHED_SCHEMAS.Add(typeof(T), schema);
+        CACHED_SCHEMAS.TryAdd(typeof(T), schema);
 
         try
         {

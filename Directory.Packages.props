@@ -27,7 +27,7 @@
     <PackageVersion Include="FluentValidation" Version="[12.1.1]" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.1]" />
     <PackageVersion Include="FluentValidation.Validators.UnitTestExtension" Version="[1.12.0.2]" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="[2.4.1]" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="[3.0.1]" />
     <PackageVersion Include="Google.Cloud.PubSub.V1" Version="[3.30.0]" />
     <PackageVersion Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
     <PackageVersion Include="JWT" Version="[11.0.0]" />
@@ -104,11 +104,8 @@
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.0]" />
     <PackageVersion Include="System.Interactive.Async" Version="[6.0.3]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.9.0]" />
-    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.12.3]" />
+    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.0]" />
     <PackageVersion Include="UrlBase64" Version="[2.0.0]" />
-    <PackageVersion Include="xunit" Version="[2.9.3]" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="[3.1.5]" />
-    <PackageVersion Include="xunit.v3" Version="[3.2.1]" />
-    <PackageVersion Include="xunit.v3.core" Version="[3.2.1]" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="[3.2.1]" />
   </ItemGroup>
 </Project>

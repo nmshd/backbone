@@ -20,6 +20,7 @@ public static class Backbone
     {
         var assemblies = Directory
             .GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
+            .Where(x => !x.Contains("xunit")) // Not excluding xunit assemblies causes issues when running the tests with `dotnet test`. But they aren't necessary anyway.
             .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)))
             .Where(x => x.FullName!.StartsWith("Backbone"));
         return assemblies.ToArray();

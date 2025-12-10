@@ -4,7 +4,7 @@ using FluentValidation.TestHelper;
 
 namespace Backbone.Modules.Announcements.Application.Tests.Tests.Announcements.Commands.CreateAnnouncement;
 
-public class ValidatorTests
+public class ValidatorTests : AbstractTestsBase
 {
     [Fact]
     public void Accepts_a_valid_object()
