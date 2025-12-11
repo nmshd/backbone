@@ -116,7 +116,7 @@ COPY . .
 ARG VERSION
 
 RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/Applications/AdminApi/src/AdminApi/AdminApi.csproj"
-RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
 FROM ghcr.io/cirruslabs/flutter:3.38.4@sha256:bc5062a72c83df6661a8e54dc9dbec65d5db163fa7297d12a995948e832156ae AS flutter-build-env

@@ -90,7 +90,7 @@ RUN dotnet build /p:ContinuousIntegrationBuild=true "./Housekeeper.csproj" -c Re
 
 FROM build AS publish
 
-RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release --output /app/publish "./Housekeeper.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release --output /app/publish "./Housekeeper.csproj"
 
 FROM base AS final
 

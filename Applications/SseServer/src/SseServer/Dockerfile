@@ -57,7 +57,7 @@ ARG VERSION
 
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/SseServer/src/SseServer/SseServer.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/SseServer/src/SseServer/SseServer.csproj"
-RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled@sha256:5730fa91fab5ec91f69661b86897249ad6a01c8da6da557695e9da4c6bc83621
