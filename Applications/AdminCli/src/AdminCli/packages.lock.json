@@ -16,7 +16,7 @@
         "type": "Direct",
         "requested": "[10.0.0, )",
         "resolved": "10.0.0",
-        "contentHash": "kICGrGYEzCNI3wPzfEXcwNHgTvlvVn9yJDhSdRK+oZQy4jvYH529u7O0xf5ocQKzOMjfS07+3z9PKRIjrFMJDA=="
+        "contentHash": "VYCtdJ9pb8fdxRbV5dBmLsKp/1wUrvwo+sXiEDzDnSb+L+PLI23cwa4+soLjEqzQ1U1gRrCTQfOlFXT8w7COcA=="
       },
       "Spectre.Console": {
         "type": "Direct",
