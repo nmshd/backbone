@@ -8,6 +8,10 @@
         "resolved": "12.1.1",
         "contentHash": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw=="
       }
-    }
+    },
+    "net10.0/linux-arm64": {},
+    "net10.0/linux-x64": {},
+    "net10.0/osx-arm64": {},
+    "net10.0/win-x64": {}
   }
 }

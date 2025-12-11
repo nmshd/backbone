@@ -46,6 +46,10 @@
         "resolved": "2.0.0",
         "contentHash": "b8tTEqBi0IEHU03MMG8raeKjn4P5EiFYfbx9mIotiGNGhl18b7p8qX0So4pawR1kSYIJWGQVngeWXHMFzZgq4g=="
       }
-    }
+    },
+    "net10.0/linux-arm64": {},
+    "net10.0/linux-x64": {},
+    "net10.0/osx-arm64": {},
+    "net10.0/win-x64": {}
   }
 }

@@ -79,6 +79,34 @@
         "resolved": "2.0.0",
         "contentHash": "b8tTEqBi0IEHU03MMG8raeKjn4P5EiFYfbx9mIotiGNGhl18b7p8qX0So4pawR1kSYIJWGQVngeWXHMFzZgq4g=="
       }
+    },
+    "net10.0/linux-arm64": {
+      "libsodium": {
+        "type": "Transitive",
+        "resolved": "1.0.20.1",
+        "contentHash": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ=="
+      }
+    },
+    "net10.0/linux-x64": {
+      "libsodium": {
+        "type": "Transitive",
+        "resolved": "1.0.20.1",
+        "contentHash": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ=="
+      }
+    },
+    "net10.0/osx-arm64": {
+      "libsodium": {
+        "type": "Transitive",
+        "resolved": "1.0.20.1",
+        "contentHash": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ=="
+      }
+    },
+    "net10.0/win-x64": {
+      "libsodium": {
+        "type": "Transitive",
+        "resolved": "1.0.20.1",
+        "contentHash": "pkiceEqJDQFHjbga3k/oPfTVX9g+GKJZ1VrkuiLhaymt9YNw1Dr7cX9hNuZuNaWcr9WD0moW55k4pMwzQ7JaZQ=="
+      }
     }
   }
 }

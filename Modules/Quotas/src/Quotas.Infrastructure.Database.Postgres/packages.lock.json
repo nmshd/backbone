@@ -257,10 +257,10 @@
       },
       "Microsoft.Extensions.Caching.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "Zcoy6H9mSoGyvr7UvlGokEZrlZkcPCICPZr8mCsSt9U/N8eeCwCXwKF5bShdA66R0obxBCwP4AxomQHvVkC/uA==",
+        "resolved": "9.0.11",
+        "contentHash": "PRv1SPyrgl/ullMF6eKDuEULRkTc10fVcnWvzFhqIMDA3m5f91znKH9ZNsKZBgu4xVc4ulNt7TEXyyt0rdlB3g==",
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "10.0.0"
+          "Microsoft.Extensions.Primitives": "9.0.11"
         }
       },
       "Microsoft.Extensions.Caching.Memory": {
@@ -1097,12 +1097,12 @@
       "Microsoft.Extensions.Identity.Stores": {
         "type": "CentralTransitive",
         "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "Rtg3Mjy13li7Lpim7qP+JN1pWXsBR/8mslLIhSMvt8WfojxkDlvUhVxY2leIVYnnl5igfixGLzjpC2soGhPCBw==",
+        "resolved": "9.0.11",
+        "contentHash": "H05q2662AqhXUU+dHoCZQGtZe6vk+5fvGYfAZbFuDKeIJYZzT4ICjEB5o4Dc26d2ZBJ4D0hcDbO9HPnbnr51sw==",
         "dependencies": {
-          "Microsoft.Extensions.Caching.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Identity.Core": "10.0.0",
-          "Microsoft.Extensions.Logging": "10.0.0"
+          "Microsoft.Extensions.Caching.Abstractions": "9.0.11",
+          "Microsoft.Extensions.Identity.Core": "9.0.11",
+          "Microsoft.Extensions.Logging": "9.0.11"
         }
       },
       "Microsoft.Extensions.Logging": {
@@ -1191,6 +1191,206 @@
         "requested": "[2.0.0, 2.0.0]",
         "resolved": "2.0.0",
         "contentHash": "b8tTEqBi0IEHU03MMG8raeKjn4P5EiFYfbx9mIotiGNGhl18b7p8qX0So4pawR1kSYIJWGQVngeWXHMFzZgq4g=="
+      }
+    },
+    "net10.0/linux-arm64": {
+      "Microsoft.Data.SqlClient": {
+        "type": "Transitive",
+        "resolved": "6.1.2",
+        "contentHash": "q0GxRC0fgwfZgU14pU34ro0MW7Gs8S6NDmKCcEqymvZljT8UQa633BbEmk/Rb5upNF9NHZ3/jVm7zLiWbM8uTA==",
+        "dependencies": {
+          "Azure.Core": "1.47.1",
+          "Azure.Identity": "1.14.2",
+          "Microsoft.Bcl.Cryptography": "9.0.4",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.2",
+          "Microsoft.Extensions.Caching.Memory": "9.0.4",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.4",
+          "System.Security.Cryptography.Pkcs": "9.0.4"
+        }
+      },
+      "Microsoft.Data.SqlClient.SNI.runtime": {
+        "type": "Transitive",
+        "resolved": "6.0.2",
+        "contentHash": "f+pRODTWX7Y67jXO3T5S2dIPZ9qMJNySjlZT/TKmWVNWe19N8jcWmHaqHnnchaq3gxEKv1SWVY5EFzOD06l41w=="
+      },
+      "Microsoft.SqlServer.Types": {
+        "type": "Transitive",
+        "resolved": "160.1000.6",
+        "contentHash": "4kk+rz5vnIPr9ENzm8KttUbhBKftv0uHSSFDVjc5OuKPtRP5q0lDbYUy5ZsoYCAG3RrZdJoxPnWN2JNozZAiGA==",
+        "dependencies": {
+          "Microsoft.SqlServer.Server": "1.0.0"
+        }
+      },
+      "System.Diagnostics.EventLog": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "uaFRda9NjtbJRkdx311eXlAA3n2em7223c1A8d1VWyl+4FL9vkG7y2lpPfBU9HYdj/9KgdRNdn1vFK8ZYCYT/A=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "7.0.2",
+        "contentHash": "/qEUN91mP/MUQmJnM5y5BdT7ZoPuVrtxnFlbJ8a3kBJGhe2wCzBfnPFtK2wTtEEcf3DMGR9J00GZZfg6HRI6yA==",
+        "dependencies": {
+          "System.CodeDom": "7.0.0"
+        }
+      },
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Transitive",
+        "resolved": "9.0.4",
+        "contentHash": "cUFTcMlz/Qw9s90b2wnWSCvHdjv51Bau9FQqhsr4TlwSe1OX+7SoXUqphis5G74MLOvMOCghxPPlEqOdCrVVGA=="
+      }
+    },
+    "net10.0/linux-x64": {
+      "Microsoft.Data.SqlClient": {
+        "type": "Transitive",
+        "resolved": "6.1.2",
+        "contentHash": "q0GxRC0fgwfZgU14pU34ro0MW7Gs8S6NDmKCcEqymvZljT8UQa633BbEmk/Rb5upNF9NHZ3/jVm7zLiWbM8uTA==",
+        "dependencies": {
+          "Azure.Core": "1.47.1",
+          "Azure.Identity": "1.14.2",
+          "Microsoft.Bcl.Cryptography": "9.0.4",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.2",
+          "Microsoft.Extensions.Caching.Memory": "9.0.4",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.4",
+          "System.Security.Cryptography.Pkcs": "9.0.4"
+        }
+      },
+      "Microsoft.Data.SqlClient.SNI.runtime": {
+        "type": "Transitive",
+        "resolved": "6.0.2",
+        "contentHash": "f+pRODTWX7Y67jXO3T5S2dIPZ9qMJNySjlZT/TKmWVNWe19N8jcWmHaqHnnchaq3gxEKv1SWVY5EFzOD06l41w=="
+      },
+      "Microsoft.SqlServer.Types": {
+        "type": "Transitive",
+        "resolved": "160.1000.6",
+        "contentHash": "4kk+rz5vnIPr9ENzm8KttUbhBKftv0uHSSFDVjc5OuKPtRP5q0lDbYUy5ZsoYCAG3RrZdJoxPnWN2JNozZAiGA==",
+        "dependencies": {
+          "Microsoft.SqlServer.Server": "1.0.0"
+        }
+      },
+      "System.Diagnostics.EventLog": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "uaFRda9NjtbJRkdx311eXlAA3n2em7223c1A8d1VWyl+4FL9vkG7y2lpPfBU9HYdj/9KgdRNdn1vFK8ZYCYT/A=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "7.0.2",
+        "contentHash": "/qEUN91mP/MUQmJnM5y5BdT7ZoPuVrtxnFlbJ8a3kBJGhe2wCzBfnPFtK2wTtEEcf3DMGR9J00GZZfg6HRI6yA==",
+        "dependencies": {
+          "System.CodeDom": "7.0.0"
+        }
+      },
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Transitive",
+        "resolved": "9.0.4",
+        "contentHash": "cUFTcMlz/Qw9s90b2wnWSCvHdjv51Bau9FQqhsr4TlwSe1OX+7SoXUqphis5G74MLOvMOCghxPPlEqOdCrVVGA=="
+      }
+    },
+    "net10.0/osx-arm64": {
+      "Microsoft.Data.SqlClient": {
+        "type": "Transitive",
+        "resolved": "6.1.2",
+        "contentHash": "q0GxRC0fgwfZgU14pU34ro0MW7Gs8S6NDmKCcEqymvZljT8UQa633BbEmk/Rb5upNF9NHZ3/jVm7zLiWbM8uTA==",
+        "dependencies": {
+          "Azure.Core": "1.47.1",
+          "Azure.Identity": "1.14.2",
+          "Microsoft.Bcl.Cryptography": "9.0.4",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.2",
+          "Microsoft.Extensions.Caching.Memory": "9.0.4",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.4",
+          "System.Security.Cryptography.Pkcs": "9.0.4"
+        }
+      },
+      "Microsoft.Data.SqlClient.SNI.runtime": {
+        "type": "Transitive",
+        "resolved": "6.0.2",
+        "contentHash": "f+pRODTWX7Y67jXO3T5S2dIPZ9qMJNySjlZT/TKmWVNWe19N8jcWmHaqHnnchaq3gxEKv1SWVY5EFzOD06l41w=="
+      },
+      "Microsoft.SqlServer.Types": {
+        "type": "Transitive",
+        "resolved": "160.1000.6",
+        "contentHash": "4kk+rz5vnIPr9ENzm8KttUbhBKftv0uHSSFDVjc5OuKPtRP5q0lDbYUy5ZsoYCAG3RrZdJoxPnWN2JNozZAiGA==",
+        "dependencies": {
+          "Microsoft.SqlServer.Server": "1.0.0"
+        }
+      },
+      "System.Diagnostics.EventLog": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "uaFRda9NjtbJRkdx311eXlAA3n2em7223c1A8d1VWyl+4FL9vkG7y2lpPfBU9HYdj/9KgdRNdn1vFK8ZYCYT/A=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "7.0.2",
+        "contentHash": "/qEUN91mP/MUQmJnM5y5BdT7ZoPuVrtxnFlbJ8a3kBJGhe2wCzBfnPFtK2wTtEEcf3DMGR9J00GZZfg6HRI6yA==",
+        "dependencies": {
+          "System.CodeDom": "7.0.0"
+        }
+      },
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Transitive",
+        "resolved": "9.0.4",
+        "contentHash": "cUFTcMlz/Qw9s90b2wnWSCvHdjv51Bau9FQqhsr4TlwSe1OX+7SoXUqphis5G74MLOvMOCghxPPlEqOdCrVVGA=="
+      }
+    },
+    "net10.0/win-x64": {
+      "Microsoft.Data.SqlClient": {
+        "type": "Transitive",
+        "resolved": "6.1.2",
+        "contentHash": "q0GxRC0fgwfZgU14pU34ro0MW7Gs8S6NDmKCcEqymvZljT8UQa633BbEmk/Rb5upNF9NHZ3/jVm7zLiWbM8uTA==",
+        "dependencies": {
+          "Azure.Core": "1.47.1",
+          "Azure.Identity": "1.14.2",
+          "Microsoft.Bcl.Cryptography": "9.0.4",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.2",
+          "Microsoft.Extensions.Caching.Memory": "9.0.4",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.4",
+          "System.Security.Cryptography.Pkcs": "9.0.4"
+        }
+      },
+      "Microsoft.Data.SqlClient.SNI.runtime": {
+        "type": "Transitive",
+        "resolved": "6.0.2",
+        "contentHash": "f+pRODTWX7Y67jXO3T5S2dIPZ9qMJNySjlZT/TKmWVNWe19N8jcWmHaqHnnchaq3gxEKv1SWVY5EFzOD06l41w=="
+      },
+      "Microsoft.SqlServer.Types": {
+        "type": "Transitive",
+        "resolved": "160.1000.6",
+        "contentHash": "4kk+rz5vnIPr9ENzm8KttUbhBKftv0uHSSFDVjc5OuKPtRP5q0lDbYUy5ZsoYCAG3RrZdJoxPnWN2JNozZAiGA==",
+        "dependencies": {
+          "Microsoft.SqlServer.Server": "1.0.0"
+        }
+      },
+      "System.Diagnostics.EventLog": {
+        "type": "Transitive",
+        "resolved": "10.0.0",
+        "contentHash": "uaFRda9NjtbJRkdx311eXlAA3n2em7223c1A8d1VWyl+4FL9vkG7y2lpPfBU9HYdj/9KgdRNdn1vFK8ZYCYT/A=="
+      },
+      "System.Management": {
+        "type": "Transitive",
+        "resolved": "7.0.2",
+        "contentHash": "/qEUN91mP/MUQmJnM5y5BdT7ZoPuVrtxnFlbJ8a3kBJGhe2wCzBfnPFtK2wTtEEcf3DMGR9J00GZZfg6HRI6yA==",
+        "dependencies": {
+          "System.CodeDom": "7.0.0"
+        }
+      },
+      "System.Security.Cryptography.Pkcs": {
+        "type": "Transitive",
+        "resolved": "9.0.4",
+        "contentHash": "cUFTcMlz/Qw9s90b2wnWSCvHdjv51Bau9FQqhsr4TlwSe1OX+7SoXUqphis5G74MLOvMOCghxPPlEqOdCrVVGA=="
       }
     }
   }
