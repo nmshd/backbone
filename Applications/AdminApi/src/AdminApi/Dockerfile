@@ -110,13 +110,14 @@ COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrast
 COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/Tokens.Infrastructure.Database.SqlServer.csproj", "Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/"]
 
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/HealthCheck/src/HealthCheck.csproj"
 
 COPY . .
 
 ARG VERSION
 
-RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/Applications/AdminApi/src/AdminApi/AdminApi.csproj"
-RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "/src/Applications/HealthCheck/src/HealthCheck.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "Applications/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
 FROM ghcr.io/cirruslabs/flutter:3.38.4@sha256:bc5062a72c83df6661a8e54dc9dbec65d5db163fa7297d12a995948e832156ae AS flutter-build-env
