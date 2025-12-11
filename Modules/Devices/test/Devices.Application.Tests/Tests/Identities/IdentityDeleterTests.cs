@@ -2,6 +2,7 @@
 using Backbone.Modules.Devices.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeletePnsRegistrationsOfIdentity;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using MediatR;
 
@@ -12,6 +13,9 @@ public class IdentityDeleterTests : AbstractTestsBase
     [Fact]
     public async Task Deleter_calls_correct_command()
     {
+        var hash = Hasher.HashUtf8("did:e:nmshd-bkb.meinbildungsraum.de:dids:5812d78f3e82732df122f3");
+        var base64 = Convert.ToBase64String(hash);
+        
         // Arrange
         var mockMediator = A.Fake<IMediator>();
         var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
