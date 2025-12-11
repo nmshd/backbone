@@ -58,6 +58,8 @@ COPY ["Modules/Directory.Build.props", "Modules/"]
 
 COPY ["Directory.Packages.props", "."]
 
+COPY ["Applications/HealthCheck/src/HealthCheck.csproj", "Applications/HealthCheck/src/packages.lock.json*", "Applications/HealthCheck/src/"]
+
 COPY ["Applications/AdminApi/src/AdminApi/AdminApi.csproj", "Applications/AdminApi/src/AdminApi/packages.lock.json*", "Applications/AdminApi/src/AdminApi/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/packages.lock.json*", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/packages.lock.json*", "Applications/AdminApi/src/AdminApi.Infrastructure/"]
