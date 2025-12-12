@@ -14,9 +14,9 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[10.0.0, )",
-        "resolved": "10.0.0",
-        "contentHash": "VYCtdJ9pb8fdxRbV5dBmLsKp/1wUrvwo+sXiEDzDnSb+L+PLI23cwa4+soLjEqzQ1U1gRrCTQfOlFXT8w7COcA=="
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "I7A75OPExCmnMCVF8AVVyWcR+RfYJdFKY0pY5lD+2BRi096FNn0brE3SyAgHClZ4jgqzgiVdM33dHTfJYPx48w=="
       },
       "Spectre.Console": {
         "type": "Direct",
