@@ -82,16 +82,16 @@
     <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.2.1]" />
     <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.2.1]" />
     <PackageVersion Include="Serilog" Version="[4.3.0]" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.8.0]" />
     <PackageVersion Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
     <PackageVersion Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
     <PackageVersion Include="Serilog.Exceptions" Version="[8.4.0]" />
     <PackageVersion Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
-    <PackageVersion Include="Serilog.Extensions.Hosting" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.Extensions.Hosting" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
-    <PackageVersion Include="Serilog.Settings.Configuration" Version="[9.0.0]" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="[6.1.1]" />
     <PackageVersion Include="Serilog.Sinks.Debug" Version="[3.0.0]" />
     <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.0]" />
@@ -102,7 +102,6 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[9.0.6]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.1]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.0]" />
-    <PackageVersion Include="System.Interactive.Async" Version="[6.0.3]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.9.0]" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.0]" />
     <PackageVersion Include="UrlBase64" Version="[2.0.0]" />
