@@ -15,7 +15,7 @@ dependencies:
   collection: any
   data_table_2: ^2.5.15
   dropdown_button2: ^2.3.9
-  flex_seed_scheme: 4.0.1
+  flex_seed_scheme: ^4.0.1
   flutter:
     sdk: flutter
   flutter_localizations:
