@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -6,12 +5,11 @@ using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using OpenTelemetry.Metrics;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -133,8 +131,6 @@ public static class ServiceCollectionExtensions
 
             services.AddSwaggerGen(options =>
             {
-                options.OperationFilter<SwaggerDefaultValues>();
-
                 options.CustomSchemaIds(t =>
                 {
                     static string GetReadableName(Type type)
@@ -173,21 +169,10 @@ public static class ServiceCollectionExtensions
                         }
                     });
 
-                options.AddSecurityRequirement(
-                    new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Id = securityDefinitionName,
-                                    Type = ReferenceType.SecurityScheme
-                                }
-                            },
-                            new List<string>()
-                        }
-                    });
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference(securityDefinitionName, document)] = []
+                });
             });
 
             services.AddApiVersioning().AddApiExplorer(options =>
