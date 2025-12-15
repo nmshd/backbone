@@ -621,15 +621,15 @@
           "Microsoft.IdentityModel.Tokens": "7.7.1"
         }
       },
+        "System.Interactive.Async": {
+            "type": "Transitive",
+            "resolved": "3.0.0",
+            "contentHash": "iyrgkZz9Dzm0fiPouQszFC3SO/46k6AYd/jG9bu+/o0AoDMaRXtlo3TIuWVNtOuJFd1noL963QouroJ0T3rImw=="
+        },
       "System.IO.Hashing": {
         "type": "Transitive",
         "resolved": "8.0.0",
         "contentHash": "ne1843evDugl0md7Fjzy6QjJrzsjh46ZKbhf8GwBXb5f/gw97J4bxMs0NQKifDuThh/f0bZ0e62NPl1jzTuRqA=="
-      },
-      "System.Linq.Async": {
-        "type": "Transitive",
-        "resolved": "6.0.3",
-        "contentHash": "hSHiq2m1ky7zUQgTp+/2h1K3lABIQ+GltRixoclHPg/Sc1vnfeS6g/Uy5moOVZKrZJdQiFPFZd6OobBp3tZcFg=="
       },
       "System.Management": {
         "type": "Transitive",
@@ -758,7 +758,7 @@
           "Microsoft.EntityFrameworkCore": "[9.0.11, 9.0.11]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[9.0.11, 9.0.11]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[9.0.4, 9.0.4]",
-          "System.Interactive.Async": "[6.0.3, 6.0.3]"
+            "System.Interactive.Async": "(, )"
         }
       },
       "Backbone.Tooling": {
@@ -1172,15 +1172,6 @@
         "requested": "[5.6.0, 5.6.0]",
         "resolved": "5.6.0",
         "contentHash": "1nNr/DCvcxTrQzN1gUnYzFpLkbAKcFYhF/aMK34jVxrPUjMwL/J3KNEp89M0WaW2k9FUpacxRe4BmjFFjOv3zw=="
-      },
-      "System.Interactive.Async": {
-        "type": "CentralTransitive",
-        "requested": "[6.0.3, 6.0.3]",
-        "resolved": "6.0.3",
-        "contentHash": "OAcB2IdKXsU1xT1xPnpNh8/czT/+EbVcIkNgo92p39R2ScegChS6Sdgpdk9+IsJW4XOjkT+iCUgZvljC6dLgTA==",
-        "dependencies": {
-          "System.Linq.Async": "6.0.3"
-        }
       },
       "UrlBase64": {
         "type": "CentralTransitive",
