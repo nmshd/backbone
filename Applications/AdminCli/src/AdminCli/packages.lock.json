@@ -12,12 +12,6 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1"
         }
       },
-      "Microsoft.NET.ILLink.Tasks": {
-        "type": "Direct",
-        "requested": "[10.0.1, )",
-        "resolved": "10.0.1",
-        "contentHash": "I7A75OPExCmnMCVF8AVVyWcR+RfYJdFKY0pY5lD+2BRi096FNn0brE3SyAgHClZ4jgqzgiVdM33dHTfJYPx48w=="
-      },
       "Spectre.Console": {
         "type": "Direct",
         "requested": "[0.54.0, 0.54.0]",

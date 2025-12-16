@@ -4,7 +4,6 @@
         <Version>1.5.0</Version>
 
         <OutputType>Exe</OutputType>
-        <PublishSingleFile>True</PublishSingleFile>
         <SelfContained>True</SelfContained>
         <PublishReadyToRun>False</PublishReadyToRun>
     </PropertyGroup>
