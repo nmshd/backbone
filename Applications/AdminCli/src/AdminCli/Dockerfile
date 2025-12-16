@@ -58,7 +58,7 @@ COPY . .
 ARG VERSION
 
 WORKDIR "/src/Applications/AdminCli/src/AdminCli"
-RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o /app/publish "AdminCli.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:RuntimeIdentifier=linux-x64 --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app
