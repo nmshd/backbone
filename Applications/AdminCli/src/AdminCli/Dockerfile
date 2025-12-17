@@ -64,7 +64,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish/* .
 
-# Test
+RUN echo 'alias backbone="dotnet Backbone.AdminCli.dll"' >> ~/.bashrc
+
 COPY Applications/AdminCli/src/AdminCli/appsettings.json .
 
 ENV PATH="$PATH:/app"
