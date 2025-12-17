@@ -4,8 +4,6 @@
         <Version>1.5.0</Version>
 
         <OutputType>Exe</OutputType>
-        <SelfContained>True</SelfContained>
-        <PublishReadyToRun>False</PublishReadyToRun>
     </PropertyGroup>
 
     <ItemGroup>
