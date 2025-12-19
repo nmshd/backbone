@@ -58,6 +58,8 @@ COPY . .
 ARG VERSION
 
 WORKDIR "/src/Applications/AdminCli/src/AdminCli"
+
+# We have to specify the RuntimeIdentifier so that the correct dependencies from the package-lock file are chosen
 RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:RuntimeIdentifier=linux-x64 --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
@@ -70,4 +72,6 @@ ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
+# Create a simple wrapper script to call the AdminCli. This simplifies exexcution, because users do not have to write "dotnet /app/Backbone.AdminCli.dll <command>" every time.
+# Instead they can just call "backbone <command>"
 RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/backbone && chmod +x /app/backbone
