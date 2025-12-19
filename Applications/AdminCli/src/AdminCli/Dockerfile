@@ -70,4 +70,4 @@ ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
-RUN echo "#!/bin/bash\nbash -c \"dotnet /app/Backbone.AdminCli.dll $@\"" > /app/backbone && chmod +x /app/backbone
+RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/backbone && chmod +x /app/backbone
