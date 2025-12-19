@@ -64,10 +64,10 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish/* .
 
-RUN echo 'alias backbone="dotnet Backbone.AdminCli.dll"' >> ~/.bashrc
-
 COPY Applications/AdminCli/src/AdminCli/appsettings.json .
 
 ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
+
+RUN echo "#!/bin/bash\nbash -c \"dotnet /app/Backbone.AdminCli.dll $@\"" > /app/backbone && chmod +x /app/backbone
