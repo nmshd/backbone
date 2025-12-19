@@ -51,6 +51,7 @@ public class ActualDeletionWorker : IHostedService
         // In case there was an error during a previous run, we need to make sure we also process those identities again.
         var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
         var addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
+        
         var allAddressesToProcess = addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast.Union(addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses).Distinct();
 
         await Delete(allAddressesToProcess);

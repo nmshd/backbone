@@ -2,7 +2,6 @@
 using Backbone.Modules.Devices.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeletePnsRegistrationsOfIdentity;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using MediatR;
 
