@@ -77,10 +77,9 @@ COPY . .
 WORKDIR "/src/Applications/EventHandlerService/src/EventHandlerService"
 RUN dotnet build /p:ContinuousIntegrationBuild=true "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
-FROM build AS publish
 RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
-FROM dhi.io/dotnet:10.0.1
+FROM dhi.io/dotnet:10.0.1-alpine3.22
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
