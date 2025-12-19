@@ -1,18 +1,16 @@
-#### Build application ####
 FROM dhi.io/dotnet:10.0.101-sdk AS build-env
+
+ARG VERSION
 
 WORKDIR /src
 
 COPY . .
-
-ARG VERSION
 
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/HealthCheck/src/HealthCheck.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
-### Final ####
 FROM dhi.io/dotnet:10.0.1
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
