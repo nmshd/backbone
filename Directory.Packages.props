@@ -4,15 +4,15 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Asp.Versioning.Mvc" Version="[8.1.0]" />
-    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[8.1.0]" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="[8.1.1]" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[8.1.1]" />
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
     <PackageVersion Include="Autofac" Version="[9.0.0]" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.15.2]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.16.2]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.26.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
