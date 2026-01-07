@@ -86,5 +86,5 @@ LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.EventHandlerService.dll"]
