@@ -8,6 +8,7 @@
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <RuntimeIdentifiers>win-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
     </PropertyGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
