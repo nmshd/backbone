@@ -35,6 +35,14 @@ melos:
       run: melos exec -c 1 --no-flutter -- "dart pub outdated" && melos exec -c 1 --flutter -- "flutter pub outdated"
       description: Run `dart pub outdated` in all packages
 
+    check_translations:
+      run: melos exec --dir-exists=lib/l10n --flutter -- "dart run translations_cleaner list-unused-terms --include-subpackages --abort-on-unused"
+      description: Check translations in all packages
+
+    clean_translations:
+      run: melos exec --dir-exists=lib/l10n --flutter -- "dart run translations_cleaner clean-translations --include-subpackages && npx prettier -w lib/l10n/*.arb --parser json"
+      description: Clean translations in all packages
+
     generate_translations:
       run: melos exec --dir-exists=lib/l10n --flutter -- "flutter gen-l10n && dart format lib/generated/l10n"
       description: Generate translations in all packages
