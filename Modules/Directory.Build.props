@@ -8,6 +8,7 @@
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <RuntimeIdentifiers>win-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
     </PropertyGroup>
 
     <!-- Relationships Module is currently the only one with its respective unit tests next to the production (within the same project, as opposed to on a separate one) -->
