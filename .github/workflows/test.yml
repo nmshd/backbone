@@ -127,6 +127,9 @@ jobs:
           username: ${{ secrets.DHI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.DHI_DOCKERHUB_TOKEN }}
 
+      - run: docker pull dhi.io/aspnetcore:10.0.1-alpine3.22
+      - run: docker pull dhi.io/dotnet:10.0.101-sdk
+
       - uses: actions/setup-node@v6
         with:
           node-version: 24.12.0
