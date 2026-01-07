@@ -1,4 +1,4 @@
-FROM dhi.io/dotnet:10.0.101-sdk-alpine3.22 AS build-env
+FROM dhi.io/dotnet:10.0.101 AS build-env
 
 ARG VERSION
 
