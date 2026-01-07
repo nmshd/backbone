@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
+        <ReqnrollUseIntermediateOutputPathForCodeBehind>true</ReqnrollUseIntermediateOutputPathForCodeBehind>
     </PropertyGroup>
 
     <ItemGroup>

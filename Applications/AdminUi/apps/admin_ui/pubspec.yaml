@@ -39,7 +39,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.0
   flutter_test:
     sdk: flutter
-  translations_cleaner: ^0.0.5
+  translations_cleaner: ^0.1.0
   very_good_analysis: ^10.0.0
 
 flutter:

@@ -6,15 +6,15 @@
     <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</RestoreLockedMode>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Asp.Versioning.Mvc" Version="[8.1.0]" />
-    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[8.1.0]" />
+    <PackageVersion Include="Asp.Versioning.Mvc" Version="[8.1.1]" />
+    <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[8.1.1]" />
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
     <PackageVersion Include="Autofac" Version="[9.0.0]" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.14.3]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.16.3]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.26.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
@@ -65,7 +65,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="[3.0.28]" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.28]" />
-    <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.3.0]" />
+    <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.3.1]" />
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.5.2]" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[9.0.4]" />
     <PackageVersion Include="NSec.Cryptography" Version="[25.4.0]" />
@@ -81,8 +81,8 @@
     <PackageVersion Include="Polly" Version="[8.6.5]" />
     <PackageVersion Include="RabbitMQ.Client" Version="[7.2.0]" />
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
-    <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.2.1]" />
-    <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.2.1]" />
+    <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.3.0]" />
+    <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.3.0]" />
     <PackageVersion Include="Serilog" Version="[4.3.0]" />
     <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.8.0]" />
@@ -96,16 +96,16 @@
     <PackageVersion Include="Serilog.Settings.Configuration" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="[6.1.1]" />
     <PackageVersion Include="Serilog.Sinks.Debug" Version="[3.0.0]" />
-    <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.0]" />
+    <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.1]" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="[9.0.0]" />
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
     <PackageVersion Include="SimpleBase" Version="[5.6.0]" />
     <PackageVersion Include="Spectre.Console" Version="[0.54.0]" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.0.1]" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.1.0]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.1]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.0]" />
-    <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.9.0]" />
-    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.0]" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.10.0]" />
+    <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.1]" />
     <PackageVersion Include="UrlBase64" Version="[2.0.0]" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="[3.2.1]" />
   </ItemGroup>

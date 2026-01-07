@@ -65,8 +65,7 @@ public class MigrationReaderTests : AbstractTestsBase
 
     private static async Task<string> StartPostgres()
     {
-        var postgreSqlContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:16")
+        var postgreSqlContainer = new PostgreSqlBuilder("postgres:16")
             .WithDatabase("enmeshed")
             .Build();
 
