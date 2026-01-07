@@ -67,8 +67,4 @@ WORKDIR /app
 
 COPY --from=build /app/publish/* .
 
-COPY Applications/AdminCli/src/AdminCli/appsettings.json .
-
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
-
-COPY --from=build /app/publish/backbone /app/backbone
