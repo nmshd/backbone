@@ -1,67 +1,17 @@
-#### Build chisel binary ####
-################################################################################################################
-# The following lines are required to install libicu, which itself is required for the SQL Server client to work 
-# (see https://github.com/dotnet/dotnet-docker/discussions/4527).
-# They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
-################################################################################################################
-FROM golang:1.25@sha256:6cc2338c038bc20f96ab32848da2b5c0641bb9bb5363f2c33e9b7c8838f9a208 AS chisel
-
-RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
-WORKDIR /opt/chisel
-RUN go build ./cmd/chisel
-
-#### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:10.0-noble@sha256:d1823fecac3689a2eb959e02ee3bfe1c2142392808240039097ad70644566190 AS build-env
-
-# use chisel to install libicu
-RUN apt-get update \
-    && apt-get install -y fdupes \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/runtime:10.0-noble-chiseled@sha256:dcd2422e953f1c1009eb37855e97f508110b078e1b3d78d2987e93a1b81ea686 / /runtime-ref
-
-RUN mkdir /rootfs \
-    && chisel cut --release "ubuntu-24.04" --root /rootfs \
-    libicu74_libs \
-    \
-    # Remove duplicates from rootfs that exist in runtime-ref
-    && fdupes /runtime-ref /rootfs -rdpN \
-    \
-    # Delete duplicate symlinks
-    # Function to find and format symlinks w/o including root dir (format: /path/to/symlink /path/to/target)
-    && getsymlinks() { find $1 -type l -printf '%p %l\n' | sed -n "s/^\\$1\\(.*\\)/\\1/p"; } \
-    # Combine set of symlinks between rootfs and runtime-ref
-    && (getsymlinks "/rootfs"; getsymlinks "/runtime-ref") \
-    # Sort them
-    | sort \
-    # Find the duplicates
-    | uniq -d \
-    # Extract just the path to the symlink
-    | cut -d' ' -f1 \
-    # Prepend the rootfs directory to the paths
-    | sed -e 's/^/\/rootfs/' \
-    # Delete the files
-    | xargs rm \
-    \
-    # Delete empty directories
-    && find /rootfs -type d -empty -delete
-################################################################################################################
-# end of libicu-related stuff
-################################################################################################################
-
-WORKDIR /src
-COPY . .
+FROM dhi.io/dotnet:10.0.101@sha256:7b8537ac8b4a954e35033d3bbf62a7f8e760b097fecaf09c9fd723444c25a3d3 AS build-env
 
 ARG VERSION
+
+WORKDIR /src
+
+COPY . .
 
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/HealthCheck/src/HealthCheck.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
-### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled@sha256:ba111738d21b4898f433fd8724ba1ed2e450adcb295c58f31d4137751922c83c
+FROM dhi.io/aspnetcore:10.0.1-alpine3.22@sha256:467fbea286437c7345fd5612dbb975e8debae801ab5d93398b5db69fa163d4d8
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
@@ -72,9 +22,6 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
 
-COPY --from=build-env /rootfs /
 COPY --from=build-env /app/publish .
-
-USER $APP_UID
 
 ENTRYPOINT ["dotnet", "Backbone.ConsumerApi.dll"]
