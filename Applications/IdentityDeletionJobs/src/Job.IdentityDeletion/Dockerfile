@@ -1,4 +1,4 @@
-FROM dhi.io/aspnetcore:10.0.1-alpine3.22@sha256:467fbea286437c7345fd5612dbb975e8debae801ab5d93398b5db69fa163d4d8 AS base
+FROM dhi.io/aspnetcore:10.0.1-debian13@sha256:b7e1580565643952a47ada845f469595667e1e09e392cf991bfafc38de48c2e5 AS base
 WORKDIR /app
 
 FROM dhi.io/dotnet:10.0.101-sdk@sha256:7b8537ac8b4a954e35033d3bbf62a7f8e760b097fecaf09c9fd723444c25a3d3 AS build

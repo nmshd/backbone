@@ -11,7 +11,7 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/HealthCheck/
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/SseServer/src/SseServer/SseServer.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
-FROM dhi.io/aspnetcore:10.0.1-alpine3.22@sha256:467fbea286437c7345fd5612dbb975e8debae801ab5d93398b5db69fa163d4d8
+FROM dhi.io/aspnetcore:10.0.1-debian13@sha256:b7e1580565643952a47ada845f469595667e1e09e392cf991bfafc38de48c2e5
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
