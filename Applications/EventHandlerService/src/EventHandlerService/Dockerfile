@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:1be14b20e4ec3dad26aa4932ae16c2193cc990c5499239492e9b697f0cba4e04 AS base
-WORKDIR /app
+FROM dhi.io/dotnet:10.0.101-sdk@sha256:7b8537ac8b4a954e35033d3bbf62a7f8e760b097fecaf09c9fd723444c25a3d3 AS build-env
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:0fba99926e4f12405c78f37941312f00c1aadb178bd63616f5d96fc2af5a26a9 AS build
+ARG VERSION
+
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -74,21 +74,17 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/EventHandler
 
 COPY . .
 
-ARG VERSION
-
 WORKDIR "/src/Applications/EventHandlerService/src/EventHandlerService"
 RUN dotnet build /p:ContinuousIntegrationBuild=true "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
-FROM build AS publish
 RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
-FROM base AS final
+FROM dhi.io/aspnetcore:10.0.1-alpine3.22@sha256:467fbea286437c7345fd5612dbb975e8debae801ab5d93398b5db69fa163d4d8
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
-RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.EventHandlerService.dll"]
