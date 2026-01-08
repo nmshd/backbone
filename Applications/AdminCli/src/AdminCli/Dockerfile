@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble AS base
-WORKDIR /app
-
 FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:d1823fecac3689a2eb959e02ee3bfe1c2142392808240039097ad70644566190 AS build
+
+ARG VERSION
+
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -55,23 +55,20 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src
 
 COPY . .
 
-ARG VERSION
-
-WORKDIR "/src/Applications/AdminCli/src/AdminCli"
-
 # We have to specify the RuntimeIdentifier so that the correct dependencies from the package-lock file are chosen
-RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:RuntimeIdentifier=linux-x64 --no-restore -c Release -o /app/publish "AdminCli.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:RuntimeIdentifier=linux-x64 --no-restore -c Release -o /app/publish "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
-FROM base AS final
+# Create a simple wrapper script to call the AdminCli. This simplifies execution, because users do not have to write "dotnet /app/Backbone.AdminCli.dll <command>" every time.
+# Instead they can just call "backbone <command>"
+RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/publish/backbone && chmod +x /app/publish/backbone
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble
 WORKDIR /app
-COPY --from=build /app/publish/* .
 
-COPY Applications/AdminCli/src/AdminCli/appsettings.json .
+COPY --from=build /app/publish/* .
 
 ENV PATH="$PATH:/app"
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
-# Create a simple wrapper script to call the AdminCli. This simplifies exexcution, because users do not have to write "dotnet /app/Backbone.AdminCli.dll <command>" every time.
-# Instead they can just call "backbone <command>"
-RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/backbone && chmod +x /app/backbone
+COPY --from=build /app/publish/backbone /app/backbone
