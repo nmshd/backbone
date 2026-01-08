@@ -3,7 +3,6 @@ changelog:
     labels:
       - ci
       - chore
-      - dependencies
       - refactor
       - test
   categories:
@@ -16,6 +15,9 @@ changelog:
     - title: Bug Fixes
       labels:
         - bug
+    - title: Dependency Updates
+      labels:
+        - dependencies
     - title: Other Changes
       labels:
         - "*"
