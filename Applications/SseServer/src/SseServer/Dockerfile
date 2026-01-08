@@ -1,4 +1,4 @@
-FROM dhi.io/dotnet:10.0.101@sha256:7b8537ac8b4a954e35033d3bbf62a7f8e760b097fecaf09c9fd723444c25a3d3 AS build-env
+FROM dhi.io/dotnet:10.0.101-sdk@sha256:7b8537ac8b4a954e35033d3bbf62a7f8e760b097fecaf09c9fd723444c25a3d3 AS build-env
 
 ARG VERSION
 
