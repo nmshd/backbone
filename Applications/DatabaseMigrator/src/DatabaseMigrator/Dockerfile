@@ -99,7 +99,6 @@ FROM base AS final
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
-RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
