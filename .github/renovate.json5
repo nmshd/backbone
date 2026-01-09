@@ -1,6 +1,9 @@
 {
     $schema: "https://docs.renovatebot.com/renovate-schema.json",
     extends: ["config:recommended", "docker:pinDigests", "schedule:earlyMondays"],
+    registryAliases: {
+        "dhi.io": "dhi.io"
+    },
     labels: ["dependencies"],
     ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     rangeStrategy: "pin",
