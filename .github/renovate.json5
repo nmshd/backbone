@@ -8,6 +8,14 @@
     ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     rangeStrategy: "pin",
     additionalReviewers: ["erbenjak"],
+    hostRules: [
+        {
+            matchHost: "dhi.io",
+            hostType: "docker",
+            username: "{{ secrets.MEND_DHI_USERNAME }}",
+            password: "{{ secrets.MEND_DHI_PASSWORD }}"
+        }
+    ],
     packageRules: [
         {
             // don't update EF Core and depending libraries for the following reason:
