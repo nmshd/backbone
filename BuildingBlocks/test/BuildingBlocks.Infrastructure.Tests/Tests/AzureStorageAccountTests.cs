@@ -8,19 +8,19 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 {
-    private static AzuriteContainer _container = null!;
+    private static AzuriteContainer _azuriteContainer = null!;
     private const string CONTAINER_NAME = "test-container";
 
     public async ValueTask InitializeAsync()
     {
-        _container = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").WithExposedPort(10000).Build();
+        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").WithExposedPort(10000).Build();
 
-        await _container.StartAsync();
+        await _azuriteContainer.StartAsync();
     }
 
     public async ValueTask DisposeAsync()
     {
-        await _container.StopAsync();
+        await _azuriteContainer.StopAsync();
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 
         services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
         {
-            ConnectionString = _container.GetConnectionString(),
+            ConnectionString = _azuriteContainer.GetConnectionString(),
             ContainerName = "test"
         });
 
