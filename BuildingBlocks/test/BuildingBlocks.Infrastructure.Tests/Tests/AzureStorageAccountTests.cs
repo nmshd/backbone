@@ -14,7 +14,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
     private static void StartAzuriteContainer()
     {
         var processInfo = new ProcessStartInfo("docker",
-            "run --rm --name azurite-test-container -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0")
+            "run --rm --name azurite-test-container -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0 --skipApiVersionCheck")
         {
             CreateNoWindow = true,
             UseShellExecute = false,
