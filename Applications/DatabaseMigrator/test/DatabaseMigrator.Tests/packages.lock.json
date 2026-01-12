@@ -26,11 +26,11 @@
       },
       "Testcontainers.PostgreSql": {
         "type": "Direct",
-          "requested": "[4.10.0, 4.10.0]",
-          "resolved": "4.10.0",
-          "contentHash": "TP7j3N014O9MONT21lqZPzlVuP1LJYhkRKYZPbRdHl3VN+4RPk5Jt799WvLfxDsOFLVNibNO3B7tP1vcYQmXHA==",
+        "requested": "[4.10.0, 4.10.0]",
+        "resolved": "4.10.0",
+        "contentHash": "TP7j3N014O9MONT21lqZPzlVuP1LJYhkRKYZPbRdHl3VN+4RPk5Jt799WvLfxDsOFLVNibNO3B7tP1vcYQmXHA==",
         "dependencies": {
-            "Testcontainers": "4.10.0"
+          "Testcontainers": "4.10.0"
         }
       },
       "xunit.v3.mtp-v2": {
@@ -46,8 +46,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-          "resolved": "4.0.3.7",
-          "contentHash": "ECtav09nk+lGtUhmS3de01UDhUgqjh6DdLalzJaEoWouKtBqBrJU6DC68M4pjEW/aLr2w+iBbjS+xxCcm3pTUQ=="
+        "resolved": "4.0.3.8",
+        "contentHash": "nJyNzaz3pcD8c8hZvtJXuziJm1dkd3/BYmZvhf1TPNfMo3G3lsesGFZl1UVyQhGEfmQOS+efT0H8tf00PMmjug=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -111,18 +111,18 @@
       },
       "Docker.DotNet.Enhanced": {
         "type": "Transitive",
-          "resolved": "3.131.1",
-          "contentHash": "hGLHCNUsQbT2Ab/HUznRnNqYZQs40zInXa3eLwYjeNyfUYbw1pqqDGqcOLl5uGepS8IuigEYakEdAcVT/2ezYg==",
+        "resolved": "3.131.1",
+        "contentHash": "hGLHCNUsQbT2Ab/HUznRnNqYZQs40zInXa3eLwYjeNyfUYbw1pqqDGqcOLl5uGepS8IuigEYakEdAcVT/2ezYg==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3"
         }
       },
       "Docker.DotNet.Enhanced.X509": {
         "type": "Transitive",
-          "resolved": "3.131.1",
-          "contentHash": "8FU7zmttFQzp0xb0EPupxQ0nGtC2cTpukgh3jMxMT8luj5TSDyzIKTnroDpXCjpg9P2fV+6JIvC+IetsMEfyBA==",
+        "resolved": "3.131.1",
+        "contentHash": "8FU7zmttFQzp0xb0EPupxQ0nGtC2cTpukgh3jMxMT8luj5TSDyzIKTnroDpXCjpg9P2fV+6JIvC+IetsMEfyBA==",
         "dependencies": {
-            "Docker.DotNet.Enhanced": "3.131.1"
+          "Docker.DotNet.Enhanced": "3.131.1"
         }
       },
       "EmptyFiles": {
@@ -1193,11 +1193,11 @@
       },
       "Testcontainers": {
         "type": "Transitive",
-          "resolved": "4.10.0",
-          "contentHash": "a7tH+s9IRME6QEeMRgl/mTqQyudgtGNJmJRPn1+LwW8w/2L11cJzRJd7Io0QoSrP+i6lAOETX2SRY7cLbElcdQ==",
+        "resolved": "4.10.0",
+        "contentHash": "a7tH+s9IRME6QEeMRgl/mTqQyudgtGNJmJRPn1+LwW8w/2L11cJzRJd7Io0QoSrP+i6lAOETX2SRY7cLbElcdQ==",
         "dependencies": {
-            "Docker.DotNet.Enhanced": "3.131.1",
-            "Docker.DotNet.Enhanced.X509": "3.131.1",
+          "Docker.DotNet.Enhanced": "3.131.1",
+          "Docker.DotNet.Enhanced.X509": "3.131.1",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
           "SSH.NET": "2025.1.0",
           "SharpZipLib": "1.4.2"
@@ -1308,7 +1308,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-            "AWSSDK.S3": "[4.0.16.3, 4.0.16.3]",
+          "AWSSDK.S3": "[4.0.17, 4.0.17]",
           "Autofac": "[9.0.0, 9.0.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
           "Azure.Storage.Blobs": "[12.26.0, 12.26.0]",
@@ -1397,7 +1397,7 @@
           "Serilog.Settings.Configuration": "[10.0.0, 10.0.0]",
           "Serilog.Sinks.Console": "[6.1.1, 6.1.1]",
           "Serilog.Sinks.Debug": "[3.0.0, 3.0.0]",
-            "Serilog.Sinks.Http": "[9.2.1, 9.2.1]",
+          "Serilog.Sinks.Http": "[9.2.1, 9.2.1]",
           "Serilog.Sinks.Seq": "[9.0.0, 9.0.0]",
           "System.Data.SqlClient": "[4.9.0, 4.9.0]"
         }
@@ -1861,11 +1861,11 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-          "requested": "[4.0.16.3, 4.0.16.3]",
-          "resolved": "4.0.16.3",
-          "contentHash": "/26WjZNXc0lYroSHNfhZzQZ5qD/p3gjLsLl9+HNXw/7+fRs6IIX20kL4iEOTIzMgoI/pu5n61snTfFnrW1pjpw==",
+        "requested": "[4.0.17, 4.0.17]",
+        "resolved": "4.0.17",
+        "contentHash": "bW61dnzr1nRUWiuswge2Nq7mMmJXODrvokt1VaqqKfy9QRKBiC9qt4ogh3HV6crQRikP5mdncIWymRSxihK2Mw==",
         "dependencies": {
-            "AWSSDK.Core": "[4.0.3.7, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.8, 5.0.0)"
         }
       },
       "Azure.Messaging.ServiceBus": {
@@ -2476,11 +2476,11 @@
       },
       "Serilog.Sinks.Http": {
         "type": "CentralTransitive",
-          "requested": "[9.2.1, 9.2.1]",
-          "resolved": "9.2.1",
-          "contentHash": "sxc3GZSBsDFuRhcVKZMs66Mr7RfsGCPASSyiGG1Ew20a8kaeFbUL0tru352o0K0GLHjIcmxgkH2KrwoqjvJjjQ==",
+        "requested": "[9.2.1, 9.2.1]",
+        "resolved": "9.2.1",
+        "contentHash": "sxc3GZSBsDFuRhcVKZMs66Mr7RfsGCPASSyiGG1Ew20a8kaeFbUL0tru352o0K0GLHjIcmxgkH2KrwoqjvJjjQ==",
         "dependencies": {
-            "Microsoft.Extensions.Configuration.Abstractions": "10.0.1",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.1",
           "Serilog.Sinks.File": "7.0.0"
         }
       },
