@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +35,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
         await azureBlobStorage.SaveAsync();
 
         var retrievedBlobContent = await azureBlobStorage.GetAsync(CONTAINER_NAME, addBlobName);
-        Assert.Equal(addBlobContent, retrievedBlobContent);
+        addBlobContent.ShouldBe(retrievedBlobContent);
     }
 
     [Fact]
@@ -48,8 +47,11 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
         var addBlobContent = "AzureDeleteBlobThatExists"u8.ToArray();
 
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);
+
         azureBlobStorage.Remove(CONTAINER_NAME, addBlobName);
-        await azureBlobStorage.SaveAsync();
+        var acting = azureBlobStorage.SaveAsync;
+
+        await acting.ShouldNotThrowAsync();
     }
 
     [Fact]
@@ -58,8 +60,9 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
         var azureBlobStorage = ProvisionAzureStorageTests();
 
         azureBlobStorage.Remove(CONTAINER_NAME, "AzureDeleteBlobThatDoesNotExist");
+        var acting = azureBlobStorage.SaveAsync;
 
-        await Assert.ThrowsAsync<NotFoundException>(azureBlobStorage.SaveAsync);
+        await acting.ShouldNotThrowAsync();
     }
 
     [Fact]
@@ -72,7 +75,9 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, "AddBlobWithSameName Before"u8.ToArray());
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, "AddBlobWithSameName After"u8.ToArray());
 
-        await Assert.ThrowsAsync<BlobAlreadyExistsException>(azureBlobStorage.SaveAsync);
+        var acting = azureBlobStorage.SaveAsync;
+
+        await acting.ShouldThrowAsync<BlobAlreadyExistsException>();
     }
 
     [Fact]
@@ -101,14 +106,14 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX1_Blob", "content"u8.ToArray());
-        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2_Blob", "content"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX1-Blob", "content"u8.ToArray());
+        azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2-Blob", "content"u8.ToArray());
         await azureBlobStorage.SaveAsync();
 
-        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync("PREFIX1_")).ToListAsync(TestContext.Current.CancellationToken);
+        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync("PREFIX1-")).ToListAsync(TestContext.Current.CancellationToken);
 
-        blobsWithPrefix1.ShouldContain("PREFIX1_Blob");
-        blobsWithPrefix1.ShouldNotContain("PREFIX2_Blob");
+        blobsWithPrefix1.ShouldContain("PREFIX1-Blob");
+        blobsWithPrefix1.ShouldNotContain("PREFIX2-Blob");
     }
 
     [Fact]
