@@ -16,7 +16,7 @@
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
     <PackageVersion Include="AWSSDK.S3" Version="[4.0.17]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
-    <PackageVersion Include="Azure.Storage.Blobs" Version="[12.26.0]" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="[12.27.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
     <PackageVersion Include="coverlet.collector" Version="[6.0.4]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
