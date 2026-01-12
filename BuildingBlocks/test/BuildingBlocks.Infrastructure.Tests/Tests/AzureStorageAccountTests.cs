@@ -9,18 +9,33 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 {
     private AzuriteContainer _azuriteContainer = null!;
+    private ServiceProvider _serviceProvider = null!;
     private const string CONTAINER_NAME = "test-container";
 
     public async ValueTask InitializeAsync()
     {
-        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").WithExposedPort(10000).Build();
+        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").Build();
 
         await _azuriteContainer.StartAsync();
+
+        var services = new ServiceCollection()
+            .AddLogging();
+
+        services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
+        {
+            ConnectionString = _azuriteContainer.GetConnectionString(),
+            ContainerName = "test"
+        });
+
+        _serviceProvider = services.BuildServiceProvider();
     }
 
     public async ValueTask DisposeAsync()
     {
+        await _serviceProvider.DisposeAsync();
+
         await _azuriteContainer.StopAsync();
+        await _azuriteContainer.DisposeAsync();
     }
 
     [Fact]
@@ -128,16 +143,6 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 
     private IBlobStorage CreateAzureBlobStorage()
     {
-        var services = new ServiceCollection()
-            .AddLogging();
-
-        services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
-        {
-            ConnectionString = _azuriteContainer.GetConnectionString(),
-            ContainerName = "test"
-        });
-
-        var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetRequiredService<IBlobStorage>();
+        return _serviceProvider.GetRequiredService<IBlobStorage>();
     }
 }
