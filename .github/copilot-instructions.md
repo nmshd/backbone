@@ -255,20 +255,6 @@ All workflows use Ubuntu latest and cache NuGet/npm dependencies.
 
 ## Known Issues & Workarounds
 
-### Reqnroll Code-Behind Files Warning
-
-**Issue**: Build shows warning about old code-behind files in obj/ folder
-**Workaround**: This is safe to ignore; files are auto-managed. If features don't compile, run: `dotnet clean` followed by `dotnet build`
-
-### Database Migration Code-Behind
-
-If you modify `.feature` files in ConsumerApi or AdminApi integration tests:
-
-```pwsh
-dotnet clean  # Remove old code-behind
-dotnet build  # Regenerate from .feature files
-```
-
 ### AdminUI Dart Pub Cache
 
 If Flutter commands fail, clear cache:
