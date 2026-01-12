@@ -8,7 +8,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 {
-    private static AzuriteContainer _azuriteContainer = null!;
+    private AzuriteContainer _azuriteContainer = null!;
     private const string CONTAINER_NAME = "test-container";
 
     public async ValueTask InitializeAsync()
@@ -26,7 +26,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureSaveAsyncAndFindAsync()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         const string addBlobName = "AzureSaveAsyncAndFindAsync";
         var addBlobContent = "AzureSaveAsyncAndFindAsync"u8.ToArray();
@@ -41,7 +41,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureDeleteBlobThatExists()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         const string addBlobName = "AzureDeleteBlobThatExists";
         var addBlobContent = "AzureDeleteBlobThatExists"u8.ToArray();
@@ -57,7 +57,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureDeleteBlobThatDoesNotExist()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         azureBlobStorage.Remove(CONTAINER_NAME, "AzureDeleteBlobThatDoesNotExist");
         var acting = azureBlobStorage.SaveAsync;
@@ -68,7 +68,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureAddBlobWithSameName()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         const string addBlobName = "AzureAddBlobWithSameName";
 
@@ -83,7 +83,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureAddMultipleBlobsAndFindAllBlobs()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         const string addBlobName1 = "AzureAddMultipleBlobsAndFindAllBlobs1";
         const string addBlobName2 = "AzureAddMultipleBlobsAndFindAllBlobs2";
@@ -104,7 +104,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureAddMultiplePrefixBlobsAndFindAllBlobs()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         azureBlobStorage.Add(CONTAINER_NAME, "PREFIX1-Blob", "content"u8.ToArray());
         azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2-Blob", "content"u8.ToArray());
@@ -119,14 +119,14 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
     [Fact]
     public async Task AzureEmptyFindAllBlobs()
     {
-        var azureBlobStorage = ProvisionAzureStorageTests();
+        var azureBlobStorage = CreateAzureBlobStorage();
 
         var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync(TestContext.Current.CancellationToken);
 
         retrievedBlobContent.ShouldBeEmpty();
     }
 
-    private static IBlobStorage ProvisionAzureStorageTests()
+    private IBlobStorage CreateAzureBlobStorage()
     {
         var services = new ServiceCollection()
             .AddLogging();
