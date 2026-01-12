@@ -8,23 +8,23 @@ namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 {
+    private const string CONTAINER_NAME = "test-container";
+
     private AzuriteContainer _azuriteContainer = null!;
     private ServiceProvider _serviceProvider = null!;
-    private const string CONTAINER_NAME = "test-container";
 
     public async ValueTask InitializeAsync()
     {
-        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").Build();
+        _azuriteContainer = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("azurite-blob", "--skipApiVersionCheck").Build();
 
         await _azuriteContainer.StartAsync();
 
-        var services = new ServiceCollection()
-            .AddLogging();
+        var services = new ServiceCollection().AddLogging();
 
         services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
         {
             ConnectionString = _azuriteContainer.GetConnectionString(),
-            ContainerName = "test"
+            ContainerName = CONTAINER_NAME
         });
 
         _serviceProvider = services.BuildServiceProvider();
