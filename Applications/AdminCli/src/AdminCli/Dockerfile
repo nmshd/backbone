@@ -65,7 +65,7 @@ RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/publi
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble@sha256:eaa79205c3ade4792a7f7bf310a3aac51fe0e1d91c44e40f70b7c6423d475fe0
 WORKDIR /app
 
-COPY --from=build /app/publish/* .
+COPY --from=build /app/publish/ .
 
 ENV PATH="$PATH:/app"
 
