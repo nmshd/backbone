@@ -110,7 +110,7 @@ public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
         azureBlobStorage.Add(CONTAINER_NAME, "PREFIX2-Blob", "content"u8.ToArray());
         await azureBlobStorage.SaveAsync();
 
-        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync("PREFIX1-")).ToListAsync(TestContext.Current.CancellationToken);
+        var blobsWithPrefix1 = await (await azureBlobStorage.ListAsync(CONTAINER_NAME, "PREFIX1")).ToListAsync(TestContext.Current.CancellationToken);
 
         blobsWithPrefix1.ShouldContain("PREFIX1-Blob");
         blobsWithPrefix1.ShouldNotContain("PREFIX2-Blob");
