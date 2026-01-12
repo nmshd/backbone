@@ -1,79 +1,30 @@
-using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Microsoft.Extensions.DependencyInjection;
+using Testcontainers.Azurite;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
 [Collection("AzureBlobStorageTests")]
-public class AzureStorageAccountTests : AbstractTestsBase
+public class AzureStorageAccountTests : AbstractTestsBase, IAsyncLifetime
 {
+    private static AzuriteContainer _container = null!;
     private const string CONTAINER_NAME = "test-container";
 
-    private static void StartAzuriteContainer()
+    public async ValueTask InitializeAsync()
     {
-        var processInfo = new ProcessStartInfo("docker",
-            "run --rm --name azurite-test-container -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0")
-        {
-            CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
+        _container = new AzuriteBuilder("mcr.microsoft.com/azure-storage/azurite:latest").WithCommand("--skipApiVersionCheck").WithExposedPort(10000).Build();
 
-        using var process = new Process();
-        process.StartInfo = processInfo;
-        process.Start();
-        process.WaitForExit(TimeSpan.FromSeconds(60));
-        if (!process.HasExited)
-        {
-            process.Kill();
-        }
-
-        process.Close();
+        await _container.StartAsync();
     }
 
-    private static void CloseAzuriteContainer()
+    public async ValueTask DisposeAsync()
     {
-        var processInfo = new ProcessStartInfo("docker", "stop azurite-test-container")
-        {
-            CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
-
-        using var process = new Process();
-        process.StartInfo = processInfo;
-        process.Start();
-        process.WaitForExit(10000);
-        if (!process.HasExited)
-        {
-            process.Kill();
-        }
-
-        process.Close();
+        await _container.StopAsync();
     }
 
-    private static IBlobStorage ProvisionAzureStorageTests()
-    {
-        StartAzuriteContainer();
-
-        var services = new ServiceCollection()
-            .AddLogging();
-
-        services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
-        {
-            ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;",
-            ContainerName = "test"
-        });
-
-        var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetRequiredService<IBlobStorage>();
-    }
-
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureSaveAsyncAndFindAsync()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -86,11 +37,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         var retrievedBlobContent = await azureBlobStorage.GetAsync(CONTAINER_NAME, addBlobName);
         Assert.Equal(addBlobContent, retrievedBlobContent);
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureDeleteBlobThatExists()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -101,11 +50,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);
         azureBlobStorage.Remove(CONTAINER_NAME, addBlobName);
         await azureBlobStorage.SaveAsync();
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureDeleteBlobThatDoesNotExist()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -113,11 +60,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
         azureBlobStorage.Remove(CONTAINER_NAME, "AzureDeleteBlobThatDoesNotExist");
 
         await Assert.ThrowsAsync<NotFoundException>(azureBlobStorage.SaveAsync);
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureAddBlobWithSameName()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -128,11 +73,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, "AddBlobWithSameName After"u8.ToArray());
 
         await Assert.ThrowsAsync<BlobAlreadyExistsException>(azureBlobStorage.SaveAsync);
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureAddMultipleBlobsAndFindAllBlobs()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -151,11 +94,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         retrievedBlobContent.ShouldContain(addBlobName1);
         retrievedBlobContent.ShouldContain(addBlobName2);
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureAddMultiplePrefixBlobsAndFindAllBlobs()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -168,11 +109,9 @@ public class AzureStorageAccountTests : AbstractTestsBase
 
         blobsWithPrefix1.ShouldContain("PREFIX1_Blob");
         blobsWithPrefix1.ShouldNotContain("PREFIX2_Blob");
-
-        CloseAzuriteContainer();
     }
 
-    [Fact(Skip = "Fails because emulator container can't be started")]
+    [Fact]
     public async Task AzureEmptyFindAllBlobs()
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
@@ -180,7 +119,20 @@ public class AzureStorageAccountTests : AbstractTestsBase
         var retrievedBlobContent = await (await azureBlobStorage.ListAsync(CONTAINER_NAME)).ToListAsync(TestContext.Current.CancellationToken);
 
         retrievedBlobContent.ShouldBeEmpty();
+    }
 
-        CloseAzuriteContainer();
+    private static IBlobStorage ProvisionAzureStorageTests()
+    {
+        var services = new ServiceCollection()
+            .AddLogging();
+
+        services.AddAzureStorageAccount(new AzureStorageAccountConfiguration
+        {
+            ConnectionString = _container.GetConnectionString(),
+            ContainerName = "test"
+        });
+
+        var serviceProvider = services.BuildServiceProvider();
+        return serviceProvider.GetRequiredService<IBlobStorage>();
     }
 }
