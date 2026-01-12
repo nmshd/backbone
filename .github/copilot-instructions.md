@@ -111,6 +111,18 @@ dotnet format --no-restore
 -   Imports sorted, modifiers ordered: public, private, protected, internal, file, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required
 -   Single-line blocks preserved, space after cast disabled
 
+## Code Reviews
+
+When reviewing code changes:
+
+-   Ensure adherence to Clean Architecture principles
+-   Verify proper layering (Domain, Application, Infrastructure, API)
+-   Check for appropriate use of MediatR for commands/queries
+-   Confirm strong typing for IDs and domain events
+-   Validate that new dependency versions are pinned in `Directory.Packages.props`
+-   Validate that no TODO comments or commented out code remains
+-   Ignore any changes to generated files (e.g. packages.lock.json)
+
 ## Testing
 
 ### Unit Tests (Fastest - Run First)
