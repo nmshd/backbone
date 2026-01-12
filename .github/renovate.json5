@@ -6,7 +6,6 @@
     rangeStrategy: "pin",
     additionalReviewers: ["erbenjak"],
     packageRules: [
-        {
         // don't update MediatR due to license issues
         {
             groupName: "dont-update-mediatr-due-to-license-issues",
