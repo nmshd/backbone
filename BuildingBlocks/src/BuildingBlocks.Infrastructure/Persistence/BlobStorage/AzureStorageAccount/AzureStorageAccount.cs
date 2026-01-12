@@ -1,5 +1,6 @@
 using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.Logging;
@@ -67,7 +68,7 @@ public class AzureStorageAccount : IBlobStorage, IDisposable
         try
         {
             var blobs = container
-                .GetBlobsAsync(prefix: prefix)
+                .GetBlobsAsync(new GetBlobsOptions { Prefix = prefix })
                 .Select(storageObject => storageObject.Name);
             _logger.LogTrace("Found all blobs.");
             return Task.FromResult(blobs);
