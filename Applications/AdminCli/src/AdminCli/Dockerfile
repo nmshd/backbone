@@ -55,17 +55,18 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src
 
 COPY . .
 
-# We have to specify the RuntimeIdentifier so that the correct dependencies from the package-lock file are chosen
-RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:RuntimeIdentifier=linux-x64 --no-restore -c Release -o /app/publish "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o /app/publish "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
 # Create a simple wrapper script to call the AdminCli. This simplifies execution, because users do not have to write "dotnet /app/Backbone.AdminCli.dll <command>" every time.
 # Instead they can just call "backbone <command>"
 RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/publish/backbone && chmod +x /app/publish/backbone
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble@sha256:eaa79205c3ade4792a7f7bf310a3aac51fe0e1d91c44e40f70b7c6423d475fe0
+RUN apt-get update && apt-get install -y libgssapi-krb5-2 && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-COPY --from=build /app/publish/* .
+COPY --from=build /app/publish/ .
 
 ENV PATH="$PATH:/app"
 
