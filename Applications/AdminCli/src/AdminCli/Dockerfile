@@ -55,7 +55,6 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src
 
 COPY . .
 
-# We have to specify the RuntimeIdentifier so that the correct dependencies from the package-lock file are chosen
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o /app/publish "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
 # Create a simple wrapper script to call the AdminCli. This simplifies execution, because users do not have to write "dotnet /app/Backbone.AdminCli.dll <command>" every time.
