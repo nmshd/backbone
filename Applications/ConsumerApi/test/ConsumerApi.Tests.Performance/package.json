@@ -2,10 +2,10 @@
     "name": "enmshed-backbone-performance-tests",
     "license": "AGPL-3.0-or-later",
     "devDependencies": {
-        "@babel/core": "7.28.5",
+        "@babel/core": "7.28.6",
         "@babel/plugin-transform-class-properties": "7.27.1",
-        "@babel/plugin-transform-object-rest-spread": "7.28.4",
-        "@babel/preset-env": "7.28.5",
+        "@babel/plugin-transform-object-rest-spread": "7.28.6",
+        "@babel/preset-env": "7.28.6",
         "@babel/preset-typescript": "7.28.5",
         "@js-soft/eslint-config-ts": "2.0.4",
         "@js-soft/license-check": "1.0.10",
