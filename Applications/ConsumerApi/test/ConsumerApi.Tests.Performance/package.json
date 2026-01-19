@@ -3,7 +3,7 @@
     "license": "AGPL-3.0-or-later",
     "devDependencies": {
         "@babel/core": "7.28.6",
-        "@babel/plugin-transform-class-properties": "7.27.1",
+        "@babel/plugin-transform-class-properties": "7.28.6",
         "@babel/plugin-transform-object-rest-spread": "7.28.6",
         "@babel/preset-env": "7.28.6",
         "@babel/preset-typescript": "7.28.5",
@@ -17,7 +17,7 @@
         "copy-webpack-plugin": "13.0.1",
         "eslint": "9.39.2",
         "papaparse": "5.5.3",
-        "prettier": "3.7.4",
+        "prettier": "3.8.0",
         "typescript": "5.9.3",
         "webpack": "5.104.1",
         "webpack-cli": "6.0.1",
