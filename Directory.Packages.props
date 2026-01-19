@@ -30,7 +30,7 @@
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="[12.1.1]" />
     <PackageVersion Include="FluentValidation.Validators.UnitTestExtension" Version="[1.12.0.2]" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="[3.0.1]" />
-    <PackageVersion Include="Google.Cloud.PubSub.V1" Version="[3.30.0]" />
+    <PackageVersion Include="Google.Cloud.PubSub.V1" Version="[3.31.0]" />
     <PackageVersion Include="Google.Cloud.Storage.V1" Version="[4.13.0]" />
     <PackageVersion Include="JWT" Version="[11.0.0]" />
     <PackageVersion Include="MediatR" Version="[12.5.0]" />
@@ -54,7 +54,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[10.0.2]" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.2]" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[10.1.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[10.2.0]" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.2]" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="[10.0.2]" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="[10.0.2]" />
@@ -85,7 +85,7 @@
     <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.3.2]" />
     <PackageVersion Include="Serilog" Version="[4.3.0]" />
     <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0]" />
-    <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.8.0]" />
+    <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.9.0]" />
     <PackageVersion Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
     <PackageVersion Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
