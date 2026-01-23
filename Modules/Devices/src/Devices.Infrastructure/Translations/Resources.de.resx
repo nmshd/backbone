@@ -36,7 +36,7 @@
         <value>Ihre Identität wird in ein paar Tagen gelöscht. Bis dahin haben Sie die Möglichkeit, diesen Vorgang abzubrechen.</value>
     </data>
     <data name="DeletionProcessGracePeriodReminderPushNotification.Title" xml:space="preserve">
-        <value>Deine Identität wird gelöscht</value>
+        <value>Ihre Identität wird gelöscht</value>
     </data>
     <data name="DeletionProcessStartedPushNotification.Body" xml:space="preserve">
         <value>Ein Löschvorgang wurde für eine Ihrer Identitäten gestartet.</value>
