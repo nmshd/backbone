@@ -135,7 +135,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Deine Identität wird in ein paar Tagen gelöscht. Bis dahin hast du die Möglichkeit, diesen Vorgang abzubrechen..
+        ///   Looks up a localized string similar to Ihre Identität wird in ein paar Tagen gelöscht. Bis dahin hast du die Möglichkeit, diesen Vorgang abzubrechen..
         /// </summary>
         internal static string DeletionProcessGracePeriodReminderPushNotification_Body
         {
@@ -146,7 +146,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Deine Identität wird gelöscht.
+        ///   Looks up a localized string similar to Ihre Identität wird gelöscht.
         /// </summary>
         internal static string DeletionProcessGracePeriodReminderPushNotification_Title
         {
@@ -190,7 +190,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Deine Identität ist jetzt gelöscht..
+        ///   Looks up a localized string similar to Ihre Identität ist jetzt gelöscht..
         /// </summary>
         internal static string DeletionStartsPushNotification_Title
         {
