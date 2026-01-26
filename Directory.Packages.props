@@ -74,10 +74,10 @@
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.2.0]" />
     <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="[1.11.2-beta.1]" />
     <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="[1.11.2-beta.1]" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.14.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.14.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.14.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.14.0]" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.15.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.15.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.15.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.15.0]" />
     <PackageVersion Include="Polly" Version="[8.6.5]" />
     <PackageVersion Include="RabbitMQ.Client" Version="[7.2.0]" />
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
