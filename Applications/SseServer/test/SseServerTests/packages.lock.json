@@ -1537,7 +1537,7 @@
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
-          "FakeItEasy": "[8.3.0, 8.3.0]",
+          "FakeItEasy": "[9.0.1, 9.0.1]",
           "FluentValidation": "[12.1.1, 12.1.1]",
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore.Sqlite": "[10.0.2, 10.0.2]",
@@ -1682,11 +1682,11 @@
       },
       "FakeItEasy": {
         "type": "CentralTransitive",
-        "requested": "[8.3.0, 8.3.0]",
-        "resolved": "8.3.0",
-        "contentHash": "5QmShA6njFOhQHUYrFUjWEepfRcbQLOhgctaFhWyhPTi17kVGNyZOdvJ/2HhoNthmdghIzNsnZsMScJZhVBaQQ==",
+        "requested": "[9.0.1, 9.0.1]",
+        "resolved": "9.0.1",
+        "contentHash": "cqM6hKjoAmjuh+GzKLX7gcqCDownqffmQ3KSBMdFowCZgwQMXpu1jlsJE649FsrMF5Ea5kYpuokGTuOaUrz/2w==",
         "dependencies": {
-          "Castle.Core": "5.1.1"
+          "Castle.Core": "5.2.1"
         }
       },
       "FirebaseAdmin": {
