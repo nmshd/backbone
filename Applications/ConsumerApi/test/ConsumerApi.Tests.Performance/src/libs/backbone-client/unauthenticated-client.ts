@@ -1,15 +1,16 @@
+import { check } from "k6";
 import { b64encode } from "k6/encoding";
 import { CryptoHelper } from "../crypto-helper";
 import { BaseClient } from "./base-client";
-import { apiVersion } from "./http-client-configuration";
-import { CreateChallengeResponse, CreateIdentityRequest, CreateIdentityResponse } from "./models";
+import { HttpClientConfiguration } from "./http-client-configuration";
+import { CreateChallengeResponse, CreateIdentityRequest } from "./models";
 
 export class UnauthenticatedClient extends BaseClient {
-    public constructor() {
-        super();
+    public constructor(configuration: HttpClientConfiguration) {
+        super(configuration);
     }
 
-    public createIdentity(clientId: string, clientSecret: string, password: string): CreateIdentityResponse {
+    public createIdentity(clientId: string, clientSecret: string, password: string): void {
         try {
             const keyPair = CryptoHelper.generateKeyPair();
 
@@ -26,12 +27,13 @@ export class UnauthenticatedClient extends BaseClient {
                 identityVersion: 1
             };
 
-            const httpResponse = this.httpxClient
-                .post(`api/${apiVersion}/Identities`, JSON.stringify(createIdentityRequest), {
-                    headers: { "Content-Type": "application/json" }
-                })
-                .json("result") as CreateIdentityResponse;
-            return httpResponse;
+            const httpResponse = this.httpxClient.post(`api/${this.configuration.apiVersion}/Identities`, JSON.stringify(createIdentityRequest), {
+                headers: { "Content-Type": "application/json" }
+            });
+
+            check(httpResponse, { "identity creation successful": (r) => r.status === 201 });
+
+            // return httpResponse.json("result") as CreateIdentityResponse;
         } catch (e) {
             console.error(e);
             throw e;
@@ -39,6 +41,6 @@ export class UnauthenticatedClient extends BaseClient {
     }
 
     public getChallenge(): CreateChallengeResponse {
-        return this.httpxClient.post(`api/${apiVersion}/Challenges`).json("result") as CreateChallengeResponse;
+        return this.httpxClient.post(`api/${this.configuration.apiVersion}/Challenges`).json("result") as CreateChallengeResponse;
     }
 }
