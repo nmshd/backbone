@@ -8,7 +8,7 @@
     },
     "author": "",
     "dependencies": {
-        "@js-soft/ts-serval": "2.0.14",
+        "@js-soft/ts-serval": "2.0.15",
         "@nmshd/crypto": "2.1.3",
         "koa": "3.1.1",
         "koa-body": "7.0.1",

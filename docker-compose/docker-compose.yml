@@ -14,7 +14,7 @@ services:
   ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:54b23ca766287dab5f6f55162923325f07cdec6ccb42108f37c55c87e7688ebd
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:698682bab57c02c42bc0aa274b158aeb242d8e9104149a7489628d5535805816
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.2.3-management-alpine@sha256:7c5fe2a75e711d6012c9c407748cf0b4db8474207a507e4549bbf2342bf711ac
+    image: rabbitmq:4.2.3-management-alpine@sha256:426aa8163d714142a902fe50cca1af49d75fb2351863331647c1976339f49809
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
