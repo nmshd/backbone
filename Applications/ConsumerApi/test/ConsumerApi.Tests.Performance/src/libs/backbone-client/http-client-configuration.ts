@@ -8,7 +8,7 @@ export class HttpClientConfiguration {
     }
 
     public get apiVersion(): string {
-        return this.getEnvVar("apiVersion") ?? "v1";
+        return this.getEnvVar("apiVersion") ?? "v2";
     }
 
     public get baseUrl(): string {
