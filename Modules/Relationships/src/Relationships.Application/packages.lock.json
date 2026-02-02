@@ -137,11 +137,11 @@
       },
       "Google.Api.Gax.Rest": {
         "type": "Transitive",
-        "resolved": "4.9.0",
-        "contentHash": "xzHvOe8WzmSWVurtRFG+uSMWIKPHAAyhGdnGfBNSr4xSBzHsx7G5rWjjZhGcyeCYc0ZdaKEVyidtQS7A2OD2mg==",
+        "resolved": "4.12.1",
+        "contentHash": "djYb7sDJvUiOG66fpDIOsprrZz4RPbiAtMiKtRguQhrzlHasd+3k/u6BQFFY3S0KCdxJzvv8M8hi81Ocdi6Ijw==",
         "dependencies": {
-          "Google.Api.Gax": "4.9.0",
-          "Google.Apis.Auth": "1.68.0",
+          "Google.Api.Gax": "4.12.1",
+          "Google.Apis.Auth": "1.72.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
@@ -173,11 +173,11 @@
       },
       "Google.Apis.Storage.v1": {
         "type": "Transitive",
-        "resolved": "1.69.0.3707",
-        "contentHash": "XzNH0Xx4w+11o9rR71tVpVq3Ji+BFB9621PtNOScrm4f3I8pU3/vKRaKo2JAKRiX6fi1TpJgI5nfHbYJtc88BQ==",
+        "resolved": "1.71.0.3920",
+        "contentHash": "jW4i96fvFjtkPOdOo3bfC2Wity0krx3RTCExTksIx9lS/k7HmbF/zfxE1z3VouhrQvwwdEOkrR4TxdxzomJKxQ==",
         "dependencies": {
-          "Google.Apis": "1.69.0",
-          "Google.Apis.Auth": "1.69.0"
+          "Google.Apis": "1.71.0",
+          "Google.Apis.Auth": "1.71.0"
         }
       },
       "Google.Cloud.Iam.V1": {
@@ -905,8 +905,8 @@
           "EFCore.BulkExtensions.Core": "[10.0.0, 10.0.0]",
           "EFCore.BulkExtensions.PostgreSql": "[10.0.0, 10.0.0]",
           "EFCore.BulkExtensions.SqlServer": "[10.0.0, 10.0.0]",
-          "Google.Cloud.PubSub.V1": "[3.31.0, 3.31.0]",
-          "Google.Cloud.Storage.V1": "[4.13.0, 4.13.0]",
+          "Google.Cloud.PubSub.V1": "[3.32.0, 3.32.0]",
+          "Google.Cloud.Storage.V1": "[4.14.0, 4.14.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.2, 10.0.2]",
           "Microsoft.EntityFrameworkCore.Abstractions": "[10.0.2, 10.0.2]",
           "Microsoft.EntityFrameworkCore.Proxies": "[10.0.2, 10.0.2]",
@@ -1073,9 +1073,9 @@
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",
-        "requested": "[3.31.0, 3.31.0]",
-        "resolved": "3.31.0",
-        "contentHash": "Ls9XyvePWCL9aA+55SRsICoMD9GGkWYorSnXNk8jpE742MTVdRhW8h/YblBaXonbC9muhiOFf/gOeK1MF2GWJg==",
+        "requested": "[3.32.0, 3.32.0]",
+        "resolved": "3.32.0",
+        "contentHash": "+yOXrDZWRA0l3a3kMOQtWirvvTxDQEC0yXMp/gAxjwU0T4HYtgs2SHf6j4nAaMjCT5FLN5sB7xlFzUVs3OwKNQ==",
         "dependencies": {
           "Google.Api.Gax.Grpc": "[4.12.1, 5.0.0)",
           "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
@@ -1083,12 +1083,12 @@
       },
       "Google.Cloud.Storage.V1": {
         "type": "CentralTransitive",
-        "requested": "[4.13.0, 4.13.0]",
-        "resolved": "4.13.0",
-        "contentHash": "TMHPYZM3o9YtwkvdNqMciECtXzgptFCJUGa8r4MQuY8Y+uBKLvv3/PfijJhATESJw7dQdFcMGm+TOKJfKBfeWA==",
+        "requested": "[4.14.0, 4.14.0]",
+        "resolved": "4.14.0",
+        "contentHash": "CLoAz9BDzqGEXWKWPuUxlk8/wcabsONxCa3MEQzxhbEGoKT1TOT6KnWNl1IhrBGqNw7IWtR/Xg06XHS8JYF1qQ==",
         "dependencies": {
-          "Google.Api.Gax.Rest": "[4.9.0, 5.0.0)",
-          "Google.Apis.Storage.v1": "[1.69.0.3707, 2.0.0)"
+          "Google.Api.Gax.Rest": "[4.12.1, 5.0.0)",
+          "Google.Apis.Storage.v1": "[1.71.0.3920, 2.0.0)"
         }
       },
       "MediatR": {
