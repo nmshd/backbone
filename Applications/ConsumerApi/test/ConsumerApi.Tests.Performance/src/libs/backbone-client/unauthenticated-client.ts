@@ -21,7 +21,10 @@ export class UnauthenticatedClient extends BaseClient {
             const createIdentityRequest: CreateIdentityRequest = {
                 clientId: clientId,
                 clientSecret: clientSecret,
-                signedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
+                signedChallenge: {
+                    challenge: JSON.stringify(challenge),
+                    signature: b64encode(JSON.stringify(signedChallenge))
+                },
                 identityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
                 devicePassword: password,
                 identityVersion: 1
