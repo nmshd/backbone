@@ -41,6 +41,10 @@ export class UnauthenticatedClient extends BaseClient {
     }
 
     public getChallenge(): CreateChallengeResponse {
-        return this.httpxClient.post(`api/${this.configuration.apiVersion}/Challenges`).json("result") as CreateChallengeResponse;
+        const response = this.httpxClient.post(`api/${this.configuration.apiVersion}/Challenges`);
+
+        if (response.status !== 201) throw new Error(`Failed to get challenge, status code: ${response.status}`);
+
+        return response.json("result") as CreateChallengeResponse;
     }
 }
