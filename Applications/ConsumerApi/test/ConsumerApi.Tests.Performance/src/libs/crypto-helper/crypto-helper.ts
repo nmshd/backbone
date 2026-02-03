@@ -11,19 +11,21 @@ export class CryptoHelper {
         return CryptoHelper.client.get("keypair").json() as KeyPair;
     }
 
-    public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestPayload): string | undefined {
-        return CryptoHelper.client
-            .post(
-                "sign",
-                JSON.stringify({
-                    keyPair,
-                    challenge: JSON.stringify(challenge)
-                }),
-                {
-                    headers: { "Content-Type": "application/json" }
-                }
-            )
-            .json() as string | undefined;
+    public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestPayload): CryptoSignature {
+        const response = CryptoHelper.client.post(
+            "sign",
+            JSON.stringify({
+                keyPair,
+                challenge: JSON.stringify(challenge)
+            }),
+            {
+                headers: { "Content-Type": "application/json" }
+            }
+        );
+
+        if (response.status !== 200) throw new Error(`Failed to sign challenge, status code: ${response.status}`);
+
+        return response.json() as CryptoSignature;
     }
 }
 
@@ -42,4 +44,9 @@ interface KeyPair {
 export interface ChallengeRequestPayload {
     id: string;
     expiresAt: string;
+}
+
+export interface CryptoSignature {
+    signature: string;
+    algorithm: string;
 }
