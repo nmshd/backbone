@@ -1,25 +1,18 @@
-import axios, { AxiosResponse } from "axios";
-import { HttpClientConfiguration } from "../backbone-client/http-client-configuration";
+import axios from "axios";
 import { CreateChallengeResponse } from "../backbone-client/models";
 import { CryptoHelper } from "./crypto-helper";
+import { HttpClientConfiguration } from "./http-client-configuration";
 
 const config = new HttpClientConfiguration();
 const client = axios.create({ baseURL: config.baseUrl, timeout: config.timeoutInMilliseconds });
 
 async function main(): Promise<void> {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 2; i++) {
         let promises = [];
-        for (let j = 0; j < 10; j++) {
-            promises.push(createIdentity(config.clientId, config.clientSecret, "Password123!"));
+        for (let j = 0; j < 5; j++) {
+            promises.push(createIdentity("Password123!"));
         }
-        const results = await Promise.allSettled(promises);
-        for (const res of results) {
-            if (res.status === "fulfilled") {
-                console.log(res.value.status);
-            } else {
-                console.error("Error creating identity:", res.reason);
-            }
-        }
+        await Promise.allSettled(promises);
     }
 }
 
@@ -28,7 +21,7 @@ main().catch((e) => {
     throw e;
 });
 
-async function createIdentity(clientId: string, clientSecret: string, password: string): Promise<AxiosResponse> {
+async function createIdentity(password: string) {
     try {
         const keyPair = await CryptoHelper.generateKeyPair();
 
@@ -36,11 +29,22 @@ async function createIdentity(clientId: string, clientSecret: string, password: 
 
         const signedChallenge = await CryptoHelper.signChallenge(keyPair, challenge);
 
+        const challengeForJson = JSON.stringify(challenge);
+        const signatureForJson = b64encode(JSON.stringify(signedChallenge));
+        const publicKeyForJson = b64encode(JSON.stringify(keyPair.pub));
+
+        console.log(`challenge: ${challengeForJson}`);
+        console.log(`signature: ${signatureForJson}`);
+        console.log(`public key: ${publicKeyForJson}`);
+
         const createIdentityRequest: CreateIdentityRequest = {
-            clientId: clientId,
-            clientSecret: clientSecret,
-            signedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
-            identityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
+            clientId: config.clientId,
+            clientSecret: config.clientSecret,
+            signedChallenge: {
+                challenge: challengeForJson,
+                signature: signatureForJson
+            },
+            identityPublicKey: publicKeyForJson,
             devicePassword: password,
             identityVersion: 1
         };
@@ -50,8 +54,6 @@ async function createIdentity(clientId: string, clientSecret: string, password: 
         });
 
         console.log(JSON.stringify(httpResponse.status));
-
-        return httpResponse;
     } catch (e) {
         console.error(e);
         throw e;
