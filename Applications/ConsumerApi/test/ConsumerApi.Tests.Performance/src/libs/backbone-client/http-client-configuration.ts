@@ -15,10 +15,6 @@ export class HttpClientConfiguration {
         return this.getEnvVar("baseUrl") ?? "http://localhost:8081/";
     }
 
-    public get timeoutInMilliseconds(): number {
-        return parseInt(this.getEnvVar("timeoutInMilliseconds") ?? "20000");
-    }
-
     private getEnvVar(name: string): string | undefined {
         return __ENV[name] as string | undefined;
     }

@@ -10,7 +10,7 @@ export class BaseClient {
     protected constructor(config: HttpClientConfiguration) {
         this.httpxClient = new Httpx({
             baseURL: config.baseUrl,
-            timeout: config.timeoutInMilliseconds
+            timeout: 20_000
         });
 
         this.configuration = config;
