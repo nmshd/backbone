@@ -19,6 +19,7 @@ export class UnauthenticatedClient {
             const createIdentityRequest: CreateIdentityRequest = {
                 clientId: this.configuration.clientId,
                 clientSecret: this.configuration.clientSecret,
+                signedChallenge: signedChallenge,
                 identityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
                 devicePassword: password,
                 identityVersion: 1
