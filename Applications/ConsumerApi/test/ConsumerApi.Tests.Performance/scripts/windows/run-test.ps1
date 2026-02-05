@@ -1,64 +1,53 @@
 param (
-    [string]$s
+    [Parameter(Mandatory=$true)][string]$scenario,
+    [string]$baseUrl = $env:NMSHD_TEST_BASEURL ? $env:NMSHD_TEST_BASEURL : "http://localhost:8081/",
+    [string]$clientId = $env:NMSHD_TEST_CLIENTID ? $env:NMSHD_TEST_CLIENTID : "test",
+    [string]$clientSecret = $env:NMSHD_TEST_CLIENTSECRET ? $env:NMSHD_TEST_CLIENTSECRET : "test",
+    [string]$apiVersion = "v2",
+    [string]$vus = "1",
+    [string]$duration = "10s"
 )
 
-# Check if the scenario is provided; if not, prompt the user
-if (-not $s) {
-    $s = Read-Host "Enter the scenario name"
-}
+echo "Scenario: $scenario"
+echo "Base URL: $baseUrl"
+echo "Client ID: $clientId"
+echo "Client Secret: $clientSecret"
+echo "API Version: $apiVersion"
+echo "VUs: $vus"
+echo "Duration: $duration"
 
-# install required global packages
-npm install -g webpack-cli tsx webpack
+echo "-------------------------------"
+
+exit
+
+# Stop the script when a cmdlet or a native command fails
+$ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $true
 
 $k6Arguments = $args
-
-# Generate a timestamp `t` in the format YYYYMMDD-HHmmSS
 $t = Get-Date -Format "yyyyMMdd-HHmmss"
-
-# Construct the file paths and commands
-$testFile = ".\dist\$($s).test.js"
-$outputFile = "k6-outputs\$($t)-$($s).csv"
+$testFile = ".\dist\$($scenario).test.js"
+$outputFile = "k6-outputs\$($t)-$($scenario).csv"
 $resultAnalyzerFolder = ".\tools\result-analyzer"
 
-# Run the `npx webpack` command
 npx webpack
 
 Set-Location tools\result-analyzer
-
 npm install
-
 Set-Location ..\..
 
 New-Item -Path "k6-outputs" -ItemType Directory -Force
 
-# Check the exit code of the webpack command
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "Error: Webpack failed with exit code $LASTEXITCODE." -ForegroundColor Red
-    exit $LASTEXITCODE
-}
+k6 run `
+    --tag testid=$t `
+    --out "csv=$outputFile" --out opentelemetry `
+    --env K6_WEB_DASHBOARD_EXPORT=html-report.html --env K6_WEB_DASHBOARD=true `
+    --env K6_OTEL_GRPC_EXPORTER_ENDPOINT=localhost:4317 --env K6_OTEL_GRPC_EXPORTER_INSECURE=true --env K6_OTEL_METRIC_PREFIX=k6_ `
+    --env baseUrl=$baseUrl --env clientId=$clientId --env clientSecret=$clientSecret --env apiVersion=$apiVersion `
+    --vus $vus --duration $duration `
+    $testFile
 
-# Check if the test file exists
-if (-not (Test-Path $testFile)) {
-    Write-Host "Error: Test file '$testFile' does not exist." -ForegroundColor Red
-    exit 1
-}
+# Run the result analyzer script
+npx ts-node $resultAnalyzerFolder\src\main.ts $outputFile
 
-try {
-    # Run the `k6` command with additional arguments
-    k6 run $testFile `
-        -v `
-        -o "csv=$outputFile" `
-        --tag testid=$t `
-        -o experimental-opentelemetry `
-        --env K6_WEB_DASHBOARD_EXPORT=html-report.html `
-        --env K6_WEB_DASHBOARD=true `
-        --env K6_OTEL_GRPC_EXPORTER_ENDPOINT=localhost:4317 `
-        --env K6_OTEL_GRPC_EXPORTER_INSECURE=true `
-        --env K6_OTEL_METRIC_PREFIX=k6_ `
-        @k6Arguments
-}
-finally {
-    # Run the result analyzer script
-    npx tsx $resultAnalyzerFolder\src\main.js $outputFile
-    Write-Host "Result file can be found at '$outputFile'."
-}
+Write-Host "Result file can be found at '$outputFile'."
