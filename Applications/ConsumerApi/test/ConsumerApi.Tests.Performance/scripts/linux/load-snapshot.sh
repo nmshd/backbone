@@ -1,46 +1,56 @@
 #!/bin/bash
+set -e
 
-# Check if unzip is installed, and install it if not
-if ! command -v unzip &> /dev/null; then
-    echo "'unzip' is not installed. Installing it now..."
-    sudo apt update && sudo apt install -y unzip
-fi
-# Default values for parameters
-SNAPSHOT_NAME=$1
-HOSTNAME=${2:-"host.docker.internal"}
-USERNAME=${3:-"postgres"}
-PASSWORD=${4:-"admin"}
-DB_NAME=${5:-"enmeshed"}
+scenario="$1"
+vus="1"
+duration="10s"
 
-# Prompt for the snapshot name if not provided
-if [ -z "$SNAPSHOT_NAME" ]; then
-    read -p "Enter the snapshot name: " SNAPSHOT_NAME
-fi
-
-# Get the current script location
-SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT_PATH=$(realpath "$SCRIPT_PATH/../..")
-SNAPSHOTS_FOLDER="$ROOT_PATH/snapshots"
-SNAPSHOT_FILE_PATH="$SNAPSHOTS_FOLDER/$SNAPSHOT_NAME.zip"
-REPO_ROOT=$(realpath "$SCRIPT_PATH/../../../../../..")
-
-# Check if the file exists
-echo "Snapshot file path: $SNAPSHOT_FILE_PATH"
-if [ ! -f "$SNAPSHOT_FILE_PATH" ]; then
-    echo "Snapshot file '$SNAPSHOT_NAME' not found in the 'snapshots' folder."
+if [ -z "$scenario" ]; then
+    echo "Error: scenario parameter is required"
     exit 1
 fi
 
-# Extract the zip file
-echo "Extracting '$SNAPSHOT_NAME'..."
-if unzip -o "$SNAPSHOT_FILE_PATH" -d "$SNAPSHOTS_FOLDER"; then
-    echo "Extraction complete. Files are in '$SNAPSHOTS_FOLDER'."
-    mv -f "$SNAPSHOTS_FOLDER/$SNAPSHOT_NAME/enmeshed.pg" "$REPO_ROOT/scripts/dumps/dump-files/"
-else
-    echo "An error occurred during extraction."
-    exit 1
-fi
+shift
 
-# Load Postgres
-LOAD_POSTGRES="$REPO_ROOT/scripts/dumps/load_postgres.sh"
-bash "$LOAD_POSTGRES" "$HOSTNAME" "$USERNAME" "$PASSWORD" "$DB_NAME" "enmeshed.pg"
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --vus)
+            vus="$2"
+            shift 2
+            ;;
+        --duration)
+            duration="$2"
+            shift 2
+            ;;
+        *)
+            echo "Error: unknown parameter $1"
+            exit 1
+            ;;
+    esac
+done
+
+t=$(date +"%Y%m%d-%H%M%S")
+testFile="./dist/${scenario}.test.js"
+outputFile="k6-outputs/${t}-${scenario}.csv"
+resultAnalyzerFolder="./tools/result-analyzer"
+
+npx webpack
+
+cd tools/result-analyzer
+npm install
+cd ../..
+
+mkdir -p k6-outputs
+
+k6 run \
+    --tag testid=$t \
+    --out "csv=$outputFile" --out opentelemetry \
+    --env K6_WEB_DASHBOARD_EXPORT=html-report.html --env K6_WEB_DASHBOARD=true \
+    --env K6_OTEL_GRPC_EXPORTER_ENDPOINT=localhost:4317 --env K6_OTEL_GRPC_EXPORTER_INSECURE=true --env K6_OTEL_METRIC_PREFIX=k6_ \
+    --vus $vus --duration $duration \
+    $testFile
+
+# Run the result analyzer script
+npx ts-node $resultAnalyzerFolder/src/main.ts $outputFile
+
+echo "Result file can be found at '$outputFile'."
