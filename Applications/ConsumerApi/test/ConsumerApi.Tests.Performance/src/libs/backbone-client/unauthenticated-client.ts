@@ -30,8 +30,6 @@ export class UnauthenticatedClient {
             });
 
             check(httpResponse, { "identity creation successful": (r) => r.status === 201 });
-
-            console.log(JSON.stringify(httpResponse.status));
         } catch (e) {
             console.error(e);
             throw e;

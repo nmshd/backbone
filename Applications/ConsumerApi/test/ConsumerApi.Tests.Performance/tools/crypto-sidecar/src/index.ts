@@ -1,5 +1,5 @@
 import Router from "@koa/router";
-import { CoreBuffer, CryptoSignaturePrivateKey, CryptoSignaturePublicKey, CryptoSignatures } from "@nmshd/crypto";
+import { CoreBuffer, CryptoSignaturePrivateKey, CryptoSignatures } from "@nmshd/crypto";
 import Koa from "koa";
 import koaBody from "koa-body";
 
@@ -34,10 +34,6 @@ router.post("/sign", async ({ request, response }) => {
     const cryptoSignaturePrivateKey = CryptoSignaturePrivateKey.fromJSON({ prv: privateKey.prv, alg: privateKey.alg });
 
     const signedChallenge = await CryptoSignatures.sign(challenge, cryptoSignaturePrivateKey);
-
-    const isValid = await CryptoSignatures.verify(challenge, signedChallenge, CryptoSignaturePublicKey.fromJSON(body.keyPair.pub));
-
-    if (!isValid) throw new Error("Signature could not be verified");
 
     response.body = signedChallenge.toJSON();
     response.status = 200;
