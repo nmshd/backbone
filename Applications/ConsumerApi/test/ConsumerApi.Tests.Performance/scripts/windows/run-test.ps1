@@ -45,7 +45,17 @@ if (-not (Test-Path $testFile)) {
 
 try {
     # Run the `k6` command with additional arguments
-    k6 run $testFile -v -o "csv=$outputFile" @k6Arguments
+    k6 run $testFile `
+        -v `
+        -o "csv=$outputFile" `
+        --tag testid=$t `
+        -o experimental-opentelemetry `
+        --env K6_WEB_DASHBOARD_EXPORT=html-report.html `
+        --env K6_WEB_DASHBOARD=true `
+        --env K6_OTEL_GRPC_EXPORTER_ENDPOINT=localhost:4317 `
+        --env K6_OTEL_GRPC_EXPORTER_INSECURE=true `
+        --env K6_OTEL_METRIC_PREFIX=k6_ `
+        @k6Arguments
 }
 finally {
     # Run the result analyzer script
