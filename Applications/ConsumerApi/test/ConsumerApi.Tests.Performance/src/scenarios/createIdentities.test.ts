@@ -16,5 +16,5 @@ const configuration = Configuration.load();
 const client = new UnauthenticatedClient(configuration.httpClient);
 
 export default function (): void {
-    client.createIdentity(configuration.httpClient.clientId, configuration.httpClient.clientSecret, "Password123!");
+    client.createIdentity("Password123!");
 }

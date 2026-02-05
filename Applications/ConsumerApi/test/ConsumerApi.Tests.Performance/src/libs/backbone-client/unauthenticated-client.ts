@@ -8,7 +8,7 @@ import { CreateChallengeResponse, CreateIdentityRequest } from "./models";
 export class UnauthenticatedClient {
     public constructor(private readonly configuration: HttpClientConfiguration) {}
 
-    public createIdentity(clientId: string, clientSecret: string, password: string): void {
+    public createIdentity(password: string): void {
         try {
             const keyPair = CryptoHelper.generateKeyPair();
 
@@ -17,12 +17,8 @@ export class UnauthenticatedClient {
             const signedChallenge = CryptoHelper.signChallenge(keyPair, challenge);
 
             const createIdentityRequest: CreateIdentityRequest = {
-                clientId: clientId,
-                clientSecret: clientSecret,
-                signedChallenge: {
-                    challenge: JSON.stringify(challenge),
-                    signature: b64encode(JSON.stringify(signedChallenge))
-                },
+                clientId: this.configuration.clientId,
+                clientSecret: this.configuration.clientSecret,
                 identityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
                 devicePassword: password,
                 identityVersion: 1
