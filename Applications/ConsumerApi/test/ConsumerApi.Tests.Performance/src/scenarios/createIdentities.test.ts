@@ -1,6 +1,6 @@
 import { Options } from "k6/options";
 import { UnauthenticatedClient } from "../libs/backbone-client/unauthenticated-client";
-import { Configuration } from "./configuration";
+import { Configuration } from "../libs/configuration";
 
 export const options: Options = {
     scenarios: {
