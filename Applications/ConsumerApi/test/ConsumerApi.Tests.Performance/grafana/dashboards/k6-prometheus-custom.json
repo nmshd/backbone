@@ -19,7 +19,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 2,
-    "id": 1,
+    "id": 2,
     "links": [
         {
             "asDropdown": false,
@@ -1120,515 +1120,652 @@
             "type": "timeseries"
         },
         {
-            "collapsed": true,
+            "collapsed": false,
             "gridPos": {
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 24
+                "y": 23
             },
             "id": 1,
-            "panels": [
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "fieldConfig": {
-                        "defaults": {
-                            "color": {
-                                "mode": "palette-classic"
-                            },
-                            "custom": {
-                                "axisBorderShow": false,
-                                "axisCenteredZero": false,
-                                "axisColorMode": "text",
-                                "axisLabel": "",
-                                "axisPlacement": "auto",
-                                "barAlignment": 0,
-                                "barWidthFactor": 0.6,
-                                "drawStyle": "line",
-                                "fillOpacity": 0,
-                                "gradientMode": "none",
-                                "hideFrom": {
-                                    "legend": false,
-                                    "tooltip": false,
-                                    "viz": false
-                                },
-                                "insertNulls": false,
-                                "lineInterpolation": "linear",
-                                "lineWidth": 1,
-                                "pointSize": 5,
-                                "scaleDistribution": {
-                                    "type": "linear"
-                                },
-                                "showPoints": "auto",
-                                "spanNulls": false,
-                                "stacking": {
-                                    "group": "A",
-                                    "mode": "none"
-                                },
-                                "thresholdsStyle": {
-                                    "mode": "off"
-                                }
-                            },
-                            "mappings": [],
-                            "thresholds": {
-                                "mode": "absolute",
-                                "steps": [
-                                    {
-                                        "color": "green",
-                                        "value": 0
-                                    }
-                                ]
-                            },
-                            "unit": "bytes"
-                        },
-                        "overrides": []
-                    },
-                    "gridPos": {
-                        "h": 8,
-                        "w": 12,
-                        "x": 0,
-                        "y": 510
-                    },
-                    "id": 8,
-                    "options": {
-                        "legend": {
-                            "calcs": [],
-                            "displayMode": "list",
-                            "placement": "bottom",
-                            "showLegend": true
-                        },
-                        "tooltip": {
-                            "hideZeros": false,
-                            "mode": "single",
-                            "sort": "none"
-                        }
-                    },
-                    "pluginVersion": "12.1.1",
-                    "targets": [
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "avg(rate(k6_data_sent{testid=~\"$testid\"}[$__rate_interval]))",
-                            "instant": false,
-                            "legendFormat": "data_sent",
-                            "range": true,
-                            "refId": "A"
-                        },
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "exemplar": false,
-                            "expr": "avg(rate(k6_data_received{testid=~\"$testid\"}[$__rate_interval]))",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "data_received",
-                            "range": true,
-                            "refId": "B"
-                        }
-                    ],
-                    "title": "Transfer Rate",
-                    "type": "timeseries"
-                },
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "fieldConfig": {
-                        "defaults": {
-                            "color": {
-                                "mode": "palette-classic"
-                            },
-                            "custom": {
-                                "axisBorderShow": false,
-                                "axisCenteredZero": false,
-                                "axisColorMode": "text",
-                                "axisLabel": "",
-                                "axisPlacement": "auto",
-                                "barAlignment": 0,
-                                "barWidthFactor": 0.6,
-                                "drawStyle": "line",
-                                "fillOpacity": 0,
-                                "gradientMode": "none",
-                                "hideFrom": {
-                                    "legend": false,
-                                    "tooltip": false,
-                                    "viz": false
-                                },
-                                "insertNulls": false,
-                                "lineInterpolation": "linear",
-                                "lineWidth": 1,
-                                "pointSize": 5,
-                                "scaleDistribution": {
-                                    "type": "linear"
-                                },
-                                "showPoints": "auto",
-                                "spanNulls": false,
-                                "stacking": {
-                                    "group": "A",
-                                    "mode": "none"
-                                },
-                                "thresholdsStyle": {
-                                    "mode": "off"
-                                }
-                            },
-                            "mappings": [],
-                            "thresholds": {
-                                "mode": "absolute",
-                                "steps": [
-                                    {
-                                        "color": "green",
-                                        "value": 0
-                                    }
-                                ]
-                            },
-                            "unit": "ms"
-                        },
-                        "overrides": [
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "dropped_iterations"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "unit",
-                                        "value": "none"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "gridPos": {
-                        "h": 8,
-                        "w": 12,
-                        "x": 12,
-                        "y": 510
-                    },
-                    "id": 9,
-                    "options": {
-                        "legend": {
-                            "calcs": [],
-                            "displayMode": "list",
-                            "placement": "bottom",
-                            "showLegend": true
-                        },
-                        "tooltip": {
-                            "hideZeros": false,
-                            "mode": "single",
-                            "sort": "none"
-                        }
-                    },
-                    "pluginVersion": "12.1.1",
-                    "targets": [
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "histogram_quantile($quantile, sum by(le) (rate(k6_iteration_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
-                            "instant": false,
-                            "legendFormat": "iteration_duration_q$quantile",
-                            "range": true,
-                            "refId": "A"
-                        },
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "exemplar": false,
-                            "expr": "avg(k6_dropped_iterations_total{testid=~\"$testid\"})",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "dropped_iterations",
-                            "range": true,
-                            "refId": "B"
-                        }
-                    ],
-                    "title": "Iterations",
-                    "type": "timeseries"
-                },
-                {
-                    "datasource": {
-                        "type": "prometheus",
-                        "uid": "${DS_PROMETHEUS}"
-                    },
-                    "description": "min/max/p95/p99 depends on the available Quantile Stats",
-                    "fieldConfig": {
-                        "defaults": {
-                            "color": {
-                                "mode": "thresholds"
-                            },
-                            "custom": {
-                                "align": "auto",
-                                "cellOptions": {
-                                    "type": "auto"
-                                },
-                                "inspect": false
-                            },
-                            "mappings": [],
-                            "thresholds": {
-                                "mode": "absolute",
-                                "steps": [
-                                    {
-                                        "color": "green",
-                                        "value": 0
-                                    }
-                                ]
-                            }
-                        },
-                        "overrides": [
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "name"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "filterable",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "method"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "filterable",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "status"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "filterable",
-                                        "value": false
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "min"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "unit",
-                                        "value": "ms"
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "max"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "unit",
-                                        "value": "ms"
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "p95"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "unit",
-                                        "value": "ms"
-                                    }
-                                ]
-                            },
-                            {
-                                "matcher": {
-                                    "id": "byName",
-                                    "options": "p99"
-                                },
-                                "properties": [
-                                    {
-                                        "id": "unit",
-                                        "value": "ms"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    "gridPos": {
-                        "h": 7,
-                        "w": 24,
-                        "x": 0,
-                        "y": 518
-                    },
-                    "id": 17,
-                    "options": {
-                        "cellHeight": "sm",
-                        "footer": {
-                            "countRows": false,
-                            "enablePagination": true,
-                            "fields": "",
-                            "reducer": ["sum"],
-                            "show": false
-                        },
-                        "frameIndex": 2,
-                        "showHeader": true
-                    },
-                    "pluginVersion": "12.1.1",
-                    "targets": [
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "histogram_quantile(0, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
-                            "format": "table",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "min",
-                            "range": true,
-                            "refId": "B"
-                        },
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "histogram_quantile(1, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
-                            "format": "table",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "max",
-                            "range": true,
-                            "refId": "C"
-                        },
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "histogram_quantile(0.95, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
-                            "format": "table",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "p95",
-                            "range": true,
-                            "refId": "D"
-                        },
-                        {
-                            "datasource": {
-                                "type": "prometheus",
-                                "uid": "${DS_PROMETHEUS}"
-                            },
-                            "editorMode": "code",
-                            "expr": "histogram_quantile(0.99, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
-                            "format": "table",
-                            "hide": false,
-                            "instant": false,
-                            "legendFormat": "__auto",
-                            "range": true,
-                            "refId": "E"
-                        }
-                    ],
-                    "title": "Requests by URL",
-                    "transformations": [
-                        {
-                            "id": "merge",
-                            "options": {}
-                        },
-                        {
-                            "id": "groupBy",
-                            "options": {
-                                "fields": {
-                                    "Value #B": {
-                                        "aggregations": ["min"],
-                                        "operation": "aggregate"
-                                    },
-                                    "Value #C": {
-                                        "aggregations": ["max"],
-                                        "operation": "aggregate"
-                                    },
-                                    "Value #D": {
-                                        "aggregations": ["mean"],
-                                        "operation": "aggregate"
-                                    },
-                                    "Value #E": {
-                                        "aggregations": ["mean"],
-                                        "operation": "aggregate"
-                                    },
-                                    "method": {
-                                        "aggregations": [],
-                                        "operation": "groupby"
-                                    },
-                                    "name": {
-                                        "aggregations": [],
-                                        "operation": "groupby"
-                                    },
-                                    "status": {
-                                        "aggregations": [],
-                                        "operation": "groupby"
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "id": "organize",
-                            "options": {
-                                "excludeByName": {
-                                    "Time": true
-                                },
-                                "indexByName": {
-                                    "Time": 0,
-                                    "Value #B": 4,
-                                    "Value #C": 5,
-                                    "Value #D": 6,
-                                    "Value #E": 7,
-                                    "method": 2,
-                                    "name": 1,
-                                    "status": 3
-                                },
-                                "renameByName": {
-                                    "Value #B": "min",
-                                    "Value #B (min)": "min",
-                                    "Value #C": "max",
-                                    "Value #C (max)": "max",
-                                    "Value #D": "p95",
-                                    "Value #D (mean)": "p95",
-                                    "Value #E": "p99",
-                                    "Value #E (mean)": "p99"
-                                }
-                            }
-                        }
-                    ],
-                    "type": "table"
-                }
-            ],
+            "panels": [],
             "title": "Performance Overview",
             "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "unit": "bytes"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 24
+            },
+            "id": 8,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.1.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(rate(k6_data_sent{testid=~\"$testid\"}[$__rate_interval]))",
+                    "instant": false,
+                    "legendFormat": "data_sent",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "avg(rate(k6_data_received{testid=~\"$testid\"}[$__rate_interval]))",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "data_received",
+                    "range": true,
+                    "refId": "B"
+                }
+            ],
+            "title": "Transfer Rate",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "unit": "ms"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "dropped_iterations"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "none"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 24
+            },
+            "id": 9,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.1.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile($quantile, sum by(le) (rate(k6_iteration_duration_bucket{testid=~\"$testid\"}[$__rate_interval])))",
+                    "instant": false,
+                    "legendFormat": "iteration_duration_q$quantile",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "avg(k6_dropped_iterations_total{testid=~\"$testid\"})",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "dropped_iterations",
+                    "range": true,
+                    "refId": "B"
+                }
+            ],
+            "title": "Iterations",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+            },
+            "description": "min/max/p95/p99 depends on the available Quantile Stats",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "align": "auto",
+                        "cellOptions": {
+                            "type": "auto"
+                        },
+                        "inspect": false
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "name"
+                        },
+                        "properties": [
+                            {
+                                "id": "filterable",
+                                "value": false
+                            },
+                            {
+                                "id": "mappings",
+                                "value": [
+                                    {
+                                        "options": {
+                                            "pattern": "^https:\\/\\/(?:[a-zA-Z-]+\\.?){2,}/api/v\\d(.*)$",
+                                            "result": {
+                                                "index": 0,
+                                                "text": "$1"
+                                            }
+                                        },
+                                        "type": "regex"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "method"
+                        },
+                        "properties": [
+                            {
+                                "id": "filterable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "status"
+                        },
+                        "properties": [
+                            {
+                                "id": "filterable",
+                                "value": false
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "min"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "max"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "p95"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "p99"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "p75"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "p85"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "p80"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "ms"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 32
+            },
+            "id": 17,
+            "options": {
+                "cellHeight": "sm",
+                "footer": {
+                    "countRows": false,
+                    "enablePagination": true,
+                    "fields": "",
+                    "reducer": ["sum"],
+                    "show": false
+                },
+                "frameIndex": 2,
+                "showHeader": true,
+                "sortBy": []
+            },
+            "pluginVersion": "12.1.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "min",
+                    "range": true,
+                    "refId": "min"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(1, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "max",
+                    "range": true,
+                    "refId": "max"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.75, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p75",
+                    "range": true,
+                    "refId": "p75"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.80, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p80",
+                    "range": true,
+                    "refId": "p80"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.90, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p90",
+                    "range": true,
+                    "refId": "p85"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.95, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p95",
+                    "range": true,
+                    "refId": "p95"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.99, sum by(le, name, method, status) (rate(k6_http_req_duration_bucket{testid=~\"$testid\", name=~\"$endpoint\", method=~\"$method\"}[$__rate_interval])))",
+                    "format": "table",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "p99",
+                    "range": true,
+                    "refId": "p99"
+                }
+            ],
+            "title": "Requests by URL",
+            "transformations": [
+                {
+                    "id": "merge",
+                    "options": {}
+                },
+                {
+                    "id": "groupBy",
+                    "options": {
+                        "fields": {
+                            "Value #B": {
+                                "aggregations": ["min"],
+                                "operation": "aggregate"
+                            },
+                            "Value #C": {
+                                "aggregations": ["max"],
+                                "operation": "aggregate"
+                            },
+                            "Value #D": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #E": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #max": {
+                                "aggregations": ["max"],
+                                "operation": "aggregate"
+                            },
+                            "Value #min": {
+                                "aggregations": ["min"],
+                                "operation": "aggregate"
+                            },
+                            "Value #p75": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #p80": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #p85": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #p95": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "Value #p99": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "method": {
+                                "aggregations": [],
+                                "operation": "groupby"
+                            },
+                            "name": {
+                                "aggregations": [],
+                                "operation": "groupby"
+                            },
+                            "p75": {
+                                "aggregations": ["mean"],
+                                "operation": "aggregate"
+                            },
+                            "status": {
+                                "aggregations": [],
+                                "operation": "groupby"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true
+                        },
+                        "includeByName": {},
+                        "indexByName": {
+                            "Value #max (max)": 4,
+                            "Value #min (min)": 3,
+                            "Value #p75 (mean)": 5,
+                            "Value #p80 (mean)": 6,
+                            "Value #p85 (mean)": 7,
+                            "Value #p95 (mean)": 8,
+                            "Value #p99 (mean)": 9,
+                            "method": 1,
+                            "name": 0,
+                            "status": 2
+                        },
+                        "renameByName": {
+                            "Value #B": "min",
+                            "Value #B (min)": "min",
+                            "Value #C": "max",
+                            "Value #C (max)": "max",
+                            "Value #D": "p95",
+                            "Value #D (mean)": "p95",
+                            "Value #E": "p99",
+                            "Value #E (mean)": "p99",
+                            "Value #max (max)": "max",
+                            "Value #min (min)": "min",
+                            "Value #p75 (mean)": "p75",
+                            "Value #p80 (mean)": "p80",
+                            "Value #p85 (mean)": "p85",
+                            "Value #p95 (mean)": "p95",
+                            "Value #p99 (mean)": "p99",
+                            "name": "",
+                            "p75 (mean)": "p75"
+                        }
+                    }
+                }
+            ],
+            "type": "table"
         },
         {
             "collapsed": true,
@@ -1636,7 +1773,7 @@
                 "h": 1,
                 "w": 24,
                 "x": 0,
-                "y": 25
+                "y": 39
             },
             "id": 11,
             "panels": [
@@ -1715,7 +1852,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 0,
-                        "y": 489
+                        "y": 504
                     },
                     "id": 12,
                     "options": {
@@ -1871,7 +2008,7 @@
                         "h": 8,
                         "w": 12,
                         "x": 12,
-                        "y": 489
+                        "y": 504
                     },
                     "id": 13,
                     "options": {
@@ -1914,7 +2051,7 @@
                         "h": 5,
                         "w": 24,
                         "x": 0,
-                        "y": 497
+                        "y": 512
                     },
                     "id": 23,
                     "options": {
