@@ -1,66 +1,64 @@
 #!/bin/bash
 
-# Get the scenario, either from the command line argument or by prompting the user
-s="$1"
-if [ -z "$s" ]; then
-  read -p "Which scenario should be executed? " s
-fi
+# Default values
+scenario=""
+vus="1"
+duration="10s"
 
-# Capture all arguments after `--`
-while [ "$1" != "--" ] && [ -n "$1" ]; do
-    s="$1"
-    shift
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -s|--scenario)
+            scenario="$2"
+            shift 2
+            ;;
+        -v|--vus)
+            vus="$2"
+            shift 2
+            ;;
+        -d|--duration)
+            duration="$2"
+            shift 2
+            ;;
+        *)
+            # Store remaining args for k6
+            k6Arguments+=("$1")
+            shift
+            ;;
+    esac
 done
 
-# Shift past `--`
-if [ "$1" == "--" ]; then
-    shift
+# Validate scenario is provided
+if [[ -z "$scenario" ]]; then
+    echo "Error: scenario parameter is required" >&2
+    exit 1
 fi
 
-npm install -g webpack-cli tsx webpack
+# Stop the script when a command fails
+set -e
 
-# Remaining arguments are for `k6`
-k6Arguments="$@"
-
-# Generate a timestamp `t` in the format YYYYMMDD-HHmmSS
-t=$(date +"%Y%m%d-%H%M%S")
-
-# Construct the file paths and commands
-testFile="./dist/${s}.test.js"
-outputFile="./k6-outputs/${t}-${s}.csv"
+t=$(date +%Y%m%d-%H%M%S)
+testFile="./dist/${scenario}.test.js"
+outputFile="k6-outputs/${t}-${scenario}.csv"
 resultAnalyzerFolder="./tools/result-analyzer"
 
-# ensure the the result analyzer has its dependencies installed
-
-cd tools/result-analyzer
-
-npm i
-
-cd ../..
-
-mkdir -p k6-results
-
-# Run the `npx webpack` command
 npx webpack
 
-# Check the exit status of the webpack command
-if [ $? -ne 0 ]; then
-  echo "Error: Webpack failed."
-  exit 1
-fi
+cd tools/result-analyzer
+npm install
+cd ../..
 
-# Check if the test file exists
-if [ ! -f "$testFile" ]; then
-  echo "Error: Test file '$testFile' does not exist."
-  exit 1
-fi
+mkdir -p k6-outputs
 
-# Run the `k6` command
-k6 run "$testFile" -o "csv=$outputFile" $k6Arguments
+k6 run \
+    --tag testid=$t \
+    --out "csv=$outputFile" --out opentelemetry \
+    --env K6_WEB_DASHBOARD_EXPORT=html-report.html --env K6_WEB_DASHBOARD=true \
+    --env K6_OTEL_GRPC_EXPORTER_ENDPOINT=localhost:4317 --env K6_OTEL_GRPC_EXPORTER_INSECURE=true --env K6_OTEL_METRIC_PREFIX=k6_ \
+    --vus $vus --duration $duration \
+    $testFile
 
 # Run the result analyzer script
-cd $resultAnalyzerFolder
+npx ts-node $resultAnalyzerFolder/src/main.ts $outputFile
 
-npx tsx "src/main.js" "$outputFile"
-
-cd ../..
+echo "Result file can be found at '$outputFile'."
