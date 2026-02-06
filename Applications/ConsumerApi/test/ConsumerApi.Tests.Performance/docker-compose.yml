@@ -12,6 +12,8 @@ services:
       - k6
     ports:
       - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
 
   alloy:
     image: grafana/alloy:v1.10.2@sha256:bcf27f18c4402869af112fb39e35e1db3804a404686f4caa20bdf77814219223
@@ -46,3 +48,6 @@ services:
       - GF_AUTH_BASIC_ENABLED=false
     volumes:
       - ./grafana:/etc/grafana/provisioning/
+
+volumes:
+  prometheus_data:
