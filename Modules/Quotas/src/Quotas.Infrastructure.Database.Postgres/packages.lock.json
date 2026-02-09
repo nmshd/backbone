@@ -684,7 +684,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.18.1, 4.0.18.1]",
+          "AWSSDK.S3": "[4.0.18.3, 4.0.18.3]",
           "Autofac": "[9.0.0, 9.0.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
           "Azure.Storage.Blobs": "[12.27.0, 12.27.0]",
@@ -773,9 +773,9 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.18.1, 4.0.18.1]",
-        "resolved": "4.0.18.1",
-        "contentHash": "T4tT121H4vpRk2X5ML2zU/IbgIg/BLpZdY4EVE2OhQh/8g96ZtquyCu8UmhQl6769Avv+245jSknR3ADOJavYw==",
+        "requested": "[4.0.18.3, 4.0.18.3]",
+        "resolved": "4.0.18.3",
+        "contentHash": "SOx6ToXt5Kb7HNG4Lg2NRpRTM6VtTvZDjUqlC8xbIT7DtwquXI6gSquLDxQ2cD5dIKDl4X2eVy9sxDg+ANtSsg==",
         "dependencies": {
           "AWSSDK.Core": "[4.0.3.12, 5.0.0)"
         }

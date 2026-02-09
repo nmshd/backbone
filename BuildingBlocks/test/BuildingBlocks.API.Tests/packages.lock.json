@@ -1050,24 +1050,24 @@
       },
       "Swashbuckle.AspNetCore.Swagger": {
         "type": "Transitive",
-        "resolved": "10.1.1",
-        "contentHash": "uboevzqi/byrbQr/lpPYQQC8aeHs7YqJCbpYs/b/nWnF++6Lc33BqLkjaHnACYTVylio1zMqUuND3fg8vv0+MA==",
+        "resolved": "10.1.2",
+        "contentHash": "CvIeWbEJ+pogj601pptQYzz3poZhS8/mk/vFozRQ74JckT3WWLGX1mFjNwNVdJOERf4Lk/clbFqfRG4WEvDGcw==",
         "dependencies": {
           "Microsoft.OpenApi": "2.4.1"
         }
       },
       "Swashbuckle.AspNetCore.SwaggerGen": {
         "type": "Transitive",
-        "resolved": "10.1.1",
-        "contentHash": "mIy+YMXn3e3uwgHJMAFC7WVq5U4oQag/nrO/TSAGdjbiMn/JPfBMNV+F05X9yoJee/N+AJi7Pc8zy+jr56GsZw==",
+        "resolved": "10.1.2",
+        "contentHash": "/gcOooF1cfmdvYU6wFiPB9On5CMUp2P/jrt2EFEoSG0p0xSALBdWoWy3eNHVmzXUlVHaGAg5PHFC6e8C+tVpWw==",
         "dependencies": {
-          "Swashbuckle.AspNetCore.Swagger": "10.1.1"
+          "Swashbuckle.AspNetCore.Swagger": "10.1.2"
         }
       },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "Transitive",
-        "resolved": "10.1.1",
-        "contentHash": "t2+tHjz6vyhVJO67B/g8vZCY78o3dVQ0OevpuT+HuNk7EWITW5McjzJK2skJTfEPhiRWkYdfRdC+Z8UerZSfcg=="
+        "resolved": "10.1.2",
+        "contentHash": "Zzam+F/g3jpGvSLhqdtOoBe+GEABk+oi9LJxun1wrz52/254sSGWkz1P+U1dDifsXJWVdZusiRuDWLXkJW+7Eg=="
       },
       "System.ClientModel": {
         "type": "Transitive",
@@ -1218,7 +1218,7 @@
           "Polly": "[8.6.5, 8.6.5]",
           "Serilog.Enrichers.Sensitive": "[2.1.0, 2.1.0]",
           "Serilog.Extensions.Hosting": "[10.0.0, 10.0.0]",
-          "Swashbuckle.AspNetCore": "[10.1.1, 10.1.1]",
+          "Swashbuckle.AspNetCore": "[10.1.2, 10.1.2]",
           "System.Data.SqlClient": "[4.9.0, 4.9.0]"
         }
       },
@@ -1252,7 +1252,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.18.1, 4.0.18.1]",
+          "AWSSDK.S3": "[4.0.18.3, 4.0.18.3]",
           "Autofac": "[9.0.0, 9.0.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
           "Azure.Storage.Blobs": "[12.27.0, 12.27.0]",
@@ -1411,9 +1411,9 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.18.1, 4.0.18.1]",
-        "resolved": "4.0.18.1",
-        "contentHash": "T4tT121H4vpRk2X5ML2zU/IbgIg/BLpZdY4EVE2OhQh/8g96ZtquyCu8UmhQl6769Avv+245jSknR3ADOJavYw==",
+        "requested": "[4.0.18.3, 4.0.18.3]",
+        "resolved": "4.0.18.3",
+        "contentHash": "SOx6ToXt5Kb7HNG4Lg2NRpRTM6VtTvZDjUqlC8xbIT7DtwquXI6gSquLDxQ2cD5dIKDl4X2eVy9sxDg+ANtSsg==",
         "dependencies": {
           "AWSSDK.Core": "[4.0.3.12, 5.0.0)"
         }
@@ -1976,14 +1976,14 @@
       },
       "Swashbuckle.AspNetCore": {
         "type": "CentralTransitive",
-        "requested": "[10.1.1, 10.1.1]",
-        "resolved": "10.1.1",
-        "contentHash": "pWb/TzYOG/3VOhCD8uqXrt54PwQbX8bsfeza49Lo6Y1wl2fC2Qxj3oiVYEEDFY3Ug6zV7uPzMxhrr+U0RqskGg==",
+        "requested": "[10.1.2, 10.1.2]",
+        "resolved": "10.1.2",
+        "contentHash": "txDJi7w/didFl/kIlTaA+FfzaJvZaXXZMejfxhJRK/CZdG8PrJcW1xquUuyLN0zNTpU5K0mm0U19B0/P5xiNOA==",
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "10.0.0",
-          "Swashbuckle.AspNetCore.Swagger": "10.1.1",
-          "Swashbuckle.AspNetCore.SwaggerGen": "10.1.1",
-          "Swashbuckle.AspNetCore.SwaggerUI": "10.1.1"
+          "Swashbuckle.AspNetCore.Swagger": "10.1.2",
+          "Swashbuckle.AspNetCore.SwaggerGen": "10.1.2",
+          "Swashbuckle.AspNetCore.SwaggerUI": "10.1.2"
         }
       },
       "System.Data.SqlClient": {
