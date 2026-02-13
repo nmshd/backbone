@@ -200,11 +200,12 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                             itemCount: _actions.length,
                             onReorder: (oldIndex, newIndex) {
                               setState(() {
+                                var insertPosition = newIndex;
                                 if (newIndex > oldIndex) {
-                                  newIndex -= 1;
+                                  insertPosition -= 1;
                                 }
                                 final item = _actions.removeAt(oldIndex);
-                                _actions.insert(newIndex, item);
+                                _actions.insert(insertPosition, item);
                               });
                             },
                             itemBuilder: (context, index) => _ActionRow(
