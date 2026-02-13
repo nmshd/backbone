@@ -77,15 +77,17 @@ public class ValidatorTests : AbstractTestsBase
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Fact]
-    public void Allows_creation_of_empty_content_by_authenticated_user()
+    [Theory]
+    [InlineData(null)]
+    [InlineData(new byte[0])]
+    public void Allows_creation_of_empty_content_by_authenticated_user(byte[]? content)
     {
         // Arrange
         var validator = CreateValidatorForAuthenticatedUser();
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = null, ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = content, ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
