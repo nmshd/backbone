@@ -33,7 +33,7 @@ public class Validator : AbstractValidator<CreateTokenCommand>
         }
         else
         {
-            RuleFor(t => t.Content).NumberOfBytes(1, Token.MAX_CONTENT_LENGTH);
+            RuleFor(t => t.Content).NumberOfBytes(0, Token.MAX_CONTENT_LENGTH);
         }
     }
 }

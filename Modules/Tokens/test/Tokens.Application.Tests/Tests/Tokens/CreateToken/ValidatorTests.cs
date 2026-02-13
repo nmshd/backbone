@@ -77,19 +77,20 @@ public class ValidatorTests : AbstractTestsBase
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Fact]
-    public void Fails_for_authenticated_user_when_Content_is_empty()
+    [Theory]
+    [InlineData(null)]
+    [InlineData(new byte[0])]
+    public void Allows_creation_of_empty_content_by_authenticated_user(byte[]? content)
     {
         // Arrange
         var validator = CreateValidatorForAuthenticatedUser();
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = content, ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem("Content", "error.platform.validation.invalidPropertyValue",
-            "'Content' must be between 1 and 10485760 bytes long. You entered 0 bytes.");
+        validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
