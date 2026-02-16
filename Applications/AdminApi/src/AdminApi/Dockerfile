@@ -71,7 +71,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.38.9@sha256:97815fc722f55910e12cb2645a4ef793174a54ccb80985caa11776327bf316f2 AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.41.1@sha256:a2b70117a92ec3799128099d8849783877b5d8f2ed6ee323c4e01f18c7084aee AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
