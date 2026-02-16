@@ -18,7 +18,7 @@
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.27.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
-    <PackageVersion Include="coverlet.collector" Version="[6.0.4]" />
+    <PackageVersion Include="coverlet.collector" Version="[8.0.0]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
     <PackageVersion Include="Dapper" Version="[2.1.66]" />
     <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.0]" />
