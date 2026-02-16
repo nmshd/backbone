@@ -403,8 +403,8 @@
       },
       "Microsoft.Extensions.Compliance.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.2.0",
-        "contentHash": "1a4xDAT6fRyP8t419q3WvWMmMslDTvI7OAZLWBhn5rysFG0bl5xFenTswd1xAbT/3u3mx4Xyb5bPx+V+18tJeQ=="
+        "resolved": "10.3.0",
+        "contentHash": "b3gmxtyX0n8bQFuZ679f8QiOWqjeZKFc6XXPUsYNFzMcWi0Q44Ej3pB41N/QQ0maX380kmOMF36bLSBHNThXAg=="
       },
       "Microsoft.Extensions.DependencyInjection.AutoActivation": {
         "type": "Transitive",
@@ -470,10 +470,10 @@
       },
       "Microsoft.Extensions.Telemetry.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.2.0",
-        "contentHash": "6V4V6NX6RLUYWwV89DeW/4zK5xOycYHWhsfMXSpKVGgMHfXcczmbk6hBeqTnRPzhpATYcOWlmA6hk1jgdxUugA==",
+        "resolved": "10.3.0",
+        "contentHash": "aKxH6ZsGAewGF8uSXyx1WkjqItwZA+hd1hhQ/4i7o5injCWSdr9vIZ3R3djJfy8OG3xaWK+LZY/+slVvlnwEHw==",
         "dependencies": {
-          "Microsoft.Extensions.Compliance.Abstractions": "10.2.0"
+          "Microsoft.Extensions.Compliance.Abstractions": "10.3.0"
         }
       },
       "Microsoft.Identity.Client": {
@@ -981,7 +981,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.3, 10.0.3]",
           "Microsoft.Extensions.Azure": "[1.13.1, 1.13.1]",
           "Microsoft.Extensions.DependencyInjection": "[10.0.3, 10.0.3]",
-          "Microsoft.Extensions.Diagnostics.HealthChecks.Common": "[10.2.0, 10.2.0]",
+          "Microsoft.Extensions.Diagnostics.HealthChecks.Common": "[10.3.0, 10.3.0]",
           "Microsoft.Extensions.Identity.Core": "[10.0.3, 10.0.3]",
           "Microsoft.Extensions.Logging": "[10.0.3, 10.0.3]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, 10.0.0]",
@@ -1368,11 +1368,11 @@
       },
       "Microsoft.Extensions.Diagnostics.HealthChecks.Common": {
         "type": "CentralTransitive",
-        "requested": "[10.2.0, 10.2.0]",
-        "resolved": "10.2.0",
-        "contentHash": "AlI958ujOGIQ2XLWPEcMCKqBfpZVxvF2WoRE6BPWH8znBoGCqMheDl04Q20kHAqABjoQWZ0IRoQbBbXBJCryUQ==",
+        "requested": "[10.3.0, 10.3.0]",
+        "resolved": "10.3.0",
+        "contentHash": "1/7XtR1/muEcywE8+d+KYnhn2zjSbof/4HhrgquaJTPoTKVZ1PAmA7cOVrREf44KZ14LZy2wfsLftkRK0JN1TQ==",
         "dependencies": {
-          "Microsoft.Extensions.Telemetry.Abstractions": "10.2.0"
+          "Microsoft.Extensions.Telemetry.Abstractions": "10.3.0"
         }
       },
       "Microsoft.Extensions.Identity.Core": {
