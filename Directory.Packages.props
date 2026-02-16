@@ -14,7 +14,7 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.18.3]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.18.6]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.27.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
@@ -35,33 +35,33 @@
     <PackageVersion Include="JWT" Version="[11.0.0]" />
     <PackageVersion Include="MediatR" Version="[12.5.0]" />
     <PackageVersion Include="MediatR.Contracts" Version="[2.0.1]" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.2]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.3]" />
     <PackageVersion Include="Microsoft.AspNetCore.OData" Version="[9.4.1]" />
-    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[10.0.2]" />
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="[10.0.3]" />
     <PackageVersion Include="Microsoft.Extensions.Azure" Version="[1.13.1]" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.2]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.3]" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[10.2.0]" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="[10.0.2]" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="[10.0.2]" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="[10.0.3]" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="[10.0.3]" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.0.1]" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="[3.0.28]" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.0.28]" />
@@ -83,7 +83,7 @@
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
     <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.3.3]" />
     <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.3.3]" />
-    <PackageVersion Include="Serilog" Version="[4.3.0]" />
+    <PackageVersion Include="Serilog" Version="[4.3.1]" />
     <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.9.0]" />
     <PackageVersion Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
@@ -101,8 +101,8 @@
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
     <PackageVersion Include="SimpleBase" Version="[5.6.0]" />
     <PackageVersion Include="Spectre.Console" Version="[0.54.0]" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.1.2]" />
-    <PackageVersion Include="System.CommandLine" Version="[2.0.2]" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.1.3]" />
+    <PackageVersion Include="System.CommandLine" Version="[2.0.3]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.0]" />
     <PackageVersion Include="Testcontainers.Azurite" Version="[4.10.0]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.10.0]" />
