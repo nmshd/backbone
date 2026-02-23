@@ -14,7 +14,7 @@ services:
   ms-sql-server:
     container_name: bkb-mssql_server
     hostname: ms-sql-server
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:698682bab57c02c42bc0aa274b158aeb242d8e9104149a7489628d5535805816
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:5ffdffd2ba852051c2fc2f5b310391bf896dbaf8d16cc026a3c859d6214b30d1
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres:18.1@sha256:1090bc3a8ccfb0b55f78a494d76f8d603434f7e4553543d6e807bc7bd6bbd17f
+    image: postgres:18.2@sha256:b6b4d0b75c699a2c94dfc5a94fe09f38630f3b67ab0e1653ede1b7ac8e13c197
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.2.3-management-alpine@sha256:49c7be122659b3a00ba8a31579a2545b7946dcb8392b71dab41d128c69d28493
+    image: rabbitmq:4.2.4-management-alpine@sha256:4ba40e715b16ade72116073ba8d4ab3cd03dc6eb4e785a92d82f329f7292135f
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
