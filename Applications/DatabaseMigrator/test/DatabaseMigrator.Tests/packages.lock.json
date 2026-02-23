@@ -1393,7 +1393,7 @@
           "Serilog.Sinks.Debug": "[3.0.0, 3.0.0]",
           "Serilog.Sinks.Http": "[9.2.1, 9.2.1]",
           "Serilog.Sinks.Seq": "[9.0.0, 9.0.0]",
-          "System.Data.SqlClient": "[4.9.0, 4.9.0]"
+          "System.Data.SqlClient": "[4.9.1, 4.9.1]"
         }
       },
       "Backbone.DevelopmentKit.Identity": {
@@ -2506,9 +2506,9 @@
       },
       "System.Data.SqlClient": {
         "type": "CentralTransitive",
-        "requested": "[4.9.0, 4.9.0]",
-        "resolved": "4.9.0",
-        "contentHash": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+        "requested": "[4.9.1, 4.9.1]",
+        "resolved": "4.9.1",
+        "contentHash": "A7RK9I4UaVHJ407GTfy37S4ABHt1+lZ+/uoA54zTv0XaaWgHO5BtXSMzMVqB6socIHEeeK5K1YRgaxCEfD79wQ==",
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
@@ -2601,9 +2601,9 @@
       },
       "System.Data.SqlClient": {
         "type": "CentralTransitive",
-        "requested": "[4.9.0, 4.9.0]",
-        "resolved": "4.9.0",
-        "contentHash": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+        "requested": "[4.9.1, 4.9.1]",
+        "resolved": "4.9.1",
+        "contentHash": "A7RK9I4UaVHJ407GTfy37S4ABHt1+lZ+/uoA54zTv0XaaWgHO5BtXSMzMVqB6socIHEeeK5K1YRgaxCEfD79wQ==",
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
@@ -2690,9 +2690,9 @@
       },
       "System.Data.SqlClient": {
         "type": "CentralTransitive",
-        "requested": "[4.9.0, 4.9.0]",
-        "resolved": "4.9.0",
-        "contentHash": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+        "requested": "[4.9.1, 4.9.1]",
+        "resolved": "4.9.1",
+        "contentHash": "A7RK9I4UaVHJ407GTfy37S4ABHt1+lZ+/uoA54zTv0XaaWgHO5BtXSMzMVqB6socIHEeeK5K1YRgaxCEfD79wQ==",
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
@@ -2779,9 +2779,9 @@
       },
       "System.Data.SqlClient": {
         "type": "CentralTransitive",
-        "requested": "[4.9.0, 4.9.0]",
-        "resolved": "4.9.0",
-        "contentHash": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+        "requested": "[4.9.1, 4.9.1]",
+        "resolved": "4.9.1",
+        "contentHash": "A7RK9I4UaVHJ407GTfy37S4ABHt1+lZ+/uoA54zTv0XaaWgHO5BtXSMzMVqB6socIHEeeK5K1YRgaxCEfD79wQ==",
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
@@ -2868,9 +2868,9 @@
       },
       "System.Data.SqlClient": {
         "type": "CentralTransitive",
-        "requested": "[4.9.0, 4.9.0]",
-        "resolved": "4.9.0",
-        "contentHash": "j4KJO+vC62NyUtNHz854njEqXbT8OmAa5jb1nrGfYWBOcggyYUQE0w/snXeaCjdvkSKWuUD+hfvlbN8pTrJTXg==",
+        "requested": "[4.9.1, 4.9.1]",
+        "resolved": "4.9.1",
+        "contentHash": "A7RK9I4UaVHJ407GTfy37S4ABHt1+lZ+/uoA54zTv0XaaWgHO5BtXSMzMVqB6socIHEeeK5K1YRgaxCEfD79wQ==",
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
