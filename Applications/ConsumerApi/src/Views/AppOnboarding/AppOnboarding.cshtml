@@ -19,6 +19,8 @@
             --primary-color: @Model.PrimaryColor;
             --secondary-color: @Model.SecondaryColor;
             --background-color: @Model.BackgroundColor;
+            --on-primary-color: @Model.OnPrimaryColor;
+            --on-secondary-color: @Model.OnSecondaryColor;
         }
 
         #app-install-step {
@@ -117,7 +119,8 @@
                         <img
                             src="@appStore.StoreButtonUrl"
                             alt="@appStore.StoreName"
-                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';"
+                            onclick="   document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';
+                                        document.querySelector('#app-install-step .step-content').style.color ='@Model.OnSecondaryColor';"
                             class="@(string.IsNullOrEmpty(appStore.Link) ? "store-link-missing" : null) " />
                     </a>
                 }

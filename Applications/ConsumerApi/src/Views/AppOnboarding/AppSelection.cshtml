@@ -25,6 +25,8 @@
             --primary-color: @Model.Apps[0].PrimaryColor;
             --secondary-color: @Model.Apps[0].SecondaryColor;
             --background-color: @Model.Apps[0].BackgroundColor;
+            --on-primary-color: @Model.Apps[0].OnPrimaryColor;
+            --on-secondary-color: @Model.Apps[0].OnSecondaryColor;
         }
 
         .container {
@@ -58,7 +60,7 @@
 <div class="container">
     <div class="steps-container">
         <div class="info-box">
-            <p>Bitte wählen Sie die von Ihrem Anbieter angegebene App aus und installieren Sie sie.</p>
+            <p>Bitte wählen Sie die von Ihrem Anbieter angegebene App aus und installieren Sie diese.</p>
         </div>
         @foreach (var app in Model.Apps)
         {
