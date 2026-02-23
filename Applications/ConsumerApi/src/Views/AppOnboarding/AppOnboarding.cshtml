@@ -119,8 +119,8 @@
                         <img
                             src="@appStore.StoreButtonUrl"
                             alt="@appStore.StoreName"
-                            onclick="   document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';
-                                        document.querySelector('#app-install-step .step-content').style.color ='@Model.OnSecondaryColor';"
+                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.SecondaryColor';
+                                     document.querySelector('#app-install-step .step-content').style.color ='@Model.OnSecondaryColor';"
                             class="@(string.IsNullOrEmpty(appStore.Link) ? "store-link-missing" : null) " />
                     </a>
                 }
