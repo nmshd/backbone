@@ -40,17 +40,17 @@
       },
       "MyCSharp.HttpUserAgentParser": {
         "type": "Direct",
-        "requested": "[3.0.28, 3.0.28]",
-        "resolved": "3.0.28",
-        "contentHash": "UbqKb1z2r8gFhsD5Scf/lEI5T7VtCeQUTzXA3yyWoyvXdY5u4HL7CsHk6WNAtbZJa2rgRGqN7pHLpcffo3PIRA=="
+        "requested": "[3.1.2, 3.1.2]",
+        "resolved": "3.1.2",
+        "contentHash": "M7xqzZR9dGp/7gkzUfw/UBE0Z/8y2Qd9TZBN7Gs2UIQjBcpAHKt+HYQaQx1aXXlYpX2AT1LLHS7kF27TgcK2UA=="
       },
       "MyCSharp.HttpUserAgentParser.AspNetCore": {
         "type": "Direct",
-        "requested": "[3.0.28, 3.0.28]",
-        "resolved": "3.0.28",
-        "contentHash": "Y1P7g0LhvBhkltZ3QQNVF+v7Wah4SNtu3CnT6tlwfprNEa7cxJrxsho80odtxCu4ThjcmR/27hg6K78lRJGB1Q==",
+        "requested": "[3.1.2, 3.1.2]",
+        "resolved": "3.1.2",
+        "contentHash": "Ft0GbSIIO51p3Ruz0SzahWfzqo1QGvE5dHdjqnzYYIVCYAjfBu8qZ1Qtlg27lka1Nc4VupOuJKWzHxx4bEkLXA==",
         "dependencies": {
-          "MyCSharp.HttpUserAgentParser": "3.0.28"
+          "MyCSharp.HttpUserAgentParser": "3.1.2"
         }
       },
       "NetEscapades.AspNetCore.SecurityHeaders": {

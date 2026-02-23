@@ -1599,8 +1599,8 @@
           "Backbone.Modules.Tokens.Module": "[1.0.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.3, 10.0.3]",
           "Microsoft.EntityFrameworkCore.Relational": "[10.0.3, 10.0.3]",
-          "MyCSharp.HttpUserAgentParser": "[3.0.28, 3.0.28]",
-          "MyCSharp.HttpUserAgentParser.AspNetCore": "[3.0.28, 3.0.28]",
+          "MyCSharp.HttpUserAgentParser": "[3.1.2, 3.1.2]",
+          "MyCSharp.HttpUserAgentParser.AspNetCore": "[3.1.2, 3.1.2]",
           "NetEscapades.AspNetCore.SecurityHeaders": "[1.3.1, 1.3.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.0, 10.0.0]",
           "Serilog": "[4.3.1, 4.3.1]",
@@ -2674,20 +2674,20 @@
       },
       "MyCSharp.HttpUserAgentParser": {
         "type": "CentralTransitive",
-        "requested": "[3.0.28, 3.0.28]",
-        "resolved": "3.0.28",
-        "contentHash": "UbqKb1z2r8gFhsD5Scf/lEI5T7VtCeQUTzXA3yyWoyvXdY5u4HL7CsHk6WNAtbZJa2rgRGqN7pHLpcffo3PIRA==",
+        "requested": "[3.1.2, 3.1.2]",
+        "resolved": "3.1.2",
+        "contentHash": "M7xqzZR9dGp/7gkzUfw/UBE0Z/8y2Qd9TZBN7Gs2UIQjBcpAHKt+HYQaQx1aXXlYpX2AT1LLHS7kF27TgcK2UA==",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
         }
       },
       "MyCSharp.HttpUserAgentParser.AspNetCore": {
         "type": "CentralTransitive",
-        "requested": "[3.0.28, 3.0.28]",
-        "resolved": "3.0.28",
-        "contentHash": "Y1P7g0LhvBhkltZ3QQNVF+v7Wah4SNtu3CnT6tlwfprNEa7cxJrxsho80odtxCu4ThjcmR/27hg6K78lRJGB1Q==",
+        "requested": "[3.1.2, 3.1.2]",
+        "resolved": "3.1.2",
+        "contentHash": "Ft0GbSIIO51p3Ruz0SzahWfzqo1QGvE5dHdjqnzYYIVCYAjfBu8qZ1Qtlg27lka1Nc4VupOuJKWzHxx4bEkLXA==",
         "dependencies": {
-          "MyCSharp.HttpUserAgentParser": "3.0.28"
+          "MyCSharp.HttpUserAgentParser": "3.1.2"
         }
       },
       "NetEscapades.AspNetCore.SecurityHeaders": {
