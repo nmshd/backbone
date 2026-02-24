@@ -22,11 +22,11 @@
     }
     <style>
         :root {
-            --primary-color: @Model.Apps[0].PrimaryColor;
-            --secondary-color: @Model.Apps[0].SecondaryColor;
-            --background-color: @Model.Apps[0].BackgroundColor;
-            --on-primary-color: @Model.Apps[0].OnPrimaryColor;
-            --on-secondary-color: @Model.Apps[0].OnSecondaryColor;
+            --primary-color: @Model.Apps[0].ColorScheme.PrimaryColor;
+            --secondary-color: @Model.Apps[0].ColorScheme.SecondaryColor;
+            --background-color: @Model.Apps[0].ColorScheme.BackgroundColor;
+            --on-primary-color: @Model.Apps[0].ColorScheme.OnPrimaryColor;
+            --on-secondary-color: @Model.Apps[0].ColorScheme.OnSecondaryColor;
         }
 
         .container {
