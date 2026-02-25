@@ -16,11 +16,11 @@
 
     <style>
         :root {
-            --primary-color: @Model.ColorScheme.PrimaryColor;
-            --secondary-color: @Model.ColorScheme.SecondaryColor;
-            --background-color: @Model.ColorScheme.BackgroundColor;
-            --on-primary-color: @Model.ColorScheme.OnPrimaryColor;
-            --on-secondary-color: @Model.ColorScheme.OnSecondaryColor;
+            --primary-color: @Model.ColorScheme.Primary;
+            --secondary-color: @Model.ColorScheme.Secondary;
+            --background-color: @Model.ColorScheme.Background;
+            --on-primary-color: @Model.ColorScheme.OnPrimary;
+            --on-secondary-color: @Model.ColorScheme.OnSecondary;
         }
 
         #app-install-step {
@@ -119,8 +119,8 @@
                         <img
                             src="@appStore.StoreButtonUrl"
                             alt="@appStore.StoreName"
-                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.ColorScheme.SecondaryColor';
-                                     document.querySelector('#app-install-step .step-content').style.color ='@Model.ColorScheme.OnSecondaryColor';"
+                            onclick="document.getElementById('app-install-step').style.backgroundColor ='@Model.ColorScheme.Secondary';
+                                     document.querySelector('#app-install-step .step-content').style.color ='@Model.ColorScheme.OnSecondary';"
                             class="@(string.IsNullOrEmpty(appStore.Link) ? "store-link-missing" : null) " />
                     </a>
                 }
