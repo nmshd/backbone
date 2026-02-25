@@ -113,19 +113,19 @@ public class ConsumerApiConfiguration
                 [Required]
                 [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
                 public string BackgroundColor { get; init; } = "#FFFFFF";
-                
+
                 [Required]
                 [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
                 public string PrimaryColor { get; init; } = "#000000";
-                
+
                 [Required]
                 [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
                 public string SecondaryColor { get; init; } = "#000000";
-                
+
                 [Required]
                 [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
                 public string OnPrimaryColor { get; init; } = "#000000";
-                
+
                 [Required]
                 [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
                 public string OnSecondaryColor { get; init; } = "#000000";

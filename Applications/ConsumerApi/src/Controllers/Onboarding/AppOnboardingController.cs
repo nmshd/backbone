@@ -125,7 +125,7 @@ public class AppOnboardingModel
     public string AppDisplayName { get; }
     public string AppDescription { get; set; }
     public List<AppStore> Links { get; }
-   
+
     public ConsumerApiConfiguration.AppOnboardingConfiguration.App.ColorSchemeConfig ColorScheme { get; }
     public string BannerUrl { get; }
     public string AppIconUrl { get; }
