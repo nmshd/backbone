@@ -97,18 +97,14 @@ public class AppSelectionModel
             Id = app.Id;
             DisplayName = app.DisplayName;
             AppIconUrl = app.IconUrl;
-            BackgroundColor = app.BackgroundColor;
-            PrimaryColor = app.PrimaryColor;
-            SecondaryColor = app.SecondaryColor;
+            ColorScheme = app.ColorScheme;
         }
 
         public string Id { get; }
         public string DisplayName { get; }
 
         public string AppIconUrl { get; }
-        public string BackgroundColor { get; }
-        public string PrimaryColor { get; }
-        public string SecondaryColor { get; }
+        public ConsumerApiConfiguration.AppOnboardingConfiguration.App.ColorSchemeConfig ColorScheme { get; }
     }
 }
 
@@ -120,9 +116,7 @@ public class AppOnboardingModel
         AppDisplayName = config.DisplayName;
         AppDescription = config.Description;
         Links = links;
-        BackgroundColor = config.BackgroundColor;
-        PrimaryColor = config.PrimaryColor;
-        SecondaryColor = config.SecondaryColor;
+        ColorScheme = config.ColorScheme;
         BannerUrl = config.BannerUrl;
         AppIconUrl = config.IconUrl;
     }
@@ -131,9 +125,8 @@ public class AppOnboardingModel
     public string AppDisplayName { get; }
     public string AppDescription { get; set; }
     public List<AppStore> Links { get; }
-    public string BackgroundColor { get; }
-    public string PrimaryColor { get; }
-    public string SecondaryColor { get; }
+
+    public ConsumerApiConfiguration.AppOnboardingConfiguration.App.ColorSchemeConfig ColorScheme { get; }
     public string BannerUrl { get; }
     public string AppIconUrl { get; }
     public string AppStoreDescriptor => Links.Count == 1 ? Links[0].StoreName : "App Store";
