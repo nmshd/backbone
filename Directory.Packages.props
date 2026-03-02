@@ -14,15 +14,15 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.18.6]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.18.7]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.27.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.6.0]" />
     <PackageVersion Include="Dapper" Version="[2.1.66]" />
-    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.0]" />
-    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[10.0.0]" />
-    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[10.0.0]" />
+    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.1]" />
+    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[10.0.1]" />
+    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[10.0.1]" />
     <PackageVersion Include="FakeItEasy" Version="[9.0.1]" />
     <PackageVersion Include="FirebaseAdmin" Version="[3.4.0]" />
     <PackageVersion Include="FluentValidation" Version="[12.1.1]" />
@@ -78,7 +78,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.15.0]" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.15.0]" />
     <PackageVersion Include="Polly" Version="[8.6.5]" />
-    <PackageVersion Include="RabbitMQ.Client" Version="[7.2.0]" />
+    <PackageVersion Include="RabbitMQ.Client" Version="[7.2.1]" />
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.0]" />
     <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="[3.3.3]" />
     <PackageVersion Include="Reqnroll.xUnit.v3" Version="[3.3.3]" />
