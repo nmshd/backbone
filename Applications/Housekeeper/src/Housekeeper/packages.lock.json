@@ -1247,8 +1247,8 @@
       },
       "Polly.Core": {
         "type": "Transitive",
-        "resolved": "8.6.5",
-        "contentHash": "t+sUVrIwvo7UmsgHGgOG9F0GDZSRIm47u2ylH17Gvcv1q5hNEwgD5GoBlFyc0kh/pebmPyrAgvGsR/65ZBaXlg=="
+        "resolved": "8.6.6",
+        "contentHash": "lCBL9mmhF9TZxHG3beVRkyjlLohkIC464xIAq7J7Y59C+z42hmsdUaeCKl2SIAYertOUU5TeBXyQDLDQGIKePQ=="
       },
       "Polly.Extensions": {
         "type": "Transitive",
@@ -1527,7 +1527,7 @@
           "OpenTelemetry.Instrumentation.AspNetCore": "[1.15.0, 1.15.0]",
           "OpenTelemetry.Instrumentation.Http": "[1.15.0, 1.15.0]",
           "OpenTelemetry.Instrumentation.Runtime": "[1.15.0, 1.15.0]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "Serilog.Enrichers.Sensitive": "[2.1.0, 2.1.0]",
           "Serilog.Extensions.Hosting": "[10.0.0, 10.0.0]",
           "Swashbuckle.AspNetCore": "[10.1.4, 10.1.4]",
@@ -1542,7 +1542,7 @@
           "FluentValidation": "[12.1.1, 12.1.1]",
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.3, 10.0.3]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "ReHackt.Extensions.Options.Validation": "[10.0.0, 10.0.0]"
         }
       },
@@ -1585,7 +1585,7 @@
           "Microsoft.Extensions.Identity.Core": "[10.0.3, 10.0.3]",
           "Microsoft.Extensions.Logging": "[10.0.3, 10.0.3]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, 10.0.0]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "RabbitMQ.Client": "[7.2.1, 7.2.1]",
           "Serilog": "[4.3.1, 4.3.1]"
         }
@@ -1604,9 +1604,9 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
-          "Dapper": "[2.1.66, 2.1.66]",
+          "Dapper": "[2.1.72, 2.1.72]",
           "Microsoft.EntityFrameworkCore": "[10.0.3, 10.0.3]",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Crypto": {
@@ -1738,7 +1738,7 @@
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "OpenIddict.Core": "[7.2.0, 7.2.0]",
           "OpenIddict.EntityFrameworkCore": "[7.2.0, 7.2.0]",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Devices.Domain": {
@@ -1770,7 +1770,7 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, 10.0.0]",
           "OpenIddict.AspNetCore": "[7.2.0, 7.2.0]",
           "OpenIddict.EntityFrameworkCore": "[7.2.0, 7.2.0]",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Devices.Infrastructure.Database.Postgres": {
@@ -2078,7 +2078,7 @@
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Tokens.Domain": {
@@ -2098,21 +2098,21 @@
           "Microsoft.EntityFrameworkCore": "[10.0.3, 10.0.3]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.3, 10.0.3]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, 10.0.0]",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Tokens.Infrastructure.Database.Postgres": {
         "type": "Project",
         "dependencies": {
           "Backbone.Modules.Tokens.Infrastructure": "[1.0.0, )",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Tokens.Infrastructure.Database.SqlServer": {
         "type": "Project",
         "dependencies": {
           "Backbone.Modules.Tokens.Infrastructure": "[1.0.0, )",
-          "Polly": "[8.6.5, 8.6.5]"
+          "Polly": "[8.6.6, 8.6.6]"
         }
       },
       "Backbone.Modules.Tokens.Module": {
@@ -2146,7 +2146,7 @@
           "FluentValidation": "[12.1.1, 12.1.1]",
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore.Sqlite": "[10.0.3, 10.0.3]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "Shouldly": "[4.3.0, 4.3.0]"
         }
       },
@@ -2238,9 +2238,9 @@
       },
       "Dapper": {
         "type": "CentralTransitive",
-        "requested": "[2.1.66, 2.1.66]",
-        "resolved": "2.1.66",
-        "contentHash": "/q77jUgDOS+bzkmk3Vy9SiWMaetTw+NOoPAV0xPBsGVAyljd5S6P+4RUW7R3ZUGGr9lDRyPKgAMj2UAOwvqZYw=="
+        "requested": "[2.1.72, 2.1.72]",
+        "resolved": "2.1.72",
+        "contentHash": "ns4mGqQd9a/MhP8m6w556vVlZIa0/MfUu03zrxjZC/jlr1uVCsUac8bkdB+Fs98Llbd56rRSo1eZH5VVmeGZyw=="
       },
       "EFCore.BulkExtensions.Core": {
         "type": "CentralTransitive",
@@ -2708,11 +2708,11 @@
       },
       "Polly": {
         "type": "CentralTransitive",
-        "requested": "[8.6.5, 8.6.5]",
-        "resolved": "8.6.5",
-        "contentHash": "VqtW2ZE/ALvQMAH1cQY3qZ2cF2OXa3oe/HKMdOv6Q02HCoEW0rsFNfcBONXlHBe1TnjWW1vdRxBEkPeq0/2FHA==",
+        "requested": "[8.6.6, 8.6.6]",
+        "resolved": "8.6.6",
+        "contentHash": "czKHYJ6uGowPijuZt4kgF4njfGvWxVZ8mKBcrZ9iEtwDe9HKdF0ug6p6TwUG8EHuuufgbDU//rSBFebt5/0Fyw==",
         "dependencies": {
-          "Polly.Core": "8.6.5"
+          "Polly.Core": "8.6.6"
         }
       },
       "RabbitMQ.Client": {
