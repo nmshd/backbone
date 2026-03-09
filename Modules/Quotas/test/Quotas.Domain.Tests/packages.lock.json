@@ -585,8 +585,8 @@
       },
       "Polly.Core": {
         "type": "Transitive",
-        "resolved": "8.6.5",
-        "contentHash": "t+sUVrIwvo7UmsgHGgOG9F0GDZSRIm47u2ylH17Gvcv1q5hNEwgD5GoBlFyc0kh/pebmPyrAgvGsR/65ZBaXlg=="
+        "resolved": "8.6.6",
+        "contentHash": "lCBL9mmhF9TZxHG3beVRkyjlLohkIC464xIAq7J7Y59C+z42hmsdUaeCKl2SIAYertOUU5TeBXyQDLDQGIKePQ=="
       },
       "SQLitePCLRaw.bundle_e_sqlite3": {
         "type": "Transitive",
@@ -781,7 +781,7 @@
           "Microsoft.Extensions.Identity.Core": "[10.0.3, 10.0.3]",
           "Microsoft.Extensions.Logging": "[10.0.3, 10.0.3]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.0, 10.0.0]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "RabbitMQ.Client": "[7.2.1, 7.2.1]",
           "Serilog": "[4.3.1, 4.3.1]"
         }
@@ -820,7 +820,7 @@
           "FluentValidation": "[12.1.1, 12.1.1]",
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore.Sqlite": "[10.0.3, 10.0.3]",
-          "Polly": "[8.6.5, 8.6.5]",
+          "Polly": "[8.6.6, 8.6.6]",
           "Shouldly": "[4.3.0, 4.3.0]"
         }
       },
@@ -1172,11 +1172,11 @@
       },
       "Polly": {
         "type": "CentralTransitive",
-        "requested": "[8.6.5, 8.6.5]",
-        "resolved": "8.6.5",
-        "contentHash": "VqtW2ZE/ALvQMAH1cQY3qZ2cF2OXa3oe/HKMdOv6Q02HCoEW0rsFNfcBONXlHBe1TnjWW1vdRxBEkPeq0/2FHA==",
+        "requested": "[8.6.6, 8.6.6]",
+        "resolved": "8.6.6",
+        "contentHash": "czKHYJ6uGowPijuZt4kgF4njfGvWxVZ8mKBcrZ9iEtwDe9HKdF0ug6p6TwUG8EHuuufgbDU//rSBFebt5/0Fyw==",
         "dependencies": {
-          "Polly.Core": "8.6.5"
+          "Polly.Core": "8.6.6"
         }
       },
       "RabbitMQ.Client": {
