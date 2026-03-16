@@ -10,7 +10,9 @@ spec:
   parentRefs:
     - name: {{ .Values.sseserver.httpRoute.parentRefName | quote }}
       namespace: {{ .Values.sseserver.httpRoute.parentRefNamespace | quote }}
+      {{- if .Values.sseserver.httpRoute.parentRefSectionName }}
       sectionName: {{ .Values.sseserver.httpRoute.parentRefSectionName | quote }}
+      {{- end }}
   hostnames:
   {{- if .Values.sseserver.httpRoute.hostnamesOverride }}
     {{- toYaml .Values.sseserver.httpRoute.hostnamesOverride | nindent 4 }}
