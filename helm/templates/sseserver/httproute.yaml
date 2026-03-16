@@ -8,9 +8,11 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
 spec:
   parentRefs:
-    - name: {{ .Values.sseserver.httpRoute.parentRefName }}
-      namespace: {{ .Values.sseserver.httpRoute.parentRefNamespace }}
-      sectionName: {{ .Values.sseserver.httpRoute.parentRefSectionName }}
+    - name: {{ .Values.sseserver.httpRoute.parentRefName | quote }}
+      namespace: {{ .Values.sseserver.httpRoute.parentRefNamespace | quote }}
+      {{- if .Values.sseserver.httpRoute.parentRefSectionName }}
+      sectionName: {{ .Values.sseserver.httpRoute.parentRefSectionName | quote }}
+      {{- end }}
   hostnames:
   {{- if .Values.sseserver.httpRoute.hostnamesOverride }}
     {{- toYaml .Values.sseserver.httpRoute.hostnamesOverride | nindent 4 }}
