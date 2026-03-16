@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:e362a8dbcd691522456da26a5198b8f3ca1d7641c95624fadc5e3e82678bd08a AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:478b9038d187e5b5c29bfa8173ded5d29e864b5ad06102a12106380ee01e2e49 AS build
 
 ARG VERSION
 
@@ -61,7 +61,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o
 # Instead they can just call "backbone <command>"
 RUN echo '#!/bin/bash\nexec dotnet /app/Backbone.AdminCli.dll "$@"' > /app/publish/backbone && chmod +x /app/publish/backbone
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble@sha256:aec87aa74ddf129da573fa69f42f229a23c953a1c6fdecedea1aa6b1fe147d76
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-noble@sha256:a04d1c1d2d26119049494057d80ea6cda25bbd8aef7c444a1fc1ef874fd3955b
 RUN apt-get update && apt-get install -y libgssapi-krb5-2 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
