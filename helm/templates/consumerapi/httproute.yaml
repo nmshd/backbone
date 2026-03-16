@@ -7,9 +7,9 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
 spec:
   parentRefs:
-    - name: {{ .Values.consumerapi.httpRoute.parentRefName }}
-      namespace: {{ .Values.consumerapi.httpRoute.parentRefNamespace }}
-      sectionName: {{ .Values.consumerapi.httpRoute.parentRefSectionName }}
+    - name: {{ .Values.consumerapi.httpRoute.parentRefName | quote }}
+      namespace: {{ .Values.consumerapi.httpRoute.parentRefNamespace | quote }}
+      sectionName: {{ .Values.consumerapi.httpRoute.parentRefSectionName | quote }}
   hostnames:
   {{- if .Values.consumerapi.httpRoute.hostnamesOverride }}
     {{- toYaml .Values.consumerapi.httpRoute.hostnamesOverride | nindent 4 }}
