@@ -27,7 +27,7 @@ services:
   postgres:
     container_name: bkb-postgres
     hostname: postgres
-    image: postgres:18.3@sha256:69e8582b781cb44fa4557b98ed586fe68361e320d9b12f9707494335634f4f3d
+    image: postgres:18.3@sha256:a9abf4275f9e99bff8e6aed712b3b7dfec9cac1341bba01c1ffdfce9ff9fc34a
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -38,7 +38,7 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq
     hostname: rabbitmq
-    image: rabbitmq:4.2.4-management-alpine@sha256:adac51a4a14a200b8eb928a12787564ed56e93fc55e789a73ec13e1e2eac7aef
+    image: rabbitmq:4.2.5-management-alpine@sha256:7983ce30209cb12a4423907cfafe9eebcfa3dfc8e7463a444b1070bf0f52851c
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"

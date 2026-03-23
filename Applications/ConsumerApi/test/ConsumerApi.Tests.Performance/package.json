@@ -5,7 +5,7 @@
         "@babel/core": "7.29.0",
         "@babel/plugin-transform-class-properties": "7.28.6",
         "@babel/plugin-transform-object-rest-spread": "7.28.6",
-        "@babel/preset-env": "7.29.0",
+        "@babel/preset-env": "7.29.2",
         "@babel/preset-typescript": "7.28.5",
         "@js-soft/eslint-config-ts": "2.0.4",
         "@js-soft/license-check": "1.0.10",
