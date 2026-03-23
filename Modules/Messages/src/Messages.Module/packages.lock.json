@@ -112,11 +112,11 @@
       },
       "Google.Api.Gax.Rest": {
         "type": "Transitive",
-        "resolved": "4.12.1",
-        "contentHash": "djYb7sDJvUiOG66fpDIOsprrZz4RPbiAtMiKtRguQhrzlHasd+3k/u6BQFFY3S0KCdxJzvv8M8hi81Ocdi6Ijw==",
+        "resolved": "4.13.1",
+        "contentHash": "wDfFZXKoHC6sy+Yfub/4cLQOb5ozBVPqDOrxCUAeTfku4d96ILqgzulJSdkPHbiT3oWB3hlYTdJgUwNSJjyo+A==",
         "dependencies": {
-          "Google.Api.Gax": "4.12.1",
-          "Google.Apis.Auth": "1.72.0",
+          "Google.Api.Gax": "4.13.1",
+          "Google.Apis.Auth": "1.73.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
@@ -1204,7 +1204,7 @@
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Devices.Application": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "FirebaseAdmin": "[3.4.0, 3.4.0]",
+          "FirebaseAdmin": "[3.5.0, 3.5.0]",
           "JWT": "[11.0.0, 11.0.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.5, 10.0.5]",
           "Microsoft.EntityFrameworkCore": "[10.0.5, 10.0.5]",
@@ -1395,12 +1395,12 @@
       },
       "FirebaseAdmin": {
         "type": "CentralTransitive",
-        "requested": "[3.4.0, 3.4.0]",
-        "resolved": "3.4.0",
-        "contentHash": "sQyVEOYRe4HSSmRCJQhKr33DxZk10lpDE2otdTgNkqPn4BRul2JG7TCQC7N7X0wO9ShnPLbVS4xuSUHlaPBbug==",
+        "requested": "[3.5.0, 3.5.0]",
+        "resolved": "3.5.0",
+        "contentHash": "NL9dWvrGCbgu3VxumjpHXgHsagQswntJNLtgVIgTF/y2ro6e6UpvFuZrlfjsMTzRXJEXqnse3U5rN/6HC5TlFA==",
         "dependencies": {
-          "Google.Api.Gax.Rest": "4.8.0",
-          "Google.Apis.Auth": "1.68.0"
+          "Google.Api.Gax.Rest": "4.13.1",
+          "Google.Apis.Auth": "1.73.0"
         }
       },
       "FluentValidation": {
