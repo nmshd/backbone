@@ -10,7 +10,7 @@
     "author": "",
     "license": "AGPL-3.0-or-later",
     "dependencies": {
-        "csv-parse": "6.1.0"
+        "csv-parse": "6.2.1"
     },
     "devDependencies": {
         "tsx": "4.21.0"
