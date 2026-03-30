@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2.22.0
+        uses: subosito/flutter-action@v2.23.0
       - name: Run checks
         run: ./.ci/aui/runChecks.sh
 
@@ -342,7 +342,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Install helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
       - name: Build Helm Chart
         run: ./.ci/helm/buildChart.js
         env:
