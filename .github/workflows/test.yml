@@ -342,7 +342,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Install helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
       - name: Build Helm Chart
         run: ./.ci/helm/buildChart.js
         env:
