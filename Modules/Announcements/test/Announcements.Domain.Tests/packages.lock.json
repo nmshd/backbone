@@ -4,9 +4,9 @@
     "net10.0": {
       "GitHubActionsTestLogger": {
         "type": "Direct",
-        "requested": "[3.0.1, 3.0.1]",
-        "resolved": "3.0.1",
-        "contentHash": "HCfw7V1yuKxnm89vVKrb8b6aug96PUgxN9Z0YthEFCR8JOfTJF4XcU1i6RX2eEB08p3zriuFIG7BGXns4PyE8Q=="
+        "requested": "[3.0.2, 3.0.2]",
+        "resolved": "3.0.2",
+        "contentHash": "zAsjvF7eeQOv84OjTzPmAG1O8Z8K+OYLWFZ/0waaZraf32z/tTyTr2h/H812KYyXkkCxd9oXJ4vWD7IBYPxGbg=="
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
@@ -31,8 +31,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.3.19",
-        "contentHash": "8zIzN59+J6arYSyFuhnSxPepr8ff4p6li+MxKUUnqCgwZqQ+icEGJK/23c1USIEALqZZ5gdiITuH2sOZWQom+Q=="
+        "resolved": "4.0.3.25",
+        "contentHash": "ug/C6csm8/GcRrMij9EtTA6k2MtRFV9EibhWNRFTISR8AGXQnSoxUKnddMpHah6ax/Tjg1GW0zk1i0/wcvEqmg=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -754,7 +754,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.19.1, 4.0.19.1]",
+          "AWSSDK.S3": "[4.0.20.1, 4.0.20.1]",
           "Autofac": "[9.1.0, 9.1.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
           "Azure.Storage.Blobs": "[12.27.0, 12.27.0]",
@@ -825,11 +825,11 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.19.1, 4.0.19.1]",
-        "resolved": "4.0.19.1",
-        "contentHash": "DCTFohRB53/g2kaz7cUX3ZTyFTbRErj5JvT4HrquKTvXvUpY/vUyUMGEVWoC0UXmxalYaPAR8tO7WgEJRJjM9w==",
+        "requested": "[4.0.20.1, 4.0.20.1]",
+        "resolved": "4.0.20.1",
+        "contentHash": "UH2ozA9bQe/dOwxClI7h1BEmpt45hk5rrzwQgDFLdt5bpP5o46gHAAHiM6dbiBLzD81Q0YQHMiJ9nWeO5AG5FQ==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.19, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.25, 5.0.0)"
         }
       },
       "Azure.Messaging.ServiceBus": {
