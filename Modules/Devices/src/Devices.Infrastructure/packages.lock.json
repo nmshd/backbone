@@ -159,8 +159,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.3.25",
-        "contentHash": "ug/C6csm8/GcRrMij9EtTA6k2MtRFV9EibhWNRFTISR8AGXQnSoxUKnddMpHah6ax/Tjg1GW0zk1i0/wcvEqmg=="
+        "resolved": "4.0.3.27",
+        "contentHash": "hGdpxa7GR2JrfOGI35MWlGCiqq4GlpNDJi0DDvE8lJunboziMFeTCXypvstS5eo0WYdJR9pqHykR53QsjWj7jg=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -1129,7 +1129,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.20.1, 4.0.20.1]",
+          "AWSSDK.S3": "[4.0.20.3, 4.0.20.3]",
           "Autofac": "[9.1.0, 9.1.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
           "Azure.Storage.Blobs": "[12.27.0, 12.27.0]",
@@ -1219,11 +1219,11 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.20.1, 4.0.20.1]",
-        "resolved": "4.0.20.1",
-        "contentHash": "UH2ozA9bQe/dOwxClI7h1BEmpt45hk5rrzwQgDFLdt5bpP5o46gHAAHiM6dbiBLzD81Q0YQHMiJ9nWeO5AG5FQ==",
+        "requested": "[4.0.20.3, 4.0.20.3]",
+        "resolved": "4.0.20.3",
+        "contentHash": "CX/Bu4doaRSuLcaPS5HwOHULbuZl3gBqcr7MZxBIBs1wfjYbKv8vgvDYkBrSpg6fFs7UgmDZ8fT2k6ule8UgBw==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.3.25, 5.0.0)"
+          "AWSSDK.Core": "[4.0.3.27, 5.0.0)"
         }
       },
       "Azure.Messaging.ServiceBus": {
