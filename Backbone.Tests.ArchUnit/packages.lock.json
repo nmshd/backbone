@@ -1488,7 +1488,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac": "[9.1.0, 9.1.0]",
-          "Autofac.Extensions.DependencyInjection": "[10.0.0, 10.0.0]",
+          "Autofac.Extensions.DependencyInjection": "[11.0.0, 11.0.0]",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
@@ -1557,7 +1557,7 @@
       "Backbone.EventHandlerService": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extensions.DependencyInjection": "[10.0.0, 10.0.0]",
+          "Autofac.Extensions.DependencyInjection": "[11.0.0, 11.0.0]",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Challenges.Module": "[1.0.0, )",
           "Backbone.Modules.Devices.Module": "[1.0.0, )",
@@ -1591,7 +1591,7 @@
       "Backbone.Job.IdentityDeletion": {
         "type": "Project",
         "dependencies": {
-          "Autofac.Extensions.DependencyInjection": "[10.0.0, 10.0.0]",
+          "Autofac.Extensions.DependencyInjection": "[11.0.0, 11.0.0]",
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
@@ -2463,12 +2463,12 @@
       },
       "Autofac.Extensions.DependencyInjection": {
         "type": "CentralTransitive",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "ZjR/onUlP7BzQ7VBBigQepWLAyAzi3VRGX3pP6sBqkPRiT61fsTZqbTpRUKxo30TMgbs1o3y6bpLbETix4SJog==",
+        "requested": "[11.0.0, 11.0.0]",
+        "resolved": "11.0.0",
+        "contentHash": "/FSrJyYEsptkV9O3L95dTAoGO6XGSQFDENWHFcHxW0oQIEvW56Mgr01qO53EIEIDDvMFqszBU+uIm9fzGARLPQ==",
         "dependencies": {
-          "Autofac": "8.1.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1"
+          "Autofac": "9.1.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.4"
         }
       },
       "AutoFixture": {

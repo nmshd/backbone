@@ -11,7 +11,7 @@
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
     <PackageVersion Include="Autofac" Version="[9.1.0]" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[10.0.0]" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.0]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
     <PackageVersion Include="AWSSDK.S3" Version="[4.0.21.1]" />
