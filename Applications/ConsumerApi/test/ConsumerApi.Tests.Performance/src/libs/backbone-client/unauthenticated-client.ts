@@ -1,12 +1,14 @@
 import { check } from "k6";
 import { b64encode } from "k6/encoding";
-import http from "k6/http"; // TODO: USE HTTPX AGAIN!!!!!
 import { CryptoHelper } from "../crypto-helper";
+import { BaseClient } from "./base-client";
 import { HttpClientConfiguration } from "./http-client-configuration";
 import { CreateChallengeResponse, CreateIdentityRequest } from "./models";
 
-export class UnauthenticatedClient {
-    public constructor(private readonly configuration: HttpClientConfiguration) {}
+export class UnauthenticatedClient extends BaseClient {
+    public constructor(configuration: HttpClientConfiguration) {
+        super(configuration);
+    }
 
     public createIdentity(password: string): void {
         try {
@@ -25,7 +27,7 @@ export class UnauthenticatedClient {
                 identityVersion: 1
             };
 
-            const httpResponse = http.post(`${this.configuration.baseUrl}api/${this.configuration.apiVersion}/Identities`, JSON.stringify(createIdentityRequest), {
+            const httpResponse = this.httpxClient.post(`${this.configuration.baseUrl}api/${this.configuration.apiVersion}/Identities`, JSON.stringify(createIdentityRequest), {
                 headers: { "Content-Type": "application/json" }
             });
 
@@ -37,7 +39,7 @@ export class UnauthenticatedClient {
     }
 
     public createChallenge(): CreateChallengeResponse {
-        const response = http.post(`${this.configuration.baseUrl}api/${this.configuration.apiVersion}/Challenges`);
+        const response = this.httpxClient.post(`${this.configuration.baseUrl}api/${this.configuration.apiVersion}/Challenges`);
 
         if (response.status !== 201) throw new Error(`Failed to get challenge, status code: ${response.status}`);
 
