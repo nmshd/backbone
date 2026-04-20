@@ -4,7 +4,7 @@ import { Configuration } from "../libs/configuration";
 
 export const options: Options = {
     scenarios: {
-        constantRequestRate: {
+        constantVus: {
             executor: "constant-vus",
             duration: "1m",
             vus: 1
