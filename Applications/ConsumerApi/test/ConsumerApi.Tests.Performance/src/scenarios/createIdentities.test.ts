@@ -1,3 +1,4 @@
+import { check } from "k6";
 import { Options } from "k6/options";
 import { UnauthenticatedClient } from "../libs/backbone-client/unauthenticated-client";
 import { Configuration } from "../libs/configuration";
@@ -16,5 +17,6 @@ const configuration = Configuration.load();
 const client = new UnauthenticatedClient(configuration.httpClient);
 
 export default function (): void {
-    client.createIdentity("Password123!");
+    const response = client.createIdentity("Password123!");
+    check(response, { "identity creation successful": (r) => r.status === 201 });
 }

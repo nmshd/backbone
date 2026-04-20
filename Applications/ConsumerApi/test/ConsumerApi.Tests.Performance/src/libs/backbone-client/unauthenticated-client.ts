@@ -1,4 +1,4 @@
-import { check } from "k6";
+import { TypedResponse } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { CryptoHelper } from "../crypto-helper";
 import { BaseClient } from "./base-client";
@@ -10,7 +10,7 @@ export class UnauthenticatedClient extends BaseClient {
         super(configuration);
     }
 
-    public createIdentity(password: string): void {
+    public createIdentity(password: string): TypedResponse<unknown> {
         try {
             const keyPair = CryptoHelper.generateKeyPair();
 
@@ -31,7 +31,7 @@ export class UnauthenticatedClient extends BaseClient {
                 headers: { "Content-Type": "application/json" }
             });
 
-            check(httpResponse, { "identity creation successful": (r) => r.status === 201 });
+            return httpResponse;
         } catch (e) {
             console.error(e);
             throw e;
