@@ -123,26 +123,35 @@ Test snapshots are currently only available for **Postgres**. For windows, make 
 1.  **Run the test(s)**
 
     ```sh
-    # scripts/windows/run-test.ps1 <scenario-name>
+    # Linux/macOS: ./scripts/linux/run-test.sh --scenario <scenario-name> [--vus <count>] [--duration <duration>]
+    # Windows (PowerShell): ./scripts/windows/run-test.ps1 -scenario <scenario-name> [-vus <count>] [-duration <duration>]
     ```
 
     where \<scenario-name> is for example `s01`.
 
     > [!NOTE]
-    > The command can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
+    > The wrapper scripts currently support only `--scenario`, `--vus`, and `--duration` (or `-scenario`, `-vus`, `-duration` in PowerShell). Additional k6 parameters are not forwarded yet.
 
-1.  You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+1.  You must tweak the way the test is run to ensure it conforms with your preferences.
 
-    | Key                   | Default             | Possible Values                             |
-    | --------------------- | ------------------- | ------------------------------------------- |
-    | `--duration`          | depends on the test | `60m`, `4h`, etc.                           |
-    | `--baseUrl`           | `localhost:8081`    | any valid URL, e.g. `load-test.enmeshed.eu` |
-    | `--env snapshot=`     | `light`             | `heavy`                                     |
-    | `--env clientId=`     | `test`              | any string                                  |
-    | `--env clientSecret=` | `test`              | any string                                  |
+    Script parameters:
+
+    | Key          | Default | Possible Values   |
+    | ------------ | ------- | ----------------- |
+    | `--scenario` | none    | e.g. `s01`, `s02` |
+    | `--vus`      | `1`     | any positive int  |
+    | `--duration` | `10s`   | `60m`, `4h`, etc. |
+
+    Environment variables read from `__ENV` in test code:
+
+    | Variable                  | Default                  | Purpose               |
+    | ------------------------- | ------------------------ | --------------------- |
+    | `NMSHD_TEST_BASEURL`      | `http://localhost:8081/` | Consumer API base URL |
+    | `NMSHD_TEST_CLIENTID`     | `test`                   | OAuth client id       |
+    | `NMSHD_TEST_CLIENTSECRET` | `test`                   | OAuth client secret   |
 
     Example:
 
     ```sh
-    $ scripts/windows/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h
+    $ NMSHD_TEST_BASEURL=https://load-test.enmeshed.eu ./scripts/linux/run-test.sh --scenario s01 --vus 5 --duration 4h
     ```
