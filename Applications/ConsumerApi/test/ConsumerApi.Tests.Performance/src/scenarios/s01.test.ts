@@ -2,9 +2,9 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { AuthenticatedClient } from "../libs/backbone-client/authenticated-client";
+import { Configuration } from "../libs/configuration";
 import { PoolLoadOptions, PoolTypes } from "../libs/data-loader/models";
 import { loadPools } from "../libs/file-utils";
-import { Configuration } from "./configuration";
 
 export const options: Options = {
     scenarios: {

@@ -1,22 +1,18 @@
 export class HttpClientConfiguration {
+    public get baseUrl(): string {
+        return this.getEnvVar("NMSHD_TEST_BASEURL") ?? "http://localhost:8081/";
+    }
+
     public get clientId(): string {
-        return this.getEnvVar("clientId") ?? "test";
+        return this.getEnvVar("NMSHD_TEST_CLIENTID") ?? "test";
     }
 
     public get clientSecret(): string {
-        return this.getEnvVar("clientSecret") ?? "test";
+        return this.getEnvVar("NMSHD_TEST_CLIENTSECRET") ?? "test";
     }
 
     public get apiVersion(): string {
-        return this.getEnvVar("apiVersion") ?? "v1";
-    }
-
-    public get baseUrl(): string {
-        return this.getEnvVar("baseUrl") ?? "http://localhost:8081/";
-    }
-
-    public get timeoutInMilliseconds(): number {
-        return parseInt(this.getEnvVar("timeoutInMilliseconds") ?? "20000");
+        return "v2";
     }
 
     private getEnvVar(name: string): string | undefined {

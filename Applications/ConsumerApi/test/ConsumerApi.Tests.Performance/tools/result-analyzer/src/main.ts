@@ -16,7 +16,7 @@ function readK6Output(filePath: string): k6OutputLine[] | null {
 
 // Function to group metrics by route
 function groupMetricsByRoute(metrics: k6OutputLine[]): RouteMetrics {
-    const routeMetrics = {};
+    const routeMetrics: RouteMetrics = {};
 
     metrics.forEach((metric) => {
         const route = `${metric.method} ${new URL(metric.name).pathname}`;

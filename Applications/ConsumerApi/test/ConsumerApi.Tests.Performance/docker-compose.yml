@@ -1,0 +1,53 @@
+networks:
+  k6:
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.11.2@sha256:3674db04d3640d2157de57f8679dbe8dbc10a673e6d63ec58d9430e34abbfe68
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - k6
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+
+  alloy:
+    image: grafana/alloy:v1.15.1@sha256:4c014ba5f844ae94be1a3175d8e170fe9884fdb8ca9803deac300264bab0dd5a
+    networks:
+      - k6
+    volumes:
+      - ./grafana/alloy:/etc/alloy
+    environment:
+      REMOTE_WRITE_HOST: prometheus:9090
+    depends_on:
+      - prometheus
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --stability.level=experimental # Enable all functionality
+    ports:
+      - "12345:12345" # Alloy UI
+      - "4317:4317" # gRPC receiver
+      - "4318:4318" # HTTP receiver
+
+  grafana:
+    image: grafana/grafana:13.0.1@sha256:3625fdfa3cab904abdf9faaff8f40de0639b456ac5c5d322964fe705051d5455
+    networks:
+      - k6
+    ports:
+      - "4000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/
+
+volumes:
+  prometheus_data:

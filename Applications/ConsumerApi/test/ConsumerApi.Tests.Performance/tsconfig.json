@@ -4,8 +4,7 @@
         "moduleResolution": "node",
         "module": "commonjs",
         "noEmit": true,
-        "allowJs": true,
-        "removeComments": false,
+        "removeComments": true,
 
         "strict": true,
         "noImplicitAny": true,

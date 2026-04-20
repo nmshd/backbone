@@ -26,29 +26,29 @@ Run the `ConsumerApi.Tests.Performance.SnapshotCreator` project with the followi
 
 where:
 
--   `--baseAddress` is the address of the ConsumerSdk.
--   `--clientId` is the client Id to use when addressing the API.
--   `--clientSecret` is the client Secret to use when addressing the API.
--   `--poolsFile` is the same file used in the step above.
--   `--relationshipsAndMessages` the Relationships & Messages configuration created in the step above (csv file).
+- `--baseAddress` is the address of the ConsumerSdk.
+- `--clientId` is the client Id to use when addressing the API.
+- `--clientSecret` is the client Secret to use when addressing the API.
+- `--poolsFile` is the same file used in the step above.
+- `--relationshipsAndMessages` the Relationships & Messages configuration created in the step above (csv file).
 
 This command will create the following entities:
 
--   Identities
--   Relationship Templates
--   Relationships
--   Messages
--   Challenges
--   Datawallet Modifications
+- Identities
+- Relationship Templates
+- Relationships
+- Messages
+- Challenges
+- Datawallet Modifications
 
 It also exports a number of csv files, containing:
 
--   created Identities (Address, DeviceId, Username, Password, Type)
--   created Relationship Templates (IdentityAddress, RelationshipTemplateId)
--   created Relationships (RelationshipId, FromAddress, ToAddress)
--   created Messages (MessageId, AddressFrom, AddressTo)
--   created Challenges (CreatedByAddress, ChallengeId, CreatedByDevice)
--   created Datawallet Modifications (IdentityAddress, ModificationIndex, ModificationId)
+- created Identities (Address, DeviceId, Username, Password, Type)
+- created Relationship Templates (IdentityAddress, RelationshipTemplateId)
+- created Relationships (RelationshipId, FromAddress, ToAddress)
+- created Messages (MessageId, AddressFrom, AddressTo)
+- created Challenges (CreatedByAddress, ChallengeId, CreatedByDevice)
+- created Datawallet Modifications (IdentityAddress, ModificationIndex, ModificationId)
 
 The time it takes to run this command depends mostly on the number of entities to create. It is useful to reduce the logging level of the ConsumerAPI for this operation.
 
@@ -107,15 +107,12 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 Test snapshots are currently only available for **Postgres**. For windows, make sure that you're using PowerShell 7. It can be installed by running `winget install --id Microsoft.PowerShell --source winget`.
 
 1.  **Install k6**
-
     1. You must install k6 if you haven't already. Please download it from the [official website](https://k6.io/open-source/).
 
 1.  **Select a snapshot:**
-
     1. Select one of the available snapshots. You can find more information on the available snapshots in the [scenarios README](src/scenarios/README.md) file.
 
 1.  **Load the snapshot and the CSVs:**
-
     1. `cd Applications/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Ensure that the Postgres server where the snapshot should be loaded is running.
     1. Run the following command (the snapshot name **must not** contain the extension)
@@ -126,26 +123,35 @@ Test snapshots are currently only available for **Postgres**. For windows, make 
 1.  **Run the test(s)**
 
     ```sh
-    # scripts/windows/run-test.ps1 <scenario-name>
+    # Linux/macOS: ./scripts/linux/run-test.sh --scenario <scenario-name> [--vus <count>] [--duration <duration>]
+    # Windows (PowerShell): ./scripts/windows/run-test.ps1 -scenario <scenario-name> [-vus <count>] [-duration <duration>]
     ```
 
     where \<scenario-name> is for example `s01`.
 
     > [!NOTE]
-    > The command can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
+    > The wrapper scripts currently support only `--scenario`, `--vus`, and `--duration` (or `-scenario`, `-vus`, `-duration` in PowerShell). Additional k6 parameters are not forwarded yet.
 
-1.  You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+1.  You must tweak the way the test is run to ensure it conforms with your preferences.
 
-    | Key                   | Default             | Possible Values                             |
-    | --------------------- | ------------------- | ------------------------------------------- |
-    | `--duration`          | depends on the test | `60m`, `4h`, etc.                           |
-    | `--address`           | `localhost:8081`    | any valid URL, e.g. `load-test.enmeshed.eu` |
-    | `--env snapshot=`     | `light`             | `heavy`                                     |
-    | `--env clientId=`     | `test`              | any string                                  |
-    | `--env clientSecret=` | `test`              | any string                                  |
+    Script parameters:
+
+    | Key          | Default | Possible Values   |
+    | ------------ | ------- | ----------------- |
+    | `--scenario` | none    | e.g. `s01`, `s02` |
+    | `--vus`      | `1`     | any positive int  |
+    | `--duration` | `10s`   | `60m`, `4h`, etc. |
+
+    Environment variables read from `__ENV` in test code:
+
+    | Variable                  | Default                  | Purpose               |
+    | ------------------------- | ------------------------ | --------------------- |
+    | `NMSHD_TEST_BASEURL`      | `http://localhost:8081/` | Consumer API base URL |
+    | `NMSHD_TEST_CLIENTID`     | `test`                   | OAuth client id       |
+    | `NMSHD_TEST_CLIENTSECRET` | `test`                   | OAuth client secret   |
 
     Example:
 
     ```sh
-    $ scripts/windows/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h
+    $ NMSHD_TEST_BASEURL=https://load-test.enmeshed.eu ./scripts/linux/run-test.sh --scenario s01 --vus 5 --duration 4h
     ```
