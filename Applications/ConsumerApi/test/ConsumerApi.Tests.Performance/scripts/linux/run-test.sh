@@ -20,11 +20,6 @@ while [[ $# -gt 0 ]]; do
             duration="$2"
             shift 2
             ;;
-        *)
-            # Store remaining args for k6
-            k6Arguments+=("$1")
-            shift
-            ;;
     esac
 done
 

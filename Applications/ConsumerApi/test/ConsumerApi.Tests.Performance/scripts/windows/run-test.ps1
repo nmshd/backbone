@@ -8,7 +8,6 @@ param (
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
-$k6Arguments = $args
 $t = Get-Date -Format "yyyyMMdd-HHmmss"
 $testFile = ".\dist\$($scenario).test.js"
 $outputFile = "k6-outputs\$($t)-$($scenario).csv"
