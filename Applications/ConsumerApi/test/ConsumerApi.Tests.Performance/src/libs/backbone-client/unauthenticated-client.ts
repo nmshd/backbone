@@ -12,7 +12,7 @@ export class UnauthenticatedClient {
         try {
             const keyPair = CryptoHelper.generateKeyPair();
 
-            const challenge = this.getChallenge();
+            const challenge = this.createChallenge();
 
             const signedChallenge = CryptoHelper.signChallenge(keyPair, challenge);
 
@@ -36,7 +36,7 @@ export class UnauthenticatedClient {
         }
     }
 
-    public getChallenge(): CreateChallengeResponse {
+    public createChallenge(): CreateChallengeResponse {
         const response = http.post(`${this.configuration.baseUrl}api/${this.configuration.apiVersion}/Challenges`);
 
         if (response.status !== 201) throw new Error(`Failed to get challenge, status code: ${response.status}`);
