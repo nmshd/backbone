@@ -323,7 +323,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Install helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
       - run: echo "$PASSWORD" | helm registry login -u $USER --password-stdin ghcr.io
         env:
           USER: ${{ github.actor }}

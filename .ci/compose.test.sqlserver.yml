@@ -4,7 +4,7 @@ services:
   database:
     container_name: bkb-sql_server-test
     hostname: sqlserver
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:ca62ad2d75975074cbc9ac39a1329cd88af9cd3ea2ffb59d6302579a97cf32f4
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:a93989eebfb50ae37ee0bfecfaf03648421859558eef6cbff9dec0db3976f192
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
