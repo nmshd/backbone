@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs",
+        "target": "es2025",
+        "module": "nodenext",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "rootDir": "./src"
     },
     "include": ["./src/**/*"],
     "exclude": ["node_modules"]
