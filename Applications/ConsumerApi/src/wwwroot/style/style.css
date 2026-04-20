@@ -28,6 +28,7 @@ body {
 .info-box {
     /*noinspection CssUnresolvedCustomProperty*/
     background-color: var(--secondary-color);
+    color: var(--on-secondary-color);
     padding: 16px;
     border-radius: 4px;
 }
@@ -40,11 +41,11 @@ body {
     display: flex;
     gap: 16px;
     justify-content: space-between;
-    color: #1A1B20;
     text-decoration: none;
 }
 
 .step-content {
+    color: var(--on-primary-color);
     display: flex;
     flex-direction: row;
     align-items: flex-start;

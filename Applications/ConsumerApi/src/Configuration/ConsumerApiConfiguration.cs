@@ -96,16 +96,7 @@ public class ConsumerApiConfiguration
             public required StoreConfig GooglePlayStore { get; init; }
 
             [Required]
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string BackgroundColor { get; init; } = "#FFFFFF";
-
-            [Required]
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string PrimaryColor { get; init; } = "#000000";
-
-            [Required]
-            [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
-            public string SecondaryColor { get; init; } = "#000000";
+            public required ColorSchemeConfig ColorScheme { get; init; }
 
             [Required]
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
@@ -116,6 +107,29 @@ public class ConsumerApiConfiguration
             [RegularExpression("^(https?:\\/\\/[^\\s]+|data:image\\/[a-zA-Z+]+;base64,[A-Za-z0-9+\\/=]+)$",
                 ErrorMessage = "Invalid URL. Must be either an http(s) URL that points to an image or a data url with the image as base64 encoded content (e.g. data:image/png;base64,iVBO...).")]
             public required string IconUrl { get; init; }
+
+            public class ColorSchemeConfig
+            {
+                [Required]
+                [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+                public string Background { get; init; } = "#FFFFFF";
+
+                [Required]
+                [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+                public string Primary { get; init; } = "#000000";
+
+                [Required]
+                [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+                public string Secondary { get; init; } = "#000000";
+
+                [Required]
+                [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+                public string OnPrimary { get; init; } = "#000000";
+
+                [Required]
+                [RegularExpression("^#[0-9A-Fa-f]{6}$", ErrorMessage = "Invalid color format. Use a hex color code like #FFFFFF.")]
+                public string OnSecondary { get; init; } = "#000000";
+            }
 
             public class StoreConfig
             {
