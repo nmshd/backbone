@@ -43,6 +43,6 @@ export class UnauthenticatedClient extends BaseClient {
 
         if (response.status !== 201) throw new Error(`Failed to create challenge, status code: ${response.status}`);
 
-        return response.json("result") as any;
+        return response.json("result") as CreateChallengeResponse;
     }
 }
