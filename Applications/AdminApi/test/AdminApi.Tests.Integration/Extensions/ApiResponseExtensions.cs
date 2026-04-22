@@ -7,6 +7,11 @@ namespace Backbone.AdminApi.Tests.Integration.Extensions;
 [ShouldlyMethods]
 public static class ApiResponseExtensions
 {
+    private static readonly JsonSerializerOptions SCHEMA_SERIALIZER_OPTIONS = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     extension<T>(ApiResponse<T> response)
     {
         public async Task ShouldComplyWithSchema(string? customMessage = null)
@@ -14,7 +19,7 @@ public static class ApiResponseExtensions
             if (response.Result == null)
                 throw new ShouldAssertException(new ActualShouldlyMessage(null, customMessage).ToString());
 
-            var resultJson = JsonSerializer.Serialize(response.Result);
+            var resultJson = JsonSerializer.Serialize(response.Result, SCHEMA_SERIALIZER_OPTIONS);
             var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
 
             if (!isValid)
