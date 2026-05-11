@@ -73,9 +73,9 @@
       },
       "Google.Cloud.PubSub.V1": {
         "type": "Direct",
-        "requested": "[3.33.0, 3.33.0]",
-        "resolved": "3.33.0",
-        "contentHash": "3Bacs+X/QHkxIJzdn1Q+0fGIeKFg9wrxokEMI/9/8KctFdmMV76eO8gTOPjZbpNeEa1zSG55HzwwJCF1nstVZw==",
+        "requested": "[3.34.0, 3.34.0]",
+        "resolved": "3.34.0",
+        "contentHash": "e9OLVR61r11vC8sWt1CeSo4kJFyiaT/WKRnNI4/ysafxlLWe1cgEN/O14SGdmowa8N6qe4VCPPA6oHcMFKMS8w==",
         "dependencies": {
           "Google.Api.Gax.Grpc": "[4.13.1, 5.0.0)",
           "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
