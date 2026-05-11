@@ -1382,7 +1382,7 @@
           "EFCore.BulkExtensions.Core": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.PostgreSql": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.SqlServer": "[10.0.1, 10.0.1]",
-          "Google.Cloud.PubSub.V1": "[3.33.0, 3.33.0]",
+          "Google.Cloud.PubSub.V1": "[3.34.0, 3.34.0]",
           "Google.Cloud.Storage.V1": "[4.14.0, 4.14.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.7, 10.0.7]",
           "Microsoft.EntityFrameworkCore.Abstractions": "[10.0.7, 10.0.7]",
@@ -2121,9 +2121,9 @@
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",
-        "requested": "[3.33.0, 3.33.0]",
-        "resolved": "3.33.0",
-        "contentHash": "3Bacs+X/QHkxIJzdn1Q+0fGIeKFg9wrxokEMI/9/8KctFdmMV76eO8gTOPjZbpNeEa1zSG55HzwwJCF1nstVZw==",
+        "requested": "[3.34.0, 3.34.0]",
+        "resolved": "3.34.0",
+        "contentHash": "e9OLVR61r11vC8sWt1CeSo4kJFyiaT/WKRnNI4/ysafxlLWe1cgEN/O14SGdmowa8N6qe4VCPPA6oHcMFKMS8w==",
         "dependencies": {
           "Google.Api.Gax.Grpc": "[4.13.1, 5.0.0)",
           "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
