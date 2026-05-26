@@ -1,8 +1,7 @@
 enum AnnouncementSeverity {
   low,
   medium,
-  high
-  ;
+  high;
 
   String get name => switch (this) {
     .low => 'Low',
