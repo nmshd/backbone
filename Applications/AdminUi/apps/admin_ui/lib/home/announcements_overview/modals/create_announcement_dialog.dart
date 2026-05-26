@@ -198,14 +198,10 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                           ReorderableListView.builder(
                             shrinkWrap: true,
                             itemCount: _actions.length,
-                            onReorder: (oldIndex, newIndex) {
+                            onReorderItem: (oldIndex, newIndex) {
                               setState(() {
-                                var insertPosition = newIndex;
-                                if (newIndex > oldIndex) {
-                                  insertPosition -= 1;
-                                }
                                 final item = _actions.removeAt(oldIndex);
-                                _actions.insert(insertPosition, item);
+                                _actions.insert(newIndex, item);
                               });
                             },
                             itemBuilder: (context, index) => _ActionRow(
