@@ -1,7 +1,6 @@
 enum MessageType {
   incoming,
-  outgoing
-  ;
+  outgoing;
 
   String get name => switch (this) {
     .incoming => 'Incoming',

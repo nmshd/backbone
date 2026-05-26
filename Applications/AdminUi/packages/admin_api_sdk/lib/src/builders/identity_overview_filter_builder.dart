@@ -68,8 +68,7 @@ enum FilterOperator {
   greaterThan('>'),
   greaterThanOrEqual('>='),
   lessThan('<'),
-  lessThanOrEqual('<=')
-  ;
+  lessThanOrEqual('<=');
 
   final String userFriendlyOperator;
 
