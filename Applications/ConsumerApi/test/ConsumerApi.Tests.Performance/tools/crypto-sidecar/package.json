@@ -10,12 +10,12 @@
     "dependencies": {
         "@js-soft/ts-serval": "2.0.17",
         "@nmshd/crypto": "2.1.5",
-        "koa": "3.2.0",
+        "koa": "3.2.1",
         "koa-body": "7.0.1",
         "@koa/router": "15.5.0"
     },
     "devDependencies": {
-        "@types/koa": "3.0.2",
+        "@types/koa": "3.0.3",
         "@types/koa__router": "12.0.5",
         "ts-node": "10.9.2"
     }
