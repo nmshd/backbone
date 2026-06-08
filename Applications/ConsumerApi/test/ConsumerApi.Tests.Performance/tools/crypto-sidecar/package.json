@@ -12,7 +12,7 @@
         "@nmshd/crypto": "2.1.5",
         "koa": "3.2.1",
         "koa-body": "7.0.1",
-        "@koa/router": "15.5.0"
+        "@koa/router": "15.6.0"
     },
     "devDependencies": {
         "@types/koa": "3.0.3",
