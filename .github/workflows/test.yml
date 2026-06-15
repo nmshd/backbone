@@ -165,7 +165,7 @@ jobs:
           tags: ghcr.io/nmshd/backbone-${{ matrix.image }}:0.0.1
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: docker-${{ matrix.image }}
           path: /tmp/${{ matrix.image }}.tar
@@ -217,7 +217,7 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: /tmp
           pattern: docker-*
@@ -256,7 +256,7 @@ jobs:
 
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{matrix.test-project.display-name}}-${{matrix.database}}
           path: logs.txt
@@ -288,7 +288,7 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
 
       - name: Download cached Docker images
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: /tmp
           pattern: docker-*
@@ -327,7 +327,7 @@ jobs:
 
       - name: Archive logs
         if: failure()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: transport-test-${{matrix.database}}-docker-logs
           path: logs.txt
