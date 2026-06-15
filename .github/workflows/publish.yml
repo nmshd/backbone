@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -72,7 +72,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -109,7 +109,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -146,7 +146,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -183,7 +183,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -220,7 +220,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -257,7 +257,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
@@ -294,7 +294,7 @@ jobs:
           username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
           password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           version: "lab:latest"
           driver: cloud
