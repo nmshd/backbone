@@ -9,7 +9,7 @@
     "author": "",
     "dependencies": {
         "@js-soft/ts-serval": "2.0.17",
-        "@nmshd/crypto": "2.1.5",
+        "@nmshd/crypto": "3.0.0",
         "koa": "3.2.1",
         "koa-body": "7.0.1",
         "@koa/router": "15.6.0"
