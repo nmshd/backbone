@@ -208,7 +208,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncDisposabl
 
     public async Task StopConsuming(CancellationToken cancellationToken)
     {
-        var stopTasks = _subscriptions.Select(subscription => subscription.SubscriberClient.StopAsync(CancellationToken.None));
+        var stopTasks = _subscriptions.Select(subscription => subscription.SubscriberClient.StopAsync(new SubscriberClient.ShutdownOptions(), CancellationToken.None));
 
         await Task.WhenAll(stopTasks);
     }
