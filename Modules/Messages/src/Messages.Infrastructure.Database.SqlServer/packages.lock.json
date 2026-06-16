@@ -9,15 +9,15 @@
       },
       "Azure.Core": {
         "type": "Transitive",
-        "resolved": "1.53.0",
-        "contentHash": "x9c/toFMOtRrlTdFuE7rlGCVAduQzWVfKmLz5juj41zJAXEhYD5hluiUyyAEzJ6OxpBnKtiaBztzwpZITAVjtg==",
+        "resolved": "1.55.0",
+        "contentHash": "c7femvYS/xEUrLP1sNZN+DoQZmx3X+G3ZXtOOz0RL/7cGMCM3JVqepVmRd3AwM4IK8AtTGS4GOigCO+d/zaSsQ==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "10.0.3",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.3",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.3",
           "Microsoft.Identity.Client": "4.83.1",
           "Microsoft.Identity.Client.Extensions.Msal": "4.83.1",
-          "System.ClientModel": "1.10.0",
+          "System.ClientModel": "1.11.0",
           "System.Memory.Data": "10.0.3"
         }
       },
@@ -42,11 +42,11 @@
       },
       "Azure.Storage.Common": {
         "type": "Transitive",
-        "resolved": "12.26.0",
-        "contentHash": "XaT6CDcSshZb7KaCTwc6m4EouZbLBg7ciOEpsJSdJCvkNsZJQCvPKw7V5TtXno19AA1NpwtsZriYque8mzbQVg==",
+        "resolved": "12.28.0",
+        "contentHash": "5l8YhNrks38zKLGFW2BBFLwieyamH/xauABSASsdpZv79G0f+n2n22IjkRmUqCmALSupkwRHh2LOhbW3yj5Qgw==",
         "dependencies": {
-          "Azure.Core": "1.50.0",
-          "System.IO.Hashing": "10.0.1"
+          "Azure.Core": "1.55.0",
+          "System.IO.Hashing": "10.0.3"
         }
       },
       "Castle.Core": {
@@ -90,47 +90,47 @@
       },
       "Google.Api.Gax.Rest": {
         "type": "Transitive",
-        "resolved": "4.12.1",
-        "contentHash": "djYb7sDJvUiOG66fpDIOsprrZz4RPbiAtMiKtRguQhrzlHasd+3k/u6BQFFY3S0KCdxJzvv8M8hi81Ocdi6Ijw==",
+        "resolved": "4.13.1",
+        "contentHash": "wDfFZXKoHC6sy+Yfub/4cLQOb5ozBVPqDOrxCUAeTfku4d96ILqgzulJSdkPHbiT3oWB3hlYTdJgUwNSJjyo+A==",
         "dependencies": {
-          "Google.Api.Gax": "4.12.1",
-          "Google.Apis.Auth": "1.72.0",
+          "Google.Api.Gax": "4.13.1",
+          "Google.Apis.Auth": "1.73.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         }
       },
       "Google.Apis": {
         "type": "Transitive",
-        "resolved": "1.73.0",
-        "contentHash": "TnCjEyV2aCLQ6Zl40OCbEJULDuEkEWc6C/g81KYw5l1PqGo+G7pFZrV+YH8XgUL0JRUanz+IrUp8SsKF4dzkqg==",
+        "resolved": "1.74.0",
+        "contentHash": "Z6hSkmRD6V8/raSBqn/EsPpNop6suaLaGE9DbSY3yRE5G47l4zYqrJgapcLARk2Z3TsQUDmWz+w/tob3wuVt3g==",
         "dependencies": {
-          "Google.Apis.Core": "1.73.0"
+          "Google.Apis.Core": "1.74.0"
         }
       },
       "Google.Apis.Auth": {
         "type": "Transitive",
-        "resolved": "1.73.0",
-        "contentHash": "wEu12uhnRv3zrPBSqv4E2vPH6lYLtc1RPAnU9MJRCMFlBVwZ7Lnq3NfbYXi6VG7EurkYInTaMpeBZkbM/HrAog==",
+        "resolved": "1.74.0",
+        "contentHash": "43H4foh3zfWgboK8QnJjIfPQuBiS794TxqQLDfeE3erQSluKmEN0qeDuwxLTpSr9Mtwj76S4LWxPneuSbC6fNg==",
         "dependencies": {
-          "Google.Apis": "1.73.0",
-          "Google.Apis.Core": "1.73.0",
+          "Google.Apis": "1.74.0",
+          "Google.Apis.Core": "1.74.0",
           "System.Management": "7.0.2"
         }
       },
       "Google.Apis.Core": {
         "type": "Transitive",
-        "resolved": "1.73.0",
-        "contentHash": "vSc7CY4KCP7HE4QTElDx/ExnGLbg9kXb89MS6cdvI+0D4sxvTYb16vGtXmF2jSDMV3iDmykSXdIUPTz8TDS6gg==",
+        "resolved": "1.74.0",
+        "contentHash": "gWOIiks6yo2TRliIyy10V18BJOO2BfUSPJFiTW6Tfap4tm3hFj7nvYU3XIfwzAxwoIy6nsBoqVDt9iBDSXrvYQ==",
         "dependencies": {
           "Newtonsoft.Json": "13.0.4"
         }
       },
       "Google.Apis.Storage.v1": {
         "type": "Transitive",
-        "resolved": "1.71.0.3920",
-        "contentHash": "jW4i96fvFjtkPOdOo3bfC2Wity0krx3RTCExTksIx9lS/k7HmbF/zfxE1z3VouhrQvwwdEOkrR4TxdxzomJKxQ==",
+        "resolved": "1.74.0.4115",
+        "contentHash": "9J3YPPSG53xwQLzdQ304dI+DMtVxJDpEazA2QQ2LA8IJoM4VUu4DpIxyhTGxpnAK4Db7s4LwzeNi6NkPKM3HzQ==",
         "dependencies": {
-          "Google.Apis": "1.71.0",
-          "Google.Apis.Auth": "1.71.0"
+          "Google.Apis": "1.74.0",
+          "Google.Apis.Auth": "1.74.0"
         }
       },
       "Google.Cloud.Iam.V1": {
@@ -277,11 +277,11 @@
       },
       "Microsoft.Extensions.Compliance.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.5.0",
-        "contentHash": "xbWZji13Vb2jDJNtwVrKpI09jd8x3n3fL+GzhiLK+8O5Wc2A+GyqCZalST2fV46Pf0QfCwkXf83y+3/rDkCd7A==",
+        "resolved": "10.7.0",
+        "contentHash": "qbi6lg6dyvydBvpjXeBx3wLPvmgXWn3nwkKBOsgEck6w++BEsBcv8YhdcczME16Oq+a6wkdtna9/qCEkxsNw5A==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.6",
-          "Microsoft.Extensions.ObjectPool": "10.0.6"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.9",
+          "Microsoft.Extensions.ObjectPool": "10.0.9"
         }
       },
       "Microsoft.Extensions.Configuration.CommandLine": {
@@ -346,19 +346,19 @@
       },
       "Microsoft.Extensions.Diagnostics.HealthChecks": {
         "type": "Transitive",
-        "resolved": "10.0.6",
-        "contentHash": "G6AVN2vs66Gu8IkB2FwsVJRpIkkTmPJ+NmAUH7+N+VGGI6qK38OXMZLipjCaOYdj2DW6ge2IIXdwZjhNJefD0w==",
+        "resolved": "10.0.9",
+        "contentHash": "I3mmGlsR73z+7SJJ1ngUG6JfH+UEVTm/42leXxzzr6OKC9DqYIqwZKAjumoH3HEcRqfGPOpo/lfECifQN7qgUA==",
         "dependencies": {
-          "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "10.0.6",
-          "Microsoft.Extensions.Hosting.Abstractions": "10.0.6",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.6",
-          "Microsoft.Extensions.Options": "10.0.6"
+          "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "10.0.9",
+          "Microsoft.Extensions.Hosting.Abstractions": "10.0.9",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.9",
+          "Microsoft.Extensions.Options": "10.0.9"
         }
       },
       "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.6",
-        "contentHash": "ChhUF6HVSz9DwBgTyHtWbGzH8kWMbEFS7gqrqBnZQhHJFFK7L1k5BX7UCiIHiCap5HEDS6bZYks79JK4c+H0GQ=="
+        "resolved": "10.0.9",
+        "contentHash": "/pbRl7IJW3QFzEwBGtgEvcEUbL9OGFe+1uTMisWLIS+NaHH5+PEQ3/Sw58c4UqXKlC/rtqFp+qSOGelEelNAjA=="
       },
       "Microsoft.Extensions.FileProviders.Abstractions": {
         "type": "Transitive",
@@ -446,8 +446,8 @@
       },
       "Microsoft.Extensions.ObjectPool": {
         "type": "Transitive",
-        "resolved": "10.0.6",
-        "contentHash": "2Jafd4fdxxiwiQ08mcF+Lf3vqikkQZusGVThOKZNSmPDceGk4IwkjeHL7OEb9Ov8q9ICY5wofL98CS153K5VvQ=="
+        "resolved": "10.0.9",
+        "contentHash": "KZENCkfqO7Ciax6goUWQHDSxKH+x763hkBWMz9KpE87EyKW+EKEas9EFe9i1KgtQShG8KwKxaeJ5gd9sj6TuTQ=="
       },
       "Microsoft.Extensions.Options.ConfigurationExtensions": {
         "type": "Transitive",
@@ -468,13 +468,13 @@
       },
       "Microsoft.Extensions.Telemetry.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.5.0",
-        "contentHash": "VmU7e6xHqoubWKl7y9MtWyQAjlDpvbds3gY8ZKMS/1GxY2+U1/aMNnMj09aOXAa3p5qhHSSkBzDJvyokCjVkPg==",
+        "resolved": "10.7.0",
+        "contentHash": "ir1QKShZzfEmqO9LUWESVMUDZdnxYBSKQyulYPMeaye531lAuT8YTotthx+htrrS8hZY52HANeqowLQyCYBCZg==",
         "dependencies": {
-          "Microsoft.Extensions.Compliance.Abstractions": "10.5.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.6",
-          "Microsoft.Extensions.ObjectPool": "10.0.6",
-          "Microsoft.Extensions.Options": "10.0.6"
+          "Microsoft.Extensions.Compliance.Abstractions": "10.7.0",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.9",
+          "Microsoft.Extensions.ObjectPool": "10.0.9",
+          "Microsoft.Extensions.Options": "10.0.9"
         }
       },
       "Microsoft.Identity.Client": {
@@ -581,13 +581,13 @@
       },
       "Polly.Core": {
         "type": "Transitive",
-        "resolved": "8.6.6",
-        "contentHash": "lCBL9mmhF9TZxHG3beVRkyjlLohkIC464xIAq7J7Y59C+z42hmsdUaeCKl2SIAYertOUU5TeBXyQDLDQGIKePQ=="
+        "resolved": "8.7.0",
+        "contentHash": "BS2t+nsBer16PIebCEPNBK5fgMisADQyRCd7K+BgkMWpFmSaiYE+rVVNpFhGRqUkJmNSLmw0uCNzHHWfgml28Q=="
       },
       "System.ClientModel": {
         "type": "Transitive",
-        "resolved": "1.10.0",
-        "contentHash": "lBEWs54F5Y5pZ9hC+8z4S/X76957ex+DPk7WecRHlbIHtrPfbRMMlOgI3iDn4Jpb3bSxvBnKaaHoD59auFjlBA==",
+        "resolved": "1.11.0",
+        "contentHash": "1Wl32zh7TbvN+HAO8NqDuaN0Ao2Qu/0j0NJSrXGDtpUQsTXQYJ3C6hd9/Ds2IrgP4agMQYFoXB35GZfC21ByHw==",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.3",
           "Microsoft.Extensions.Hosting.Abstractions": "10.0.3",
@@ -625,8 +625,8 @@
       },
       "System.IO.Hashing": {
         "type": "Transitive",
-        "resolved": "10.0.1",
-        "contentHash": "Dy6ULPb2S0GmNndjKrEIpfibNsc8+FTOoZnqygtFDuyun8vWboQbfMpQtKUXpgTxokR5E4zFHETpNnGfeWY6NA=="
+        "resolved": "10.0.3",
+        "contentHash": "La6ICwsdTKhVX+LKN+pvFjQRR3LhLwq3uKdi2knjLzRyPYBSydF4cjXidYxIiTcDD6XVYdsBWQEI8ZxiZ/OdIg=="
       },
       "System.Management": {
         "type": "Transitive",
@@ -664,7 +664,7 @@
           "FluentValidation": "[12.1.1, 12.1.1]",
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.9, 10.0.9]",
-          "Polly": "[8.6.6, 8.6.6]",
+          "Polly": "[8.7.0, 8.7.0]",
           "ReHackt.Extensions.Options.Validation": "[10.0.0, 10.0.0]"
         }
       },
@@ -689,13 +689,13 @@
           "AWSSDK.S3": "[4.0.24.4, 4.0.24.4]",
           "Autofac": "[9.1.0, 9.1.0]",
           "Azure.Messaging.ServiceBus": "[7.20.1, 7.20.1]",
-          "Azure.Storage.Blobs": "[12.27.0, 12.27.0]",
+          "Azure.Storage.Blobs": "[12.29.0, 12.29.0]",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "EFCore.BulkExtensions.Core": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.PostgreSql": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.SqlServer": "[10.0.1, 10.0.1]",
-          "Google.Cloud.PubSub.V1": "[3.34.0, 3.34.0]",
-          "Google.Cloud.Storage.V1": "[4.14.0, 4.14.0]",
+          "Google.Cloud.PubSub.V1": "[3.36.0, 3.36.0]",
+          "Google.Cloud.Storage.V1": "[4.15.0, 4.15.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.9, 10.0.9]",
           "Microsoft.EntityFrameworkCore.Abstractions": "[10.0.9, 10.0.9]",
           "Microsoft.EntityFrameworkCore.Proxies": "[10.0.9, 10.0.9]",
@@ -703,11 +703,11 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.9, 10.0.9]",
           "Microsoft.Extensions.Azure": "[1.14.0, 1.14.0]",
           "Microsoft.Extensions.DependencyInjection": "[10.0.9, 10.0.9]",
-          "Microsoft.Extensions.Diagnostics.HealthChecks.Common": "[10.5.0, 10.5.0]",
+          "Microsoft.Extensions.Diagnostics.HealthChecks.Common": "[10.7.0, 10.7.0]",
           "Microsoft.Extensions.Identity.Core": "[10.0.9, 10.0.9]",
           "Microsoft.Extensions.Logging": "[10.0.9, 10.0.9]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.2, 10.0.2]",
-          "Polly": "[8.6.6, 8.6.6]",
+          "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.1, 7.2.1]",
           "Serilog": "[4.3.1, 4.3.1]"
         }
@@ -719,7 +719,7 @@
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
           "Dapper": "[2.1.79, 2.1.79]",
           "Microsoft.EntityFrameworkCore": "[10.0.9, 10.0.9]",
-          "Polly": "[8.6.6, 8.6.6]"
+          "Polly": "[8.7.0, 8.7.0]"
         }
       },
       "Backbone.DevelopmentKit.Identity": {
@@ -793,12 +793,12 @@
       },
       "Azure.Storage.Blobs": {
         "type": "CentralTransitive",
-        "requested": "[12.27.0, 12.27.0]",
-        "resolved": "12.27.0",
-        "contentHash": "zI5rg1tTtnA8T2g2/21l+1iIUdDjpEQQ0FI1BabJVEQJ1JUyTQKrc41eNabAHs0SBHprl6pu/6OqIMK9Ve+4tQ==",
+        "requested": "[12.29.0, 12.29.0]",
+        "resolved": "12.29.0",
+        "contentHash": "e82Racxat6NsLHD+6Nwf2GxglYdN9T20QHgAsaHB1FYgbJUZilmUR0H+IPCu6AJy8nNyvSONc/erF8vtsyHrRw==",
         "dependencies": {
-          "Azure.Core": "1.50.0",
-          "Azure.Storage.Common": "12.26.0"
+          "Azure.Core": "1.55.0",
+          "Azure.Storage.Common": "12.28.0"
         }
       },
       "Dapper": {
@@ -858,9 +858,9 @@
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",
-        "requested": "[3.34.0, 3.34.0]",
-        "resolved": "3.34.0",
-        "contentHash": "e9OLVR61r11vC8sWt1CeSo4kJFyiaT/WKRnNI4/ysafxlLWe1cgEN/O14SGdmowa8N6qe4VCPPA6oHcMFKMS8w==",
+        "requested": "[3.36.0, 3.36.0]",
+        "resolved": "3.36.0",
+        "contentHash": "69Tc+bHPvQQPXYs5cnLPhCsEMBYH5CABu/N+yccH+xS2Eforkt3r8DIhy6MUTA+O2NQYKYQSbmU/gIVXYpOBQA==",
         "dependencies": {
           "Google.Api.Gax.Grpc": "[4.13.1, 5.0.0)",
           "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
@@ -868,12 +868,12 @@
       },
       "Google.Cloud.Storage.V1": {
         "type": "CentralTransitive",
-        "requested": "[4.14.0, 4.14.0]",
-        "resolved": "4.14.0",
-        "contentHash": "CLoAz9BDzqGEXWKWPuUxlk8/wcabsONxCa3MEQzxhbEGoKT1TOT6KnWNl1IhrBGqNw7IWtR/Xg06XHS8JYF1qQ==",
+        "requested": "[4.15.0, 4.15.0]",
+        "resolved": "4.15.0",
+        "contentHash": "TVlJsaIkMDwHbZPCcLFFKduFcFD0yJL1jsZmV/V/FMjv5iok/eoC0oy8/VHjxfmWmNGkJLPLMAe5MrFLtY7hzg==",
         "dependencies": {
-          "Google.Api.Gax.Rest": "[4.12.1, 5.0.0)",
-          "Google.Apis.Storage.v1": "[1.71.0.3920, 2.0.0)"
+          "Google.Api.Gax.Rest": "[4.13.1, 5.0.0)",
+          "Google.Apis.Storage.v1": "[1.74.0.4115, 2.0.0)"
         }
       },
       "MediatR": {
@@ -1016,16 +1016,16 @@
       },
       "Microsoft.Extensions.Diagnostics.HealthChecks.Common": {
         "type": "CentralTransitive",
-        "requested": "[10.5.0, 10.5.0]",
-        "resolved": "10.5.0",
-        "contentHash": "nJ6ihpji8To3urc9Ww/2//mPBSfSU6+lARdaBGQKDldq0Ocyh9vjq/9O55gvNvt/8r2/fKz6UExv00j653hoDA==",
+        "requested": "[10.7.0, 10.7.0]",
+        "resolved": "10.7.0",
+        "contentHash": "3C+obqTMLidp9yqWg5E9eMEdlYgeEyf3Y3JfG88f+qKB210jby/E6odpruJNS3TpSpvAlRC7wRR8nH9mQJ+SEA==",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Binder": "10.0.6",
-          "Microsoft.Extensions.Diagnostics": "10.0.6",
-          "Microsoft.Extensions.Diagnostics.HealthChecks": "10.0.6",
-          "Microsoft.Extensions.ObjectPool": "10.0.6",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.6",
-          "Microsoft.Extensions.Telemetry.Abstractions": "10.5.0"
+          "Microsoft.Extensions.Configuration.Binder": "10.0.9",
+          "Microsoft.Extensions.Diagnostics": "10.0.9",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "10.0.9",
+          "Microsoft.Extensions.ObjectPool": "10.0.9",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "10.0.9",
+          "Microsoft.Extensions.Telemetry.Abstractions": "10.7.0"
         }
       },
       "Microsoft.Extensions.Hosting": {
@@ -1126,11 +1126,11 @@
       },
       "Polly": {
         "type": "CentralTransitive",
-        "requested": "[8.6.6, 8.6.6]",
-        "resolved": "8.6.6",
-        "contentHash": "czKHYJ6uGowPijuZt4kgF4njfGvWxVZ8mKBcrZ9iEtwDe9HKdF0ug6p6TwUG8EHuuufgbDU//rSBFebt5/0Fyw==",
+        "requested": "[8.7.0, 8.7.0]",
+        "resolved": "8.7.0",
+        "contentHash": "0qR4f0OR8FeCAfLWcfwzAM7w6EmpUgwa22PgxKjcL25dEAto7sKpQQXbtxp38vVvK+V3RFkh/TeI7g/iUdoYIQ==",
         "dependencies": {
-          "Polly.Core": "8.6.6"
+          "Polly.Core": "8.7.0"
         }
       },
       "RabbitMQ.Client": {
