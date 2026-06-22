@@ -10,11 +10,11 @@
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[10.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
-    <PackageVersion Include="Autofac" Version="[9.1.0]" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.0]" />
+    <PackageVersion Include="Autofac" Version="[9.2.0]" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.1]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.24.4]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.25.2]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.29.0]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
@@ -98,9 +98,9 @@
     <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.1]" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="[9.1.0]" />
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
-    <PackageVersion Include="SimpleBase" Version="[5.6.0]" />
+    <PackageVersion Include="SimpleBase" Version="[5.6.1]" />
     <PackageVersion Include="Spectre.Console" Version="[0.57.0]" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.1]" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.2]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.9]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
     <PackageVersion Include="Testcontainers.Azurite" Version="[4.12.0]" />
