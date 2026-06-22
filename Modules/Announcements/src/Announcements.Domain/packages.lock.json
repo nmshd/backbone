@@ -23,7 +23,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "SimpleBase": "[5.6.0, 5.6.0]"
+          "SimpleBase": "[5.6.1, 5.6.1]"
         }
       },
       "Backbone.Tooling": {
@@ -61,9 +61,9 @@
       },
       "SimpleBase": {
         "type": "CentralTransitive",
-        "requested": "[5.6.0, 5.6.0]",
-        "resolved": "5.6.0",
-        "contentHash": "1nNr/DCvcxTrQzN1gUnYzFpLkbAKcFYhF/aMK34jVxrPUjMwL/J3KNEp89M0WaW2k9FUpacxRe4BmjFFjOv3zw=="
+        "requested": "[5.6.1, 5.6.1]",
+        "resolved": "5.6.1",
+        "contentHash": "gCexR8/Laso8JFm8myi3uJfo6NYyZElg5qgRyGHok6jFNY/wQwLJHr0D4tb6645SBV2D6L8e/xV2RMSSKXYd5Q=="
       },
       "UrlBase64": {
         "type": "CentralTransitive",
