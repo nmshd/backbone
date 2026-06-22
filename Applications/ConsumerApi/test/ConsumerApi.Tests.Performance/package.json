@@ -16,7 +16,7 @@
         "clean-webpack-plugin": "4.0.0",
         "copy-webpack-plugin": "14.0.0",
         "eslint": "10.5.0",
-        "papaparse": "5.5.3",
+        "papaparse": "5.5.4",
         "prettier": "3.8.4",
         "typescript": "6.0.3",
         "webpack": "5.107.2",
