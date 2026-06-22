@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v6.0.3
       - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 24.16.0
+          node-version: 24.17.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -63,7 +63,7 @@ jobs:
         uses: actions/checkout@v6.0.3
       - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 24.16.0
+          node-version: 24.17.0
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -131,7 +131,7 @@ jobs:
 
       - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 24.16.0
+          node-version: 24.17.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -200,7 +200,7 @@ jobs:
 
       - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 24.16.0
+          node-version: 24.17.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -283,7 +283,7 @@ jobs:
 
       - uses: actions/setup-node@v6.4.0
         with:
-          node-version: 24.16.0
+          node-version: 24.17.0
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
