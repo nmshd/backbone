@@ -14,7 +14,7 @@
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.1]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.25.3]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.100.2]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.29.1]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
@@ -99,7 +99,7 @@
     <PackageVersion Include="Serilog.Sinks.Seq" Version="[9.1.0]" />
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
     <PackageVersion Include="SimpleBase" Version="[5.6.1]" />
-    <PackageVersion Include="Spectre.Console" Version="[0.57.1]" />
+    <PackageVersion Include="Spectre.Console" Version="[0.57.2]" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.3]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.9]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
