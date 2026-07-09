@@ -1,27 +1,27 @@
 [
-  {
-    "Name": "Backbone (Full)",
-    "Projects": [
-      {
-        "Name": "ConsumerApi\\ConsumerApi.csproj",
-        "Action": "Start",
-        "DebugTarget": ""
-      },
-      {
-        "Name": "docker-compose\\docker-compose.dcproj",
-        "Action": "StartWithoutDebugging",
-        "DebugTarget": ""
-      },
-      {
-        "Name": "AdminApi\\src\\AdminApi\\AdminApi.csproj",
-        "Action": "Start",
-        "DebugTarget": ""
-      },
-      {
-        "Name": "EventHandlerService\\src\\EventHandlerService\\EventHandlerService.csproj",
-        "Action": "Start",
-        "DebugTarget": ""
-      }
-    ]
-  }
+    {
+        "Name": "Backbone (Full)",
+        "Projects": [
+            {
+                "Name": "ConsumerApi\\ConsumerApi.csproj",
+                "Action": "Start",
+                "DebugTarget": ""
+            },
+            {
+                "Name": "docker-compose\\docker-compose.dcproj",
+                "Action": "StartWithoutDebugging",
+                "DebugTarget": ""
+            },
+            {
+                "Name": "AdminApi\\src\\AdminApi\\AdminApi.csproj",
+                "Action": "Start",
+                "DebugTarget": ""
+            },
+            {
+                "Name": "EventHandlerService\\src\\EventHandlerService\\EventHandlerService.csproj",
+                "Action": "Start",
+                "DebugTarget": ""
+            }
+        ]
+    }
 ]

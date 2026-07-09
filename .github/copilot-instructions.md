@@ -4,14 +4,14 @@
 
 **Enmeshed Backbone** is a comprehensive .NET-based cloud infrastructure platform that provides central services for the Enmeshed ecosystem. It consists of multiple services, libraries, feature modules, and a Flutter-based administrative UI.
 
--   **Repository Size**: Large monorepo with 100+ projects across multiple layers
--   **Primary Language**: C# (.NET 10.0)
--   **Secondary Language**: Dart (Flutter for Admin UI)
--   **Architecture Style**: Clean Architecture + CQRS + Domain-Driven Design
--   **Primary Target Runtime**: .NET 10.0 (net10.0)
--   **Database Support**: PostgreSQL and SQL Server
--   **Deployment**: Docker containers (8+ services)
--   **Framework**: ASP.NET Core 10 for APIs, Entity Framework Core 10 for data access
+- **Repository Size**: Large monorepo with 100+ projects across multiple layers
+- **Primary Language**: C# (.NET 10.0)
+- **Secondary Language**: Dart (Flutter for Admin UI)
+- **Architecture Style**: Clean Architecture + CQRS + Domain-Driven Design
+- **Primary Target Runtime**: .NET 10.0 (net10.0)
+- **Database Support**: PostgreSQL and SQL Server
+- **Deployment**: Docker containers (8+ services)
+- **Framework**: ASP.NET Core 10 for APIs, Entity Framework Core 10 for data access
 
 ## Project Structure
 
@@ -37,18 +37,18 @@ Backbone/
 
 ## Key Dependencies & Versions
 
--   **.NET SDK**: 10.0.101 (pinned in `global.json`)
--   **Testing Framework**: xUnit 3 with Shouldly assertions, AutoFixture
--   **ORM**: Entity Framework Core 10.0.1
--   **API Framework**: ASP.NET Core 10, OData 9.4.1, Asp.Versioning 8.1.1
--   **BDD/Integration Tests**: Reqnroll (formerly SpecFlow)
--   **Database Drivers**: Npgsql 10.0.0, SQL Server provider 10.0.1
--   **Messaging**: Azure Service Bus, RabbitMQ
--   **Cloud Storage**: Azure Blob Storage, Google Cloud Storage, AWS S3
--   **Security**: OpenIddict 7.2.0, Autofac 9.0.0
--   **Telemetry**: Serilog, OpenTelemetry
--   **UI (Flutter)**: Flutter stable channel, Melos 7.3.0+
--   **Node.js**: 24.12.0 (for build scripts and CI)
+- **.NET SDK**: 10.0.101 (pinned in `global.json`)
+- **Testing Framework**: xUnit 3 with Shouldly assertions, AutoFixture
+- **ORM**: Entity Framework Core 10.0.1
+- **API Framework**: ASP.NET Core 10, OData 9.4.1, Asp.Versioning 8.1.1
+- **BDD/Integration Tests**: Reqnroll (formerly SpecFlow)
+- **Database Drivers**: Npgsql 10.0.0, SQL Server provider 10.0.1
+- **Messaging**: Azure Service Bus, RabbitMQ
+- **Cloud Storage**: Azure Blob Storage, Google Cloud Storage, AWS S3
+- **Security**: OpenIddict 7.2.0, Autofac 9.0.0
+- **Telemetry**: Serilog, OpenTelemetry
+- **UI (Flutter)**: Flutter stable channel, Melos 7.3.0+
+- **Node.js**: 24.12.0 (for build scripts and CI)
 
 ## Build & Compilation
 
@@ -67,11 +67,11 @@ dotnet restore /p:ContinuousIntegrationBuild=true "Backbone.slnx"
 
 **Critical Settings**:
 
--   Central package management is enabled (`Directory.Packages.props`)
--   Locked mode is enforced in CI builds (`RestoreLockedMode=true`)
--   All projects use `net10.0` target framework
--   Implicit usings are enabled in all projects
--   Nullable reference types are enabled (TreatWarningsAsErrors=true)
+- Central package management is enabled (`Directory.Packages.props`)
+- Locked mode is enforced in CI builds (`RestoreLockedMode=true`)
+- All projects use `net10.0` target framework
+- Implicit usings are enabled in all projects
+- Nullable reference types are enabled (TreatWarningsAsErrors=true)
 
 ### Build
 
@@ -87,10 +87,10 @@ dotnet build /p:ContinuousIntegrationBuild=true --no-restore "Backbone.slnx"
 
 **Build Behavior**:
 
--   Solution file is `Backbone.slnx` (new .NET format)
--   Pre-build targets copy `appsettings.override.json` in Debug configuration
--   Build warnings are treated as errors (`TreatWarningsAsErrors=true`)
--   Expect ~19-25 seconds for full build on modern hardware
+- Solution file is `Backbone.slnx` (new .NET format)
+- Pre-build targets copy `appsettings.override.json` in Debug configuration
+- Build warnings are treated as errors (`TreatWarningsAsErrors=true`)
+- Expect ~19-25 seconds for full build on modern hardware
 
 ### Code Formatting & Style
 
@@ -106,22 +106,22 @@ dotnet format --no-restore
 
 **Code Style Configuration**:
 
--   `.editorconfig` defines all C# conventions (4-space indentation, 200-character line limit)
--   C# 12 features enabled (file-scoped namespaces as suggestion, implicit usings)
--   Imports sorted, modifiers ordered: public, private, protected, internal, file, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required
--   Single-line blocks preserved, space after cast disabled
+- `.editorconfig` defines all C# conventions (4-space indentation, 200-character line limit)
+- C# 12 features enabled (file-scoped namespaces as suggestion, implicit usings)
+- Imports sorted, modifiers ordered: public, private, protected, internal, file, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required
+- Single-line blocks preserved, space after cast disabled
 
 ## Code Reviews
 
 When reviewing code changes:
 
--   Ensure adherence to Clean Architecture principles
--   Verify proper layering (Domain, Application, Infrastructure, API)
--   Check for appropriate use of MediatR for commands/queries
--   Confirm strong typing for IDs and domain events
--   Validate that new dependency versions are pinned in `Directory.Packages.props`
--   Validate that no TODO comments or commented out code remains
--   Ignore any changes to generated files (e.g. packages.lock.json)
+- Ensure adherence to Clean Architecture principles
+- Verify proper layering (Domain, Application, Infrastructure, API)
+- Check for appropriate use of MediatR for commands/queries
+- Confirm strong typing for IDs and domain events
+- Validate that new dependency versions are pinned in `Directory.Packages.props`
+- Validate that no TODO comments or commented out code remains
+- Ignore any changes to generated files (e.g. packages.lock.json)
 
 ## Testing
 
@@ -141,11 +141,11 @@ dotnet test /p:ContinuousIntegrationBuild=true --no-restore --no-build `
 
 **Expected**:
 
--   Tests use xUnit 3 test framework
--   Assertions use Shouldly library
--   GitHubActionsTestLogger captures output
--   Unit tests should run in < 2 minutes
--   Exit code 8 is ignored (allowed, used for skipped tests)
+- Tests use xUnit 3 test framework
+- Assertions use Shouldly library
+- GitHubActionsTestLogger captures output
+- Unit tests should run in < 2 minutes
+- Exit code 8 is ignored (allowed, used for skipped tests)
 
 ### Integration Tests (Requires Docker)
 
@@ -159,10 +159,10 @@ dotnet test /p:ContinuousIntegrationBuild=true --no-restore --no-build `
 
 **Important**:
 
--   Integration tests use BDD with Reqnroll (.feature files)
--   Tests connect to PostgreSQL or SQL Server in Docker
--   Feature files have code-behind code that must be regenerated after edits
--   If code-behind files are out of sync, run `dotnet clean` then `dotnet build`
+- Integration tests use BDD with Reqnroll (.feature files)
+- Tests connect to PostgreSQL or SQL Server in Docker
+- Feature files have code-behind code that must be regenerated after edits
+- If code-behind files are out of sync, run `dotnet clean` then `dotnet build`
 
 ### Complete Test Pipeline (Replicates CI)
 
@@ -242,7 +242,7 @@ The repository enforces strict quality gates on all pull requests:
 
 **.github/workflows/check-pr.yml**:
 
--   Validates PR has required labels (breaking-change, bug, chore, ci, dependencies, documentation, enhancement, refactoring, test)
+- Validates PR has required labels (breaking-change, bug, chore, ci, dependencies, documentation, enhancement, refactoring, test)
 
 **.github/workflows/test.yml** (runs on every push to non-main branches):
 
@@ -267,12 +267,12 @@ melos bootstrap
 
 ## Architecture Notes
 
--   **Clean Architecture**: Projects organized by layer (Domain, Application, Infrastructure, API)
--   **CQRS Pattern**: MediatR used for command/query handlers
--   **Domain Events**: Strong typing with IEvent, published via event handlers
--   **Module System**: Each feature module is independently testable with its own domain, application, and infrastructure layers
--   **Database Abstractions**: Support for PostgreSQL and SQL Server with database-specific implementations
--   **Strongly-Typed IDs**: Custom generated strongly-typed ID types prevent type confusion
+- **Clean Architecture**: Projects organized by layer (Domain, Application, Infrastructure, API)
+- **CQRS Pattern**: MediatR used for command/query handlers
+- **Domain Events**: Strong typing with IEvent, published via event handlers
+- **Module System**: Each feature module is independently testable with its own domain, application, and infrastructure layers
+- **Database Abstractions**: Support for PostgreSQL and SQL Server with database-specific implementations
+- **Strongly-Typed IDs**: Custom generated strongly-typed ID types prevent type confusion
 
 ## Important Files
 
@@ -302,6 +302,6 @@ When implementing changes:
 
 Only perform additional searches if:
 
--   Instructions mention "see documentation" or reference external sources
--   You need specific implementation details for a particular module
--   A command fails with an error not explained in these instructions
+- Instructions mention "see documentation" or reference external sources
+- You need specific implementation details for a particular module
+- A command fails with an error not explained in these instructions

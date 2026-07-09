@@ -1,51 +1,30 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "github>js-soft/renovate-config"
-    ],
-    "reviewers": [
-        "Milena-Czierlinski",
-        "britsta"
-    ],
-    "additionalReviewers": [
-        "erbenjak"
-    ],
+    "extends": ["github>js-soft/renovate-config"],
+    "reviewers": ["Milena-Czierlinski", "britsta"],
+    "additionalReviewers": ["erbenjak"],
     "packageRules": [
         {
             "groupName": "dont-update-mediatr-due-to-license-issues",
-            "matchDatasources": [
-                "nuget"
-            ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "matchPackageNames": [
-                "MediatR"
-            ],
+            "matchDatasources": ["nuget"],
+            "matchUpdateTypes": ["major"],
+            "matchPackageNames": ["MediatR"],
             "enabled": false
         },
         {
-            "matchDatasources": [
-                "dart"
-            ],
+            "matchDatasources": ["dart"],
             "rangeStrategy": "auto"
         },
         {
-            "matchDatasources": [
-                "dart-version"
-            ],
+            "matchDatasources": ["dart-version"],
             "enabled": false
         },
         {
-            "matchDatasources": [
-                "flutter-version"
-            ],
+            "matchDatasources": ["flutter-version"],
             "enabled": false
         },
         {
-            "matchDatasources": [
-                "docker"
-            ],
+            "matchDatasources": ["docker"],
             "matchPackageNames": [
                 "ghcr.io/nmshd/backbone-consumer-api",
                 "ghcr.io/nmshd/backbone-admin-ui",
@@ -57,98 +36,57 @@
             "enabled": false
         },
         {
-            "matchDatasources": [
-                "dart"
-            ],
-            "matchPackageNames": [
-                "window_size"
-            ],
+            "matchDatasources": ["dart"],
+            "matchPackageNames": ["window_size"],
             "enabled": false
         },
         {
-            "matchDatasources": [
-                "dart"
-            ],
-            "matchPackageNames": [
-                "admin_api_sdk",
-                "admin_api_types"
-            ],
+            "matchDatasources": ["dart"],
+            "matchPackageNames": ["admin_api_sdk", "admin_api_types"],
             "enabled": false
         },
         {
             "groupName": "patch-all",
-            "matchUpdateTypes": [
-                "patch",
-                "digest"
-            ],
+            "matchUpdateTypes": ["patch", "digest"],
             "automerge": true,
             "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-nuget",
-            "matchDatasources": [
-                "nuget"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["nuget"],
+            "matchUpdateTypes": ["minor"]
         },
         {
             "groupName": "minor-updates-npm",
-            "matchDatasources": [
-                "npm"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ],
+            "matchDatasources": ["npm"],
+            "matchUpdateTypes": ["minor"],
             "automerge": true,
             "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-dart",
-            "matchDatasources": [
-                "dart"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["dart"],
+            "matchUpdateTypes": ["minor"]
         },
         {
             "groupName": "minor-updates-docker",
-            "matchDatasources": [
-                "docker"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["docker"],
+            "matchUpdateTypes": ["minor"]
         },
         {
             "groupName": "minor-updates-github-tags-and-runners",
-            "matchDatasources": [
-                "github-tags",
-                "github-runners"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["github-tags", "github-runners"],
+            "matchUpdateTypes": ["minor"]
         },
         {
             "groupName": "minor-updates-helm",
-            "matchDatasources": [
-                "helm"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["helm"],
+            "matchUpdateTypes": ["minor"]
         },
         {
             "groupName": "minor-updates-kubernetes-api",
-            "matchDatasources": [
-                "kubernetes-api"
-            ],
-            "matchUpdateTypes": [
-                "minor"
-            ]
+            "matchDatasources": ["kubernetes-api"],
+            "matchUpdateTypes": ["minor"]
         }
     ]
 }

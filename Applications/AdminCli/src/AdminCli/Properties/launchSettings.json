@@ -1,40 +1,40 @@
 {
-  "profiles": {
-      "Create Client": {
-          "commandName": "Project",
-          "commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic"
-      },
-      "List Clients": {
-          "commandName": "Project",
-          "commandLineArgs": "client list"
-      },
-      "Delete Client": {
-          "commandName": "Project",
-          "commandLineArgs": "client delete test"
-      },
-      "Create Announcement": {
-          "commandName": "Project",
-          "commandLineArgs": "announcement send --silent --expiration 2025-12-31 --severity medium --iql-query \"StreetAddress.city='Heidelberg' && #'Primary Address'\""
-      },
-      "Delete Announcement": {
-          "commandName": "Project",
-          "commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy"
-      },
-      "Create Tier": {
-          "commandName": "Project",
-          "commandLineArgs": "tier create --name test"
-      },
-      "List Tiers": {
-          "commandName": "Project",
-          "commandLineArgs": "tier list"
-      },
-      "Reset access-failed-count of Token": {
-          "commandName": "Project",
-          "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
-      },
-      "Export database": {
-          "commandName": "Project",
-          "commandLineArgs": "database export --sensitive"
-      }
-  }
+    "profiles": {
+        "Create Client": {
+            "commandName": "Project",
+            "commandLineArgs": "client create --clientId test --clientSecret test --defaultTier Basic"
+        },
+        "List Clients": {
+            "commandName": "Project",
+            "commandLineArgs": "client list"
+        },
+        "Delete Client": {
+            "commandName": "Project",
+            "commandLineArgs": "client delete test"
+        },
+        "Create Announcement": {
+            "commandName": "Project",
+            "commandLineArgs": "announcement send --silent --expiration 2025-12-31 --severity medium --iql-query \"StreetAddress.city='Heidelberg' && #'Primary Address'\""
+        },
+        "Delete Announcement": {
+            "commandName": "Project",
+            "commandLineArgs": "announcement delete --id ANCXYZ2YKRnc9SLnEmMy"
+        },
+        "Create Tier": {
+            "commandName": "Project",
+            "commandLineArgs": "tier create --name test"
+        },
+        "List Tiers": {
+            "commandName": "Project",
+            "commandLineArgs": "tier list"
+        },
+        "Reset access-failed-count of Token": {
+            "commandName": "Project",
+            "commandLineArgs": "token reset-access-failed-count --id TOKJyKNScncbXqqMEsGf"
+        },
+        "Export database": {
+            "commandName": "Project",
+            "commandLineArgs": "database export --sensitive"
+        }
+    }
 }

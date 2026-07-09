@@ -4,8 +4,8 @@
 
 ### Prerequisites
 
--   [Flutter](https://flutter.dev/docs/get-started/install) (we are using the `stable` channel)
--   [melos](https://melos.invertase.dev/getting-started)
+- [Flutter](https://flutter.dev/docs/get-started/install) (we are using the `stable` channel)
+- [melos](https://melos.invertase.dev/getting-started)
 
     TLDR: `dart pub global activate melos`
 
