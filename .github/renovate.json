@@ -1,7 +1,6 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>js-soft/renovate-config"],
-    "reviewers": ["Milena-Czierlinski", "britsta"],
     "additionalReviewers": ["erbenjak"],
     "packageRules": [
         {
