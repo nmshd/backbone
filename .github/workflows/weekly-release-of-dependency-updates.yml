@@ -14,6 +14,6 @@ concurrency:
 
 jobs:
   release:
-    uses: js-soft/github-actions/.github/workflows/release-dependency-updates.yml@main
+    uses: js-soft/github-actions/.github/workflows/release-dependency-updates.yml@9b8903f62d9e84d33e1e00be5e65c7e91ea03ab6 # main
     secrets:
       github-token: ${{ secrets.GH_PAT }}
