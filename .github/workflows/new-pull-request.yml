@@ -8,6 +8,6 @@ jobs:
   send_notification:
     runs-on: ubuntu-latest
     steps:
-      - uses: nmshd/github-notify-action@v1
+      - uses: nmshd/github-notify-action@748d79bf71cd3c2a4190bcf1172b82d1428a58b9 # v1
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK_CONTRIBUTION }}
