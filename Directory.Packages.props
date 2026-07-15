@@ -10,12 +10,12 @@
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[10.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
-    <PackageVersion Include="Autofac" Version="[9.2.0]" />
-    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.1]" />
+    <PackageVersion Include="Autofac" Version="[9.3.1]" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.2]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
     <PackageVersion Include="AutoFixture.Xunit3" Version="[4.19.0]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.0.100.2]" />
-    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.1]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.0.100.3]" />
+    <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.20.2]" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="[12.29.1]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.6.2]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.7.0]" />
@@ -66,7 +66,7 @@
     <PackageVersion Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.1.6]" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.3.1]" />
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.6.1]" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[10.0.2]" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[10.0.3]" />
     <PackageVersion Include="NSec.Cryptography" Version="[26.4.0]" />
     <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.5.0]" />
     <PackageVersion Include="OpenIddict.Core" Version="[7.5.0]" />
