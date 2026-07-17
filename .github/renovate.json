@@ -4,6 +4,12 @@
     "additionalReviewers": ["erbenjak"],
     "packageRules": [
         {
+            "description": "Don't report abandonment for these packages, because they are fine as they are.",
+            "matchDatasources": ["nuget"],
+            "matchPackageNames": ["Serilog.Formatting.Compact"],
+            "abandonmentThreshold": null
+        },
+        {
             "description": "Don't update MediatR due to license issues",
             "matchDatasources": ["nuget"],
             "matchUpdateTypes": ["major"],

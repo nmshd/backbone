@@ -99,6 +99,8 @@
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
     <PackageVersion Include="SimpleBase" Version="[5.6.1]" />
     <PackageVersion Include="Spectre.Console" Version="[0.57.2]" />
+    <!-- Even though we don't reference this package directly (it comes via Microsoft.Data.Sqlite), we have to pin this version because there is a vulnerability in versions <= 2.1.11 (see https://github.com/advisories/GHSA-2m69-gcr7-jv3q) -->
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="[2.1.12]" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.3]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.9]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
