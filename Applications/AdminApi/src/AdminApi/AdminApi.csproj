@@ -14,7 +14,6 @@
         <PackageReference Include="Serilog.AspNetCore" />
         <PackageReference Include="Serilog.Enrichers.ClientInfo" />
         <PackageReference Include="Serilog.Enrichers.Demystifier" />
-        <PackageReference Include="Serilog.Enrichers.Environment" />
         <PackageReference Include="Serilog.Enrichers.Sensitive" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />

@@ -16,7 +16,6 @@
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
         <PackageReference Include="Serilog" />
         <PackageReference Include="Serilog.Enrichers.Demystifier" />
-        <PackageReference Include="Serilog.Enrichers.Environment" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
         <PackageReference Include="Serilog.Formatting.Compact" />
