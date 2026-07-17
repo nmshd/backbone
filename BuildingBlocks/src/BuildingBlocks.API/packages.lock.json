@@ -20,14 +20,14 @@
           "Asp.Versioning.Mvc": "10.0.0"
         }
       },
-      "AspNetCore.HealthChecks.NpgSql": {
+      "DotNetDiag.HealthChecks.NpgSql": {
         "type": "Direct",
-        "requested": "[9.0.0, 9.0.0]",
-        "resolved": "9.0.0",
-        "contentHash": "npc58/AD5zuVxERdhCl2Kb7WnL37mwX42SJcXIwvmEig0/dugOLg3SIwtfvvh3TnvTwR/sk5LYNkkPaBdks61A==",
+        "requested": "[10.0.10, 10.0.10]",
+        "resolved": "10.0.10",
+        "contentHash": "lxb6wQ1YC/TpvZMVgbyeLP5dYOg/RJWLg1xlR+I0FeyfyMmukppKdwzBOrKRtZ8FHG3nV9xrVTaPdwRw0yL4Vw==",
         "dependencies": {
-          "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.11",
-          "Npgsql": "8.0.3"
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "10.0.9",
+          "Npgsql": "10.0.3"
         }
       },
       "DotNetDiag.HealthChecks.SqlServer": {

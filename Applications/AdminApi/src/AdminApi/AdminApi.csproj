@@ -19,7 +19,7 @@
         <PackageReference Include="Serilog.Formatting.Compact" />
         <PackageReference Include="Serilog.Sinks.Http" />
         <PackageReference Include="Serilog.Sinks.Seq" />
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+        <PackageReference Include="DotNetDiag.HealthChecks.NpgSql" />
         <PackageReference Include="DotNetDiag.HealthChecks.SqlServer" />
     </ItemGroup>
     <ItemGroup>
