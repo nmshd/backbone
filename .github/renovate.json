@@ -6,7 +6,7 @@
         {
             "description": "Don't report abandonment for these packages, because they are fine as they are.",
             "matchDatasources": ["nuget"],
-            "matchPackageNames": ["Serilog.Formatting.Compact"],
+            "matchPackageNames": ["Serilog.Formatting.Compact", "Serilog.Exceptions.EntityFrameworkCore", "Serilog.Exceptions", "MediatR.Contracts"],
             "abandonmentThreshold": null
         },
         {
