@@ -4,7 +4,6 @@ using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
-using NeoSmart.Utils;
 
 namespace Backbone.Modules.Announcements.Domain.Tests.Tests;
 

@@ -1,7 +1,6 @@
 using System.Buffers.Text;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
-using NeoSmart.Utils;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Domain.Tests.Helpers;
