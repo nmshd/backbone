@@ -18,6 +18,7 @@ using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ValidateFileOwnershipToken;
+using Backbone.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,9 +57,9 @@ public class FilesController : ApiControllerBase
         {
             FileContent = inputStream.ToArray(),
             ExpiresAt = dto.ExpiresAt,
-            CipherHash = Base64Url.DecodeFromChars(dto.CipherHash),
-            OwnerSignature = Base64Url.DecodeFromChars(dto.OwnerSignature),
-            EncryptedProperties = Base64Url.DecodeFromChars(dto.EncryptedProperties)
+            CipherHash = Base64Helper.Decode(dto.CipherHash),
+            OwnerSignature = Base64Helper.Decode(dto.OwnerSignature),
+            EncryptedProperties = Base64Helper.Decode(dto.EncryptedProperties)
         };
 
         var response = await _mediator.Send(command, cancellationToken);

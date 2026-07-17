@@ -1,6 +1,7 @@
 ﻿using System.Buffers.Text;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
@@ -32,7 +33,7 @@ public class RelationshipTemplateDeleteTests : AbstractTestsBase
     private RelationshipTemplate CreateRelationshipTemplate(IdentityAddress identity)
     {
         var deviceId = CreateRandomDeviceId();
-        var content = Base64Url.DecodeFromChars("AAAA");
+        var content = Base64Helper.Decode("AAAA");
 
         return new RelationshipTemplate(identity, deviceId, null, null, content, null, null);
     }

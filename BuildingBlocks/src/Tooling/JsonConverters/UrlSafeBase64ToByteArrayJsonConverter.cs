@@ -17,7 +17,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
         try
         {
-            return Base64Url.DecodeFromChars(stringValue);
+            return stringValue == null ? [] : Base64Helper.Decode(stringValue);
         }
         catch (FormatException e)
         {
@@ -27,7 +27,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
     public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
     {
-        var stringValue = Base64Url.EncodeToChars(value);
+        var stringValue = Base64Helper.EncodeUrlSafeWithoutPadding(value);
         writer.WriteStringValue(stringValue);
     }
 }
