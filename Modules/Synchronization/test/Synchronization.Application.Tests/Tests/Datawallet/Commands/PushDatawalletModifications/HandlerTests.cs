@@ -1,4 +1,3 @@
-using AutoFixture;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -19,7 +18,6 @@ public class HandlerTests : AbstractTestsBase
     private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
     private readonly IEventBus _eventBus;
-    private readonly Fixture _testDataGenerator;
 
     public HandlerTests()
     {
@@ -31,9 +29,6 @@ public class HandlerTests : AbstractTestsBase
         var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
-
-        _testDataGenerator = new Fixture();
-        _testDataGenerator.Customize<PushDatawalletModificationItem>(composer => composer.With(m => m.DatawalletVersion, 1));
     }
 
     [Fact]
@@ -46,14 +41,12 @@ public class HandlerTests : AbstractTestsBase
         // will definitely run into an error regarding the duplicate database index.
         var handlerWithDelayedSave = CreateHandlerWithDelayedSave();
         var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
-
-        var newModifications = _testDataGenerator.CreateMany<PushDatawalletModificationItem>(1).ToArray();
+        
+        PushDatawalletModificationItem[] newModifications = [new() {Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null}];
 
         // Act
-        var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 },
-            CancellationToken.None);
-        var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 },
-            CancellationToken.None);
+        var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
 
         var handleWithDelayedSave = () => taskWithImmediateSave;
         var handleWithImmediateSave = () => taskWithDelayedSave;
