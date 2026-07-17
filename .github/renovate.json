@@ -10,6 +10,12 @@
             "abandonmentThreshold": null
         },
         {
+            "description": "Don't report flutter because it's a false positive",
+            "matchDatasources": ["pub"],
+            "matchPackageNames": ["flutter"],
+            "abandonmentThreshold": null
+        },
+        {
             "description": "Don't update MediatR due to license issues",
             "matchDatasources": ["nuget"],
             "matchUpdateTypes": ["major"],
