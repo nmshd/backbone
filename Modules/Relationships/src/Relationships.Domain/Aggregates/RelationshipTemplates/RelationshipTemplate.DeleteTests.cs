@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain.Exceptions;
+﻿using System.Buffers.Text;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using NeoSmart.Utils;
 
@@ -32,7 +33,7 @@ public class RelationshipTemplateDeleteTests : AbstractTestsBase
     private RelationshipTemplate CreateRelationshipTemplate(IdentityAddress identity)
     {
         var deviceId = CreateRandomDeviceId();
-        var content = UrlBase64.Decode("AAAA");
+        var content = Base64Url.DecodeFromChars("AAAA");
 
         return new RelationshipTemplate(identity, deviceId, null, null, content, null, null);
     }

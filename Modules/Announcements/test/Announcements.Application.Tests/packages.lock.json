@@ -976,8 +976,7 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "[10.0.9, 10.0.9]",
-          "Microsoft.Extensions.Options": "[10.0.9, 10.0.9]",
-          "UrlBase64": "[2.0.0, 2.0.0]"
+          "Microsoft.Extensions.Options": "[10.0.9, 10.0.9]"
         }
       },
       "Backbone.UnitTestTools": {
@@ -1441,12 +1440,6 @@
         "requested": "[5.6.1, 5.6.1]",
         "resolved": "5.6.1",
         "contentHash": "gCexR8/Laso8JFm8myi3uJfo6NYyZElg5qgRyGHok6jFNY/wQwLJHr0D4tb6645SBV2D6L8e/xV2RMSSKXYd5Q=="
-      },
-      "UrlBase64": {
-        "type": "CentralTransitive",
-        "requested": "[2.0.0, 2.0.0]",
-        "resolved": "2.0.0",
-        "contentHash": "b8tTEqBi0IEHU03MMG8raeKjn4P5EiFYfbx9mIotiGNGhl18b7p8qX0So4pawR1kSYIJWGQVngeWXHMFzZgq4g=="
       }
     },
     "net10.0/linux-arm64": {

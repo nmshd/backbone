@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
 using NeoSmart.Utils;
@@ -16,7 +17,7 @@ public static class TestDataGenerator
     public static File CreateFile(IdentityAddress owner)
     {
         var deviceId = CreateRandomDeviceId();
-        var cipherHash = UrlBase64.Decode("AAAA");
+        var cipherHash = Base64Url.DecodeFromChars("AAAA");
         var ownerSignature = cipherHash;
         var encryptedProperties = cipherHash;
         var content = "Hello World!".GetBytes();

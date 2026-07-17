@@ -52,8 +52,7 @@
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "[10.0.9, 10.0.9]",
-          "Microsoft.Extensions.Options": "[10.0.9, 10.0.9]",
-          "UrlBase64": "[2.0.0, 2.0.0]"
+          "Microsoft.Extensions.Options": "[10.0.9, 10.0.9]"
         }
       },
       "BouncyCastle.Cryptography": {
@@ -95,12 +94,6 @@
         "dependencies": {
           "libsodium": "[1.0.22, 1.0.23)"
         }
-      },
-      "UrlBase64": {
-        "type": "CentralTransitive",
-        "requested": "[2.0.0, 2.0.0]",
-        "resolved": "2.0.0",
-        "contentHash": "b8tTEqBi0IEHU03MMG8raeKjn4P5EiFYfbx9mIotiGNGhl18b7p8qX0So4pawR1kSYIJWGQVngeWXHMFzZgq4g=="
       }
     },
     "net10.0/linux-arm64": {

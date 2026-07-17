@@ -1,8 +1,10 @@
-﻿using Backbone.BuildingBlocks.Domain.Exceptions;
+﻿using System.Buffers.Text;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
+using NeoSmart.Utils;
 
 namespace Backbone.Modules.Announcements.Domain.Tests.Tests;
 

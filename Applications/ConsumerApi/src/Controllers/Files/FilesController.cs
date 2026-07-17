@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Net.Mime;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
@@ -56,9 +57,9 @@ public class FilesController : ApiControllerBase
         {
             FileContent = inputStream.ToArray(),
             ExpiresAt = dto.ExpiresAt,
-            CipherHash = UrlBase64.Decode(dto.CipherHash),
-            OwnerSignature = UrlBase64.Decode(dto.OwnerSignature),
-            EncryptedProperties = UrlBase64.Decode(dto.EncryptedProperties)
+            CipherHash = Base64Url.DecodeFromChars(dto.CipherHash),
+            OwnerSignature = Base64Url.DecodeFromChars(dto.OwnerSignature),
+            EncryptedProperties = Base64Url.DecodeFromChars(dto.EncryptedProperties)
         };
 
         var response = await _mediator.Send(command, cancellationToken);

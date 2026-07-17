@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NeoSmart.Utils;
@@ -17,7 +18,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
         try
         {
-            return UrlBase64.Decode(stringValue);
+            return Base64Url.DecodeFromChars(stringValue);
         }
         catch (FormatException e)
         {
@@ -27,7 +28,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
     public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
     {
-        var stringValue = UrlBase64.Encode(value);
+        var stringValue = Base64Url.EncodeToChars(value);
         writer.WriteStringValue(stringValue);
     }
 }
