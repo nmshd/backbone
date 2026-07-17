@@ -94,16 +94,6 @@
           "Serilog": "4.3.0"
         }
       },
-      "Serilog.Enrichers.Demystifier": {
-        "type": "Direct",
-        "requested": "[1.0.3, 1.0.3]",
-        "resolved": "1.0.3",
-        "contentHash": "+4Kf7eomQs1TMPcsF097g0GqiChpjgNMBf9bFpSjGGijT1q+aDWo9xMcWJjowF1o5zyE6TD6QInzajfo6RkmRw==",
-        "dependencies": {
-          "Ben.Demystifier": "0.4.1",
-          "Serilog": "2.11.0"
-        }
-      },
       "Serilog.Enrichers.Sensitive": {
         "type": "Direct",
         "requested": "[2.1.0, 2.1.0]",
@@ -215,11 +205,6 @@
           "Azure.Core": "1.55.0",
           "System.IO.Hashing": "10.0.3"
         }
-      },
-      "Ben.Demystifier": {
-        "type": "Transitive",
-        "resolved": "0.4.1",
-        "contentHash": "axFeEMfmEORy3ipAzOXG/lE+KcNptRbei3F0C4kQCdeiQtW+qJW90K5iIovITGrdLt8AjhNCwk5qLSX9/rFpoA=="
       },
       "Castle.Core": {
         "type": "Transitive",

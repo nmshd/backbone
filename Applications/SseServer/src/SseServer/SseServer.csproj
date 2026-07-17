@@ -9,7 +9,6 @@
         <PackageReference Include="Serilog" />
         <PackageReference Include="Serilog.AspNetCore" />
         <PackageReference Include="Serilog.Enrichers.ClientInfo" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
         <PackageReference Include="Serilog.Formatting.Compact" />

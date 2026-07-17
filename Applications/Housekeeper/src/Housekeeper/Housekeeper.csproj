@@ -15,7 +15,6 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
         <PackageReference Include="Serilog" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
         <PackageReference Include="Serilog.Formatting.Compact" />

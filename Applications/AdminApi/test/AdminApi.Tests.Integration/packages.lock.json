@@ -187,11 +187,6 @@
           "System.IO.Hashing": "10.0.3"
         }
       },
-      "Ben.Demystifier": {
-        "type": "Transitive",
-        "resolved": "0.4.1",
-        "contentHash": "axFeEMfmEORy3ipAzOXG/lE+KcNptRbei3F0C4kQCdeiQtW+qJW90K5iIovITGrdLt8AjhNCwk5qLSX9/rFpoA=="
-      },
       "Castle.Core": {
         "type": "Transitive",
         "resolved": "5.2.1",
@@ -1580,7 +1575,6 @@
           "Serilog": "[4.3.1, 4.3.1]",
           "Serilog.AspNetCore": "[10.0.0, 10.0.0]",
           "Serilog.Enrichers.ClientInfo": "[2.9.0, 2.9.0]",
-          "Serilog.Enrichers.Demystifier": "[1.0.3, 1.0.3]",
           "Serilog.Enrichers.Sensitive": "[2.1.0, 2.1.0]",
           "Serilog.Exceptions": "[8.4.0, 8.4.0]",
           "Serilog.Exceptions.EntityFrameworkCore": "[8.4.0, 8.4.0]",
@@ -2653,16 +2647,6 @@
         "dependencies": {
           "Microsoft.AspNetCore.Http": "2.3.9",
           "Serilog": "4.3.0"
-        }
-      },
-      "Serilog.Enrichers.Demystifier": {
-        "type": "CentralTransitive",
-        "requested": "[1.0.3, 1.0.3]",
-        "resolved": "1.0.3",
-        "contentHash": "+4Kf7eomQs1TMPcsF097g0GqiChpjgNMBf9bFpSjGGijT1q+aDWo9xMcWJjowF1o5zyE6TD6QInzajfo6RkmRw==",
-        "dependencies": {
-          "Ben.Demystifier": "0.4.1",
-          "Serilog": "2.11.0"
         }
       },
       "Serilog.Enrichers.Sensitive": {

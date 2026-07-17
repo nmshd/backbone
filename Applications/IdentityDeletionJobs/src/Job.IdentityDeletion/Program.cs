@@ -112,7 +112,6 @@ public class Program
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-                    .Enrich.WithDemystifiedStackTraces()
                     .Enrich.FromLogContext()
                     .Enrich.WithProperty("service", "jobs.identitydeletion")
                     .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
