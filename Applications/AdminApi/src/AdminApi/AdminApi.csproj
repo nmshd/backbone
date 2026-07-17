@@ -20,7 +20,7 @@
         <PackageReference Include="Serilog.Sinks.Http" />
         <PackageReference Include="Serilog.Sinks.Seq" />
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+        <PackageReference Include="DotNetDiag.HealthChecks.SqlServer" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />

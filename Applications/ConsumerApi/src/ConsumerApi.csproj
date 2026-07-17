@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+        <PackageReference Include="DotNetDiag.HealthChecks.SqlServer" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
         <PackageReference Include="MyCSharp.HttpUserAgentParser" />
         <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" />
