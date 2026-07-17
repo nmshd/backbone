@@ -41,8 +41,8 @@ public class HandlerTests : AbstractTestsBase
         // will definitely run into an error regarding the duplicate database index.
         var handlerWithDelayedSave = CreateHandlerWithDelayedSave();
         var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
-        
-        PushDatawalletModificationItem[] newModifications = [new() {Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null}];
+
+        PushDatawalletModificationItem[] newModifications = [new() { Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null }];
 
         // Act
         var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
