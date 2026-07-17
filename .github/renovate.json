@@ -4,25 +4,19 @@
     "additionalReviewers": ["erbenjak"],
     "packageRules": [
         {
-            "groupName": "dont-update-mediatr-due-to-license-issues",
+            "description": "Don't update MediatR due to license issues",
             "matchDatasources": ["nuget"],
             "matchUpdateTypes": ["major"],
             "matchPackageNames": ["MediatR"],
             "enabled": false
         },
         {
-            "matchDatasources": ["dart"],
-            "rangeStrategy": "auto"
-        },
-        {
-            "matchDatasources": ["dart-version"],
+            "description": "We want to update the Dart and Flutter versions manually.",
+            "matchDatasources": ["dart-version", "flutter-version"],
             "enabled": false
         },
         {
-            "matchDatasources": ["flutter-version"],
-            "enabled": false
-        },
-        {
+            "description": "These images are built and used in the pipelines and should therefore not be updated by Renovate.",
             "matchDatasources": ["docker"],
             "matchPackageNames": [
                 "ghcr.io/nmshd/backbone-consumer-api",
@@ -40,6 +34,7 @@
             "enabled": false
         },
         {
+            "description": "These are our own packages used as a monorepo and should therefore not be updated by Renovate.",
             "matchDatasources": ["dart"],
             "matchPackageNames": ["admin_api_sdk", "admin_api_types"],
             "enabled": false
