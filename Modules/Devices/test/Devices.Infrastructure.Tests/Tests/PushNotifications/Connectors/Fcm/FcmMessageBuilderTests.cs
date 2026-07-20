@@ -26,7 +26,9 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         message.Notification.Title.ShouldBe("someNotificationTextTitle");
         message.Notification.Body.ShouldBe("someNotificationTextBody");
 
+#pragma warning disable CS0618 // Type or member is obsolete - We cannot use the suggested replacement (Fid) yet, because the app still sends us a Token instead of a Fid 
         message.Token.ShouldContain("token1");
+#pragma warning restore CS0618 // Type or member is obsolete
 
         message.Android.Notification.ChannelId.ShouldBe("ENMESHED");
         message.Data.ShouldContain(new KeyValuePair<string, string>("android_channel_id", "ENMESHED"));
