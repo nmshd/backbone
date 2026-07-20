@@ -4,7 +4,7 @@ services:
   azure-storage-emulator:
     container_name: azure-storage-emulator
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite:3.35.0@sha256:647c63a91102a9d8e8000aab803436e1fc85fbb285e7ce830a82ee5d6661cf37
+    image: mcr.microsoft.com/azure-storage/azurite:3.36.0@sha256:37493d0f2e764467421ffe16eb3caa39277e5fa7f6adea18eb5bbfb3c5247f98
     command: azurite-blob -l /data --blobHost "0.0.0.0" --skipApiVersionCheck
     ports:
       - "10000:10000"
