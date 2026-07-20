@@ -7,7 +7,8 @@ public class FcmMessageBuilder
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
-        Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        Converters = { new DateTimeConverter() },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
     private readonly Message _message;
@@ -76,7 +77,9 @@ public class FcmMessageBuilder
 
     public FcmMessageBuilder SetToken(string token)
     {
+#pragma warning disable CS0618 // Type or member is obsolete - We cannot use the suggested replacement (Fid) yet, because the app still sends us a Token instead of a Fid
         _message.Token = token;
+#pragma warning restore CS0618 // Type or member is obsolete
         return this;
     }
 
