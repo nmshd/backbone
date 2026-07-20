@@ -76,7 +76,7 @@ public class FcmMessageBuilder
 
     public FcmMessageBuilder SetToken(string token)
     {
-        _message.Token = token;
+        _message.Fid = token;
         return this;
     }
 
