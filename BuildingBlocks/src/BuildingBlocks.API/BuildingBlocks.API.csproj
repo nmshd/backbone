@@ -3,8 +3,8 @@
     <ItemGroup>
         <PackageReference Include="Asp.Versioning.Mvc" />
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
-        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+        <PackageReference Include="DotNetDiag.HealthChecks.NpgSql" />
+        <PackageReference Include="DotNetDiag.HealthChecks.SqlServer" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
         <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />

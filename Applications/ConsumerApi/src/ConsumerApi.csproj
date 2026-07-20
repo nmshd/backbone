@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+        <PackageReference Include="DotNetDiag.HealthChecks.SqlServer" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
         <PackageReference Include="MyCSharp.HttpUserAgentParser" />
         <PackageReference Include="MyCSharp.HttpUserAgentParser.AspNetCore" />
@@ -17,8 +17,6 @@
         <PackageReference Include="Serilog" />
         <PackageReference Include="Serilog.AspNetCore" />
         <PackageReference Include="Serilog.Enrichers.ClientInfo" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" />
-        <PackageReference Include="Serilog.Enrichers.Environment" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
         <PackageReference Include="Serilog.Formatting.Compact" />

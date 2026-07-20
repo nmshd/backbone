@@ -65,9 +65,6 @@ networks:
 volumes:
   rabbitmq-volume:
   mssql-server-volume:
-    external: true
   postgres-volume:
-    external: true
   azure-storage-emulator-volume:
-    external: true
   seq-data:

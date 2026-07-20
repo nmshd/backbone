@@ -1,4 +1,3 @@
-using AutoFixture;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -19,7 +18,6 @@ public class HandlerTests : AbstractTestsBase
     private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
     private readonly IEventBus _eventBus;
-    private readonly Fixture _testDataGenerator;
 
     public HandlerTests()
     {
@@ -31,9 +29,6 @@ public class HandlerTests : AbstractTestsBase
         var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
-
-        _testDataGenerator = new Fixture();
-        _testDataGenerator.Customize<PushDatawalletModificationItem>(composer => composer.With(m => m.DatawalletVersion, 1));
     }
 
     [Fact]
@@ -42,28 +37,26 @@ public class HandlerTests : AbstractTestsBase
         var arrangeContext = CreateDbContext();
         arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
 
+        var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
         // By adding a save-delay to one of the calls, we can ensure that the second one will finish first, and therefore the first one
         // will definitely run into an error regarding the duplicate database index.
         var handlerWithDelayedSave = CreateHandlerWithDelayedSave();
-        var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
 
-        var newModifications = _testDataGenerator.CreateMany<PushDatawalletModificationItem>(1).ToArray();
+        PushDatawalletModificationItem[] newModifications = [new() { Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null }];
 
         // Act
-        var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 },
-            CancellationToken.None);
-        var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 },
-            CancellationToken.None);
+        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
 
-        var handleWithDelayedSave = () => taskWithImmediateSave;
-        var handleWithImmediateSave = () => taskWithDelayedSave;
+        var handleWithImmediateSave = () => taskWithImmediateSave;
+        var handleWithDelayedSave = () => taskWithDelayedSave;
 
         // Assert
         await handleWithImmediateSave.ShouldNotThrowAsync();
 
         await handleWithDelayedSave
             .ShouldThrowAsync<OperationFailedException>()
-            .ShouldContainMessage("The sent localIndex does not match the index of the latest modification.")
+            .ShouldContainMessage("The sent localIndex 'null' does not match the index of the latest modification ('0').")
             .ShouldHaveErrorCode("error.platform.validation.datawallet.datawalletNotUpToDate");
     }
 

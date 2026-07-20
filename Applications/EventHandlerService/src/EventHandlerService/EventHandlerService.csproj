@@ -9,7 +9,6 @@
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" />
         <PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" />
         <PackageReference Include="Serilog.Enrichers.Sensitive" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />

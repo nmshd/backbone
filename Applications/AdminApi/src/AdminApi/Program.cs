@@ -74,7 +74,6 @@ static WebApplication CreateApp(string[] args)
         .UseSerilog((context, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
             .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-            .Enrich.WithDemystifiedStackTraces()
             .Enrich.FromLogContext()
             .Enrich.WithProperty("service", "adminui")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()

@@ -78,7 +78,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
                 .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-                .Enrich.WithDemystifiedStackTraces()
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("service", "housekeeper")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()

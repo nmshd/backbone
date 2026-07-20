@@ -3,7 +3,6 @@ name: Check Pull Request
 on:
   pull_request:
     types: [opened, labeled, unlabeled, synchronize]
-  merge_group:
 
 jobs:
   validate-pr-label:
@@ -11,8 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PR must be labeled
-        uses: jesusvasquez333/verify-pr-label-action@657d111bbbe13e22bbd55870f1813c699bde1401 # v1.4.0
-        with:
-          disable-reviews: true
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          valid-labels: "breaking-change, bug, chore, ci, dependencies, documentation, enhancement, refactoring, test"
+        uses: js-soft/github-actions/validate-pr-label@main

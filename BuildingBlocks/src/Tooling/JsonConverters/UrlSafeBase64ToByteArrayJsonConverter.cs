@@ -1,6 +1,6 @@
+using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using NeoSmart.Utils;
 
 namespace Backbone.Tooling.JsonConverters;
 
@@ -17,7 +17,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
         try
         {
-            return UrlBase64.Decode(stringValue);
+            return stringValue == null ? [] : Base64Helper.Decode(stringValue);
         }
         catch (FormatException e)
         {
@@ -27,7 +27,7 @@ public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 
     public override void Write(Utf8JsonWriter writer, byte[] value, JsonSerializerOptions options)
     {
-        var stringValue = UrlBase64.Encode(value);
+        var stringValue = Base64Helper.EncodeUrlSafeWithoutPadding(value);
         writer.WriteStringValue(stringValue);
     }
 }

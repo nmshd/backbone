@@ -15,15 +15,12 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
         <PackageReference Include="Serilog" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" />
-        <PackageReference Include="Serilog.Enrichers.Environment" />
         <PackageReference Include="Serilog.Exceptions" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" />
         <PackageReference Include="Serilog.Formatting.Compact" />
         <PackageReference Include="Serilog.Settings.Configuration" />
         <PackageReference Include="Serilog.Extensions.Hosting" />
         <PackageReference Include="Serilog.Sinks.Console" />
-        <PackageReference Include="Serilog.Sinks.Debug" />
         <PackageReference Include="Serilog.Sinks.Http" />
         <PackageReference Include="Serilog.Sinks.Seq" />
         <PackageReference Include="System.Data.SqlClient" />

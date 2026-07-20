@@ -8,8 +8,8 @@
   <ItemGroup>
     <PackageVersion Include="Asp.Versioning.Mvc" Version="[10.0.0]" />
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="[10.0.0]" />
-    <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="[9.0.0]" />
-    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0]" />
+    <PackageVersion Include="DotNetDiag.HealthChecks.NpgSql" Version="[10.0.10]" />
+    <PackageVersion Include="DotNetDiag.HealthChecks.SqlServer" Version="[10.0.10]" />
     <PackageVersion Include="Autofac" Version="[9.3.1]" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.2]" />
     <PackageVersion Include="AutoFixture" Version="[4.18.1]" />
@@ -85,8 +85,6 @@
     <PackageVersion Include="Serilog" Version="[4.3.1]" />
     <PackageVersion Include="Serilog.AspNetCore" Version="[10.0.0]" />
     <PackageVersion Include="Serilog.Enrichers.ClientInfo" Version="[2.9.0]" />
-    <PackageVersion Include="Serilog.Enrichers.Demystifier" Version="[1.0.3]" />
-    <PackageVersion Include="Serilog.Enrichers.Environment" Version="[3.0.1]" />
     <PackageVersion Include="Serilog.Enrichers.Sensitive" Version="[2.1.0]" />
     <PackageVersion Include="Serilog.Exceptions" Version="[8.4.0]" />
     <PackageVersion Include="Serilog.Exceptions.EntityFrameworkCore" Version="[8.4.0]" />
@@ -94,19 +92,19 @@
     <PackageVersion Include="Serilog.Formatting.Compact" Version="[3.0.0]" />
     <PackageVersion Include="Serilog.Settings.Configuration" Version="[10.0.1]" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="[6.1.1]" />
-    <PackageVersion Include="Serilog.Sinks.Debug" Version="[3.0.0]" />
     <PackageVersion Include="Serilog.Sinks.Http" Version="[9.2.1]" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="[9.1.0]" />
     <PackageVersion Include="Shouldly" Version="[4.3.0]" />
     <PackageVersion Include="SimpleBase" Version="[5.6.1]" />
     <PackageVersion Include="Spectre.Console" Version="[0.57.2]" />
+    <!-- Even though we don't reference this package directly (it comes via Microsoft.Data.Sqlite), we have to pin this version because there is a vulnerability in versions <= 2.1.11 (see https://github.com/advisories/GHSA-2m69-gcr7-jv3q) -->
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="[2.1.12]" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.3]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.9]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
     <PackageVersion Include="Testcontainers.Azurite" Version="[4.12.0]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.12.0]" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.3]" />
-    <PackageVersion Include="UrlBase64" Version="[2.0.0]" />
     <PackageVersion Include="xunit.v3.mtp-v2" Version="[3.2.2]" />
   </ItemGroup>
 </Project>
