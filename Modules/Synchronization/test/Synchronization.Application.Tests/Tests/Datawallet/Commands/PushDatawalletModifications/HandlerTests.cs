@@ -37,19 +37,19 @@ public class HandlerTests : AbstractTestsBase
         var arrangeContext = CreateDbContext();
         arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
 
+        var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
         // By adding a save-delay to one of the calls, we can ensure that the second one will finish first, and therefore the first one
         // will definitely run into an error regarding the duplicate database index.
         var handlerWithDelayedSave = CreateHandlerWithDelayedSave();
-        var handlerWithImmediateSave = CreateHandlerWithImmediateSave();
 
         PushDatawalletModificationItem[] newModifications = [new() { Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null }];
 
         // Act
-        var taskWithImmediateSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
-        var taskWithDelayedSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
 
-        var handleWithDelayedSave = () => taskWithImmediateSave;
-        var handleWithImmediateSave = () => taskWithDelayedSave;
+        var handleWithImmediateSave = () => taskWithImmediateSave;
+        var handleWithDelayedSave = () => taskWithDelayedSave;
 
         // Assert
         await handleWithImmediateSave.ShouldNotThrowAsync();
