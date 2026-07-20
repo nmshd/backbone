@@ -56,7 +56,7 @@ public class HandlerTests : AbstractTestsBase
 
         await handleWithDelayedSave
             .ShouldThrowAsync<OperationFailedException>()
-            .ShouldContainMessage("The sent localIndex does not match the index of the latest modification.")
+            .ShouldContainMessage("The sent localIndex 'null' does not match the index of the latest modification ('0').")
             .ShouldHaveErrorCode("error.platform.validation.datawallet.datawalletNotUpToDate");
     }
 

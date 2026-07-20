@@ -10,7 +10,7 @@ public static class ApplicationErrors
         public static ApplicationError DatawalletNotUpToDate(long? localIndex = -100, long latestIndex = -100)
         {
             var localIndexString = localIndex == -100 ? " " : $" '{localIndex?.ToString() ?? "null"}' ";
-            var latestIndexString = localIndex == -100 ? "" : $" ('{latestIndex}') ";
+            var latestIndexString = localIndex == -100 ? "" : $" ('{latestIndex}')";
 
             return new ApplicationError("error.platform.validation.datawallet.datawalletNotUpToDate",
                 $"The sent localIndex{localIndexString}does not match the index of the latest modification{latestIndexString}. This probably means that your local datawallet is not up to date. Make sure you applied all modifications from the backbone before pushing a new modification.");
