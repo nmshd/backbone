@@ -1,0 +1,42 @@
+---
+# https://github.com/repository-settings/app
+
+repository:
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  allow_auto_merge: true
+  allow_update_branch: true
+  delete_branch_on_merge: true
+
+labels:
+  - name: breaking-change
+    color: "#16060F"
+    description: A breaking change
+  - name: bug
+    color: "#d73a4a"
+    description: Something isn't working
+  - name: chore
+    color: "#c2e0c6"
+    description: Some routine work like updating dependencies
+  - name: ci
+    color: "#DFB5FD"
+    description: Continuous Integration related stuff
+  - name: dependencies
+    color: "#0366d6"
+    description: Pull requests that update dependencies
+  - name: documentation
+    color: "#0075ca"
+    description: Improvements or additions to documentation
+  - name: enhancement
+    color: "#a2eeef"
+    description: New feature or request
+  - name: refactoring
+    color: "#880361"
+    description: Refactoring of code
+  - name: test
+    color: "#20D89D"
+    description: This pull request contains only new or changed tests
+  - name: wip
+    color: "#32BF4C"
+    description: Work in Progress (blocks mergify from auto update the branch)

@@ -3,7 +3,7 @@ changelog:
     labels:
       - ci
       - chore
-      - refactor
+      - refactoring
       - test
   categories:
     - title: Breaking Changes
