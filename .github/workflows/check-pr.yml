@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PR must be labeled
-        uses: js-soft/github-actions/validate-pr-label@main
+        uses: js-soft/github-actions/validate-pr-label@f4fe33fb7e0332ce7544c1506685e2cd954d546c # main
