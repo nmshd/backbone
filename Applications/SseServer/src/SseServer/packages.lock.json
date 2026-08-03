@@ -1002,7 +1002,7 @@
       "Backbone.Crypto": {
         "type": "Project",
         "dependencies": {
-          "BouncyCastle.Cryptography": "[2.6.2, 2.6.2]",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "NSec.Cryptography": "[26.4.0, 26.4.0]"
         }
       },
@@ -1146,9 +1146,9 @@
       },
       "BouncyCastle.Cryptography": {
         "type": "CentralTransitive",
-        "requested": "[2.6.2, 2.6.2]",
-        "resolved": "2.6.2",
-        "contentHash": "7oWOcvnntmMKNzDLsdxAYqApt+AjpRpP2CShjMfIa3umZ42UQMvH0tl1qAliYPNYO6vTdcGMqnRrCPmsfzTI1w=="
+        "requested": "[2.7.0, 2.7.0]",
+        "resolved": "2.7.0",
+        "contentHash": "U+12df8UEWHgBi04YVf/Lgi2dy3SItlIYvHjjEVa/BngCQIzDCDRBk50DDByCfDvSbe5pRNFr3b7UrVK2kMcLw=="
       },
       "CSharpFunctionalExtensions": {
         "type": "CentralTransitive",
