@@ -16,6 +16,13 @@ dev_dependencies:
   melos: ^8.0.0
   very_good_analysis: ^10.0.0
 
+# flutter_launcher_icons currently constrains cli_util to ^0.4.1, while Melos 8
+# requires ^0.5.0. The APIs used by flutter_launcher_icons are compatible with
+# cli_util 0.5, so keep the workspace on the newer version until its constraint
+# is updated upstream.
+dependency_overrides:
+  cli_util: ^0.5.0
+
 melos:
   ide:
     intellij:
