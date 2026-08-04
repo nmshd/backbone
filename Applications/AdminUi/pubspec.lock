@@ -229,10 +229,10 @@ packages:
     dependency: transitive
     description:
       name: dropdown_button2
-      sha256: b0fe8d49a030315e9eef6c7ac84ca964250155a6224d491c1365061bc974a9e1
+      sha256: "24f5b775483a9b3c508092766798c10e3f23127e66b3f4a305b5bfb59ff1debc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.9"
+    version: "3.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -790,10 +790,10 @@ packages:
     dependency: transitive
     description:
       name: translations_cleaner
-      sha256: "811f42be32f024fdf083903f198d3625f6ee6927601e3a53a29b85b90508b88c"
+      sha256: "96308250844e5451bb6e37f97a029a175caf90225db8e366cb328768bb3bef32"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.1"
   typed_data:
     dependency: transitive
     description:

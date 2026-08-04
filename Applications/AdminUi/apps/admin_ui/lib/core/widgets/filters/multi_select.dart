@@ -15,7 +15,13 @@ class MultiSelectFilter extends StatefulWidget {
 }
 
 class _MultiSelectFilterState extends State<MultiSelectFilter> {
-  final List<String> selectedItems = [];
+  final selectedItems = ValueNotifier<List<String>>([]);
+
+  @override
+  void dispose() {
+    selectedItems.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +36,22 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
             isExpanded: true,
             items: widget.options
                 .map(
-                  (item) => DropdownMenuItem(
+                  (item) => DropdownItem(
                     value: item.value,
-                    //disable default onTap to avoid closing menu when selecting an item
-                    enabled: false,
-                    child: StatefulBuilder(
-                      builder: (context, menuSetState) {
+                    closeOnTap: false,
+                    child: ValueListenableBuilder(
+                      valueListenable: selectedItems,
+                      builder: (context, selectedItems, _) {
                         final isSelected = selectedItems.contains(item.value);
-                        return InkWell(
-                          onTap: () {
-                            isSelected ? selectedItems.remove(item.value) : selectedItems.add(item.value);
-                            //This rebuilds the StatefulWidget to update the button's text
-                            setState(() {});
-                            //This rebuilds the dropdownMenu Widget to update the check mark
-                            menuSetState(() {});
-
-                            widget.onOptionSelected(selectedItems);
-                          },
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              children: [
-                                if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
-                                const SizedBox(width: 16),
-                                Expanded(child: Text(item.label, style: const TextStyle(fontSize: 14))),
-                              ],
-                            ),
+                        return Container(
+                          height: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
+                              const SizedBox(width: 16),
+                              Expanded(child: Text(item.label, style: const TextStyle(fontSize: 14))),
+                            ],
                           ),
                         );
                       },
@@ -64,18 +59,25 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
                   ),
                 )
                 .toList(),
-            value: selectedItems.isEmpty ? null : selectedItems.last,
-            onChanged: (value) {},
+            multiValueListenable: selectedItems,
+            onChanged: (value) {
+              final newSelection = selectedItems.value.contains(value) ? ([...selectedItems.value]..remove(value)) : [...selectedItems.value, value!];
+              selectedItems.value = newSelection;
+              widget.onOptionSelected(newSelection);
+            },
             selectedItemBuilder: (context) => widget.options
                 .map(
-                  (_) => Text(
-                    widget.options.where((item) => selectedItems.contains(item.value)).map((item) => item.label).join(', '),
-                    maxLines: 1,
-                    overflow: .ellipsis,
+                  (_) => ValueListenableBuilder(
+                    valueListenable: selectedItems,
+                    builder: (context, selectedItems, _) => Text(
+                      widget.options.where((item) => selectedItems.contains(item.value)).map((item) => item.label).join(', '),
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                    ),
                   ),
                 )
                 .toList(),
-            buttonStyleData: const ButtonStyleData(padding: .zero),
+            buttonStyleData: const FormFieldButtonStyleData(padding: .zero),
             menuItemStyleData: const MenuItemStyleData(padding: .zero),
             decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
