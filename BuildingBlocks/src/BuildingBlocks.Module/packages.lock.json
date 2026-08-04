@@ -19,12 +19,12 @@
       },
       "ReHackt.Extensions.Options.Validation": {
         "type": "Direct",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "duD2REg9F2Mbt8KbRU4MKtbhD+oqSEoL/7mw3VshkheVxLkOmD2x02+ebbeYChxo2h/KsIDGW+hh2l5vD+Dkrg==",
+        "requested": "[10.0.1, 10.0.1]",
+        "resolved": "10.0.1",
+        "contentHash": "/mjsZpv8DLDeHns99iDROqFa0eJ/5NU4X2kMMt3VTfVf3xYWQNLPoTs//x+wKXWYSo+pdXkA+ASvaJT/pifB2Q==",
         "dependencies": {
-          "Microsoft.Extensions.Hosting": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
+          "Microsoft.Extensions.Hosting": "10.0.10",
+          "Microsoft.Extensions.Options": "10.0.10"
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers": {
@@ -237,7 +237,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "SimpleBase": "[5.6.1, 5.6.1]"
+          "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
       "Backbone.Tooling": {
@@ -387,9 +387,9 @@
       },
       "SimpleBase": {
         "type": "CentralTransitive",
-        "requested": "[5.6.1, 5.6.1]",
-        "resolved": "5.6.1",
-        "contentHash": "gCexR8/Laso8JFm8myi3uJfo6NYyZElg5qgRyGHok6jFNY/wQwLJHr0D4tb6645SBV2D6L8e/xV2RMSSKXYd5Q=="
+        "requested": "[5.6.3, 5.6.3]",
+        "resolved": "5.6.3",
+        "contentHash": "ayL730f1gdQVYmFFLKSX83QcoltyKSMBsV94qfCBpZHMaJz/e3ALuXKZDD8SkseWbNHxBe0HxLRBe5OOpQ9HpA=="
       }
     },
     "net10.0/linux-arm64": {

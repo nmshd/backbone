@@ -4,20 +4,20 @@
     "net10.0": {
       "Asp.Versioning.Mvc": {
         "type": "Direct",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "W0wZ+0uZ0UK4KstjvEkNBZ0xxhBmxunwNg8582SVyyW7txQmSXibtm8fC4o82LaemPquYskms67bIbJOSrnlug==",
+        "requested": "[10.0.1, 10.0.1]",
+        "resolved": "10.0.1",
+        "contentHash": "OqoFPKKxXkNmw62H3CgXkPrf1L4PPwwyYr9QMP6itt/khKTIayqaHhK6F2e3jt6KHc4s23cWAUbu+Z5GPEeMaw==",
         "dependencies": {
-          "Asp.Versioning.Http": "10.0.0"
+          "Asp.Versioning.Http": "10.0.1"
         }
       },
       "Asp.Versioning.Mvc.ApiExplorer": {
         "type": "Direct",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "H54UOpRoc4RmhQ4RA2lzDz43a/hAu/JN19Yyy/DNmH4XlRxhemfhifJyh9BaXNJOtGa2Dnu2xEeP4VSiTdUdAg==",
+        "requested": "[10.0.1, 10.0.1]",
+        "resolved": "10.0.1",
+        "contentHash": "ylPZe+LheFp0pt2tSMq2pPeGAkMLqWVOn5+1/xOB/eUj889n9b35Sny08bSQ0ziAGIFjp3BBTXaYsWJjRoFV4A==",
         "dependencies": {
-          "Asp.Versioning.Mvc": "10.0.0"
+          "Asp.Versioning.Mvc": "10.0.1"
         }
       },
       "DotNetDiag.HealthChecks.NpgSql": {
@@ -163,24 +163,24 @@
       },
       "Asp.Versioning.Abstractions": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "cMRE5nvNMfBgfkb0XFWst/7UtyXCjoAXnV0L4Scx4P9fcf0idgrj1Z0c+3ylsy01K4cOib7dKhCBfpg5z3r0Kg==",
+        "resolved": "10.1.0",
+        "contentHash": "RwdgC5O0baZ4pt30pAKKPQHq2CV4unBKA4HWoTeu7NY9ZwXM0dWYGf1Ipc5GK0eFBe9cMeqz4pGpPncMz4/ZNQ==",
         "dependencies": {
           "Microsoft.Extensions.Primitives": "10.0.0"
         }
       },
       "Asp.Versioning.Http": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "xmNm9FM2d20NKy7i1osEQysf7pJ4iJjWnM6e8CoeIhUREqG8nugsfC82pGpmzlatjAJL5T52ieSpyW+GFdSsSQ==",
+        "resolved": "10.0.1",
+        "contentHash": "g0ayV/9ho3tGgooC6eF5p1063I1WzlxFJDYQrigcGnW+mLvui6eXrcW5hzTHhQREroUR3ZwXQrIN2SAIoi+KDw==",
         "dependencies": {
-          "Asp.Versioning.Abstractions": "10.0.0"
+          "Asp.Versioning.Abstractions": "10.1.0"
         }
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.100.3",
-        "contentHash": "KU+8IlwHqh68J82FXvsNgehAuG0Z++Ul62oD5sg5Iyj4RgSdUKer3nbLBJbW31DAM7mgEuckhsEcJW+2wYpSVA=="
+        "resolved": "4.0.100.9",
+        "contentHash": "OPYy41jZjXwxxcYRotaq24HDrwUnVtBB/mvg1IwB9D1ICXAtHqMa1sp2hpmlVJCZwjlcrPcTCJIejInvV1vp5g=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -1256,7 +1256,7 @@
           "MediatR": "[12.5.0, 12.5.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Polly": "[8.7.0, 8.7.0]",
-          "ReHackt.Extensions.Options.Validation": "[10.0.0, 10.0.0]"
+          "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
       "Backbone.BuildingBlocks.Application.Abstractions": {
@@ -1277,8 +1277,8 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.100.3, 4.0.100.3]",
-          "Autofac": "[9.3.1, 9.3.1]",
+          "AWSSDK.S3": "[4.0.101.6, 4.0.101.6]",
+          "Autofac": "[9.3.2, 9.3.2]",
           "Azure.Messaging.ServiceBus": "[7.20.2, 7.20.2]",
           "Azure.Storage.Blobs": "[12.29.1, 12.29.1]",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
@@ -1309,7 +1309,7 @@
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[10.0.10, 10.0.10]",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, 10.0.10]",
-          "ReHackt.Extensions.Options.Validation": "[10.0.0, 10.0.0]"
+          "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
       "Backbone.Common.Infrastructure": {
@@ -1333,7 +1333,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "SimpleBase": "[5.6.1, 5.6.1]"
+          "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
       "Backbone.Modules.Devices.Application": {
@@ -1391,17 +1391,17 @@
       },
       "Autofac": {
         "type": "CentralTransitive",
-        "requested": "[9.3.1, 9.3.1]",
-        "resolved": "9.3.1",
-        "contentHash": "WCDp+kYLr+r9enkRDt4PYRzj321P/c+8SICxHhWo9gkVNqE9EziiYyUMa7A0ce27SK6qgRWYCK0zp19J2ykVHw=="
+        "requested": "[9.3.2, 9.3.2]",
+        "resolved": "9.3.2",
+        "contentHash": "an3dLpmXWvb2aBP5qyA7GVEcXhoG+W/EtFRa3sBYzJdXSNDnB0aoeo4MgOQru0G5sjNDGYM3D3CnBzNFXEVOOA=="
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.100.3, 4.0.100.3]",
-        "resolved": "4.0.100.3",
-        "contentHash": "bHe+BZRyC/TnyPw3/l6N96V/hqtBHyjtXINVrVxVl8LTYx2fxNI1HTwknm0jslSkOiOKeHRZ/oduxMcJXBbtsg==",
+        "requested": "[4.0.101.6, 4.0.101.6]",
+        "resolved": "4.0.101.6",
+        "contentHash": "LsVXGc3lyJuUJe+EbGubkFeR0cVmtmj4YdMChqsqSIsjZtCMzPg2BXR7cJqcrIBGoHab3q3RS6K8T9QD2tbhhQ==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.100.3, 5.0.0)"
+          "AWSSDK.Core": "[4.0.100.9, 5.0.0)"
         }
       },
       "Azure.Messaging.ServiceBus": {
@@ -1834,12 +1834,12 @@
       },
       "ReHackt.Extensions.Options.Validation": {
         "type": "CentralTransitive",
-        "requested": "[10.0.0, 10.0.0]",
-        "resolved": "10.0.0",
-        "contentHash": "duD2REg9F2Mbt8KbRU4MKtbhD+oqSEoL/7mw3VshkheVxLkOmD2x02+ebbeYChxo2h/KsIDGW+hh2l5vD+Dkrg==",
+        "requested": "[10.0.1, 10.0.1]",
+        "resolved": "10.0.1",
+        "contentHash": "/mjsZpv8DLDeHns99iDROqFa0eJ/5NU4X2kMMt3VTfVf3xYWQNLPoTs//x+wKXWYSo+pdXkA+ASvaJT/pifB2Q==",
         "dependencies": {
-          "Microsoft.Extensions.Hosting": "10.0.0",
-          "Microsoft.Extensions.Options": "10.0.0"
+          "Microsoft.Extensions.Hosting": "10.0.10",
+          "Microsoft.Extensions.Options": "10.0.10"
         }
       },
       "Serilog": {
@@ -1850,9 +1850,9 @@
       },
       "SimpleBase": {
         "type": "CentralTransitive",
-        "requested": "[5.6.1, 5.6.1]",
-        "resolved": "5.6.1",
-        "contentHash": "gCexR8/Laso8JFm8myi3uJfo6NYyZElg5qgRyGHok6jFNY/wQwLJHr0D4tb6645SBV2D6L8e/xV2RMSSKXYd5Q=="
+        "requested": "[5.6.3, 5.6.3]",
+        "resolved": "5.6.3",
+        "contentHash": "ayL730f1gdQVYmFFLKSX83QcoltyKSMBsV94qfCBpZHMaJz/e3ALuXKZDD8SkseWbNHxBe0HxLRBe5OOpQ9HpA=="
       }
     },
     "net10.0/linux-arm64": {
