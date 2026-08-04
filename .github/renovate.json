@@ -23,6 +23,13 @@
             "enabled": false
         },
         {
+            "description": "Don't update SQLitePCLRaw.lib.e_sqlite3. It's only used by Microsoft.Data.Sqlite. We want to pin it to the current version because the version that comes with Microsoft.Data.Sqlite has a vulnerability.",
+            "matchDatasources": ["nuget"],
+            "matchUpdateTypes": ["major"],
+            "matchPackageNames": ["SQLitePCLRaw.lib.e_sqlite3"],
+            "enabled": false
+        },
+        {
             "description": "We want to update the Dart and Flutter versions manually.",
             "matchDatasources": ["dart-version", "flutter-version"],
             "enabled": false

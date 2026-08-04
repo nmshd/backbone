@@ -14,7 +14,7 @@ dependencies:
   admin_api_types: ^1.0.0
   collection: any
   data_table_2: ^2.7.2
-  dropdown_button2: ^2.3.9
+  dropdown_button2: ^3.0.0
   flex_seed_scheme: ^4.0.1
   flutter:
     sdk: flutter
