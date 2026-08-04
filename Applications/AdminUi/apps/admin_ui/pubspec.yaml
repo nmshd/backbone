@@ -28,7 +28,7 @@ dependencies:
   intl: any
   logger: ^2.6.2
   shared_preferences: ^2.5.4
-  sn_progress_dialog: ^1.2.0
+  sn_progress_dialog: ^2.0.0
   watch_it: ^2.4.1
   window_size:
     git:
