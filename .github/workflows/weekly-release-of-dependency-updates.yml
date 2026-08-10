@@ -2,7 +2,7 @@ name: Weekly Release of Dependency Updates
 
 on:
   schedule:
-    - cron: "0 2 * * 2" # every Tuesday at 02:00 UTC
+    - cron: "0 2 * * 5" # every Friday at 02:00 UTC
   workflow_dispatch:
 
 permissions:
