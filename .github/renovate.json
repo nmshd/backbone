@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>js-soft/renovate-config"],
-    "additionalReviewers": ["erbenjak"],
+    "additionalReviewers": ["team:c-dependency-update-reviewers"],
     "packageRules": [
         {
             "description": "Don't report abandonment for these packages, because they are fine as they are.",
