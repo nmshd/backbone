@@ -6,6 +6,7 @@ on:
       - "main"
     tags-ignore:
       - "**"
+  merge_group:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
