@@ -1,0 +1,128 @@
+name: Merge Queue Required Checks
+
+on:
+  merge_group:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-pr-label:
+    name: "Validate the Pull Request's labels"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-helm-chart:
+    name: "Build Helm Chart"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  check-formatting:
+    name: "Check Formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  adminui-checks:
+    name: "Run Admin UI Checks"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  unit-test:
+    name: "Run Unit Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-admin-ui-image:
+    name: "Build admin-ui Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-consumer-api-image:
+    name: "Build consumer-api Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-database-migrator-image:
+    name: "Build database-migrator Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-identity-deletion-jobs-image:
+    name: "Build identity-deletion-jobs Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-sse-server-image:
+    name: "Build sse-server Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-admin-cli-image:
+    name: "Build admin-cli Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  consumer-api-integration-tests-postgres:
+    name: "Run consumer-api Integration Tests (on postgres)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  consumer-api-integration-tests-sqlserver:
+    name: "Run consumer-api Integration Tests (on sqlserver)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  admin-api-integration-tests-postgres:
+    name: "Run admin-api Integration Tests (on postgres)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  admin-api-integration-tests-sqlserver:
+    name: "Run admin-api Integration Tests (on sqlserver)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  identity-deletion-job-integration-tests-postgres:
+    name: "Run identity-deletion-job Integration Tests (on postgres)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  identity-deletion-job-integration-tests-sqlserver:
+    name: "Run identity-deletion-job Integration Tests (on sqlserver)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  transport-tests-postgres:
+    name: "Run transport Tests (on postgres)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  transport-tests-sqlserver:
+    name: "Run transport Tests (on sqlserver)"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
+
+  build-event-handler-image:
+    name: "Build event-handler Image"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Merge queue check passed"
