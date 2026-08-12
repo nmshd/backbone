@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - "main"
+      - "gh-readonly-queue/**"
     tags-ignore:
       - "**"
   merge_group:
