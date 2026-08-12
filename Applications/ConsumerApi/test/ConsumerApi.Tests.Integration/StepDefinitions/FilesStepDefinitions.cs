@@ -103,7 +103,7 @@ internal class FilesStepDefinitions
         _filesContext.Files[fileName] = getFileResponse.Result!;
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with an incorrect ownership token")]
+    [When($"{RegexFor.SINGLE_THING} sends a PATCH request to the /Files/{RegexFor.SINGLE_THING}.Id/ClaimOwnership with an incorrect ownership token and waits 2 seconds")]
     public async Task WhenISendsApatchRequestToTheFilesFIdClaimOwnershipWithAnIncorrectOwnershipToken(string identityName, string fileName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
@@ -111,6 +111,8 @@ internal class FilesStepDefinitions
         var request = new ClaimFileOwnershipRequest { OwnershipToken = FileOwnershipToken.New().Value };
 
         _responseContext.WhenResponse = _claimFileOwnershipResponse = await identity.Files.ClaimFileOwnership(fileId, request);
+
+        await Task.Delay(2000);
 
         var getFileResponse = await identity.Files.GetFileMetadata(fileId);
         _filesContext.Files[fileName] = getFileResponse.Result!;
