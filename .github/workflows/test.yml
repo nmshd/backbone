@@ -9,8 +9,8 @@ on:
   merge_group:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name == 'merge_group' && github.sha || github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 
 jobs:
   adminui-checks:
