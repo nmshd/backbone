@@ -1,0 +1,56 @@
+extensions:
+  health_check:
+  zpages:
+    endpoint: :55679
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 50
+    spike_limit_percentage: 30
+
+  batch:
+
+  attributes:
+    actions:
+      - key: region
+        value: west
+        action: insert
+
+exporters:
+  debug:
+  otlp:
+    endpoint: "${TEMPO_ENDPOINT}"
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+
+service:
+  pipelines:
+    traces:
+      receivers:
+        - otlp
+      processors: [memory_limiter, attributes, batch]
+      exporters:
+        - debug
+        - otlp
+    metrics:
+      receivers:
+        - otlp
+      processors: [memory_limiter, batch]
+      exporters:
+        - debug
+        - prometheus
+
+  extensions:
+    - health_check
+    - zpages
