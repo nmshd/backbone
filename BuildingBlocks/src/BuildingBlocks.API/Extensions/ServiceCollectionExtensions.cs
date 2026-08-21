@@ -13,6 +13,7 @@ using Microsoft.OpenApi;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
@@ -119,7 +120,18 @@ public static class ServiceCollectionExtensions
                         .AddMeter("Microsoft.AspNetCore.Authorization")
                         .AddMeter("Microsoft.AspNetCore.Authentication")
                         .AddMeter("Microsoft.AspNetCore.Identity");
-                });
+                })
+                .WithTracing(tracing =>
+                    {
+                        tracing.AddAspNetCoreInstrumentation();
+                        tracing.AddEntityFrameworkCoreInstrumentation();
+                        tracing.AddConsoleExporter();
+                        tracing.AddOtlpExporter(options =>
+                        {
+                            options.Endpoint = new Uri("http://localhost:4317");
+                        });
+                    }
+                );
 
             return services;
         }
