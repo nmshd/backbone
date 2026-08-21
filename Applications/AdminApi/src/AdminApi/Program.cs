@@ -73,14 +73,15 @@ static WebApplication CreateApp(string[] args)
 
     builder.Host
         .UseSerilog((context, configuration) => configuration
-            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty("service", "adminui")
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-                .WithDefaultDestructurers()
-                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
-            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()), preserveStaticLogger: true)
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("service", "adminui")
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                    .WithDefaultDestructurers()
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()]))
+                .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()),
+            preserveStaticLogger: true, writeToProviders: true)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);

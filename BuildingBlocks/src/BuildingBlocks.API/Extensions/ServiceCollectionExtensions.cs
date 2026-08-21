@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -20,6 +21,8 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    private static readonly Uri OTLP_GRPC_ENDPOINT = new("http://localhost:4317"); // TODO: extract endpoint to config
+
     extension(IServiceCollection services)
     {
         public void AddSqlDatabaseHealthCheck(string name, string provider, string connectionString)
@@ -108,7 +111,7 @@ public static class ServiceCollectionExtensions
                     metrics
                         .AddOtlpExporter(options =>
                         {
-                            options.Endpoint = new Uri("http://localhost:4317");
+                            options.Endpoint = OTLP_GRPC_ENDPOINT;
                             options.Protocol = OtlpExportProtocol.Grpc;
                         })
                         .AddAspNetCoreInstrumentation()
@@ -128,10 +131,23 @@ public static class ServiceCollectionExtensions
                         tracing.AddConsoleExporter();
                         tracing.AddOtlpExporter(options =>
                         {
-                            options.Endpoint = new Uri("http://localhost:4317");
+                            options.Endpoint = OTLP_GRPC_ENDPOINT;
+                            options.Protocol = OtlpExportProtocol.Grpc;
                         });
                     }
-                );
+                )
+                .WithLogging(
+                    logging => logging.AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = OTLP_GRPC_ENDPOINT;
+                        options.Protocol = OtlpExportProtocol.Grpc;
+                    }),
+                    logging =>
+                    {
+                        logging.IncludeFormattedMessage = true;
+                        logging.IncludeScopes = true;
+                        logging.ParseStateValues = true;
+                    });
 
             return services;
         }

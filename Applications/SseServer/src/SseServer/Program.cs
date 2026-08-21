@@ -69,7 +69,8 @@ static WebApplication CreateApp(string[] args)
                 .Enrich.WithProperty("service", "sseserver")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
-                    .WithDestructurers([new DbUpdateExceptionDestructurer()])), preserveStaticLogger: true
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()])),
+            preserveStaticLogger: true, writeToProviders: true
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
