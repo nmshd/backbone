@@ -23,3 +23,10 @@ datasources:
         enabled: true
       tracesToMetrics:
         datasourceUid: prometheus
+
+  - name: Loki
+    uid: loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
