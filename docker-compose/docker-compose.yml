@@ -109,7 +109,6 @@ services:
       TEMPO_ENDPOINT: "tempo:4317"
     ports:
       - "8889:8889" # Prometheus metrics exporter (scrape endpoint)
-      - "13133:13133" # health_check extension
       - "55679:55679" # ZPages extension
       - "4317:4317" # OTLP Receiver
     depends_on:

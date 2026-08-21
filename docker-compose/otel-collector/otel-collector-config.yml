@@ -19,12 +19,6 @@ processors:
 
   batch:
 
-  attributes:
-    actions:
-      - key: region
-        value: west
-        action: insert
-
 exporters:
   debug:
   otlp:
@@ -39,14 +33,18 @@ service:
     traces:
       receivers:
         - otlp
-      processors: [memory_limiter, attributes, batch]
+      processors:
+        - memory_limiter
+        - batch
       exporters:
         - debug
         - otlp
     metrics:
       receivers:
         - otlp
-      processors: [memory_limiter, batch]
+      processors:
+        - memory_limiter
+        - batch
       exporters:
         - debug
         - prometheus
