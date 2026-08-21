@@ -83,6 +83,18 @@ services:
       - tempo-data:/tmp/tempo
     restart: unless-stopped
 
+  loki:
+    image: grafana/loki:3.7.6
+    container_name: loki
+    command:
+      - -config.file=/etc/loki/loki.yml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki.yml:/etc/loki/loki.yml:ro
+      - loki-data:/loki
+    restart: unless-stopped
+
   grafana:
     image: grafana/grafana:13.2
     container_name: grafana
@@ -94,6 +106,7 @@ services:
     depends_on:
       - prometheus
       - tempo
+      - loki
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana-data:/var/lib/grafana
@@ -111,9 +124,11 @@ services:
       - "8889:8889" # Prometheus metrics exporter (scrape endpoint)
       - "55679:55679" # ZPages extension
       - "4317:4317" # OTLP Receiver
+      - "4318:4318" # OTLP HTTP Receiver
     depends_on:
       - tempo
       - prometheus
+      - loki
 
 networks:
   default:
@@ -127,4 +142,5 @@ volumes:
   seq-data:
   prometheus-data:
   tempo-data:
+  loki-data:
   grafana-data:
