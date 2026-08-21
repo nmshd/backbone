@@ -1,4 +1,5 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
@@ -13,7 +14,6 @@ using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
-using OpenTelemetry.Metrics;
 using Serilog;
 using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
@@ -21,7 +21,6 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
-using OpenTelemetrySdk = OpenTelemetry.Sdk;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -36,19 +35,7 @@ try
     Log.Information("App created.");
     Log.Information("Starting app...");
 
-    var meterProvider = OpenTelemetrySdk.CreateMeterProviderBuilder()
-        .AddMeter(METER_NAME)
-        .AddMeter("Microsoft.EntityFrameworkCore")
-        .AddPrometheusHttpListener(options =>
-        {
-            var host = Environment.GetEnvironmentVariable("METRICS_HOST") ?? "localhost";
-            options.UriPrefixes = [$"http://{host}:9444/"];
-        })
-        .Build();
-
     await app.Build().RunAsync();
-
-    meterProvider.Dispose();
 
     return 0;
 }
@@ -69,7 +56,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureAppConfiguration((hostContext, configuration) =>
         {
             configuration.Sources.Clear();
-            var env = hostContext.HostingEnvironment;
 
             configuration
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -87,6 +73,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             var parsedConfiguration =
                 services.BuildServiceProvider().GetRequiredService<IOptions<EventHandlerServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
+
+            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
 
             services.AddTransient<IHostedService, EventHandlerService>();
 

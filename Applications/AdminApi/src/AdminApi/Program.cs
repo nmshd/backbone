@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
@@ -132,7 +133,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
-    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
@@ -156,8 +157,6 @@ static void Configure(WebApplication app, AdminApiConfiguration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
         app.UseCustomSwaggerUi();
-
-    app.MapPrometheusScrapingEndpoint();
 
     // the following headers are necessary to run the application in webassembly mode
     app.Use(async (context, next) =>

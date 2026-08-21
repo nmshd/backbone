@@ -10,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
@@ -96,18 +98,27 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        public IServiceCollection AddOpenTelemetryWithPrometheusExporter(string name)
+        public IServiceCollection AddOpenTelemetry(string name, string version)
         {
             services.AddOpenTelemetry()
+                .ConfigureResource(resource => resource.AddService(name, serviceVersion: version))
                 .WithMetrics(metrics =>
                 {
                     metrics
-                        .AddPrometheusExporter()
+                        .AddOtlpExporter(options =>
+                        {
+                            options.Endpoint = new Uri("http://localhost:4317");
+                            options.Protocol = OtlpExportProtocol.Grpc;
+                        })
+                        .AddAspNetCoreInstrumentation()
                         .AddMeter(name)
                         .AddMeter("Microsoft.EntityFrameworkCore")
                         .AddMeter("Microsoft.AspNetCore.Hosting")
                         .AddMeter("Microsoft.AspNetCore.Diagnostics")
-                        .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
+                        .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+                        .AddMeter("Microsoft.AspNetCore.Authorization")
+                        .AddMeter("Microsoft.AspNetCore.Authentication")
+                        .AddMeter("Microsoft.AspNetCore.Identity");
                 });
 
             return services;

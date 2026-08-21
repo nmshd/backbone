@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -110,7 +111,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
 
     services.AddCustomIdentity(environment);
 
@@ -121,8 +122,6 @@ static void Configure(WebApplication app, Configuration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
         app.UseCustomSwaggerUi();
-
-    app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>
     {
