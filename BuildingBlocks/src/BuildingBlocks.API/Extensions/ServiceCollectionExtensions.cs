@@ -1,6 +1,7 @@
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -136,6 +137,7 @@ public static class ServiceCollectionExtensions
                             options.Endpoint = OTLP_GRPC_ENDPOINT;
                             options.Protocol = OtlpExportProtocol.Grpc;
                         });
+                        tracing.AddProcessor<DatabaseNameProcessor>();
                     }
                 )
                 .WithLogging(
