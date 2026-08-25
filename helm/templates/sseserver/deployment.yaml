@@ -84,7 +84,7 @@ spec:
             {{- include "generateEnvVars" (list .Values.global.env .Values.sseserver.env) | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
             initialDelaySeconds: {{ .Values.sseserver.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sseserver.livenessProbe.periodSeconds }}
@@ -92,7 +92,7 @@ spec:
             failureThreshold: {{ .Values.sseserver.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
             initialDelaySeconds: {{ .Values.sseserver.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sseserver.readinessProbe.periodSeconds }}
