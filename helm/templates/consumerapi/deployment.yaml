@@ -83,7 +83,7 @@ spec:
             {{- include "generateEnvVars" (list .Values.global.env .Values.consumerapi.env) | nindent 12 }}
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
             initialDelaySeconds: {{ .Values.consumerapi.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.consumerapi.livenessProbe.periodSeconds }}
@@ -91,7 +91,7 @@ spec:
             failureThreshold: {{ .Values.consumerapi.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
             initialDelaySeconds: {{ .Values.consumerapi.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.consumerapi.readinessProbe.periodSeconds }}
