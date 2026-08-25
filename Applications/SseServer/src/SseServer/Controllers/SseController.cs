@@ -14,14 +14,14 @@ public class SseController : ControllerBase
 {
     private readonly IEventQueue _eventQueue;
     private readonly IUserContext _userContext;
-    private readonly IMediator _mediator;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<SseController> _logger;
 
-    public SseController(IEventQueue eventQueue, IUserContext userContext, IMediator mediator, ILogger<SseController> logger)
+    public SseController(IEventQueue eventQueue, IUserContext userContext, IServiceScopeFactory scopeFactory, ILogger<SseController> logger)
     {
         _eventQueue = eventQueue;
         _userContext = userContext;
-        _mediator = mediator;
+        _scopeFactory = scopeFactory;
         _logger = logger;
     }
 
@@ -31,12 +31,15 @@ public class SseController : ControllerBase
     {
         var address = _userContext.GetAddress().Value;
 
-        await _mediator.Send(new UpdateDeviceRegistrationCommand
+        await using (var scope = _scopeFactory.CreateAsyncScope())
         {
-            Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
-            AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
-            Platform = "sse"
-        }, cancellationToken);
+            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new UpdateDeviceRegistrationCommand
+            {
+                Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
+                AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
+                Platform = "sse"
+            }, cancellationToken);
+        }
 
         Response.StatusCode = 200;
         Response.Headers.CacheControl = "no-cache";
@@ -74,7 +77,8 @@ public class SseController : ControllerBase
         {
             _eventQueue.Deregister(address);
             // we must NOT pass the cancellation token here, because otherwise the device registration would not be deleted in case the request was cancelled
-            await _mediator.Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
         }
     }
 }
