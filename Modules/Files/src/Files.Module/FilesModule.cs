@@ -21,7 +21,7 @@ public class FilesModule : AbstractModule<ApplicationConfiguration, Infrastructu
         services.AddPersistence(infrastructureConfiguration.SqlDatabase, infrastructureConfiguration.BlobStorage);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
+            services.AddSqlDatabaseHealthCheck(infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override Task ConfigureEventBus(IEventBus eventBus)

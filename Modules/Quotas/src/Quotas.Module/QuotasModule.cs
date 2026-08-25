@@ -21,7 +21,7 @@ public class QuotasModule : AbstractModule<ApplicationConfiguration, Infrastruct
         services.AddDatabase(infrastructureConfiguration.SqlDatabase);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
+            services.AddSqlDatabaseHealthCheck(infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
 
         services.AddResponseCaching();
     }

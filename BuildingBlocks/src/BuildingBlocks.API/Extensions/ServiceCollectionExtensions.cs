@@ -17,23 +17,30 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    private sealed class SqlDatabaseHealthCheckMarker;
+
     extension(IServiceCollection services)
     {
-        public void AddSqlDatabaseHealthCheck(string name, string provider, string connectionString)
+        public void AddSqlDatabaseHealthCheck(string provider, string connectionString)
         {
+            if (services.Any(service => service.ServiceType == typeof(SqlDatabaseHealthCheckMarker)))
+                return;
+
             switch (provider)
             {
                 case DatabaseConfiguration.SQLSERVER:
                     services.AddHealthChecks().AddSqlServer(
                         connectionString,
-                        name: $"{name}Database"
+                        name: "database"
                     );
+                    services.AddSingleton<SqlDatabaseHealthCheckMarker>();
                     break;
                 case DatabaseConfiguration.POSTGRES:
                     services.AddHealthChecks().AddNpgSql(
                         connectionString: connectionString,
-                        name: $"{name}Database"
+                        name: "database"
                     );
+                    services.AddSingleton<SqlDatabaseHealthCheckMarker>();
                     break;
                 default:
                     throw new Exception($"Unsupported database provider: {provider}");

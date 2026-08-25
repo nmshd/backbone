@@ -21,7 +21,7 @@ public class ChallengesModule : AbstractModule<ApplicationConfiguration, Infrast
         services.AddDatabase(infrastructureConfigurationConfiguration.SqlDatabase);
 
         if (infrastructureConfigurationConfiguration.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfigurationConfiguration.SqlDatabase.Provider, infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString);
+            services.AddSqlDatabaseHealthCheck(infrastructureConfigurationConfiguration.SqlDatabase.Provider, infrastructureConfigurationConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override Task ConfigureEventBus(IEventBus eventBus)
