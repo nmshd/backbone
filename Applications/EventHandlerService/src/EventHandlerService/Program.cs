@@ -99,7 +99,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("service", "eventHandlerService")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
