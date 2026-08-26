@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -40,8 +38,7 @@ public partial class EventBusRabbitMq : IEventBus, IDisposable
             .Or<SocketException>()
             .Or<AlreadyClosedException>()
             .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
-                _ => 2.Seconds(),
-                (ex, _) => Activity.Current?.AddException(ex));
+                _ => 2.Seconds());
 
         _connection.ConnectionShutdownAsync += (_, args) =>
         {

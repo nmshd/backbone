@@ -41,24 +41,24 @@ public partial class EventBusRabbitMq
 
         await _publishRetryPolicy.ExecuteAsync(async () =>
         {
-            var channel = await _channelPool.Get();
-
             try
             {
+                var channel = await _channelPool.Get();
+
                 var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
 
                 _metrics.TrackEventPublishingDuration(startedAt);
                 _metrics.IncrementNumberOfPublishedEvents(eventName);
+
+                _channelPool.Return(channel);
             }
             catch (Exception ex)
             {
                 _metrics.IncrementNumberOfPublishingErrors(eventName);
-                activity?.SetTag("error.type", ex.GetType().Name);
+                Activity.Current?.AddException(ex);
                 throw;
             }
-
-            _channelPool.Return(channel);
         });
     }
 
