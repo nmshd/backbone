@@ -21,6 +21,8 @@ using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using Configuration = Backbone.SseServer.Configuration;
 using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
+using ServiceCollectionExtensions = Backbone.BuildingBlocks.API.Extensions.ServiceCollectionExtensions;
+using WebApplicationExtensions = Backbone.BuildingBlocks.API.Extensions.WebApplicationExtensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -93,12 +95,12 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSaveChangesTimeInterceptor();
 
-    services.AddModule<DevicesModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
+    ServiceCollectionExtensions.AddModule<DevicesModule, ApplicationConfiguration, InfrastructureConfiguration>(services, configuration);
 
     services.AddSingleton<IEventQueue, EventQueue>();
 
     services.AddCustomAspNetCore(parsedConfiguration);
-    services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi, "SSE Server");
+    ServiceCollectionExtensions.AddCustomSwaggerUi(services, parsedConfiguration.SwaggerUi, "SSE Server");
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
@@ -113,9 +115,9 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
-    services.AddCustomIdentity(environment);
+    ServiceCollectionExtensions.AddCustomIdentity(services, environment);
 
     services.Configure(parsedConfiguration.SseServer);
 }
@@ -123,7 +125,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 static void Configure(WebApplication app, Configuration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
-        app.UseCustomSwaggerUi();
+        WebApplicationExtensions.UseCustomSwaggerUi(app);
 
     app.UseSerilogRequestLogging(opts =>
     {

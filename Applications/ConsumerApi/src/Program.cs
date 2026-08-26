@@ -175,7 +175,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedBackboneConfiguration.Telemetry.OpenTelemetryCollector);
 
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
     services.AddHttpUserAgentParser();

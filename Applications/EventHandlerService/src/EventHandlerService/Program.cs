@@ -75,7 +75,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 services.BuildServiceProvider().GetRequiredService<IOptions<EventHandlerServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
+            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
             services.AddTransient<IHostedService, EventHandlerService>();
 
@@ -94,7 +94,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.AddSingleton<IUserContext, AnonymousUserContext>();
-            
+
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())

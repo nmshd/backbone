@@ -135,7 +135,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
-    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 

@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -23,8 +22,6 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    private static readonly Uri OTLP_GRPC_ENDPOINT = new("http://localhost:4317"); // TODO: extract endpoint to config
-
     private sealed class SqlDatabaseHealthCheckMarker;
 
     extension(IServiceCollection services)
@@ -111,20 +108,15 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        public IServiceCollection AddOpenTelemetry(string name, string version)
+        public IServiceCollection AddOpenTelemetry(string resourceName, string resourceVersion, OpenTelemetryCollectorConfiguration openTelemetryCollectorConfiguration)
         {
             services.AddOpenTelemetry()
-                .ConfigureResource(resource => resource.AddService(name, serviceVersion: version))
+                .ConfigureResource(resource => resource.AddService(resourceName, serviceVersion: resourceVersion))
                 .WithMetrics(metrics =>
                 {
                     metrics
-                        .AddOtlpExporter(options =>
-                        {
-                            options.Endpoint = OTLP_GRPC_ENDPOINT;
-                            options.Protocol = OtlpExportProtocol.Grpc;
-                        })
                         .AddAspNetCoreInstrumentation()
-                        .AddMeter(name)
+                        .AddMeter(resourceName)
                         .AddMeter("Microsoft.EntityFrameworkCore")
                         .AddMeter("Microsoft.AspNetCore.Hosting")
                         .AddMeter("Microsoft.AspNetCore.Diagnostics")
@@ -132,34 +124,35 @@ public static class ServiceCollectionExtensions
                         .AddMeter("Microsoft.AspNetCore.Authorization")
                         .AddMeter("Microsoft.AspNetCore.Authentication")
                         .AddMeter("Microsoft.AspNetCore.Identity");
+
+                    if (openTelemetryCollectorConfiguration.Endpoint != null)
+                        metrics.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
                 })
                 .WithTracing(tracing =>
-                    {
-                        tracing.AddAspNetCoreInstrumentation();
-                        tracing.AddEntityFrameworkCoreInstrumentation();
-                        tracing.AddHttpClientInstrumentation();
-                        tracing.AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME);
-                        tracing.AddOtlpExporter(options =>
-                        {
-                            options.Endpoint = OTLP_GRPC_ENDPOINT;
-                            options.Protocol = OtlpExportProtocol.Grpc;
-                        });
-                        tracing.AddProcessor<DatabaseNameProcessor>();
-                        tracing.AddProcessor<UserContextProcessor>();
-                    }
-                )
+                {
+                    tracing.AddAspNetCoreInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME)
+                        .AddProcessor<DatabaseNameProcessor>()
+                        .AddProcessor<UserContextProcessor>();
+
+                    if (openTelemetryCollectorConfiguration.Endpoint != null)
+                        tracing.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
+                })
                 .WithLogging(
-                    logging => logging.AddOtlpExporter(options =>
+                    logging =>
                     {
-                        options.Endpoint = OTLP_GRPC_ENDPOINT;
-                        options.Protocol = OtlpExportProtocol.Grpc;
-                    }),
+                        if (openTelemetryCollectorConfiguration.Endpoint != null)
+                            logging.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
+                    },
                     logging =>
                     {
                         logging.IncludeFormattedMessage = true;
                         logging.IncludeScopes = true;
                         logging.ParseStateValues = true;
-                    });
+                    }
+                );
 
             return services;
         }
@@ -236,6 +229,11 @@ public static class ServiceCollectionExtensions
             return services;
         }
     }
+}
+
+public class OpenTelemetryCollectorConfiguration
+{
+    public string? Endpoint { get; set; }
 }
 
 public class SwaggerUiConfiguration
