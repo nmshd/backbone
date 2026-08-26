@@ -8,6 +8,8 @@ using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
+using OpenTelemetry.Context.Propagation;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -18,20 +20,15 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    public const string ACTIVITY_SOURCE_NAME = "Backbone.EventBus.RabbitMQ";
-
     private const int PUBLISH_RETRY_COUNT = 6;
     private const int CONNECTION_RETRY_COUNT = 6;
     private const int HANDLER_RETRY_COUNT = 5;
+    
     private const string MESSAGING_SYSTEM = "rabbitmq";
     private const string PUBLISH_OPERATION_NAME = "publish";
-    private const string PROCESS_OPERATION_NAME = "process";
+    private const string PROCESS_OPERATION_NAME = "consume";
     private const string SEND_OPERATION_TYPE = "send";
     private const string PROCESS_OPERATION_TYPE = "process";
-    private const string TRACE_PARENT_HEADER = "traceparent";
-    private const string TRACE_STATE_HEADER = "tracestate";
-
-    private static readonly ActivitySource ACTIVITY_SOURCE = new(ACTIVITY_SOURCE_NAME);
 
     private readonly ILogger<EventBusRabbitMq> _logger;
     private readonly IServiceProvider _serviceProvider;
@@ -203,6 +200,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             var eventName = eventArgs.RoutingKey;
             var queueName = GetQueueName<THandler, TEvent>();
+            
+            using var activity = StartProcessActivity(eventArgs, queueName, eventArgs.BasicProperties, eventArgs.Body.Length);
 
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
@@ -212,7 +211,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
 
                 using (CustomLogContext.SetCorrelationId(correlationId))
-                using (StartProcessActivity(queueName, eventArgs.BasicProperties, eventArgs.Body.Length))
                 {
                     await ProcessEvent<TEvent, THandler>(message);
 
@@ -221,6 +219,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
+                activity?.SetTag("error.type", ex.GetType().Name);
+                
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
                 _metrics.IncrementNumberOfProcessingErrors(GetQueueName<THandler, TEvent>());
 
@@ -268,20 +268,19 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         _metrics.TrackHandledMessageSize(body.Length);
 
-        using var activity = StartPublishActivity(@event.DomainEventId, eventName, body.Length);
+        var properties = new BasicProperties
+        {
+            DeliveryMode = DeliveryModes.Persistent,
+            MessageId = @event.DomainEventId,
+            CorrelationId = CustomLogContext.GetCorrelationId()
+        };
+        using var activity = StartPublishActivity(properties, @event.DomainEventId, eventName, body.Length);
 
         await _publishRetryPolicy.ExecuteAsync(async () =>
         {
             _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
 
             var channel = await _channelPool.Get();
-            var properties = new BasicProperties
-            {
-                DeliveryMode = DeliveryModes.Persistent,
-                MessageId = @event.DomainEventId,
-                CorrelationId = CustomLogContext.GetCorrelationId()
-            };
-            InjectTraceContext(properties);
 
             try
             {
@@ -296,7 +295,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 _metrics.IncrementNumberOfPublishingErrors(eventName);
                 activity?.SetTag("error.type", ex.GetType().Name);
-                activity?.SetStatus(ActivityStatusCode.Error);
                 throw;
             }
 
@@ -340,80 +338,82 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public bool IsConnected => _connection.IsOpen;
 
-    private Activity? StartPublishActivity(string messageId, string eventName, int bodySize)
+    private Activity? StartPublishActivity(BasicProperties properties, string messageId, string eventName, int bodySize)
     {
-        var tags = new ActivityTagsCollection
-        {
-            { "messaging.system", MESSAGING_SYSTEM },
-            { "messaging.operation.name", PUBLISH_OPERATION_NAME },
-            { "messaging.operation.type", SEND_OPERATION_TYPE },
-            { "messaging.destination.name", _exchangeName },
-            { "messaging.message.id", messageId },
-            { "messaging.message.body.size", bodySize }
-        };
+        var destinationName = $"{_exchangeName}:{eventName}";
+        
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{PUBLISH_OPERATION_NAME} {destinationName}", ActivityKind.Producer, Activity.Current?.Context ?? default);
+        
+        ActivityContext contextToInject = default;
 
-        return ACTIVITY_SOURCE.StartActivity($"{PUBLISH_OPERATION_NAME} {eventName}", ActivityKind.Producer, Activity.Current?.Context ?? default, tags: tags);
+        if (activity != null)
+            contextToInject = activity.Context;
+        else if (Activity.Current != null)
+            contextToInject = Activity.Current.Context;
+        
+        EventBusDiagnostics.PROPAGATOR.Inject(new PropagationContext(contextToInject, Baggage.Current), properties, InjectTraceContextIntoProperties);
+
+        if (activity == null)
+            return null;
+        
+        activity.SetTag("messaging.system", MESSAGING_SYSTEM);
+        activity.SetTag("messaging.operation.name", PUBLISH_OPERATION_NAME);
+        activity.SetTag("messaging.operation.type", SEND_OPERATION_TYPE);
+        activity.SetTag("messaging.destination.name", destinationName);
+        activity.SetTag("messaging.message.id", messageId);
+        activity.SetTag("messaging.message.body.size", bodySize);
+        activity.SetTag("messaging.destination.template", $"{_exchangeName}:{{eventName}}");
+        activity.SetTag("messaging.rabbitmq.destination.routing_key", eventName);
+        
+        return activity;
     }
 
-    private static Activity? StartProcessActivity(string queueName, IReadOnlyBasicProperties properties, int bodySize)
+    private void InjectTraceContextIntoProperties(IBasicProperties properties, string key, string value)
     {
-        var parentContext = TryExtractTraceContext(properties, out var creationContext) ? creationContext : Activity.Current?.Context ?? default;
+        properties.Headers ??= new Dictionary<string, object?>();
+        properties.Headers[key] = value;
+    }
 
-        var tags = new ActivityTagsCollection
-        {
-            { "messaging.system", MESSAGING_SYSTEM },
-            { "messaging.operation.name", PROCESS_OPERATION_NAME },
-            { "messaging.operation.type", PROCESS_OPERATION_TYPE },
-            { "messaging.destination.name", queueName },
-            { "messaging.message.body.size", bodySize }
-        };
+    private Activity? StartProcessActivity(BasicDeliverEventArgs eventArgs, string queueName, IReadOnlyBasicProperties properties, int bodySize)
+    {
+        var parentContext = EventBusDiagnostics.PROPAGATOR.Extract(default,
+            eventArgs.BasicProperties,
+            ExtractTraceContextFromBasicProperties);
+        Baggage.Current = parentContext.Baggage;
 
+        var destinationName = $"{_exchangeName}.{queueName}";
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{PROCESS_OPERATION_NAME} {destinationName}", ActivityKind.Consumer, parentContext.ActivityContext);
+        
+        if (activity == null)
+            return null;
+
+        activity.SetTag("messaging.system", MESSAGING_SYSTEM);
+        activity.SetTag("messaging.operation.name", PROCESS_OPERATION_NAME);
+        activity.SetTag("messaging.operation.type", PROCESS_OPERATION_TYPE);
+        activity.SetTag("messaging.destination.name", destinationName);
+        activity.SetTag("messaging.destination.template", $"{_exchangeName}:{{queueName}}");
+        activity.SetTag("messaging.rabbitmq.destination.routing_key", eventArgs.RoutingKey);
+        activity.SetTag("messaging.rabbitmq.message.delivery_tag", eventArgs.DeliveryTag);
+        activity.SetTag("messaging.message.body.size", bodySize);
+        
         if (!properties.MessageId.IsNullOrEmpty())
-            tags.Add("messaging.message.id", properties.MessageId);
+            activity.SetTag("messaging.message.id", properties.MessageId);
 
         if (!properties.CorrelationId.IsNullOrEmpty())
-            tags.Add("messaging.message.conversation_id", properties.CorrelationId);
+            activity.SetTag("messaging.message.conversation_id", properties.CorrelationId);
 
-        return ACTIVITY_SOURCE.StartActivity($"{PROCESS_OPERATION_NAME} {queueName}", ActivityKind.Consumer, parentContext, tags: tags);
+        return activity;
+
     }
 
-    private static void InjectTraceContext(IBasicProperties properties)
+
+    private IEnumerable<string> ExtractTraceContextFromBasicProperties(IReadOnlyBasicProperties props, string key)
     {
-        var activity = Activity.Current;
-        if (activity == null)
-            return;
+        if (props.Headers == null || !props.Headers.TryGetValue(key, out var value)) return [];
 
-        properties.Headers ??= new Dictionary<string, object?>();
+        if (value is byte[] bytes) return [Encoding.UTF8.GetString(bytes)];
 
-        properties.Headers[TRACE_PARENT_HEADER] = Encoding.UTF8.GetBytes(activity.Id!);
-
-        if (!activity.TraceStateString.IsNullOrEmpty())
-            properties.Headers[TRACE_STATE_HEADER] = Encoding.UTF8.GetBytes(activity.TraceStateString);
-    }
-
-    private static bool TryExtractTraceContext(IReadOnlyBasicProperties properties, out ActivityContext context)
-    {
-        context = default;
-
-        if (properties.Headers == null || !properties.Headers.TryGetValue(TRACE_PARENT_HEADER, out var traceParentValue))
-            return false;
-
-        var traceParent = GetHeaderValueAsString(traceParentValue);
-        var traceState = properties.Headers.TryGetValue(TRACE_STATE_HEADER, out var traceStateValue) ? GetHeaderValueAsString(traceStateValue) : null;
-
-        return ActivityContext.TryParse(traceParent, traceState, true, out context);
-    }
-
-    private static string? GetHeaderValueAsString(object? value)
-    {
-        return value switch
-        {
-            null => null,
-            byte[] bytes => Encoding.UTF8.GetString(bytes),
-            ReadOnlyMemory<byte> bytes => Encoding.UTF8.GetString(bytes.Span),
-            string stringValue => stringValue,
-            _ => value.ToString()
-        };
+        return [];
     }
 }
 

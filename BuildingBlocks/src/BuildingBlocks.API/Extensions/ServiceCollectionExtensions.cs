@@ -1,7 +1,7 @@
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
-using Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -130,7 +130,7 @@ public static class ServiceCollectionExtensions
                     {
                         tracing.AddAspNetCoreInstrumentation();
                         tracing.AddEntityFrameworkCoreInstrumentation();
-                        tracing.AddSource(EventBusRabbitMq.ACTIVITY_SOURCE_NAME);
+                        tracing.AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME);
                         tracing.AddConsoleExporter();
                         tracing.AddOtlpExporter(options =>
                         {

@@ -69,6 +69,7 @@
     <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.6.0]" />
     <PackageVersion Include="OpenIddict.Core" Version="[7.6.0]" />
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.6.0]" />
+    <PackageVersion Include="OpenTelemetry.Api" Version="1.17.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.17.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.17.0]" />

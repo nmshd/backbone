@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.EventHandlerService;
 using Backbone.Modules.Challenges.Module;
@@ -92,6 +93,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
+            services.AddSingleton<IUserContext, AnonymousUserContext>();
+            
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
