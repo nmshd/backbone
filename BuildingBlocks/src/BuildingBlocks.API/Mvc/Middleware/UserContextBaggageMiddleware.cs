@@ -6,10 +6,10 @@ namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
 
 public class UserContextBaggageMiddleware
 {
-    private const string DEVICE_ID = "deviceId";
-    private const string IDENTITY_ADDRESS = "identityAddress";
-    private const string CLIENT_ID = "clientId";
-    private const string USERNAME = "username";
+    private const string DEVICE_ID = "enmeshed.backbone.device_id";
+    private const string IDENTITY_ADDRESS = "enmeshed.backbone.identity_address";
+    private const string CLIENT_ID = "enmeshed.backbone.client_id";
+    private const string USERNAME = "enmeshed.backbone.username";
 
     private readonly RequestDelegate _next;
 

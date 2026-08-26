@@ -21,8 +21,6 @@ public class MetricStatusesService : IMetricStatusesService
     {
         var identities = (await _identitiesRepository.ListByAddresses(identityAddresses, cancellationToken, track: true)).ToList();
 
-        Activity.Current?.AddEvent(new ActivityEvent("FetchedIdentities", tags: new ActivityTagsCollection([new KeyValuePair<string, object?>("IdentitiesCount", identities.Count)])));
-
         foreach (var identity in identities)
         {
             await identity.UpdateMetricStatuses(metrics, _metricCalculatorFactory, updateType, cancellationToken);

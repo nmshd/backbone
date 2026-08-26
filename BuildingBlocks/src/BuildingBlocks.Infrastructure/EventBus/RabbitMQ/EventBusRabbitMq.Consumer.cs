@@ -94,7 +94,7 @@ public partial class EventBusRabbitMq
 
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
 
-            activity?.AddEvent(new ActivityEvent("MessageDecoded"));
+            activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.message_decoded"));
 
             try
             {
@@ -122,10 +122,7 @@ public partial class EventBusRabbitMq
 
     private async Task ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var eventType = typeof(TEvent);
-        var eventName = eventType.GetEventName();
-
-        _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.start_processing"));
 
         var domainEvent = JsonSerializer.Deserialize<TEvent>(message);
 
@@ -136,7 +133,7 @@ public partial class EventBusRabbitMq
         if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
             throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
-        Activity.Current?.AddEvent(new ActivityEvent("HandlerResolved"));
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
 
         var startedAt = Stopwatch.GetTimestamp();
         await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;

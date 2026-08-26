@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
@@ -42,8 +41,6 @@ public partial class EventBusRabbitMq
 
         await _publishRetryPolicy.ExecuteAsync(async () =>
         {
-            _logger.LogDebug("Publishing a '{EventName}' event to RabbitMQ.", eventName);
-
             var channel = await _channelPool.Get();
 
             try
