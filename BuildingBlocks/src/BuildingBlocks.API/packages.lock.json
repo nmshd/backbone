@@ -64,15 +64,6 @@
           "Microsoft.Extensions.Logging": "10.0.10"
         }
       },
-      "OpenTelemetry.Exporter.Console": {
-        "type": "Direct",
-        "requested": "[1.17.0, )",
-        "resolved": "1.17.0",
-        "contentHash": "sSoCa2DMCkw7tQabiVduwKWVyg9ungCiwh+0JuDPODF6CuYvR+OCuJwqcbzJsTMecWQrbgL8OYWAt3GC5tJGhw==",
-        "dependencies": {
-          "OpenTelemetry": "1.17.0"
-        }
-      },
       "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
         "type": "Direct",
         "requested": "[1.17.0, )",

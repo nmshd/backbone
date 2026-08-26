@@ -138,7 +138,6 @@ public static class ServiceCollectionExtensions
                         tracing.AddAspNetCoreInstrumentation();
                         tracing.AddEntityFrameworkCoreInstrumentation();
                         tracing.AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME);
-                        tracing.AddConsoleExporter();
                         tracing.AddOtlpExporter(options =>
                         {
                             options.Endpoint = OTLP_GRPC_ENDPOINT;
