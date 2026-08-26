@@ -137,6 +137,7 @@ public static class ServiceCollectionExtensions
                     {
                         tracing.AddAspNetCoreInstrumentation();
                         tracing.AddEntityFrameworkCoreInstrumentation();
+                        tracing.AddHttpClientInstrumentation();
                         tracing.AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME);
                         tracing.AddOtlpExporter(options =>
                         {
