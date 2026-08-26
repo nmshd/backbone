@@ -13,6 +13,7 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
 {
     private const int SUBSCRIPTION_MINIMUM_BACKOFF = 2;
     private const int SUBSCRIPTION_MAXIMUM_BACKOFF = 120;
+    private const string MESSAGING_SYSTEM = "gcp_pubsub";
 
     private static readonly TimeSpan MESSAGE_ACK_DEADLINE = 60.Seconds();
 
@@ -129,21 +130,4 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable, IAsyncD
         public Type EventType { get; }
         public Type HandlerType { get; }
     }
-}
-
-internal static partial class EventBusGoogleCloudPubSubLogs
-{
-    [LoggerMessage(
-        EventId = 830408,
-        EventName = "EventBusGoogleCloudPubSub.SuccessfullySentDomainEvent",
-        Level = LogLevel.Debug,
-        Message = "Successfully sent domain event with id '{messageId}'.")]
-    public static partial void SuccessfullySentDomainEvent(this ILogger logger, string messageId);
-
-    [LoggerMessage(
-        EventId = 712382,
-        EventName = "EventBusGoogleCloudPubSub.ErrorHandlingMessage",
-        Level = LogLevel.Error,
-        Message = "Error handling message with context {exceptionSource}.")]
-    public static partial void ErrorHandlingMessage(this ILogger logger, string exceptionSource, Exception exception);
 }
