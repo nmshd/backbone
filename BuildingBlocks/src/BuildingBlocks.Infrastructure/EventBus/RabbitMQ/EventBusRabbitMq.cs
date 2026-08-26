@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Tooling.Extensions;
@@ -40,7 +41,7 @@ public partial class EventBusRabbitMq : IEventBus, IDisposable
             .Or<AlreadyClosedException>()
             .WaitAndRetryAsync(PUBLISH_RETRY_COUNT,
                 _ => 2.Seconds(),
-                (ex, _) => _logger.ErrorOnPublish(ex));
+                (ex, _) => Activity.Current?.AddException(ex));
 
         _connection.ConnectionShutdownAsync += (_, args) =>
         {
@@ -151,25 +152,4 @@ internal static partial class EventBusRabbitMqLogs
         Level = LogLevel.Information,
         Message = "The connection was successfully recovered.")]
     public static partial void RecoverySucceeded(this ILogger logger);
-
-    [LoggerMessage(
-        EventId = 411326,
-        EventName = "EventBusRabbitMQ.ErrorOnPublish",
-        Level = LogLevel.Warning,
-        Message = "There was an error while trying to publish an event.")]
-    public static partial void ErrorOnPublish(this ILogger logger, Exception exception);
-
-    [LoggerMessage(
-        EventId = 585231,
-        EventName = "EventBusRabbitMQ.PublishedDomainEvent",
-        Level = LogLevel.Debug,
-        Message = "Successfully published the event.")]
-    public static partial void PublishedDomainEvent(this ILogger logger);
-
-    [LoggerMessage(
-        EventId = 702822,
-        EventName = "EventBusRabbitMQ.ErrorWhileProcessingDomainEvent",
-        Level = LogLevel.Error,
-        Message = "An error occurred while processing the domain event of type '{eventName}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string eventName, Exception exception);
 }

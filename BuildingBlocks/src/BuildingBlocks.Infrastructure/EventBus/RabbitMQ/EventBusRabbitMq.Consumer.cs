@@ -88,12 +88,13 @@ public partial class EventBusRabbitMq
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
-            var eventName = eventArgs.RoutingKey;
             var queueName = GetQueueName<THandler, TEvent>();
 
             using var activity = StartProcessActivity(eventArgs, queueName, eventArgs.BasicProperties, eventArgs.Body.Length);
 
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+
+            activity?.AddEvent(new ActivityEvent("MessageDecoded"));
 
             try
             {
@@ -109,12 +110,10 @@ public partial class EventBusRabbitMq
             }
             catch (Exception ex)
             {
-                activity?.SetTag("error.type", ex.GetType().Name);
+                activity?.AddException(ex);
 
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
                 _metrics.IncrementNumberOfProcessingErrors(GetQueueName<THandler, TEvent>());
-
-                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
         };
 
@@ -137,10 +136,10 @@ public partial class EventBusRabbitMq
         if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
             throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
-        var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
+        Activity.Current?.AddEvent(new ActivityEvent("HandlerResolved"));
 
         var startedAt = Stopwatch.GetTimestamp();
-        await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+        await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
         _metrics.TrackEventProcessingDuration(startedAt, GetQueueName<THandler, TEvent>());
 
         _metrics.IncrementNumberOfHandledEvents(GetQueueName<THandler, TEvent>());
