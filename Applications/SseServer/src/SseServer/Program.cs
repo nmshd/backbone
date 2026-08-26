@@ -21,8 +21,6 @@ using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 using Configuration = Backbone.SseServer.Configuration;
 using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
-using ServiceCollectionExtensions = Backbone.BuildingBlocks.API.Extensions.ServiceCollectionExtensions;
-using WebApplicationExtensions = Backbone.BuildingBlocks.API.Extensions.WebApplicationExtensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -95,12 +93,12 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSaveChangesTimeInterceptor();
 
-    ServiceCollectionExtensions.AddModule<DevicesModule, ApplicationConfiguration, InfrastructureConfiguration>(services, configuration);
+    services.AddModule<DevicesModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
     services.AddSingleton<IEventQueue, EventQueue>();
 
     services.AddCustomAspNetCore(parsedConfiguration);
-    ServiceCollectionExtensions.AddCustomSwaggerUi(services, parsedConfiguration.SwaggerUi, "SSE Server");
+    services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi, "SSE Server");
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
@@ -117,7 +115,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
-    ServiceCollectionExtensions.AddCustomIdentity(services, environment);
+    services.AddCustomIdentity(environment);
 
     services.Configure(parsedConfiguration.SseServer);
 }
@@ -125,7 +123,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 static void Configure(WebApplication app, Configuration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
-        WebApplicationExtensions.UseCustomSwaggerUi(app);
+        app.UseCustomSwaggerUi();
 
     app.UseSerilogRequestLogging(opts =>
     {

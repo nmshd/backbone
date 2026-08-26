@@ -16,11 +16,8 @@ namespace Backbone.ConsumerApi.Controllers.Challenges;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class ChallengesController : ApiControllerBase
 {
-    private readonly ILogger<ChallengesController> _logger;
-
-    public ChallengesController(IMediator mediator, ILogger<ChallengesController> logger) : base(mediator)
+    public ChallengesController(IMediator mediator) : base(mediator)
     {
-        _logger = logger;
     }
 
     [HttpPost]
@@ -30,7 +27,6 @@ public class ChallengesController : ApiControllerBase
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CreateChallengeCommand(), cancellationToken);
-        _logger.LogInformation("Created challenge with id {id}", response.Id);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 

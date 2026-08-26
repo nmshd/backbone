@@ -130,7 +130,8 @@ public static class ServiceCollectionExtensions
                 })
                 .WithTracing(tracing =>
                 {
-                    tracing.AddAspNetCoreInstrumentation()
+                    tracing
+                        .AddAspNetCoreInstrumentation()
                         .AddEntityFrameworkCoreInstrumentation()
                         .AddHttpClientInstrumentation()
                         .AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME)
