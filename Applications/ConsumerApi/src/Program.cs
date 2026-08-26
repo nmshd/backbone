@@ -213,6 +213,8 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
+    app.UseMiddleware<UserContextBaggageMiddleware>();
+
     app.MapControllers();
     app.MapHealthChecks("/health");
 

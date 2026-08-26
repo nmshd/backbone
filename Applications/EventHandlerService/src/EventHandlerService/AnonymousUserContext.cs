@@ -28,12 +28,12 @@ public class AnonymousUserContext : IUserContext
 
     public string GetUserId()
     {
-        throw new NotSupportedException();
+        throw new NotFoundException();
     }
 
     public string? GetUserIdOrNull()
     {
-        throw new NotSupportedException();
+        return null;
     }
 
     public string GetUsername()
@@ -48,11 +48,11 @@ public class AnonymousUserContext : IUserContext
 
     public string GetClientId()
     {
-        throw new NotSupportedException();
+        throw new NotFoundException();
     }
 
     public string? GetClientIdOrNull()
     {
-        throw new NotSupportedException();
+        return null;
     }
 }

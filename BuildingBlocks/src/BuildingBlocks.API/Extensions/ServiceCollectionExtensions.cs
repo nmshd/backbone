@@ -138,9 +138,7 @@ public static class ServiceCollectionExtensions
                             options.Protocol = OtlpExportProtocol.Grpc;
                         });
                         tracing.AddProcessor<DatabaseNameProcessor>();
-                        tracing.AddProcessor<DeviceIdProcessor>();
-                        tracing.AddProcessor<IdentityAddressProcessor>();
-                        tracing.AddProcessor<UsernameProcessor>();
+                        tracing.AddProcessor<UserContextProcessor>();
                     }
                 )
                 .WithLogging(

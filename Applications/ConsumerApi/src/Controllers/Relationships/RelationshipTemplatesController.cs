@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.ConsumerApi.Versions;
 using Backbone.Modules.Relationships.Application;
@@ -14,6 +15,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OpenTelemetry;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.ConsumerApi.Controllers.Relationships;
@@ -23,10 +25,12 @@ namespace Backbone.ConsumerApi.Controllers.Relationships;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class RelationshipTemplatesController : ApiControllerBase
 {
+    private readonly IUserContext _userContext;
     private readonly ApplicationConfiguration _configuration;
 
-    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationConfiguration> options) : base(mediator)
+    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationConfiguration> options, IUserContext userContext) : base(mediator)
     {
+        _userContext = userContext;
         _configuration = options.Value;
     }
 
