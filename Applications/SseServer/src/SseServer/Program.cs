@@ -11,6 +11,7 @@ using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;
 using Backbone.SseServer.Extensions;
 using Backbone.Tooling.Extensions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -149,7 +150,18 @@ static void Configure(WebApplication app, Configuration configuration)
 
     app.MapControllers();
 
-    app.MapHealthChecks("/health");
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+    app.MapHealthChecks("/health/ready", new HealthCheckOptions
+    {
+        Predicate = _ => true
+    });
+    app.MapHealthChecks("/health/live", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

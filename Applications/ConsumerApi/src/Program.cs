@@ -31,6 +31,7 @@ using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -216,7 +217,18 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.UseMiddleware<UserContextBaggageMiddleware>();
 
     app.MapControllers();
-    app.MapHealthChecks("/health");
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+    app.MapHealthChecks("/health/ready", new HealthCheckOptions
+    {
+        Predicate = _ => true
+    });
+    app.MapHealthChecks("/health/live", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
 
     app.UseResponseCaching();
 }

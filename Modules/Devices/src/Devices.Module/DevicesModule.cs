@@ -28,7 +28,7 @@ public class DevicesModule : AbstractModule<ApplicationConfiguration, Infrastruc
         services.AddPushNotifications(infrastructureConfiguration.PushNotifications);
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
-            services.AddSqlDatabaseHealthCheck(Name, infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
+            services.AddSqlDatabaseHealthCheck(infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);
     }
 
     public override async Task ConfigureEventBus(IEventBus eventBus)

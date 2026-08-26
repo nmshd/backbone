@@ -20,6 +20,7 @@ using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
@@ -204,7 +205,18 @@ static void Configure(WebApplication app, AdminApiConfiguration configuration)
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
-    app.MapHealthChecks("/health");
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+    app.MapHealthChecks("/health/ready", new HealthCheckOptions
+    {
+        Predicate = _ => true
+    });
+    app.MapHealthChecks("/health/live", new HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
 }
 
 public partial class Program

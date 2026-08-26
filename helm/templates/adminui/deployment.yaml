@@ -61,7 +61,7 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: 8080
             initialDelaySeconds: {{ .Values.adminui.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.adminui.livenessProbe.periodSeconds }}
@@ -69,7 +69,7 @@ spec:
             failureThreshold: {{ .Values.adminui.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: 8080
             initialDelaySeconds: {{ .Values.adminui.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.adminui.readinessProbe.periodSeconds }}
