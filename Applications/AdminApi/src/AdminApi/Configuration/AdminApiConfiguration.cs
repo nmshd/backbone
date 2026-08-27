@@ -23,7 +23,7 @@ public class AdminApiConfiguration
 
     public class TelemetryConfiguration
     {
-        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; }
+        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
     }
 
     public class AuthenticationConfiguration

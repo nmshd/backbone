@@ -15,7 +15,7 @@ public class EventHandlerServiceConfiguration
 
 public class TelemetryConfiguration
 {
-    public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; }
+    public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
 }
 
 public class InfrastructureConfiguration

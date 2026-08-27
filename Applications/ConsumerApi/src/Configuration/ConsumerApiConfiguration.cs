@@ -26,7 +26,8 @@ public class ConsumerApiConfiguration
 
     public class TelemetryConfiguration
     {
-        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; }
+        [Required]
+        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
     }
 
     public class WellKnownEndpointsConfiguration
