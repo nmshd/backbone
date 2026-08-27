@@ -95,7 +95,7 @@ static WebApplication CreateApp(string[] args)
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()]))
                 .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()),
-            preserveStaticLogger: true, writeToProviders: true)
+            writeToProviders: true)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);

@@ -106,7 +106,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()]))
                 .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()),
-            preserveStaticLogger: true, writeToProviders: true
+            writeToProviders: true
         );
 }
 

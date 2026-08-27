@@ -71,7 +71,7 @@ static WebApplication CreateApp(string[] args)
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])),
-            preserveStaticLogger: true, writeToProviders: true
+            writeToProviders: true
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
