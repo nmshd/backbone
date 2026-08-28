@@ -34,27 +34,34 @@ public partial class EventBusRabbitMq
         };
         using var activity = StartPublishActivity(properties, @event.DomainEventId, eventName, body.Length);
 
+        IChannel? channel = null;
+
         await _publishRetryPolicy.ExecuteAsync(async () =>
         {
             try
             {
-                var channel = await _channelPool.Get();
+                channel = await _channelPool.Get();
 
-                activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.publisher.created_channel_for_publish"));
+                activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.publisher.acquired_channel_for_publish"));
 
                 var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
 
                 _metrics.TrackEventPublishingDuration(startedAt);
                 _metrics.IncrementNumberOfPublishedEvents(eventName);
-
-                _channelPool.Return(channel);
             }
             catch (Exception ex)
             {
                 _metrics.IncrementNumberOfPublishingErrors(eventName);
                 Activity.Current?.AddException(ex);
                 throw;
+            }
+            finally
+            {
+                if (channel != null)
+                    _channelPool.Return(channel);
+
+                activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.publisher.returned_channel"));
             }
         });
     }

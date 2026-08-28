@@ -36,49 +36,65 @@ public partial class EventBusRabbitMq
 
     private async Task EnsureDeadLetterQueueExists()
     {
-        var channel = await _channelPool.Get();
+        IChannel? channel = null;
 
-        await channel.QueueDeclareAsync(_deadLetterQueueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: new Dictionary<string, object?>
-            {
-                { "x-queue-type", "quorum" },
-            }
-        );
+        try
+        {
+            channel = await _channelPool.Get();
 
-        await channel.QueueBindAsync(_deadLetterQueueName, _deadLetterExchangeName, "#");
+            await channel.QueueDeclareAsync(_deadLetterQueueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: new Dictionary<string, object?>
+                {
+                    { "x-queue-type", "quorum" },
+                }
+            );
 
-        _logger.LogTrace("Successfully bound dead letter queue.");
+            await channel.QueueBindAsync(_deadLetterQueueName, _deadLetterExchangeName, "#");
 
-        _channelPool.Return(channel);
+            _logger.LogTrace("Successfully bound dead letter queue.");
+        }
+        finally
+        {
+            if (channel != null)
+                _channelPool.Return(channel);
+        }
     }
 
     private async Task CreateQueue<TEvent>(string queueName) where TEvent : DomainEvent
     {
         var eventName = typeof(TEvent).GetEventName();
 
-        var channel = await _channelPool.Get();
+        IChannel? channel = null;
 
-        await channel.QueueDeclareAsync(queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: new Dictionary<string, object?>
-            {
-                { "x-queue-type", "quorum" },
-                { "x-delivery-limit", HANDLER_RETRY_COUNT },
-                { "x-dead-letter-exchange", _deadLetterExchangeName },
-                { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
-            }
-        );
+        try
+        {
+            channel = await _channelPool.Get();
 
-        await channel.QueueBindAsync(queueName, _exchangeName, eventName);
+            await channel.QueueDeclareAsync(queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: new Dictionary<string, object?>
+                {
+                    { "x-queue-type", "quorum" },
+                    { "x-delivery-limit", HANDLER_RETRY_COUNT },
+                    { "x-dead-letter-exchange", _deadLetterExchangeName },
+                    { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
+                }
+            );
 
-        _logger.LogTrace("Successfully bound queue '{QueueName}' to event '{EventName}'.", queueName, eventName);
+            await channel.QueueBindAsync(queueName, _exchangeName, eventName);
 
-        _channelPool.Return(channel);
+            _logger.LogTrace("Successfully bound queue '{QueueName}' to event '{EventName}'.", queueName, eventName);
+        }
+        finally
+        {
+            if (channel != null)
+                _channelPool.Return(channel);
+        }
     }
 
     private async Task<AsyncEventingBasicConsumer> CreateConsumer<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>

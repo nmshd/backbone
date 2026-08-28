@@ -87,9 +87,12 @@ public partial class EventBusRabbitMq : IEventBus, IDisposable
 
     private async Task EnsureExchangeExists(string exchangeName, string exchangeType = "direct")
     {
+        IChannel? channel = null;
+
         try
         {
-            var channel = await _channelPool.Get();
+            channel = await _channelPool.Get();
+
             await channel.ExchangeDeclarePassiveAsync(exchangeName);
             _channelPool.Return(channel);
         }
@@ -99,16 +102,24 @@ public partial class EventBusRabbitMq : IEventBus, IDisposable
             {
                 try
                 {
-                    var channel = await _channelPool.Get();
-                    await channel.ExchangeDeclareAsync(exchangeName, exchangeType, durable: true);
-                    _channelPool.Return(channel);
+                    await channel!.ExchangeDeclareAsync(exchangeName, exchangeType, durable: true);
                 }
                 catch (Exception)
                 {
                     _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", exchangeName);
                     throw new Exception($"The exchange '{exchangeName}' does not exist and could not be created.");
                 }
+                finally
+                {
+                    if (channel != null)
+                        _channelPool.Return(channel);
+                }
             }
+        }
+        finally
+        {
+            if (channel != null)
+                _channelPool.Return(channel);
         }
     }
 
