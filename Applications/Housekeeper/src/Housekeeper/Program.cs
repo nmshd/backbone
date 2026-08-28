@@ -1,4 +1,5 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
@@ -72,6 +73,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<Executor>();
 
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+
+            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
         })

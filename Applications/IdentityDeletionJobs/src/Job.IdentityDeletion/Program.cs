@@ -107,6 +107,8 @@ public class Program
 
                 services.RegisterIdentityDeleters();
 
+                services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())

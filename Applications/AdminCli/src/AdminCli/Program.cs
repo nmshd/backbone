@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Infrastructure.Persistence;
@@ -77,6 +78,7 @@ public class Program
 #pragma warning restore ASP0000
 
         services.AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase);
+        services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Populate(services);
