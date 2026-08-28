@@ -17,6 +17,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public partial class EventBusGoogleCloudPubSub
 {
+    private const string CALL_OPERATION_NAME = "call";
     private const string PROCESS_OPERATION_NAME = "consume";
     private const string PROCESS_OPERATION_TYPE = "process";
 
@@ -131,10 +132,36 @@ public partial class EventBusGoogleCloudPubSub
         var handleMethod = handler.GetType().GetMethod("Handle");
 
         var startedAt = Stopwatch.GetTimestamp();
-        await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+        using (var handlerActivity = StartHandlerActivity(eventType, handlerType))
+        {
+            try
+            {
+                await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+            }
+            catch (Exception ex)
+            {
+                handlerActivity?.AddException(ex);
+                throw;
+            }
+        }
+
         _metrics.TrackEventProcessingDuration(startedAt, subscriptionName);
 
         _metrics.IncrementNumberOfHandledEvents(subscriptionName);
+    }
+
+    private Activity? StartHandlerActivity(Type eventType, Type handlerType)
+    {
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{CALL_OPERATION_NAME} {handlerType.FullName}", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("event_bus.event.name", eventType.GetEventName());
+        activity.SetTag("event_bus.event.type", eventType.FullName);
+        activity.SetTag("event_bus.handler.type", handlerType.FullName);
+
+        return activity;
     }
 
     private Activity? StartProcessActivity(PubsubMessage message, string subscriptionName, int bodySize)

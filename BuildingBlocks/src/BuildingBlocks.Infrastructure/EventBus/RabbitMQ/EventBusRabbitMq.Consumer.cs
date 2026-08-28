@@ -16,6 +16,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 public partial class EventBusRabbitMq
 {
     private const int HANDLER_RETRY_COUNT = 5;
+    private const string CALL_OPERATION_NAME = "call";
     private const string PROCESS_OPERATION_NAME = "consume";
     private const string PROCESS_OPERATION_TYPE = "process";
 
@@ -152,10 +153,38 @@ public partial class EventBusRabbitMq
         Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
 
         var startedAt = Stopwatch.GetTimestamp();
-        await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+        using (var handlerActivity = StartHandlerActivity<TEvent, THandler>())
+        {
+            try
+            {
+                await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+            }
+            catch (Exception ex)
+            {
+                handlerActivity?.AddException(ex);
+                throw;
+            }
+        }
+
         _metrics.TrackEventProcessingDuration(startedAt, GetQueueName<THandler, TEvent>());
 
         _metrics.IncrementNumberOfHandledEvents(GetQueueName<THandler, TEvent>());
+    }
+
+    private Activity? StartHandlerActivity<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var handlerType = typeof(THandler);
+        var eventType = typeof(TEvent);
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{CALL_OPERATION_NAME} {handlerType.FullName}", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("event_bus.event.name", eventType.GetEventName());
+        activity.SetTag("event_bus.event.type", eventType.FullName);
+        activity.SetTag("event_bus.handler.type", handlerType.FullName);
+
+        return activity;
     }
 
     public async Task StartConsuming(CancellationToken cancellationToken)

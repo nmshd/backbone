@@ -15,6 +15,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public partial class EventBusAzureServiceBus
 {
+    private const string CALL_OPERATION_NAME = "call";
     private const string PROCESS_OPERATION_NAME = "consume";
     private const string PROCESS_OPERATION_TYPE = "process";
 
@@ -141,7 +142,19 @@ public partial class EventBusAzureServiceBus
             Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
 
             var startedAt = Stopwatch.GetTimestamp();
-            await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+            using (var handlerActivity = StartHandlerActivity<TEvent, THandler>())
+            {
+                try
+                {
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+                }
+                catch (Exception ex)
+                {
+                    handlerActivity?.AddException(ex);
+                    throw;
+                }
+            }
+
             _metrics.TrackEventProcessingDuration(startedAt, GetSubscriptionName<THandler, TEvent>());
 
             _metrics.IncrementNumberOfHandledEvents(GetSubscriptionName<THandler, TEvent>());
@@ -153,6 +166,22 @@ public partial class EventBusAzureServiceBus
         }
 
         return true;
+    }
+
+    private Activity? StartHandlerActivity<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var handlerType = typeof(THandler);
+        var eventType = typeof(TEvent);
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{CALL_OPERATION_NAME} {handlerType.FullName}", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("event_bus.event.name", eventType.GetEventName());
+        activity.SetTag("event_bus.event.type", eventType.FullName);
+        activity.SetTag("event_bus.handler.type", handlerType.FullName);
+
+        return activity;
     }
 
     private Activity? StartProcessActivity(ServiceBusReceivedMessage message, string subscriptionName, int bodySize)
