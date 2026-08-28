@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
-using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using Polly.Retry;
@@ -22,11 +21,7 @@ public partial class EventBusRabbitMq
     public async Task Publish(DomainEvent @event)
     {
         var eventName = @event.GetEventName();
-
-        _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
-
         var message = JsonSerializer.Serialize(@event, @event.GetType());
-
         var body = Encoding.UTF8.GetBytes(message);
 
         _metrics.TrackHandledMessageSize(body.Length);
@@ -44,6 +39,8 @@ public partial class EventBusRabbitMq
             try
             {
                 var channel = await _channelPool.Get();
+
+                activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.publisher.created_channel_for_publish"));
 
                 var startedAt = Stopwatch.GetTimestamp();
                 await channel.BasicPublishAsync(_exchangeName, eventName, mandatory: false, properties, body);
