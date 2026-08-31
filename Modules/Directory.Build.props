@@ -11,22 +11,6 @@
         <RuntimeIdentifiers>win-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
     </PropertyGroup>
 
-    <!-- Relationships Module is currently the only one with its respective unit tests next to the production (within the same project, as opposed to on a separate one) -->
-    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="GitHubActionsTestLogger" />
-
-        <Using Include="Shouldly" />
-        <Using Include="Backbone.UnitTestTools.BaseClasses" />
-        <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
-        <Using Include="Xunit" />
-
-    </ItemGroup>
-
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
         <PackageReference Include="GitHubActionsTestLogger" />
 
