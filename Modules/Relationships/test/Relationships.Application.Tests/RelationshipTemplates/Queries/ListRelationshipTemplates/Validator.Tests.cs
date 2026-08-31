@@ -1,5 +1,5 @@
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;

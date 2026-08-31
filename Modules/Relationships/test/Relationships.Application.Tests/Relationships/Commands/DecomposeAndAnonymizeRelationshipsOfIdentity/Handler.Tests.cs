@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
