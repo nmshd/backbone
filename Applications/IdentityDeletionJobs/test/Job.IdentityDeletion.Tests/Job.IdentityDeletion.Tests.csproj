@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
         <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj" />
     </ItemGroup>
 

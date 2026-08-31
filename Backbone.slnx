@@ -190,6 +190,11 @@
     <Project Path="Modules/Relationships/src/Relationships.Infrastructure/Relationships.Infrastructure.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Module/Relationships.Module.csproj" />
   </Folder>
+  <Folder Name="/Modules/Relationships/test/">
+    <Project Path="Modules/Relationships/test/Relationships.Application.Tests/Relationships.Application.Tests.csproj" />
+    <Project Path="Modules/Relationships/test/Relationships.Domain.Tests/Relationships.Domain.Tests.csproj" />
+    <Project Path="Modules/Relationships/test/Relationships.Infrastructure.Tests/Relationships.Infrastructure.Tests.csproj" />
+  </Folder>
   <Folder Name="/Modules/Synchronization/" />
   <Folder Name="/Modules/Synchronization/src/">
     <Project Path="Modules/Synchronization/src/Synchronization.Application/Synchronization.Application.csproj" />
