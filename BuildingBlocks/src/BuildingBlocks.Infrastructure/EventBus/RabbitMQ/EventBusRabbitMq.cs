@@ -93,28 +93,12 @@ public partial class EventBusRabbitMq : IEventBus, IDisposable
         {
             channel = await _channelPool.Get();
 
-            await channel.ExchangeDeclarePassiveAsync(exchangeName);
-            _channelPool.Return(channel);
+            await channel.ExchangeDeclareAsync(exchangeName, exchangeType, durable: true);
         }
-        catch (OperationInterruptedException ex)
+        catch (Exception ex)
         {
-            if (ex.ShutdownReason?.ReplyCode == 404)
-            {
-                try
-                {
-                    await channel!.ExchangeDeclareAsync(exchangeName, exchangeType, durable: true);
-                }
-                catch (Exception)
-                {
-                    _logger.LogCritical("The exchange '{ExchangeName}' does not exist and could not be created.", exchangeName);
-                    throw new Exception($"The exchange '{exchangeName}' does not exist and could not be created.");
-                }
-                finally
-                {
-                    if (channel != null)
-                        _channelPool.Return(channel);
-                }
-            }
+            _logger.LogCritical(ex, "The exchange '{ExchangeName}' does not exist and could not be created.", exchangeName);
+            throw new Exception($"The exchange '{exchangeName}' does not exist and could not be created.", ex);
         }
         finally
         {
