@@ -127,7 +127,7 @@ internal static partial class EventBusRabbitMqLogs
     [LoggerMessage(
         EventId = 900001,
         EventName = "EventBusRabbitMQ.ConnectionShutdown",
-        Level = LogLevel.Error,
+        Level = LogLevel.Warning,
         Message = "A shutdown of the connection was initiated. Initiator: {shutdownInitiator}, ReplyCode: {replyCode}, ReplyText: {replyText}")]
     public static partial void ConnectionShutdown(this ILogger logger, ShutdownInitiator shutdownInitiator, ushort replyCode, string replyText);
 
