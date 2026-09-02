@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using MediatR;
 using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Application.Announcements.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
@@ -23,20 +24,42 @@ public class Executor
 
     public async Task Execute(CancellationToken cancellationToken)
     {
+        using var activity = StartHousekeeperActivity();
+
         _logger.StartingDeletion();
         var stopwatch = Stopwatch.StartNew();
 
-        await _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
+        try
+        {
+            await _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
+            await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            activity?.AddException(ex);
+            throw;
+        }
 
         stopwatch.Stop();
 
         _logger.DeletionCompleted(stopwatch.ElapsedMilliseconds);
+    }
+
+    private static Activity? StartHousekeeperActivity()
+    {
+        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity("housekeeper run", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("housekeeper.operation", "run");
+
+        return activity;
     }
 }
 

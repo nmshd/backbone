@@ -108,7 +108,8 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        public IServiceCollection AddOpenTelemetry(string resourceName, string resourceVersion, OpenTelemetryCollectorConfiguration openTelemetryCollectorConfiguration)
+        public IServiceCollection AddOpenTelemetry(string resourceName, string resourceVersion, OpenTelemetryCollectorConfiguration openTelemetryCollectorConfiguration,
+            params string[] additionalActivitySourceNames)
         {
             services.AddOpenTelemetry()
                 .ConfigureResource(resource => resource.AddService(resourceName, serviceVersion: resourceVersion))
@@ -137,6 +138,11 @@ public static class ServiceCollectionExtensions
                         .AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME)
                         .AddProcessor<DatabaseNameProcessor>()
                         .AddProcessor<UserContextProcessor>();
+
+                    foreach (var activitySourceName in additionalActivitySourceNames)
+                    {
+                        tracing.AddSource(activitySourceName);
+                    }
 
                     if (openTelemetryCollectorConfiguration.Endpoint != null)
                         tracing.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });

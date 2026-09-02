@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.Housekeeper;
@@ -74,9 +75,12 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
-            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector,
+                HousekeepingDiagnostics.ACTIVITY_SOURCE_NAME);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
+
+            services.AddSingleton<HousekeepingTelemetry>();
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

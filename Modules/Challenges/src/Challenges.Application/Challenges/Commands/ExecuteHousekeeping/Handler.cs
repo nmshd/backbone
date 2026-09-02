@@ -1,21 +1,19 @@
-﻿using System.Diagnostics;
-using Backbone.BuildingBlocks.Application.Housekeeping;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping;
 
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IChallengesRepository _challengesRepository;
-    private readonly ILogger<Handler> _logger;
+    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(IChallengesRepository challengesRepository, ILogger<Handler> logger)
+    public Handler(IChallengesRepository challengesRepository, HousekeepingTelemetry telemetry)
     {
         _challengesRepository = challengesRepository;
-        _logger = logger;
+        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -25,10 +23,6 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteChallenges(CancellationToken cancellationToken)
     {
-        var stopwatch = Stopwatch.StartNew();
-        var numberOfDeletedItems = await _challengesRepository.Delete(Challenge.CanBeCleanedUp, cancellationToken);
-        stopwatch.Stop();
-
-        _logger.DataDeleted(numberOfDeletedItems, "challenges", stopwatch.ElapsedMilliseconds);
+        await _telemetry.TrackDeletion("challenges", ct => _challengesRepository.Delete(Challenge.CanBeCleanedUp, ct), cancellationToken);
     }
 }

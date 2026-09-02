@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Backbone.BuildingBlocks.Application.Housekeeping;
+﻿using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping;
@@ -10,12 +8,12 @@ namespace Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping;
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IFilesRepository _filesRepository;
-    private readonly ILogger<Handler> _logger;
+    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(IFilesRepository filesRepository, ILogger<Handler> logger)
+    public Handler(IFilesRepository filesRepository, HousekeepingTelemetry telemetry)
     {
         _filesRepository = filesRepository;
-        _logger = logger;
+        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -26,19 +24,11 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteFiles(CancellationToken cancellationToken)
     {
-        var stopwatch = Stopwatch.StartNew();
-        var numberOfDeletedItems = await _filesRepository.Delete(File.CanBeCleanedUp, cancellationToken);
-        stopwatch.Stop();
-
-        _logger.DataDeleted(numberOfDeletedItems, "files", stopwatch.ElapsedMilliseconds);
+        await _telemetry.TrackDeletion("files", ct => _filesRepository.Delete(File.CanBeCleanedUp, ct), cancellationToken);
     }
 
     private async Task DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
-        var stopwatch = Stopwatch.StartNew();
-        var numberOfDeletedItems = await _filesRepository.DeleteOrphanedBlobs(cancellationToken);
-        stopwatch.Stop();
-
-        _logger.DataDeleted(numberOfDeletedItems, "orphaned file contents", stopwatch.ElapsedMilliseconds);
+        await _telemetry.TrackDeletion("orphaned file contents", _filesRepository.DeleteOrphanedBlobs, cancellationToken);
     }
 }
