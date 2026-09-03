@@ -1,0 +1,23 @@
+{
+  "name": "@nmshd/backbone-consumerapi-openid4vp-verifier",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@credo-ts/core": "0.7.0",
+    "@credo-ts/openid4vc": "0.7.0",
+    "@noble/curves": "2.0.1",
+    "@noble/hashes": "2.0.1",
+    "events": "3.3.0",
+    "reflect-metadata": "0.2.2"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  }
+}
