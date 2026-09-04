@@ -4,6 +4,10 @@ namespace Backbone.BuildingBlocks.Application.Housekeeping;
 
 public static class HousekeepingTelemetry
 {
+    public const string ACTIVITY_SOURCE_NAME = "Backbone.Housekeeping";
+
+    public static readonly ActivitySource ACTIVITY_SOURCE = new(ACTIVITY_SOURCE_NAME);
+
     public static async Task TrackModuleDeletion(string moduleName, Func<CancellationToken, Task> execute, CancellationToken cancellationToken)
     {
         using var activity = StartModuleDeletionActivity(moduleName);
@@ -21,7 +25,7 @@ public static class HousekeepingTelemetry
 
     private static Activity? StartModuleDeletionActivity(string moduleName)
     {
-        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity(moduleName);
+        var activity = ACTIVITY_SOURCE.StartActivity(moduleName);
 
         if (activity == null)
             return null;
@@ -50,7 +54,7 @@ public static class HousekeepingTelemetry
 
     private static Activity? StartItemDeletionActivity(string itemType)
     {
-        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity($"delete {itemType}");
+        var activity = ACTIVITY_SOURCE.StartActivity($"delete {itemType}");
 
         if (activity == null)
             return null;

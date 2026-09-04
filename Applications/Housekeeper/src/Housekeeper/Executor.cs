@@ -45,7 +45,7 @@ public class Executor
     private static Activity? StartHousekeeperActivity()
     {
         // ReSharper disable once ExplicitCallerInfoArgument
-        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity("housekeeper_run");
+        var activity = HousekeepingTelemetry.ACTIVITY_SOURCE.StartActivity("housekeeper_run");
 
         if (activity == null)
             return null;
