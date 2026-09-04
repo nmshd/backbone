@@ -34,3 +34,7 @@ overrides:
       processors:
         - service-graphs
         - span-metrics
+
+query_frontend:
+  metrics:
+    max_duration: 720h
