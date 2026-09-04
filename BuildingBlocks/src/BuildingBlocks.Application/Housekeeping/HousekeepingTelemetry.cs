@@ -2,27 +2,11 @@ using System.Diagnostics;
 
 namespace Backbone.BuildingBlocks.Application.Housekeeping;
 
-public class HousekeepingTelemetry
+public static class HousekeepingTelemetry
 {
-    public async Task TrackDeletion(string itemType, Func<CancellationToken, Task<int>> delete, CancellationToken cancellationToken)
+    public static async Task TrackModuleDeletion(string moduleName, Func<CancellationToken, Task> execute, CancellationToken cancellationToken)
     {
-        using var activity = StartDeletionActivity(itemType);
-
-        try
-        {
-            var numberOfDeletedItems = await delete(cancellationToken);
-            activity?.SetTag("housekeeping.deleted_items", numberOfDeletedItems);
-        }
-        catch (Exception ex)
-        {
-            TrackException(activity, ex);
-            throw;
-        }
-    }
-
-    public async Task TrackCommand(string moduleName, Func<CancellationToken, Task> execute, CancellationToken cancellationToken)
-    {
-        using var activity = StartModuleDeletionRunActivity(moduleName);
+        using var activity = StartModuleDeletionActivity(moduleName);
 
         try
         {
@@ -35,22 +19,38 @@ public class HousekeepingTelemetry
         }
     }
 
-    private static Activity? StartModuleDeletionRunActivity(string moduleName)
+    private static Activity? StartModuleDeletionActivity(string moduleName)
     {
         var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity(moduleName);
 
         if (activity == null)
             return null;
 
-        activity.SetTag("housekeeping.operation", "module_deletion_run");
+        activity.SetTag("housekeeping.operation", "module_deletion");
         activity.SetTag("housekeeping.module", moduleName);
 
         return activity;
     }
 
-    private static Activity? StartDeletionActivity(string itemType)
+    public static async Task TrackItemDeletion(string itemType, Func<CancellationToken, Task<int>> delete, CancellationToken cancellationToken)
     {
-        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity($"housekeeping delete {itemType}", ActivityKind.Internal);
+        using var activity = StartItemDeletionActivity(itemType);
+
+        try
+        {
+            var numberOfDeletedItems = await delete(cancellationToken);
+            activity?.SetTag("housekeeping.deleted_item_count", numberOfDeletedItems);
+        }
+        catch (Exception ex)
+        {
+            TrackException(activity, ex);
+            throw;
+        }
+    }
+
+    private static Activity? StartItemDeletionActivity(string itemType)
+    {
+        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity($"delete {itemType}");
 
         if (activity == null)
             return null;

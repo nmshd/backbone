@@ -8,12 +8,10 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeep
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(IIdentitiesRepository identitiesRepository, HousekeepingTelemetry telemetry)
+    public Handler(IIdentitiesRepository identitiesRepository)
     {
         _identitiesRepository = identitiesRepository;
-        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -24,12 +22,13 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteDeletionProcesses(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("identity deletion processes", ct => _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, ct), cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("identity deletion processes", ct => _identitiesRepository.DeleteDeletionProcesses(IdentityDeletionProcess.CanBeCleanedUp, ct),
+            cancellationToken);
     }
 
     private async Task DeleteDeletionProcessAuditLogEntries(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("identity deletion process audit log entries",
+        await HousekeepingTelemetry.TrackItemDeletion("identity deletion process audit log entries",
             ct => _identitiesRepository.DeleteDeletionProcessAuditLogEntries(IdentityDeletionProcessAuditLogEntry.CanBeCleanedUp, ct), cancellationToken);
     }
 }

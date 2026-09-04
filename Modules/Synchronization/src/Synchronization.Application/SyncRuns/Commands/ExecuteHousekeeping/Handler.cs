@@ -10,12 +10,10 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.Execute
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(ISynchronizationDbContext dbContext, HousekeepingTelemetry telemetry)
+    public Handler(ISynchronizationDbContext dbContext)
     {
         _dbContext = dbContext;
-        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -26,12 +24,12 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteSyncRuns(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("sync runs", ct => _dbContext.Set<SyncRun>().Where(SyncRun.CanBeCleanedUp).ExecuteDeleteAsync(ct), cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("sync runs", ct => _dbContext.Set<SyncRun>().Where(SyncRun.CanBeCleanedUp).ExecuteDeleteAsync(ct), cancellationToken);
     }
 
     private async Task DeleteDatawalletModifications(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("datawallet modifications",
+        await HousekeepingTelemetry.TrackItemDeletion("datawallet modifications",
             ct => _dbContext.Set<DatawalletModification>().Where(DatawalletModification.CanBeCleanedUp).ExecuteDeleteAsync(ct), cancellationToken);
     }
 }

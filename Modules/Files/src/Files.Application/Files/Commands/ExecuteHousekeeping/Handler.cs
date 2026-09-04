@@ -8,12 +8,10 @@ namespace Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping;
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IFilesRepository _filesRepository;
-    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(IFilesRepository filesRepository, HousekeepingTelemetry telemetry)
+    public Handler(IFilesRepository filesRepository)
     {
         _filesRepository = filesRepository;
-        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -24,11 +22,11 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteFiles(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("files", ct => _filesRepository.Delete(File.CanBeCleanedUp, ct), cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("files", ct => _filesRepository.Delete(File.CanBeCleanedUp, ct), cancellationToken);
     }
 
     private async Task DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("orphaned file contents", _filesRepository.DeleteOrphanedBlobs, cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("orphaned file contents", _filesRepository.DeleteOrphanedBlobs, cancellationToken);
     }
 }

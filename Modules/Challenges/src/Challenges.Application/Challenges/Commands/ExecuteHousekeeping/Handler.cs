@@ -8,12 +8,10 @@ namespace Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHou
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
     private readonly IChallengesRepository _challengesRepository;
-    private readonly HousekeepingTelemetry _telemetry;
 
-    public Handler(IChallengesRepository challengesRepository, HousekeepingTelemetry telemetry)
+    public Handler(IChallengesRepository challengesRepository)
     {
         _challengesRepository = challengesRepository;
-        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -23,6 +21,6 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteChallenges(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("challenges", ct => _challengesRepository.Delete(Challenge.CanBeCleanedUp, ct), cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("challenges", ct => _challengesRepository.Delete(Challenge.CanBeCleanedUp, ct), cancellationToken);
     }
 }

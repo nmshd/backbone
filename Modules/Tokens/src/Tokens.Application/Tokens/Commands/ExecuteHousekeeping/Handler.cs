@@ -7,13 +7,11 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeepin
 
 public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 {
-    private readonly HousekeepingTelemetry _telemetry;
     private readonly ITokensRepository _tokensRepository;
 
-    public Handler(ITokensRepository tokensRepository, HousekeepingTelemetry telemetry)
+    public Handler(ITokensRepository tokensRepository)
     {
         _tokensRepository = tokensRepository;
-        _telemetry = telemetry;
     }
 
     public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
@@ -23,6 +21,6 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
 
     private async Task DeleteTokens(CancellationToken cancellationToken)
     {
-        await _telemetry.TrackDeletion("tokens", ct => _tokensRepository.Delete(Token.CanBeCleanedUp, ct), cancellationToken);
+        await HousekeepingTelemetry.TrackItemDeletion("tokens", ct => _tokensRepository.Delete(Token.CanBeCleanedUp, ct), cancellationToken);
     }
 }
