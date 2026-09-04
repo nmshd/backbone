@@ -67,7 +67,6 @@ static WebApplication CreateApp(string[] args)
                 .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "sseserver")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])),

@@ -14,12 +14,10 @@ namespace Backbone.Housekeeper;
 public class Executor
 {
     private readonly IMediator _mediator;
-    private readonly HousekeepingTelemetry _telemetry;
 
-    public Executor(IMediator mediator, HousekeepingTelemetry telemetry)
+    public Executor(IMediator mediator)
     {
         _mediator = mediator;
-        _telemetry = telemetry;
     }
 
     public async Task Execute(CancellationToken cancellationToken)
@@ -28,13 +26,13 @@ public class Executor
 
         try
         {
-            await _telemetry.TrackCommand("Announcements", ct => _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Challenges", ct => _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Devices", ct => _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Files", ct => _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Relationships", ct => _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Synchronization", ct => _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), ct), cancellationToken);
-            await _telemetry.TrackCommand("Tokens", ct => _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Announcements", ct => _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Challenges", ct => _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Devices", ct => _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Files", ct => _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Relationships", ct => _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Synchronization", ct => _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Tokens", ct => _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), ct), cancellationToken);
         }
         catch (Exception ex)
         {

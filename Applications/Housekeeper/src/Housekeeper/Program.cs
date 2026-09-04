@@ -79,14 +79,11 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 HousekeepingDiagnostics.ACTIVITY_SOURCE_NAME);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
-
-            services.AddSingleton<HousekeepingTelemetry>();
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
                 .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "housekeeper")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])

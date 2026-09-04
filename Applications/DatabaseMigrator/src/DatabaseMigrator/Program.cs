@@ -71,7 +71,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .UseSerilog((context, configuration) => configuration
                 .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "databasemigrator")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])
