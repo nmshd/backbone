@@ -50,6 +50,7 @@ public class Executor
         if (activity == null)
             return null;
 
+        activity.SetTag("housekeeping.trace_id", activity.TraceId.ToString());
         activity.SetTag("housekeeper.operation", "job_run");
 
         return activity;
