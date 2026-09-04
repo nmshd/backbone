@@ -7,6 +7,9 @@ namespace Backbone.ConsumerApi.Configuration;
 public class ConsumerApiConfiguration
 {
     [Required]
+    public required TelemetryConfiguration Telemetry { get; init; }
+
+    [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
     [Required]
@@ -20,6 +23,12 @@ public class ConsumerApiConfiguration
     public AppOnboardingConfiguration? AppOnboarding { get; init; }
 
     public WellKnownEndpointsConfiguration? WellKnownEndpoints { get; init; }
+
+    public class TelemetryConfiguration
+    {
+        [Required]
+        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
+    }
 
     public class WellKnownEndpointsConfiguration
     {

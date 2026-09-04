@@ -29,17 +29,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/acli/buildContainerImage.js
         env:
@@ -66,17 +61,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/aui/buildContainerImage.js
         env:
@@ -103,17 +93,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/capi/buildContainerImage.js
         env:
@@ -140,17 +125,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/eh/buildContainerImage.js
         env:
@@ -177,17 +157,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/hk/buildContainerImage.js
         env:
@@ -214,17 +189,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/dbm/buildContainerImage.js
         env:
@@ -251,17 +221,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/idj/buildContainerImage.js
         env:
@@ -288,17 +253,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Log in to Docker Hub for accessing the cloud builder
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
-        with:
-          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
-          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
-          version: "lab:latest"
-          driver: cloud
-          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+          driver: docker-container
       - name: Build and Push Container Image
         run: ./.ci/sses/buildContainerImage.js
         env:

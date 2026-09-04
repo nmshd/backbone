@@ -913,6 +913,7 @@
           "Microsoft.Extensions.Identity.Core": "[10.0.10, 10.0.10]",
           "Microsoft.Extensions.Logging": "[10.0.10, 10.0.10]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]",
+          "OpenTelemetry.Api": "[1.17.0, )",
           "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.1, 7.2.1]",
           "Serilog": "[4.4.0, 4.4.0]"
@@ -1001,20 +1002,29 @@
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.Modules.Relationships.Common": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
       "Backbone.Modules.Relationships.Common": {
         "type": "Project",
         "dependencies": {
-          "FluentValidation": "[12.1.1, 12.1.1]"
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FluentValidation": "[12.1.1, 12.1.1]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
       "Backbone.Modules.Relationships.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
-          "Backbone.Tooling": "[1.0.0, )"
+          "Backbone.Tooling": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
       "Backbone.Modules.Relationships.Infrastructure": {
@@ -1024,8 +1034,11 @@
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Relationships.Application": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]"
         }
       },
@@ -1459,6 +1472,12 @@
           "Microsoft.EntityFrameworkCore.Relational": "[10.0.4, 11.0.0)",
           "Npgsql": "10.0.3"
         }
+      },
+      "OpenTelemetry.Api": {
+        "type": "CentralTransitive",
+        "requested": "[1.17.0, )",
+        "resolved": "1.17.0",
+        "contentHash": "mSBxzomZgHIJu9CyVNqyDu/n2JHEtqVgfcCD1Br0cV5iLYogjZOMqhlVLt99PEp+0KGBNUR3GXgeOdN2GR3F9g=="
       },
       "Polly": {
         "type": "CentralTransitive",

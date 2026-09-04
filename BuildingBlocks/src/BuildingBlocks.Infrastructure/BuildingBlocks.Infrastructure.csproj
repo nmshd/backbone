@@ -21,6 +21,7 @@
         <PackageReference Include="Microsoft.Extensions.Identity.Core" />
         <PackageReference Include="Microsoft.Extensions.Logging" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <PackageReference Include="OpenTelemetry.Api" />
         <PackageReference Include="Polly" />
         <PackageReference Include="RabbitMQ.Client" />
         <PackageReference Include="Serilog" />

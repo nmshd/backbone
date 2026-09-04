@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using MediatR;
 using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Application.Announcements.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
@@ -13,46 +14,44 @@ namespace Backbone.Housekeeper;
 public class Executor
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<Executor> _logger;
 
-    public Executor(IMediator mediator, ILogger<Executor> logger)
+    public Executor(IMediator mediator)
     {
         _mediator = mediator;
-        _logger = logger;
     }
 
     public async Task Execute(CancellationToken cancellationToken)
     {
-        _logger.StartingDeletion();
-        var stopwatch = Stopwatch.StartNew();
+        using var activity = StartHousekeeperActivity();
 
-        await _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
-        await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
-
-        stopwatch.Stop();
-
-        _logger.DeletionCompleted(stopwatch.ElapsedMilliseconds);
+        try
+        {
+            await HousekeepingTelemetry.TrackModuleDeletion("Announcements", ct => _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Challenges", ct => _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Devices", ct => _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Files", ct => _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Relationships", ct => _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Synchronization", ct => _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), ct), cancellationToken);
+            await HousekeepingTelemetry.TrackModuleDeletion("Tokens", ct => _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), ct), cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            activity?.AddException(ex);
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            throw;
+        }
     }
-}
 
-internal static partial class ExecutorLogs
-{
-    [LoggerMessage(
-        EventId = 468524,
-        EventName = "Housekeeper.Executor.StartingDeletion",
-        Level = LogLevel.Information,
-        Message = "Starting deletion...")]
-    public static partial void StartingDeletion(this ILogger logger);
+    private static Activity? StartHousekeeperActivity()
+    {
+        // ReSharper disable once ExplicitCallerInfoArgument
+        var activity = HousekeepingTelemetry.ACTIVITY_SOURCE.StartActivity("housekeeper_run");
 
-    [LoggerMessage(
-        EventId = 945132,
-        EventName = "Housekeeper.Executor.DeletionCompleted",
-        Level = LogLevel.Information,
-        Message = "Deletion completed after {elapsedMilliseconds}ms.")]
-    public static partial void DeletionCompleted(this ILogger logger, long elapsedMilliseconds);
+        if (activity == null)
+            return null;
+
+        activity.SetTag("housekeeper.operation", "job_run");
+
+        return activity;
+    }
 }

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+    <ProjectReference Include="..\..\src\UnitTestTools\UnitTestTools.csproj" />
   </ItemGroup>
 
 </Project>

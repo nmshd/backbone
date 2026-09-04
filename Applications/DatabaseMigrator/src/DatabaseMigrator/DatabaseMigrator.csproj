@@ -29,6 +29,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.Postgres\Announcements.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure.Database.SqlServer\Announcements.Infrastructure.Database.SqlServer.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />

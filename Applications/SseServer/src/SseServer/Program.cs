@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -63,13 +64,13 @@ static WebApplication CreateApp(string[] args)
 
     builder.Host
         .UseSerilog((context, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "sseserver")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
-                    .WithDestructurers([new DbUpdateExceptionDestructurer()])), preserveStaticLogger: true
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()])),
+            writeToProviders: true
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -111,7 +112,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
 
     services.AddCustomIdentity(environment);
 
@@ -122,8 +123,6 @@ static void Configure(WebApplication app, Configuration configuration)
 {
     if (configuration.SwaggerUi.Enabled)
         app.UseCustomSwaggerUi();
-
-    app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>
     {
