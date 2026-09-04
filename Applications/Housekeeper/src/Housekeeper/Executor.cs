@@ -14,68 +14,46 @@ namespace Backbone.Housekeeper;
 public class Executor
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<Executor> _logger;
+    private readonly HousekeepingTelemetry _telemetry;
 
-    public Executor(IMediator mediator, ILogger<Executor> logger)
+    public Executor(IMediator mediator, HousekeepingTelemetry telemetry)
     {
         _mediator = mediator;
-        _logger = logger;
+        _telemetry = telemetry;
     }
 
     public async Task Execute(CancellationToken cancellationToken)
     {
         using var activity = StartHousekeeperActivity();
 
-        _logger.StartingDeletion();
-        var stopwatch = Stopwatch.StartNew();
-
         try
         {
-            await _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), cancellationToken);
-            await _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), cancellationToken);
+            await _telemetry.TrackCommand("Announcements", ct => _mediator.Send(new ExecuteAnnouncementsModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Challenges", ct => _mediator.Send(new ExecuteChallengesModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Devices", ct => _mediator.Send(new ExecuteDevicesModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Files", ct => _mediator.Send(new ExecuteFilesModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Relationships", ct => _mediator.Send(new ExecuteRelationshipsModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Synchronization", ct => _mediator.Send(new ExecuteSynchronizationModuleHousekeepingCommand(), ct), cancellationToken);
+            await _telemetry.TrackCommand("Tokens", ct => _mediator.Send(new ExecuteTokensModuleHousekeepingCommand(), ct), cancellationToken);
         }
         catch (Exception ex)
         {
             activity?.AddException(ex);
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             throw;
         }
-
-        stopwatch.Stop();
-
-        _logger.DeletionCompleted(stopwatch.ElapsedMilliseconds);
     }
 
     private static Activity? StartHousekeeperActivity()
     {
-        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity("housekeeper run", ActivityKind.Internal);
+        // ReSharper disable once ExplicitCallerInfoArgument
+        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity("housekeeper_run");
 
         if (activity == null)
             return null;
 
-        activity.SetTag("housekeeper.operation", "run");
+        activity.SetTag("housekeeper.operation", "job_run");
 
         return activity;
     }
-}
-
-internal static partial class ExecutorLogs
-{
-    [LoggerMessage(
-        EventId = 468524,
-        EventName = "Housekeeper.Executor.StartingDeletion",
-        Level = LogLevel.Information,
-        Message = "Starting deletion...")]
-    public static partial void StartingDeletion(this ILogger logger);
-
-    [LoggerMessage(
-        EventId = 945132,
-        EventName = "Housekeeper.Executor.DeletionCompleted",
-        Level = LogLevel.Information,
-        Message = "Deletion completed after {elapsedMilliseconds}ms.")]
-    public static partial void DeletionCompleted(this ILogger logger, long elapsedMilliseconds);
 }

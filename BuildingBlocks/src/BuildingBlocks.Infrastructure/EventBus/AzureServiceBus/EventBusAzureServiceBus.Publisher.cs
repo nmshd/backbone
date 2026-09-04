@@ -49,7 +49,7 @@ public partial class EventBusAzureServiceBus
         catch (Exception ex)
         {
             _metrics.IncrementNumberOfPublishingErrors(eventName);
-            activity?.SetTag("error.type", ex.GetType().Name);
+            activity?.AddException(ex);
             throw;
         }
     }

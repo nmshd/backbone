@@ -25,22 +25,22 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-var app = CreateHostBuilder(args).Build();
+using var app = CreateHostBuilder(args).Build();
 
 await app.Services.GetRequiredService<Executor>().Execute(CancellationToken.None);
+
 return;
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
     return Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((hostContext, configuration) =>
+        .ConfigureAppConfiguration((_, configuration) =>
         {
             configuration.Sources.Clear();
-            var env = hostContext.HostingEnvironment;
 
             configuration
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.override.json", optional: true);
 
             configuration.AddEnvironmentVariables();
             configuration.AddCommandLine(args);

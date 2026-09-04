@@ -1,48 +1,51 @@
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 
 namespace Backbone.BuildingBlocks.Application.Housekeeping;
 
 public class HousekeepingTelemetry
 {
-    private readonly Histogram<double> _deletionDuration;
-    private readonly Counter<long> _numberOfDeletedItems;
-
-    public HousekeepingTelemetry(Meter meter)
-    {
-        _numberOfDeletedItems = meter.CreateCounter<long>(name: "enmeshed_housekeeping_deleted_items_total");
-        _deletionDuration = meter.CreateHistogram(name: "enmeshed_housekeeping_deletion_duration_seconds", unit: "s", advice: new InstrumentAdvice<double>
-        {
-            HistogramBucketBoundaries = [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, 30, 60, 180, 600]
-        });
-    }
-
     public async Task TrackDeletion(string itemType, Func<CancellationToken, Task<int>> delete, CancellationToken cancellationToken)
     {
         using var activity = StartDeletionActivity(itemType);
-        var startedAt = Stopwatch.GetTimestamp();
 
         try
         {
             var numberOfDeletedItems = await delete(cancellationToken);
             activity?.SetTag("housekeeping.deleted_items", numberOfDeletedItems);
-
-            TrackDeletion(numberOfDeletedItems, startedAt, itemType);
         }
         catch (Exception ex)
         {
-            activity?.AddException(ex);
-            activity?.SetTag("error.type", ex.GetType().Name);
+            TrackException(activity, ex);
             throw;
         }
     }
 
-    private void TrackDeletion(int numberOfDeletedItems, long startedAt, string itemType)
+    public async Task TrackCommand(string moduleName, Func<CancellationToken, Task> execute, CancellationToken cancellationToken)
     {
-        var itemTypeTag = new KeyValuePair<string, object?>("item_type", itemType);
+        using var activity = StartModuleDeletionRunActivity(moduleName);
 
-        _numberOfDeletedItems.Add(numberOfDeletedItems, itemTypeTag);
-        _deletionDuration.Record(Stopwatch.GetElapsedTime(startedAt).TotalSeconds, itemTypeTag);
+        try
+        {
+            await execute(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            TrackException(activity, ex);
+            throw;
+        }
+    }
+
+    private static Activity? StartModuleDeletionRunActivity(string moduleName)
+    {
+        var activity = HousekeepingDiagnostics.ACTIVITY_SOURCE.StartActivity(moduleName);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("housekeeping.operation", "module_deletion_run");
+        activity.SetTag("housekeeping.module", moduleName);
+
+        return activity;
     }
 
     private static Activity? StartDeletionActivity(string itemType)
@@ -56,5 +59,11 @@ public class HousekeepingTelemetry
         activity.SetTag("housekeeping.item_type", itemType);
 
         return activity;
+    }
+
+    private static void TrackException(Activity? activity, Exception exception)
+    {
+        activity?.AddException(exception);
+        activity?.SetStatus(ActivityStatusCode.Error, exception.Message);
     }
 }
