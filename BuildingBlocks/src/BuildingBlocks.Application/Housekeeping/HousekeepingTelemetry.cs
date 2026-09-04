@@ -25,7 +25,7 @@ public static class HousekeepingTelemetry
 
     private static Activity? StartModuleDeletionActivity(string moduleName)
     {
-        var activity = ACTIVITY_SOURCE.StartActivity(moduleName);
+        var activity = ACTIVITY_SOURCE.StartActivity($"delete {moduleName} module");
 
         if (activity == null)
             return null;

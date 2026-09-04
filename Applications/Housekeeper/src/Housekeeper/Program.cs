@@ -62,6 +62,8 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
     builder.Configuration.AddCommandLine(args);
 
     // Configure Services
+    services.Configure<ConsoleLifetimeOptions>(options => { options.SuppressStatusMessages = true; });
+
     services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
     services.AddLogging();
