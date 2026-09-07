@@ -2,19 +2,21 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Backbone.UnitTestTools.TestDoubles.Fakes;
 
 public static class FakeDbContextFactory
 {
     public static (TContext arrangeContext, TContext actContext, TContext assertionContext)
-        CreateDbContexts<TContext>(SqliteConnection? connection = null) where TContext : DbContext
+        CreateDbContexts<TContext>(SqliteConnection? connection = null, IEnumerable<DbCommandInterceptor>? interceptors = null) where TContext : DbContext
     {
         connection ??= CreateDbConnection();
         connection.Open();
 
         var options = new DbContextOptionsBuilder<TContext>()
             .UseSqlite(connection)
+            .AddInterceptors(interceptors ?? [])
             .Options;
 
         object[] args = [options, A.Dummy<IEventBus>()];
