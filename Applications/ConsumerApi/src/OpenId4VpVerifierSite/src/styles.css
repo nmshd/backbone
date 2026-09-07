@@ -80,6 +80,16 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   line-height: 1.05;
 }
 
+.pass-logo {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 49px;
+  height: 49px;
+  object-fit: contain;
+  object-position: left top;
+}
+
 .pass-portrait {
   position: absolute;
   top: 16px;
@@ -136,6 +146,10 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   font-size: 15px;
   line-height: 1.15;
   overflow-wrap: anywhere;
+}
+
+.additional-claims {
+  display: contents;
 }
 
 .result {

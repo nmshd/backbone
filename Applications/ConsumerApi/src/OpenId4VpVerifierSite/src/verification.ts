@@ -21,12 +21,18 @@ import { BrowserFileSystem, InMemoryStorageService } from "./verificationStorage
 type JsonObject = Record<string, unknown>;
 
 export type VerificationDisplay = {
+  claims?: VerificationDisplayClaim[];
   createdAt?: string;
   expiresAt?: string;
   issuer?: string;
   portrait?: string;
   publicKey?: string;
   title?: string;
+};
+
+export type VerificationDisplayClaim = {
+  label: string;
+  value: string;
 };
 
 export type VerificationOutcome = {
@@ -411,6 +417,7 @@ function extractDisplayFromObject(input: unknown): VerificationDisplay {
   const claims = [credentialSubject, getObjectPath(credential, ["vc"]), credential].filter(isObject);
 
   return {
+    claims: extractDisplayClaims(credential),
     createdAt: formatDate(firstString(claims, ["issuanceDate", "validFrom", "nbf", "iat"])),
     expiresAt: formatDate(firstString(claims, ["expirationDate", "validUntil", "exp"])),
     issuer: issuerName(credential),
@@ -418,6 +425,88 @@ function extractDisplayFromObject(input: unknown): VerificationDisplay {
     publicKey: formatPublicKey(firstString([credential], ["kid", "iss", "id"])),
     title: credentialTitle(credential)
   };
+}
+
+const technicalClaimNames = new Set([
+  "@context",
+  "_sd",
+  "_sd_alg",
+  "cnf",
+  "credentialSubject",
+  "exp",
+  "iat",
+  "iss",
+  "issuanceDate",
+  "nbf",
+  "proof",
+  "status",
+  "type",
+  "validFrom",
+  "validUntil",
+  "vc",
+  "vct",
+  "vp"
+]);
+const imageClaimNames = new Set(["image", "photo", "picture", "portrait"]);
+
+function extractDisplayClaims(credential: JsonObject): VerificationDisplayClaim[] {
+  const credentialSubject = getObjectPath(credential, ["credentialSubject"]) ?? getObjectPath(credential, ["vc", "credentialSubject"]);
+  const claimSource = credentialSubject ?? credential;
+  const claims: VerificationDisplayClaim[] = [];
+
+  for (const [name, value] of Object.entries(claimSource)) {
+    if (technicalClaimNames.has(name) || imageClaimNames.has(name)) {
+      continue;
+    }
+
+    appendDisplayClaims(claims, [name], value);
+  }
+
+  return claims;
+}
+
+function appendDisplayClaims(claims: VerificationDisplayClaim[], path: string[], value: unknown) {
+  if (isObject(value)) {
+    for (const [name, nestedValue] of Object.entries(value)) {
+      if (name === "@type") {
+        continue;
+      }
+
+      appendDisplayClaims(claims, [...path, name], nestedValue);
+    }
+    return;
+  }
+
+  if (Array.isArray(value) && value.some((entry) => isObject(entry) || Array.isArray(entry))) {
+    value.forEach((entry, index) => appendDisplayClaims(claims, [...path, String(index + 1)], entry));
+    return;
+  }
+
+  const formattedValue = formatClaimValue(value);
+  if (formattedValue === undefined) {
+    return;
+  }
+
+  claims.push({
+    label: path.map((segment) => splitCamelCase(segment)).join(" · "),
+    value: formattedValue
+  });
+}
+
+function formatClaimValue(value: unknown) {
+  if (typeof value === "string") {
+    return value.trim() || undefined;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => String(entry)).join(", ");
+  }
+
+  return undefined;
 }
 
 function unwrapCredential(input: unknown): JsonObject {
