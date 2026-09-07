@@ -1,4 +1,4 @@
-import { CoreBuffer, CryptoCipher, CryptoEncryption, CryptoSecretKey } from "@nmshd/crypto";
+import { CoreBuffer, CryptoCipher, CryptoEncryption, SodiumWrapper } from "@nmshd/crypto";
 
 type ApiEnvelope = {
   result?: unknown;
@@ -28,6 +28,8 @@ export async function tryLoadVerifiablePresentationTokenContent(
   config: ReferenceContentConfig
 ): Promise<TokenContentVerifiablePresentation | undefined> {
   try {
+    await SodiumWrapper.ready();
+
     const referenceId = config.referenceId?.trim();
     const parsedReference = parseReferenceHash(window.location.hash);
 
@@ -42,7 +44,8 @@ export async function tryLoadVerifiablePresentationTokenContent(
 
     const decryptedContent = await decryptTokenContent(encryptedContent, parsedReference);
     return isTokenContentVerifiablePresentation(decryptedContent) ? decryptedContent : undefined;
-  } catch {
+  } catch (error) {
+    console.error("Failed to load verifiable presentation token content.", error);
     return undefined;
   }
 }
@@ -129,14 +132,31 @@ function extractEncryptedContent(body: ApiEnvelope): string | undefined {
 }
 
 async function decryptTokenContent(encryptedContent: string, reference: ParsedReferenceHash) {
-  const secretKey = CryptoSecretKey.from({
-    algorithm: XCHACHA20_POLY1305_ALGORITHM,
-    secretKey: CoreBuffer.fromBase64URL(reference.key)
-  });
-  const cipher = CryptoCipher.fromBase64(encryptedContent);
-  const plaintext = await CryptoEncryption.decrypt(cipher, secretKey);
+  const secretKey = CoreBuffer.fromBase64URL(reference.key);
+  const cipher = deserializeCryptoCipher(encryptedContent);
+  const plaintext = await CryptoEncryption.decrypt(cipher, secretKey, undefined, XCHACHA20_POLY1305_ALGORITHM);
 
   return JSON.parse(plaintext.toUtf8()) as unknown;
+}
+
+function deserializeCryptoCipher(encryptedContent: string) {
+  const serializedCipher = JSON.parse(CoreBuffer.fromBase64URL(encryptedContent).toUtf8()) as unknown;
+
+  if (
+    !isRecord(serializedCipher) ||
+    serializedCipher.alg !== XCHACHA20_POLY1305_ALGORITHM ||
+    typeof serializedCipher.cph !== "string" ||
+    typeof serializedCipher.nnc !== "string"
+  ) {
+    throw new Error("The token content does not contain a supported CryptoCipher.");
+  }
+
+  const cipher = new CryptoCipher();
+  cipher.algorithm = XCHACHA20_POLY1305_ALGORITHM;
+  cipher.cipher = CoreBuffer.fromBase64URL(serializedCipher.cph);
+  cipher.nonce = CoreBuffer.fromBase64URL(serializedCipher.nnc);
+
+  return cipher;
 }
 
 function isTokenContentVerifiablePresentation(value: unknown): value is TokenContentVerifiablePresentation {

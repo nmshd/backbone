@@ -1,4 +1,5 @@
 ﻿@model Backbone.ConsumerApi.Controllers.Onboarding.AppOnboardingModel
+@inject Microsoft.AspNetCore.Mvc.ViewFeatures.IFileVersionProvider FileVersionProvider
 
 @{
     Layout = null;
@@ -89,8 +90,8 @@
     </style>
 
     <link rel="stylesheet" href="~/style/style.css" />
-    <link rel="stylesheet" href="~/openid4vp-verifier/assets/verifier.css" />
-    <script type="module" src="~/openid4vp-verifier/assets/verifier.js"></script>
+    <link rel="stylesheet" href="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.css")" />
+    <script type="module" src="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.js")"></script>
     <noscript>
         <style>
             body.openid4vp-verifier-visible #openid4vp-verifier-root {

@@ -153,22 +153,49 @@ async function verifySdJwtCredential(
   token: string,
   context: { expectedAudience: string; expectedNonce?: string }
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
-  const result = await agent.sdJwtVc.verify({
-    compactSdJwtVc: token,
-    fetchTypeMetadata: false,
-    keyBinding: context.expectedNonce
-      ? {
-          audience: context.expectedAudience,
-          nonce: context.expectedNonce
-        }
-      : undefined
-  });
+  const sdJwtVc = agent.sdJwtVc.fromCompact(token);
+  const validationError = validateSdJwtPresentation(sdJwtVc.payload, sdJwtVc.kbJwt?.payload, context);
 
   return {
-    display: extractDisplayFromObject(result.sdJwtVc?.prettyClaims ?? result.sdJwtVc?.payload),
-    error: result.isValid ? undefined : result.error.message,
-    isValid: result.isValid
+    display: extractDisplayFromObject(sdJwtVc.prettyClaims),
+    error: validationError,
+    isValid: validationError === undefined
   };
+}
+
+function validateSdJwtPresentation(
+  credentialPayload: JsonObject,
+  keyBindingPayload: JsonObject | undefined,
+  context: { expectedAudience: string; expectedNonce?: string }
+) {
+  if (context.expectedNonce) {
+    if (!keyBindingPayload) {
+      return "The presented credential does not contain a key binding JWT.";
+    }
+
+    if (keyBindingPayload.nonce !== context.expectedNonce) {
+      return "The key binding nonce does not match the reference id.";
+    }
+
+    const audience = keyBindingPayload.aud;
+    const hasExpectedAudience =
+      audience === context.expectedAudience || (Array.isArray(audience) && audience.includes(context.expectedAudience));
+
+    if (!hasExpectedAudience) {
+      return "The key binding audience does not match the expected audience.";
+    }
+  }
+
+  const now = Date.now() / 1000;
+  if (typeof credentialPayload.nbf === "number" && credentialPayload.nbf > now) {
+    return "The presented credential is not valid yet.";
+  }
+
+  if (typeof credentialPayload.exp === "number" && credentialPayload.exp <= now) {
+    return "The presented credential has expired.";
+  }
+
+  return undefined;
 }
 
 async function verifyJwtArtifact(
