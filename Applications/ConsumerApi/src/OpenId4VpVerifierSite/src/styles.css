@@ -28,6 +28,10 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   font: inherit;
 }
 
+.openid4vp-verifier [hidden] {
+  display: none !important;
+}
+
 .verifier {
   position: relative;
   display: flex;
@@ -39,6 +43,13 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   padding: calc(40px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
   overflow: hidden;
   background: #fff8f5;
+}
+
+.verifier-content {
+  display: flex;
+  min-height: calc(100svh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  flex: 1;
+  flex-direction: column;
 }
 
 .intro {
@@ -67,25 +78,6 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   font-size: 30px;
   font-weight: 700;
   line-height: 1.05;
-}
-
-.pass-logo {
-  display: grid;
-  width: 52px;
-  height: 52px;
-  gap: 5px;
-}
-
-.pass-logo span {
-  display: block;
-  height: 11px;
-  border: 6px solid #fff;
-  border-top: 0;
-}
-
-.pass-logo span:nth-child(2) {
-  border-right: 0;
-  border-left: 0;
 }
 
 .pass-portrait {
@@ -157,6 +149,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   font-family: Arial, sans-serif;
   font-size: 25px;
   line-height: 1.25;
+  white-space: pre-line;
 }
 
 .status-mark {

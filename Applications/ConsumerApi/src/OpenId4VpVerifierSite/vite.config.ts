@@ -11,7 +11,7 @@ export default defineConfig({
       entry: "src/main.ts",
       formats: ["es"]
     },
-    outDir: "../wwwroot/openid4vp-verifier",
+    outDir: "dist/openid4vp-verifier",
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => (assetInfo.name?.endsWith(".css") ? "assets/verifier.css" : "assets/[name][extname]"),

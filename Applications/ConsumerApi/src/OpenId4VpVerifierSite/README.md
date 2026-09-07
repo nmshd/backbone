@@ -9,7 +9,9 @@ npm install
 npm run build
 ```
 
-The build output is written to `../wwwroot/openid4vp-verifier` and exposes fixed asset names under `/openid4vp-verifier/assets/`.
+The Vite build output is written to `dist/openid4vp-verifier` and exposes fixed asset names under `/openid4vp-verifier/assets/`.
+
+During the Consumer API build, MSBuild runs the Vite build and copies the generated files into `../wwwroot/openid4vp-verifier`. The copied `wwwroot` files are build artifacts and are not committed.
 
 ## Input
 
