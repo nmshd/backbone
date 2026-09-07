@@ -11,8 +11,10 @@
   "dependencies": {
     "@credo-ts/core": "0.7.0",
     "@credo-ts/openid4vc": "0.7.0",
+    "@js-soft/ts-serval": "2.0.17",
     "@noble/curves": "2.0.1",
     "@noble/hashes": "2.0.1",
+    "@nmshd/crypto": "3.0.6",
     "events": "3.3.0",
     "reflect-metadata": "0.2.2"
   },

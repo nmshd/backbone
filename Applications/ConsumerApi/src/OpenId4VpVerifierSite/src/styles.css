@@ -1,13 +1,4 @@
-* {
-  box-sizing: border-box;
-}
-
-html {
-  min-height: 100%;
-  background: #e5e5e5;
-}
-
-body {
+body.openid4vp-verifier-visible {
   min-height: 100%;
   margin: 0;
   background: #e5e5e5;
@@ -16,7 +7,24 @@ body {
   letter-spacing: 0;
 }
 
-button {
+body.openid4vp-verifier-visible #app-onboarding-content {
+  display: none;
+}
+
+#openid4vp-verifier-root {
+  display: none;
+}
+
+body.openid4vp-verifier-visible #openid4vp-verifier-root {
+  display: block;
+}
+
+.openid4vp-verifier,
+.openid4vp-verifier * {
+  box-sizing: border-box;
+}
+
+.openid4vp-verifier button {
   font: inherit;
 }
 
@@ -240,7 +248,8 @@ button {
   color: #5a4c43;
 }
 
-.result p {
+.result p,
+.closed-view p {
   margin: 0;
   text-align: center;
   font-family: Arial, sans-serif;
@@ -277,7 +286,7 @@ button {
 
 .loading-mark {
   border-right-color: transparent;
-  animation: spin 1s linear infinite;
+  animation: openid4vp-spin 1s linear infinite;
 }
 
 .close-button {
@@ -297,6 +306,13 @@ button {
   transform: translateY(1px);
 }
 
+.closed-view {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  color: #5a4c43;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -308,14 +324,14 @@ button {
   border: 0;
 }
 
-@keyframes spin {
+@keyframes openid4vp-spin {
   to {
     transform: rotate(1turn);
   }
 }
 
 @media (min-width: 440px) {
-  body {
+  body.openid4vp-verifier-visible {
     padding: 10px;
   }
 

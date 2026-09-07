@@ -35,6 +35,11 @@ export type VerificationOutcome = {
   isValid: boolean;
 };
 
+type VerificationOptions = {
+  expectedAudience?: string;
+  expectedNonce?: string;
+};
+
 type VerifierAgent = Agent<{
   dids: DidsModule;
   kms: Kms.KeyManagementModule;
@@ -42,12 +47,12 @@ type VerifierAgent = Agent<{
 
 let agentPromise: Promise<VerifierAgent> | undefined;
 
-export async function verifyPresentedCredential(): Promise<VerificationOutcome> {
+export async function verifyPresentedCredential(presentation?: unknown, options: VerificationOptions = {}): Promise<VerificationOutcome> {
   try {
-    const response = readAuthorizationResponseFromUrl();
-    const tokens = extractVpTokens(response);
-    const expectedNonce = getStringParam("nonce") ?? getStringParam("expected_nonce") ?? sessionStorage.getItem("openid4vpVerifier.nonce") ?? undefined;
-    const expectedAudience = getStringParam("audience") ?? getStringParam("client_id") ?? window.location.origin;
+    const tokens = presentation === undefined ? extractVpTokens(readAuthorizationResponseFromUrl()) : normalizeToken(presentation);
+    const expectedNonce =
+      options.expectedNonce ?? getStringParam("nonce") ?? getStringParam("expected_nonce") ?? sessionStorage.getItem("openid4vpVerifier.nonce") ?? undefined;
+    const expectedAudience = options.expectedAudience ?? getStringParam("audience") ?? getStringParam("client_id") ?? window.location.origin;
 
     if (tokens.length === 0) {
       return invalid("No vp_token parameter was found in the OpenID4VP response.");

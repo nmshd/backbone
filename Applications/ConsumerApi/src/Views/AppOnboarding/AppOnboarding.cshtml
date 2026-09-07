@@ -10,7 +10,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const link = document.getElementById('in-app-link');
-            link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+            if (link) {
+                link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+            }
         });
     </script>
 
@@ -87,9 +89,42 @@
     </style>
 
     <link rel="stylesheet" href="~/style/style.css" />
+    <link rel="stylesheet" href="~/openid4vp-verifier/assets/verifier.css" />
+    <script type="module" src="~/openid4vp-verifier/assets/verifier.js"></script>
+    <noscript>
+        <style>
+            body.openid4vp-verifier-visible #openid4vp-verifier-root {
+                display: none;
+            }
+
+            body.openid4vp-verifier-visible #app-onboarding-content {
+                display: block;
+            }
+        </style>
+    </noscript>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="openid4vp-verifier-visible">
+<div id="openid4vp-verifier-root"
+     data-reference-id="@Model.ReferenceId"
+     data-token-endpoint-template="/api/v2/Tokens/{id}"
+     data-relationship-template-endpoint-template="/api/v2/RelationshipTemplates/{id}">
+    <main class="openid4vp-verifier verifier is-loading" aria-label="OpenID4VP Nachweisprüfung">
+        <div class="phone-status" aria-hidden="true">
+            <span>10:41</span>
+            <span class="status-icons">
+                <span class="signal"></span>
+                <span class="wifi"></span>
+                <span class="battery"></span>
+            </span>
+        </div>
+        <section class="result" aria-live="polite">
+            <p>Der Nachweis<br />wird geprüft.</p>
+            <div class="status-mark loading-mark" aria-hidden="true"></div>
+        </section>
+    </main>
+</div>
+<div id="app-onboarding-content">
 <div class="container">
     <div class="banner-box">
         <div class="banner">
@@ -135,5 +170,6 @@
             <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
         </a>
     </div>
+</div>
 </div>
 </body>

@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import "./styles.css";
+import { tryLoadVerifiablePresentationTokenContent } from "./referenceContent";
 import { verifyPresentedCredential } from "./verification";
 
 type CredentialDisplay = {
@@ -16,7 +17,10 @@ type AppState = {
   error?: string;
   isLoading?: boolean;
   isValid: boolean;
+  isClosed?: boolean;
 };
+
+const credentialDisplayFields = ["createdAt", "expiresAt", "issuer", "portrait", "publicKey", "title"] as const;
 
 const defaultCredential: CredentialDisplay = {
   createdAt: "21.11.2025",
@@ -27,34 +31,36 @@ const defaultCredential: CredentialDisplay = {
   title: "Heidelberg-Pass"
 };
 
-const appElementCandidate = document.querySelector<HTMLDivElement>("#app");
+const rootElement = document.querySelector<HTMLDivElement>("#openid4vp-verifier-root");
 
-if (!appElementCandidate) {
-  throw new Error("Could not find app container.");
+if (rootElement) {
+  document.body.classList.add("openid4vp-verifier-visible");
+  rootElement.innerHTML = renderShell({
+    credential: defaultCredential,
+    isLoading: true,
+    isValid: false
+  });
+
+  void initialize(rootElement);
 }
 
-const appElement = appElementCandidate;
+async function initialize(appElement: HTMLElement) {
+  const tokenContent = await tryLoadVerifiablePresentationTokenContent({
+    referenceId: appElement.dataset.referenceId,
+    relationshipTemplateEndpointTemplate: appElement.dataset.relationshipTemplateEndpointTemplate,
+    tokenEndpointTemplate: appElement.dataset.tokenEndpointTemplate
+  });
 
-appElement.innerHTML = renderShell({
-  credential: defaultCredential,
-  isLoading: true,
-  isValid: false
-});
-
-void initialize();
-
-async function initialize() {
-  const root = document.querySelector<HTMLElement>(".verifier");
-
-  if (root) {
-    root.dataset.loading = "true";
+  if (!tokenContent) {
+    showOnboarding();
+    return;
   }
 
-  const result = await verifyPresentedCredential();
-  const credential = {
-    ...defaultCredential,
-    ...result.credential
-  };
+  const result = await verifyPresentedCredential(tokenContent.value, {
+    expectedAudience: "defaultPresentationAudience",
+    expectedNonce: appElement.dataset.referenceId
+  });
+  const credential = mergeCredentialDisplay(defaultCredential, displayFromTokenContent(tokenContent), result.credential);
 
   appElement.innerHTML = renderShell({
     credential,
@@ -65,13 +71,70 @@ async function initialize() {
   document.querySelector<HTMLButtonElement>("[data-close]")?.addEventListener("click", () => {
     window.close();
 
-    if (!window.closed) {
-      window.location.href = "/";
-    }
+    window.setTimeout(() => {
+      appElement.innerHTML = renderShell({
+        credential,
+        isClosed: true,
+        isValid: result.isValid
+      });
+    }, 120);
   });
 }
 
+function showOnboarding() {
+  document.body.classList.remove("openid4vp-verifier-visible");
+  rootElement?.replaceChildren();
+}
+
+function displayFromTokenContent(tokenContent: {
+  displayInformation?: Array<Record<string, unknown>>;
+  type?: string;
+}): Partial<CredentialDisplay> {
+  const displayInformation = tokenContent.displayInformation?.find(isRecord);
+
+  return {
+    issuer: firstDisplayString(displayInformation, ["issuer", "issuerName", "issuedBy"]),
+    portrait: firstDisplayString(displayInformation, ["portrait", "photo", "picture", "image"]),
+    publicKey: firstDisplayString(displayInformation, ["publicKey", "keyId", "kid"]),
+    title: firstDisplayString(displayInformation, ["title", "name", "displayName"]) ?? tokenContent.type
+  };
+}
+
+function mergeCredentialDisplay(...sources: Array<Partial<CredentialDisplay>>): CredentialDisplay {
+  const merged: Partial<CredentialDisplay> = {};
+
+  for (const source of sources) {
+    for (const field of credentialDisplayFields) {
+      const value = source[field];
+
+      if (typeof value === "string" && value.trim()) {
+        merged[field] = value;
+      }
+    }
+  }
+
+  return merged as CredentialDisplay;
+}
+
 function renderShell(state: AppState) {
+  if (state.isClosed) {
+    return `
+      <main class="openid4vp-verifier verifier is-closed" aria-label="OpenID4VP Nachweisprüfung geschlossen">
+        <div class="phone-status" aria-hidden="true">
+          <span>10:41</span>
+          <span class="status-icons">
+            <span class="signal"></span>
+            <span class="wifi"></span>
+            <span class="battery"></span>
+          </span>
+        </div>
+        <section class="closed-view" aria-live="polite">
+          <p>Sie können dieses Fenster jetzt schließen.</p>
+        </section>
+      </main>
+    `;
+  }
+
   const statusClass = state.isLoading ? "is-loading" : state.isValid ? "is-valid" : "is-invalid";
   const statusText = state.isValid ? "ist gültig." : "ist ungültig.";
   const title = escapeHtml(state.credential.title);
@@ -82,7 +145,7 @@ function renderShell(state: AppState) {
     : `<div class="pass-portrait fallback-portrait" aria-hidden="true"></div>`;
 
   return `
-    <main class="verifier ${statusClass}" aria-label="OpenID4VP Nachweisprüfung">
+    <main class="openid4vp-verifier verifier ${statusClass}" aria-label="OpenID4VP Nachweisprüfung">
       <div class="phone-status" aria-hidden="true">
         <span>10:41</span>
         <span class="status-icons">
@@ -183,4 +246,23 @@ function escapeHtml(value: string) {
 
 function escapeAttribute(value: string) {
   return escapeHtml(value).replaceAll("`", "&#096;");
+}
+
+function firstDisplayString(object: Record<string, unknown> | undefined, keys: string[]) {
+  if (!object) {
+    return undefined;
+  }
+
+  for (const key of keys) {
+    const value = object[key];
+    if (typeof value === "string" && value.trim()) {
+      return value;
+    }
+  }
+
+  return undefined;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
