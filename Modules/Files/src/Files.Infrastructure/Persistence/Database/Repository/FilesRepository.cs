@@ -16,6 +16,8 @@ namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 
 public class FilesRepository : IFilesRepository
 {
+    private const int DELETE_ORPHANED_BLOB_IDS_BATCH_SIZE = 1000;
+
     private readonly DbSet<File> _files;
     private readonly IQueryable<File> _readOnlyFiles;
     private readonly FilesDbContext _dbContext;
@@ -89,19 +91,44 @@ public class FilesRepository : IFilesRepository
     public async Task<int> DeleteOrphanedBlobs(CancellationToken cancellationToken)
     {
         var allBlobIds = await _blobStorage.ListAsync(_blobConfiguration.RootFolder);
-        var orphanedBlobIds = allBlobIds.Where(b => _readOnlyFiles.All(f => f.Id != b));
-
         var numberOfDeletedBlobs = 0;
+        var blobIdBatch = new List<string>(DELETE_ORPHANED_BLOB_IDS_BATCH_SIZE);
 
-        await foreach (var blobId in orphanedBlobIds.WithCancellation(cancellationToken))
+        await foreach (var blobId in allBlobIds.WithCancellation(cancellationToken))
         {
-            _blobStorage.Remove(_blobConfiguration.RootFolder, blobId);
-            numberOfDeletedBlobs++;
+            blobIdBatch.Add(blobId);
+
+            if (blobIdBatch.Count < DELETE_ORPHANED_BLOB_IDS_BATCH_SIZE)
+                continue;
+
+            numberOfDeletedBlobs += await DeleteOrphanedBlobs(blobIdBatch, cancellationToken);
+            blobIdBatch.Clear();
         }
+
+        if (blobIdBatch.Count > 0)
+            numberOfDeletedBlobs += await DeleteOrphanedBlobs(blobIdBatch, cancellationToken);
 
         await _blobStorage.SaveAsync();
 
         return numberOfDeletedBlobs;
+    }
+
+    private async Task<int> DeleteOrphanedBlobs(List<string> blobIds, CancellationToken cancellationToken)
+    {
+        var existingFileIds = await _readOnlyFiles
+            .Where(file => blobIds.Contains(file.Id))
+            .Select(file => file.Id)
+            .ToListAsync(cancellationToken);
+
+        var existingBlobIds = existingFileIds.Select(fileId => fileId.Value).ToHashSet();
+        var orphanedBlobIds = blobIds.Where(blobId => !existingBlobIds.Contains(blobId)).ToList();
+
+        foreach (var blobId in orphanedBlobIds)
+        {
+            _blobStorage.Remove(_blobConfiguration.RootFolder, blobId);
+        }
+
+        return orphanedBlobIds.Count;
     }
 
     public async Task<File?> Get(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
