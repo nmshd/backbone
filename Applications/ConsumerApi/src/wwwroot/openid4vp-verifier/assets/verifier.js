@@ -16711,7 +16711,7 @@ function extractEncryptedContent(e) {
 		e.result,
 		getPath$1(e.result, ["value"]),
 		e
-	].filter(isRecord$1);
+	].filter(isRecord);
 	for (let e of t) {
 		let t = e.content;
 		if (typeof t == "string" && t.trim()) return t;
@@ -16725,17 +16725,17 @@ async function decryptTokenContent(e, t) {
 	return JSON.parse(i.toUtf8());
 }
 function isTokenContentVerifiablePresentation(e) {
-	return isRecord$1(e) && e["@type"] === "TokenContentVerifiablePresentation" && "value" in e;
+	return isRecord(e) && e["@type"] === "TokenContentVerifiablePresentation" && "value" in e;
 }
 function getPath$1(e, t) {
 	let n = e;
 	for (let e of t) {
-		if (!isRecord$1(n)) return;
+		if (!isRecord(n)) return;
 		n = n[e];
 	}
 	return n;
 }
-function isRecord$1(e) {
+function isRecord(e) {
 	return typeof e == "object" && !!e && !Array.isArray(e);
 }
 //#endregion
@@ -156914,16 +156914,9 @@ var credentialDisplayFields = [
 	"portrait",
 	"publicKey",
 	"title"
-], defaultCredential = {
-	createdAt: "21.11.2025",
-	expiresAt: "20.11.2027",
-	issuer: "Stadt Heidelberg",
-	portrait: "/openid4vp-verifier/heidelberg-pass-portrait.png",
-	publicKey: "8984-9874-6263-9485-9475",
-	title: "Heidelberg-Pass"
-}, rootElement = document.querySelector("#openid4vp-verifier-root");
-rootElement && (document.body.classList.add("openid4vp-verifier-visible"), rootElement.innerHTML = renderShell({
-	credential: defaultCredential,
+], rootElement = document.querySelector("#openid4vp-verifier-root");
+rootElement && (document.body.classList.add("openid4vp-verifier-visible"), rootElement.innerHTML = renderVerifier({
+	credential: {},
 	isLoading: !0,
 	isValid: !1
 }), initialize(rootElement));
@@ -156940,14 +156933,14 @@ async function initialize(e) {
 	let n = await verifyPresentedCredential(t.value, {
 		expectedAudience: "defaultPresentationAudience",
 		expectedNonce: e.dataset.referenceId
-	}), r = mergeCredentialDisplay(defaultCredential, displayFromTokenContent(t), n.credential);
-	e.innerHTML = renderShell({
+	}), r = mergeCredentialDisplay(n.credential);
+	e.innerHTML = renderVerifier({
 		credential: r,
 		error: n.error,
 		isValid: n.isValid
 	}), document.querySelector("[data-close]")?.addEventListener("click", () => {
 		window.close(), window.setTimeout(() => {
-			e.innerHTML = renderShell({
+			e.innerHTML = renderVerifier({
 				credential: r,
 				isClosed: !0,
 				isValid: n.isValid
@@ -156958,32 +156951,6 @@ async function initialize(e) {
 function showOnboarding() {
 	document.body.classList.remove("openid4vp-verifier-visible"), rootElement?.replaceChildren();
 }
-function displayFromTokenContent(e) {
-	let t = e.displayInformation?.find(isRecord);
-	return {
-		issuer: firstDisplayString(t, [
-			"issuer",
-			"issuerName",
-			"issuedBy"
-		]),
-		portrait: firstDisplayString(t, [
-			"portrait",
-			"photo",
-			"picture",
-			"image"
-		]),
-		publicKey: firstDisplayString(t, [
-			"publicKey",
-			"keyId",
-			"kid"
-		]),
-		title: firstDisplayString(t, [
-			"title",
-			"name",
-			"displayName"
-		]) ?? e.type
-	};
-}
 function mergeCredentialDisplay(...e) {
 	let t = {};
 	for (let n of e) for (let e of credentialDisplayFields) {
@@ -156992,60 +156959,17 @@ function mergeCredentialDisplay(...e) {
 	}
 	return t;
 }
-function renderShell(e) {
-	if (e.isClosed) return "\n      <main class=\"openid4vp-verifier verifier is-closed\" aria-label=\"OpenID4VP Nachweisprüfung geschlossen\">\n        <div class=\"phone-status\" aria-hidden=\"true\">\n          <span>10:41</span>\n          <span class=\"status-icons\">\n            <span class=\"signal\"></span>\n            <span class=\"wifi\"></span>\n            <span class=\"battery\"></span>\n          </span>\n        </div>\n        <section class=\"closed-view\" aria-live=\"polite\">\n          <p>Sie können dieses Fenster jetzt schließen.</p>\n        </section>\n      </main>\n    ";
-	let t = e.isLoading ? "is-loading" : e.isValid ? "is-valid" : "is-invalid", n = e.isValid ? "ist gültig." : "ist ungültig.", r = escapeHtml(e.credential.title), i = escapeHtml(e.credential.issuer), a = escapeHtml(e.credential.publicKey);
+function renderVerifier(e) {
+	if (e.isClosed) return "\n      <main class=\"openid4vp-verifier verifier is-closed\" aria-label=\"OpenID4VP Nachweisprüfung geschlossen\">\n        <section class=\"closed-view\" aria-live=\"polite\">\n          <p>Sie können dieses Fenster jetzt schließen.</p>\n        </section>\n      </main>\n    ";
+	let t = e.isLoading ? "is-loading" : e.isValid ? "is-valid" : "is-invalid", n = e.isValid ? "ist gültig." : "ist ungültig.", r = e.credential.title ? escapeHtml(e.credential.title) : void 0, i = e.credential.portrait ? `<img class="pass-portrait" src="${escapeAttribute(e.credential.portrait)}" alt="" />` : "";
 	return `
     <main class="openid4vp-verifier verifier ${t}" aria-label="OpenID4VP Nachweisprüfung">
-      <div class="phone-status" aria-hidden="true">
-        <span>10:41</span>
-        <span class="status-icons">
-          <span class="signal"></span>
-          <span class="wifi"></span>
-          <span class="battery"></span>
-        </span>
-      </div>
-
       <p class="intro">
         Ein Nachweis wurde Ihnen präsentiert.<br />
         Überprüfen Sie die Gültigkeit!
       </p>
 
-      <section class="pass-card" aria-label="${r}">
-        <div class="pass-logo" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-        ${e.credential.portrait ? `<img class="pass-portrait" src="${escapeAttribute(e.credential.portrait)}" alt="" />` : "<div class=\"pass-portrait fallback-portrait\" aria-hidden=\"true\"></div>"}
-        <h1>${r}</h1>
-      </section>
-
-      <section class="details" aria-label="Nachweisdetails">
-        <div class="verified-by">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3 5 6v5c0 4.5 2.8 8.7 7 10 4.2-1.3 7-5.5 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" />
-            <path d="m9 12 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span>verifiziert durch die Stadt Heidelberg</span>
-        </div>
-        <dl>
-          <div>
-            <dt>Aussteller</dt>
-            <dd>${i}</dd>
-          </div>
-          <div>
-            <dt>Erstellt</dt>
-            <dd>${escapeHtml(e.credential.createdAt)}</dd>
-          </div>
-          <div>
-            <dt>Gültig bis</dt>
-            <dd>${escapeHtml(e.credential.expiresAt)}</dd>
-          </div>
-          <div>
-            <dt>Public Key</dt>
-            <dd>${a}</dd>
-          </div>
-        </dl>
-      </section>
+      ${e.isLoading ? "" : renderCredential(e.credential, i, r)}
 
       <section class="result" aria-live="polite">
         ${e.isLoading ? `<p>Der Nachweis<br />wird geprüft.</p>${renderLoader()}` : `<p>Der präsentierte Nachweis<br />${n}</p>${e.isValid ? renderCheckmark() : renderCross()}`}
@@ -157053,7 +156977,7 @@ function renderShell(e) {
 
       ${e.error ? `<p class="sr-only">Prüfhinweis: ${escapeHtml(e.error)}</p>` : ""}
 
-      <button class="close-button" type="button" data-close>Hinweis schließen</button>
+      ${e.isLoading ? "" : "<button class=\"close-button\" type=\"button\" data-close>Hinweis schließen</button>"}
     </main>
   `;
 }
@@ -157072,13 +156996,43 @@ function escapeHtml(e) {
 function escapeAttribute(e) {
 	return escapeHtml(e).replaceAll("`", "&#096;");
 }
-function firstDisplayString(e, t) {
-	if (e) for (let n of t) {
-		let t = e[n];
-		if (typeof t == "string" && t.trim()) return t;
-	}
+function renderCredential(e, t, n) {
+	let r = [
+		detailRow("Aussteller", e.issuer),
+		detailRow("Erstellt", e.createdAt),
+		detailRow("Gültig bis", e.expiresAt),
+		detailRow("Public Key", e.publicKey)
+	].join("");
+	return `
+    ${n || t ? `<section class="pass-card" aria-label="${n ?? "Nachweis"}">
+          <div class="pass-logo" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          ${t}
+          ${n ? `<h1>${n}</h1>` : ""}
+        </section>` : ""}
+
+    ${r ? `<section class="details" aria-label="Nachweisdetails">
+            ${e.issuer ? verifiedBy(e.issuer) : ""}
+            <dl>${r}</dl>
+          </section>` : ""}
+  `;
 }
-function isRecord(e) {
-	return typeof e == "object" && !!e && !Array.isArray(e);
+function verifiedBy(e) {
+	return `
+    <div class="verified-by">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3 5 6v5c0 4.5 2.8 8.7 7 10 4.2-1.3 7-5.5 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" />
+        <path d="m9 12 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>verifiziert durch ${escapeHtml(e)}</span>
+    </div>
+  `;
+}
+function detailRow(e, t) {
+	return typeof t == "string" && t.trim() ? `<div>
+        <dt>${escapeHtml(e)}</dt>
+        <dd>${escapeHtml(t)}</dd>
+      </div>` : "";
 }
 //#endregion

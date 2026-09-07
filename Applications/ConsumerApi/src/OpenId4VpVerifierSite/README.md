@@ -17,6 +17,8 @@ The bundle reads the NMSHD reference fragment from the current `/r/{referenceId}
 
 The referenced Token or RelationshipTemplate content is fetched from the Consumer API. If the decrypted JSON has `@type: "TokenContentVerifiablePresentation"`, its `value` is verified as a presented credential using the reference id as expected nonce and `defaultPresentationAudience` as expected audience. Otherwise, the original onboarding page is shown.
 
+Credential display values are extracted from the Verifiable Presentation. Missing values are omitted instead of being replaced with sample/default credential data.
+
 Optional validation parameters:
 
 - `nonce` or `expected_nonce`: expected presentation challenge.

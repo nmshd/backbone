@@ -1,7 +1,7 @@
 body.openid4vp-verifier-visible {
   min-height: 100%;
   margin: 0;
-  background: #e5e5e5;
+  background: #fff8f5;
   color: #28211f;
   font-family: "Courier New", Courier, monospace;
   letter-spacing: 0;
@@ -32,108 +32,17 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100svh;
-  max-width: 390px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: calc(16px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
+  padding: calc(40px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
   overflow: hidden;
   background: #fff8f5;
-  border: 4px solid #334883;
-  border-radius: 25px;
-}
-
-.phone-status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 20px;
-  padding: 0 5px 0 20px;
-  color: #111;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1;
-}
-
-.status-icons {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.signal {
-  display: inline-block;
-  width: 17px;
-  height: 12px;
-  background:
-    linear-gradient(to top, #111 0 100%) 0 7px / 3px 5px no-repeat,
-    linear-gradient(to top, #111 0 100%) 5px 5px / 3px 7px no-repeat,
-    linear-gradient(to top, #111 0 100%) 10px 3px / 3px 9px no-repeat,
-    linear-gradient(to top, #111 0 100%) 15px 0 / 3px 12px no-repeat;
-}
-
-.wifi {
-  position: relative;
-  display: inline-block;
-  width: 14px;
-  height: 11px;
-}
-
-.wifi::before,
-.wifi::after {
-  position: absolute;
-  left: 50%;
-  content: "";
-  border: 2px solid #111;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-  transform: translateX(-50%);
-}
-
-.wifi::before {
-  top: 0;
-  width: 14px;
-  height: 8px;
-  border-radius: 14px 14px 0 0;
-}
-
-.wifi::after {
-  top: 4px;
-  width: 8px;
-  height: 5px;
-  border-radius: 8px 8px 0 0;
-}
-
-.battery {
-  position: relative;
-  display: inline-block;
-  width: 22px;
-  height: 11px;
-  border: 2px solid #111;
-  border-radius: 2px;
-}
-
-.battery::before {
-  position: absolute;
-  top: 2px;
-  right: -4px;
-  width: 2px;
-  height: 5px;
-  content: "";
-  background: #111;
-  border-radius: 0 2px 2px 0;
-}
-
-.battery::after {
-  position: absolute;
-  inset: 2px 3px 2px 2px;
-  content: "";
-  background: #111;
-  border-radius: 1px;
 }
 
 .intro {
-  margin: 31px 0 34px;
+  margin: 0 0 34px;
   text-align: center;
   font-size: 16px;
   line-height: 1.43;
@@ -188,13 +97,6 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   object-fit: cover;
   background: #ead9cc;
   border-radius: 5px;
-}
-
-.fallback-portrait {
-  background:
-    radial-gradient(circle at 50% 34%, #ffe3d2 0 17%, transparent 18%),
-    radial-gradient(ellipse at 50% 110%, #f8d9c9 0 42%, transparent 43%),
-    linear-gradient(135deg, #c8957d, #f2c8b5 55%, #fff0e9);
 }
 
 .details {
@@ -327,15 +229,5 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 @keyframes openid4vp-spin {
   to {
     transform: rotate(1turn);
-  }
-}
-
-@media (min-width: 440px) {
-  body.openid4vp-verifier-visible {
-    padding: 10px;
-  }
-
-  .verifier {
-    min-height: min(100svh, 980px);
   }
 }
