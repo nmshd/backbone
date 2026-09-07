@@ -527,12 +527,9 @@ function readableIssuer(value: string) {
 
   try {
     const url = new URL(value);
-    return url.hostname
-      .replace(/^www\./, "")
-      .split(".")
-      .slice(0, -1)
-      .map(capitalize)
-      .join(" ");
+    const hostnameParts = url.hostname.replace(/^www\./, "").split(".");
+    const issuerParts = hostnameParts.length > 1 ? hostnameParts.slice(0, -1) : hostnameParts;
+    return issuerParts.map(capitalize).join(" ");
   } catch {
     return value;
   }

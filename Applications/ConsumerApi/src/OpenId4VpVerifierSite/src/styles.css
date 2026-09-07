@@ -38,9 +38,9 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   flex-direction: column;
   width: 100%;
   min-height: 100svh;
-  max-width: 480px;
+  max-width: 375px;
   margin: 0 auto;
-  padding: calc(40px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
+  padding: calc(40px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
   overflow: hidden;
   background: #fff8f5;
 }
@@ -53,7 +53,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 }
 
 .intro {
-  margin: 0 0 34px;
+  margin: 0 8px 34px;
   text-align: center;
   font-size: 16px;
   line-height: 1.43;
@@ -64,8 +64,8 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   min-height: 216px;
   padding: 17px 16px 12px;
   color: #fff;
-  background: #a61958;
-  border-radius: 10px;
+  background: #971d50;
+  border-radius: 8px;
 }
 
 .pass-card h1 {
@@ -84,7 +84,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 83px;
+  width: 84px;
   height: 108px;
   object-fit: cover;
   background: #ead9cc;
@@ -94,32 +94,35 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 .details {
   margin-top: 16px;
   overflow: hidden;
-  background: #f4e4d7;
-  border-radius: 7px;
+  background: #f5e5db;
+  border-radius: 8px;
 }
 
 .verified-by {
   display: flex;
   align-items: center;
-  gap: 7px;
-  height: 32px;
-  padding: 0 8px;
-  background: #ead8c8;
+  gap: 4px;
+  min-height: 24px;
+  padding: 4px 12px 4px 4px;
+  background: #efe0d5;
+  border-radius: 4px 4px 0 0;
   font-size: 12px;
   line-height: 1;
 }
 
 .verified-by svg {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
 }
 
 .details dl {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   margin: 0;
-  padding: 8px 8px 9px;
+  padding: 6px 8px;
+  background: #fbebe1;
+  border-radius: 0 0 4px 4px;
 }
 
 .details dt {
@@ -139,7 +142,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: grid;
   justify-items: center;
   margin: 40px 0 0;
-  color: #5a4c43;
+  color: #51443a;
 }
 
 .result p,
@@ -163,16 +166,16 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 }
 
 .status-mark svg {
-  width: 93px;
-  height: 93px;
+  width: 64px;
+  height: 64px;
 }
 
 .is-valid .status-mark {
-  color: #3f8f20;
+  color: #428c17;
 }
 
 .is-invalid .status-mark {
-  color: #ff514a;
+  color: #ff5449;
 }
 
 .is-loading .status-mark {
@@ -185,14 +188,14 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 }
 
 .close-button {
-  width: calc(100% - 14px);
-  min-height: 41px;
+  width: calc(100% - 16px);
+  min-height: 40px;
   margin: auto auto 0;
-  padding: 11px 20px;
+  padding: 10px 20px;
   color: #fff;
   font-size: 14px;
   line-height: 1.2;
-  background: #111c3d;
+  background: #151e38;
   border: 0;
   border-radius: 24px;
 }
@@ -205,7 +208,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: grid;
   flex: 1;
   place-items: center;
-  color: #5a4c43;
+  color: #51443a;
 }
 
 .sr-only {
