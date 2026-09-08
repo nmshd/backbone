@@ -117,40 +117,42 @@
                 Überprüfen Sie die Gültigkeit!
             </p>
 
-            <section class="pass-card" aria-label="Nachweis" data-credential-card hidden>
-                <img class="pass-logo" alt="" data-credential-logo hidden />
-                <img class="pass-portrait" alt="" data-credential-portrait hidden />
-                <h1 data-credential-title hidden></h1>
-            </section>
+            <div class="credential-section">
+                <section class="pass-card" aria-label="Nachweis" data-credential-card hidden>
+                    <img class="pass-logo" alt="" data-credential-logo hidden />
+                    <img class="pass-portrait" alt="" data-credential-portrait hidden />
+                    <h1 data-credential-title hidden></h1>
+                </section>
 
-            <section class="details" aria-label="Nachweisdetails" data-details hidden>
-                <div class="verified-by" data-verified-by hidden>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 3 5 6v5c0 4.5 2.8 8.7 7 10 4.2-1.3 7-5.5 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" />
-                        <path d="m9 12 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>verifiziert durch <span data-verified-by-issuer></span></span>
-                </div>
-                <dl>
-                    <div data-detail-row="issuer" hidden>
-                        <dt>Aussteller</dt>
-                        <dd data-detail-value="issuer"></dd>
+                <section class="details" aria-label="Nachweisdetails" data-details hidden>
+                    <div class="verified-by" data-verified-by hidden>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3 5 6v5c0 4.5 2.8 8.7 7 10 4.2-1.3 7-5.5 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" />
+                            <path d="m9 12 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>verifiziert durch <span data-verified-by-issuer></span></span>
                     </div>
-                    <div data-detail-row="createdAt" hidden>
-                        <dt>Erstellt</dt>
-                        <dd data-detail-value="createdAt"></dd>
-                    </div>
-                    <div data-detail-row="expiresAt" hidden>
-                        <dt>Gültig bis</dt>
-                        <dd data-detail-value="expiresAt"></dd>
-                    </div>
-                    <div data-detail-row="publicKey" hidden>
-                        <dt>Public Key</dt>
-                        <dd data-detail-value="publicKey"></dd>
-                    </div>
-                    <div class="additional-claims" data-additional-claims></div>
-                </dl>
-            </section>
+                    <dl>
+                        <div data-detail-row="issuer" hidden>
+                            <dt>Aussteller</dt>
+                            <dd data-detail-value="issuer"></dd>
+                        </div>
+                        <div data-detail-row="createdAt" hidden>
+                            <dt>Erstellt</dt>
+                            <dd data-detail-value="createdAt"></dd>
+                        </div>
+                        <div data-detail-row="expiresAt" hidden>
+                            <dt>Gültig bis</dt>
+                            <dd data-detail-value="expiresAt"></dd>
+                        </div>
+                        <div data-detail-row="publicKey" hidden>
+                            <dt>Public Key</dt>
+                            <dd data-detail-value="publicKey"></dd>
+                        </div>
+                        <div class="additional-claims" data-additional-claims></div>
+                    </dl>
+                </section>
+            </div>
 
             <section class="result" aria-live="polite">
                 <p data-result-text>Der Nachweis<br />wird geprüft.</p>
@@ -169,7 +171,9 @@
 
             <p class="sr-only" data-error hidden></p>
 
-            <button class="close-button" type="button" data-close hidden>Hinweis schließen</button>
+            <footer class="button-area">
+                <button class="close-button" type="button" data-close hidden>Hinweis schließen</button>
+            </footer>
         </section>
 
         <section class="closed-view" aria-live="polite" data-closed-view hidden>

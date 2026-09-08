@@ -1,4 +1,7 @@
 import "reflect-metadata";
+import "@fontsource/work-sans/latin-400.css";
+import "@fontsource/work-sans/latin-500.css";
+import "@fontsource/work-sans/latin-600.css";
 import "./styles.css";
 import { tryLoadVerifiablePresentationTokenContent } from "./referenceContent";
 import { type VerificationDisplay, verifyPresentedCredential } from "./verification";
@@ -217,6 +220,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function setImage(element: HTMLImageElement, source?: string) {
   if (source) {
+    element.onload = () => {
+      element.hidden = false;
+    };
+    element.onerror = () => {
+      element.hidden = true;
+    };
     element.src = source;
     element.hidden = false;
   } else {
@@ -235,9 +244,25 @@ function setText(element: HTMLElement, value?: string) {
 
 function getVerifierElements(root: HTMLElement): VerifierElements | undefined {
   const credentialCard = query<HTMLElement>(root, "[data-credential-card]");
+  const details = query<HTMLElement>(root, "[data-details]");
   const detailsList = query<HTMLDListElement>(root, ".details dl");
-  if (!credentialCard || !detailsList) {
+  const closeButton = query<HTMLButtonElement>(root, "[data-close]");
+  if (!credentialCard || !details || !detailsList || !closeButton) {
     return undefined;
+  }
+
+  if (!query(root, ".credential-section")) {
+    const credentialSection = document.createElement("div");
+    credentialSection.className = "credential-section";
+    credentialCard.before(credentialSection);
+    credentialSection.append(credentialCard, details);
+  }
+
+  if (!query(root, ".button-area")) {
+    const buttonArea = document.createElement("footer");
+    buttonArea.className = "button-area";
+    closeButton.before(buttonArea);
+    buttonArea.append(closeButton);
   }
 
   const credentialLogo = query<HTMLImageElement>(root, "[data-credential-logo]") ?? document.createElement("img");
@@ -271,12 +296,12 @@ function getVerifierElements(root: HTMLElement): VerifierElements | undefined {
 
   const elements = {
     additionalClaims,
-    closeButton: query<HTMLButtonElement>(root, "[data-close]"),
+    closeButton,
     closedView: query<HTMLElement>(root, "[data-closed-view]"),
     content: query<HTMLElement>(root, "[data-verifier-content]"),
     credentialCard,
     credentialLogo,
-    details: query<HTMLElement>(root, "[data-details]"),
+    details,
     detailRows,
     detailValues,
     error: query<HTMLElement>(root, "[data-error]"),

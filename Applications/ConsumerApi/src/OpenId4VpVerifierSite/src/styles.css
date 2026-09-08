@@ -1,10 +1,12 @@
 body.openid4vp-verifier-visible {
   min-height: 100%;
   margin: 0;
-  background: #fff8f5;
-  color: #28211f;
-  font-family: "Courier New", Courier, monospace;
-  letter-spacing: 0;
+  padding: 0;
+  background: #f7f9ff;
+  color: #181c20;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.25px;
 }
 
 body.openid4vp-verifier-visible #app-onboarding-content {
@@ -37,47 +39,59 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 100svh;
+  min-height: max(100svh, 812px);
   max-width: 375px;
   margin: 0 auto;
-  padding: calc(40px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
   overflow: hidden;
-  background: #fff8f5;
+  background: #f7f9ff;
 }
 
 .verifier-content {
   display: flex;
-  min-height: calc(100svh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   flex: 1;
   flex-direction: column;
 }
 
 .intro {
-  margin: 0 8px 34px;
+  width: 100%;
+  min-height: 80px;
+  margin: 0;
+  padding: 16px 24px;
   text-align: center;
   font-size: 16px;
-  line-height: 1.43;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.credential-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
 }
 
 .pass-card {
   position: relative;
-  min-height: 216px;
-  padding: 17px 16px 12px;
+  width: 100%;
+  height: 216px;
+  flex: 0 0 216px;
+  overflow: hidden;
   color: #fff;
   background: #971d50;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .pass-card h1 {
   position: absolute;
   right: 15px;
-  bottom: 12px;
+  bottom: 13px;
   left: 15px;
   margin: 0;
-  font-family: Arial, sans-serif;
   font-size: 30px;
-  font-weight: 700;
-  line-height: 1.05;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 0;
 }
 
 .pass-logo {
@@ -97,14 +111,15 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   width: 84px;
   height: 108px;
   object-fit: cover;
-  background: #ead9cc;
-  border-radius: 5px;
+  background: #e6e8ee;
+  border-radius: 6px;
 }
 
 .details {
-  margin-top: 16px;
+  width: 100%;
   overflow: hidden;
-  background: #f5e5db;
+  color: #181c20;
+  background: #F5E5DB;
   border-radius: 8px;
 }
 
@@ -112,18 +127,20 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: flex;
   align-items: center;
   gap: 4px;
-  min-height: 24px;
+  min-height: 32px;
   padding: 4px 12px 4px 4px;
-  background: #efe0d5;
+  background: #e0e2e8;
   border-radius: 4px 4px 0 0;
   font-size: 12px;
-  line-height: 1;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
 }
 
 .verified-by svg {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
 }
 
 .details dl {
@@ -131,20 +148,24 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   gap: 8px;
   margin: 0;
   padding: 6px 8px;
-  background: #fbebe1;
+  background: #f5e5db;
   border-radius: 0 0 4px 4px;
 }
 
 .details dt {
   margin: 0;
+  color: #42474e;
   font-size: 12px;
-  line-height: 1.1;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
 }
 
 .details dd {
-  margin: 3px 0 0;
-  font-size: 15px;
-  line-height: 1.15;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
   overflow-wrap: anywhere;
 }
 
@@ -153,19 +174,26 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 }
 
 .result {
-  display: grid;
-  justify-items: center;
-  margin: 40px 0 0;
-  color: #51443a;
+  display: flex;
+  min-height: 283px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 24px;
+  color: #42474e;
+  background: #f7f9ff;
 }
 
 .result p,
 .closed-view p {
+  width: 100%;
   margin: 0;
   text-align: center;
-  font-family: Arial, sans-serif;
-  font-size: 25px;
-  line-height: 1.25;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0;
   white-space: pre-line;
 }
 
@@ -174,7 +202,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   place-items: center;
   width: 147px;
   height: 147px;
-  margin-top: 25px;
+  flex: 0 0 147px;
   border: 7px solid currentColor;
   border-radius: 50%;
 }
@@ -193,7 +221,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
 }
 
 .is-loading .status-mark {
-  color: #334883;
+  color: #2f628c;
 }
 
 .loading-mark {
@@ -201,17 +229,29 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   animation: openid4vp-spin 1s linear infinite;
 }
 
+.button-area {
+  display: flex;
+  width: 100%;
+  min-height: 88px;
+  align-items: center;
+  padding: 24px;
+  margin-top: auto;
+  background: #fff8f5;
+}
+
 .close-button {
-  width: calc(100% - 16px);
+  width: 100%;
   min-height: 40px;
-  margin: auto auto 0;
-  padding: 10px 20px;
+  padding: 10px 24px;
   color: #fff;
   font-size: 14px;
-  line-height: 1.2;
-  background: #151e38;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  background: #2f628c;
   border: 0;
-  border-radius: 24px;
+  border-radius: 100px;
+  cursor: pointer;
 }
 
 .close-button:active {
@@ -222,7 +262,8 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: grid;
   flex: 1;
   place-items: center;
-  color: #51443a;
+  padding: 24px;
+  color: #42474e;
 }
 
 .sr-only {
