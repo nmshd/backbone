@@ -244,41 +244,12 @@ function setText(element: HTMLElement, value?: string) {
 
 function getVerifierElements(root: HTMLElement): VerifierElements | undefined {
   const credentialCard = query<HTMLElement>(root, "[data-credential-card]");
+  const credentialLogo = query<HTMLImageElement>(root, "[data-credential-logo]");
+  const additionalClaims = query<HTMLElement>(root, "[data-additional-claims]");
   const details = query<HTMLElement>(root, "[data-details]");
-  const detailsList = query<HTMLDListElement>(root, ".details dl");
   const closeButton = query<HTMLButtonElement>(root, "[data-close]");
-  if (!credentialCard || !details || !detailsList || !closeButton) {
+  if (!credentialCard || !credentialLogo || !additionalClaims || !details || !closeButton) {
     return undefined;
-  }
-
-  if (!query(root, ".credential-section")) {
-    const credentialSection = document.createElement("div");
-    credentialSection.className = "credential-section";
-    credentialCard.before(credentialSection);
-    credentialSection.append(credentialCard, details);
-  }
-
-  if (!query(root, ".button-area")) {
-    const buttonArea = document.createElement("footer");
-    buttonArea.className = "button-area";
-    closeButton.before(buttonArea);
-    buttonArea.append(closeButton);
-  }
-
-  const credentialLogo = query<HTMLImageElement>(root, "[data-credential-logo]") ?? document.createElement("img");
-  if (!credentialLogo.isConnected) {
-    credentialLogo.className = "pass-logo";
-    credentialLogo.alt = "";
-    credentialLogo.dataset.credentialLogo = "";
-    credentialLogo.hidden = true;
-    credentialCard.prepend(credentialLogo);
-  }
-
-  const additionalClaims = query<HTMLElement>(root, "[data-additional-claims]") ?? document.createElement("div");
-  if (!additionalClaims.isConnected) {
-    additionalClaims.className = "additional-claims";
-    additionalClaims.dataset.additionalClaims = "";
-    detailsList.append(additionalClaims);
   }
 
   const detailRows = {
