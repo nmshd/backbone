@@ -16,6 +16,7 @@
     "@nmshd/crypto": "3.0.6",
     "@noble/curves": "2.0.1",
     "@noble/hashes": "2.0.1",
+    "@sd-jwt/core": "0.19.0",
     "events": "3.3.0",
     "reflect-metadata": "0.2.2"
   },

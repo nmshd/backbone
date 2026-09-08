@@ -10,10 +10,15 @@ import {
   KeyDidResolver,
   Kms,
   LogLevel,
+  TypedArrayEncoder,
   WebDidResolver,
   W3cJsonLdVerifiableCredential,
-  W3cJsonLdVerifiablePresentation
+  W3cJsonLdVerifiablePresentation,
+  X509Certificate,
+  getPublicJwkFromVerificationMethod,
+  sdJwtVcHasher
 } from "@credo-ts/core";
+import { SDJwtInstance } from "@sd-jwt/core";
 import { EventEmitter } from "events";
 import { BrowserVerificationKeyManagementService } from "./verificationKeyManagement";
 import { BrowserFileSystem, InMemoryStorageService } from "./verificationStorage";
@@ -160,13 +165,112 @@ async function verifySdJwtCredential(
   context: { expectedAudience: string; expectedNonce?: string }
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   const sdJwtVc = agent.sdJwtVc.fromCompact(token);
-  const validationError = validateSdJwtPresentation(sdJwtVc.payload, sdJwtVc.kbJwt?.payload, context);
+  const display = extractDisplayFromObject(sdJwtVc.prettyClaims);
 
-  return {
-    display: extractDisplayFromObject(sdJwtVc.prettyClaims),
-    error: validationError,
-    isValid: validationError === undefined
+  if (!context.expectedNonce) {
+    return {
+      display,
+      error: "A challenge is required to verify an SD-JWT presentation.",
+      isValid: false
+    };
+  }
+
+  try {
+    if (sdJwtVc.header.typ !== "dc+sd-jwt" && sdJwtVc.header.typ !== "vc+sd-jwt") {
+      throw new Error("The SD-JWT presentation has an unsupported typ header.");
+    }
+
+    const issuerJwk = await resolveSdJwtIssuerJwk(agent, sdJwtVc.header, sdJwtVc.payload);
+    const holderJwk = await resolveSdJwtHolderJwk(agent, sdJwtVc.payload);
+    const issuerAlgorithm = signingAlgorithm(sdJwtVc.header);
+    const holderAlgorithm = signingAlgorithm(sdJwtVc.kbJwt?.header);
+    const verifier = new SDJwtInstance({
+      hasher: sdJwtVcHasher,
+      kbVerifier: createJwtVerifier(agent, holderJwk, holderAlgorithm),
+      verifier: createJwtVerifier(agent, issuerJwk, issuerAlgorithm)
+    });
+
+    await verifier.verify(token, {
+      currentDate: Math.floor(Date.now() / 1000),
+      keyBindingNonce: context.expectedNonce,
+      requiredClaimKeys: ["vct"]
+    });
+
+    const validationError = validateSdJwtPresentation(sdJwtVc.payload, sdJwtVc.kbJwt?.payload, context);
+
+    return {
+      display,
+      error: validationError,
+      isValid: validationError === undefined
+    };
+  } catch (error) {
+    return {
+      display,
+      error: error instanceof Error ? error.message : "The SD-JWT presentation signature could not be verified.",
+      isValid: false
+    };
+  }
+}
+
+function createJwtVerifier(agent: VerifierAgent, publicJwk: Kms.KmsJwkPublicAsymmetric, algorithm: Kms.KnownJwaSignatureAlgorithm) {
+  return async (data: string, signature: string) => {
+    const result = await agent.kms.verify({
+      algorithm,
+      data: TypedArrayEncoder.fromUtf8String(data),
+      key: { publicJwk },
+      signature: TypedArrayEncoder.fromBase64Url(signature)
+    });
+
+    return result.verified;
   };
+}
+
+function signingAlgorithm(header?: JsonObject): Kms.KnownJwaSignatureAlgorithm {
+  const algorithm = header?.alg;
+
+  if (
+    typeof algorithm !== "string" ||
+    !Object.values(Kms.KnownJwaSignatureAlgorithms).includes(algorithm as Kms.KnownJwaSignatureAlgorithm) ||
+    algorithm.startsWith("HS")
+  ) {
+    throw new Error("The presentation uses an unsupported signature algorithm.");
+  }
+
+  return algorithm as Kms.KnownJwaSignatureAlgorithm;
+}
+
+async function resolveSdJwtIssuerJwk(agent: VerifierAgent, header: JsonObject, payload: JsonObject): Promise<Kms.KmsJwkPublicAsymmetric> {
+  const x5c = header.x5c;
+  if (Array.isArray(x5c) && typeof x5c[0] === "string") {
+    return X509Certificate.fromEncodedCertificate(x5c[0]).publicJwk.toJson();
+  }
+
+  return resolveDidJwk(agent, header.kid, payload.iss, "issuer");
+}
+
+async function resolveSdJwtHolderJwk(agent: VerifierAgent, payload: JsonObject): Promise<Kms.KmsJwkPublicAsymmetric> {
+  const confirmation = isObject(payload.cnf) ? payload.cnf : undefined;
+
+  if (confirmation?.jwk) {
+    return Kms.PublicJwk.fromUnknown(confirmation.jwk).toJson();
+  }
+
+  return resolveDidJwk(agent, confirmation?.kid, undefined, "holder");
+}
+
+async function resolveDidJwk(agent: VerifierAgent, keyId: unknown, controller: unknown, role: "holder" | "issuer") {
+  if (typeof keyId !== "string") {
+    throw new Error(`The ${role} verification key is missing.`);
+  }
+
+  const didUrl = keyId.startsWith("#") && typeof controller === "string" ? `${controller}${keyId}` : keyId;
+  if (!didUrl.startsWith("did:")) {
+    throw new Error(`The ${role} verification key is not a supported DID URL.`);
+  }
+
+  const didDocument = await agent.dids.resolveDidDocument(didUrl);
+  const verificationMethod = didDocument.dereferenceKey(didUrl, role === "issuer" ? ["assertionMethod", "verificationMethod"] : ["authentication", "verificationMethod"]);
+  return getPublicJwkFromVerificationMethod(verificationMethod).toJson();
 }
 
 function validateSdJwtPresentation(
@@ -214,18 +318,24 @@ async function verifyJwtArtifact(
 
   if (looksLikePresentation(payload)) {
     const challenge = context.expectedNonce;
-    const presentationResult = challenge
-      ? await tryVerify(() =>
-          agent.w3cCredentials.verifyPresentation({
-            challenge,
-            domain: context.expectedAudience,
-            presentation: token,
-            verifyCredentialStatus: false
-          })
-        )
-      : undefined;
+    if (!challenge) {
+      return {
+        display: extractDisplayFromObject(payload),
+        error: "A challenge is required to verify a JWT presentation.",
+        isValid: false
+      };
+    }
 
-    if (challenge && presentationResult?.isValid === false) {
+    const presentationResult = await tryVerify(() =>
+      agent.w3cCredentials.verifyPresentation({
+        challenge,
+        domain: context.expectedAudience,
+        presentation: token,
+        verifyCredentialStatus: false
+      })
+    );
+
+    if (!presentationResult.isValid) {
       return {
         display: extractDisplayFromObject(payload),
         error: presentationResult.error,
@@ -283,17 +393,6 @@ async function verifyJsonLdArtifact(
   context: { expectedAudience: string; expectedNonce?: string }
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   if (looksLikePresentation(token)) {
-    const embeddedCredentials = extractEmbeddedCredentials(token);
-
-    if (embeddedCredentials.length > 0) {
-      const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context)));
-      return {
-        display: credentialResults.map((result) => result.display).find(Boolean) ?? extractDisplayFromObject(token),
-        error: credentialResults.find((result) => !result.isValid)?.error,
-        isValid: credentialResults.every((result) => result.isValid)
-      };
-    }
-
     if (!context.expectedNonce) {
       return {
         display: extractDisplayFromObject(token),
@@ -312,10 +411,29 @@ async function verifyJsonLdArtifact(
       })
     );
 
+    if (!result.isValid) {
+      return {
+        display: extractDisplayFromObject(token),
+        error: result.error,
+        isValid: false
+      };
+    }
+
+    const embeddedCredentials = extractEmbeddedCredentials(token);
+    if (embeddedCredentials.length === 0) {
+      return {
+        display: extractDisplayFromObject(token),
+        error: "The presentation did not contain a verifiable credential.",
+        isValid: false
+      };
+    }
+
+    const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context)));
+
     return {
-      display: extractDisplayFromObject(token),
-      error: result.isValid ? undefined : result.error,
-      isValid: result.isValid
+      display: credentialResults.map((credentialResult) => credentialResult.display).find(Boolean) ?? extractDisplayFromObject(token),
+      error: credentialResults.find((credentialResult) => !credentialResult.isValid)?.error,
+      isValid: credentialResults.every((credentialResult) => credentialResult.isValid)
     };
   }
 
