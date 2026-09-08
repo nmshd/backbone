@@ -1,4 +1,3 @@
-import type { OpenId4VpAuthorizationResponsePayload } from "@credo-ts/openid4vc";
 import {
   Agent,
   ClaimFormat,
@@ -46,9 +45,16 @@ export type VerificationOutcome = {
   isValid: boolean;
 };
 
-type VerificationOptions = {
-  expectedAudience?: string;
-  expectedNonce?: string;
+export type PresentationValidationOptions = {
+  expectedAudience: string;
+  expectedNonce: string;
+  now?: Date;
+};
+
+type VerificationContext = {
+  expectedAudience: string;
+  expectedNonce: string;
+  now: Date;
 };
 
 type VerifierAgent = Agent<{
@@ -58,12 +64,20 @@ type VerifierAgent = Agent<{
 
 let agentPromise: Promise<VerifierAgent> | undefined;
 
-export async function verifyPresentedCredential(presentation?: unknown, options: VerificationOptions = {}): Promise<VerificationOutcome> {
+export async function validatePresentedCredential(
+  presentation: unknown,
+  options: PresentationValidationOptions
+): Promise<VerificationOutcome> {
   try {
-    const tokens = presentation === undefined ? extractVpTokens(readAuthorizationResponseFromUrl()) : normalizeToken(presentation);
-    const expectedNonce =
-      options.expectedNonce ?? getStringParam("nonce") ?? getStringParam("expected_nonce") ?? sessionStorage.getItem("openid4vpVerifier.nonce") ?? undefined;
-    const expectedAudience = options.expectedAudience ?? getStringParam("audience") ?? getStringParam("client_id") ?? window.location.origin;
+    if (!options.expectedNonce) {
+      return invalid("A challenge is required to verify the presentation.");
+    }
+
+    if (!options.expectedAudience) {
+      return invalid("An audience is required to verify the presentation.");
+    }
+
+    const tokens = normalizeToken(presentation);
 
     if (tokens.length === 0) {
       return invalid("No vp_token parameter was found in the OpenID4VP response.");
@@ -71,9 +85,16 @@ export async function verifyPresentedCredential(presentation?: unknown, options:
 
     const agent = await getVerifierAgent();
     const verifiedArtifacts = [];
+    const now = options.now ?? new Date();
 
     for (const token of tokens) {
-      verifiedArtifacts.push(await verifyToken(agent, token, { expectedAudience, expectedNonce }));
+      verifiedArtifacts.push(
+        await verifyToken(agent, token, {
+          expectedAudience: options.expectedAudience,
+          expectedNonce: options.expectedNonce,
+          now
+        })
+      );
     }
 
     const isValid = verifiedArtifacts.length > 0 && verifiedArtifacts.every((artifact) => artifact.isValid);
@@ -88,30 +109,6 @@ export async function verifyPresentedCredential(presentation?: unknown, options:
   } catch (error) {
     return invalid(error instanceof Error ? error.message : "The credential could not be verified.");
   }
-}
-
-function readAuthorizationResponseFromUrl(): Partial<OpenId4VpAuthorizationResponsePayload> {
-  const params = new URLSearchParams(window.location.search);
-  const fragment = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : window.location.hash;
-  const fragmentParams = new URLSearchParams(fragment);
-
-  for (const [key, value] of fragmentParams.entries()) {
-    if (!params.has(key)) {
-      params.set(key, value);
-    }
-  }
-
-  const response: JsonObject = {};
-  for (const [key, value] of params.entries()) {
-    response[key] = tryParseJson(value);
-  }
-
-  return response as Partial<OpenId4VpAuthorizationResponsePayload>;
-}
-
-function extractVpTokens(response: Partial<OpenId4VpAuthorizationResponsePayload>) {
-  const candidates = [response.vp_token, (response as JsonObject).presentation, (response as JsonObject).verifiablePresentation];
-  return candidates.flatMap(normalizeToken).filter((token) => token !== undefined);
 }
 
 function normalizeToken(value: unknown): Array<string | JsonObject> {
@@ -142,7 +139,7 @@ function normalizeToken(value: unknown): Array<string | JsonObject> {
 async function verifyToken(
   agent: VerifierAgent,
   token: string | JsonObject,
-  context: { expectedAudience: string; expectedNonce?: string }
+  context: VerificationContext
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   if (typeof token === "string") {
     if (isSdJwt(token)) {
@@ -162,7 +159,7 @@ async function verifyToken(
 async function verifySdJwtCredential(
   agent: VerifierAgent,
   token: string,
-  context: { expectedAudience: string; expectedNonce?: string }
+  context: VerificationContext
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   const sdJwtVc = agent.sdJwtVc.fromCompact(token);
   const display = extractDisplayFromObject(sdJwtVc.prettyClaims);
@@ -180,10 +177,14 @@ async function verifySdJwtCredential(
       throw new Error("The SD-JWT presentation has an unsupported typ header.");
     }
 
+    if (!sdJwtVc.kbJwt) {
+      throw new Error("The presented credential does not contain a key binding JWT.");
+    }
+
     const issuerJwk = await resolveSdJwtIssuerJwk(agent, sdJwtVc.header, sdJwtVc.payload);
     const holderJwk = await resolveSdJwtHolderJwk(agent, sdJwtVc.payload);
     const issuerAlgorithm = signingAlgorithm(sdJwtVc.header);
-    const holderAlgorithm = signingAlgorithm(sdJwtVc.kbJwt?.header);
+    const holderAlgorithm = signingAlgorithm(sdJwtVc.kbJwt.header);
     const verifier = new SDJwtInstance({
       hasher: sdJwtVcHasher,
       kbVerifier: createJwtVerifier(agent, holderJwk, holderAlgorithm),
@@ -191,7 +192,7 @@ async function verifySdJwtCredential(
     });
 
     await verifier.verify(token, {
-      currentDate: Math.floor(Date.now() / 1000),
+      currentDate: Math.floor(context.now.getTime() / 1000),
       keyBindingNonce: context.expectedNonce,
       requiredClaimKeys: ["vct"]
     });
@@ -276,7 +277,7 @@ async function resolveDidJwk(agent: VerifierAgent, keyId: unknown, controller: u
 function validateSdJwtPresentation(
   credentialPayload: JsonObject,
   keyBindingPayload: JsonObject | undefined,
-  context: { expectedAudience: string; expectedNonce?: string }
+  context: VerificationContext
 ) {
   if (context.expectedNonce) {
     if (!keyBindingPayload) {
@@ -296,7 +297,7 @@ function validateSdJwtPresentation(
     }
   }
 
-  const now = Date.now() / 1000;
+  const now = context.now.getTime() / 1000;
   if (typeof credentialPayload.nbf === "number" && credentialPayload.nbf > now) {
     return "The presented credential is not valid yet.";
   }
@@ -311,7 +312,7 @@ function validateSdJwtPresentation(
 async function verifyJwtArtifact(
   agent: VerifierAgent,
   token: string,
-  context: { expectedAudience: string; expectedNonce?: string }
+  context: VerificationContext
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   const payload = decodeJwtPayload(token);
   const embeddedCredentials = extractEmbeddedCredentials(payload);
@@ -390,7 +391,7 @@ async function verifyJwtArtifact(
 async function verifyJsonLdArtifact(
   agent: VerifierAgent,
   token: JsonObject,
-  context: { expectedAudience: string; expectedNonce?: string }
+  context: VerificationContext
 ): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
   if (looksLikePresentation(token)) {
     if (!context.expectedNonce) {
@@ -474,15 +475,15 @@ async function createVerifierAgent() {
 
   const agent = new Agent({
     config: {
-      allowInsecureHttpUrls: window.location.protocol === "http:",
+      allowInsecureHttpUrls: globalThis.location?.protocol === "http:",
       autoUpdateStorageOnStartup: true,
       logger: new ConsoleLogger(LogLevel.Error)
     },
     dependencies: {
       EventEmitterClass: EventEmitter,
       FileSystem: BrowserFileSystem,
-      WebSocketClass: window.WebSocket as never,
-      fetch: window.fetch.bind(window)
+      WebSocketClass: globalThis.WebSocket as never,
+      fetch: globalThis.fetch.bind(globalThis)
     },
     modules: {
       dids: new DidsModule({
@@ -757,12 +758,6 @@ function decodeJwtPayload(jwt: string): JsonObject {
   }
 
   return JSON.parse(new TextDecoder().decode(base64UrlToBytes(payload))) as JsonObject;
-}
-
-function getStringParam(key: string) {
-  const searchParams = new URLSearchParams(window.location.search);
-  const fragmentParams = new URLSearchParams(window.location.hash.startsWith("#") ? window.location.hash.slice(1) : window.location.hash);
-  return searchParams.get(key) ?? fragmentParams.get(key);
 }
 
 function getObjectPath(object: JsonObject, path: string[]) {

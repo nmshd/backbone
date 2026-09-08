@@ -4,7 +4,7 @@ import "@fontsource/work-sans/latin-500.css";
 import "@fontsource/work-sans/latin-600.css";
 import "./styles.css";
 import { tryLoadVerifiablePresentationTokenContent } from "./referenceContent";
-import { type VerificationDisplay, verifyPresentedCredential } from "./verification";
+import { type VerificationDisplay, validatePresentedCredential } from "./verification";
 
 type CredentialDisplay = VerificationDisplay & {
   backgroundColor?: string;
@@ -61,9 +61,9 @@ async function initialize(appElement: HTMLElement, elements: VerifierElements) {
     return;
   }
 
-  const result = await verifyPresentedCredential(tokenContent.value, {
+  const result = await validatePresentedCredential(tokenContent.value, {
     expectedAudience: "defaultPresentationAudience",
-    expectedNonce: appElement.dataset.referenceId
+    expectedNonce: appElement.dataset.referenceId ?? ""
   });
   const credential = mergeCredentialDisplay(result.credential, credentialDisplayFromTokenContent(tokenContent.displayInformation));
 

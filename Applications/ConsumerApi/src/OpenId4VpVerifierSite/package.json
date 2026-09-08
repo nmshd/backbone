@@ -6,11 +6,11 @@
     "build": "vite build",
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@credo-ts/core": "0.7.0",
-    "@credo-ts/openid4vc": "0.7.0",
     "@fontsource/work-sans": "5.2.8",
     "@js-soft/ts-serval": "2.0.17",
     "@nmshd/crypto": "3.0.6",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "typescript": "5.9.3",
-    "vite": "8.2.2"
+    "vite": "8.2.2",
+    "vitest": "5.0.0"
   }
 }
