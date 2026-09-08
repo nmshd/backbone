@@ -45,7 +45,7 @@ export async function tryLoadVerifiablePresentationTokenContent(
     const decryptedContent = await decryptTokenContent(encryptedContent, parsedReference);
     return isTokenContentVerifiablePresentation(decryptedContent) ? decryptedContent : undefined;
   } catch (error) {
-    console.error("Failed to load verifiable presentation token content.", error);
+    console.error("Der Inhalt der Nachweispräsentation konnte nicht geladen werden.", error);
     return undefined;
   }
 }
@@ -148,7 +148,7 @@ function deserializeCryptoCipher(encryptedContent: string) {
     typeof serializedCipher.cph !== "string" ||
     typeof serializedCipher.nnc !== "string"
   ) {
-    throw new Error("The token content does not contain a supported CryptoCipher.");
+    throw new Error("Der Token-Inhalt enthält keine unterstützte Verschlüsselung.");
   }
 
   const cipher = new CryptoCipher();

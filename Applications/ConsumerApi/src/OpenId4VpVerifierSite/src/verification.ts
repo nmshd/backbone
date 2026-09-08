@@ -24,6 +24,36 @@ import { BrowserFileSystem, InMemoryStorageService } from "./verificationStorage
 
 type JsonObject = Record<string, unknown>;
 
+export enum PresentationValidationErrorCode {
+  AudienceMismatch = "audienceMismatch",
+  CredentialExpired = "credentialExpired",
+  CredentialNotYetValid = "credentialNotYetValid",
+  InvalidDisclosure = "invalidDisclosure",
+  InvalidPresentationBinding = "invalidPresentationBinding",
+  InvalidSignature = "invalidSignature",
+  MissingAudience = "missingAudience",
+  MissingChallenge = "missingChallenge",
+  MissingCredential = "missingCredential",
+  MissingCredentialType = "missingCredentialType",
+  MissingHolderVerificationKey = "missingHolderVerificationKey",
+  MissingIssuerVerificationKey = "missingIssuerVerificationKey",
+  MissingKeyBinding = "missingKeyBinding",
+  MissingPresentation = "missingPresentation",
+  NonceMismatch = "nonceMismatch",
+  UnsupportedHolderDidUrl = "unsupportedHolderDidUrl",
+  UnsupportedIssuerDidUrl = "unsupportedIssuerDidUrl",
+  UnsupportedPresentationFormat = "unsupportedPresentationFormat",
+  UnsupportedSdJwtType = "unsupportedSdJwtType",
+  UnsupportedSignatureAlgorithm = "unsupportedSignatureAlgorithm",
+  VerificationFailed = "verificationFailed"
+}
+
+class PresentationValidationError extends Error {
+  public constructor(public readonly code: PresentationValidationErrorCode) {
+    super(code);
+  }
+}
+
 export type VerificationDisplay = {
   claims?: VerificationDisplayClaim[];
   createdAt?: string;
@@ -41,7 +71,13 @@ export type VerificationDisplayClaim = {
 
 export type VerificationOutcome = {
   credential: VerificationDisplay;
-  error?: string;
+  errorCode?: PresentationValidationErrorCode;
+  isValid: boolean;
+};
+
+type ArtifactVerificationOutcome = {
+  display?: VerificationDisplay;
+  errorCode?: PresentationValidationErrorCode;
   isValid: boolean;
 };
 
@@ -70,17 +106,17 @@ export async function validatePresentedCredential(
 ): Promise<VerificationOutcome> {
   try {
     if (!options.expectedNonce) {
-      return invalid("A challenge is required to verify the presentation.");
+      return invalid(PresentationValidationErrorCode.MissingChallenge);
     }
 
     if (!options.expectedAudience) {
-      return invalid("An audience is required to verify the presentation.");
+      return invalid(PresentationValidationErrorCode.MissingAudience);
     }
 
     const tokens = normalizeToken(presentation);
 
     if (tokens.length === 0) {
-      return invalid("No vp_token parameter was found in the OpenID4VP response.");
+      return invalid(PresentationValidationErrorCode.MissingPresentation);
     }
 
     const agent = await getVerifierAgent();
@@ -99,15 +135,15 @@ export async function validatePresentedCredential(
 
     const isValid = verifiedArtifacts.length > 0 && verifiedArtifacts.every((artifact) => artifact.isValid);
     const firstCredential = verifiedArtifacts.map((artifact) => artifact.display).find(Boolean) ?? {};
-    const firstError = verifiedArtifacts.find((artifact) => !artifact.isValid)?.error;
+    const firstErrorCode = verifiedArtifacts.find((artifact) => !artifact.isValid)?.errorCode;
 
     return {
       credential: firstCredential,
-      error: firstError,
+      errorCode: firstErrorCode,
       isValid
     };
   } catch (error) {
-    return invalid(error instanceof Error ? error.message : "The credential could not be verified.");
+    return invalid(error instanceof PresentationValidationError ? error.code : PresentationValidationErrorCode.VerificationFailed);
   }
 }
 
@@ -140,7 +176,7 @@ async function verifyToken(
   agent: VerifierAgent,
   token: string | JsonObject,
   context: VerificationContext
-): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
+): Promise<ArtifactVerificationOutcome> {
   if (typeof token === "string") {
     if (isSdJwt(token)) {
       return verifySdJwtCredential(agent, token, context);
@@ -150,7 +186,7 @@ async function verifyToken(
       return verifyJwtArtifact(agent, token, context);
     }
 
-    return { error: "The vp_token format is not supported.", isValid: false };
+    return { errorCode: PresentationValidationErrorCode.UnsupportedPresentationFormat, isValid: false };
   }
 
   return verifyJsonLdArtifact(agent, token, context);
@@ -160,25 +196,25 @@ async function verifySdJwtCredential(
   agent: VerifierAgent,
   token: string,
   context: VerificationContext
-): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
+): Promise<ArtifactVerificationOutcome> {
   const sdJwtVc = agent.sdJwtVc.fromCompact(token);
   const display = extractDisplayFromObject(sdJwtVc.prettyClaims);
 
   if (!context.expectedNonce) {
     return {
       display,
-      error: "A challenge is required to verify an SD-JWT presentation.",
+      errorCode: PresentationValidationErrorCode.MissingChallenge,
       isValid: false
     };
   }
 
   try {
     if (sdJwtVc.header.typ !== "dc+sd-jwt" && sdJwtVc.header.typ !== "vc+sd-jwt") {
-      throw new Error("The SD-JWT presentation has an unsupported typ header.");
+      throw new PresentationValidationError(PresentationValidationErrorCode.UnsupportedSdJwtType);
     }
 
     if (!sdJwtVc.kbJwt) {
-      throw new Error("The presented credential does not contain a key binding JWT.");
+      throw new PresentationValidationError(PresentationValidationErrorCode.MissingKeyBinding);
     }
 
     const issuerJwk = await resolveSdJwtIssuerJwk(agent, sdJwtVc.header, sdJwtVc.payload);
@@ -201,13 +237,13 @@ async function verifySdJwtCredential(
 
     return {
       display,
-      error: validationError,
+      errorCode: validationError,
       isValid: validationError === undefined
     };
   } catch (error) {
     return {
       display,
-      error: error instanceof Error ? error.message : "The SD-JWT presentation signature could not be verified.",
+      errorCode: classifySdJwtError(error),
       isValid: false
     };
   }
@@ -234,7 +270,7 @@ function signingAlgorithm(header?: JsonObject): Kms.KnownJwaSignatureAlgorithm {
     !Object.values(Kms.KnownJwaSignatureAlgorithms).includes(algorithm as Kms.KnownJwaSignatureAlgorithm) ||
     algorithm.startsWith("HS")
   ) {
-    throw new Error("The presentation uses an unsupported signature algorithm.");
+    throw new PresentationValidationError(PresentationValidationErrorCode.UnsupportedSignatureAlgorithm);
   }
 
   return algorithm as Kms.KnownJwaSignatureAlgorithm;
@@ -261,12 +297,16 @@ async function resolveSdJwtHolderJwk(agent: VerifierAgent, payload: JsonObject):
 
 async function resolveDidJwk(agent: VerifierAgent, keyId: unknown, controller: unknown, role: "holder" | "issuer") {
   if (typeof keyId !== "string") {
-    throw new Error(`The ${role} verification key is missing.`);
+    throw new PresentationValidationError(
+      role === "issuer" ? PresentationValidationErrorCode.MissingIssuerVerificationKey : PresentationValidationErrorCode.MissingHolderVerificationKey
+    );
   }
 
   const didUrl = keyId.startsWith("#") && typeof controller === "string" ? `${controller}${keyId}` : keyId;
   if (!didUrl.startsWith("did:")) {
-    throw new Error(`The ${role} verification key is not a supported DID URL.`);
+    throw new PresentationValidationError(
+      role === "issuer" ? PresentationValidationErrorCode.UnsupportedIssuerDidUrl : PresentationValidationErrorCode.UnsupportedHolderDidUrl
+    );
   }
 
   const didDocument = await agent.dids.resolveDidDocument(didUrl);
@@ -281,11 +321,11 @@ function validateSdJwtPresentation(
 ) {
   if (context.expectedNonce) {
     if (!keyBindingPayload) {
-      return "The presented credential does not contain a key binding JWT.";
+      return PresentationValidationErrorCode.MissingKeyBinding;
     }
 
     if (keyBindingPayload.nonce !== context.expectedNonce) {
-      return "The key binding nonce does not match the reference id.";
+      return PresentationValidationErrorCode.NonceMismatch;
     }
 
     const audience = keyBindingPayload.aud;
@@ -293,17 +333,17 @@ function validateSdJwtPresentation(
       audience === context.expectedAudience || (Array.isArray(audience) && audience.includes(context.expectedAudience));
 
     if (!hasExpectedAudience) {
-      return "The key binding audience does not match the expected audience.";
+      return PresentationValidationErrorCode.AudienceMismatch;
     }
   }
 
   const now = context.now.getTime() / 1000;
   if (typeof credentialPayload.nbf === "number" && credentialPayload.nbf > now) {
-    return "The presented credential is not valid yet.";
+    return PresentationValidationErrorCode.CredentialNotYetValid;
   }
 
   if (typeof credentialPayload.exp === "number" && credentialPayload.exp <= now) {
-    return "The presented credential has expired.";
+    return PresentationValidationErrorCode.CredentialExpired;
   }
 
   return undefined;
@@ -313,7 +353,7 @@ async function verifyJwtArtifact(
   agent: VerifierAgent,
   token: string,
   context: VerificationContext
-): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
+): Promise<ArtifactVerificationOutcome> {
   const payload = decodeJwtPayload(token);
   const embeddedCredentials = extractEmbeddedCredentials(payload);
 
@@ -322,7 +362,7 @@ async function verifyJwtArtifact(
     if (!challenge) {
       return {
         display: extractDisplayFromObject(payload),
-        error: "A challenge is required to verify a JWT presentation.",
+        errorCode: PresentationValidationErrorCode.MissingChallenge,
         isValid: false
       };
     }
@@ -339,7 +379,7 @@ async function verifyJwtArtifact(
     if (!presentationResult.isValid) {
       return {
         display: extractDisplayFromObject(payload),
-        error: presentationResult.error,
+        errorCode: presentationResult.errorCode,
         isValid: false
       };
     }
@@ -347,7 +387,7 @@ async function verifyJwtArtifact(
     if (embeddedCredentials.length === 0) {
       return {
         display: extractDisplayFromObject(payload),
-        error: "The presentation did not contain a verifiable credential.",
+        errorCode: PresentationValidationErrorCode.MissingCredential,
         isValid: false
       };
     }
@@ -356,7 +396,7 @@ async function verifyJwtArtifact(
 
     return {
       display: credentialResults.map((result) => result.display).find(Boolean) ?? extractDisplayFromObject(payload),
-      error: credentialResults.find((result) => !result.isValid)?.error,
+      errorCode: credentialResults.find((result) => !result.isValid)?.errorCode,
       isValid: credentialResults.every((result) => result.isValid)
     };
   }
@@ -383,7 +423,7 @@ async function verifyJwtArtifact(
 
   return {
     display: extractDisplayFromObject(payload),
-    error: v2CredentialResult.isValid ? undefined : credentialResult.error ?? v2CredentialResult.error,
+    errorCode: v2CredentialResult.isValid ? undefined : credentialResult.errorCode ?? v2CredentialResult.errorCode,
     isValid: v2CredentialResult.isValid
   };
 }
@@ -392,12 +432,12 @@ async function verifyJsonLdArtifact(
   agent: VerifierAgent,
   token: JsonObject,
   context: VerificationContext
-): Promise<{ display?: VerificationDisplay; error?: string; isValid: boolean }> {
+): Promise<ArtifactVerificationOutcome> {
   if (looksLikePresentation(token)) {
     if (!context.expectedNonce) {
       return {
         display: extractDisplayFromObject(token),
-        error: "A challenge is required to verify a JSON-LD presentation.",
+        errorCode: PresentationValidationErrorCode.MissingChallenge,
         isValid: false
       };
     }
@@ -415,7 +455,7 @@ async function verifyJsonLdArtifact(
     if (!result.isValid) {
       return {
         display: extractDisplayFromObject(token),
-        error: result.error,
+        errorCode: result.errorCode,
         isValid: false
       };
     }
@@ -424,7 +464,7 @@ async function verifyJsonLdArtifact(
     if (embeddedCredentials.length === 0) {
       return {
         display: extractDisplayFromObject(token),
-        error: "The presentation did not contain a verifiable credential.",
+        errorCode: PresentationValidationErrorCode.MissingCredential,
         isValid: false
       };
     }
@@ -433,7 +473,7 @@ async function verifyJsonLdArtifact(
 
     return {
       display: credentialResults.map((credentialResult) => credentialResult.display).find(Boolean) ?? extractDisplayFromObject(token),
-      error: credentialResults.find((credentialResult) => !credentialResult.isValid)?.error,
+      errorCode: credentialResults.find((credentialResult) => !credentialResult.isValid)?.errorCode,
       isValid: credentialResults.every((credentialResult) => credentialResult.isValid)
     };
   }
@@ -447,18 +487,64 @@ async function verifyJsonLdArtifact(
 
   return {
     display: extractDisplayFromObject(token),
-    error: result.isValid ? undefined : result.error,
+    errorCode: result.isValid ? undefined : result.errorCode,
     isValid: result.isValid
   };
+}
+
+function classifySdJwtError(error: unknown) {
+  if (error instanceof PresentationValidationError) {
+    return error.code;
+  }
+
+  const message = error instanceof Error ? error.message : "";
+
+  if (/invalid jwt signature/i.test(message)) {
+    return PresentationValidationErrorCode.InvalidSignature;
+  }
+
+  if (/invalid sd_hash/i.test(message)) {
+    return PresentationValidationErrorCode.InvalidPresentationBinding;
+  }
+
+  if (/missing required claim keys.*vct/i.test(message)) {
+    return PresentationValidationErrorCode.MissingCredentialType;
+  }
+
+  if (/jwt is expired/i.test(message)) {
+    return PresentationValidationErrorCode.CredentialExpired;
+  }
+
+  if (/jwt is not yet valid/i.test(message)) {
+    return PresentationValidationErrorCode.CredentialNotYetValid;
+  }
+
+  if (/invalid nonce/i.test(message)) {
+    return PresentationValidationErrorCode.NonceMismatch;
+  }
+
+  if (/key binding jwt not exist/i.test(message)) {
+    return PresentationValidationErrorCode.MissingKeyBinding;
+  }
+
+  if (/disclosure/i.test(message)) {
+    return PresentationValidationErrorCode.InvalidDisclosure;
+  }
+
+  return PresentationValidationErrorCode.VerificationFailed;
 }
 
 async function tryVerify(verify: () => Promise<{ isValid?: boolean; verified?: boolean }>) {
   try {
     const result = await verify();
-    return { isValid: result.isValid === true || result.verified === true };
-  } catch (error) {
+    const isValid = result.isValid === true || result.verified === true;
     return {
-      error: error instanceof Error ? error.message : "The signature could not be verified.",
+      errorCode: isValid ? undefined : PresentationValidationErrorCode.InvalidSignature,
+      isValid
+    };
+  } catch {
+    return {
+      errorCode: PresentationValidationErrorCode.InvalidSignature,
       isValid: false
     };
   }
@@ -567,6 +653,27 @@ const technicalClaimNames = new Set([
   "vp"
 ]);
 const imageClaimNames = new Set(["image", "photo", "picture", "portrait"]);
+const germanClaimLabels: Record<string, string> = {
+  birthdate: "Geburtsdatum",
+  city: "Stadt",
+  country: "Land",
+  dateofbirth: "Geburtsdatum",
+  day: "Tag",
+  email: "E-Mail-Adresse",
+  familyname: "Nachname",
+  firstname: "Vorname",
+  givenname: "Vorname",
+  houseno: "Hausnummer",
+  lastname: "Nachname",
+  month: "Monat",
+  phonenumber: "Telefonnummer",
+  recipient: "Empfänger",
+  street: "Straße",
+  streetaddress: "Anschrift",
+  surname: "Nachname",
+  year: "Jahr",
+  zipcode: "Postleitzahl"
+};
 
 function extractDisplayClaims(credential: JsonObject): VerificationDisplayClaim[] {
   const credentialSubject = getObjectPath(credential, ["credentialSubject"]) ?? getObjectPath(credential, ["vc", "credentialSubject"]);
@@ -607,9 +714,14 @@ function appendDisplayClaims(claims: VerificationDisplayClaim[], path: string[],
   }
 
   claims.push({
-    label: path.map((segment) => splitCamelCase(segment)).join(" · "),
+    label: path.map(localizeClaimName).join(" · "),
     value: formattedValue
   });
+}
+
+function localizeClaimName(value: string) {
+  const normalizedValue = value.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return germanClaimLabels[normalizedValue] ?? capitalize(splitCamelCase(value));
 }
 
 function formatClaimValue(value: unknown) {
@@ -617,7 +729,11 @@ function formatClaimValue(value: unknown) {
     return value.trim() || undefined;
   }
 
-  if (typeof value === "number" || typeof value === "boolean") {
+  if (typeof value === "boolean") {
+    return value ? "Ja" : "Nein";
+  }
+
+  if (typeof value === "number") {
     return String(value);
   }
 
@@ -809,10 +925,10 @@ function isObject(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function invalid(error: string): VerificationOutcome {
+function invalid(errorCode: PresentationValidationErrorCode): VerificationOutcome {
   return {
     credential: {},
-    error,
+    errorCode,
     isValid: false
   };
 }

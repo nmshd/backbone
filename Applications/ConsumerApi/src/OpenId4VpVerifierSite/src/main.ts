@@ -4,7 +4,7 @@ import "@fontsource/work-sans/latin-500.css";
 import "@fontsource/work-sans/latin-600.css";
 import "./styles.css";
 import { tryLoadVerifiablePresentationTokenContent } from "./referenceContent";
-import { type VerificationDisplay, validatePresentedCredential } from "./verification";
+import { PresentationValidationErrorCode, type VerificationDisplay, validatePresentedCredential } from "./verification";
 
 type CredentialDisplay = VerificationDisplay & {
   backgroundColor?: string;
@@ -39,6 +39,34 @@ type VerifierElements = {
 const credentialDisplayFields = ["backgroundColor", "createdAt", "expiresAt", "issuer", "logo", "portrait", "publicKey", "textColor", "title"] as const;
 const detailFields = ["createdAt", "expiresAt", "issuer", "publicKey"] as const;
 type DetailField = (typeof detailFields)[number];
+const validationErrorMessages: Record<PresentationValidationErrorCode, string> = {
+  [PresentationValidationErrorCode.AudienceMismatch]:
+    "Der vorgesehene Empfänger der Schlüsselbindung stimmt nicht mit diesem Prüfvorgang überein.",
+  [PresentationValidationErrorCode.CredentialExpired]: "Der präsentierte Nachweis ist abgelaufen.",
+  [PresentationValidationErrorCode.CredentialNotYetValid]: "Der präsentierte Nachweis ist noch nicht gültig.",
+  [PresentationValidationErrorCode.InvalidDisclosure]: "Die offengelegten Angaben stimmen nicht mit dem signierten Nachweis überein.",
+  [PresentationValidationErrorCode.InvalidPresentationBinding]: "Die Schlüsselbindung gehört nicht zu dieser Präsentation.",
+  [PresentationValidationErrorCode.InvalidSignature]: "Eine Signatur der Präsentation ist ungültig.",
+  [PresentationValidationErrorCode.MissingAudience]: "Für die Prüfung fehlt der vorgesehene Empfänger.",
+  [PresentationValidationErrorCode.MissingChallenge]: "Für die Prüfung fehlt die Anfragekennung.",
+  [PresentationValidationErrorCode.MissingCredential]: "Die Präsentation enthält keinen überprüfbaren Nachweis.",
+  [PresentationValidationErrorCode.MissingCredentialType]: "Der Nachweis enthält keinen Credential-Typ (vct).",
+  [PresentationValidationErrorCode.MissingHolderVerificationKey]: "Der Prüfschlüssel des Inhabers fehlt.",
+  [PresentationValidationErrorCode.MissingIssuerVerificationKey]: "Der Prüfschlüssel des Ausstellers fehlt.",
+  [PresentationValidationErrorCode.MissingKeyBinding]: "Der präsentierte Nachweis enthält keine Schlüsselbindung.",
+  [PresentationValidationErrorCode.MissingPresentation]: "Die OpenID4VP-Antwort enthält keine Präsentation.",
+  [PresentationValidationErrorCode.NonceMismatch]:
+    "Die Anfragekennung der Schlüsselbindung stimmt nicht mit diesem Prüfvorgang überein.",
+  [PresentationValidationErrorCode.UnsupportedHolderDidUrl]:
+    "Der Prüfschlüssel des Inhabers verwendet keine unterstützte DID-Adresse.",
+  [PresentationValidationErrorCode.UnsupportedIssuerDidUrl]:
+    "Der Prüfschlüssel des Ausstellers verwendet keine unterstützte DID-Adresse.",
+  [PresentationValidationErrorCode.UnsupportedPresentationFormat]: "Das Format der Präsentation wird nicht unterstützt.",
+  [PresentationValidationErrorCode.UnsupportedSdJwtType]: "Die SD-JWT-Präsentation enthält einen nicht unterstützten Typ.",
+  [PresentationValidationErrorCode.UnsupportedSignatureAlgorithm]:
+    "Die Präsentation verwendet ein nicht unterstütztes Signaturverfahren.",
+  [PresentationValidationErrorCode.VerificationFailed]: "Der Nachweis konnte nicht geprüft werden."
+};
 const rootElement = document.querySelector<HTMLElement>("#openid4vp-verifier-root");
 const verifierElements = rootElement ? getVerifierElements(rootElement) : undefined;
 
@@ -68,7 +96,7 @@ async function initialize(appElement: HTMLElement, elements: VerifierElements) {
   const credential = mergeCredentialDisplay(result.credential, credentialDisplayFromTokenContent(tokenContent.displayInformation));
 
   setCredential(elements, credential);
-  setStatus(elements, result.isValid ? "valid" : "invalid", result.error);
+  setStatus(elements, result.isValid ? "valid" : "invalid", result.errorCode);
 
   elements.closeButton.addEventListener("click", () => {
     window.close();
@@ -89,7 +117,7 @@ function showClosedView(elements: VerifierElements) {
   elements.closedView.hidden = false;
 }
 
-function setStatus(elements: VerifierElements, status: VerificationStatus, error?: string) {
+function setStatus(elements: VerifierElements, status: VerificationStatus, errorCode?: PresentationValidationErrorCode) {
   elements.root.classList.toggle("is-loading", status === "loading");
   elements.root.classList.toggle("is-valid", status === "valid");
   elements.root.classList.toggle("is-invalid", status === "invalid");
@@ -100,8 +128,8 @@ function setStatus(elements: VerifierElements, status: VerificationStatus, error
   elements.invalidMark.hidden = status !== "invalid";
   elements.closeButton.hidden = status === "loading";
 
-  if (error) {
-    elements.error.textContent = `Prüfhinweis: ${error}`;
+  if (errorCode) {
+    elements.error.textContent = `Prüfhinweis: ${validationErrorMessages[errorCode]}`;
     elements.error.hidden = false;
   } else {
     elements.error.textContent = "";

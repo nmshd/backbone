@@ -2,7 +2,7 @@ import { DidJwk, Kms, TypedArrayEncoder, sdJwtVcHasher } from "@credo-ts/core";
 import { ed25519 } from "@noble/curves/ed25519.js";
 import { SDJwtInstance } from "@sd-jwt/core";
 import { describe, expect, it } from "vitest";
-import { validatePresentedCredential } from "../src/verification";
+import { PresentationValidationErrorCode, validatePresentedCredential } from "../src/verification";
 
 const now = new Date("2030-01-01T12:00:00.000Z");
 const nowInSeconds = Math.floor(now.getTime() / 1000);
@@ -19,11 +19,11 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(true);
-    expect(result.error).toBeUndefined();
+    expect(result.errorCode).toBeUndefined();
     expect(result.credential.claims).toEqual(
       expect.arrayContaining([
-        { label: "Given Name", value: "Maria" },
-        { label: "Surname", value: "Müller" }
+        { label: "Vorname", value: "Maria" },
+        { label: "Nachname", value: "Müller" }
       ])
     );
   });
@@ -35,7 +35,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(tamperedPresentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/signature/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidSignature);
   });
 
   it("rejects a presentation whose key-binding signature was changed", async () => {
@@ -50,7 +50,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(tamperedPresentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/signature/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidSignature);
   });
 
   it("rejects a disclosed claim that no longer matches the digest signed by the issuer", async () => {
@@ -63,6 +63,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(parts.join("~"));
 
     expect(result.isValid).toBe(false);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidPresentationBinding);
   });
 
   it("rejects an incorrect sd_hash even if the modified key-binding JWT has a valid holder signature", async () => {
@@ -79,7 +80,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(parts.join("~"));
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/sd_hash/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidPresentationBinding);
   });
 
   it("rejects a key-binding JWT signed by a key other than the holder key in cnf", async () => {
@@ -88,7 +89,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/signature/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidSignature);
   });
 
   it("rejects an SD-JWT without a key-binding presentation", async () => {
@@ -97,7 +98,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(credential);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/key binding/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingKeyBinding);
   });
 
   it("rejects a presentation created for a different nonce", async () => {
@@ -106,7 +107,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/nonce/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.NonceMismatch);
   });
 
   it("rejects a presentation created for a different audience", async () => {
@@ -115,7 +116,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/audience/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.AudienceMismatch);
   });
 
   it("rejects an expired credential even when both signatures are valid", async () => {
@@ -124,7 +125,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/expired/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.CredentialExpired);
   });
 
   it("rejects a credential whose validity period has not started", async () => {
@@ -133,7 +134,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/not yet valid/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.CredentialNotYetValid);
   });
 
   it("rejects an unsupported SD-JWT typ header", async () => {
@@ -142,7 +143,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/typ header/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.UnsupportedSdJwtType);
   });
 
   it("rejects a cryptographically valid SD-JWT without a vct claim", async () => {
@@ -151,7 +152,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate(presentation);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/vct/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingCredentialType);
   });
 
   it("rejects the complete response when one of multiple presentations is invalid", async () => {
@@ -161,7 +162,7 @@ describe("validatePresentedCredential", () => {
     const result = await validate([validPresentation, invalidPresentation]);
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/signature/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.InvalidSignature);
   });
 
   it("rejects empty input", async () => {
@@ -173,7 +174,7 @@ describe("validatePresentedCredential", () => {
 
     expect(result).toEqual({
       credential: {},
-      error: "No vp_token parameter was found in the OpenID4VP response.",
+      errorCode: PresentationValidationErrorCode.MissingPresentation,
       isValid: false
     });
   });
@@ -188,7 +189,7 @@ describe("validatePresentedCredential", () => {
     });
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/challenge/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingChallenge);
   });
 
   it("rejects validation without an audience before doing any cryptographic work", async () => {
@@ -201,7 +202,7 @@ describe("validatePresentedCredential", () => {
     });
 
     expect(result.isValid).toBe(false);
-    expect(result.error).toMatch(/audience/i);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingAudience);
   });
 });
 

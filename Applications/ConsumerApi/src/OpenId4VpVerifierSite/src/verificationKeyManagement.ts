@@ -33,11 +33,11 @@ export class BrowserVerificationKeyManagementService implements Kms.KeyManagemen
   }
 
   public async createKey(): Promise<never> {
-    throw new Kms.KeyManagementError("The browser verification backend cannot create keys.");
+    throw new Kms.KeyManagementError("Die Prüfkomponente im Browser kann keine Schlüssel erzeugen.");
   }
 
   public async importKey(): Promise<never> {
-    throw new Kms.KeyManagementError("The browser verification backend cannot import keys.");
+    throw new Kms.KeyManagementError("Die Prüfkomponente im Browser kann keine Schlüssel importieren.");
   }
 
   public async deleteKey() {
@@ -45,14 +45,14 @@ export class BrowserVerificationKeyManagementService implements Kms.KeyManagemen
   }
 
   public async sign(): Promise<never> {
-    throw new Kms.KeyManagementError("The browser verification backend cannot sign data.");
+    throw new Kms.KeyManagementError("Die Prüfkomponente im Browser kann keine Daten signieren.");
   }
 
   public async verify(_agentContext: AgentContext, options: Kms.KmsVerifyOptions): Promise<Kms.KmsVerifyReturn> {
     const publicJwk = options.key.publicJwk;
 
     if (!publicJwk) {
-      throw new Kms.KeyManagementError("Only public JWK based verification is supported in the browser.");
+      throw new Kms.KeyManagementError("Im Browser wird nur die Prüfung mit öffentlichen JWK-Schlüsseln unterstützt.");
     }
 
     Kms.assertAllowedSigningAlgForKey(publicJwk, options.algorithm);
@@ -71,11 +71,11 @@ export class BrowserVerificationKeyManagementService implements Kms.KeyManagemen
   }
 
   public async encrypt(): Promise<never> {
-    throw new Kms.KeyManagementError("The browser verification backend cannot encrypt data.");
+    throw new Kms.KeyManagementError("Die Prüfkomponente im Browser kann keine Daten verschlüsseln.");
   }
 
   public async decrypt(): Promise<never> {
-    throw new Kms.KeyManagementError("The browser verification backend cannot decrypt data.");
+    throw new Kms.KeyManagementError("Die Prüfkomponente im Browser kann keine Daten entschlüsseln.");
   }
 
   public randomBytes(_agentContext: AgentContext, options: Kms.KmsRandomBytesOptions) {
