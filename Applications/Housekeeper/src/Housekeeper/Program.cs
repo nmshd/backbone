@@ -1,5 +1,7 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.Housekeeper;
@@ -23,68 +25,86 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-var app = CreateHostBuilder(args).Build();
+using var host = CreateHostBuilder(args).Build();
 
-await app.Services.GetRequiredService<Executor>().Execute(CancellationToken.None);
-return;
-
-static IHostBuilder CreateHostBuilder(string[] args)
+try
 {
-    return Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((hostContext, configuration) =>
-        {
-            configuration.Sources.Clear();
-            var env = hostContext.HostingEnvironment;
+    await host.StartAsync();
 
-            configuration
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
+    await host.Services.GetRequiredService<Executor>().Execute(CancellationToken.None);
 
-            configuration.AddEnvironmentVariables();
-            configuration.AddCommandLine(args);
-        })
-        .ConfigureServices((hostContext, services) =>
-        {
-            var configuration = hostContext.Configuration;
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "There was an error while executing the housekeeper.");
+    return 1;
+}
+finally
+{
+    await host.StopAsync();
+}
 
-            services.ConfigureAndValidate<Configuration>(configuration.Bind);
+static HostApplicationBuilder CreateHostBuilder(string[] args)
+{
+    var builder = Host.CreateApplicationBuilder(args);
+    builder.ConfigureContainer(new AutofacServiceProviderFactory());
 
-            services.AddLogging();
+    var configuration = builder.Configuration;
+    var services = builder.Services;
 
-            services
-                .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration,
-                    Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
-                    Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
-                    Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
+    // Configure Configuration
+    builder.Configuration.Sources.Clear();
+    builder.Configuration
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile("appsettings.override.json", optional: true);
+    builder.Configuration.AddEnvironmentVariables();
+    builder.Configuration.AddCommandLine(args);
 
-            var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
+    // Configure Services
+    services.Configure<ConsoleLifetimeOptions>(options => { options.SuppressStatusMessages = true; });
 
-            services.AddCustomOpenIddict();
+    services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
-            services.AddCustomIdentity(hostContext.HostingEnvironment);
+    services.AddLogging();
 
-            services.AddSingleton<Executor>();
+    services
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration,
+            Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+            Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+            Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
-            services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
-            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
-        })
-        .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-        .UseSerilog((context, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "housekeeper")
-                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-                    .WithDefaultDestructurers()
-                    .WithDestructurers([new DbUpdateExceptionDestructurer()])
-                ), preserveStaticLogger: true
-        );
+    services.AddCustomOpenIddict();
+
+    services.AddCustomIdentity(builder.Environment);
+
+    services.AddSingleton<Executor>();
+
+    services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector,
+        HousekeepingTelemetry.ACTIVITY_SOURCE_NAME);
+
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
+
+    services.AddSerilog(configuration => configuration
+            .ReadFrom.Configuration(builder.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
+            .Enrich.FromLogContext()
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers([new DbUpdateExceptionDestructurer()])
+            ), preserveStaticLogger: true
+    );
+
+    return builder;
 }
 
 public partial class Program

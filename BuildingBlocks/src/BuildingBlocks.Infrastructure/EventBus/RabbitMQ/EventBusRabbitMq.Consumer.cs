@@ -7,6 +7,7 @@ using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -14,6 +15,15 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public partial class EventBusRabbitMq
 {
+    private const int HANDLER_RETRY_COUNT = 5;
+    private const string CALL_OPERATION_NAME = "call";
+    private const string PROCESS_OPERATION_NAME = "consume";
+    private const string PROCESS_OPERATION_TYPE = "process";
+
+    private readonly string _deadLetterExchangeName;
+    private readonly string _deadLetterQueueName;
+    private readonly SubscriptionManager _subscriptionManager = new();
+
     public async Task Subscribe<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
         var queueName = GetQueueName<THandler, TEvent>();
@@ -25,30 +35,67 @@ public partial class EventBusRabbitMq
         _subscriptionManager.AddSubscription(consumer, queueName);
     }
 
+    private async Task EnsureDeadLetterQueueExists()
+    {
+        IChannel? channel = null;
+
+        try
+        {
+            channel = await _channelPool.Get();
+
+            await channel.QueueDeclareAsync(_deadLetterQueueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: new Dictionary<string, object?>
+                {
+                    { "x-queue-type", "quorum" },
+                }
+            );
+
+            await channel.QueueBindAsync(_deadLetterQueueName, _deadLetterExchangeName, "#");
+
+            _logger.LogTrace("Successfully bound dead letter queue.");
+        }
+        finally
+        {
+            if (channel != null)
+                _channelPool.Return(channel);
+        }
+    }
+
     private async Task CreateQueue<TEvent>(string queueName) where TEvent : DomainEvent
     {
         var eventName = typeof(TEvent).GetEventName();
 
-        var channel = await _channelPool.Get();
+        IChannel? channel = null;
 
-        await channel.QueueDeclareAsync(queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: new Dictionary<string, object?>
-            {
-                { "x-queue-type", "quorum" },
-                { "x-delivery-limit", HANDLER_RETRY_COUNT },
-                { "x-dead-letter-exchange", _deadLetterExchangeName },
-                { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
-            }
-        );
+        try
+        {
+            channel = await _channelPool.Get();
 
-        await channel.QueueBindAsync(queueName, _exchangeName, eventName);
+            await channel.QueueDeclareAsync(queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: new Dictionary<string, object?>
+                {
+                    { "x-queue-type", "quorum" },
+                    { "x-delivery-limit", HANDLER_RETRY_COUNT },
+                    { "x-dead-letter-exchange", _deadLetterExchangeName },
+                    { "x-dead-letter-routing-key", $"dead.routing.{eventName}" }
+                }
+            );
 
-        _logger.LogTrace("Successfully bound queue '{QueueName}' to event '{EventName}'.", queueName, eventName);
+            await channel.QueueBindAsync(queueName, _exchangeName, eventName);
 
-        _channelPool.Return(channel);
+            _logger.LogTrace("Successfully bound queue '{QueueName}' to event '{EventName}'.", queueName, eventName);
+        }
+        finally
+        {
+            if (channel != null)
+                _channelPool.Return(channel);
+        }
     }
 
     private async Task<AsyncEventingBasicConsumer> CreateConsumer<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
@@ -58,9 +105,13 @@ public partial class EventBusRabbitMq
 
         consumer.ReceivedAsync += async (_, eventArgs) =>
         {
-            var eventName = eventArgs.RoutingKey;
+            var queueName = GetQueueName<THandler, TEvent>();
+
+            using var activity = StartProcessActivity(eventArgs, queueName, eventArgs.BasicProperties, eventArgs.Body.Length);
 
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+
+            activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.message_decoded"));
 
             try
             {
@@ -76,10 +127,10 @@ public partial class EventBusRabbitMq
             }
             catch (Exception ex)
             {
+                activity?.AddException(ex);
+
                 await channel.BasicRejectAsync(eventArgs.DeliveryTag, true);
                 _metrics.IncrementNumberOfProcessingErrors(GetQueueName<THandler, TEvent>());
-
-                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
         };
 
@@ -88,10 +139,7 @@ public partial class EventBusRabbitMq
 
     private async Task ProcessEvent<TEvent, THandler>(string message) where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
     {
-        var eventType = typeof(TEvent);
-        var eventName = eventType.GetEventName();
-
-        _logger.LogDebug("Processing RabbitMQ event: '{EventName}'", eventName);
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.start_processing"));
 
         var domainEvent = JsonSerializer.Deserialize<TEvent>(message);
 
@@ -102,13 +150,41 @@ public partial class EventBusRabbitMq
         if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
             throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
-        var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
 
         var startedAt = Stopwatch.GetTimestamp();
-        await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+        using (var handlerActivity = StartHandlerActivity<TEvent, THandler>())
+        {
+            try
+            {
+                await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+            }
+            catch (Exception ex)
+            {
+                handlerActivity?.AddException(ex);
+                throw;
+            }
+        }
+
         _metrics.TrackEventProcessingDuration(startedAt, GetQueueName<THandler, TEvent>());
 
         _metrics.IncrementNumberOfHandledEvents(GetQueueName<THandler, TEvent>());
+    }
+
+    private Activity? StartHandlerActivity<TEvent, THandler>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var handlerType = typeof(THandler);
+        var eventType = typeof(TEvent);
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{CALL_OPERATION_NAME} {handlerType.FullName}", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("event_bus.event.name", eventType.GetEventName());
+        activity.SetTag("event_bus.event.type", eventType.FullName);
+        activity.SetTag("event_bus.handler.type", handlerType.FullName);
+
+        return activity;
     }
 
     public async Task StartConsuming(CancellationToken cancellationToken)
@@ -129,5 +205,54 @@ public partial class EventBusRabbitMq
                 await channel.BasicCancelAsync(tag, cancellationToken: cancellationToken);
             }
         }
+    }
+
+    private Activity? StartProcessActivity(BasicDeliverEventArgs eventArgs, string queueName, IReadOnlyBasicProperties properties, int bodySize)
+    {
+        var parentContext = EventBusDiagnostics.PROPAGATOR.Extract(default,
+            eventArgs.BasicProperties,
+            ExtractTraceContextFromBasicProperties);
+        Baggage.Current = parentContext.Baggage;
+
+        var destinationName = $"{_exchangeName}.{queueName}";
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{PROCESS_OPERATION_NAME} {destinationName}", ActivityKind.Consumer, parentContext.ActivityContext);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("messaging.system", MESSAGING_SYSTEM);
+        activity.SetTag("messaging.operation.name", PROCESS_OPERATION_NAME);
+        activity.SetTag("messaging.operation.type", PROCESS_OPERATION_TYPE);
+        activity.SetTag("messaging.destination.name", destinationName);
+        activity.SetTag("messaging.destination.template", $"{_exchangeName}:{{queueName}}");
+        activity.SetTag("messaging.rabbitmq.destination.routing_key", eventArgs.RoutingKey);
+        activity.SetTag("messaging.rabbitmq.message.delivery_tag", eventArgs.DeliveryTag);
+        activity.SetTag("messaging.message.body.size", bodySize);
+
+        if (!properties.MessageId.IsNullOrEmpty())
+            activity.SetTag("messaging.message.id", properties.MessageId);
+
+        if (!properties.CorrelationId.IsNullOrEmpty())
+            activity.SetTag("messaging.message.conversation_id", properties.CorrelationId);
+
+        return activity;
+    }
+
+    private IEnumerable<string> ExtractTraceContextFromBasicProperties(IReadOnlyBasicProperties props, string key)
+    {
+        if (props.Headers == null || !props.Headers.TryGetValue(key, out var value)) return [];
+
+        if (value is byte[] bytes) return [Encoding.UTF8.GetString(bytes)];
+
+        return [];
+    }
+
+    public static string GetQueueName<THandler, TEvent>() where TEvent : DomainEvent where THandler : IDomainEventHandler<TEvent>
+    {
+        var eventHandlerFullName = typeof(THandler).FullName!;
+
+        var moduleName = eventHandlerFullName.Split('.').ElementAt(2);
+
+        return $"{moduleName}.{typeof(TEvent).GetEventName()}";
     }
 }

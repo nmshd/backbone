@@ -64,13 +64,13 @@
           "Microsoft.Extensions.Logging": "10.0.10"
         }
       },
-      "OpenTelemetry.Exporter.Prometheus.AspNetCore": {
+      "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
         "type": "Direct",
-        "requested": "[1.11.2-beta.1, 1.11.2-beta.1]",
-        "resolved": "1.11.2-beta.1",
-        "contentHash": "jouLU4VHpzyXuzF2yi/bpt9DoseZGyUudSdTFvylgIwIx6ST1bdI/AXNoJ4/n6HwMiso677ILLm/RM8DY+EYwA==",
+        "requested": "[1.17.0, )",
+        "resolved": "1.17.0",
+        "contentHash": "R1omQOrQpGlS0Cp5UIr/TAiuEA48JrPlgr1NPV5gESiTU7HhWU+ILe2EBSYb1fKdsSavZ7nZkHcUxAzofPqr2A==",
         "dependencies": {
-          "OpenTelemetry": "[1.11.2, 2.0.0)"
+          "OpenTelemetry": "1.17.0"
         }
       },
       "OpenTelemetry.Extensions.Hosting": {
@@ -89,6 +89,17 @@
         "resolved": "1.17.0",
         "contentHash": "rGbmk1vuy1kvgZmE0ps7Vb99YZvDap6AalrrF60FwnNit1uW/PbeFZj1cpb0T8MPkYmjhBrRJ1/JB6QqXkRjHA==",
         "dependencies": {
+          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.17.0, 2.0.0)"
+        }
+      },
+      "OpenTelemetry.Instrumentation.EntityFrameworkCore": {
+        "type": "Direct",
+        "requested": "[1.17.0-beta.1, )",
+        "resolved": "1.17.0-beta.1",
+        "contentHash": "BPSv1rk6qEkGZUGTNBfk7XmYqBAWdF3FBdjXEjVClp0bKUl6VCumlaosT84qvlK7YnHLCv5FFqJHx2N62TbKEw==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.0",
+          "Microsoft.Extensions.Options": "10.0.0",
           "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.17.0, 2.0.0)"
         }
       },
@@ -1066,11 +1077,6 @@
           "OpenTelemetry.Api.ProviderBuilderExtensions": "1.17.0"
         }
       },
-      "OpenTelemetry.Api": {
-        "type": "Transitive",
-        "resolved": "1.17.0",
-        "contentHash": "mSBxzomZgHIJu9CyVNqyDu/n2JHEtqVgfcCD1Br0cV5iLYogjZOMqhlVLt99PEp+0KGBNUR3GXgeOdN2GR3F9g=="
-      },
       "OpenTelemetry.Api.ProviderBuilderExtensions": {
         "type": "Transitive",
         "resolved": "1.17.0",
@@ -1298,6 +1304,7 @@
           "Microsoft.Extensions.Identity.Core": "[10.0.10, 10.0.10]",
           "Microsoft.Extensions.Logging": "[10.0.10, 10.0.10]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]",
+          "OpenTelemetry.Api": "[1.17.0, )",
           "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.1, 7.2.1]",
           "Serilog": "[4.4.0, 4.4.0]"
@@ -1822,6 +1829,12 @@
           "OpenIddict.Core": "7.6.0",
           "OpenIddict.EntityFrameworkCore.Models": "7.6.0"
         }
+      },
+      "OpenTelemetry.Api": {
+        "type": "CentralTransitive",
+        "requested": "[1.17.0, )",
+        "resolved": "1.17.0",
+        "contentHash": "mSBxzomZgHIJu9CyVNqyDu/n2JHEtqVgfcCD1Br0cV5iLYogjZOMqhlVLt99PEp+0KGBNUR3GXgeOdN2GR3F9g=="
       },
       "RabbitMQ.Client": {
         "type": "CentralTransitive",

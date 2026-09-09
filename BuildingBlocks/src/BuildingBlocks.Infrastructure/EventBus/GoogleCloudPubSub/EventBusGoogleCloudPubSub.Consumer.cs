@@ -10,12 +10,17 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
 using Type = System.Type;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public partial class EventBusGoogleCloudPubSub
 {
+    private const string CALL_OPERATION_NAME = "call";
+    private const string PROCESS_OPERATION_NAME = "consume";
+    private const string PROCESS_OPERATION_TYPE = "process";
+
     public async Task Subscribe<T, TH>()
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
@@ -79,7 +84,13 @@ public partial class EventBusGoogleCloudPubSub
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, Type eventType, Type handlerType)
     {
+        var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
+
+        using var activity = StartProcessActivity(@event, subscriptionName, @event.Data.Length);
+
         var eventData = @event.Data.ToStringUtf8();
+
+        activity?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.message_decoded"));
 
         try
         {
@@ -94,8 +105,10 @@ public partial class EventBusGoogleCloudPubSub
         }
         catch (Exception ex)
         {
-            _metrics.IncrementNumberOfProcessingErrors(GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId);
-            _logger.ErrorHandlingMessage(ex.StackTrace!, ex);
+            activity?.AddException(ex);
+
+            _metrics.IncrementNumberOfProcessingErrors(subscriptionName);
+            activity?.AddException(ex);
             return SubscriberClient.Reply.Nack;
         }
 
@@ -104,6 +117,8 @@ public partial class EventBusGoogleCloudPubSub
 
     private async Task ProcessEvent(string message, Type eventType, Type handlerType)
     {
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.start_processing"));
+
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
         var domainEvent = JsonSerializer.Deserialize(message, eventType)!;
 
@@ -112,13 +127,81 @@ public partial class EventBusGoogleCloudPubSub
         if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
             throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
+        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
+
         var handleMethod = handler.GetType().GetMethod("Handle");
 
         var startedAt = Stopwatch.GetTimestamp();
-        await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+        using (var handlerActivity = StartHandlerActivity(eventType, handlerType))
+        {
+            try
+            {
+                await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+            }
+            catch (Exception ex)
+            {
+                handlerActivity?.AddException(ex);
+                throw;
+            }
+        }
+
         _metrics.TrackEventProcessingDuration(startedAt, subscriptionName);
 
         _metrics.IncrementNumberOfHandledEvents(subscriptionName);
+    }
+
+    private Activity? StartHandlerActivity(Type eventType, Type handlerType)
+    {
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{CALL_OPERATION_NAME} {handlerType.FullName}", ActivityKind.Internal);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("event_bus.event.name", eventType.GetEventName());
+        activity.SetTag("event_bus.event.type", eventType.FullName);
+        activity.SetTag("event_bus.handler.type", handlerType.FullName);
+
+        return activity;
+    }
+
+    private Activity? StartProcessActivity(PubsubMessage message, string subscriptionName, int bodySize)
+    {
+        var parentContext = EventBusDiagnostics.PROPAGATOR.Extract(default,
+            message.Attributes,
+            ExtractTraceContextFromAttributes);
+        Baggage.Current = parentContext.Baggage;
+
+        var destinationName = $"{_topicName.TopicId}.{subscriptionName}";
+        var activity = EventBusDiagnostics.ACTIVITY_SOURCE.StartActivity($"{PROCESS_OPERATION_NAME} {destinationName}", ActivityKind.Consumer, parentContext.ActivityContext);
+
+        if (activity == null)
+            return null;
+
+        activity.SetTag("messaging.system", MESSAGING_SYSTEM);
+        activity.SetTag("messaging.operation.name", PROCESS_OPERATION_NAME);
+        activity.SetTag("messaging.operation.type", PROCESS_OPERATION_TYPE);
+        activity.SetTag("messaging.destination.name", destinationName);
+        activity.SetTag("messaging.destination.subscription.name", subscriptionName);
+        activity.SetTag("messaging.destination.template", $"{_topicName.TopicId}:{{subscriptionName}}");
+        activity.SetTag("messaging.message.body.size", bodySize);
+
+        if (!message.MessageId.IsNullOrEmpty())
+            activity.SetTag("messaging.message.id", message.MessageId);
+
+        if (!message.OrderingKey.IsNullOrEmpty())
+            activity.SetTag("messaging.gcp_pubsub.message.ordering_key", message.OrderingKey);
+
+        if (message.Attributes.TryGetValue(PubSubMessageAttributes.CORRELATION_ID, out var correlationId) && !correlationId.IsNullOrEmpty())
+            activity.SetTag("messaging.message.conversation_id", correlationId);
+
+        return activity;
+    }
+
+    private IEnumerable<string> ExtractTraceContextFromAttributes(IDictionary<string, string> attributes, string key)
+    {
+        if (!attributes.TryGetValue(key, out var value)) return [];
+
+        return [value];
     }
 
     public async Task StopConsuming(CancellationToken cancellationToken)

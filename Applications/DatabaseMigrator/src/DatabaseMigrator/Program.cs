@@ -1,4 +1,6 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DatabaseMigrator;
 using Microsoft.Extensions.Options;
@@ -62,15 +64,21 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<MigrationReader>();
 
             services.AddAllDbContexts(parsedConfiguration.Infrastructure.SqlDatabase);
+
+            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                 .Enrich.FromLogContext()
-                .Enrich.WithProperty("service", "databasemigrator")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])
                 ), preserveStaticLogger: true
         );
+}
+
+public partial class Program
+{
+    private const string METER_NAME = "enmeshed.backbone.databasemigrator";
 }

@@ -107,11 +107,13 @@ public class Program
 
                 services.RegisterIdentityDeleters();
 
+                services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration
-                    .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                    .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
                     .Enrich.FromLogContext()
                     .Enrich.WithProperty("service", "jobs.identitydeletion")
                     .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()

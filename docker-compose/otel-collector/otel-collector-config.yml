@@ -1,0 +1,65 @@
+extensions:
+  health_check:
+  zpages:
+    endpoint: :55679
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 50
+    spike_limit_percentage: 30
+
+  batch:
+
+exporters:
+  debug:
+  otlp/tempo:
+    endpoint: "${TEMPO_ENDPOINT}"
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  otlp_http/loki:
+    endpoint: "http://loki:3100/otlp"
+
+service:
+  pipelines:
+    traces:
+      receivers:
+        - otlp
+      processors:
+        - memory_limiter
+        - batch
+      exporters:
+        - debug
+        - otlp/tempo
+    metrics:
+      receivers:
+        - otlp
+      processors:
+        - memory_limiter
+        - batch
+      exporters:
+        - debug
+        - prometheus
+    logs:
+      receivers:
+        - otlp
+      processors:
+        - memory_limiter
+        - batch
+      exporters:
+        - debug
+        - otlp_http/loki
+
+  extensions:
+    - health_check
+    - zpages

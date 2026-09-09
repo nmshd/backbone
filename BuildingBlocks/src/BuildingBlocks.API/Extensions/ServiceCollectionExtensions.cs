@@ -1,5 +1,7 @@
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.BuildingBlocks.API.Diagnostics;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -10,7 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
@@ -103,19 +108,58 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        public IServiceCollection AddOpenTelemetryWithPrometheusExporter(string name)
+        public IServiceCollection AddOpenTelemetry(string resourceName, string resourceVersion, OpenTelemetryCollectorConfiguration openTelemetryCollectorConfiguration,
+            params string[] additionalActivitySourceNames)
         {
             services.AddOpenTelemetry()
+                .ConfigureResource(resource => resource.AddService(resourceName, serviceVersion: resourceVersion))
                 .WithMetrics(metrics =>
                 {
                     metrics
-                        .AddPrometheusExporter()
-                        .AddMeter(name)
+                        .AddAspNetCoreInstrumentation()
+                        .AddMeter(resourceName)
                         .AddMeter("Microsoft.EntityFrameworkCore")
                         .AddMeter("Microsoft.AspNetCore.Hosting")
                         .AddMeter("Microsoft.AspNetCore.Diagnostics")
-                        .AddMeter("Microsoft.AspNetCore.Server.Kestrel");
-                });
+                        .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+                        .AddMeter("Microsoft.AspNetCore.Authorization")
+                        .AddMeter("Microsoft.AspNetCore.Authentication")
+                        .AddMeter("Microsoft.AspNetCore.Identity");
+
+                    if (openTelemetryCollectorConfiguration.Endpoint != null)
+                        metrics.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
+                })
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME)
+                        .AddProcessor<DatabaseNameProcessor>()
+                        .AddProcessor<UserContextProcessor>();
+
+                    foreach (var activitySourceName in additionalActivitySourceNames)
+                    {
+                        tracing.AddSource(activitySourceName);
+                    }
+
+                    if (openTelemetryCollectorConfiguration.Endpoint != null)
+                        tracing.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
+                })
+                .WithLogging(
+                    logging =>
+                    {
+                        if (openTelemetryCollectorConfiguration.Endpoint != null)
+                            logging.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
+                    },
+                    logging =>
+                    {
+                        logging.IncludeFormattedMessage = true;
+                        logging.IncludeScopes = true;
+                        logging.ParseStateValues = true;
+                    }
+                );
 
             return services;
         }
@@ -192,6 +236,11 @@ public static class ServiceCollectionExtensions
             return services;
         }
     }
+}
+
+public class OpenTelemetryCollectorConfiguration
+{
+    public string? Endpoint { get; set; }
 }
 
 public class SwaggerUiConfiguration
