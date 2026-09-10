@@ -75,7 +75,7 @@ Design source: [Frosch Wallet App in Figma](https://www.figma.com/design/D15DcZI
 - `vite.config.ts` generates fixed filenames under `dist/openid4vp-verifier/assets/verifier.{js,css}` with the base path `/openid4vp-verifier/`.
 - `../ConsumerApi.csproj` runs `npm ci` and `npm run build` during regular builds and copies the result to `../wwwroot/openid4vp-verifier`.
 - `../Dockerfile` builds the bundle in a dedicated Node stage and copies it into the Consumer API image.
-- `../Views/AppOnboarding/AppOnboarding.cshtml` includes CSS and JavaScript through `IFileVersionProvider` with cache busting.
+- `../Views/AppOnboarding/AppOnboarding.cshtml` includes CSS and preloads and dynamically imports JavaScript through `IFileVersionProvider` with cache busting. The server-rendered verifier remains visible during normal loading, while import or initialization failures restore the onboarding page.
 - `../../../../.github/workflows/test.yml` installs the dependencies and runs `npm test` in the unit-test job.
 
 `node_modules/`, `dist/`, and `../wwwroot/openid4vp-verifier/` are generated or copied artifacts. Do not edit or commit them directly. Changes belong in `src/`, the Razor markup, or the build configuration. When dependencies change, `package-lock.json` must be updated together with `package.json`.

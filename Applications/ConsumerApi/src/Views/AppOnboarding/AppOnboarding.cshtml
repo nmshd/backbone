@@ -3,6 +3,8 @@
 
 @{
     Layout = null;
+    var verifierStylePath = FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.css");
+    var verifierScriptPath = FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.js");
 }
 
 <!DOCTYPE html>
@@ -90,8 +92,14 @@
     </style>
 
     <link rel="stylesheet" href="~/style/style.css" />
-    <link rel="stylesheet" href="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.css")" />
-    <script type="module" src="@FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.js")"></script>
+    <link rel="stylesheet" href="@verifierStylePath" />
+    <link rel="modulepreload" href="@verifierScriptPath" />
+    <script type="module">
+        void import("@verifierScriptPath").catch((error) => {
+            console.error("Der Nachweisprüfer konnte nicht gestartet werden.", error);
+            document.body.classList.remove("openid4vp-verifier-visible");
+        });
+    </script>
     <noscript>
         <style>
             body.openid4vp-verifier-visible #openid4vp-verifier-root {

@@ -69,7 +69,12 @@ if (rootElement && verifierElements) {
     document.body.classList.add("openid4vp-verifier-visible");
     setStatus(verifierElements, "loading");
 
-    void initialize(rootElement, verifierElements);
+    void initialize(rootElement, verifierElements).catch((error) => {
+        console.error("Der Nachweisprüfer konnte nicht gestartet werden.", error);
+        showOnboarding();
+    });
+} else {
+    showOnboarding();
 }
 
 async function initialize(appElement: HTMLElement, elements: VerifierElements) {
