@@ -1,87 +1,87 @@
-# OpenID4VP Verifier – Hinweise für AI Agents
+# OpenID4VP Verifier – Instructions for AI Agents
 
-Diese Datei gilt für den gesamten Ordner `OpenId4VpVerifierSite`. Halte sie bei jeder Änderung am Feature aktuell. Wenn sich Architektur, Validierungsregeln, unterstützte Formate, Integrationspunkte, Build-Schritte, Tests oder Designvorgaben ändern, aktualisiere diese Datei im selben Change.
+This file applies to the entire `OpenId4VpVerifierSite` directory. Keep it up to date with every change to the feature. If the architecture, validation rules, supported formats, integration points, build steps, tests, or design requirements change, update this file as part of the same change.
 
-## Zweck und Ablauf
+## Purpose and Flow
 
-Dieses Vite-/TypeScript-Bundle ergänzt die Consumer-API-Seite `/r/{referenceId}` um eine browserseitige Prüfung präsentierter Nachweise.
+This Vite/TypeScript bundle adds browser-side verification of presented credentials to the Consumer API page `/r/{referenceId}`.
 
-1. `referenceContent.ts` liest den Schlüssel aus dem URL-Fragment. Das Fragment ist base64url-kodiert und enthält `algorithm|key|forIdentity|passwordProtection`; aktuell wird nur Algorithmus `3` (`XCHACHA20_POLY1305`) unterstützt.
-2. Der verschlüsselte Inhalt wird über den Token- oder RelationshipTemplate-Endpunkt der Consumer API geladen und im Browser entschlüsselt.
-3. Nur Inhalte mit `@type: "TokenContentVerifiablePresentation"` werden als Präsentation behandelt. Andernfalls bleibt die reguläre Onboarding-Seite sichtbar.
-4. `verification.ts` validiert `value`. Als erwartete Nonce wird die Reference-ID verwendet, als Audience derzeit fest `defaultPresentationAudience`.
-5. `main.ts` verbindet Lade- und Validierungslogik mit dem vorhandenen DOM und zeigt Status sowie Credential-Inhalte an.
+1. `referenceContent.ts` reads the key from the URL fragment. The fragment is base64url-encoded and contains `algorithm|key|forIdentity|passwordProtection`; currently, only algorithm `3` (`XCHACHA20_POLY1305`) is supported.
+2. The encrypted content is loaded through the Consumer API's token or RelationshipTemplate endpoint and decrypted in the browser.
+3. Only content with `@type: "TokenContentVerifiablePresentation"` is treated as a presentation. Otherwise, the regular onboarding page remains visible.
+4. `verification.ts` validates `value`. The reference ID is used as the expected nonce, while the audience is currently hard-coded to `defaultPresentationAudience`.
+5. `main.ts` connects the loading and validation logic to the existing DOM and displays the status and credential contents.
 
-Das URL-Fragment wird vom Browser nicht an den Server übertragen. Verschiebe den darin enthaltenen Entschlüsselungsschlüssel nicht in Query-Parameter oder serverseitige Requests.
+The URL fragment is not sent to the server by the browser. Do not move the decryption key it contains into query parameters or server-side requests.
 
-## Verantwortlichkeiten der Dateien
+## File Responsibilities
 
-- `src/referenceContent.ts`: Referenz-Fragment parsen, API-Endpunkte auswählen, verschlüsselten Inhalt laden und entschlüsseln. Fehler führen dazu, dass kein VP-Inhalt zurückgegeben wird.
-- `src/verification.ts`: Validierung und Extraktion der anzuzeigenden Credential-Daten. Der öffentliche Einstiegspunkt ist `validatePresentedCredential(presentation, options)`; Input rein, `VerificationOutcome` raus, ohne DOM-Abhängigkeit.
-- `src/main.ts`: UI-Orchestrierung, DOM-Zugriff, deutsche Texte, Zuordnung von `PresentationValidationErrorCode` zu nutzerfreundlichen Meldungen und Zusammenführung optionaler `displayInformation`.
-- `src/verificationKeyManagement.ts`: Browser-KMS für reine Signaturprüfung mit öffentlichen JWKs. Keine Schlüsselgenerierung, kein Import privater Schlüssel und kein Signieren.
-- `src/verificationStorage.ts`: Flüchtige Storage-/Filesystem-Adapter, die Credo im Browser zum Initialisieren benötigt. Es werden keine Verifier-Daten dauerhaft gespeichert.
-- `src/styles.css`: Ausschließlich Verifier-Styles; Selektoren unter `.openid4vp-verifier` beziehungsweise `#openid4vp-verifier-root` kapseln.
-- `test/verification.test.ts`: Echte kryptografische Unit Tests der Validierungslogik ohne Mocks.
+- `src/referenceContent.ts`: Parse the reference fragment, select API endpoints, and load and decrypt the encrypted content. Errors result in no VP content being returned.
+- `src/verification.ts`: Validate and extract the credential data to be displayed. The public entry point is `validatePresentedCredential(presentation, options)`; input in, `VerificationOutcome` out, with no DOM dependency.
+- `src/main.ts`: UI orchestration, DOM access, German text, mapping `PresentationValidationErrorCode` values to user-friendly messages, and merging optional `displayInformation`.
+- `src/verificationKeyManagement.ts`: Browser KMS exclusively for signature verification with public JWKs. No key generation, private-key import, or signing.
+- `src/verificationStorage.ts`: Ephemeral storage/filesystem adapters required to initialize Credo in the browser. No verifier data is stored persistently.
+- `src/styles.css`: Verifier styles only; scope selectors beneath `.openid4vp-verifier` or `#openid4vp-verifier-root`.
+- `test/verification.test.ts`: Real cryptographic unit tests of the validation logic without mocks.
 
-## Validierungsregeln
+## Validation Rules
 
-Unterstützt werden derzeit kompakte SD-JWT VCs mit Key Binding sowie JWT- und JSON-LD-basierte VCs/VPs, soweit Credo sie prüfen kann. Ein erfolgreicher Status erfordert:
+Compact SD-JWT VCs with Key Binding as well as JWT- and JSON-LD-based VCs/VPs are currently supported to the extent that Credo can verify them. A successful status requires:
 
-- mindestens eine Präsentation beziehungsweise ein Credential;
-- vorhandene erwartete Nonce und Audience;
-- gültige kryptografische Signaturen;
-- bei SD-JWT eine gültige Issuer-Signatur, gültige Disclosures, eine gültige Holder-Key-Binding-Signatur und einen passenden `sd_hash`;
-- Übereinstimmung von Nonce und Audience mit dem aktuellen Prüfvorgang;
-- einen unterstützten SD-JWT-Typ und das Pflichtfeld `vct`;
-- einen bereits begonnenen und noch nicht abgelaufenen Gültigkeitszeitraum;
-- bei einer VP mindestens ein eingebettetes Credential;
-- bei mehreren Präsentationen beziehungsweise Credentials die Gültigkeit jedes einzelnen Elements.
+- at least one presentation or credential;
+- the expected nonce and audience to be present;
+- valid cryptographic signatures;
+- for SD-JWT, a valid issuer signature, valid disclosures, a valid holder key-binding signature, and a matching `sd_hash`;
+- the nonce and audience to match the current verification process;
+- a supported SD-JWT type and the required `vct` field;
+- a validity period that has already started and has not yet expired;
+- at least one embedded credential in a VP;
+- every individual item to be valid when multiple presentations or credentials are supplied.
 
-Signer-Schlüssel werden aus eingebetteten JWKs, `x5c` oder unterstützten DID-URLs aufgelöst. Die Credo-Konfiguration enthält Resolver für `did:key`, `did:jwk` und `did:web`.
+Signer keys are resolved from embedded JWKs, `x5c`, or supported DID URLs. The Credo configuration includes resolvers for `did:key`, `did:jwk`, and `did:web`.
 
-Wichtige bewusste Grenzen:
+Important intentional limitations:
 
-- Credential-Status beziehungsweise Widerruf wird aktuell nicht geprüft (`verifyCredentialStatus: false`).
-- Bei `x5c` wird der öffentliche Schlüssel des Zertifikats für die Signaturprüfung verwendet; eine Zertifikatskette oder das Vertrauen in den Aussteller wird nicht validiert.
-- Eine gültige Signatur allein bedeutet daher nicht, dass der Aussteller fachlich vertrauenswürdig ist.
+- Credential status or revocation is not currently checked (`verifyCredentialStatus: false`).
+- With `x5c`, the certificate's public key is used to verify the signature; neither the certificate chain nor trust in the issuer is validated.
+- A valid signature alone therefore does not mean that the issuer is trusted from a business perspective.
 
-Ändere diese Grenzen nicht beiläufig. Sicherheitsrelevante Erweiterungen benötigen passende positive und negative Tests.
+Do not change these limitations casually. Security-relevant extensions require appropriate positive and negative tests.
 
-## Fehlerbehandlung
+## Error Handling
 
-Validierungsergebnisse enthalten keine Fehlermeldung als Freitext, sondern einen Wert aus `PresentationValidationErrorCode`. Ergänze für neue Fehlerfälle:
+Validation results do not contain a free-text error message, but a value from `PresentationValidationErrorCode`. For new error cases, add:
 
-1. einen eindeutigen Enum-Wert in `verification.ts`;
-2. eine korrekte Zuordnung im Validierungspfad;
-3. eine kurze, nicht technische deutsche UI-Meldung in `validationErrorMessages` in `main.ts`;
-4. mindestens einen Unit Test, der exakt den Error Code prüft.
+1. a distinct enum value in `verification.ts`;
+2. the correct mapping in the validation path;
+3. a short, non-technical German UI message in `validationErrorMessages` in `main.ts`;
+4. at least one unit test that asserts the exact error code.
 
-Unbekannte Fehler dürfen nicht als gültig behandelt werden und werden auf `VerificationFailed` abgebildet. Interne technische Details, Bibliotheksfehler, Schlüsselmaterial und komplette Präsentationen gehören nicht in sichtbare Fehlermeldungen.
+Unknown errors must not be treated as valid and are mapped to `VerificationFailed`. Internal technical details, library errors, key material, and complete presentations must not appear in visible error messages.
 
-## UI- und Designvorgaben
+## UI and Design Requirements
 
-Das Markup liegt nicht in diesem Vite-Projekt, sondern in `../Views/AppOnboarding/AppOnboarding.cshtml`. `main.ts` erwartet die dortigen `data-*`-Elemente. Ändere Markup, TypeScript-Abfragen und CSS gemeinsam, wenn dieser DOM-Vertrag angepasst wird. Erzeuge fehlende Elemente nicht dynamisch als Fallback; bei einem unvollständigen DOM soll der Verifier nicht initialisieren.
+The markup is not located in this Vite project, but in `../Views/AppOnboarding/AppOnboarding.cshtml`. `main.ts` expects the `data-*` elements defined there. Change the markup, TypeScript queries, and CSS together when modifying this DOM contract. Do not create missing elements dynamically as a fallback; the verifier must not initialize when the DOM is incomplete.
 
-Alle sichtbaren Texte einschließlich Fehler- und Accessibility-Texte müssen auf Deutsch sein. Fehlermeldungen sollen verständlich und wenig technisch formuliert werden. Verwende `textContent`, nicht `innerHTML`, für Daten aus Präsentationen.
+All visible text, including error and accessibility text, must be in German. Error messages should be understandable and use minimal technical language. Use `textContent`, not `innerHTML`, for data from presentations.
 
-Alle präsentierten fachlichen Claims sollen angezeigt werden. Technische Metadaten aus `technicalClaimNames` und Bildfelder aus `imageClaimNames` werden davon bewusst ausgenommen beziehungsweise separat dargestellt. Fehlende Werte werden ausgeblendet; keine erfundenen Beispieldaten oder Anzeige-Fallbacks hinzufügen. Der Aussteller steuert zusätzlich den Bereich „verifiziert durch“. Optionale `displayInformation` aus dem Token kann Titel, Logo und Farben vorgeben.
+All presented domain claims should be displayed. Technical metadata listed in `technicalClaimNames` and image fields listed in `imageClaimNames` are intentionally excluded or displayed separately. Hide missing values; do not add invented sample data or display fallbacks. The issuer also controls the “verifiziert durch” section. Optional `displayInformation` from the token can specify the title, logo, and colors.
 
-Designquelle: [Frosch Wallet App in Figma](https://www.figma.com/design/D15DcZItr1P4lCa61vfOWN/Frosch-Wallet-App?node-id=73604-148644&m=dev). Für Designänderungen das Figma-Plugin verwenden und die Desktop-Screens direkt unterhalb des verlinkten Elements berücksichtigen; die ersten beiden dortigen Screens sind nur für die Mobile-App. Der blaue Außenrahmen in Figma stellt ein Smartphone dar und gehört nicht zum Web-UI.
+Design source: [Frosch Wallet App in Figma](https://www.figma.com/design/D15DcZItr1P4lCa61vfOWN/Frosch-Wallet-App?node-id=73604-148644&m=dev). For design changes, use the Figma plugin and consider the desktop screens directly below the linked element; the first two screens there are only for the mobile app. The blue outer frame in Figma represents a smartphone and is not part of the web UI.
 
-## Einbettung und Build
+## Embedding and Build
 
-- `vite.config.ts` erzeugt feste Namen unter `dist/openid4vp-verifier/assets/verifier.{js,css}` mit Basis-Pfad `/openid4vp-verifier/`.
-- `../ConsumerApi.csproj` führt bei normalen Builds `npm ci` und `npm run build` aus und kopiert das Ergebnis nach `../wwwroot/openid4vp-verifier`.
-- `../Dockerfile` baut das Bundle in einer eigenen Node-Stufe und kopiert es in das Consumer-API-Image.
-- `../Views/AppOnboarding/AppOnboarding.cshtml` bindet CSS und JavaScript über `IFileVersionProvider` mit Cache-Busting ein.
-- `../../../../.github/workflows/test.yml` installiert die Abhängigkeiten und führt `npm test` im Unit-Test-Job aus.
+- `vite.config.ts` generates fixed filenames under `dist/openid4vp-verifier/assets/verifier.{js,css}` with the base path `/openid4vp-verifier/`.
+- `../ConsumerApi.csproj` runs `npm ci` and `npm run build` during regular builds and copies the result to `../wwwroot/openid4vp-verifier`.
+- `../Dockerfile` builds the bundle in a dedicated Node stage and copies it into the Consumer API image.
+- `../Views/AppOnboarding/AppOnboarding.cshtml` includes CSS and JavaScript through `IFileVersionProvider` with cache busting.
+- `../../../../.github/workflows/test.yml` installs the dependencies and runs `npm test` in the unit-test job.
 
-`node_modules/`, `dist/` und `../wwwroot/openid4vp-verifier/` sind generierte beziehungsweise kopierte Artefakte. Nicht direkt bearbeiten oder committen. Änderungen gehören in `src/`, das Razor-Markup oder die Build-Konfiguration. `package-lock.json` muss bei Abhängigkeitsänderungen zusammen mit `package.json` aktualisiert werden.
+`node_modules/`, `dist/`, and `../wwwroot/openid4vp-verifier/` are generated or copied artifacts. Do not edit or commit them directly. Changes belong in `src/`, the Razor markup, or the build configuration. When dependencies change, `package-lock.json` must be updated together with `package.json`.
 
-## Tests und lokale Prüfung
+## Tests and Local Verification
 
-Führe im Verifier-Ordner mindestens aus:
+Run at least the following commands in the verifier directory:
 
 ```sh
 npm ci
@@ -90,6 +90,6 @@ npm test
 npm run build
 ```
 
-Die Tests für `validatePresentedCredential` sollen reine Input-/Output-Tests ohne Mocks bleiben. Erzeuge signierte Test-Präsentationen mit echten Testschlüsseln und injiziere über `options.now` eine feste Zeit, damit Zeitprüfungen deterministisch sind. Decke bei Änderungen sowohl den Erfolgsfall als auch Manipulationen, falsche Bindungswerte, Zeitgrenzen, fehlende Pflichtdaten und Arrays mit teilweise ungültigen Präsentationen ab.
+Tests for `validatePresentedCredential` should remain pure input/output tests without mocks. Generate signed test presentations with real test keys and inject a fixed time through `options.now` so that time checks are deterministic. When making changes, cover the success case as well as tampering, incorrect binding values, time boundaries, missing required data, and arrays containing partially invalid presentations.
 
-Wenn Markup oder Consumer-API-Einbettung geändert werden, führe zusätzlich die betroffenen .NET-Integrationstests beziehungsweise mindestens einen Build von `../ConsumerApi.csproj` aus. Bekannte Warnungen aus transitiven Kryptografie-Abhängigkeiten beim Vite-Build nicht mit Fehlern verwechseln, aber neue Warnungen prüfen und dokumentieren.
+When changing the markup or Consumer API embedding, also run the affected .NET integration tests or at least build `../ConsumerApi.csproj`. Do not confuse known warnings from transitive cryptography dependencies during the Vite build with errors, but investigate and document new warnings.
