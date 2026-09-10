@@ -1,16 +1,21 @@
 ﻿@model Backbone.ConsumerApi.Controllers.Onboarding.AppOnboardingModel
+@inject Microsoft.AspNetCore.Mvc.ViewFeatures.IFileVersionProvider FileVersionProvider
 
 @{
     Layout = null;
+    var verifierStylePath = FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.css");
+    var verifierScriptPath = FileVersionProvider.AddFileVersionToPath(Context.Request.PathBase, "/openid4vp-verifier/assets/verifier.js");
 }
 
 <!DOCTYPE html>
 <head>
-    <title>Onboarding</title>
+    <title>Einrichtung</title>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const link = document.getElementById('in-app-link');
-            link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+            if (link) {
+                link.href = window.location.toString().replace(/^(https)|(http)/, "@Model.AppId");
+            }
         });
     </script>
 
@@ -87,13 +92,108 @@
     </style>
 
     <link rel="stylesheet" href="~/style/style.css" />
+    <link rel="stylesheet" href="@verifierStylePath" />
+    <link rel="modulepreload" href="@verifierScriptPath" />
+    <script type="module">
+        void import("@verifierScriptPath").catch((error) => {
+            console.error("Der Nachweisprüfer konnte nicht gestartet werden.", error);
+            document.body.classList.remove("openid4vp-verifier-visible");
+        });
+    </script>
+    <noscript>
+        <style>
+            body.openid4vp-verifier-visible #openid4vp-verifier-root {
+                display: none;
+            }
+
+            body.openid4vp-verifier-visible #app-onboarding-content {
+                display: block;
+            }
+        </style>
+    </noscript>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="openid4vp-verifier-visible">
+<div id="openid4vp-verifier-root"
+     data-reference-id="@Model.ReferenceId"
+     data-token-endpoint-template="/api/v2/Tokens/{id}"
+     data-relationship-template-endpoint-template="/api/v2/RelationshipTemplates/{id}">
+    <main class="openid4vp-verifier verifier is-loading" aria-label="OpenID4VP Nachweisprüfung" data-verifier>
+        <section class="verifier-content" data-verifier-content>
+            <p class="intro">
+                Ein Nachweis wurde Ihnen präsentiert.<br />
+                Überprüfen Sie die Gültigkeit!
+            </p>
+
+            <div class="credential-section">
+                <section class="pass-card" aria-label="Nachweis" data-credential-card hidden>
+                    <img class="pass-logo" alt="" data-credential-logo hidden />
+                    <img class="pass-portrait" alt="" data-credential-portrait hidden />
+                    <h1 data-credential-title hidden></h1>
+                </section>
+
+                <section class="details" aria-label="Nachweisdetails" data-details hidden>
+                    <div class="verified-by" data-verified-by hidden>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 3 5 6v5c0 4.5 2.8 8.7 7 10 4.2-1.3 7-5.5 7-10V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" />
+                            <path d="m9 12 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>verifiziert durch <span data-verified-by-issuer></span></span>
+                    </div>
+                    <dl>
+                        <div data-detail-row="issuer" hidden>
+                            <dt>Aussteller</dt>
+                            <dd data-detail-value="issuer"></dd>
+                        </div>
+                        <div data-detail-row="createdAt" hidden>
+                            <dt>Erstellt</dt>
+                            <dd data-detail-value="createdAt"></dd>
+                        </div>
+                        <div data-detail-row="expiresAt" hidden>
+                            <dt>Gültig bis</dt>
+                            <dd data-detail-value="expiresAt"></dd>
+                        </div>
+                        <div data-detail-row="publicKey" hidden>
+                            <dt>Öffentlicher Schlüssel</dt>
+                            <dd data-detail-value="publicKey"></dd>
+                        </div>
+                        <div class="additional-claims" data-additional-claims></div>
+                    </dl>
+                </section>
+            </div>
+
+            <section class="result" aria-live="polite">
+                <p data-result-text>Der Nachweis<br />wird geprüft.</p>
+                <div class="status-mark loading-mark" aria-hidden="true" data-loading-mark></div>
+                <div class="status-mark" aria-hidden="true" data-valid-mark hidden>
+                    <svg viewBox="0 0 120 120">
+                        <path d="M36 62.5 52.5 79 86 40" fill="none" stroke="currentColor" stroke-width="7" />
+                    </svg>
+                </div>
+                <div class="status-mark" aria-hidden="true" data-invalid-mark hidden>
+                    <svg viewBox="0 0 120 120">
+                        <path d="m43 43 34 34M77 43 43 77" fill="none" stroke="currentColor" stroke-width="7" />
+                    </svg>
+                </div>
+            </section>
+
+            <p class="sr-only" data-error hidden></p>
+
+            <footer class="button-area">
+                <button class="close-button" type="button" data-close hidden>Hinweis schließen</button>
+            </footer>
+        </section>
+
+        <section class="closed-view" aria-live="polite" data-closed-view hidden>
+            <p>Sie können dieses Fenster jetzt schließen.</p>
+        </section>
+    </main>
+</div>
+<div id="app-onboarding-content">
 <div class="container">
     <div class="banner-box">
         <div class="banner">
-            <img src="@Model.BannerUrl" alt="@Model.AppDisplayName Logo" />
+            <img src="@Model.BannerUrl" alt="Logo von @Model.AppDisplayName" />
         </div>
     </div>
 
@@ -135,5 +235,6 @@
             <img src="@Model.AppIconUrl" alt="App starten" class="app-icon" />
         </a>
     </div>
+</div>
 </div>
 </body>
