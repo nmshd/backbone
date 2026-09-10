@@ -605,6 +605,41 @@ global:
     annotations: {}
 
   configuration:
+    # telemetry - configures OpenTelemetry and telemetry logging
+    # telemetry:
+    #   openTelemetry:
+    #     logger:
+    #       includeFormattedMessage: true
+    #       includeScopes: true
+    #       parseStateValues: true
+    #       includeAttributes: false
+    #       includeTraceState: false
+    #     logRecordExportProcessor:
+    #       exportProcessorType: "Batch" # possible values: "Batch"/"Simple"
+    #       batchExportProcessorOptions:
+    #         maxQueueSize: 2048
+    #         scheduledDelayMilliseconds: 5000
+    #         exporterTimeoutMilliseconds: 30000
+    #         maxExportBatchSize: 512
+    #     metricReader:
+    #       temporalityPreference: "Cumulative" # possible values: "Cumulative"/"Delta"/"LowMemory"
+    #       defaultHistogramAggregation: "ExplicitBucketHistogram" # possible values: "ExplicitBucketHistogram"/"Base2ExponentialBucketHistogram"
+    #       periodicExportingMetricReaderOptions:
+    #         exportIntervalMilliseconds: 60000
+    #         exportTimeoutMilliseconds: 30000
+    #     otlpExporter:
+    #       endpoint: "http://otel-collector:4317"
+    #       headers: "key1=value1,key2=value2"
+    #       timeoutMilliseconds: 10000
+    #       protocol: "Grpc" # possible values: "Grpc"/"HttpProtobuf"
+    #       compression: "GZip"
+    #       userAgentProductIdentifier: "custom-product/1.0"
+    #       exportProcessorType: "Batch" # traces only; possible values: "Batch"/"Simple"
+    #       batchExportProcessorOptions: # traces only
+    #         maxQueueSize: 2048
+    #         scheduledDelayMilliseconds: 5000
+    #         exporterTimeoutMilliseconds: 30000
+    #         maxExportBatchSize: 512
     authentication:
       jwtLifetimeInSeconds: 300
       # jwtSigningCertificate - a base64 string containing the certificate that is used to sign the JWTs

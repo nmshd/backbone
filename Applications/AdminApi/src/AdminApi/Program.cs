@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.AdminApi.Authentication;
 using Backbone.AdminApi.Configuration;
@@ -134,7 +133,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             options.ReplaceApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreApplicationStore>();
         });
 
-    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+    services.AddOpenTelemetry(configuration, METER_NAME);
 
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 

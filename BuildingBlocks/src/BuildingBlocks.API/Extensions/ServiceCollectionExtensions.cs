@@ -1,3 +1,4 @@
+using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
@@ -12,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
+using OpenTelemetry;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -108,16 +111,31 @@ public static class ServiceCollectionExtensions
             return services;
         }
 
-        public IServiceCollection AddOpenTelemetry(string resourceName, string resourceVersion, OpenTelemetryCollectorConfiguration openTelemetryCollectorConfiguration,
-            params string[] additionalActivitySourceNames)
+        public IServiceCollection AddOpenTelemetry(IConfiguration configuration, string meterName, params string[] additionalActivitySourceNames)
         {
+            var openTelemetryConfiguration = configuration.GetSection("Telemetry:OpenTelemetry");
+            services.Configure<OtlpExporterOptions>(openTelemetryConfiguration.GetSection("OtlpExporter"));
+            services.Configure<OpenTelemetryLoggerOptions>(openTelemetryConfiguration.GetSection("Logger"));
+            services.Configure<LogRecordExportProcessorOptions>(openTelemetryConfiguration.GetSection("LogRecordExportProcessor"));
+            services.Configure<MetricReaderOptions>(openTelemetryConfiguration.GetSection("MetricReader"));
+
             services.AddOpenTelemetry()
-                .ConfigureResource(resource => resource.AddService(resourceName, serviceVersion: resourceVersion))
+                .ConfigureResource(resource =>
+                {
+                    var entryAssembly = Assembly.GetEntryAssembly();
+                    var serviceVersion = entryAssembly?.GetName().Version?.ToString();
+                    var serviceName = configuration.GetValue<string>("OTEL_SERVICE_NAME") ?? entryAssembly?.GetName().Name ?? "<unknown>";
+
+                    resource.AddService(serviceName, serviceVersion: serviceVersion);
+
+                    resource.AddEnvironmentVariableDetector();
+                })
+                .UseOtlpExporter()
                 .WithMetrics(metrics =>
                 {
                     metrics
                         .AddAspNetCoreInstrumentation()
-                        .AddMeter(resourceName)
+                        .AddMeter(meterName)
                         .AddMeter("Microsoft.EntityFrameworkCore")
                         .AddMeter("Microsoft.AspNetCore.Hosting")
                         .AddMeter("Microsoft.AspNetCore.Diagnostics")
@@ -125,9 +143,6 @@ public static class ServiceCollectionExtensions
                         .AddMeter("Microsoft.AspNetCore.Authorization")
                         .AddMeter("Microsoft.AspNetCore.Authentication")
                         .AddMeter("Microsoft.AspNetCore.Identity");
-
-                    if (openTelemetryCollectorConfiguration.Endpoint != null)
-                        metrics.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
                 })
                 .WithTracing(tracing =>
                 {
@@ -143,23 +158,8 @@ public static class ServiceCollectionExtensions
                     {
                         tracing.AddSource(activitySourceName);
                     }
-
-                    if (openTelemetryCollectorConfiguration.Endpoint != null)
-                        tracing.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
                 })
-                .WithLogging(
-                    logging =>
-                    {
-                        if (openTelemetryCollectorConfiguration.Endpoint != null)
-                            logging.AddOtlpExporter(options => { options.Endpoint = new Uri(openTelemetryCollectorConfiguration.Endpoint); });
-                    },
-                    logging =>
-                    {
-                        logging.IncludeFormattedMessage = true;
-                        logging.IncludeScopes = true;
-                        logging.ParseStateValues = true;
-                    }
-                );
+                .WithLogging();
 
             return services;
         }
@@ -236,11 +236,6 @@ public static class ServiceCollectionExtensions
             return services;
         }
     }
-}
-
-public class OpenTelemetryCollectorConfiguration
-{
-    public string? Endpoint { get; set; }
 }
 
 public class SwaggerUiConfiguration
