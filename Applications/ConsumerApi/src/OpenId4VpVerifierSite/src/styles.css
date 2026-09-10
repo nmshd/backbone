@@ -34,7 +34,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   display: none !important;
 }
 
-.verifier {
+.openid4vp-verifier.verifier {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -46,13 +46,13 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   background: #f7f9ff;
 }
 
-.verifier-content {
+.openid4vp-verifier .verifier-content {
   display: flex;
   flex: 1;
   flex-direction: column;
 }
 
-.intro {
+.openid4vp-verifier .intro {
   width: 100%;
   min-height: 80px;
   margin: 0;
@@ -63,7 +63,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   letter-spacing: 0.5px;
 }
 
-.credential-section {
+.openid4vp-verifier .credential-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -71,7 +71,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   padding: 16px;
 }
 
-.pass-card {
+.openid4vp-verifier .pass-card {
   position: relative;
   width: 100%;
   height: 216px;
@@ -82,7 +82,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   border-radius: 12px;
 }
 
-.pass-card h1 {
+.openid4vp-verifier .pass-card h1 {
   position: absolute;
   right: 15px;
   bottom: 13px;
@@ -94,7 +94,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   letter-spacing: 0;
 }
 
-.pass-logo {
+.openid4vp-verifier .pass-logo {
   position: absolute;
   top: 16px;
   left: 16px;
@@ -104,7 +104,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   object-position: left top;
 }
 
-.pass-portrait {
+.openid4vp-verifier .pass-portrait {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -115,7 +115,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   border-radius: 6px;
 }
 
-.details {
+.openid4vp-verifier .details {
   width: 100%;
   overflow: hidden;
   color: #181c20;
@@ -123,7 +123,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   border-radius: 8px;
 }
 
-.verified-by {
+.openid4vp-verifier .verified-by {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -137,13 +137,13 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   letter-spacing: 0.5px;
 }
 
-.verified-by svg {
+.openid4vp-verifier .verified-by svg {
   width: 24px;
   height: 24px;
   flex: 0 0 24px;
 }
 
-.details dl {
+.openid4vp-verifier .details dl {
   display: grid;
   gap: 8px;
   margin: 0;
@@ -152,7 +152,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   border-radius: 0 0 4px 4px;
 }
 
-.details dt {
+.openid4vp-verifier .details dt {
   margin: 0;
   color: #42474e;
   font-size: 12px;
@@ -161,7 +161,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   letter-spacing: 0.5px;
 }
 
-.details dd {
+.openid4vp-verifier .details dd {
   margin: 0;
   font-size: 14px;
   line-height: 20px;
@@ -169,11 +169,11 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   overflow-wrap: anywhere;
 }
 
-.additional-claims {
+.openid4vp-verifier .additional-claims {
   display: contents;
 }
 
-.result {
+.openid4vp-verifier .result {
   display: flex;
   min-height: 283px;
   flex-direction: column;
@@ -185,8 +185,8 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   background: #f7f9ff;
 }
 
-.result p,
-.closed-view p {
+.openid4vp-verifier .result p,
+.openid4vp-verifier .closed-view p {
   width: 100%;
   margin: 0;
   text-align: center;
@@ -197,7 +197,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   white-space: pre-line;
 }
 
-.status-mark {
+.openid4vp-verifier .status-mark {
   display: grid;
   place-items: center;
   width: 147px;
@@ -207,29 +207,29 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   border-radius: 50%;
 }
 
-.status-mark svg {
+.openid4vp-verifier .status-mark svg {
   width: 64px;
   height: 64px;
 }
 
-.is-valid .status-mark {
+.openid4vp-verifier.is-valid .status-mark {
   color: #428c17;
 }
 
-.is-invalid .status-mark {
+.openid4vp-verifier.is-invalid .status-mark {
   color: #ff5449;
 }
 
-.is-loading .status-mark {
+.openid4vp-verifier.is-loading .status-mark {
   color: #2f628c;
 }
 
-.loading-mark {
+.openid4vp-verifier .loading-mark {
   border-right-color: transparent;
   animation: openid4vp-spin 1s linear infinite;
 }
 
-.button-area {
+.openid4vp-verifier .button-area {
   display: flex;
   width: 100%;
   min-height: 88px;
@@ -239,7 +239,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   background: #fff8f5;
 }
 
-.close-button {
+.openid4vp-verifier .close-button {
   width: 100%;
   min-height: 40px;
   padding: 10px 24px;
@@ -254,11 +254,11 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   cursor: pointer;
 }
 
-.close-button:active {
+.openid4vp-verifier .close-button:active {
   transform: translateY(1px);
 }
 
-.closed-view {
+.openid4vp-verifier .closed-view {
   display: grid;
   flex: 1;
   place-items: center;
@@ -266,7 +266,7 @@ body.openid4vp-verifier-visible #openid4vp-verifier-root {
   color: #42474e;
 }
 
-.sr-only {
+.openid4vp-verifier .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
