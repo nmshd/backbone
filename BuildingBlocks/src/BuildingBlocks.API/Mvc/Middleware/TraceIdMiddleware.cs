@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
 namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -17,7 +18,7 @@ public class TraceIdMiddleware
     {
         context.Response.OnStarting(() =>
         {
-            var traceId = context.TraceIdentifier;
+            var traceId = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier;
             context.Response.Headers[RESPONSE_HEADER_TRACE_ID] = traceId;
             return Task.CompletedTask;
         });

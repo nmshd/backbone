@@ -214,6 +214,12 @@
           "Npgsql": "10.0.3"
         }
       },
+      "OpenTelemetry.Api": {
+        "type": "Direct",
+        "requested": "[1.17.0, )",
+        "resolved": "1.17.0",
+        "contentHash": "mSBxzomZgHIJu9CyVNqyDu/n2JHEtqVgfcCD1Br0cV5iLYogjZOMqhlVLt99PEp+0KGBNUR3GXgeOdN2GR3F9g=="
+      },
       "Polly": {
         "type": "Direct",
         "requested": "[8.7.0, 8.7.0]",

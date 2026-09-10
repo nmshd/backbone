@@ -122,8 +122,6 @@ public class S3BlobStorage : IBlobStorage, IDisposable
 
         foreach (var blob in changedBlobs)
         {
-            await EnsureKeyDoesNotExist(blob.Folder, blob.Name);
-
             using var memoryStream = new MemoryStream(blob.Content);
 
             try
@@ -134,7 +132,8 @@ public class S3BlobStorage : IBlobStorage, IDisposable
                 {
                     InputStream = memoryStream,
                     Key = blob.Name,
-                    BucketName = blob.Folder
+                    BucketName = blob.Folder,
+                    IfNoneMatch = "*"
                 };
 
                 var transferUtility = new TransferUtility(_s3Client);
@@ -151,26 +150,6 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             {
                 _changedBlobs.Remove(blob);
             }
-        }
-    }
-
-    private async Task EnsureKeyDoesNotExist(string folder, string key)
-    {
-        try
-        {
-            var request = new GetObjectRequest
-            {
-                BucketName = folder,
-                Key = key
-            };
-
-            await _s3Client.GetObjectAsync(request);
-
-            _logger.LogError("A blob with key '{blobName}' already exists.", key);
-            throw new BlobAlreadyExistsException(key);
-        }
-        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-        {
         }
     }
 

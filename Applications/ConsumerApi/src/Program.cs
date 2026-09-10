@@ -1,3 +1,4 @@
+using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -86,14 +87,14 @@ static WebApplication CreateApp(string[] args)
 
     builder.Host
         .UseSerilog((context, configuration) => configuration
-            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty("service", "consumerapi")
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-                .WithDefaultDestructurers()
-                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
-            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()), preserveStaticLogger: true)
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Telemetry:Logging" })
+                .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                    .WithDefaultDestructurers()
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()]))
+                .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()),
+            writeToProviders: true)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
@@ -173,7 +174,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetryWithPrometheusExporter(METER_NAME);
+    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedBackboneConfiguration.Telemetry.OpenTelemetryCollector);
 
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
     services.AddHttpUserAgentParser();
@@ -183,8 +184,6 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
 {
     if (configuration.SwaggerUi.Enabled)
         app.UseCustomSwaggerUi();
-
-    app.MapPrometheusScrapingEndpoint();
 
     app.UseSerilogRequestLogging(opts =>
     {
@@ -214,6 +213,8 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
+    app.UseMiddleware<UserContextBaggageMiddleware>();
+
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

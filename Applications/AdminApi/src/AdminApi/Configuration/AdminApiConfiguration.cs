@@ -8,6 +8,9 @@ namespace Backbone.AdminApi.Configuration;
 public class AdminApiConfiguration
 {
     [Required]
+    public required TelemetryConfiguration Telemetry { get; init; }
+
+    [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
     [Required]
@@ -17,6 +20,11 @@ public class AdminApiConfiguration
 
     [Required]
     public required InfrastructureConfiguration Infrastructure { get; init; }
+
+    public class TelemetryConfiguration
+    {
+        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
+    }
 
     public class AuthenticationConfiguration
     {

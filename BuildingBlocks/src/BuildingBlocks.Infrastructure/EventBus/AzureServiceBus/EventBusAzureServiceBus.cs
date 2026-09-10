@@ -10,6 +10,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 public partial class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string TOPIC_NAME = "default";
+    private const string MESSAGING_SYSTEM = "servicebus";
     private const int MAX_DELIVERY_COUNT = 5;
 
     private readonly ServiceBusProcessorOptions _options = new()
@@ -86,11 +87,4 @@ internal static partial class EventBusAzureServiceBusLogs
         Level = LogLevel.Error,
         Message = "Error handling message with context {exceptionContext}.")]
     public static partial void ErrorHandlingMessage(this ILogger logger, ServiceBusErrorSource exceptionContext, Exception exception);
-
-    [LoggerMessage(
-        EventId = 146670,
-        EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
-        Level = LogLevel.Error,
-        Message = "An error occurred while processing the event with id '{domainEventId}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
 }
