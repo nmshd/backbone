@@ -31,6 +31,7 @@ Compact SD-JWT VCs with Key Binding as well as JWT- and JSON-LD-based VCs/VPs ar
 - at least one presentation or credential;
 - the expected nonce and audience to be present;
 - valid cryptographic signatures;
+- JWT and JSON-LD credentials to be embedded in a request-bound Verifiable Presentation rather than supplied as standalone credentials;
 - for SD-JWT, a valid issuer signature, valid disclosures, a valid holder key-binding signature, and a matching `sd_hash`;
 - the nonce and audience to match the current verification process;
 - a supported SD-JWT type and the required `vct` field;

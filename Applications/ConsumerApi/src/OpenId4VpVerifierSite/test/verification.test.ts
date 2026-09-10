@@ -101,6 +101,28 @@ describe("validatePresentedCredential", () => {
     expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingKeyBinding);
   });
 
+  it("rejects a correctly signed standalone JWT VC without presentation binding", async () => {
+    const credential = await createStandaloneJwtCredential();
+
+    const result = await validate(credential);
+
+    expect(result.isValid).toBe(false);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingKeyBinding);
+  });
+
+  it("rejects a standalone JSON-LD VC without presentation binding", async () => {
+    const result = await validate({
+      "@context": ["https://www.w3.org/2018/credentials/v1"],
+      credentialSubject: { id: "did:example:holder", name: "Maria Müller" },
+      issuer: "did:example:issuer",
+      proof: { type: "DataIntegrityProof" },
+      type: ["VerifiableCredential"]
+    });
+
+    expect(result.isValid).toBe(false);
+    expect(result.errorCode).toBe(PresentationValidationErrorCode.MissingKeyBinding);
+  });
+
   it("rejects a presentation created for a different nonce", async () => {
     const presentation = await createPresentation({ nonce: "TOK-another-reference" });
 
@@ -285,6 +307,34 @@ async function createCredential(overrides: PresentationOverrides = {}) {
       }
     }
   );
+}
+
+async function createStandaloneJwtCredential() {
+  const issuerDid = DidJwk.fromPublicJwk(Kms.PublicJwk.fromPublicJwk(issuerKey.publicJwk));
+  const header = {
+    alg: "EdDSA",
+    kid: issuerDid.verificationMethodId,
+    typ: "JWT"
+  };
+  const payload = {
+    exp: nowInSeconds + 3600,
+    iss: issuerDid.did,
+    nbf: nowInSeconds - 60,
+    sub: "did:example:holder",
+    vc: {
+      "@context": ["https://www.w3.org/2018/credentials/v1"],
+      credentialSubject: {
+        id: "did:example:holder",
+        name: "Maria Müller"
+      },
+      type: ["VerifiableCredential", "IdentityCredential"]
+    }
+  };
+  const encodedHeader = TypedArrayEncoder.toBase64Url(TypedArrayEncoder.fromUtf8String(JSON.stringify(header)));
+  const encodedPayload = TypedArrayEncoder.toBase64Url(TypedArrayEncoder.fromUtf8String(JSON.stringify(payload)));
+  const signingInput = `${encodedHeader}.${encodedPayload}`;
+
+  return `${signingInput}.${await issuerKey.signer(signingInput)}`;
 }
 
 type TestCredentialPayload = {

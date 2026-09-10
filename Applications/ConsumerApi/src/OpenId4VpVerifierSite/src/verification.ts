@@ -175,7 +175,8 @@ function normalizeToken(value: unknown): Array<string | JsonObject> {
 async function verifyToken(
   agent: VerifierAgent,
   token: string | JsonObject,
-  context: VerificationContext
+  context: VerificationContext,
+  isEmbeddedInVerifiedPresentation = false
 ): Promise<ArtifactVerificationOutcome> {
   if (typeof token === "string") {
     if (isSdJwt(token)) {
@@ -183,13 +184,13 @@ async function verifyToken(
     }
 
     if (isJwt(token)) {
-      return verifyJwtArtifact(agent, token, context);
+      return verifyJwtArtifact(agent, token, context, isEmbeddedInVerifiedPresentation);
     }
 
     return { errorCode: PresentationValidationErrorCode.UnsupportedPresentationFormat, isValid: false };
   }
 
-  return verifyJsonLdArtifact(agent, token, context);
+  return verifyJsonLdArtifact(agent, token, context, isEmbeddedInVerifiedPresentation);
 }
 
 async function verifySdJwtCredential(
@@ -352,7 +353,8 @@ function validateSdJwtPresentation(
 async function verifyJwtArtifact(
   agent: VerifierAgent,
   token: string,
-  context: VerificationContext
+  context: VerificationContext,
+  isEmbeddedInVerifiedPresentation: boolean
 ): Promise<ArtifactVerificationOutcome> {
   const payload = decodeJwtPayload(token);
   const embeddedCredentials = extractEmbeddedCredentials(payload);
@@ -392,12 +394,20 @@ async function verifyJwtArtifact(
       };
     }
 
-    const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context)));
+    const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context, true)));
 
     return {
       display: credentialResults.map((result) => result.display).find(Boolean) ?? extractDisplayFromObject(payload),
       errorCode: credentialResults.find((result) => !result.isValid)?.errorCode,
       isValid: credentialResults.every((result) => result.isValid)
+    };
+  }
+
+  if (!isEmbeddedInVerifiedPresentation) {
+    return {
+      display: extractDisplayFromObject(payload),
+      errorCode: PresentationValidationErrorCode.MissingKeyBinding,
+      isValid: false
     };
   }
 
@@ -431,7 +441,8 @@ async function verifyJwtArtifact(
 async function verifyJsonLdArtifact(
   agent: VerifierAgent,
   token: JsonObject,
-  context: VerificationContext
+  context: VerificationContext,
+  isEmbeddedInVerifiedPresentation: boolean
 ): Promise<ArtifactVerificationOutcome> {
   if (looksLikePresentation(token)) {
     if (!context.expectedNonce) {
@@ -469,12 +480,20 @@ async function verifyJsonLdArtifact(
       };
     }
 
-    const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context)));
+    const credentialResults = await Promise.all(embeddedCredentials.map((credential) => verifyToken(agent, credential, context, true)));
 
     return {
       display: credentialResults.map((credentialResult) => credentialResult.display).find(Boolean) ?? extractDisplayFromObject(token),
       errorCode: credentialResults.find((credentialResult) => !credentialResult.isValid)?.errorCode,
       isValid: credentialResults.every((credentialResult) => credentialResult.isValid)
+    };
+  }
+
+  if (!isEmbeddedInVerifiedPresentation) {
+    return {
+      display: extractDisplayFromObject(token),
+      errorCode: PresentationValidationErrorCode.MissingKeyBinding,
+      isValid: false
     };
   }
 
