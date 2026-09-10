@@ -107,7 +107,7 @@ public class Program
 
                 services.RegisterIdentityDeleters();
 
-                services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+                services.AddOpenTelemetry(configuration, METER_NAME);
 
                 services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
             })

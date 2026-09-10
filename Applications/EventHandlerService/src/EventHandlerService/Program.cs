@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
@@ -74,7 +73,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 services.BuildServiceProvider().GetRequiredService<IOptions<EventHandlerServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+            services.AddOpenTelemetry(configuration, METER_NAME);
 
             services.AddTransient<IHostedService, EventHandlerService>();
 

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DatabaseMigrator;
@@ -65,7 +64,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddAllDbContexts(parsedConfiguration.Infrastructure.SqlDatabase);
 
-            services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedConfiguration.Telemetry.OpenTelemetryCollector);
+            services.AddOpenTelemetry(configuration, METER_NAME);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

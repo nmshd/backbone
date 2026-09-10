@@ -7,9 +7,6 @@ namespace Backbone.SseServer;
 public class Configuration
 {
     [Required]
-    public required TelemetryConfiguration Telemetry { get; init; }
-
-    [Required]
     public required AuthenticationConfiguration Authentication { get; init; }
 
     [Required]
@@ -22,11 +19,6 @@ public class Configuration
 
     [Required]
     public required SseServerConfiguration SseServer { get; init; }
-
-    public class TelemetryConfiguration
-    {
-        public required OpenTelemetryCollectorConfiguration OpenTelemetryCollector { get; set; } = new();
-    }
 
     public class AuthenticationConfiguration
     {

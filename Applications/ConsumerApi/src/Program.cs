@@ -1,4 +1,3 @@
-using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -174,7 +173,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
-    services.AddOpenTelemetry(METER_NAME, Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown", parsedBackboneConfiguration.Telemetry.OpenTelemetryCollector);
+    services.AddOpenTelemetry(configuration, METER_NAME);
 
     services.AddEventBus(parsedBackboneConfiguration.Infrastructure.EventBus, METER_NAME);
     services.AddHttpUserAgentParser();
