@@ -608,6 +608,7 @@ global:
     # telemetry - configures OpenTelemetry and telemetry logging
     # telemetry:
     #   openTelemetry:
+    #     serviceName: "custom-service-name"
     #     logger:
     #       includeFormattedMessage: true
     #       includeScopes: true

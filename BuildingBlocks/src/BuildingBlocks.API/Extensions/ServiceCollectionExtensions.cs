@@ -124,7 +124,10 @@ public static class ServiceCollectionExtensions
                 {
                     var entryAssembly = Assembly.GetEntryAssembly();
                     var serviceVersion = entryAssembly?.GetName().Version?.ToString();
-                    var serviceName = configuration.GetValue<string>("OTEL_SERVICE_NAME") ?? entryAssembly?.GetName().Name ?? "<unknown>";
+                    var serviceName = configuration.GetValue<string>("OTEL_SERVICE_NAME")
+                                      ?? openTelemetryConfiguration.GetValue<string>("ServiceName")
+                                      ?? entryAssembly?.GetName().Name
+                                      ?? "<unknown>";
 
                     resource.AddService(serviceName, serviceVersion: serviceVersion);
 
