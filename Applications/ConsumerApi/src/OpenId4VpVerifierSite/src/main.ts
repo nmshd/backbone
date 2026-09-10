@@ -40,27 +40,27 @@ const credentialDisplayFields = ["backgroundColor", "createdAt", "expiresAt", "i
 const detailFields = ["createdAt", "expiresAt", "issuer", "publicKey"] as const;
 type DetailField = (typeof detailFields)[number];
 const validationErrorMessages: Record<PresentationValidationErrorCode, string> = {
-    [PresentationValidationErrorCode.AudienceMismatch]: "Dieser Nachweis wurde für eine andere Prüfung erstellt. (AudienceMismatch)",
-    [PresentationValidationErrorCode.CredentialExpired]: "Der präsentierte Nachweis ist abgelaufen. (CredentialExpired)",
-    [PresentationValidationErrorCode.CredentialNotYetValid]: "Der präsentierte Nachweis ist noch nicht gültig. (CredentialNotYetValid)",
-    [PresentationValidationErrorCode.InvalidDisclosure]: "Die Angaben im Nachweis konnten nicht bestätigt werden. (InvalidDisclosure)",
-    [PresentationValidationErrorCode.InvalidPresentationBinding]: "Der Nachweis gehört nicht zu dieser Präsentation. (InvalidPresentationBinding)",
-    [PresentationValidationErrorCode.InvalidSignature]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (InvalidSignature)",
-    [PresentationValidationErrorCode.MissingAudience]: "Die Prüfung konnte nicht gestartet werden. Bitte öffnen Sie den Link erneut. (MissingAudience)",
-    [PresentationValidationErrorCode.MissingChallenge]: "Die Prüfung konnte nicht gestartet werden. Bitte öffnen Sie den Link erneut. (MissingChallenge)",
-    [PresentationValidationErrorCode.MissingCredential]: "Es wurde kein Nachweis übermittelt. (MissingCredential)",
-    [PresentationValidationErrorCode.MissingCredentialType]: "Die Art des Nachweises konnte nicht erkannt werden. (MissingCredentialType)",
-    [PresentationValidationErrorCode.MissingHolderVerificationKey]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (MissingHolderVerificationKey)",
-    [PresentationValidationErrorCode.MissingIssuerVerificationKey]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (MissingIssuerVerificationKey)",
-    [PresentationValidationErrorCode.MissingKeyBinding]: "Der Nachweis konnte dieser Präsentation nicht eindeutig zugeordnet werden. (MissingKeyBinding)",
-    [PresentationValidationErrorCode.MissingPresentation]: "Es wurde kein Nachweis übermittelt. (MissingPresentation)",
-    [PresentationValidationErrorCode.NonceMismatch]: "Diese Präsentation wurde für eine andere Anfrage erstellt. (NonceMismatch)",
-    [PresentationValidationErrorCode.UnsupportedHolderDidUrl]: "Dieser Nachweis kann hier nicht geprüft werden. (UnsupportedHolderDidUrl)",
-    [PresentationValidationErrorCode.UnsupportedIssuerDidUrl]: "Dieser Nachweis kann hier nicht geprüft werden. (UnsupportedIssuerDidUrl)",
-    [PresentationValidationErrorCode.UnsupportedPresentationFormat]: "Dieser Nachweis kann hier nicht geprüft werden. (UnsupportedPresentationFormat)",
-    [PresentationValidationErrorCode.UnsupportedSdJwtType]: "Dieser Nachweis kann hier nicht geprüft werden. (UnsupportedSdJwtType)",
-    [PresentationValidationErrorCode.UnsupportedSignatureAlgorithm]: "Dieser Nachweis kann hier nicht geprüft werden. (UnsupportedSignatureAlgorithm)",
-    [PresentationValidationErrorCode.VerificationFailed]: "Bei der Prüfung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. (VerificationFailed)"
+    [PresentationValidationErrorCode.AudienceMismatch]: "Dieser Nachweis wurde für eine andere Prüfung erstellt. (Fehlercode: AudienceMismatch)",
+    [PresentationValidationErrorCode.CredentialExpired]: "Der präsentierte Nachweis ist abgelaufen. (Fehlercode: CredentialExpired)",
+    [PresentationValidationErrorCode.CredentialNotYetValid]: "Der präsentierte Nachweis ist noch nicht gültig. (Fehlercode: CredentialNotYetValid)",
+    [PresentationValidationErrorCode.InvalidDisclosure]: "Die Angaben im Nachweis konnten nicht bestätigt werden. (Fehlercode: InvalidDisclosure)",
+    [PresentationValidationErrorCode.InvalidPresentationBinding]: "Der Nachweis gehört nicht zu dieser Präsentation. (Fehlercode: InvalidPresentationBinding)",
+    [PresentationValidationErrorCode.InvalidSignature]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (Fehlercode: InvalidSignature)",
+    [PresentationValidationErrorCode.MissingAudience]: "Die Prüfung konnte nicht gestartet werden. Bitte öffnen Sie den Link erneut. (Fehlercode: MissingAudience)",
+    [PresentationValidationErrorCode.MissingChallenge]: "Die Prüfung konnte nicht gestartet werden. Bitte öffnen Sie den Link erneut. (Fehlercode: MissingChallenge)",
+    [PresentationValidationErrorCode.MissingCredential]: "Es wurde kein Nachweis übermittelt. (Fehlercode: MissingCredential)",
+    [PresentationValidationErrorCode.MissingCredentialType]: "Die Art des Nachweises konnte nicht erkannt werden. (Fehlercode: MissingCredentialType)",
+    [PresentationValidationErrorCode.MissingHolderVerificationKey]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (Fehlercode: MissingHolderVerificationKey)",
+    [PresentationValidationErrorCode.MissingIssuerVerificationKey]: "Die Echtheit des Nachweises konnte nicht bestätigt werden. (Fehlercode: MissingIssuerVerificationKey)",
+    [PresentationValidationErrorCode.MissingKeyBinding]: "Der Nachweis konnte dieser Präsentation nicht eindeutig zugeordnet werden. (Fehlercode: MissingKeyBinding)",
+    [PresentationValidationErrorCode.MissingPresentation]: "Es wurde kein Nachweis übermittelt. (Fehlercode: MissingPresentation)",
+    [PresentationValidationErrorCode.NonceMismatch]: "Diese Präsentation wurde für eine andere Anfrage erstellt. (Fehlercode: NonceMismatch)",
+    [PresentationValidationErrorCode.UnsupportedHolderDidUrl]: "Dieser Nachweis kann hier nicht geprüft werden. (Fehlercode: UnsupportedHolderDidUrl)",
+    [PresentationValidationErrorCode.UnsupportedIssuerDidUrl]: "Dieser Nachweis kann hier nicht geprüft werden. (Fehlercode: UnsupportedIssuerDidUrl)",
+    [PresentationValidationErrorCode.UnsupportedPresentationFormat]: "Dieser Nachweis kann hier nicht geprüft werden. (Fehlercode: UnsupportedPresentationFormat)",
+    [PresentationValidationErrorCode.UnsupportedSdJwtType]: "Dieser Nachweis kann hier nicht geprüft werden. (Fehlercode: UnsupportedSdJwtType)",
+    [PresentationValidationErrorCode.UnsupportedSignatureAlgorithm]: "Dieser Nachweis kann hier nicht geprüft werden. (Fehlercode: UnsupportedSignatureAlgorithm)",
+    [PresentationValidationErrorCode.VerificationFailed]: "Bei der Prüfung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. (Fehlercode: VerificationFailed)"
 };
 const rootElement = document.querySelector<HTMLElement>("#openid4vp-verifier-root");
 const verifierElements = rootElement ? getVerifierElements(rootElement) : undefined;
