@@ -216,9 +216,9 @@
       },
       "OpenTelemetry.Api": {
         "type": "Direct",
-        "requested": "[1.17.0, )",
-        "resolved": "1.17.0",
-        "contentHash": "mSBxzomZgHIJu9CyVNqyDu/n2JHEtqVgfcCD1Br0cV5iLYogjZOMqhlVLt99PEp+0KGBNUR3GXgeOdN2GR3F9g=="
+        "requested": "[1.18.0, )",
+        "resolved": "1.18.0",
+        "contentHash": "Dhzm5oughIY9EWckt2J1yXcEbXpki5WCL2q7prJoYxzH6C7jdkfGtPMTkUVZZ4AhjJKzQnlC+kLSIlmIVwC4Vw=="
       },
       "Polly": {
         "type": "Direct",

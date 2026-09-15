@@ -69,13 +69,13 @@
     <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.6.0]" />
     <PackageVersion Include="OpenIddict.Core" Version="[7.6.0]" />
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.6.0]" />
-    <PackageVersion Include="OpenTelemetry.Api" Version="1.17.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.17.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.17.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.17.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.17.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.17.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.17.0]" />
+    <PackageVersion Include="OpenTelemetry.Api" Version="1.18.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.18.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.18.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.18.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.18.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.18.0]" />
     <PackageVersion Include="Polly" Version="[8.7.0]" />
     <PackageVersion Include="RabbitMQ.Client" Version="[7.2.1]" />
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.0.1]" />
