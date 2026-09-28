@@ -24,27 +24,35 @@
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
         <ProjectReference Include="..\Modules\Announcements\test\Announcements.Application.Tests\Announcements.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Announcements\src\Announcements.Contracts\Announcements.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Announcements\test\Announcements.Domain.Tests\Announcements.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Devices\src\Devices.Contracts\Devices.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Application.Tests\Files.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Files\src\Files.Contracts\Files.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Domain.Tests\Files.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Messages\src\Messages.Common\Messages.Common.csproj" />
+        <ProjectReference Include="..\Modules\Messages\src\Messages.Contracts\Messages.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Messages\test\Messages.Application.Tests\Messages.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Quotas\src\Quotas.Contracts\Quotas.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Application.Tests\Synchronization.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Relationships\src\Relationships.Contracts\Relationships.Contracts.csproj" />
+        <ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Contracts\Synchronization.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Application\Tags.Application.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Domain\Tags.Domain.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Infrastructure\Tags.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Module\Tags.Module.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Tokens\src\Tokens.Contracts\Tokens.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj" />
     </ItemGroup>
 </Project>

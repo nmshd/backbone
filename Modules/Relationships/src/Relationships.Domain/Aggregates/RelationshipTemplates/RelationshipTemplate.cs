@@ -2,8 +2,9 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Relationships.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -36,7 +37,7 @@ public class RelationshipTemplate : Entity
         ForIdentity = forIdentity;
         Password = password;
 
-        RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
+        RaiseDomainEvent(RelationshipTemplateCreatedDomainEvent.Create(this));
     }
 
     public RelationshipTemplateId Id { get; set; }
@@ -71,7 +72,7 @@ public class RelationshipTemplate : Entity
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
 
         if (Allocations.Count == MaxNumberOfAllocations)
-            RaiseDomainEvent(new RelationshipTemplateAllocationsExhaustedDomainEvent(this));
+            RaiseDomainEvent(RelationshipTemplateAllocationsExhaustedDomainEvent.Create(this));
     }
 
     public void AnonymizeForIdentity(string didDomainName)

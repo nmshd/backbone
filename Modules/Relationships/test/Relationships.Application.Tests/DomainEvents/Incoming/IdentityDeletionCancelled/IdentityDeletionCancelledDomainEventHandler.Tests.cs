@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using FakeItEasy;
 
 namespace Backbone.Modules.Relationships.Application.Tests.DomainEvents.Incoming.IdentityDeletionCancelled;

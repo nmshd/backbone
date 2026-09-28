@@ -3,8 +3,9 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Relationships.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -42,7 +43,7 @@ public class Relationship : Entity
 
         AuditLog = [new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)];
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     private void EnsureCanEstablish(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, List<Relationship> existingRelationships)
@@ -119,7 +120,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     private void EnsureStatus(params RelationshipStatus[] statuses)
@@ -151,7 +152,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
@@ -171,7 +172,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
@@ -195,7 +196,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -212,7 +213,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationRequestedDomainEvent(this, activeIdentity, GetPeerOf(activeIdentity)));
+        RaiseDomainEvent(RelationshipReactivationRequestedDomainEvent.Create(this, activeIdentity, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureThereIsNoOpenReactivationRequest()
@@ -238,7 +239,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
+        RaiseDomainEvent(RelationshipReactivationCompletedDomainEvent.Create(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureAcceptableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -261,7 +262,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
+        RaiseDomainEvent(RelationshipReactivationCompletedDomainEvent.Create(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -284,7 +285,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
+        RaiseDomainEvent(RelationshipReactivationCompletedDomainEvent.Create(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -305,7 +306,7 @@ public class Relationship : Entity
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice, RelationshipAuditLogEntryReason.Decomposition);
 
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(this));
     }
 
     public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted, string didDomainName)
@@ -326,7 +327,7 @@ public class Relationship : Entity
 
         // CAUTION: do NOT call the constructor with the single parameter of type Relationship. Because this would fill the initiator
         // with the anonymized address.
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(Id, Status.ToString(), identityToBeDeleted, peer, true));
+        RaiseDomainEvent(RelationshipStatusChangedDomainEvent.Create(Id, Status.ToString(), identityToBeDeleted, peer, true));
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)

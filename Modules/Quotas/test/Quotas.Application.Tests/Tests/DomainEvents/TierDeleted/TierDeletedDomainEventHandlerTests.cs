@@ -1,7 +1,7 @@
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierDeleted;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierDeleted;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 

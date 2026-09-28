@@ -8,6 +8,7 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+        <ProjectReference Include="..\Quotas.Contracts\Quotas.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

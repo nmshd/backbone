@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 

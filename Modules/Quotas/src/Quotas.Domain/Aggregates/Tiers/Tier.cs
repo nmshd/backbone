@@ -1,7 +1,8 @@
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Quotas.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Quotas.Domain.DomainEvents;
 using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
@@ -54,7 +55,7 @@ public class Tier : Entity
 
         Quotas.Remove(quotaDefinition);
 
-        RaiseDomainEvent(new TierQuotaDefinitionDeletedDomainEvent(Id, tierQuotaDefinitionId));
+        RaiseDomainEvent(TierQuotaDefinitionDeletedDomainEvent.Create(Id, tierQuotaDefinitionId));
 
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
@@ -84,7 +85,7 @@ public class Tier : Entity
         var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         Quotas.Add(quotaDefinition);
 
-        RaiseDomainEvent(new TierQuotaDefinitionCreatedDomainEvent(Id, quotaDefinition.Id));
+        RaiseDomainEvent(TierQuotaDefinitionCreatedDomainEvent.Create(Id, quotaDefinition.Id));
 
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
     }

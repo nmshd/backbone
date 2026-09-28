@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
+﻿using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.UnitTestTools.Shouldly.Extensions;
@@ -26,6 +26,7 @@ public class CreationTests : AbstractTestsBase
 
         // Assert
         var domainEvent = message.ShouldHaveASingleDomainEvent<MessageCreatedDomainEvent>();
+        domainEvent.DomainEventId.ShouldBe($"{message.Id}/Created");
         domainEvent.CreatedBy.ShouldBe(sender);
         domainEvent.Id.ShouldBe(message.Id);
         domainEvent.Recipients.ShouldHaveCount(1);

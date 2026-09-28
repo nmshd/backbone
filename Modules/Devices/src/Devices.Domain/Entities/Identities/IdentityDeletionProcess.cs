@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -135,6 +136,6 @@ public class IdentityDeletionProcess : Entity
     private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, IdentityAddress? initiator)
     {
         Status = newStatus;
-        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator?.Value));
+        RaiseDomainEvent(IdentityDeletionProcessStatusChangedDomainEvent.Create(address, Id, initiator?.Value));
     }
 }

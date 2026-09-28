@@ -2,7 +2,7 @@
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 

@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -28,7 +29,7 @@ public class ExternalEvent : Entity
         Context = context;
         Errors = [];
 
-        RaiseDomainEvent(new ExternalEventCreatedDomainEvent(this));
+        RaiseDomainEvent(ExternalEventCreatedDomainEvent.Create(this));
     }
 
     public ExternalEventId Id { get; }

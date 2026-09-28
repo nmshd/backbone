@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications.DatawalletModified;

@@ -1210,6 +1210,12 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
+      "Backbone.Modules.Announcements.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Challenges.Application": {
         "type": "Project",
         "dependencies": {
@@ -1256,7 +1262,11 @@
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.Crypto": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "FluentValidation": "[12.1.1, 12.1.1]",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "OpenIddict.Core": "[7.6.0, 7.6.0]",
@@ -1264,11 +1274,18 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
+      "Backbone.Modules.Devices.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Devices.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]"
@@ -1294,6 +1311,18 @@
           "OpenIddict.AspNetCore": "[7.6.0, 7.6.0]",
           "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
           "Polly": "[8.7.0, 8.7.0]"
+        }
+      },
+      "Backbone.Modules.Synchronization.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
+      "Backbone.Modules.Tokens.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {

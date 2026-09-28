@@ -775,10 +775,17 @@
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
         }
       },
+      "Backbone.Modules.Files.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Files.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },

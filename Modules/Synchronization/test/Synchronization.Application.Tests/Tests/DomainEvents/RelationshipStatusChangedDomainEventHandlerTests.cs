@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
@@ -17,6 +17,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
+            WasDueToIdentityDeletion = false,
             RelationshipId = "REL1",
             Peer = relationshipTo,
             NewStatus = "Pending",
@@ -41,6 +42,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
+            WasDueToIdentityDeletion = false,
             RelationshipId = "REL1",
             Peer = relationshipTo,
             NewStatus = "ReadyForDeletion",
@@ -69,6 +71,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         var initiator = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
+            WasDueToIdentityDeletion = false,
             RelationshipId = relationshipId,
             Peer = relationshipTo,
             NewStatus = newStatus,
@@ -96,6 +99,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
 
         var relationshipStatusChangedDomainEvent = new RelationshipStatusChangedDomainEvent
         {
+            WasDueToIdentityDeletion = false,
             RelationshipId = relationshipId,
             Peer = relationshipTo,
             NewStatus = "Active",
@@ -132,6 +136,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         var initiator = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
+            WasDueToIdentityDeletion = false,
             RelationshipId = relationshipId,
             Peer = relationshipTo,
             NewStatus = newStatus,

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 

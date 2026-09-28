@@ -1,15 +1,14 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.AnnouncementCreated;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.BackupDeviceUsed;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.ExternalEventCreated;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.TokenLocked;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.AnnouncementCreated;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.ExternalEventCreated;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.TokenLocked;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Devices.Application.Extensions;
 

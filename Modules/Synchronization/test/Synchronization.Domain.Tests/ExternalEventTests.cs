@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
+﻿using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 
