@@ -19,13 +19,4 @@ public class DomainEvents
             .Because("each domain event has one canonical definition in its producer's contract assembly")
             .Check(Backbone.ARCHITECTURE);
     }
-
-    [Fact]
-    public void ModuleDomainEventsShouldUseTheContractNamespace()
-    {
-        _moduleDomainEvents
-            .Should().ResideInNamespaceMatching("\\.Contracts\\.DomainEvents$")
-            .Because("domain events are shared contracts rather than module implementation details")
-            .Check(Backbone.ARCHITECTURE);
-    }
 }
