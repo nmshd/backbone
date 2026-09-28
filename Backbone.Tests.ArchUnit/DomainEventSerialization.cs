@@ -8,8 +8,6 @@ public class DomainEventSerialization
     [Fact]
     public void ContractDomainEventsCanBeSerializedAndDeserialized()
     {
-        _ = Backbone.ARCHITECTURE;
-
         var contractDomainEventTypes = AppDomain.CurrentDomain.GetAssemblies()
             .Where(a => a.GetName().Name is { } name && name.StartsWith("Backbone.Modules.") && name.EndsWith(".Contracts"))
             .SelectMany(a => a.GetTypes())
