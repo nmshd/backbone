@@ -2,8 +2,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
-using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Devices.Application.DomainEvents.Incoming.ExternalEventCreated;
 

@@ -1,7 +1,7 @@
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 

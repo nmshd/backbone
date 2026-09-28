@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Quotas.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Backbone.Modules.Quotas.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.DomainEvents;
 using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;

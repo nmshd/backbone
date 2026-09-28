@@ -28,12 +28,12 @@ public static class PeerDeletionCancelledDomainEventExtensions
             IdentityAddress peerOfIdentityWithDeletionCancelled,
             RelationshipId relationshipId,
             IdentityAddress identityWithDeletionCancelled) => new()
-        {
-            DomainEventId = DomainEventIdFactory.Randomize($"{relationshipId}/peerDeletionCancelled/{identityWithDeletionCancelled}"),
-            PeerOfIdentityWithDeletionCancelled = peerOfIdentityWithDeletionCancelled,
-            RelationshipId = relationshipId,
-            IdentityWithDeletionCancelled = identityWithDeletionCancelled
-        };
+            {
+                DomainEventId = DomainEventIdFactory.Randomize($"{relationshipId}/peerDeletionCancelled/{identityWithDeletionCancelled}"),
+                PeerOfIdentityWithDeletionCancelled = peerOfIdentityWithDeletionCancelled,
+                RelationshipId = relationshipId,
+                IdentityWithDeletionCancelled = identityWithDeletionCancelled
+            };
     }
 }
 
@@ -58,13 +58,13 @@ public static class PeerToBeDeletedDomainEventExtensions
             RelationshipId relationshipId,
             IdentityAddress identityToBeDeleted,
             DateTime gracePeriodEndsAt) => new()
-        {
-            DomainEventId = DomainEventIdFactory.Randomize($"{relationshipId}/peerToBeDeleted/{identityToBeDeleted}"),
-            PeerOfIdentityToBeDeleted = peerOfIdentityToBeDeleted,
-            RelationshipId = relationshipId,
-            IdentityToBeDeleted = identityToBeDeleted,
-            GracePeriodEndsAt = gracePeriodEndsAt
-        };
+            {
+                DomainEventId = DomainEventIdFactory.Randomize($"{relationshipId}/peerToBeDeleted/{identityToBeDeleted}"),
+                PeerOfIdentityToBeDeleted = peerOfIdentityToBeDeleted,
+                RelationshipId = relationshipId,
+                IdentityToBeDeleted = identityToBeDeleted,
+                GracePeriodEndsAt = gracePeriodEndsAt
+            };
     }
 }
 
@@ -116,13 +116,13 @@ public static class RelationshipStatusChangedDomainEventExtensions
             string initiator,
             string peer,
             bool wasDueToIdentityDeletion) => new()
-        {
-            RelationshipId = relationshipId,
-            NewStatus = newStatus,
-            Initiator = initiator,
-            Peer = peer,
-            WasDueToIdentityDeletion = wasDueToIdentityDeletion
-        };
+            {
+                RelationshipId = relationshipId,
+                NewStatus = newStatus,
+                Initiator = initiator,
+                Peer = peer,
+                WasDueToIdentityDeletion = wasDueToIdentityDeletion
+            };
     }
 }
 

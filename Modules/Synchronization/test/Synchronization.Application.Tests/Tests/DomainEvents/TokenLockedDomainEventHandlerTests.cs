@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;

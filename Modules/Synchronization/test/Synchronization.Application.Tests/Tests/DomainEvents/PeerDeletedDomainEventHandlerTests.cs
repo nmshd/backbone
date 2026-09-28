@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;

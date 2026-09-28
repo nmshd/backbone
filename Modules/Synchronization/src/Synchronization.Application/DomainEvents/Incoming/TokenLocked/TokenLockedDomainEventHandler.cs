@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
 

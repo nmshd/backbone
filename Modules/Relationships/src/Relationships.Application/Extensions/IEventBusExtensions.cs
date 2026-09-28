@@ -1,9 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.FeatureFlagsOfIdentityChanged;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeleted;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Relationships.Application.Extensions;
 
