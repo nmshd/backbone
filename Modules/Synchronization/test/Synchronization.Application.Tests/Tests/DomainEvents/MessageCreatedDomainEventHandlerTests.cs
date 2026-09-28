@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
+﻿using Backbone.Modules.Messages.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Tooling;

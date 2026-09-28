@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 

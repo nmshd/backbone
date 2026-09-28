@@ -959,11 +959,18 @@
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
         }
       },
+      "Backbone.Modules.Announcements.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Announcements.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]"
         }
       },

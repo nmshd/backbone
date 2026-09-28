@@ -735,14 +735,23 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+        }
+      },
+      "Backbone.Modules.Messages.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Messages.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },
@@ -756,6 +765,12 @@
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]"
+        }
+      },
+      "Backbone.Modules.Relationships.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {

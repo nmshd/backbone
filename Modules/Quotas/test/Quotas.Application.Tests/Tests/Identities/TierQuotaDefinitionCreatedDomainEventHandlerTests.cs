@@ -1,10 +1,11 @@
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
+using Backbone.Modules.Quotas.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Quotas.Domain.DomainEvents;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 
@@ -29,7 +30,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBa
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new TierQuotaDefinitionCreatedDomainEvent(tierId, tierQuotaDefinition.Id));
+        await handler.Handle(TierQuotaDefinitionCreatedDomainEvent.Create(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>

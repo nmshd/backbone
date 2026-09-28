@@ -28,6 +28,14 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/packages.lock.json*", "BuildingBlocks/src/Crypto/"]
 
 COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/packages.lock.json*", "Common/src/Common.Infrastructure/"]
+COPY ["Modules/Announcements/src/Announcements.Contracts/Announcements.Contracts.csproj", "Modules/Announcements/src/Announcements.Contracts/packages.lock.json*", "Modules/Announcements/src/Announcements.Contracts/"]
+COPY ["Modules/Devices/src/Devices.Contracts/Devices.Contracts.csproj", "Modules/Devices/src/Devices.Contracts/packages.lock.json*", "Modules/Devices/src/Devices.Contracts/"]
+COPY ["Modules/Files/src/Files.Contracts/Files.Contracts.csproj", "Modules/Files/src/Files.Contracts/packages.lock.json*", "Modules/Files/src/Files.Contracts/"]
+COPY ["Modules/Messages/src/Messages.Contracts/Messages.Contracts.csproj", "Modules/Messages/src/Messages.Contracts/packages.lock.json*", "Modules/Messages/src/Messages.Contracts/"]
+COPY ["Modules/Quotas/src/Quotas.Contracts/Quotas.Contracts.csproj", "Modules/Quotas/src/Quotas.Contracts/packages.lock.json*", "Modules/Quotas/src/Quotas.Contracts/"]
+COPY ["Modules/Relationships/src/Relationships.Contracts/Relationships.Contracts.csproj", "Modules/Relationships/src/Relationships.Contracts/packages.lock.json*", "Modules/Relationships/src/Relationships.Contracts/"]
+COPY ["Modules/Synchronization/src/Synchronization.Contracts/Synchronization.Contracts.csproj", "Modules/Synchronization/src/Synchronization.Contracts/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Contracts/"]
+COPY ["Modules/Tokens/src/Tokens.Contracts/Tokens.Contracts.csproj", "Modules/Tokens/src/Tokens.Contracts/packages.lock.json*", "Modules/Tokens/src/Tokens.Contracts/"]
 
 COPY ["Modules/Announcements/src/Announcements.Infrastructure/Announcements.Infrastructure.csproj", "Modules/Announcements/src/Announcements.Infrastructure/packages.lock.json*", "Modules/Announcements/src/Announcements.Infrastructure/"]
 COPY ["Modules/Announcements/src/Announcements.Application/Announcements.Application.csproj", "Modules/Announcements/src/Announcements.Application/packages.lock.json*", "Modules/Announcements/src/Announcements.Application/"]

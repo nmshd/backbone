@@ -3,7 +3,8 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -115,7 +116,7 @@ public class Device : Entity
         if (IsBackupDevice)
         {
             IsBackupDevice = false;
-            RaiseDomainEvent(new BackupDeviceUsedDomainEvent(IdentityAddress));
+            RaiseDomainEvent(BackupDeviceUsedDomainEvent.Create(IdentityAddress));
         }
 
         User.LoginOccurred();

@@ -1,5 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Aggregates.RelationshipTemplates;

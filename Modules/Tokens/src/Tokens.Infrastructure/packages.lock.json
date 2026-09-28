@@ -785,10 +785,17 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
+      "Backbone.Modules.Tokens.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Tokens.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },

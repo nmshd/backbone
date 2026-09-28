@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;

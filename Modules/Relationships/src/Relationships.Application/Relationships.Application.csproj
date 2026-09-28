@@ -8,7 +8,9 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+        <ProjectReference Include="..\..\..\Devices\src\Devices.Contracts\Devices.Contracts.csproj" />
         <ProjectReference Include="..\Relationships.Common\Relationships.Common.csproj" />
+        <ProjectReference Include="..\Relationships.Contracts\Relationships.Contracts.csproj" />
         <ProjectReference Include="..\Relationships.Domain\Relationships.Domain.csproj" />
     </ItemGroup>
 
