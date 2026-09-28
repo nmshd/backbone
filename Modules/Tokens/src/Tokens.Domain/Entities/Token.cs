@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
@@ -46,7 +47,7 @@ public class Token : Entity
 
         Version = null!; // This property is handled and initialized by the database
 
-        RaiseDomainEvent(new TokenCreatedDomainEvent(this));
+        RaiseDomainEvent(TokenCreatedDomainEvent.Create(this));
     }
 
     public TokenId Id { get; set; }
@@ -75,7 +76,7 @@ public class Token : Entity
             // since the access failed count can become higher than the limit from which on the token is considered
             // locked, we have to perform this check to avoid a TokenLockedDomainEvent being raised multiple times
             if (IsLocked && !wasLockedBeforeChange)
-                RaiseDomainEvent(new TokenLockedDomainEvent(this));
+                RaiseDomainEvent(TokenLockedDomainEvent.Create(this));
         }
     }
 

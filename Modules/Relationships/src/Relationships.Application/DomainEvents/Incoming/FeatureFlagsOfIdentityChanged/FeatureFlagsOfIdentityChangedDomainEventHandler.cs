@@ -3,8 +3,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Domain.DomainEvents;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.FeatureFlagsOfIdentityChanged;
@@ -26,7 +27,7 @@ public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandl
     {
         var identitiesToBeNotified = await ListIdentitiesToBeNotified(@event);
 
-        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(new PeerFeatureFlagsChangedDomainEvent(@event.IdentityAddress, i)));
+        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(PeerFeatureFlagsChangedDomainEvent.Create(@event.IdentityAddress, i)));
 
         await Task.WhenAll(publishEventTasks);
     }

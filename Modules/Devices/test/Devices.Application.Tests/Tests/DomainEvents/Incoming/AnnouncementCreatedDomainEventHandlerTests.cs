@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.AnnouncementCreated;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.AnnouncementCreated;
+using Backbone.Modules.Announcements.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.DomainEvents.Incoming;

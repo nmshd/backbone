@@ -26,6 +26,12 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
+      "Backbone.Modules.Announcements.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Tooling": {
         "type": "Project",
         "dependencies": {

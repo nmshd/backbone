@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Domain.DomainEvents;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
@@ -28,7 +29,7 @@ public class Tier : Entity
         Name = name;
         CanBeUsedAsDefaultForClient = canBeUsedAsDefaultForClient;
         CanBeManuallyAssigned = canBeManuallyAssigned;
-        RaiseDomainEvent(new TierCreatedDomainEvent(this));
+        RaiseDomainEvent(TierCreatedDomainEvent.Create(this));
     }
 
     public TierId Id { get; }

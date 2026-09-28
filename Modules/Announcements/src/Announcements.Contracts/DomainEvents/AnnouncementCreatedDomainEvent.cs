@@ -1,0 +1,19 @@
+using Backbone.BuildingBlocks.Domain.Events;
+
+namespace Backbone.Modules.Announcements.Contracts.DomainEvents;
+
+public class AnnouncementCreatedDomainEvent : DomainEvent
+{
+    public required string Id { get; set; }
+    public required string Severity { get; set; }
+    public required bool IsSilent { get; set; }
+    public required List<AnnouncementCreatedDomainEventText> Texts { get; set; }
+    public required List<string> Recipients { get; set; }
+}
+
+public class AnnouncementCreatedDomainEventText
+{
+    public required string Language { get; set; }
+    public required string Title { get; set; }
+    public required string Body { get; set; }
+}

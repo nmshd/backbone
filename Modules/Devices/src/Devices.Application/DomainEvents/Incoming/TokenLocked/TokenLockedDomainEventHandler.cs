@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Tokens;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.TokenLocked;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DomainEvents.Incoming.TokenLocked;

@@ -1,6 +1,6 @@
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;

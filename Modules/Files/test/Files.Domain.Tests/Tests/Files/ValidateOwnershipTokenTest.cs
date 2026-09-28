@@ -1,4 +1,4 @@
-using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Files.Contracts.DomainEvents;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Domain.Tests.Helpers;
 using Backbone.UnitTestTools.Shouldly.Extensions;

@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Announcements;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.AnnouncementCreated;
+using Backbone.Modules.Announcements.Contracts.DomainEvents;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Application.DomainEvents.Incoming.AnnouncementCreated;

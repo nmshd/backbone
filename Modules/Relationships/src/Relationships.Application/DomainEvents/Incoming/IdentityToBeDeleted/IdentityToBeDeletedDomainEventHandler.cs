@@ -1,8 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Domain.DomainEvents;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
@@ -38,7 +39,7 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     {
         foreach (var relationship in relationships)
         {
-            await _eventBus.Publish(new PeerToBeDeletedDomainEvent(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted, gracePeriodEndsAt));
+            await _eventBus.Publish(PeerToBeDeletedDomainEvent.Create(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted, gracePeriodEndsAt));
         }
     }
 }

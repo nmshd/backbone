@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using MessageId = Backbone.Modules.Messages.Domain.Ids.MessageId;
 
 namespace Backbone.Modules.Messages.Application.DomainEvents.Incoming.MessageOrphaned;

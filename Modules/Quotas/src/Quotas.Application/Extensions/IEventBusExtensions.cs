@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.FileUploaded;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.MessageCreated;
@@ -10,16 +11,11 @@ using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierOfIdentityCh
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionDeleted;
 using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TokenCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.FileUploaded;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.IdentityCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.RelationshipTemplateCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierDeleted;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierOfIdentityChanged;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TokenCreated;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Files.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
+using Backbone.Modules.Quotas.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Application.Extensions;
 

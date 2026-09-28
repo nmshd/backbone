@@ -2,7 +2,8 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Announcements.Contracts.DomainEvents;
+using Backbone.Modules.Announcements.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Announcements.Domain.Entities;
@@ -36,7 +37,7 @@ public class Announcement : Entity
         IsSilent = isSilent;
         Actions = [.. actions];
 
-        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
+        RaiseDomainEvent(AnnouncementCreatedDomainEvent.Create(this));
     }
 
     public AnnouncementId Id { get; }

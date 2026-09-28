@@ -3,7 +3,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Domain.DomainEvents;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
@@ -41,6 +42,6 @@ public class Handler : IRequestHandler<DeleteTierCommand>
 
         await _tiersRepository.Remove(tier);
 
-        await _eventBus.Publish(new TierDeletedDomainEvent(tier));
+        await _eventBus.Publish(TierDeletedDomainEvent.Create(tier));
     }
 }

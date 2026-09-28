@@ -3,7 +3,8 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Domain.DomainEvents;
 using Backbone.Tooling;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
@@ -44,7 +45,7 @@ public class Identity : Entity
 
         Devices.Add(Device.CreateTestDevice(this, deviceCommunicationLanguage, username));
 
-        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
+        RaiseDomainEvent(IdentityCreatedDomainEvent.Create(this));
     }
 
     public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, CommunicationLanguage deviceCommunicationLanguage)
@@ -61,7 +62,7 @@ public class Identity : Entity
 
         Devices.Add(new Device(this, deviceCommunicationLanguage));
 
-        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
+        RaiseDomainEvent(IdentityCreatedDomainEvent.Create(this));
     }
 
     public string? ClientId { get; }
@@ -89,7 +90,7 @@ public class Identity : Entity
 
             // if the oldTier was null, we don't consider it a change
             if (oldTier != null)
-                RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
+                RaiseDomainEvent(TierOfIdentityChangedDomainEvent.Create(this, oldTier, value));
         }
     }
 
@@ -138,7 +139,7 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
-        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address, deletionProcess.GracePeriodEndsAt!.Value));
+        RaiseDomainEvent(IdentityToBeDeletedDomainEvent.Create(Address, deletionProcess.GracePeriodEndsAt!.Value));
 
         return deletionProcess;
     }
@@ -150,7 +151,7 @@ public class Identity : Entity
 
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
-        RaiseDomainEvent(new IdentityDeletedDomainEvent(Address));
+        RaiseDomainEvent(IdentityDeletedDomainEvent.Create(Address));
     }
 
     private void EnsureDeletionProcessInStatusExists(DeletionProcessStatus status)
@@ -217,7 +218,7 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = null;
         Status = IdentityStatus.Active;
 
-        RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
+        RaiseDomainEvent(IdentityDeletionCancelledDomainEvent.Create(Address));
 
         return deletionProcess;
     }
@@ -246,7 +247,7 @@ public class Identity : Entity
             FeatureFlags.Set(keyValuePair.Key, keyValuePair.Value);
         }
 
-        RaiseDomainEvent(new FeatureFlagsOfIdentityChangedDomainEvent(this));
+        RaiseDomainEvent(FeatureFlagsOfIdentityChangedDomainEvent.Create(this));
     }
 
     #region Expressions

@@ -3,7 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.TokenLocked;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Tokens;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.TokenLocked;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.DomainEvents.Incoming;

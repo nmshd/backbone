@@ -2,7 +2,7 @@
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.ExternalEventCreated;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
-using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.ExternalEventCreated;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.DomainEvents.Incoming;
@@ -24,7 +24,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
-        await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
+        await handler.Handle(new ExternalEventCreatedDomainEvent { EventId = Guid.NewGuid().ToString(), Owner = externalEventOwner, IsDeliveryBlocked = false });
 
         // Assert
         A.CallTo(() => mockPushSender.SendNotification(
@@ -51,7 +51,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
-        await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = false });
+        await handler.Handle(new ExternalEventCreatedDomainEvent { EventId = Guid.NewGuid().ToString(), Owner = externalEventOwner, IsDeliveryBlocked = false });
 
         // Assert
         A.CallTo(() => mockPushSender.SendNotification(
@@ -76,7 +76,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => fakeIdentitiesRepository.Get(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
-        await handler.Handle(new ExternalEventCreatedDomainEvent { Owner = externalEventOwner, IsDeliveryBlocked = true });
+        await handler.Handle(new ExternalEventCreatedDomainEvent { EventId = Guid.NewGuid().ToString(), Owner = externalEventOwner, IsDeliveryBlocked = true });
 
         // Assert
         A.CallTo(() => mockPushSender.SendNotification(

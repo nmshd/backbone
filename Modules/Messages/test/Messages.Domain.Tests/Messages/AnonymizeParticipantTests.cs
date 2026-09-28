@@ -1,5 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.UnitTestTools.Shouldly.Extensions;
@@ -112,7 +112,9 @@ public class AnonymizeParticipantTests : AbstractTestsBase
         message.AnonymizeParticipant(recipient2Address, anonymizedAddress);
 
         // Assert
-        message.ShouldHaveASingleDomainEvent<MessageOrphanedDomainEvent>();
+        var domainEvent = message.ShouldHaveASingleDomainEvent<MessageOrphanedDomainEvent>();
+        domainEvent.DomainEventId.ShouldBe($"{message.Id}/MessageOrphaned");
+        domainEvent.MessageId.ShouldBe(message.Id);
     }
 
     private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)

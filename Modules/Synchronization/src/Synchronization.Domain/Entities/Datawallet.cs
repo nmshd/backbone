@@ -1,7 +1,8 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Synchronization.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Domain.DomainEvents;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
@@ -52,7 +53,7 @@ public class Datawallet : Entity
         Modifications.Add(newModification);
 
         if (DomainEvents.All(d => d.GetType() != typeof(DatawalletModifiedDomainEvent)))
-            RaiseDomainEvent(new DatawalletModifiedDomainEvent(Owner, createdByDevice));
+            RaiseDomainEvent(DatawalletModifiedDomainEvent.Create(Owner, createdByDevice));
 
         return newModification;
     }

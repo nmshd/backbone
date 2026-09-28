@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
+using Backbone.Modules.Messages.Domain.DomainEvents;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 
@@ -33,7 +34,7 @@ public class Message : Entity
         Details = new MessageDetails { Id = Id, Body = body };
         Attachments = attachments.ToList();
 
-        RaiseDomainEvent(new MessageCreatedDomainEvent(this));
+        RaiseDomainEvent(MessageCreatedDomainEvent.Create(this));
     }
 
     public MessageId Id { get; }
@@ -57,7 +58,7 @@ public class Message : Entity
         AnonymizeRecipient(participantAddress, anonymizedAddress);
 
         if (IsOrphaned(this, anonymizedAddress))
-            RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
+            RaiseDomainEvent(MessageOrphanedDomainEvent.Create(this));
     }
 
     public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)

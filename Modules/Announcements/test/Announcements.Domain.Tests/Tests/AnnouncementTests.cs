@@ -1,6 +1,6 @@
 ﻿using System.Buffers.Text;
 using Backbone.BuildingBlocks.Domain.Exceptions;
-using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Announcements.Contracts.DomainEvents;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;

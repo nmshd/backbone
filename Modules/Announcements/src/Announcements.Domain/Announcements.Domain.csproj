@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
       <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+    <ProjectReference Include="..\Announcements.Contracts\Announcements.Contracts.csproj" />
   </ItemGroup>
 
     <ItemGroup>

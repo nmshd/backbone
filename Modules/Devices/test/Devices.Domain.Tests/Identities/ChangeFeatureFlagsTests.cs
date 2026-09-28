@@ -1,4 +1,4 @@
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Shouldly.Extensions;
 using Backbone.UnitTestTools.Shouldly.Extensions;

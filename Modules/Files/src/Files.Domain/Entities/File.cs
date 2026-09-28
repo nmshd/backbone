@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Files.Contracts.DomainEvents;
+using Backbone.Modules.Files.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Files.Domain.Entities;
@@ -48,7 +49,7 @@ public class File : Entity
 
         EncryptedProperties = encryptedProperties;
 
-        RaiseDomainEvent(new FileUploadedDomainEvent(this));
+        RaiseDomainEvent(FileUploadedDomainEvent.Create(this));
     }
 
     public FileId Id { get; set; }
@@ -95,7 +96,7 @@ public class File : Entity
         private set
         {
             if (!field && value)
-                RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+                RaiseDomainEvent(FileOwnershipLockedDomainEvent.Create(this));
 
             field = value;
         }
@@ -153,7 +154,7 @@ public class File : Entity
         if (OwnershipToken != ownershipToken)
         {
             OwnershipIsLocked = true;
-            RaiseDomainEvent(new FileOwnershipLockedDomainEvent(this));
+            RaiseDomainEvent(FileOwnershipLockedDomainEvent.Create(this));
             return ClaimFileOwnershipResult.IncorrectToken;
         }
 
@@ -164,7 +165,7 @@ public class File : Entity
         Owner = newOwnerAddress;
         OwnershipToken = RegenerateOwnershipToken(newOwnerAddress);
 
-        RaiseDomainEvent(new FileOwnershipClaimedDomainEvent(this, oldOwnerAddress));
+        RaiseDomainEvent(FileOwnershipClaimedDomainEvent.Create(this, oldOwnerAddress));
         return ClaimFileOwnershipResult.Ok;
     }
 

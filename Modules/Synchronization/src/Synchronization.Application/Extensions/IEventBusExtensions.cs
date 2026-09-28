@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipClaimed;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.FileOwnershipLocked;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
@@ -13,20 +14,10 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Relatio
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.TokenLocked;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershipClaimed;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.FileOwnershipIsLocked;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerFeatureFlagsChangedEvent;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipTemplateAllocationsExhausted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.TokenLocked;
+using Backbone.Modules.Files.Contracts.DomainEvents;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 

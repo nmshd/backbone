@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierOfIdentityChanged;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.Metrics;
 
 namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierOfIdentityChanged;

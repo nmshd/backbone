@@ -1454,11 +1454,18 @@
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
         }
       },
+      "Backbone.Modules.Announcements.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Announcements.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]"
         }
       },
@@ -1556,7 +1563,11 @@
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.Crypto": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "FluentValidation": "[12.1.1, 12.1.1]",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "OpenIddict.Core": "[7.6.0, 7.6.0]",
@@ -1564,11 +1575,18 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
+      "Backbone.Modules.Devices.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Devices.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]"
@@ -1629,10 +1647,17 @@
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
         }
       },
+      "Backbone.Modules.Files.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Files.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },
@@ -1679,14 +1704,23 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+        }
+      },
+      "Backbone.Modules.Messages.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Messages.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },
@@ -1732,7 +1766,19 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
+        }
+      },
+      "Backbone.Modules.Quotas.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Domain": {
@@ -1740,6 +1786,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]"
         }
@@ -1787,7 +1834,9 @@
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Modules.Relationships.Common": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
         }
@@ -1798,10 +1847,17 @@
           "FluentValidation": "[12.1.1, 12.1.1]"
         }
       },
+      "Backbone.Modules.Relationships.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Relationships.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },
@@ -1848,15 +1904,27 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "FluentValidation": "[12.1.1, 12.1.1]",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+        }
+      },
+      "Backbone.Modules.Synchronization.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Synchronization.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },
@@ -1908,10 +1976,17 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
+      "Backbone.Modules.Tokens.Contracts": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
+        }
+      },
       "Backbone.Modules.Tokens.Domain": {
         "type": "Project",
         "dependencies": {
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )"
         }
       },

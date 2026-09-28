@@ -4,8 +4,8 @@ using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityD
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using FakeItEasy;
 
 namespace Backbone.Modules.Relationships.Application.Tests.DomainEvents.Incoming.IdentityDeleted;
