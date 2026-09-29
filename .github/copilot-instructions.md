@@ -212,27 +212,16 @@ melos format
 
 ## Running Applications Locally
 
-### Prerequisites
-
 ```bash
-# Start Docker containers (PostgreSQL, storage emulator)
-docker compose -f ./docker-compose/docker-compose.yml up -d
-```
-
-### Run Services (Each in separate terminal)
-
-```pwsh
-# Terminal 1: Consumer API (REST endpoint for users)
-dotnet run --project ./Applications/ConsumerApi/src/ConsumerApi.csproj
-
-# Terminal 2: Admin API (REST endpoint for administrators)
-dotnet run --project ./Applications/AdminApi/src/AdminApi/AdminApi.csproj
-
-# Terminal 3: Event Handler (background service for async events)
-dotnet run --project ./Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj
+# Start infrastructure and all four backend services with hot reload
+docker compose \
+  -f ./docker-compose/compose.yml \
+  up --detach --build \
+  admin-api consumer-api event-handler-service sse-server
 ```
 
 Services expose OpenAPI/Swagger documentation at `/docs/{version}/openapi.json`.
+See `docker-compose/README.md` for IDE debugging and on-demand tools.
 
 ## CI/CD Pipeline & Validation
 
@@ -288,7 +277,7 @@ melos bootstrap
 | `.ci/aui/runChecks.sh`              | Flutter UI validation script                                                  |
 | `.github/workflows/test.yml`        | Main CI workflow                                                              |
 | `appsettings.override.json`         | Environment-specific configuration (copied to Debug projects)                 |
-| `docker-compose/docker-compose.yml` | Local infrastructure (Postgres, storage emulator)                             |
+| `docker-compose/compose.yml`        | Local infrastructure (Postgres, storage emulator)                             |
 
 ## Trust These Instructions
 

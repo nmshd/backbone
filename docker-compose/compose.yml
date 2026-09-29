@@ -1,0 +1,367 @@
+name: "backbone"
+
+x-watch-environment: &watch-environment
+  DOTNET_USE_POLLING_FILE_WATCHER: "1"
+  DOTNET_WATCH_RESTART_ON_RUDE_EDIT: "1"
+  DOTNET_WATCH_SUPPRESS_BROWSER_REFRESH: "1"
+  DOTNET_WATCH_SUPPRESS_EMOJIS: "1"
+  DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER: "1"
+
+x-watch-runtime: &watch-runtime
+  image: backbone:local
+  build:
+    context: ..
+    dockerfile: docker-compose/Dockerfile
+  working_dir: /src
+  volumes:
+    - ..:/src
+    - watch-artifacts:/artifacts
+  depends_on:
+    - azure-storage-emulator
+    - otel-collector
+    - postgres
+    - rabbitmq
+    - seq
+
+services:
+  ### applications ###
+
+  admin-api:
+    <<: *watch-runtime
+    environment:
+      <<: *watch-environment
+      NUGET_PACKAGES: /artifacts/admin-api/nuget
+    command:
+      [
+        "--project",
+        "Applications/AdminApi/src/AdminApi/AdminApi.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--non-interactive",
+        "--artifacts-path",
+        "/artifacts/admin-api",
+      ]
+    healthcheck:
+      test: curl http://localhost:8080/health
+      interval: 3s
+      start_period: 5s
+      retries: 200
+    ports:
+      - "8082:8080"
+
+  consumer-api:
+    <<: *watch-runtime
+    environment:
+      <<: *watch-environment
+      NUGET_PACKAGES: /artifacts/consumer-api/nuget
+    command:
+      [
+        "--project",
+        "Applications/ConsumerApi/src/ConsumerApi.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--non-interactive",
+        "--artifacts-path",
+        "/artifacts/consumer-api",
+      ]
+    healthcheck:
+      test: curl http://localhost:8080/health
+      interval: 3s
+      start_period: 5s
+      retries: 200
+    ports:
+      - "8081:8080"
+
+  event-handler-service:
+    <<: *watch-runtime
+    environment:
+      <<: *watch-environment
+      NUGET_PACKAGES: /artifacts/event-handler-service/nuget
+    command:
+      [
+        "--project",
+        "Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--non-interactive",
+        "--artifacts-path",
+        "/artifacts/event-handler-service",
+      ]
+
+  sse-server:
+    <<: *watch-runtime
+    environment:
+      <<: *watch-environment
+      NUGET_PACKAGES: /artifacts/sse-server/nuget
+    volumes:
+      - ..:/src
+      - watch-artifacts:/artifacts
+      - ../appsettings.override.json:/src/Applications/SseServer/src/SseServer/appsettings.override.json:ro
+    command:
+      [
+        "--project",
+        "Applications/SseServer/src/SseServer/SseServer.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--non-interactive",
+        "--artifacts-path",
+        "/artifacts/sse-server",
+      ]
+    healthcheck:
+      test: curl http://localhost:8080/health
+      interval: 3s
+      start_period: 5s
+      retries: 200
+    ports:
+      - "8083:8080"
+
+  ### seeds ###
+
+  seed-client:
+    <<: *watch-runtime
+    environment:
+      NUGET_PACKAGES: /artifacts/admin-cli/nuget
+    entrypoint:
+      [
+        "dotnet",
+        "run",
+        "--project",
+        "Applications/AdminCli/src/AdminCli/AdminCli.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--artifacts-path",
+        "/artifacts/admin-cli",
+        "--",
+        "client",
+        "create",
+        "--clientId",
+        "test",
+        "--clientSecret",
+        "test",
+        "--defaultTier",
+        "Basic",
+      ]
+    depends_on:
+      consumer-api:
+        condition: service_healthy
+
+  ### tools ###
+
+  admin-cli:
+    <<: *watch-runtime
+    profiles: ["tools"]
+    environment:
+      NUGET_PACKAGES: /artifacts/admin-cli/nuget
+    entrypoint:
+      [
+        "dotnet",
+        "run",
+        "--project",
+        "Applications/AdminCli/src/AdminCli/AdminCli.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--artifacts-path",
+        "/artifacts/admin-cli",
+        "--",
+      ]
+
+  database-migrator:
+    <<: *watch-runtime
+    profiles: ["tools"]
+    environment:
+      NUGET_PACKAGES: /artifacts/database-migrator/nuget
+    entrypoint:
+      [
+        "dotnet",
+        "run",
+        "--project",
+        "Applications/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--artifacts-path",
+        "/artifacts/database-migrator",
+        "--",
+      ]
+
+  housekeeper:
+    <<: *watch-runtime
+    profiles: ["tools"]
+    environment:
+      NUGET_PACKAGES: /artifacts/housekeeper/nuget
+    entrypoint:
+      [
+        "dotnet",
+        "run",
+        "--project",
+        "Applications/Housekeeper/src/Housekeeper/Housekeeper.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--artifacts-path",
+        "/artifacts/housekeeper",
+        "--",
+      ]
+
+  identity-deletion-job:
+    <<: *watch-runtime
+    profiles: ["tools"]
+    environment:
+      NUGET_PACKAGES: /artifacts/identity-deletion-job/nuget
+    entrypoint:
+      [
+        "dotnet",
+        "run",
+        "--project",
+        "Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj",
+        "--configuration",
+        "Debug",
+        "--no-launch-profile",
+        "--artifacts-path",
+        "/artifacts/identity-deletion-job",
+        "--",
+      ]
+
+  ### infrastructure ###
+
+  azure-storage-emulator:
+    hostname: azurite
+    image: mcr.microsoft.com/azure-storage/azurite:3.36.0@sha256:76b8127d608fab8287a14a4bfeb9a5502cdcffb4bf1e86f09f324ebb0e70edba
+    command: azurite-blob -l /data --blobHost "0.0.0.0" --skipApiVersionCheck
+    ports:
+      - "10000:10000"
+    volumes:
+      - azure-storage-emulator-volume:/data
+
+  ms-sql-server:
+    hostname: ms-sql-server
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:86cc6144ef39bb0fbed2329e1ad79b13ee82e7b2e4739213a0db0800e668a74a
+    environment:
+      - MSSQL_SA_PASSWORD=Passw0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    volumes:
+      - mssql-server-volume:/var/opt/mssql
+    ports:
+      - 1433:1433
+
+  postgres:
+    hostname: postgres
+    image: postgres:18.4@sha256:3a82e1f56c8f0f5616a11103ac3d47e632c3938698946a7ad26da0df1334744a
+    environment:
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - postgres-volume:/var/lib/postgresql
+    ports:
+      - 5432:5432
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:4.3.4-management-alpine@sha256:09b39ca8a3e884e91cab8842cd41264de21aab0625e1f1d016a9a3135ba590ef
+    ports:
+      - "5672:5672"
+      - "15672:15672" # mgmt plugin, "guest/guest"
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq # default data dir
+
+  seq:
+    image: datalust/seq:2026.1@sha256:91e93ff21b1e61f0bbd0854a633a94b925d771b227e98269c740079f5092f740
+    ports:
+      - "8085:80"
+      - "5341:5341"
+    volumes:
+      - seq-data:/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-remote-write-receiver
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+
+  tempo:
+    image: grafana/tempo:3.0.3
+    user: "0:0"
+    command:
+      - -config.file=/etc/tempo/tempo.yml
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - tempo-data:/tmp/tempo
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.7.6
+    command:
+      - -config.file=/etc/loki/loki.yml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki.yml:/etc/loki/loki.yml:ro
+      - loki-data:/loki
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:13.2.1
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.159.0
+    volumes:
+      - ./otel-collector/otel-collector-config.yml:/etc/otel/config.yaml
+      # - ./log:/log/otel
+    command: --config /etc/otel/config.yaml
+    environment:
+      TEMPO_ENDPOINT: "tempo:4317"
+    ports:
+      - "8889:8889" # Prometheus metrics exporter (scrape endpoint)
+      - "55679:55679" # ZPages extension
+      - "4317:4317" # OTLP Receiver
+      - "4318:4318" # OTLP HTTP Receiver
+    depends_on:
+      - tempo
+      - prometheus
+      - loki
+
+networks:
+  default:
+    name: backbone
+
+volumes:
+  rabbitmq-volume:
+  mssql-server-volume:
+  postgres-volume:
+  azure-storage-emulator-volume:
+  seq-data:
+  prometheus-data:
+  tempo-data:
+  loki-data:
+  grafana-data:
+  watch-artifacts:
