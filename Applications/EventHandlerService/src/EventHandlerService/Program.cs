@@ -78,13 +78,13 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<MessagesModule, Backbone.Modules.Messages.Module.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
                 .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
                     Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
                     Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 

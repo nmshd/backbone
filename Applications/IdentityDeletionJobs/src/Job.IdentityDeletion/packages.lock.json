@@ -1538,15 +1538,13 @@
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Messages.Application": {
+      "Backbone.Modules.Messages.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Messages.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Messages.Contracts": {
@@ -1568,7 +1566,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1592,11 +1590,13 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },

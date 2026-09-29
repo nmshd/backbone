@@ -88,13 +88,13 @@ public class Program
                     .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<FilesModule, Modules.Files.Application.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<MessagesModule, Modules.Messages.Application.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<MessagesModule, Modules.Messages.Module.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<QuotasModule, Modules.Quotas.Application.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration,
                         Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
                         Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                    .AddModule<TokensModule, Modules.Tokens.Application.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 

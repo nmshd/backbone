@@ -157,7 +157,7 @@
   </Folder>
   <Folder Name="/Modules/Messages/" />
   <Folder Name="/Modules/Messages/src/">
-    <Project Path="Modules/Messages/src/Messages.Application/Messages.Application.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Abstractions/Messages.Abstractions.csproj" />
     <Project Path="Modules/Messages/src/Messages.Common/Messages.Common.csproj" />
     <Project Path="Modules/Messages/src/Messages.Contracts/Messages.Contracts.csproj" />
     <Project Path="Modules/Messages/src/Messages.Domain/Messages.Domain.csproj" />
@@ -167,7 +167,7 @@
     <Project Path="Modules/Messages/src/Messages.Module/Messages.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Messages/test/">
-    <Project Path="Modules/Messages/test/Messages.Application.Tests/Messages.Application.Tests.csproj" />
+    <Project Path="Modules/Messages/test/Messages.Module.Tests/Messages.Module.Tests.csproj" />
     <Project Path="Modules/Messages/test/Messages.Domain.Tests/Messages.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Quotas/" />

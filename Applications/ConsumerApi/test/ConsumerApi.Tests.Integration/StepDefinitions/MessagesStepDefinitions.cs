@@ -53,6 +53,13 @@ internal class MessagesStepDefinitions
         _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages();
     }
 
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Message/\{{{RegexFor.SINGLE_THING}\.id\}} endpoint")]
+    public async Task WhenIdentitySendsAGetRequestToTheMessageEndpoint(string identityName, string messageName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = await identity.Messages.GetMessage(_messagesContext.Messages[messageName].Id);
+    }
+
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Messages endpoint with {RegexFor.SINGLE_THING} as recipient")]
     public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string senderIdentityName, string recipientIdentityName)
     {

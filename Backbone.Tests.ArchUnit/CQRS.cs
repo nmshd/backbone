@@ -33,7 +33,7 @@ public class Cqrs
     public void CommandsShouldResideInCommandsNamespace()
     {
         Classes().That().Are(COMMANDS)
-            .Should().ResideInNamespaceMatching(".+\\.Commands\\.")
+            .Should().ResideInNamespaceMatching(".+(\\.Commands\\.|\\.Features\\.)")
             .Check(Backbone.ARCHITECTURE);
     }
 
@@ -41,7 +41,7 @@ public class Cqrs
     public void QueriesShouldResideInQueriesNamespace()
     {
         Classes().That().Are(QUERIES)
-            .Should().ResideInNamespaceMatching(".+\\.Queries\\.")
+            .Should().ResideInNamespaceMatching(".+(\\.Queries\\.|\\.Features\\.)")
             .Check(Backbone.ARCHITECTURE);
     }
 }

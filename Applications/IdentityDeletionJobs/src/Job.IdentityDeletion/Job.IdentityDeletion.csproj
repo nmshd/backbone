@@ -26,7 +26,7 @@
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Module\Challenges.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Application\Messages.Application.csproj" />
+        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Module\Quotas.Module.csproj" />

@@ -62,7 +62,7 @@ COPY ["Modules/Files/src/Files.Infrastructure.Database.SqlServer/Files.Infrastru
 COPY ["Modules/Files/src/Files.Infrastructure.Database.Postgres/Files.Infrastructure.Database.Postgres.csproj", "Modules/Files/src/Files.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Files/src/Files.Infrastructure.Database.Postgres/"]
 
 COPY ["Modules/Messages/src/Messages.Infrastructure/Messages.Infrastructure.csproj", "Modules/Messages/src/Messages.Infrastructure/packages.lock.json*", "Modules/Messages/src/Messages.Infrastructure/"]
-COPY ["Modules/Messages/src/Messages.Application/Messages.Application.csproj", "Modules/Messages/src/Messages.Application/packages.lock.json*", "Modules/Messages/src/Messages.Application/"]
+COPY ["Modules/Messages/src/Messages.Abstractions/Messages.Abstractions.csproj", "Modules/Messages/src/Messages.Abstractions/packages.lock.json*", "Modules/Messages/src/Messages.Abstractions/"]
 COPY ["Modules/Messages/src/Messages.Domain/Messages.Domain.csproj", "Modules/Messages/src/Messages.Domain/packages.lock.json*", "Modules/Messages/src/Messages.Domain/"]
 COPY ["Modules/Messages/src/Messages.Infrastructure.Database.SqlServer/Messages.Infrastructure.Database.SqlServer.csproj", "Modules/Messages/src/Messages.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Messages/src/Messages.Infrastructure.Database.SqlServer/"]
 COPY ["Modules/Messages/src/Messages.Infrastructure.Database.Postgres/Messages.Infrastructure.Database.Postgres.csproj", "Modules/Messages/src/Messages.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Messages/src/Messages.Infrastructure.Database.Postgres/"]

@@ -1,8 +1,6 @@
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Modules.Messages.Application;
-using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Infrastructure;
 using Backbone.Modules.Messages.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
