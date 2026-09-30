@@ -1,5 +1,4 @@
 using Autofac.Extensions.DependencyInjection;
-using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -127,7 +126,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.ConfigureAndValidate<ConsumerApiConfiguration>(configuration.Bind);
 
     services.AddSingleton<VersionService>();
-    services.AddSingleton<HttpExceptionResponseFactory>();
+    services.AddMinimalApiErrorHandling();
 
     services.AddSaveChangesTimeInterceptor();
 

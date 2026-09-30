@@ -53,11 +53,25 @@ internal class MessagesStepDefinitions
         _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages();
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Messages endpoint with ids={{{RegexFor.SINGLE_THING}.Id}}")]
+    public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpointWithIds(string senderName, string messageId)
+    {
+        var sender = _clientPool.FirstForIdentityName(senderName);
+        _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages([messageId]);
+    }
+
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Message/\{{{RegexFor.SINGLE_THING}\.id\}} endpoint")]
     public async Task WhenIdentitySendsAGetRequestToTheMessageEndpoint(string identityName, string messageName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await identity.Messages.GetMessage(_messagesContext.Messages[messageName].Id);
+    }
+
+    [When($"^{RegexFor.SINGLE_THING} sends a GET request to the /Messages/\\{{id\\}} endpoint with a non existent id$")]
+    public async Task WhenIdentitySendsAGetRequestToTheMessagesIdEndpointWithANonExistentId(string identityName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = await identity.Messages.GetMessage("MSGthisiddoesnoexist");
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Messages endpoint with {RegexFor.SINGLE_THING} as recipient")]

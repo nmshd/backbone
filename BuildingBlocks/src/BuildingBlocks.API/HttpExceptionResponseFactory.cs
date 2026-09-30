@@ -14,29 +14,37 @@ namespace Backbone.BuildingBlocks.API;
 
 public sealed class HttpExceptionResponseFactory(IWebHostEnvironment environment)
 {
-    private const string UnexpectedExceptionErrorCode = "error.platform.unexpected";
-    private const string RequestBodyTooLargeErrorCode = "error.platform.requestBodyTooLarge";
+    private const string UNEXPECTED_EXCEPTION_ERROR_CODE = "error.platform.unexpected";
+    private const string REQUEST_BODY_TOO_LARGE_ERROR_CODE = "error.platform.requestBodyTooLarge";
 
     public HttpExceptionResponse Create(Exception exception) => exception switch
     {
         InfrastructureException infrastructureException => new(HttpStatusCode.BadRequest, HttpError.ForProduction(infrastructureException.Code, infrastructureException.Message, "")),
         ApplicationException applicationException => new(GetStatusCode(applicationException), HttpError.ForProduction(applicationException.Code, applicationException.Message, "", GetCustomData(applicationException))),
         DomainException domainException => new(GetStatusCode(domainException), HttpError.ForProduction(domainException.Code, domainException.Message, "")),
-        BadHttpRequestException => new(HttpStatusCode.BadRequest, HttpError.ForProduction(RequestBodyTooLargeErrorCode, "The request body is too large.", "")),
+        BadHttpRequestException { StatusCode: StatusCodes.Status413PayloadTooLarge } =>
+            new(HttpStatusCode.BadRequest, HttpError.ForProduction(REQUEST_BODY_TOO_LARGE_ERROR_CODE, "The request body is too large.", "")),
+        BadHttpRequestException badHttpRequestException => CreateInvalidInputResponse(badHttpRequestException),
         _ => new(HttpStatusCode.InternalServerError, CreateUnexpectedExceptionError(exception))
     };
+
+    private static HttpExceptionResponse CreateInvalidInputResponse(BadHttpRequestException exception)
+    {
+        var error = GenericApplicationErrors.Validation.InputCannotBeParsed(exception.InnerException?.Message ?? exception.Message);
+        return new HttpExceptionResponse(HttpStatusCode.BadRequest, HttpError.ForProduction(error.Code, error.Message, ""));
+    }
 
     private HttpError CreateUnexpectedExceptionError(Exception exception)
     {
         if (!environment.IsDevelopment() && !environment.IsLocal())
-            return HttpError.ForProduction(UnexpectedExceptionErrorCode, "An unexpected error occurred.", "");
+            return HttpError.ForProduction(UNEXPECTED_EXCEPTION_ERROR_CODE, "An unexpected error occurred.", "");
 
         var details = exception.Message;
         for (var inner = exception.InnerException; inner != null; inner = inner.InnerException)
             details += "\r\n> " + inner.Message;
 
         var stackTrace = exception.StackTrace == null ? Enumerable.Empty<string>() : Regex.Matches(exception.StackTrace, "at .+").Select(match => match.Value.Trim());
-        return HttpError.ForDev(UnexpectedExceptionErrorCode, "An unexpected error occurred.", "", stackTrace, details);
+        return HttpError.ForDev(UNEXPECTED_EXCEPTION_ERROR_CODE, "An unexpected error occurred.", "", stackTrace, details);
     }
 
     private static dynamic? GetCustomData(ApplicationException exception) => exception is QuotaExhaustedException quotaExhaustedException

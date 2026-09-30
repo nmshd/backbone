@@ -23,9 +23,10 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([AsParameters] PaginationFilter paginationFilter, [FromQuery] string[]? ids, IMediator mediator,
+    private static async Task<IResult> Handle([FromQuery] int? pageNumber, [FromQuery] int? pageSize, [FromQuery] string[]? ids, IMediator mediator,
         IOptions<ApplicationConfiguration> options, CancellationToken cancellationToken)
     {
+        var paginationFilter = new PaginationFilter(pageNumber, pageSize);
         paginationFilter.PageSize ??= options.Value.Pagination.DefaultPageSize;
         if (paginationFilter.PageSize > options.Value.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(options.Value.Pagination.MaxPageSize));
