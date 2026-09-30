@@ -44,19 +44,19 @@ using Serilog.Settings.Configuration;
 using InfrastructureConfiguration = Backbone.Modules.Quotas.Infrastructure.InfrastructureConfiguration;
 using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
-Log.Logger = new LoggerConfiguration()
+using var startupLogger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 try
 {
-    Log.Information("Creating app...");
+    startupLogger.Information("Creating app...");
 
     var app = CreateApp(args);
 
-    Log.Information("App created.");
+    app.Logger.LogInformation("App created.");
 
-    Log.Information("Starting app...");
+    app.Logger.LogInformation("Starting app...");
 
     app.Run();
 
@@ -64,12 +64,8 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Host terminated unexpectedly");
+    startupLogger.Fatal(ex, "Host terminated unexpectedly");
     return 1;
-}
-finally
-{
-    Log.CloseAndFlush();
 }
 
 static WebApplication CreateApp(string[] args)
@@ -93,7 +89,7 @@ static WebApplication CreateApp(string[] args)
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()]))
                 .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()),
-            writeToProviders: true)
+            preserveStaticLogger: true, writeToProviders: true)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
@@ -235,10 +231,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 {
     webApplicationBuilder.Configuration.Sources.Clear();
     var env = webApplicationBuilder.Environment;
+    var additionalConfigurationFile = Environment.GetEnvironmentVariable("BACKBONE_ADDITIONAL_CONFIGURATION_FILE");
 
     webApplicationBuilder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
+
+    if (!string.IsNullOrWhiteSpace(additionalConfigurationFile))
+        webApplicationBuilder.Configuration.AddJsonFile(additionalConfigurationFile, optional: false, reloadOnChange: false);
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
