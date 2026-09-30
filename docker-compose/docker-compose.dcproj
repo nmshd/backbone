@@ -8,9 +8,12 @@
     <ProjectVersion>2.1</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.yml" />
+    <None Include="compose.yml" />
+    <None Include="Dockerfile" />
   </ItemGroup>
   <PropertyGroup>
+    <DockerComposeBaseFilePath>compose</DockerComposeBaseFilePath>
     <DockerComposeBuildArguments>--parallel</DockerComposeBuildArguments>
+    <DockerDevelopmentMode>Regular</DockerDevelopmentMode>
   </PropertyGroup>
 </Project>

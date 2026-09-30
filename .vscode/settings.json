@@ -36,5 +36,6 @@
         "editor.rulers": [150]
     },
     "dotnet.defaultSolution": "Backbone.slnx",
+    "csharp.debug.logging.moduleLoad": false,
     "arb-editor.suppressedWarnings": ["missing_metadata_for_key"]
 }

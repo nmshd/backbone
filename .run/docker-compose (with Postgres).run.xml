@@ -10,6 +10,10 @@
         </option>
         <option name="services">
           <list>
+            <option value="admin-api" />
+            <option value="consumer-api" />
+            <option value="event-handler-service" />
+            <option value="sse-server" />
             <option value="seq" />
             <option value="rabbitmq" />
             <option value="postgres" />
@@ -20,10 +24,11 @@
             <option value="otel-collector" />
           </list>
         </option>
-        <option name="sourceFilePath" value="docker-compose/docker-compose.yml" />
+        <option name="commandLineOptions" value="--build" />
+        <option name="sourceFilePath" value="docker-compose/compose.yml" />
       </settings>
     </deployment>
-    <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+    <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="false" isSslEnabled="false" />
     <method v="2" />
   </configuration>
 </component>
