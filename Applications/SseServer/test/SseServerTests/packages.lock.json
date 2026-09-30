@@ -1479,6 +1479,7 @@
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
           "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
+          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
           "FluentValidation": "[12.1.1, 12.1.1]",
           "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "OpenIddict.Core": "[7.6.0, 7.6.0]",

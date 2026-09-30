@@ -2,9 +2,111 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "start",
+            "label": "Start Backbone",
+            "type": "process",
             "command": "docker",
-            "args": ["compose", "-f", "docker-compose/docker-compose.yml", "up", "--build", "--attach", "consumerApi"]
+            "args": [
+                "compose",
+                "--project-directory",
+                "${workspaceFolder}/docker-compose",
+                "-f",
+                "${workspaceFolder}/docker-compose/compose.yml",
+                "up",
+                "--detach",
+                "--build",
+                "admin-api",
+                "consumer-api",
+                "event-handler-service",
+                "sse-server",
+                "seed-client"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Stop Backbone",
+            "type": "process",
+            "command": "docker",
+            "args": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "down"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Admin CLI",
+            "type": "shell",
+            "command": "docker compose --project-directory \"${workspaceFolder}/docker-compose\" -f \"${workspaceFolder}/docker-compose/compose.yml\" --profile tools run --rm admin-cli ${input:adminCliArgs}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Database Migrator",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-directory",
+                "${workspaceFolder}/docker-compose",
+                "-f",
+                "${workspaceFolder}/docker-compose/compose.yml",
+                "--profile",
+                "tools",
+                "run",
+                "--rm",
+                "database-migrator"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Housekeeper",
+            "type": "process",
+            "command": "docker",
+            "args": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "--profile", "tools", "run", "--rm", "housekeeper"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Actual Identity Deletion",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-directory",
+                "${workspaceFolder}/docker-compose",
+                "-f",
+                "${workspaceFolder}/docker-compose/compose.yml",
+                "--profile",
+                "tools",
+                "run",
+                "--rm",
+                "identity-deletion-job",
+                "--Worker",
+                "ActualDeletionWorker"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Identity Deletion Reminders",
+            "type": "process",
+            "command": "docker",
+            "args": [
+                "compose",
+                "--project-directory",
+                "${workspaceFolder}/docker-compose",
+                "-f",
+                "${workspaceFolder}/docker-compose/compose.yml",
+                "--profile",
+                "tools",
+                "run",
+                "--rm",
+                "identity-deletion-job",
+                "--Worker",
+                "SendGracePeriodRemindersWorker"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "adminCliArgs",
+            "type": "promptString",
+            "description": "Arguments for the Backbone Admin CLI",
+            "default": "client list"
         }
     ]
 }

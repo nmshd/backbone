@@ -2,11 +2,87 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Attach Admin API",
+            "type": "coreclr",
+            "request": "attach",
+            "processName": "Backbone.AdminApi",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "exec", "-T", "admin-api"],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}",
+                "quoteArgs": false
+            },
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            },
+            "requireExactSource": false
+        },
+        {
+            "name": "Attach Consumer API",
+            "type": "coreclr",
+            "request": "attach",
+            "processName": "Backbone.ConsumerApi",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "exec", "-T", "consumer-api"],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}",
+                "quoteArgs": false
+            },
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            },
+            "requireExactSource": false
+        },
+        {
+            "name": "Attach Event Handler",
+            "type": "coreclr",
+            "request": "attach",
+            "processName": "Backbone.EventHandlerService",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "exec", "-T", "event-handler-service"],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}",
+                "quoteArgs": false
+            },
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            },
+            "requireExactSource": false
+        },
+        {
+            "name": "Attach SSE Server",
+            "type": "coreclr",
+            "request": "attach",
+            "processName": "Backbone.SseServer",
+            "pipeTransport": {
+                "pipeProgram": "docker",
+                "pipeArgs": ["compose", "--project-directory", "${workspaceFolder}/docker-compose", "-f", "${workspaceFolder}/docker-compose/compose.yml", "exec", "-T", "sse-server"],
+                "debuggerPath": "/vsdbg/vsdbg",
+                "pipeCwd": "${workspaceFolder}",
+                "quoteArgs": false
+            },
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            },
+            "requireExactSource": false
+        },
+        {
             "name": "Launch current dart file",
             "request": "launch",
             "type": "dart",
             "toolArgs": ["--dart-define-from-file=${workspaceFolder}/Applications/AdminUi/config.local.json"],
             "templateFor": ""
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Docker Watch: Debug Backbone",
+            "configurations": ["Attach Admin API", "Attach Consumer API", "Attach Event Handler", "Attach SSE Server"],
+            "preLaunchTask": "Start Backbone",
+            "stopAll": true
         }
     ]
 }

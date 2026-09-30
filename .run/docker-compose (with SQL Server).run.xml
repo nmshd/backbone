@@ -11,7 +11,7 @@
             <option value="ms-sql-server" />
           </list>
         </option>
-        <option name="sourceFilePath" value="docker-compose/docker-compose.yml" />
+        <option name="sourceFilePath" value="docker-compose/compose.yml" />
       </settings>
     </deployment>
     <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
