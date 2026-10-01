@@ -57,7 +57,8 @@ internal class MessagesStepDefinitions
     public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpointWithIds(string senderName, string messageId)
     {
         var sender = _clientPool.FirstForIdentityName(senderName);
-        _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages([messageId]);
+        var message = _messagesContext.Messages[messageId];
+        _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages([message.Id]);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Message/\{{{RegexFor.SINGLE_THING}\.id\}} endpoint")]
