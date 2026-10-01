@@ -6,7 +6,7 @@ public static class ServicesExtensions
 {
     public static IServiceCollection RegisterIdentityDeleters(this IServiceCollection services)
     {
-        services.AddTransient<IIdentityDeleter, Modules.Announcements.Application.Announcements.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Announcements.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Challenges.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Devices.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Files.Application.Identities.IdentityDeleter>();

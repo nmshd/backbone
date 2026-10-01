@@ -1,7 +1,7 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
+using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
 

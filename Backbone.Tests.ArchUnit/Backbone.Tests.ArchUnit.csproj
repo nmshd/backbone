@@ -23,7 +23,8 @@
         <ProjectReference Include="..\BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj" />
         <ProjectReference Include="..\Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
         <ProjectReference Include="..\Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Announcements\test\Announcements.Application.Tests\Announcements.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Announcements\test\Announcements.Module.Tests\Announcements.Module.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Announcements\src\Announcements.Abstractions\Announcements.Abstractions.csproj" />
         <ProjectReference Include="..\Modules\Announcements\src\Announcements.Contracts\Announcements.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Announcements\test\Announcements.Domain.Tests\Announcements.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Module.Tests\Challenges.Module.Tests.csproj" />

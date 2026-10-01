@@ -1,11 +1,11 @@
 ﻿using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
-using Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
-using Backbone.Modules.Announcements.Application.Announcements.DTOs;
-using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAnnouncementById;
-using Backbone.Modules.Announcements.Application.Announcements.Queries.ListAnnouncements;
+using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
+using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
+using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
+using Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;
+using Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

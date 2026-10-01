@@ -38,7 +38,7 @@ COPY ["Modules/Synchronization/src/Synchronization.Contracts/Synchronization.Con
 COPY ["Modules/Tokens/src/Tokens.Contracts/Tokens.Contracts.csproj", "Modules/Tokens/src/Tokens.Contracts/packages.lock.json*", "Modules/Tokens/src/Tokens.Contracts/"]
 
 COPY ["Modules/Announcements/src/Announcements.Infrastructure/Announcements.Infrastructure.csproj", "Modules/Announcements/src/Announcements.Infrastructure/packages.lock.json*", "Modules/Announcements/src/Announcements.Infrastructure/"]
-COPY ["Modules/Announcements/src/Announcements.Application/Announcements.Application.csproj", "Modules/Announcements/src/Announcements.Application/packages.lock.json*", "Modules/Announcements/src/Announcements.Application/"]
+COPY ["Modules/Announcements/src/Announcements.Abstractions/Announcements.Abstractions.csproj", "Modules/Announcements/src/Announcements.Abstractions/packages.lock.json*", "Modules/Announcements/src/Announcements.Abstractions/"]
 COPY ["Modules/Announcements/src/Announcements.Domain/Announcements.Domain.csproj", "Modules/Announcements/src/Announcements.Domain/packages.lock.json*", "Modules/Announcements/src/Announcements.Domain/"]
 COPY ["Modules/Announcements/src/Announcements.Infrastructure.Database.SqlServer/Announcements.Infrastructure.Database.SqlServer.csproj", "Modules/Announcements/src/Announcements.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Announcements/src/Announcements.Infrastructure.Database.SqlServer/"]
 COPY ["Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/Announcements.Infrastructure.Database.Postgres.csproj", "Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/"]

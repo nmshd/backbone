@@ -100,7 +100,7 @@
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Announcements/" />
   <Folder Name="/Modules/Announcements/src/">
-    <Project Path="Modules/Announcements/src/Announcements.Application/Announcements.Application.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Abstractions/Announcements.Abstractions.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Contracts/Announcements.Contracts.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Domain/Announcements.Domain.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/Announcements.Infrastructure.Database.Postgres.csproj" />
@@ -109,7 +109,7 @@
     <Project Path="Modules/Announcements/src/Announcements.Module/Announcements.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Announcements/test/">
-    <Project Path="Modules/Announcements/test/Announcements.Application.Tests/Announcements.Application.Tests.csproj" />
+    <Project Path="Modules/Announcements/test/Announcements.Module.Tests/Announcements.Module.Tests.csproj" />
     <Project Path="Modules/Announcements/test/Announcements.Domain.Tests/Announcements.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Challenges/" />

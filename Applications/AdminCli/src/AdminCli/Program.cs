@@ -68,9 +68,9 @@ public class Program
         services.AddCommonInfrastructure();
 
         services
-            .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+            .AddModule<AnnouncementsModule, Modules.Announcements.Module.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
             .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
-            .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+            .AddModule<TokensModule, Modules.Tokens.Application.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminCliConfiguration>>().Value;

@@ -1,6 +1,8 @@
 using System.Reflection;
 using ArchUnitNET.Domain;
 using ArchUnitNET.xUnitV3;
+using FluentValidation;
+using MediatR;
 using Shouldly;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 using Assembly = System.Reflection.Assembly;
@@ -9,7 +11,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges"];
+    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements"];
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -39,10 +41,16 @@ public class VerticalSliceArchitecture
     [InlineData("Messages")]
     [InlineData("Tags")]
     [InlineData("Challenges")]
+    [InlineData("Announcements")]
     public void UseCasesShouldResideInTheirModule(string module)
     {
+        var useCases = Classes().That().AreAssignableTo(typeof(IBaseRequest))
+            .Or().AreAssignableTo(typeof(IRequestHandler<>))
+            .Or().AreAssignableTo(typeof(IRequestHandler<,>))
+            .Or().AreAssignableTo(typeof(IValidator));
+
         Classes().That().ResideInAssemblyMatching($@"^Backbone\.Modules\.{module}\.(?!.*Tests).*$")
-            .And().HaveNameMatching(".*(Command|Query|Handler|Validator)$")
+            .And().Are(useCases)
             .Should().ResideInAssemblyMatching($@"^Backbone\.Modules\.{module}\.Module(,|$)")
             .Check(Backbone.ARCHITECTURE);
     }
@@ -51,6 +59,7 @@ public class VerticalSliceArchitecture
     [InlineData("Messages")]
     [InlineData("Tags")]
     [InlineData("Challenges")]
+    [InlineData("Announcements")]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
@@ -64,6 +73,7 @@ public class VerticalSliceArchitecture
     [InlineData("Messages")]
     [InlineData("Tags")]
     [InlineData("Challenges")]
+    [InlineData("Announcements")]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))

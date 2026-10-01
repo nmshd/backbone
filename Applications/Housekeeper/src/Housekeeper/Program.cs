@@ -68,7 +68,7 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
     services.AddLogging();
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration,
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Module.ApplicationConfiguration,
             Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)

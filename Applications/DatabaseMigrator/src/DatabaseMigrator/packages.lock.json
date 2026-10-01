@@ -1557,12 +1557,10 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
-      "Backbone.Modules.Announcements.Application": {
+      "Backbone.Modules.Announcements.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Announcements.Contracts": {
@@ -1583,8 +1581,9 @@
       "Backbone.Modules.Announcements.Infrastructure": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",

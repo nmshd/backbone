@@ -1719,7 +1719,6 @@
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
           "Backbone.Modules.Announcements.Module": "[1.0.0, )",
           "Backbone.Modules.Challenges.Module": "[1.0.0, )",
           "Backbone.Modules.Devices.Application": "[1.0.0, )",
@@ -1755,22 +1754,10 @@
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
-      "Backbone.Modules.Announcements.Application": {
+      "Backbone.Modules.Announcements.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Announcements.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
-          "Backbone.UnitTestTools": "[1.0.0, )",
-          "FluentValidation.Validators.UnitTestExtension": "[1.12.0.5, 1.12.0.5]",
-          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Announcements.Contracts": {
@@ -1800,8 +1787,9 @@
       "Backbone.Modules.Announcements.Infrastructure": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1825,11 +1813,24 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Module": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
+        }
+      },
+      "Backbone.Modules.Announcements.Module.Tests": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.Modules.Announcements.Module": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FluentValidation.Validators.UnitTestExtension": "[1.12.0.5, 1.12.0.5]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
       "Backbone.Modules.Challenges.Abstractions": {

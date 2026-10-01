@@ -1,6 +1,6 @@
 using System.CommandLine;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
+using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
 using MediatR;
 
 namespace Backbone.AdminCli.Commands.Announcements;
