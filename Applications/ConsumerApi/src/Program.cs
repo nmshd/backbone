@@ -28,9 +28,8 @@ using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tags.Module;
-using Backbone.Modules.Tokens.Application;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Module;
+using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -145,7 +144,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TagsModule, Backbone.Modules.Tags.Module.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+        .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value;
@@ -218,6 +217,7 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.MapTagsEndpoints();
     app.MapChallengesEndpoints();
     app.MapAnnouncementsEndpoints();
+    app.MapTokensEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

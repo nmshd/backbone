@@ -9,7 +9,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -70,7 +69,7 @@ public class Program
         services
             .AddModule<AnnouncementsModule, Modules.Announcements.Module.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
             .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
-            .AddModule<TokensModule, Modules.Tokens.Application.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+            .AddModule<TokensModule, Modules.Tokens.Module.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the Configuration via IOptions here so that it is validated
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<AdminCliConfiguration>>().Value;

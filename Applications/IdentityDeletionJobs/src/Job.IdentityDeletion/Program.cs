@@ -12,7 +12,6 @@ using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -94,7 +93,7 @@ public class Program
                         Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
                         Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<TokensModule, Modules.Tokens.Application.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                    .AddModule<TokensModule, Modules.Tokens.Module.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 

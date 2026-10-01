@@ -225,7 +225,7 @@
   </Folder>
   <Folder Name="/Modules/Tokens/" />
   <Folder Name="/Modules/Tokens/src/">
-    <Project Path="Modules/Tokens/src/Tokens.Application/Tokens.Application.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Abstractions/Tokens.Abstractions.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Contracts/Tokens.Contracts.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Domain/Tokens.Domain.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrastructure.Database.Postgres.csproj" />
@@ -234,7 +234,7 @@
     <Project Path="Modules/Tokens/src/Tokens.Module/Tokens.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Tokens/test/">
-    <Project Path="Modules/Tokens/test/Tokens.Application.Tests/Tokens.Application.Tests.csproj" />
+    <Project Path="Modules/Tokens/test/Tokens.Module.Tests/Tokens.Module.Tests.csproj" />
     <Project Path="Modules/Tokens/test/Tokens.Domain.Tests/Tokens.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Others/">

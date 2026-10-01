@@ -1977,14 +1977,11 @@
           "Backbone.Modules.Synchronization.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Tokens.Application": {
+      "Backbone.Modules.Tokens.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Tokens.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Tokens.Contracts": {
@@ -2004,9 +2001,9 @@
       "Backbone.Modules.Tokens.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",

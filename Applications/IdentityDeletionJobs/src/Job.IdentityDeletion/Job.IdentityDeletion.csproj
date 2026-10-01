@@ -32,7 +32,6 @@
         <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Module\Relationships.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Module\Synchronization.Module.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Application\Tokens.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Tokens\src\Tokens.Module\Tokens.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Module\Devices.Module.csproj" />

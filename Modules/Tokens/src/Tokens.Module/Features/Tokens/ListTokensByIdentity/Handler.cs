@@ -1,0 +1,17 @@
+﻿using Backbone.Modules.Tokens.Abstractions;
+using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
+using Backbone.Modules.Tokens.Domain.Entities;
+using MediatR;
+
+namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
+
+public class Handler(ITokensRepository tokensRepository) : IRequestHandler<ListTokensByIdentityQuery, ListTokensResponse>
+{
+    public async Task<ListTokensResponse> Handle(ListTokensByIdentityQuery request, CancellationToken cancellationToken)
+    {
+        var dbPaginationResult = await tokensRepository.ListWithoutContent(request.PaginationFilter, Token.WasCreatedBy(request.CreatedBy), cancellationToken);
+        var pagedResult = new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
+
+        return pagedResult;
+    }
+}

@@ -10,7 +10,6 @@ using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -84,7 +83,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                     Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
                     Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 

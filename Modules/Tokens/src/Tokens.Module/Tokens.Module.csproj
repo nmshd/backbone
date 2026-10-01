@@ -3,7 +3,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Module\BuildingBlocks.Module.csproj" />
-        <ProjectReference Include="..\Tokens.Application\Tokens.Application.csproj" />
+        <ProjectReference Include="..\Tokens.Abstractions\Tokens.Abstractions.csproj" />
         <ProjectReference Include="..\Tokens.Domain\Tokens.Domain.csproj" />
         <ProjectReference Include="..\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj" />
@@ -11,6 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+        <PackageReference Include="Polly" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
     </ItemGroup>
 

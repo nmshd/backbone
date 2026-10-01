@@ -10,9 +10,8 @@ using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
-using Backbone.Modules.Tokens.Application;
-using Backbone.Modules.Tokens.Infrastructure;
 using Backbone.Modules.Tokens.Module;
+using Backbone.Modules.Tokens.Infrastructure;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -77,7 +76,7 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration);
+        .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
