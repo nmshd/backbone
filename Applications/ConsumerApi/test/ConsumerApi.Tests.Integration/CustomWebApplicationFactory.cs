@@ -1,20 +1,15 @@
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 namespace Backbone.ConsumerApi.Tests.Integration;
 
 internal class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    protected override IHost CreateHost(IHostBuilder builder)
+    public CustomWebApplicationFactory()
     {
-        builder.ConfigureHostConfiguration(config =>
-        {
-            if (Environment.GetEnvironmentVariable("CI").IsNullOrEmpty())
-                config.AddJsonFile("api.appsettings.local.override.json");
-        });
-
-        return base.CreateHost(builder);
+        if (Environment.GetEnvironmentVariable("CI").IsNullOrEmpty())
+            Environment.SetEnvironmentVariable(
+                "BACKBONE_ADDITIONAL_CONFIGURATION_FILE",
+                Path.Combine(AppContext.BaseDirectory, "api.appsettings.local.override.json"));
     }
 }
