@@ -16,7 +16,7 @@ namespace Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class CustomExceptionFilter : ExceptionFilterAttribute
 {
-    private const string RequestBodyTooLargeErrorCode = "error.platform.requestBodyTooLarge";
+    private const string REQUEST_BODY_TOO_LARGE_ERROR_CODE = "error.platform.requestBodyTooLarge";
     private readonly ILogger<CustomExceptionFilter> _logger;
     private readonly HttpExceptionResponseFactory _responseFactory;
 
@@ -54,7 +54,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 _logger.InvalidUserInput(nameof(DomainException), domainException.Code, domainException.Message);
                 break;
             case BadHttpRequestException:
-                _logger.RequestBodyTooLarge(RequestBodyTooLargeErrorCode);
+                _logger.RequestBodyTooLarge(REQUEST_BODY_TOO_LARGE_ERROR_CODE);
                 break;
             default:
                 _logger.ErrorWhileProcessingRequestToUri(uri, exception);
