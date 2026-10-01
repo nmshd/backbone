@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
-using Backbone.Modules.Challenges.Application.Extensions;
-using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Abstractions;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;

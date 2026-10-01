@@ -1604,13 +1604,10 @@
           "Backbone.Modules.Announcements.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Challenges.Application": {
+      "Backbone.Modules.Challenges.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Challenges.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Challenges.Domain": {
@@ -1625,7 +1622,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",

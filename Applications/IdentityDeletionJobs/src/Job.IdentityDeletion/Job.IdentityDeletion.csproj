@@ -22,7 +22,6 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Module\Announcements.Module.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Module\Challenges.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />

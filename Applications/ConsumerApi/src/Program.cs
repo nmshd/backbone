@@ -135,7 +135,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services
         .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<MessagesModule, Backbone.Modules.Messages.Module.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
@@ -216,6 +216,7 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
 
     app.MapMessagesEndpoints();
     app.MapTagsEndpoints();
+    app.MapChallengesEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

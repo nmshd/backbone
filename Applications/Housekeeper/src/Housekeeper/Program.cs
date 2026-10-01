@@ -70,14 +70,14 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
     services
         .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration,
             Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
+        .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 

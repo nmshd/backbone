@@ -9,7 +9,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags"];
+    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges"];
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -38,6 +38,7 @@ public class VerticalSliceArchitecture
     [Theory]
     [InlineData("Messages")]
     [InlineData("Tags")]
+    [InlineData("Challenges")]
     public void UseCasesShouldResideInTheirModule(string module)
     {
         Classes().That().ResideInAssemblyMatching($@"^Backbone\.Modules\.{module}\.(?!.*Tests).*$")
@@ -49,6 +50,7 @@ public class VerticalSliceArchitecture
     [Theory]
     [InlineData("Messages")]
     [InlineData("Tags")]
+    [InlineData("Challenges")]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
@@ -61,6 +63,7 @@ public class VerticalSliceArchitecture
     [Theory]
     [InlineData("Messages")]
     [InlineData("Tags")]
+    [InlineData("Challenges")]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))

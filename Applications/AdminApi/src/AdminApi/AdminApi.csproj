@@ -27,7 +27,6 @@
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Announcements\src\Announcements.Module\Announcements.Module.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Module\Challenges.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />

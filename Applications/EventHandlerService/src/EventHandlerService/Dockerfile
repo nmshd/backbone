@@ -32,7 +32,7 @@ COPY ["Modules/Relationships/src/Relationships.Contracts/Relationships.Contracts
 COPY ["Modules/Synchronization/src/Synchronization.Contracts/Synchronization.Contracts.csproj", "Modules/Synchronization/src/Synchronization.Contracts/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Contracts/"]
 COPY ["Modules/Tokens/src/Tokens.Contracts/Tokens.Contracts.csproj", "Modules/Tokens/src/Tokens.Contracts/packages.lock.json*", "Modules/Tokens/src/Tokens.Contracts/"]
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/packages.lock.json*", "BuildingBlocks/src/Crypto/"]
-COPY ["Modules/Challenges/src/Challenges.Application/Challenges.Application.csproj", "Modules/Challenges/src/Challenges.Application/packages.lock.json*", "Modules/Challenges/src/Challenges.Application/"]
+COPY ["Modules/Challenges/src/Challenges.Abstractions/Challenges.Abstractions.csproj", "Modules/Challenges/src/Challenges.Abstractions/packages.lock.json*", "Modules/Challenges/src/Challenges.Abstractions/"]
 COPY ["Modules/Challenges/src/Challenges.Domain/Challenges.Domain.csproj", "Modules/Challenges/src/Challenges.Domain/packages.lock.json*", "Modules/Challenges/src/Challenges.Domain/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj", "Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure/Challenges.Infrastructure.csproj", "Modules/Challenges/src/Challenges.Infrastructure/packages.lock.json*", "Modules/Challenges/src/Challenges.Infrastructure/"]
