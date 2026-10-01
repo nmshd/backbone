@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Tags.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tags.Abstractions;
 using MediatR;
 
-namespace Backbone.Modules.Tags.Application.Tags.Queries.ListTags;
+namespace Backbone.Modules.Tags.Module.Features.Tags.ListTags;
 
 public class Handler : IRequestHandler<ListTagsQuery, ListTagsResponse>
 {

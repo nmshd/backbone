@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Tags.Domain;
 
-namespace Backbone.Modules.Tags.Application;
+namespace Backbone.Modules.Tags.Module;
 
 [ContainsValidTags]
 public class ApplicationConfiguration

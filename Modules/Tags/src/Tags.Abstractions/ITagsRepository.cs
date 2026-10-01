@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Tags.Domain;
+using Backbone.Modules.Tags.Domain;
 
-namespace Backbone.Modules.Tags.Application.Infrastructure.Persistence.Repository;
+namespace Backbone.Modules.Tags.Abstractions;
 
 public interface ITagsRepository
 {

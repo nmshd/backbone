@@ -2194,11 +2194,9 @@
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Tags.Application": {
+      "Backbone.Modules.Tags.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tags.Domain": "[1.0.0, )"
         }
       },
@@ -2208,15 +2206,18 @@
       "Backbone.Modules.Tags.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.Modules.Tags.Application": "[1.0.0, )",
-          "Backbone.Modules.Tags.Domain": "[1.0.0, )"
+          "Backbone.Modules.Tags.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Tags.Domain": "[1.0.0, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, 10.0.10]",
+          "Microsoft.Extensions.Options": "[10.0.10, 10.0.10]"
         }
       },
       "Backbone.Modules.Tags.Module": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Tags.Application": "[1.0.0, )",
+          "Backbone.Modules.Tags.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tags.Infrastructure": "[1.0.0, )",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }

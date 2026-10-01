@@ -1,9 +1,9 @@
-﻿using Backbone.Modules.Tags.Application.Tags.Queries.ListTags;
+using Backbone.Modules.Tags.Module.Features.Tags.ListTags;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Tags.Application.Extensions;
+namespace Backbone.Modules.Tags.Module;
 
-public static class IServiceCollectionExtensions
+internal static class ApplicationServiceCollectionExtensions
 {
     public static void AddApplication(this IServiceCollection services)
     {

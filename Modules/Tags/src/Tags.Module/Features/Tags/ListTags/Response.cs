@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Backbone.Modules.Tags.Domain;
 
-namespace Backbone.Modules.Tags.Application.Tags.Queries.ListTags;
+namespace Backbone.Modules.Tags.Module.Features.Tags.ListTags;
 
 public class ListTagsResponse
 {

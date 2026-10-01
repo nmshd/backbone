@@ -144,7 +144,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TagsModule, Backbone.Modules.Tags.Module.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, Backbone.Modules.Tokens.Application.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
@@ -215,6 +215,7 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.UseMiddleware<MinimalApiExceptionMiddleware>();
 
     app.MapMessagesEndpoints();
+    app.MapTagsEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

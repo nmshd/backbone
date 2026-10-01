@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Modules.Tags.Application;
-using Backbone.Modules.Tags.Application.Extensions;
+using Backbone.Modules.Tags.Abstractions;
 using Backbone.Modules.Tags.Infrastructure;
 using Backbone.Modules.Tags.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tags.Module;
 
@@ -15,6 +15,11 @@ public class TagsModule : AbstractModule<ApplicationConfiguration, Infrastructur
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration _, IConfigurationSection __)
     {
+        services.AddTransient<IOptions<TagsRepositoryOptions>>(sp => Options.Create(new TagsRepositoryOptions
+        {
+            SupportedLanguages = sp.GetRequiredService<IOptions<ApplicationConfiguration>>().Value.SupportedLanguages,
+            TagsForAttributeValueTypes = sp.GetRequiredService<IOptions<ApplicationConfiguration>>().Value.TagsForAttributeValueTypes
+        }));
         services.AddApplication();
         services.AddPersistence();
     }

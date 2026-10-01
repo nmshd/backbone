@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tags.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Tags.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Tags.Infrastructure.Persistence.Repository;

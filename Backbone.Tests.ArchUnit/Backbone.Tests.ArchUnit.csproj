@@ -50,10 +50,11 @@
         <ProjectReference Include="..\Modules\Relationships\src\Relationships.Contracts\Relationships.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\src\Synchronization.Contracts\Synchronization.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Tags\src\Tags.Application\Tags.Application.csproj" />
+        <ProjectReference Include="..\Modules\Tags\src\Tags.Abstractions\Tags.Abstractions.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Domain\Tags.Domain.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Infrastructure\Tags.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Tags\src\Tags.Module\Tags.Module.csproj" />
+        <ProjectReference Include="..\Applications\ConsumerApi\src\ConsumerApi.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Contracts\Tokens.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj" />
