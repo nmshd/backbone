@@ -22,7 +22,8 @@ public static class Dependencies
             config.GetSection("AdminApi:Http").Bind(options)
         );
 
-        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
+        services.AddSingleton<CustomWebApplicationFactory>();
+        services.AddSingleton(sp => new HttpClientFactory(sp.GetRequiredService<CustomWebApplicationFactory>()));
 
         return services;
     }
