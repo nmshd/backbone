@@ -2,7 +2,9 @@
     "RunMigrations": false,
     "Infrastructure": {
         "EventBus": {
-            "ConnectionInfo": "localhost"
+            "RabbitMQ": {
+                "HostName": "localhost"
+            }
         }
     },
     "ModuleDefaults": {

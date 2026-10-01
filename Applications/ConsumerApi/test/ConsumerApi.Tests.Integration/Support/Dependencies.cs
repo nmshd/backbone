@@ -23,7 +23,8 @@ public static class Dependencies
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
-        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
+        services.AddSingleton<CustomWebApplicationFactory>();
+        services.AddSingleton(sp => new HttpClientFactory(sp.GetRequiredService<CustomWebApplicationFactory>()));
 
         // For some reason the DI container is not able to use the internal constructor of the ClientPool. Hence we have to create it manually
         services.AddScoped<ClientPool>(sp => new ClientPool(sp.GetRequiredService<HttpClientFactory>(), sp.GetRequiredService<IOptions<HttpConfiguration>>()));

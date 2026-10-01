@@ -1,7 +1,9 @@
 {
     "Infrastructure": {
         "EventBus": {
-            "ConnectionInfo": "localhost"
+            "RabbitMQ": {
+                "HostName": "localhost"
+            }
         },
         "SqlDatabase": {
             "Provider": "Postgres",
