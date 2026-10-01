@@ -25,9 +25,9 @@ internal static class ApplicationServiceCollectionExtensions
     private static IEnumerable<Type> GetDomainEventHandlers(Assembly assembly)
     {
         return from type in assembly.GetTypes()
-            from implementedInterface in type.GetInterfaces()
-            where type.IsClass && !type.IsAbstract && implementedInterface.IsGenericType &&
-                  implementedInterface.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
-            select type;
+               from implementedInterface in type.GetInterfaces()
+               where type.IsClass && !type.IsAbstract && implementedInterface.IsGenericType &&
+                     implementedInterface.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+               select type;
     }
 }

@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Abstractions.Persistence;
-using Backbone.Modules.Messages.Module.Features.Messages.Shared;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Module.Features.Messages.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
 
