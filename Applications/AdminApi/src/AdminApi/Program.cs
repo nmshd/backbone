@@ -140,10 +140,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 {
     webApplicationBuilder.Configuration.Sources.Clear();
     var env = webApplicationBuilder.Environment;
+    var additionalConfigurationFile = Environment.GetEnvironmentVariable("BACKBONE_ADDITIONAL_CONFIGURATION_FILE");
 
     webApplicationBuilder.Configuration
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
         .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: false);
+
+    if (!string.IsNullOrWhiteSpace(additionalConfigurationFile))
+        webApplicationBuilder.Configuration.AddJsonFile(additionalConfigurationFile, optional: false, reloadOnChange: false);
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
     webApplicationBuilder.Configuration.AddCommandLine(strings);
