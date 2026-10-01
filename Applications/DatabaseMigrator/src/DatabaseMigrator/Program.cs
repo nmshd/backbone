@@ -9,9 +9,9 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 
-Log.Logger = new LoggerConfiguration()
+using var startupLogger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 try
 {
@@ -25,12 +25,8 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Host terminated unexpectedly");
+    startupLogger.Fatal(ex, "Host terminated unexpectedly");
     return 1;
-}
-finally
-{
-    await Log.CloseAndFlushAsync();
 }
 
 

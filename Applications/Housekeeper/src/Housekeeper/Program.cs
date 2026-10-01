@@ -20,9 +20,9 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
 
-Log.Logger = new LoggerConfiguration()
+using var startupLogger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 using var host = CreateHostBuilder(args).Build();
 
@@ -36,7 +36,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "There was an error while executing the housekeeper.");
+    startupLogger.Fatal(ex, "There was an error while executing the housekeeper.");
     return 1;
 }
 finally

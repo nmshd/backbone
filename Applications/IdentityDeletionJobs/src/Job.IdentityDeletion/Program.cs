@@ -29,31 +29,28 @@ public class Program
 
     public static async Task<int> Main(params string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
+        using var startupLogger = new LoggerConfiguration()
             .WriteTo.Console()
-            .CreateBootstrapLogger();
+            .CreateLogger();
 
         try
         {
-            Log.Information("Creating app...");
+            startupLogger.Information("Creating app...");
 
-            var app = CreateHostBuilder(args);
+            var app = CreateHostBuilder(args).Build();
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-            Log.Information("App created.");
-            Log.Information("Starting app...");
+            logger.LogInformation("App created.");
+            logger.LogInformation("Starting app...");
 
-            await app.Build().RunAsync();
+            await app.RunAsync();
 
             return 0;
         }
         catch (Exception ex)
         {
-            Log.Fatal(ex, "Host terminated unexpectedly");
+            startupLogger.Fatal(ex, "Host terminated unexpectedly");
             return 1;
-        }
-        finally
-        {
-            await Log.CloseAndFlushAsync();
         }
     }
 

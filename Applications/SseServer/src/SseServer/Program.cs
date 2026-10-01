@@ -21,19 +21,19 @@ using Serilog.Settings.Configuration;
 using Configuration = Backbone.SseServer.Configuration;
 using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
-Log.Logger = new LoggerConfiguration()
+using var startupLogger = new LoggerConfiguration()
     .WriteTo.Console()
-    .CreateBootstrapLogger();
+    .CreateLogger();
 
 try
 {
-    Log.Information("Creating app...");
+    startupLogger.Information("Creating app...");
 
     var app = CreateApp(args);
 
-    Log.Information("App created.");
+    app.Logger.LogInformation("App created.");
 
-    Log.Information("Starting app...");
+    app.Logger.LogInformation("Starting app...");
 
     app.Run();
 
@@ -41,12 +41,8 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Host terminated unexpectedly");
+    startupLogger.Fatal(ex, "Host terminated unexpectedly");
     return 1;
-}
-finally
-{
-    Log.CloseAndFlush();
 }
 
 static WebApplication CreateApp(string[] args)
@@ -69,7 +65,7 @@ static WebApplication CreateApp(string[] args)
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
                     .WithDestructurers([new DbUpdateExceptionDestructurer()])),
-            writeToProviders: true
+            preserveStaticLogger: true, writeToProviders: true
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
