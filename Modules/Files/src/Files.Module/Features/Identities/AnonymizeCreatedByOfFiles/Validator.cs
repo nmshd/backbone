@@ -1,0 +1,13 @@
+﻿using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using FluentValidation;
+
+namespace Backbone.Modules.Files.Module.Features.Identities.AnonymizeCreatedByOfFiles;
+
+public class Validator : AbstractValidator<AnonymizeCreatedByOfFilesCommand>
+{
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).ValidId<AnonymizeCreatedByOfFilesCommand, IdentityAddress>();
+    }
+}

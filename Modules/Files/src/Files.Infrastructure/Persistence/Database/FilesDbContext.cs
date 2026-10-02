@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.Modules.Files.Abstractions;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
-public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
+public class FilesDbContext : AbstractDbContextBase
 {
     public FilesDbContext()
     {

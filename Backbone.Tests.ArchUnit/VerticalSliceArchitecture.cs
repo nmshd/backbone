@@ -11,7 +11,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens"];
+    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files"];
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -43,6 +43,7 @@ public class VerticalSliceArchitecture
     [InlineData("Challenges")]
     [InlineData("Announcements")]
     [InlineData("Tokens")]
+    [InlineData("Files")]
     public void UseCasesShouldResideInTheirModule(string module)
     {
         var useCases = Classes().That().AreAssignableTo(typeof(IBaseRequest))
@@ -62,12 +63,17 @@ public class VerticalSliceArchitecture
     [InlineData("Challenges")]
     [InlineData("Announcements")]
     [InlineData("Tokens")]
+    [InlineData("Files")]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
             .ResideInAssemblyMatching(@"^Backbone\.Modules\.[^.]+\.Infrastructure[^,]*(,|$)")
             .Check(Backbone.ARCHITECTURE);
-        Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat().ResideInNamespaceMatching(@"Microsoft\.AspNetCore\..*")
+        // Form DTO validators belong to the HTTP adapter; command/query validators remain independent.
+        var httpValidators = Classes().That().ResideInNamespaceMatching(@".*\.Http(\.|$)")
+            .And().AreAssignableTo(typeof(IValidator));
+        Classes().That().Are(UseCases(module)).And().AreNot(httpValidators)
+            .Should().NotDependOnAnyTypesThat().ResideInNamespaceMatching(@"Microsoft\.AspNetCore\..*")
             .Check(Backbone.ARCHITECTURE);
     }
 
@@ -77,6 +83,7 @@ public class VerticalSliceArchitecture
     [InlineData("Challenges")]
     [InlineData("Announcements")]
     [InlineData("Tokens")]
+    [InlineData("Files")]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))

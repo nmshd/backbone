@@ -46,7 +46,7 @@ COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Mod
 COPY ["Modules/Devices/src/Devices.Module/Devices.Module.csproj", "Modules/Devices/src/Devices.Module/packages.lock.json*", "Modules/Devices/src/Devices.Module/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/"]
-COPY ["Modules/Files/src/Files.Application/Files.Application.csproj", "Modules/Files/src/Files.Application/packages.lock.json*", "Modules/Files/src/Files.Application/"]
+COPY ["Modules/Files/src/Files.Abstractions/Files.Abstractions.csproj", "Modules/Files/src/Files.Abstractions/packages.lock.json*", "Modules/Files/src/Files.Abstractions/"]
 COPY ["Modules/Files/src/Files.Domain/Files.Domain.csproj", "Modules/Files/src/Files.Domain/packages.lock.json*", "Modules/Files/src/Files.Domain/"]
 COPY ["Modules/Files/src/Files.Module/Files.Module.csproj", "Modules/Files/src/Files.Module/packages.lock.json*", "Modules/Files/src/Files.Module/"]
 COPY ["Modules/Files/src/Files.Infrastructure.Database.Postgres/Files.Infrastructure.Database.Postgres.csproj", "Modules/Files/src/Files.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Files/src/Files.Infrastructure.Database.Postgres/"]

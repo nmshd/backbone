@@ -1710,13 +1710,11 @@
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Files.Application": {
+      "Backbone.Modules.Files.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Files.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Files.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Files.Contracts": {
@@ -1736,9 +1734,9 @@
       "Backbone.Modules.Files.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
+          "Backbone.Modules.Files.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Files.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",

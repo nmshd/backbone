@@ -33,7 +33,8 @@
         <ProjectReference Include="..\Modules\Devices\src\Devices.Contracts\Devices.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Files\test\Files.Application.Tests\Files.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Files\src\Files.Abstractions\Files.Abstractions.csproj" />
+        <ProjectReference Include="..\Modules\Files\test\Files.Module.Tests\Files.Module.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\src\Files.Contracts\Files.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Domain.Tests\Files.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj" />

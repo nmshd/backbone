@@ -143,7 +143,7 @@
   </Folder>
   <Folder Name="/Modules/Files/" />
   <Folder Name="/Modules/Files/src/">
-    <Project Path="Modules/Files/src/Files.Application/Files.Application.csproj" />
+    <Project Path="Modules/Files/src/Files.Abstractions/Files.Abstractions.csproj" />
     <Project Path="Modules/Files/src/Files.Contracts/Files.Contracts.csproj" />
     <Project Path="Modules/Files/src/Files.Domain/Files.Domain.csproj" />
     <Project Path="Modules/Files/src/Files.Infrastructure.Database.Postgres/Files.Infrastructure.Database.Postgres.csproj" />
@@ -152,7 +152,7 @@
     <Project Path="Modules/Files/src/Files.Module/Files.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Files/test/">
-    <Project Path="Modules/Files/test/Files.Application.Tests/Files.Application.Tests.csproj" />
+    <Project Path="Modules/Files/test/Files.Module.Tests/Files.Module.Tests.csproj" />
     <Project Path="Modules/Files/test/Files.Domain.Tests/Files.Domain.Tests.csproj" />
     <Project Path="Modules/Files/test/Files.Infrastructure.Tests/Files.Infrastructure.Tests.csproj" />
   </Folder>
