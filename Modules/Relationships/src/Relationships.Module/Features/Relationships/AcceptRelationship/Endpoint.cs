@@ -1,0 +1,27 @@
+using Backbone.BuildingBlocks.API.MinimalApi;
+using Backbone.BuildingBlocks.API;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+
+namespace Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationship;
+
+internal static class Endpoint
+{
+    public static RouteGroupBuilder MapAcceptRelationshipEndpoint(this RouteGroupBuilder group)
+    {
+        group.MapPut("{id}/Accept", Handle)
+            .Produces<HttpResponseEnvelopeResult<AcceptRelationshipResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
+            .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
+        return group;
+    }
+
+    private static async Task<IResult> Handle([FromRoute] string id, [FromBody] AcceptRelationshipRequest request, IMediator mediator, CancellationToken cancellationToken)
+    {
+        var response = await mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        return EnvelopeHttpResults.Ok(response);
+    }
+}

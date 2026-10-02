@@ -3,8 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Backbone.Tooling.Extensions;

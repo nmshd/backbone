@@ -27,6 +27,7 @@ internal static class ApplicationServiceCollectionExtensions
         );
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
         services.AddScoped<ChallengeValidator>();
+        services.AddScoped<Backbone.Modules.Devices.Contracts.IIdentityStatusProvider, Backbone.Modules.Devices.Module.Features.Identities.GetIdentity.IdentityStatusProvider>();
 
         AddEventHandlers(services);
     }

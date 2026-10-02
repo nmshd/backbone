@@ -12,7 +12,7 @@ public static class ServicesExtensions
         services.AddTransient<IIdentityDeleter, Modules.Files.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Messages.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Quotas.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
-        services.AddTransient<IIdentityDeleter, Modules.Relationships.Application.Identities.IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Relationships.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Synchronization.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Tokens.Module.Features.Identities.DeleteIdentity.IdentityDeleter>();
 

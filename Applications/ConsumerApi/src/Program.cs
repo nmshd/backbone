@@ -139,7 +139,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<MessagesModule, Backbone.Modules.Messages.Module.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
-        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
@@ -221,6 +221,7 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.MapFilesEndpoints();
     app.MapQuotasEndpoints();
     app.MapDevicesEndpoints();
+    app.MapRelationshipsEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

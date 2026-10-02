@@ -188,7 +188,7 @@
   </Folder>
   <Folder Name="/Modules/Relationships/" />
   <Folder Name="/Modules/Relationships/src/">
-    <Project Path="Modules/Relationships/src/Relationships.Application/Relationships.Application.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Abstractions/Relationships.Abstractions.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Common/Relationships.Common.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Contracts/Relationships.Contracts.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Domain/Relationships.Domain.csproj" />
@@ -198,7 +198,7 @@
     <Project Path="Modules/Relationships/src/Relationships.Module/Relationships.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Relationships/test/">
-    <Project Path="Modules/Relationships/test/Relationships.Application.Tests/Relationships.Application.Tests.csproj" />
+    <Project Path="Modules/Relationships/test/Relationships.Module.Tests/Relationships.Module.Tests.csproj" />
     <Project Path="Modules/Relationships/test/Relationships.Domain.Tests/Relationships.Domain.Tests.csproj" />
     <Project Path="Modules/Relationships/test/Relationships.Infrastructure.Tests/Relationships.Infrastructure.Tests.csproj" />
   </Folder>

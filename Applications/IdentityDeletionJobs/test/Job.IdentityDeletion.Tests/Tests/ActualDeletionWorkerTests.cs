@@ -8,7 +8,7 @@ using Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationshipsOfIdentity;
+using Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;

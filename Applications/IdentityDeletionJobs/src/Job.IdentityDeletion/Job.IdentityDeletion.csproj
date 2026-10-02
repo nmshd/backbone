@@ -25,7 +25,6 @@
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Module\Files.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Module\Quotas.Module.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Application\Relationships.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Module\Relationships.Module.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Application\Synchronization.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Synchronization\src\Synchronization.Module\Synchronization.Module.csproj" />

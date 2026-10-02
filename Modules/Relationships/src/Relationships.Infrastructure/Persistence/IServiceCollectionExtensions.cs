@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 using Microsoft.Extensions.DependencyInjection;

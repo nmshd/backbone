@@ -89,7 +89,7 @@ public class Program
                     .AddModule<FilesModule, Modules.Files.Module.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<MessagesModule, Modules.Messages.Module.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<QuotasModule, Modules.Quotas.Module.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration,
+                    .AddModule<RelationshipsModule, Modules.Relationships.Module.ApplicationConfiguration,
                         Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
                         Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)

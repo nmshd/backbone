@@ -1,5 +1,5 @@
 using System.Text;
-using Backbone.Modules.Relationships.Application.Infrastructure;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer;

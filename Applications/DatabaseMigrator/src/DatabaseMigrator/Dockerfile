@@ -74,7 +74,7 @@ COPY ["Modules/Quotas/src/Quotas.Infrastructure.Database.SqlServer/Quotas.Infras
 COPY ["Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/Quotas.Infrastructure.Database.Postgres.csproj", "Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/"]
 
 COPY ["Modules/Relationships/src/Relationships.Infrastructure/Relationships.Infrastructure.csproj", "Modules/Relationships/src/Relationships.Infrastructure/packages.lock.json*", "Modules/Relationships/src/Relationships.Infrastructure/"]
-COPY ["Modules/Relationships/src/Relationships.Application/Relationships.Application.csproj", "Modules/Relationships/src/Relationships.Application/packages.lock.json*", "Modules/Relationships/src/Relationships.Application/"]
+COPY ["Modules/Relationships/src/Relationships.Abstractions/Relationships.Abstractions.csproj", "Modules/Relationships/src/Relationships.Abstractions/packages.lock.json*", "Modules/Relationships/src/Relationships.Abstractions/"]
 COPY ["Modules/Relationships/src/Relationships.Common/Relationships.Common.csproj", "Modules/Relationships/src/Relationships.Common/packages.lock.json*", "Modules/Relationships/src/Relationships.Common/"]
 COPY ["Modules/Relationships/src/Relationships.Domain/Relationships.Domain.csproj", "Modules/Relationships/src/Relationships.Domain/packages.lock.json*", "Modules/Relationships/src/Relationships.Domain/"]
 COPY ["Modules/Relationships/src/Relationships.Infrastructure.Database.SqlServer/Relationships.Infrastructure.Database.SqlServer.csproj", "Modules/Relationships/src/Relationships.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Relationships/src/Relationships.Infrastructure.Database.SqlServer/"]
