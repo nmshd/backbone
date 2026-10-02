@@ -5,7 +5,6 @@ using Asp.Versioning;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
-using Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
@@ -27,8 +26,6 @@ public static class IServiceCollectionExtensions
             .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));
-
-                    options.ModelBinderProviders.Insert(0, new GenericArrayModelBinderProvider());
                 }
             )
             .ConfigureApiBehaviorOptions(options =>

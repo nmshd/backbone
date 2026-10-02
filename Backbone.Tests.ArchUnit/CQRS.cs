@@ -31,18 +31,18 @@ public class Cqrs
     }
 
     [Fact]
-    public void CommandsShouldResideInCommandsNamespace()
+    public void CommandsShouldResideInFeaturesNamespace()
     {
         Classes().That().Are(COMMANDS)
-            .Should().ResideInNamespaceMatching(".+(\\.Commands\\.|\\.Features\\.)")
+            .Should().ResideInNamespaceMatching(@"^Backbone\.Modules\.[^.]+\.Module\.Features\..*")
             .Check(Backbone.ARCHITECTURE);
     }
 
     [Fact]
-    public void QueriesShouldResideInQueriesNamespace()
+    public void QueriesShouldResideInFeaturesNamespace()
     {
         Classes().That().Are(QUERIES)
-            .Should().ResideInNamespaceMatching(".+(\\.Queries\\.|\\.Features\\.)")
+            .Should().ResideInNamespaceMatching(@"^Backbone\.Modules\.[^.]+\.Module\.Features\..*")
             .Check(Backbone.ARCHITECTURE);
     }
 }

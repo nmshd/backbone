@@ -12,7 +12,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files", "Quotas", "Devices", "Relationships", "Synchronization"];
+    public static TheoryData<string> ModuleNames => new(GetModuleNames());
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -39,16 +39,7 @@ public class VerticalSliceArchitecture
     }
 
     [Theory]
-    [InlineData("Messages")]
-    [InlineData("Tags")]
-    [InlineData("Challenges")]
-    [InlineData("Announcements")]
-    [InlineData("Tokens")]
-    [InlineData("Files")]
-    [InlineData("Quotas")]
-    [InlineData("Devices")]
-    [InlineData("Relationships")]
-    [InlineData("Synchronization")]
+    [MemberData(nameof(ModuleNames))]
     public void UseCasesShouldResideInTheirModule(string module)
     {
         var useCases = Classes().That().AreAssignableTo(typeof(IBaseRequest))
@@ -64,16 +55,7 @@ public class VerticalSliceArchitecture
     }
 
     [Theory]
-    [InlineData("Messages")]
-    [InlineData("Tags")]
-    [InlineData("Challenges")]
-    [InlineData("Announcements")]
-    [InlineData("Tokens")]
-    [InlineData("Files")]
-    [InlineData("Quotas")]
-    [InlineData("Devices")]
-    [InlineData("Relationships")]
-    [InlineData("Synchronization")]
+    [MemberData(nameof(ModuleNames))]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
@@ -88,16 +70,7 @@ public class VerticalSliceArchitecture
     }
 
     [Theory]
-    [InlineData("Messages")]
-    [InlineData("Tags")]
-    [InlineData("Challenges")]
-    [InlineData("Announcements")]
-    [InlineData("Tokens")]
-    [InlineData("Files")]
-    [InlineData("Quotas")]
-    [InlineData("Devices")]
-    [InlineData("Relationships")]
-    [InlineData("Synchronization")]
+    [MemberData(nameof(ModuleNames))]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))
@@ -113,30 +86,33 @@ public class VerticalSliceArchitecture
     }
 
     [Fact]
-    public void RemovedApplicationAssembliesShouldNotBeReferencedOrPresent()
+    public void ModulesShouldNotHaveApplicationAssemblies()
     {
         foreach (var assembly in SolutionAssemblies())
         {
-            foreach (var module in MIGRATED_MODULES)
-            {
-                var removed = $"Backbone.Modules.{module}.Application";
-                assembly.GetName().Name.ShouldNotBe(removed);
-                assembly.GetReferencedAssemblies().Select(reference => reference.Name).ShouldNotContain(removed);
-            }
+            var names = assembly.GetReferencedAssemblies().Select(reference => reference.Name).Append(assembly.GetName().Name);
+            names.ShouldNotContain(name => name != null && name.StartsWith("Backbone.Modules.", StringComparison.Ordinal) &&
+                (name.EndsWith(".Application", StringComparison.Ordinal) || name.EndsWith(".Application.Tests", StringComparison.Ordinal)));
         }
     }
 
     [Fact]
-    public void ConsumerApiShouldReferenceMigratedModules()
+    public void ConsumerApiShouldReferenceModules()
     {
         var consumerApi = SolutionAssemblies().Single(assembly => assembly.GetName().Name == "Backbone.ConsumerApi");
-        foreach (var module in MIGRATED_MODULES)
+        foreach (var module in GetModuleNames())
             consumerApi.GetReferencedAssemblies().Select(reference => reference.Name).ShouldContain($"Backbone.Modules.{module}.Module");
     }
 
     private static IObjectProvider<IType> UseCases(string module) =>
         Classes().That().ResideInNamespaceMatching($@"^Backbone\.Modules\.{module}\.Module\.Features\..*")
             .And().HaveNameMatching(".*(Command|Query|Handler|Validator|Response)$");
+
+    private static IEnumerable<string> GetModuleNames() => SolutionAssemblies()
+        .Select(assembly => assembly.GetName().Name!)
+        .Where(name => name.StartsWith("Backbone.Modules.", StringComparison.Ordinal) && name.EndsWith(".Module", StringComparison.Ordinal))
+        .Select(name => name.Split('.')[2])
+        .Order();
 
     private static IEnumerable<Assembly> SolutionAssemblies() => Directory.GetFiles(AppContext.BaseDirectory, "Backbone.*.dll")
         .Select(path => Assembly.Load(AssemblyName.GetAssemblyName(path)));

@@ -1,8 +1,10 @@
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Modules.Announcements.Infrastructure;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
+using Backbone.Modules.Announcements.Infrastructure;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +16,13 @@ public class AnnouncementsModule : AbstractModule<ApplicationConfiguration, Infr
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
-        services.AddApplication();
+        services.AddMediatR(c => c
+            .RegisterServicesFromAssembly(typeof(AnnouncementsModule).Assembly)
+            .AddOpenBehavior(typeof(LoggingBehavior<,>))
+            .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
+            .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+        );
+        services.AddValidatorsFromAssembly(typeof(AnnouncementsModule).Assembly);
 
         services.AddDatabase(infrastructureConfiguration.SqlDatabase);
 

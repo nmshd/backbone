@@ -17,11 +17,6 @@ public class CleanArchitecture
             .ResideInAssemblyMatching("Backbone.Modules.*.Contracts")
             .As("Contract Assemblies");
 
-    private static readonly IObjectProvider<IType> CONSUMER_API_ASSEMBLIES =
-        Types().That()
-            .ResideInAssemblyMatching("Backbone.Modules.*.ConsumerApi")
-            .As("ConsumerApi Assemblies");
-
     [Theory]
     [ClassData(typeof(Modules))]
     public void ModulesShouldNotDependOnOtherModules(IObjectProvider<IType> module)
@@ -35,7 +30,6 @@ public class CleanArchitecture
         Types()
             .That().Are(module)
             .And().AreNot(Backbone.TEST_TYPES)
-            .And().AreNot(CONSUMER_API_ASSEMBLIES)
             .Should().NotDependOnAny(otherModules)
             .Because("modules should be self-contained.")
             .Check(Backbone.ARCHITECTURE);
