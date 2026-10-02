@@ -8,7 +8,7 @@ using Backbone.UnitTestTools.Extensions;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using MediatR;
 
-namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
+namespace Backbone.BuildingBlocks.Application.Tests.MediatR;
 
 public class QuotaEnforcerBehaviorTests : AbstractTestsBase
 {
