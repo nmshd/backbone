@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.TerminateRelationship;
 
-public class Validator : AbstractValidator<TerminateRelationshipCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.RelationshipId).ValidId<TerminateRelationshipCommand, RelationshipId>();
+        RuleFor(x => x.RelationshipId).ValidId<Command, RelationshipId>();
     }
 }
 

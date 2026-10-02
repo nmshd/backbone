@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.IsIdentityOfUserDeleted;
 
-public class IsIdentityOfUserDeletedQuery : IRequest<IsIdentityOfUserDeletedResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("IsIdentityOfUserDeletedQuery")]
+public class Query : IRequest<Response>
 {
     public required string Username { get; init; }
 }

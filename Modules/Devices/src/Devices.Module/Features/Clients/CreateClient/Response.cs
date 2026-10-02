@@ -2,9 +2,10 @@ using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
 
-public class CreateClientResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateClientResponse")]
+public class Response
 {
-    public CreateClientResponse(OAuthClient client, string clientSecret)
+    public Response(OAuthClient client, string clientSecret)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;

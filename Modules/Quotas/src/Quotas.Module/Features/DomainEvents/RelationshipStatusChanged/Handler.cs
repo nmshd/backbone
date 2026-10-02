@@ -6,11 +6,11 @@ using Backbone.Modules.Relationships.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.RelationshipStatusChanged;
 
-public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<RelationshipStatusChangedDomainEvent>
+public class Handler : IDomainEventHandler<RelationshipStatusChangedDomainEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public RelationshipStatusChangedDomainEventHandler(IMetricStatusesService metricStatusesService)
+    public Handler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

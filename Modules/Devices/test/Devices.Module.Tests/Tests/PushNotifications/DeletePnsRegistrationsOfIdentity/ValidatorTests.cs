@@ -1,3 +1,4 @@
+using DeletePnsRegistrationsOfIdentitySlice = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() });
+        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,9 +27,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = "some-invalid-address" });
+        var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentitySlice.Command { IdentityAddress = "some-invalid-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(DeletePnsRegistrationsOfIdentityCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeletePnsRegistrationsOfIdentitySlice.Command.IdentityAddress));
     }
 }

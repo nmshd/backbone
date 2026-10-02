@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
 
-public class DeleteClientCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteClientCommand")]
+public class Command : IRequest
 {
     public required string ClientId { get; init; }
 }

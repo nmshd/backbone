@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
 
-public class Handler : IRequestHandler<DeleteClientCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly ILogger<Handler> _logger;
@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<DeleteClientCommand>
         _logger = logger;
     }
 
-    public async Task Handle(DeleteClientCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Deleting client with id: '{clientId}'.", request.ClientId);
 

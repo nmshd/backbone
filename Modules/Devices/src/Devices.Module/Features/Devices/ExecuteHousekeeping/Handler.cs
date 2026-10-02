@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping;
 
-public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await DeleteDeletionProcesses(cancellationToken);
         await DeleteDeletionProcessAuditLogEntries(cancellationToken);

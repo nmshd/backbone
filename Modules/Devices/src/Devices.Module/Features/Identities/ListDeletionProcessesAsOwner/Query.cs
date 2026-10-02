@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsOwner;
 
-public class ListDeletionProcessesAsOwnerQuery : IRequest<ListDeletionProcessesAsOwnerResponse>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListDeletionProcessesAsOwnerQuery")]
+public class Query : IRequest<Response>;

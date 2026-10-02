@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.UpdateActiveDevice;
 
-public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly DeviceId _activeDevice;
     private readonly ILogger<Handler> _logger;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var currentDevice = await _identitiesRepository.Get(_activeDevice, cancellationToken, track: true) ?? throw new Exception("Active device could not be found.");
 

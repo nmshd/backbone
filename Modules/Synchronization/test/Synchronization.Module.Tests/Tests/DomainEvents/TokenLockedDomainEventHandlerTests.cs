@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.TokenLocked;
+﻿using TokenLocked = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.TokenLocked;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Tokens.Contracts.DomainEvents;
@@ -14,7 +14,7 @@ public class TokenLockedDomainEventHandlerTests : AbstractTestsBase
         // Arrange
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
         var identityAddress = CreateRandomIdentityAddress();
-        var handler = new TokenLockedDomainEventHandler(fakeDbContext);
+        var handler = new TokenLocked.Handler(fakeDbContext);
         var domainEvent = new TokenLockedDomainEvent { TokenId = "TOK00000000000000001", CreatedBy = identityAddress };
 
         // Act

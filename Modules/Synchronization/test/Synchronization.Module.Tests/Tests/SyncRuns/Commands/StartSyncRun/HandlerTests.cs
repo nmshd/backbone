@@ -1,3 +1,4 @@
+using StartSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -54,7 +55,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert
@@ -76,10 +77,10 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION },
+        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION },
             CancellationToken.None);
 
-        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION },
+        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION },
             CancellationToken.None);
 
         var handleWithDelayedSave = () => taskWithDelayedSave;
@@ -107,7 +108,7 @@ public class HandlerTests : AbstractTestsBase
 
         // Act
         var acting = async () =>
-            await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+            await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert
@@ -128,7 +129,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert
@@ -145,7 +146,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert
@@ -167,7 +168,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = 1 }, CancellationToken.None);
 
 
         // Assert
@@ -187,7 +188,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert
@@ -218,7 +219,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.ExternalEventSync, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
 
         // Assert

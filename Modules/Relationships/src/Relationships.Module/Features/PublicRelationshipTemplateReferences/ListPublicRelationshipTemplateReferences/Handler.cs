@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 namespace Backbone.Modules.Relationships.Module.Features.PublicRelationshipTemplateReferences.ListPublicRelationshipTemplateReferences;
 
 public class Handler(IUserContext userContext, IConfiguration configuration)
-    : IRequestHandler<ListPublicRelationshipTemplateReferencesQuery, IEnumerable<PublicRelationshipTemplateReferenceDefinition>>
+    : IRequestHandler<Query, IEnumerable<PublicRelationshipTemplateReferenceDefinition>>
 {
-    public Task<IEnumerable<PublicRelationshipTemplateReferenceDefinition>> Handle(ListPublicRelationshipTemplateReferencesQuery request, CancellationToken cancellationToken)
+    public Task<IEnumerable<PublicRelationshipTemplateReferenceDefinition>> Handle(Query request, CancellationToken cancellationToken)
     {
         var definitions = new Dictionary<string, IEnumerable<PublicRelationshipTemplateReferenceDefinition>>();
         configuration.GetSection("Modules:Relationships:PublicRelationshipTemplateReferences").Bind(definitions);

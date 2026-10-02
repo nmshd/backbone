@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
 
-public class GetFileMetadataQuery : IRequest<FileMetadataDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetFileMetadataQuery")]
+public class Query : IRequest<FileMetadataDTO>
 {
     public required string Id { get; init; }
 }

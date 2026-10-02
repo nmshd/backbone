@@ -1,3 +1,4 @@
+using RefreshExpirationTimeOfSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -24,7 +25,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
+        var acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunSlice.Command { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -44,7 +45,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
+        var acting = async () => await handler.Handle(new RefreshExpirationTimeOfSyncRunSlice.Command { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -67,7 +68,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunSlice.Command { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert
@@ -90,7 +91,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
 
         // Act
-        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunCommand { SyncRunId = syncRun.Id }, CancellationToken.None);
+        var response = await handler.Handle(new RefreshExpirationTimeOfSyncRunSlice.Command { SyncRunId = syncRun.Id }, CancellationToken.None);
 
 
         // Assert

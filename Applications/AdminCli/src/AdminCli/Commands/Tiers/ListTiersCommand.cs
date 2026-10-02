@@ -1,8 +1,8 @@
+using ListTiers = Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 using MediatR;
 
 namespace Backbone.AdminCli.Commands.Tiers;
@@ -16,7 +16,7 @@ public class ListTiersCommand : AdminCliCommand
 
     private async Task ListTiers()
     {
-        var response = await _mediator.Send(new ListTiersQuery { PaginationFilter = new PaginationFilter() }, CancellationToken.None);
+        var response = await _mediator.Send(new ListTiers.Query { PaginationFilter = new PaginationFilter() }, CancellationToken.None);
 
         Console.WriteLine(@"The following tiers are configured:");
 

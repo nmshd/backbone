@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.UpdateTokenContent;
 
-public class UpdateTokenContentCommand : IRequest<UpdateTokenContentResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateTokenContentCommand")]
+public class Command : IRequest<Response>
 {
     public required string TokenId { get; init; }
     public required byte[] NewContent { get; init; }

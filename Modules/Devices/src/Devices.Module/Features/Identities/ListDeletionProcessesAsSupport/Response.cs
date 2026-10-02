@@ -4,9 +4,10 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsSupport;
 
-public class GetDeletionProcessesAsSupportResponse : CollectionResponseBase<IdentityDeletionProcessOverviewDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetDeletionProcessesAsSupportResponse")]
+public class Response : CollectionResponseBase<IdentityDeletionProcessOverviewDTO>
 {
-    public GetDeletionProcessesAsSupportResponse(IEnumerable<IdentityDeletionProcess> processes)
+    public Response(IEnumerable<IdentityDeletionProcess> processes)
         : base(processes.Select(p => new IdentityDeletionProcessOverviewDTO(p)).OrderByDescending(p => p.CreatedAt))
     {
     }

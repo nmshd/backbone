@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
 
-public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
@@ -16,9 +16,9 @@ public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataRe
         _userContext = userContext;
     }
 
-    public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _filesRepository.ListFilesByCreator(request.Ids.Select(FileId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
-        return new ListFileMetadataResponse(dbPaginationResult, request.PaginationFilter);
+        return new Response(dbPaginationResult, request.PaginationFilter);
     }
 }

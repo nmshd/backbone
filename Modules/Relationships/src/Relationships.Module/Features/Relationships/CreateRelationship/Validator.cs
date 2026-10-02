@@ -7,11 +7,11 @@ using FluentValidation;
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.CreateRelationship;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<CreateRelationshipCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(c => c.RelationshipTemplateId).ValidId<CreateRelationshipCommand, RelationshipTemplateId>();
+        RuleFor(c => c.RelationshipTemplateId).ValidId<Command, RelationshipTemplateId>();
         RuleFor(c => c.CreationContent).NumberOfBytes(0, 10.Mebibytes());
     }
 }

@@ -1,3 +1,4 @@
+using DeleteChallengesOfIdentitySlice = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() });
+        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,9 +27,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand { IdentityAddress = "invalid-identity-address" });
+        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentitySlice.Command { IdentityAddress = "invalid-identity-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteChallengesOfIdentityCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteChallengesOfIdentitySlice.Command.IdentityAddress));
     }
 }

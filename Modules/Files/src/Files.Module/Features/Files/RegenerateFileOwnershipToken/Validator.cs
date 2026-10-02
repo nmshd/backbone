@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.RegenerateFileOwnershipToken;
 
-public class Validator : AbstractValidator<RegenerateFileOwnershipTokenCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.FileId).ValidId<RegenerateFileOwnershipTokenCommand, FileId>();
+        RuleFor(x => x.FileId).ValidId<Command, FileId>();
     }
 }

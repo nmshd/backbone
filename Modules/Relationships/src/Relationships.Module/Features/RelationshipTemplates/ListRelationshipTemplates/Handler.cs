@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 
-public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
@@ -15,11 +15,11 @@ public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelat
         _userContext = userContext;
     }
 
-    public async Task<ListRelationshipTemplatesResponse> Handle(ListRelationshipTemplatesQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _relationshipTemplatesRepository.ListWithContent(request.Ids, _userContext.GetAddress(), request.PaginationFilter,
             cancellationToken, track: false);
 
-        return new ListRelationshipTemplatesResponse(dbPaginationResult, request.PaginationFilter);
+        return new Response(dbPaginationResult, request.PaginationFilter);
     }
 }

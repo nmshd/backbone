@@ -26,7 +26,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle(string id, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new GetChallengeByIdQuery { Id = id }, cancellationToken);
+        var response = await mediator.Send(new Query { Id = id }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

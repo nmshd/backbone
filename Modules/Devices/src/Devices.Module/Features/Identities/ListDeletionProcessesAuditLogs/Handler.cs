@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 
-public class Handler : IRequestHandler<ListDeletionProcessesAuditLogsQuery, ListDeletionProcessesAuditLogsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identityRepository;
 
@@ -13,12 +13,12 @@ public class Handler : IRequestHandler<ListDeletionProcessesAuditLogsQuery, List
         _identityRepository = identityRepository;
     }
 
-    public async Task<ListDeletionProcessesAuditLogsResponse> Handle(ListDeletionProcessesAuditLogsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var addressHash = Hasher.HashUtf8(request.IdentityAddress);
 
         var identityDeletionProcessAuditLogEntries = await _identityRepository.ListIdentityDeletionProcessAuditLogs(l => l.IdentityAddressHash == addressHash, cancellationToken);
 
-        return new ListDeletionProcessesAuditLogsResponse(identityDeletionProcessAuditLogEntries.OrderBy(e => e.CreatedAt));
+        return new Response(identityDeletionProcessAuditLogEntries.OrderBy(e => e.CreatedAt));
     }
 }

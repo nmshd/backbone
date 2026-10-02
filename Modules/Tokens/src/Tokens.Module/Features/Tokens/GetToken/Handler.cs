@@ -8,7 +8,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.GetToken;
 
-public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
+public class Handler : IRequestHandler<Query, TokenDTO>
 {
     private readonly ITokensRepository _tokensRepository;
     private readonly IUserContext _userContext;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
         _userContext = userContext;
     }
 
-    public async Task<TokenDTO> Handle(GetTokenQuery request, CancellationToken cancellationToken)
+    public async Task<TokenDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var token = await GetToken(request.Id, request.Password, cancellationToken);
         return new TokenDTO(token);

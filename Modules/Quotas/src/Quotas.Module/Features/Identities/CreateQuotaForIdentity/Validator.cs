@@ -6,11 +6,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
 
-public class Validator : AbstractValidator<CreateQuotaForIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(c => c.IdentityAddress).ValidId<CreateQuotaForIdentityCommand, IdentityAddress>();
+        RuleFor(c => c.IdentityAddress).ValidId<Command, IdentityAddress>();
         RuleFor(c => c.Max)
             .GreaterThan(0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
         RuleFor(c => c.Period)

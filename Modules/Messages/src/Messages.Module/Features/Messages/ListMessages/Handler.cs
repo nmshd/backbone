@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.ListMessages;
 
-public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly IUserContext _userContext;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
         _configuration = options.Value;
     }
 
-    public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var result = await _messagesRepository.ListMessagesWithContent(request.Ids.Select(MessageId.Parse), _userContext.GetAddress(),
             request.PaginationFilter, cancellationToken, track: true);
@@ -29,6 +29,6 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
             message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress())?.FetchedMessage(_userContext.GetDeviceId());
 
         await _messagesRepository.Update(result.ItemsOnPage);
-        return new ListMessagesResponse(result, request.PaginationFilter, _userContext.GetAddress(), _configuration.DidDomainName);
+        return new Response(result, request.PaginationFilter, _userContext.GetAddress(), _configuration.DidDomainName);
     }
 }

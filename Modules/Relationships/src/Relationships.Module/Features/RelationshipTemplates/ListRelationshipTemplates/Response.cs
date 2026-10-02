@@ -5,9 +5,10 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 
-public class ListRelationshipTemplatesResponse : PagedResponse<RelationshipTemplateDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListRelationshipTemplatesResponse")]
+public class Response : PagedResponse<RelationshipTemplateDTO>
 {
-    public ListRelationshipTemplatesResponse(DbPaginationResult<RelationshipTemplate> dbPaginationResult, PaginationFilter previousPaginationFilter) : base(
+    public Response(DbPaginationResult<RelationshipTemplate> dbPaginationResult, PaginationFilter previousPaginationFilter) : base(
         dbPaginationResult.ItemsOnPage.Select(x => new RelationshipTemplateDTO(x)), previousPaginationFilter, dbPaginationResult.TotalNumberOfItems)
     {
     }

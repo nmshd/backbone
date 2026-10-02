@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 
-public class Handler : IRequestHandler<ListModificationsQuery, ListModificationsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<ListModificationsQuery, ListModifications
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ListModificationsResponse> Handle(ListModificationsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var supportedDatawalletVersion = new Datawallet.DatawalletVersion(request.SupportedDatawalletVersion);
 
@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<ListModificationsQuery, ListModifications
 
         var dbPaginationResult = await _dbContext.GetDatawalletModifications(_activeIdentity, request.LocalIndex, request.PaginationFilter, cancellationToken);
 
-        return new ListModificationsResponse(dbPaginationResult.ItemsOnPage.Select(modification => new DatawalletModificationDTO(modification)), request.PaginationFilter,
+        return new Response(dbPaginationResult.ItemsOnPage.Select(modification => new DatawalletModificationDTO(modification)), request.PaginationFilter,
             dbPaginationResult.TotalNumberOfItems);
     }
 }

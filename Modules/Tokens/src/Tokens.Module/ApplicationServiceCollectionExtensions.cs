@@ -1,3 +1,4 @@
+using CreateToken = Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 using FluentValidation;
@@ -10,7 +11,7 @@ internal static class ApplicationServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateTokenCommand>()
+            .RegisterServicesFromAssemblyContaining<CreateToken.Command>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))

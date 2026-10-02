@@ -9,7 +9,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
 
-public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefinitionDTO>
+public class Handler : IRequestHandler<Command, TierQuotaDefinitionDTO>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<TierQuotaDefinitionDTO> Handle(CreateQuotaForTierCommand request, CancellationToken cancellationToken)
+    public async Task<TierQuotaDefinitionDTO> Handle(Command request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Handling CreateQuotaForTierCommand ...");
 

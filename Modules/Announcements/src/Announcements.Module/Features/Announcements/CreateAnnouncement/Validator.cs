@@ -9,7 +9,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 
-public class Validator : AbstractValidator<CreateAnnouncementCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
@@ -28,7 +28,7 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleForEach(x => x.Texts).SetValidator(new CreateAnnouncementCommandTextValidator());
-        RuleForEach(x => x.Recipients).ValidId<CreateAnnouncementCommand, IdentityAddress>();
+        RuleForEach(x => x.Recipients).ValidId<Command, IdentityAddress>();
         RuleForEach(x => x.Actions).SetValidator(new CreateAnnouncementCommandActionValidator());
     }
 }

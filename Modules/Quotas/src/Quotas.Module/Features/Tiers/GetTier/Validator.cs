@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.GetTier;
 
-public class Validator : AbstractValidator<GetTierQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(c => c.Id).ValidId<GetTierQuery, TierId>();
+        RuleFor(c => c.Id).ValidId<Query, TierId>();
     }
 }

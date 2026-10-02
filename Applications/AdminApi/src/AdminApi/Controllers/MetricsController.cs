@@ -1,7 +1,7 @@
+using ListMetrics = Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
-using Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +18,11 @@ public class MetricsController : ApiControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListMetricsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListMetrics.Response>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ListMetrics(CancellationToken cancellationToken)
     {
-        var metrics = await _mediator.Send(new ListMetricsQuery(), cancellationToken);
+        var metrics = await _mediator.Send(new ListMetrics.Query(), cancellationToken);
         return Ok(metrics);
     }
 }

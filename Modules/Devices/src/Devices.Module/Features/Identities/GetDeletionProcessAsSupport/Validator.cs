@@ -5,11 +5,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
 
-public class Validator : AbstractValidator<GetDeletionProcessAsSupportQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<GetDeletionProcessAsSupportQuery, IdentityAddress>();
-        RuleFor(x => x.DeletionProcessId).ValidId<GetDeletionProcessAsSupportQuery, IdentityDeletionProcessId>();
+        RuleFor(x => x.IdentityAddress).ValidId<Query, IdentityAddress>();
+        RuleFor(x => x.DeletionProcessId).ValidId<Query, IdentityDeletionProcessId>();
     }
 }

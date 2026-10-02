@@ -1,9 +1,9 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
+﻿using AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
+using AnonymizeRelationshipTemplatesForIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
+using DecomposeAndAnonymizeRelationshipsOfIdentity = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
+using DeleteRelationshipTemplatesOfIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Relationships.Module.Features.Identities.DeleteIdentity;
-using Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 using FakeItEasy;
 using MediatR;
 
@@ -25,16 +25,16 @@ public class IdentityDeleterTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockMediator.Send(
-            A<DecomposeAndAnonymizeRelationshipsOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<DecomposeAndAnonymizeRelationshipsOfIdentity.Command>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
-            A<DeleteRelationshipTemplatesOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<DeleteRelationshipTemplatesOfIdentity.Command>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
-            A<AnonymizeRelationshipTemplatesForIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<AnonymizeRelationshipTemplatesForIdentity.Command>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
-            A<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity.Command>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 

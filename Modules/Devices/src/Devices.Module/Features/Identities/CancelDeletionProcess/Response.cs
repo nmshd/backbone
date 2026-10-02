@@ -3,9 +3,10 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 
-public class CancelDeletionProcessResponse : IdentityDeletionProcessOverviewDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CancelDeletionProcessResponse")]
+public class Response : IdentityDeletionProcessOverviewDTO
 {
-    public CancelDeletionProcessResponse(IdentityDeletionProcess deletionProcess) : base(deletionProcess)
+    public Response(IdentityDeletionProcess deletionProcess) : base(deletionProcess)
     {
     }
 }

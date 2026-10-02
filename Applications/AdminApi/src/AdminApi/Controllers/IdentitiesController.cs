@@ -1,23 +1,23 @@
+using CreateIdentity = Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
+using CreateQuotaForIdentity = Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
+using DeleteQuotaForIdentity = Backbone.Modules.Quotas.Module.Features.Identities.DeleteQuotaForIdentity;
+using GetDeletionProcessAsSupport = Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
+using ListDeletionProcessesAsSupport = Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsSupport;
+using ListDeletionProcessesAuditLogs = Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
+using UpdateIdentity = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using Backbone.Modules.Devices.Module.Features.Shared;
-using Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
-using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
-using Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
-using Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsSupport;
-using Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 using Backbone.Modules.Quotas.Module.Features.Shared;
-using Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
-using Backbone.Modules.Quotas.Module.Features.Identities.DeleteQuotaForIdentity;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using GetIdentityQueryDevices = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity.GetIdentityQuery;
-using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity.GetIdentityQuery;
+using GetIdentityQueryDevices = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity.Query;
+using GetIdentityQueryQuotas = Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity.Query;
 
 namespace Backbone.AdminApi.Controllers;
 
@@ -37,7 +37,7 @@ public class IdentitiesController : ApiControllerBase
     public async Task<CreatedResult> CreateIndividualQuota([FromRoute] string identityAddress, [FromBody] CreateQuotaForIdentityRequest request, CancellationToken cancellationToken)
     {
         var createdIndividualQuotaDTO =
-            await _mediator.Send(new CreateQuotaForIdentityCommand { IdentityAddress = identityAddress, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period }, cancellationToken);
+            await _mediator.Send(new CreateQuotaForIdentity.Command { IdentityAddress = identityAddress, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period }, cancellationToken);
         return Created(createdIndividualQuotaDTO);
     }
 
@@ -47,7 +47,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteIndividualQuota([FromRoute] string identityAddress, [FromRoute] string individualQuotaId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteQuotaForIdentityCommand { IdentityAddress = identityAddress, IndividualQuotaId = individualQuotaId }, cancellationToken);
+        await _mediator.Send(new DeleteQuotaForIdentity.Command { IdentityAddress = identityAddress, IndividualQuotaId = individualQuotaId }, cancellationToken);
         return NoContent();
     }
 
@@ -80,17 +80,17 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityRequest request, CancellationToken cancellationToken)
     {
-        var command = new UpdateIdentityCommand { Address = identityAddress, TierId = request.TierId };
+        var command = new UpdateIdentity.Command { Address = identityAddress, TierId = request.TierId };
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentityResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateIdentity.Response>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateIdentity(CreateIdentityRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateIdentityCommand
+        var command = new CreateIdentity.Command
         {
             ClientId = request.ClientId,
             DevicePassword = request.DevicePassword,
@@ -110,20 +110,20 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetDeletionProcessesAsSupportResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAsSupport.Response>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListDeletionProcessesAsSupportQuery { IdentityAddress = identityAddress }, cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAsSupport.Query { IdentityAddress = identityAddress }, cancellationToken);
         return Ok(response);
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/AuditLogs")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAuditLogsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListDeletionProcessesAuditLogs.Response>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ListDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identityAddress }, cancellationToken);
+        var response = await _mediator.Send(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = identityAddress }, cancellationToken);
         return Ok(response);
     }
 
@@ -132,7 +132,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDeletionProcessAsSupport([FromRoute] string identityAddress, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetDeletionProcessAsSupportQuery { IdentityAddress = identityAddress, DeletionProcessId = deletionProcessId }, cancellationToken);
+        var response = await _mediator.Send(new GetDeletionProcessAsSupport.Query { IdentityAddress = identityAddress, DeletionProcessId = deletionProcessId }, cancellationToken);
         return Ok(response);
     }
 }

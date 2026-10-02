@@ -7,11 +7,11 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.AnnouncementCreated;
 
-public class AnnouncementCreatedDomainEventHandler : IDomainEventHandler<AnnouncementCreatedDomainEvent>
+public class Handler : IDomainEventHandler<AnnouncementCreatedDomainEvent>
 {
     private readonly IPushNotificationSender _pushSenderService;
 
-    public AnnouncementCreatedDomainEventHandler(IPushNotificationSender pushSenderService)
+    public Handler(IPushNotificationSender pushSenderService)
     {
         _pushSenderService = pushSenderService;
     }

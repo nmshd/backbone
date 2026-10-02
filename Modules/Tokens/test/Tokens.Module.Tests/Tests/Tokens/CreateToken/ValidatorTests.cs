@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using CreateTokenSlice = Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -18,7 +19,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand
+            new CreateTokenSlice.Command
             {
                 Content = [1],
                 ExpiresAt = DateTime.UtcNow.AddDays(1),
@@ -38,7 +39,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [0], ExpiresAt = DateTime.UtcNow.AddDays(1) });
+            new CreateTokenSlice.Command { Content = [0], ExpiresAt = DateTime.UtcNow.AddDays(1) });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -52,7 +53,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
+            new CreateTokenSlice.Command { ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -66,7 +67,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand
+            new CreateTokenSlice.Command
             {
                 ExpiresAt = DateTime.UtcNow.AddMinutes(1),
                 ForIdentity = "did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f",
@@ -87,7 +88,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = content, ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
+            new CreateTokenSlice.Command { Content = content, ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -101,7 +102,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = CreateRandomIdentityAddress() });
+            new CreateTokenSlice.Command { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(Token.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
@@ -115,7 +116,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = "some-address" });
+            new CreateTokenSlice.Command { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = "some-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(Token.ForIdentity));
@@ -131,10 +132,10 @@ public class ValidatorTests : AbstractTestsBase
         new Random().NextBytes(password);
 
         // Act
-        var validationResult = validator.TestValidate(new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), Password = password });
+        var validationResult = validator.TestValidate(new CreateTokenSlice.Command { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), Password = password });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenCommand.Password), "error.platform.validation.invalidPropertyValue",
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenSlice.Command.Password), "error.platform.validation.invalidPropertyValue",
             "'Password' must be between 1 and 200 bytes long. You entered 250 bytes.");
     }
 
@@ -147,10 +148,10 @@ public class ValidatorTests : AbstractTestsBase
         var validator = CreateValidatorForUnauthenticatedUser();
 
         // Act
-        var validationResult = validator.TestValidate(new CreateTokenCommand { ExpiresAt = DateTime.UtcNow.AddDays(1) });
+        var validationResult = validator.TestValidate(new CreateTokenSlice.Command { ExpiresAt = DateTime.UtcNow.AddDays(1) });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenCommand.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be less than.*");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenSlice.Command.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be less than.*");
     }
 
     [Fact]
@@ -160,10 +161,10 @@ public class ValidatorTests : AbstractTestsBase
         var validator = CreateValidatorForUnauthenticatedUser();
 
         // Act
-        var validationResult = validator.TestValidate(new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
+        var validationResult = validator.TestValidate(new CreateTokenSlice.Command { Content = [1], ExpiresAt = DateTime.UtcNow.AddMinutes(1) });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenCommand.Content), "error.platform.validation.invalidPropertyValue", "");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateTokenSlice.Command.Content), "error.platform.validation.invalidPropertyValue", "");
     }
 
     private static Validator CreateValidatorForAuthenticatedUser()

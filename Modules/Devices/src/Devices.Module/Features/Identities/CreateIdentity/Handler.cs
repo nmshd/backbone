@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
 
-public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly ApplicationConfiguration _applicationConfiguration;
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         _oAuthClientsRepository = oAuthClientsRepository;
     }
 
-    public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command command, CancellationToken cancellationToken)
     {
         var publicKey = await ValidateChallenge(command);
         _logger.LogTrace("Challenge successfully validated.");
@@ -40,10 +40,10 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         await _identitiesRepository.Add(newIdentity, command.DevicePassword);
         _logger.CreatedIdentity();
 
-        return new CreateIdentityResponse(newIdentity);
+        return new Response(newIdentity);
     }
 
-    private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
+    private async Task<Identity> CreateNewIdentity(Command command, CancellationToken cancellationToken, IdentityAddress address)
     {
         var client = await _oAuthClientsRepository.Get(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
@@ -67,7 +67,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         return address;
     }
 
-    private async Task<PublicKey> ValidateChallenge(CreateIdentityCommand command)
+    private async Task<PublicKey> ValidateChallenge(Command command)
     {
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
         await _challengeValidator.Validate(command.SignedChallenge, publicKey);

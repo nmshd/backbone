@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeRelationship;
 
-public class DecomposeRelationshipCommand : IRequest<DecomposeRelationshipResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DecomposeRelationshipCommand")]
+public class Command : IRequest<Response>
 {
     public required string RelationshipId { get; init; }
 }

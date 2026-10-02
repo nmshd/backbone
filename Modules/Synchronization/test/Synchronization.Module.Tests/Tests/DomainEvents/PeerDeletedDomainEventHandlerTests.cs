@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeleted;
+﻿using PeerDeleted = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeleted;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
@@ -26,8 +26,8 @@ public class PeerDeletedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => mockDbContext.CreateExternalEvent(A<PeerDeletedExternalEvent>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static PeerDeletedDomainEventHandler CreateHandler(ISynchronizationDbContext mockDbContext)
+    private static PeerDeleted.Handler CreateHandler(ISynchronizationDbContext mockDbContext)
     {
-        return new PeerDeletedDomainEventHandler(mockDbContext, A.Fake<ILogger<PeerDeletedDomainEventHandler>>());
+        return new PeerDeleted.Handler(mockDbContext, A.Fake<ILogger<PeerDeleted.Handler>>());
     }
 }

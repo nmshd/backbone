@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 
-public class DeleteChallengesOfIdentityCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteChallengesOfIdentityCommand")]
+public class Command : IRequest
 {
     public required string IdentityAddress { get; init; }
 }

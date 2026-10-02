@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.PublicRelationshipTemplateReferences.ListPublicRelationshipTemplateReferences;
 
-public class ListPublicRelationshipTemplateReferencesQuery : IRequest<IEnumerable<PublicRelationshipTemplateReferenceDefinition>>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListPublicRelationshipTemplateReferencesQuery")]
+public class Query : IRequest<IEnumerable<PublicRelationshipTemplateReferenceDefinition>>;

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
+﻿using CreateRelationshipTemplateSlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 ExpiresAt = DateTime.UtcNow.AddDays(1),
                 MaxNumberOfAllocations = 1,
@@ -34,7 +35,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 Content = [1]
             });
@@ -51,14 +52,14 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 ExpiresAt = DateTime.UtcNow.AddDays(-1),
                 Content = [1]
             });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateSlice.Command.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
     }
 
     [Fact]
@@ -69,14 +70,14 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 MaxNumberOfAllocations = 0,
                 Content = [1]
             });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.MaxNumberOfAllocations), "error.platform.validation.invalidPropertyValue",
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateSlice.Command.MaxNumberOfAllocations), "error.platform.validation.invalidPropertyValue",
             "'Max Number Of Allocations' must be greater than '0'.");
     }
 
@@ -88,14 +89,14 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 Content = [1],
                 ForIdentity = "some-address"
             });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(CreateRelationshipTemplateCommand.ForIdentity));
+        validationResult.ShouldHaveValidationErrorForId(nameof(CreateRelationshipTemplateSlice.Command.ForIdentity));
     }
 
     [Fact]
@@ -109,14 +110,14 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand
+            new CreateRelationshipTemplateSlice.Command
             {
                 Content = [1],
                 Password = password
             });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.Password), "error.platform.validation.invalidPropertyValue",
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateSlice.Command.Password), "error.platform.validation.invalidPropertyValue",
             "'Password' must be between 1 and 200 bytes long. You entered 250 bytes.");
     }
 }

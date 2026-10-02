@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 
-public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly ApplicationConfiguration _applicationConfiguration;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsA
         _applicationConfiguration = options.Value;
     }
 
-    public async Task Handle(AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var allocations =
             (await _relationshipTemplatesRepository.ListRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken)).ToList();

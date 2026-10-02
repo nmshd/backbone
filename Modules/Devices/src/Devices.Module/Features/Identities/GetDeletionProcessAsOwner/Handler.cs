@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 
-public class Handler : IRequestHandler<GetDeletionProcessAsOwnerQuery, IdentityDeletionProcessOverviewDTO>
+public class Handler : IRequestHandler<Query, IdentityDeletionProcessOverviewDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetDeletionProcessAsOwnerQuery, IdentityD
         _userContext = userContext;
     }
 
-    public async Task<IdentityDeletionProcessOverviewDTO> Handle(GetDeletionProcessAsOwnerQuery request, CancellationToken cancellationToken)
+    public async Task<IdentityDeletionProcessOverviewDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(p => p.Id == request.Id) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));

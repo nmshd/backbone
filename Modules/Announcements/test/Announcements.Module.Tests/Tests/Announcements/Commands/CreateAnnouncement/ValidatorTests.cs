@@ -1,3 +1,4 @@
+using CreateAnnouncementSlice = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
 using FluentValidation.TestHelper;
@@ -126,11 +127,11 @@ public class ValidatorTests : AbstractTestsBase
         validationResult.ShouldHaveValidationErrorFor("Actions[0].DisplayName[0]").WithErrorMessage("A display name must not contain line breaks.");
     }
 
-    private static CreateAnnouncementCommand CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body", CreateAnnouncementCommandAction? action = null)
+    private static CreateAnnouncementSlice.Command CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body", CreateAnnouncementCommandAction? action = null)
     {
         languages ??= ["en", "de"];
 
-        var command = new CreateAnnouncementCommand
+        var command = new CreateAnnouncementSlice.Command
         {
             ExpiresAt = null,
             Severity = AnnouncementSeverity.Low,

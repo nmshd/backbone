@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ChangeFeatureFlags;
 
-public class ChangeFeatureFlagsCommand : Dictionary<string, bool>, IRequest;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ChangeFeatureFlagsCommand")]
+public class Command : Dictionary<string, bool>, IRequest;

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokenAllocationsOfIdentity;
 
-public class Handler : IRequestHandler<AnonymizeTokenAllocationsOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITokensRepository _tokensRepository;
     private readonly ApplicationConfiguration _applicationConfiguration;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<AnonymizeTokenAllocationsOfIdentityComman
         _applicationConfiguration = applicationOptions.Value;
     }
 
-    public async Task Handle(AnonymizeTokenAllocationsOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var tokens = (await _tokensRepository.ListWithoutContent(Token.HasAllocationFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken, track: true)).ToList();
 

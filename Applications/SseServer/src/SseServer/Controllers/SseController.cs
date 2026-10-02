@@ -1,4 +1,6 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using DeleteDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
+using UpdateDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 using Backbone.SseServer.Versions;
@@ -33,7 +35,7 @@ public class SseController : ControllerBase
 
         await using (var scope = _scopeFactory.CreateAsyncScope())
         {
-            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new UpdateDeviceRegistrationCommand
+            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new UpdateDeviceRegistration.Command
             {
                 Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
                 AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
@@ -78,7 +80,7 @@ public class SseController : ControllerBase
             _eventQueue.Deregister(address);
             // we must NOT pass the cancellation token here, because otherwise the device registration would not be deleted in case the request was cancelled
             await using var scope = _scopeFactory.CreateAsyncScope();
-            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
+            await scope.ServiceProvider.GetRequiredService<IMediator>().Send(new DeleteDeviceRegistration.Command(), CancellationToken.None);
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.GetMessage;
 
-public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
+public class Handler : IRequestHandler<Query, MessageDTO>
 {
     private readonly IMessagesRepository _messagesRepository;
     private readonly IUserContext _userContext;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
         _configuration = options.Value;
     }
 
-    public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
+    public async Task<MessageDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var message = await _messagesRepository.GetWithContent(MessageId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true);
         message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress())?.FetchedMessage(_userContext.GetDeviceId());

@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;
 
-public class Validator : AbstractValidator<GetAnnouncementByIdQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetAnnouncementByIdQuery, AnnouncementId>();
+        RuleFor(x => x.Id).ValidId<Query, AnnouncementId>();
     }
 }

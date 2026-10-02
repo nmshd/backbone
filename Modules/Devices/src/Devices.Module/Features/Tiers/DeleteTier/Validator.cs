@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 
-public class Validator : AbstractValidator<DeleteTierCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(c => c.TierId).ValidId<DeleteTierCommand, TierId>();
+        RuleFor(c => c.TierId).ValidId<Command, TierId>();
     }
 }

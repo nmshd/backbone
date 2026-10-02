@@ -4,7 +4,8 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
 
-public class CreateQuotaForIdentityCommand : IRequest<IndividualQuotaDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateQuotaForIdentityCommand")]
+public class Command : IRequest<IndividualQuotaDTO>
 {
     public required string IdentityAddress { get; init; }
     public required string MetricKey { get; init; }

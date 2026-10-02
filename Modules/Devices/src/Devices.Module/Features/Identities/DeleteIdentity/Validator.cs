@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 
-public class Validator : AbstractValidator<DeleteIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<DeleteIdentityCommand, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Command, IdentityAddress>();
     }
 }

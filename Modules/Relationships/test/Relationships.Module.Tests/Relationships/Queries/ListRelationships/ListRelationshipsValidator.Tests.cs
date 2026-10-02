@@ -1,3 +1,4 @@
+using ListRelationshipsSlice = Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationships;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -15,7 +16,7 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [RelationshipId.New().Value] });
+        var validationResult = validator.TestValidate(new ListRelationshipsSlice.Query { PaginationFilter = new PaginationFilter(), Ids = [RelationshipId.New().Value] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,11 +29,11 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [] });
+        var validationResult = validator.TestValidate(new ListRelationshipsSlice.Query { PaginationFilter = new PaginationFilter(), Ids = [] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListRelationshipsQuery.Ids),
+            propertyName: nameof(ListRelationshipsSlice.Query.Ids),
             expectedErrorCode: "error.platform.validation.invalidPropertyValue",
             expectedErrorMessage: "'Ids' must not be empty.");
     }
@@ -44,11 +45,11 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery { PaginationFilter = new PaginationFilter(), Ids = [] });
+        var validationResult = validator.TestValidate(new ListRelationshipsSlice.Query { PaginationFilter = new PaginationFilter(), Ids = [] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListRelationshipsQuery.Ids),
+            propertyName: nameof(ListRelationshipsSlice.Query.Ids),
             expectedErrorCode: "error.platform.validation.invalidPropertyValue",
             expectedErrorMessage: "'Ids' must not be empty.");
     }

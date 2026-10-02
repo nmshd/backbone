@@ -13,14 +13,14 @@ internal static class Endpoint
     public static RouteGroupBuilder MapStartDeletionProcessEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("", Handle)
-            .Produces<HttpResponseEnvelopeResult<StartDeletionProcessResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] StartDeletionProcessCommand? request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command? request, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(request ?? new StartDeletionProcessCommand(), cancellationToken);
+        var response = await mediator.Send(request ?? new Command(), cancellationToken);
         return EnvelopeHttpResults.Created("", response);
     }
 }

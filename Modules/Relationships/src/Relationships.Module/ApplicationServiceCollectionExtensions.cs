@@ -1,3 +1,4 @@
+using CreateRelationshipTemplate = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
@@ -14,7 +15,7 @@ internal static class ApplicationServiceCollectionExtensions
         public void AddApplication()
         {
             services.AddMediatR(c => c
-                .RegisterServicesFromAssemblyContaining<CreateRelationshipTemplateCommand>()
+                .RegisterServicesFromAssemblyContaining<CreateRelationshipTemplate.Command>()
                 .AddOpenBehavior(typeof(LoggingBehavior<,>))
                 .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
                 .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))

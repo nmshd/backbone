@@ -9,14 +9,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 
-public class IdentityCreatedDomainEventHandler : IDomainEventHandler<IdentityCreatedDomainEvent>
+public class Handler : IDomainEventHandler<IdentityCreatedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
-    private readonly ILogger<IdentityCreatedDomainEventHandler> _logger;
+    private readonly ILogger<Handler> _logger;
 
-    public IdentityCreatedDomainEventHandler(IIdentitiesRepository identitiesRepository, ILogger<IdentityCreatedDomainEventHandler> logger, ITiersRepository tiersRepository,
+    public Handler(IIdentitiesRepository identitiesRepository, ILogger<Handler> logger, ITiersRepository tiersRepository,
         MetricCalculatorFactory metricCalculatorFactory)
     {
         _identitiesRepository = identitiesRepository;

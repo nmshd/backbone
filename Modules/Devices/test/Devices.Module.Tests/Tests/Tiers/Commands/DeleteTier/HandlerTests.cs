@@ -1,3 +1,4 @@
+using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Abstractions;
@@ -32,7 +33,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(Task.FromResult(0));
 
         // Act
-        await _handler.Handle(new DeleteTierCommand { TierId = tier.Id }, CancellationToken.None);
+        await _handler.Handle(new DeleteTierSlice.Command { TierId = tier.Id }, CancellationToken.None);
 
         // Assert
         A.CallTo(() => _eventBus.Publish(A<TierDeletedDomainEvent>._)).MustHaveHappened();
@@ -50,7 +51,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => _tiersRepository.GetNumberOfIdentitiesAssignedToTier(tier, A<CancellationToken>._)).Returns(1);
 
         // Act
-        var acting = async () => await _handler.Handle(new DeleteTierCommand { TierId = tier.Id }, CancellationToken.None);
+        var acting = async () => await _handler.Handle(new DeleteTierSlice.Command { TierId = tier.Id }, CancellationToken.None);
 
         // Assert
         await acting.ShouldThrowAsync<DomainException>();

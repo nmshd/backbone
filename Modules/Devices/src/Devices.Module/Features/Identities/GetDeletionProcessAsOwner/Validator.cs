@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 
-public class Validator : AbstractValidator<GetDeletionProcessAsOwnerQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetDeletionProcessAsOwnerQuery, IdentityDeletionProcessId>();
+        RuleFor(x => x.Id).ValidId<Query, IdentityDeletionProcessId>();
     }
 }

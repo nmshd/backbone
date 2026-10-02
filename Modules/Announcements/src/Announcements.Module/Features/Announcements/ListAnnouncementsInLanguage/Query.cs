@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
 
-public class ListAnnouncementsForActiveIdentityInLanguageQuery : IRequest<ListAnnouncementsInLanguageResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListAnnouncementsForActiveIdentityInLanguageQuery")]
+public class Query : IRequest<Response>
 {
     public required string Language { get; init; }
 }

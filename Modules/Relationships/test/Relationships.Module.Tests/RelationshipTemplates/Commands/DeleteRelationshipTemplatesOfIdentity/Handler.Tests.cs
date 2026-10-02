@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DeleteRelationshipTemplatesOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
+using System.Linq.Expressions;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -15,7 +16,7 @@ public class HandlerTests : AbstractTestsBase
         var mockRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository);
-        var request = new DeleteRelationshipTemplatesOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() };
+        var request = new DeleteRelationshipTemplatesOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() };
 
         // Act
         await handler.Handle(request, CancellationToken.None);

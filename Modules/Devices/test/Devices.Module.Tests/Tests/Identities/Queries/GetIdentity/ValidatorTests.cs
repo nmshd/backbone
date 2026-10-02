@@ -1,3 +1,4 @@
+using GetIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetIdentityQuery { Address = CreateRandomIdentityAddress() });
+        var validationResult = validator.TestValidate(new GetIdentitySlice.Query { Address = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,9 +27,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetIdentityQuery { Address = "some-invalid-address" });
+        var validationResult = validator.TestValidate(new GetIdentitySlice.Query { Address = "some-invalid-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetIdentityQuery.Address));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetIdentitySlice.Query.Address));
     }
 }

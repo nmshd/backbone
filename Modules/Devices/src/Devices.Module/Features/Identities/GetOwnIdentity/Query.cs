@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetOwnIdentity;
 
-public class GetOwnIdentityQuery : IRequest<GetOwnIdentityResponse>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetOwnIdentityQuery")]
+public class Query : IRequest<Response>;

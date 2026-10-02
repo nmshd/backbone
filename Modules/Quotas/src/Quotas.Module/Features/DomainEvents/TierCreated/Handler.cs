@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.TierCreated;
 
-public class TierCreatedDomainEventHandler : IDomainEventHandler<TierCreatedDomainEvent>
+public class Handler : IDomainEventHandler<TierCreatedDomainEvent>
 {
     private readonly ITiersRepository _tiersRepository;
-    private readonly ILogger<TierCreatedDomainEventHandler> _logger;
+    private readonly ILogger<Handler> _logger;
 
-    public TierCreatedDomainEventHandler(ITiersRepository tiersRepository, ILogger<TierCreatedDomainEventHandler> logger)
+    public Handler(ITiersRepository tiersRepository, ILogger<Handler> logger)
     {
         _tiersRepository = tiersRepository;
         _logger = logger;

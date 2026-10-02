@@ -4,9 +4,10 @@ using Backbone.Modules.Devices.Module.Features.Clients.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 
-public class ListClientsResponse : CollectionResponseBase<ClientDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListClientsResponse")]
+public class Response : CollectionResponseBase<ClientDTO>
 {
-    public ListClientsResponse(IEnumerable<OAuthClient> clients, IReadOnlyDictionary<string, int> numberOfIdentitiesByClient) : base(clients.Select(client =>
+    public Response(IEnumerable<OAuthClient> clients, IReadOnlyDictionary<string, int> numberOfIdentitiesByClient) : base(clients.Select(client =>
         new ClientDTO(client, numberOfIdentitiesByClient[client.ClientId])))
     {
     }

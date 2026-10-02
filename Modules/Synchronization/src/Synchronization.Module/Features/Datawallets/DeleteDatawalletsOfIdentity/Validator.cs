@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
 
-public class Validator : AbstractValidator<DeleteDatawalletsOfIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<DeleteDatawalletsOfIdentityCommand, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Command, IdentityAddress>();
     }
 }

@@ -1,6 +1,6 @@
+using TokenLocked = Backbone.Modules.Devices.Module.Features.DomainEvents.TokenLocked;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Module.Features.DomainEvents.TokenLocked;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Tokens;
 using Backbone.Modules.Tokens.Contracts.DomainEvents;
@@ -20,7 +20,7 @@ public class TokenLockedDomainEventHandlerTests : AbstractTestsBase
 
         A.CallTo(() => fakeRepository.Get(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
-        var handler = new TokenLockedDomainEventHandler(mockPushSender, fakeRepository);
+        var handler = new TokenLocked.Handler(mockPushSender, fakeRepository);
         var domainEvent = new TokenLockedDomainEvent { TokenId = "TOK00000000000000001", CreatedBy = identity.Address };
 
         // Act

@@ -13,7 +13,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapClaimFileOwnershipEndpoint(this RouteGroupBuilder group)
     {
         group.MapPatch("{fileId}/ClaimOwnership", Handle)
-            .Produces<HttpResponseEnvelopeResult<ClaimFileOwnershipResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status403Forbidden)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
@@ -22,7 +22,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string fileId, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = body.OwnershipToken }, cancellationToken);
+        var response = await mediator.Send(new Command { FileId = fileId, OwnershipToken = body.OwnershipToken }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

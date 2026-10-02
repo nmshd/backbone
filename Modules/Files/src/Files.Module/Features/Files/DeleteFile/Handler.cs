@@ -7,7 +7,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.DeleteFile;
 
-public class Handler : IRequestHandler<DeleteFileCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<DeleteFileCommand>
         _userContext = userContext;
     }
 
-    public async Task Handle(DeleteFileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var file = await _filesRepository.Get(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 

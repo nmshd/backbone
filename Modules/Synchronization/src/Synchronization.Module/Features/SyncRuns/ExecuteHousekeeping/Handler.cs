@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.ExecuteHousekeeping;
 
-public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ISynchronizationDbContext _dbContext;
 
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         _dbContext = dbContext;
     }
 
-    public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await DeleteSyncRuns(cancellationToken);
         await DeleteDatawalletModifications(cancellationToken);

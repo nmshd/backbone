@@ -23,7 +23,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string id, [FromQuery] Base64QueryValue? password, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new GetRelationshipTemplateQuery { Id = id, Password = password?.Value }, cancellationToken);
+        var response = await mediator.Send(new Query { Id = id, Password = password?.Value }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

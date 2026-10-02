@@ -2,9 +2,10 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.UpdateTokenContent;
 
-public class UpdateTokenContentResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateTokenContentResponse")]
+public class Response
 {
-    public UpdateTokenContentResponse(Token token)
+    public Response(Token token)
     {
         Id = token.Id;
         CreatedBy = token.CreatedBy?.Value;

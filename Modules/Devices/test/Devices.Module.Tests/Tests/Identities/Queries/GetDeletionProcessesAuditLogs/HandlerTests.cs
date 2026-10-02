@@ -1,3 +1,4 @@
+using ListDeletionProcessesAuditLogs = Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 using Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -35,7 +36,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(_actDbContext);
 
         // Act
-        var result = await handler.Handle(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identity.Address }, CancellationToken.None);
+        var result = await handler.Handle(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = identity.Address }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
@@ -53,7 +54,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(_actDbContext);
 
         // Act
-        var result = await handler.Handle(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = "non-existent-identity-address" }, CancellationToken.None);
+        var result = await handler.Handle(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = "non-existent-identity-address" }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(0);
@@ -73,7 +74,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(_actDbContext);
 
         // Act
-        var result = await handler.Handle(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identity.Address }, CancellationToken.None);
+        var result = await handler.Handle(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = identity.Address }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
@@ -92,7 +93,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(_actDbContext);
 
         // Act
-        var result = await handler.Handle(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identity.Address }, CancellationToken.None);
+        var result = await handler.Handle(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = identity.Address }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
@@ -111,7 +112,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(_actDbContext);
 
         // Act
-        var result = await handler.Handle(new ListDeletionProcessesAuditLogsQuery { IdentityAddress = identity.Address }, CancellationToken.None);
+        var result = await handler.Handle(new ListDeletionProcessesAuditLogs.Query { IdentityAddress = identity.Address }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());

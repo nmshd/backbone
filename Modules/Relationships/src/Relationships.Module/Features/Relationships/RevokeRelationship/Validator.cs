@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RevokeRelationship;
 
-public class Validator : AbstractValidator<RevokeRelationshipCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.RelationshipId).ValidId<RevokeRelationshipCommand, RelationshipId>();
+        RuleFor(x => x.RelationshipId).ValidId<Command, RelationshipId>();
     }
 }

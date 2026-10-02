@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.ListQuotasForIdentity;
 
-public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasForIdentityResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
@@ -23,13 +23,13 @@ public class Handler : IRequestHandler<ListQuotasForIdentityQuery, ListQuotasFor
         _metricCalculatorFactory = metricCalculatorFactory;
     }
 
-    public async Task<ListQuotasForIdentityResponse> Handle(ListQuotasForIdentityQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_identityAddress, cancellationToken) ??
                        throw new Exception($"Identity with Id '{_identityAddress}' not found.");
         var quotaGroupDTOs = await identity.GetAllQuotas().AsQuotaGroupDTOs(identity.Address, _metricCalculatorFactory, cancellationToken);
 
-        return new ListQuotasForIdentityResponse(quotaGroupDTOs);
+        return new Response(quotaGroupDTOs);
     }
 }
 

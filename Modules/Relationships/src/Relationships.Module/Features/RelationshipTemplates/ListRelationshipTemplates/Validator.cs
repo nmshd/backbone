@@ -6,7 +6,7 @@ using FluentValidation;
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
@@ -16,6 +16,6 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
 
         RuleForEach(x => x.Ids)
             .Cascade(CascadeMode.Stop)
-            .ValidId<ListRelationshipTemplatesQuery, RelationshipTemplateId>();
+            .ValidId<Query, RelationshipTemplateId>();
     }
 }

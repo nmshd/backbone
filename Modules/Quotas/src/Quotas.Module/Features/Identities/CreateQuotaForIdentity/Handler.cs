@@ -10,7 +10,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
 
-public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, IndividualQuotaDTO>
+public class Handler : IRequestHandler<Command, IndividualQuotaDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
         _metricStatusesService = metricStatusesService;
     }
 
-    public async Task<IndividualQuotaDTO> Handle(CreateQuotaForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task<IndividualQuotaDTO> Handle(Command request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(request.IdentityAddress, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);

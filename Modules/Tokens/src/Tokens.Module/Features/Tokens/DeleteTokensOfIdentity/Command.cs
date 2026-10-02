@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 
-public class DeleteTokensOfIdentityCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteTokensOfIdentityCommand")]
+public class Command : IRequest
 {
     public required string IdentityAddress { get; init; }
 }

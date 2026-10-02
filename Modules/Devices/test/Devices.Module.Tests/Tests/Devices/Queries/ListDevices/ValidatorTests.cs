@@ -1,3 +1,4 @@
+using ListDevicesSlice = Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
@@ -15,7 +16,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDevicesQuery { PaginationFilter = new PaginationFilter(), Ids = [DeviceId.New().Value] });
+        var validationResult = validator.TestValidate(new ListDevicesSlice.Query { PaginationFilter = new PaginationFilter(), Ids = [DeviceId.New().Value] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,11 +29,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListDevicesQuery { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-device-id"] });
+        var validationResult = validator.TestValidate(new ListDevicesSlice.Query { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-device-id"] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(
-            collectionWithInvalidId: nameof(ListDevicesQuery.Ids),
+            collectionWithInvalidId: nameof(ListDevicesSlice.Query.Ids),
             indexWithInvalidId: 0);
     }
 }

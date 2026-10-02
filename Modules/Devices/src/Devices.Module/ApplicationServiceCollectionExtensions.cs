@@ -1,9 +1,9 @@
+using RegisterDevice = Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
-using Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +20,12 @@ internal static class ApplicationServiceCollectionExtensions
         applicationConfiguration.GetSection("IdentityDeletion").Bind(IdentityDeletionConfiguration.Instance);
 
         services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<RegisterDeviceCommand>()
+            .RegisterServicesFromAssemblyContaining<RegisterDevice.Command>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
-        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(ApplicationConfiguration).Assembly);
         services.AddScoped<ChallengeValidator>();
         services.AddScoped<Backbone.Modules.Devices.Contracts.IIdentityStatusProvider, Backbone.Modules.Devices.Module.Features.Identities.GetIdentity.IdentityStatusProvider>();
 

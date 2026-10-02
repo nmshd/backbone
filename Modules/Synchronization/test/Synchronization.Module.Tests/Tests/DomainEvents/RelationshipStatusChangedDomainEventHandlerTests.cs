@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipStatusChanged;
+﻿using RelationshipStatusChanged = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipStatusChanged;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -154,8 +154,8 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         A.CallTo(() => mockDbContext.DeleteBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, relationshipId, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
+    private static RelationshipStatusChanged.Handler CreateHandler(ISynchronizationDbContext dbContext)
     {
-        return new RelationshipStatusChangedDomainEventHandler(dbContext, A.Fake<ILogger<RelationshipStatusChangedDomainEventHandler>>());
+        return new RelationshipStatusChanged.Handler(dbContext, A.Fake<ILogger<RelationshipStatusChanged.Handler>>());
     }
 }

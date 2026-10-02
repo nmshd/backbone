@@ -30,7 +30,7 @@ internal static class Endpoint
         if (paginationFilter.PageSize > options.Value.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(options.Value.Pagination.MaxPageSize));
 
-        var response = await mediator.Send(new ListTokensQuery { PaginationFilter = paginationFilter, Ids = ids?.ToList() ?? [] }, cancellationToken);
+        var response = await mediator.Send(new Query { PaginationFilter = paginationFilter, Ids = ids?.ToList() ?? [] }, cancellationToken);
         return EnvelopeHttpResults.Paged(response);
     }
 }

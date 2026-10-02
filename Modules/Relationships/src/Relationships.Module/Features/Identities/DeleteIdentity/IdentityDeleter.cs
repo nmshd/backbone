@@ -1,9 +1,9 @@
+using AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
+using AnonymizeRelationshipTemplatesForIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
+using DecomposeAndAnonymizeRelationshipsOfIdentity = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
+using DeleteRelationshipTemplatesOfIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
-using Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Identities.DeleteIdentity;
@@ -21,12 +21,12 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DecomposeAndAnonymizeRelationshipsOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new DecomposeAndAnonymizeRelationshipsOfIdentity.Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
-        await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand { IdentityAddress = identityAddress });
-        await _mediator.Send(new AnonymizeRelationshipTemplatesForIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new DeleteRelationshipTemplatesOfIdentity.Command { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeRelationshipTemplatesForIdentity.Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
-        await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity.Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
     }
 }

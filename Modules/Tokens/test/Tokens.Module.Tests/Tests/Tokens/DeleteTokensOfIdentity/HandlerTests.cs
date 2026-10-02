@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DeleteTokensOfIdentitySlice = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
+using System.Linq.Expressions;
 using Backbone.Modules.Tokens.Abstractions;
 using Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 using Backbone.Modules.Tokens.Domain.Entities;
@@ -15,7 +16,7 @@ public class HandlerTests : AbstractTestsBase
         var mockRelationshipTemplatesRepository = A.Fake<ITokensRepository>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository);
-        var request = new DeleteTokensOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() };
+        var request = new DeleteTokensOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() };
 
         // Act
         await handler.Handle(request, CancellationToken.None);

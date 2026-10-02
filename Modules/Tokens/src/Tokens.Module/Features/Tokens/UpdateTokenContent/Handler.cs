@@ -7,7 +7,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.UpdateTokenContent;
 
-public class Handler : IRequestHandler<UpdateTokenContentCommand, UpdateTokenContentResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly ITokensRepository _tokensRepository;
     private readonly IUserContext _userContext;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<UpdateTokenContentCommand, UpdateTokenCon
         _userContext = userContext;
     }
 
-    public async Task<UpdateTokenContentResponse> Handle(UpdateTokenContentCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var token = await _tokensRepository.GetWithContent(TokenId.Parse(request.TokenId), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Token));
 
@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<UpdateTokenContentCommand, UpdateTokenCon
 
             case UpdateTokenContentResult.ContentUpdated:
                 await _tokensRepository.Update(token, cancellationToken);
-                return new UpdateTokenContentResponse(token);
+                return new Response(token);
 
             case UpdateTokenContentResult.ContentAlreadyExists:
                 throw new ApplicationException(ApplicationErrors.ContentUpdateNotPossibleBecauseContentIsNotNull());

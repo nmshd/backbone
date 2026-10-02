@@ -21,7 +21,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string fileId, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteFileCommand { Id = fileId }, cancellationToken);
+        await mediator.Send(new Command { Id = fileId }, cancellationToken);
         return Results.NoContent();
     }
 }

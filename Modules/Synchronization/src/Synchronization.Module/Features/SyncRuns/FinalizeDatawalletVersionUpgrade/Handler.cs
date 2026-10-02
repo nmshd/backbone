@@ -10,13 +10,13 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeDatawalletVersionUpgrade;
 
-public class Handler : SyncRunFinalization, IRequestHandler<FinalizeDatawalletVersionUpgradeSyncRunCommand, FinalizeDatawalletVersionUpgradeSyncRunResponse>
+public class Handler : SyncRunFinalization, IRequestHandler<Command, Response>
 {
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext) : base(dbContext, userContext)
     {
     }
 
-    public async Task<FinalizeDatawalletVersionUpgradeSyncRunResponse> Handle(FinalizeDatawalletVersionUpgradeSyncRunCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         _syncRun = await _dbContext.GetSyncRun(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
@@ -43,7 +43,7 @@ public class Handler : SyncRunFinalization, IRequestHandler<FinalizeDatawalletVe
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
+        var response = new Response
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
             DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m))

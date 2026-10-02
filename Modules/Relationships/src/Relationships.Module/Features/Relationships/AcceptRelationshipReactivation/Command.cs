@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationshipReactivation;
 
-public class AcceptRelationshipReactivationCommand : IRequest<AcceptRelationshipReactivationResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("AcceptRelationshipReactivationCommand")]
+public class Command : IRequest<Response>
 {
     public required string RelationshipId { get; init; }
 }

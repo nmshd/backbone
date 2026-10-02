@@ -1,3 +1,4 @@
+using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteTierCommand { TierId = TierId.Generate() });
+        var validationResult = validator.TestValidate(new DeleteTierSlice.Command { TierId = TierId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,9 +28,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteTierCommand { TierId = "invalid-tier_id" });
+        var validationResult = validator.TestValidate(new DeleteTierSlice.Command { TierId = "invalid-tier_id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteTierCommand.TierId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteTierSlice.Command.TierId));
     }
 }

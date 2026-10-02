@@ -1,5 +1,5 @@
+using TierCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierCreated;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Quotas.Module.Features.DomainEvents.TierCreated;
 using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
@@ -27,9 +27,9 @@ public class TierCreatedDomainEventHandlerTests : AbstractTestsBase
         mockTierRepository.WasCalledWith.Name.ShouldBe(name);
     }
 
-    private static TierCreatedDomainEventHandler CreateHandler(AddMockTiersRepository tiers)
+    private static TierCreated.Handler CreateHandler(AddMockTiersRepository tiers)
     {
-        var logger = A.Fake<ILogger<TierCreatedDomainEventHandler>>();
-        return new TierCreatedDomainEventHandler(tiers, logger);
+        var logger = A.Fake<ILogger<TierCreated.Handler>>();
+        return new TierCreated.Handler(tiers, logger);
     }
 }

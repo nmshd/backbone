@@ -15,7 +15,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapRegisterDeviceEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("", Handle)
-            .Produces<HttpResponseEnvelopeResult<RegisterDeviceResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -25,7 +25,7 @@ internal static class Endpoint
         if (body.DevicePassword == null || body.SignedChallenge == null || body.SignedChallenge.Challenge == null || body.SignedChallenge.Signature == null)
             throw new BadHttpRequestException("Required request fields must not be null.");
 
-        var command = new RegisterDeviceCommand
+        var command = new Command
         {
             CommunicationLanguage = body.CommunicationLanguage ?? CommunicationLanguage.DEFAULT_LANGUAGE.Value,
             SignedChallenge = body.SignedChallenge,

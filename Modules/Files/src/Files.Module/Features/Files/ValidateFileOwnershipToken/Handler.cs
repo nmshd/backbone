@@ -8,7 +8,7 @@ using File = System.IO.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken;
 
-public class Handler : IRequestHandler<ValidateFileOwnershipTokenQuery, ValidateFileOwnershipTokenResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<ValidateFileOwnershipTokenQuery, Validate
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ValidateFileOwnershipTokenResponse> Handle(ValidateFileOwnershipTokenQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var file = await _filesRepository.Get(FileId.Parse(request.FileId), cancellationToken, track: true) ?? throw new NotFoundException(nameof(File));
 
@@ -29,6 +29,6 @@ public class Handler : IRequestHandler<ValidateFileOwnershipTokenQuery, Validate
 
         await _filesRepository.Update(file, cancellationToken);
 
-        return new ValidateFileOwnershipTokenResponse { IsValid = isValid };
+        return new Response { IsValid = isValid };
     }
 }

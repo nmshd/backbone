@@ -7,7 +7,7 @@ using FluentValidation;
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationships;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<ListRelationshipsQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
@@ -16,6 +16,6 @@ public class Validator : AbstractValidator<ListRelationshipsQuery>
             .DetailedNotNull()
             .Must(ids => ids.Count > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'Ids' must not be empty.");
 
-        RuleForEach(x => x.Ids).ValidId<ListRelationshipsQuery, RelationshipId>();
+        RuleForEach(x => x.Ids).ValidId<Query, RelationshipId>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Backbone.Modules.Relationships.Module.Features.Relationships.GetPeerOfActiveIdentityInRelationship;
 
-public class GetPeerOfActiveIdentityInRelationshipResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetPeerOfActiveIdentityInRelationshipResponse")]
+public class Response
 {
     public required string IdentityAddress { get; set; }
 }

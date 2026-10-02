@@ -7,9 +7,9 @@ using FluentValidation;
 namespace Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
 
 // ReSharper disable once UnusedMember.Global
-public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
-    public CreateIdentityCommandValidator()
+    public Validator()
     {
         RuleFor(c => c.IdentityPublicKey).DetailedNotEmpty();
         RuleFor(c => c.DevicePassword).DetailedNotEmpty();

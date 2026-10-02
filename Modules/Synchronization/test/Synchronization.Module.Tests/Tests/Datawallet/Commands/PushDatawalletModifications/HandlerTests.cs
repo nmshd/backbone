@@ -1,3 +1,4 @@
+using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -45,8 +46,8 @@ public class HandlerTests : AbstractTestsBase
         PushDatawalletModificationItem[] newModifications = [new() { Collection = "testCollection", DatawalletVersion = 1, ObjectIdentifier = "testIdentifier", Type = DatawalletModificationDTO.DatawalletModificationType.Create, EncryptedPayload = [0, 1, 2], PayloadCategory = null }];
 
         // Act
-        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
-        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsCommand { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new PushDatawalletModificationsSlice.Command { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
+        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new PushDatawalletModificationsSlice.Command { Modifications = newModifications, SupportedDatawalletVersion = 1 }, CancellationToken.None);
 
         var handleWithImmediateSave = () => taskWithImmediateSave;
         var handleWithDelayedSave = () => taskWithDelayedSave;

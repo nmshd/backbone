@@ -6,11 +6,11 @@ using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.TokenCreated;
 
-public class TokenCreatedDomainEventHandler : IDomainEventHandler<TokenCreatedDomainEvent>
+public class Handler : IDomainEventHandler<TokenCreatedDomainEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public TokenCreatedDomainEventHandler(IMetricStatusesService metricStatusesService)
+    public Handler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
 
-public class ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery : IRequest<ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingResponse>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery")]
+public class Query : IRequest<Response>;

@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStatusChanged;
+﻿using IdentityDeletionProcessStatusChanged = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStatusChanged;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
@@ -19,8 +19,8 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStatusChanged.Handler(mockDbContext,
+            A.Fake<ILogger<IdentityDeletionProcessStatusChanged.Handler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStatusChangedDomainEvent);
@@ -39,8 +39,8 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStatusChanged.Handler(mockDbContext,
+            A.Fake<ILogger<IdentityDeletionProcessStatusChanged.Handler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStatusChangedDomainEvent);

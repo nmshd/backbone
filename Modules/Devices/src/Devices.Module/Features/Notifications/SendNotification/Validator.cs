@@ -6,12 +6,12 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Notifications.SendNotification;
 
-public class Validator : AbstractValidator<SendNotificationCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
         RuleFor(x => x.Code).DetailedNotEmpty();
         RuleFor(x => x.Recipients.Length).InclusiveBetween(1, 100).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
-        RuleForEach(x => x.Recipients).ValidId<SendNotificationCommand, IdentityAddress>();
+        RuleForEach(x => x.Recipients).ValidId<Command, IdentityAddress>();
     }
 }

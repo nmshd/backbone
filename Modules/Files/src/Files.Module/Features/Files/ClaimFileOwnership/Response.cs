@@ -2,9 +2,10 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ClaimFileOwnership;
 
-public class ClaimFileOwnershipResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ClaimFileOwnershipResponse")]
+public class Response
 {
-    public ClaimFileOwnershipResponse(File file)
+    public Response(File file)
     {
         NewOwnershipToken = file.OwnershipToken.Value;
     }

@@ -10,7 +10,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 
-public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDeviceRegistrationResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private const string PRODUCTION_ENVIRONMENT = "Production";
     private const string DEVELOPMENT_ENVIRONMENT = "Development";
@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 
@@ -35,7 +35,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         var environment = DeserializeEnvironment(request.Environment ?? PRODUCTION_ENVIRONMENT);
         var devicePushIdentifier = await _pushRegistrationService.UpdateRegistration(_activeIdentity, _activeDevice, parseHandleResult.Value, request.AppId, environment, cancellationToken);
 
-        return new UpdateDeviceRegistrationResponse(devicePushIdentifier);
+        return new Response(devicePushIdentifier);
     }
 
     private static PushEnvironment DeserializeEnvironment(string environment)

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 
-public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -14,12 +14,12 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
         _identitiesRepository = repository;
     }
 
-    public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address)) &&
                                                        (request.Status == null || i.Status == request.Status);
 
         var identities = await _identitiesRepository.List(filter, cancellationToken);
-        return new ListIdentitiesResponse(identities);
+        return new Response(identities);
     }
 }

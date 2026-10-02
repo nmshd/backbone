@@ -22,10 +22,11 @@ public class Cqrs
             .And().HaveNameEndingWith("Query");
 
     [Fact]
-    public void ClassesInheritingFromIRequestShouldHaveNameEndingWithCommandOrQuery()
+    public void ClassesInheritingFromIRequestShouldBeNamedCommandOrQuery()
     {
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
-            .Should().HaveNameMatching(".+(Command|Query)$").As("should have names ending with 'Command' or 'Query'")
+            .And().AreNot(Backbone.TEST_TYPES)
+            .Should().HaveNameMatching("^(Command|Query)$").As("should be named 'Command' or 'Query'")
             .Check(Backbone.ARCHITECTURE);
     }
 

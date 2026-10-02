@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
 
-public class Validator : AbstractValidator<ChangeClientSecretCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

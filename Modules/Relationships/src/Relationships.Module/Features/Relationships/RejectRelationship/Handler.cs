@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RejectRelationship;
 
-public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelationshipResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly DeviceId _activeDevice;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<RejectRelationshipResponse> Handle(RejectRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
 
@@ -31,6 +31,6 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
 
         await _relationshipsRepository.Update(relationship);
 
-        return new RejectRelationshipResponse(relationship);
+        return new Response(relationship);
     }
 }

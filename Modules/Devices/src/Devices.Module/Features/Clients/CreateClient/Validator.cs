@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
 
-public class CreateClientCommandValidator : AbstractValidator<CreateClientCommand>
+public class Validator : AbstractValidator<Command>
 {
-    public CreateClientCommandValidator()
+    public Validator()
     {
         RuleFor(c => c.DefaultTier).DetailedNotEmpty();
     }

@@ -2,9 +2,10 @@ using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
 
-public class ChangeClientSecretResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ChangeClientSecretResponse")]
+public class Response
 {
-    public ChangeClientSecretResponse(OAuthClient client, string clientSecret)
+    public Response(OAuthClient client, string clientSecret)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;

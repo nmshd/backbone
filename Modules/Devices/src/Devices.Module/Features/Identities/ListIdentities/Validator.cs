@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 
-public class Validator : AbstractValidator<ListIdentitiesQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleForEach(x => x.Addresses).ValidId<ListIdentitiesQuery, IdentityAddress>();
+        RuleForEach(x => x.Addresses).ValidId<Query, IdentityAddress>();
     }
 }

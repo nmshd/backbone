@@ -1,3 +1,4 @@
+using UpdateDeviceRegistrationSlice = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 using Backbone.Modules.Devices.Abstractions.PushNotifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -40,7 +41,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = new Handler(mockPushService, mockUserContext);
 
         // Act
-        await handler.Handle(new UpdateDeviceRegistrationCommand
+        await handler.Handle(new UpdateDeviceRegistrationSlice.Command
         {
             Platform = "fcm",
             Handle = "handle",

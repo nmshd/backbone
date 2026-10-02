@@ -2,9 +2,10 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 
-public class CreateRelationshipTemplateResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateRelationshipTemplateResponse")]
+public class Response
 {
-    public CreateRelationshipTemplateResponse(RelationshipTemplate relationshipTemplate)
+    public Response(RelationshipTemplate relationshipTemplate)
     {
         Id = relationshipTemplate.Id;
         CreatedAt = relationshipTemplate.CreatedAt;

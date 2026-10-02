@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RejectRelationship;
 
-public class RejectRelationshipCommand : IRequest<RejectRelationshipResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RejectRelationshipCommand")]
+public class Command : IRequest<Response>
 {
     public required string RelationshipId { get; init; }
     public byte[]? CreationResponseContent { get; init; }

@@ -3,9 +3,10 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RevokeRelationship;
 
-public class RevokeRelationshipResponse : RelationshipMetadataDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RevokeRelationshipResponse")]
+public class Response : RelationshipMetadataDTO
 {
-    public RevokeRelationshipResponse(Relationship relationship) : base(relationship)
+    public Response(Relationship relationship) : base(relationship)
     {
     }
 }

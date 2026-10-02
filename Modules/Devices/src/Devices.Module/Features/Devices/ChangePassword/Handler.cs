@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ChangePassword;
 
-public class Handler : IRequestHandler<ChangePasswordCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly DeviceId _activeDevice;
     private readonly ILogger<Handler> _logger;
@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<ChangePasswordCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var currentDevice = await _identitiesRepository.Get(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 

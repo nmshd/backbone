@@ -17,7 +17,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapListModificationsEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("Modifications", Handle)
-            .Produces<PagedHttpResponseEnvelope<ListModificationsResponse>>(StatusCodes.Status200OK)
+            .Produces<PagedHttpResponseEnvelope<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -31,7 +31,7 @@ internal static class Endpoint
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(options.Value.Pagination.MaxPageSize));
         paginationFilter.PageSize ??= options.Value.Pagination.DefaultPageSize;
 
-        var response = await mediator.Send(new ListModificationsQuery
+        var response = await mediator.Send(new Query
         {
             PaginationFilter = paginationFilter, LocalIndex = localIndex, SupportedDatawalletVersion = supportedDatawalletVersion ?? 0
         }, cancellationToken);

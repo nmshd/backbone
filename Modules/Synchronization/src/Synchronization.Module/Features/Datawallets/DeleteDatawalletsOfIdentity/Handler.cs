@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
 
-public class Handler : IRequestHandler<DeleteDatawalletsOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ISynchronizationDbContext _dbContext;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<DeleteDatawalletsOfIdentityCommand>
         _dbContext = dbContext;
     }
 
-    public async Task Handle(DeleteDatawalletsOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _dbContext.Set<Datawallet>().Where(d => d.Owner == request.IdentityAddress).ExecuteDeleteAsync(cancellationToken);
     }

@@ -8,7 +8,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Notifications.SendNotification;
 
-public class Handler : IRequestHandler<SendNotificationCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<SendNotificationCommand>
         _notifications = applicationConfiguration.Value.Notifications;
     }
 
-    public async Task Handle(SendNotificationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var parsedRecipients = request.Recipients.Select(IdentityAddress.ParseUnsafe).ToArray();
 
@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<SendNotificationCommand>
         await _pushNotificationSender.SendNotification(notificationId, parsedNotificationTexts, pushNotificationFilter, cancellationToken);
     }
 
-    private ApplicationConfiguration.NotificationTextsConfiguration GetNotificationFromConfigurationByCode(SendNotificationCommand request)
+    private ApplicationConfiguration.NotificationTextsConfiguration GetNotificationFromConfigurationByCode(Command request)
     {
         var textFromConfiguration = _notifications?.Texts.FirstOrDefault(t => t.Code == request.Code);
 

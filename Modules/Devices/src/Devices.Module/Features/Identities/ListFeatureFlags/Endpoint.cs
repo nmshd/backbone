@@ -13,7 +13,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapListFeatureFlagsEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("{identityAddress}/FeatureFlags", Handle)
-            .Produces<HttpResponseEnvelopeResult<ListFeatureFlagsResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -21,7 +21,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string identityAddress, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ListFeatureFlagsQuery { IdentityAddress = identityAddress }, cancellationToken);
+        var response = await mediator.Send(new Query { IdentityAddress = identityAddress }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

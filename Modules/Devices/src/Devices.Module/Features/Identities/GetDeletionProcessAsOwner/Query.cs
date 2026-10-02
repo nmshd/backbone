@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 
-public class GetDeletionProcessAsOwnerQuery : IRequest<IdentityDeletionProcessOverviewDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetDeletionProcessAsOwnerQuery")]
+public class Query : IRequest<IdentityDeletionProcessOverviewDTO>
 {
     public required string Id { get; init; }
 }

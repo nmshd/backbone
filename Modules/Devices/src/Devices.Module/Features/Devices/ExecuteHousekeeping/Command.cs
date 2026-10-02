@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping;
 
-public class ExecuteHousekeepingCommand : IRequest;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ExecuteHousekeepingCommand")]
+public class Command : IRequest;

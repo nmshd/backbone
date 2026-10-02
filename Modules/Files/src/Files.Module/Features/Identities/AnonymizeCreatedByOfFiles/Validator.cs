@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Identities.AnonymizeCreatedByOfFiles;
 
-public class Validator : AbstractValidator<AnonymizeCreatedByOfFilesCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<AnonymizeCreatedByOfFilesCommand, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Command, IdentityAddress>();
     }
 }

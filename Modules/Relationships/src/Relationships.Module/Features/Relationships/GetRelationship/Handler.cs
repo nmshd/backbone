@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.GetRelationship;
 
-public class Handler : IRequestHandler<GetRelationshipQuery, RelationshipDTO>
+public class Handler : IRequestHandler<Query, RelationshipDTO>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetRelationshipQuery, RelationshipDTO>
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<RelationshipDTO> Handle(GetRelationshipQuery request, CancellationToken cancellationToken)
+    public async Task<RelationshipDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var relationship = await _relationshipsRepository.GetRelationshipWithContent(RelationshipId.Parse(request.Id), _activeIdentity, cancellationToken, track: false);
 

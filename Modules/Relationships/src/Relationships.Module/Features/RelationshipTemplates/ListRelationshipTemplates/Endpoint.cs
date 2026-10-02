@@ -17,7 +17,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapListRelationshipTemplatesEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("", Handle)
-            .Produces<PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>>(StatusCodes.Status200OK)
+            .Produces<PagedHttpResponseEnvelope<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -29,7 +29,7 @@ internal static class Endpoint
         if (paginationFilter.PageSize > options.Value.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(options.Value.Pagination.MaxPageSize));
 
-        var response = await mediator.Send(new ListRelationshipTemplatesQuery { PaginationFilter = paginationFilter, Ids = ids?.ToList() ?? [] }, cancellationToken);
+        var response = await mediator.Send(new Query { PaginationFilter = paginationFilter, Ids = ids?.ToList() ?? [] }, cancellationToken);
         return EnvelopeHttpResults.Paged(response);
     }
 }

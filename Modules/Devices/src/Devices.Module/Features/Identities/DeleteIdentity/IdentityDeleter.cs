@@ -1,3 +1,4 @@
+using DeletePnsRegistrationsOfIdentity = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
@@ -19,9 +20,9 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeletePnsRegistrationsOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new DeletePnsRegistrationsOfIdentity.Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "PnsRegistrations");
-        await _mediator.Send(new DeleteIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Identities");
     }
 }

@@ -1,4 +1,4 @@
-using Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionCreated;
+using TierQuotaDefinitionCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Contracts.DomainEvents;
@@ -68,9 +68,9 @@ public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBa
     //     ).MustHaveHappened();
     // }
 
-    private static TierQuotaDefinitionCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions)
+    private static TierQuotaDefinitionCreated.Handler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions)
     {
-        var logger = A.Fake<ILogger<TierQuotaDefinitionCreatedDomainEventHandler>>();
-        return new TierQuotaDefinitionCreatedDomainEventHandler(identities, tierQuotaDefinitions, logger);
+        var logger = A.Fake<ILogger<TierQuotaDefinitionCreated.Handler>>();
+        return new TierQuotaDefinitionCreated.Handler(identities, tierQuotaDefinitions, logger);
     }
 }

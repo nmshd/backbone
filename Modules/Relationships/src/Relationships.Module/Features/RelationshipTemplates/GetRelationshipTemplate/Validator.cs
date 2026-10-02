@@ -5,11 +5,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
 
-public class Validator : AbstractValidator<GetRelationshipTemplateQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetRelationshipTemplateQuery, RelationshipTemplateId>();
+        RuleFor(x => x.Id).ValidId<Query, RelationshipTemplateId>();
 
         RuleFor(x => x.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH).When(t => t.Password != null);
     }

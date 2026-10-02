@@ -1,3 +1,4 @@
+using StartSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 using Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 1 });
+        var validationResult = validator.TestValidate(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 1 });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,7 +27,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new StartSyncRunCommand { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 0 });
+        var validationResult = validator.TestValidate(new StartSyncRunSlice.Command { Type = SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, SupportedDatawalletVersion = 0 });
 
         // Assert
         validationResult.ShouldHaveValidationErrorFor(x => x.SupportedDatawalletVersion);

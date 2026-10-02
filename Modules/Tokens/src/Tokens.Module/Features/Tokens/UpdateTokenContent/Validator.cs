@@ -5,11 +5,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.UpdateTokenContent;
 
-public class Validator : AbstractValidator<UpdateTokenContentCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.TokenId).ValidId<UpdateTokenContentCommand, TokenId>();
+        RuleFor(x => x.TokenId).ValidId<Command, TokenId>();
 
         RuleFor(x => x.NewContent).NumberOfBytes(1, Token.MAX_CONTENT_LENGTH);
 

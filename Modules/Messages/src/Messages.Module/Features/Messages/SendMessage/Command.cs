@@ -3,8 +3,9 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("SendMessageCommand")]
 [ApplyQuotasForMetrics("NumberOfSentMessages")]
-public class SendMessageCommand : IRequest<SendMessageResponse>
+public class Command : IRequest<Response>
 {
     public ICollection<SendMessageCommandRecipientInformation> Recipients { get; set; } = new List<SendMessageCommandRecipientInformation>();
     public required byte[] Body { get; set; }

@@ -1,3 +1,4 @@
+using CancelDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionProcessCommand { DeletionProcessId = IdentityDeletionProcessId.Generate() });
+        var validationResult = validator.TestValidate(new CancelDeletionProcessSlice.Command { DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,9 +28,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionProcessCommand { DeletionProcessId = "invalid-deletion-process-id" });
+        var validationResult = validator.TestValidate(new CancelDeletionProcessSlice.Command { DeletionProcessId = "invalid-deletion-process-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionProcessCommand.DeletionProcessId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionProcessSlice.Command.DeletionProcessId));
     }
 }

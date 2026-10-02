@@ -1,3 +1,4 @@
+using LogDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 using Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new LogDeletionProcessCommand
+        var validationResult = validator.TestValidate(new LogDeletionProcessSlice.Command
         {
             IdentityAddress = CreateRandomIdentityAddress(),
             AggregateType = "aggregateType"
@@ -30,13 +31,13 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new LogDeletionProcessCommand
+        var validationResult = validator.TestValidate(new LogDeletionProcessSlice.Command
         {
             IdentityAddress = "invalid-identity-address",
             AggregateType = "aggregateType"
         });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(LogDeletionProcessCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(LogDeletionProcessSlice.Command.IdentityAddress));
     }
 }

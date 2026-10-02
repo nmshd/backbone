@@ -5,7 +5,7 @@ using FluentValidation;
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<ListTokensByIdentityQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {

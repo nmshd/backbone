@@ -13,7 +13,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapListAnnouncementsInLanguageEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("", Handle)
-            .Produces<HttpResponseEnvelopeResult<ListAnnouncementsInLanguageResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
 
         return group;
@@ -21,7 +21,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromQuery] string language, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ListAnnouncementsForActiveIdentityInLanguageQuery { Language = language }, cancellationToken);
+        var response = await mediator.Send(new Query { Language = language }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

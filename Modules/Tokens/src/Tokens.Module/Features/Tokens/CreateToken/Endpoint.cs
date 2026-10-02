@@ -14,11 +14,11 @@ internal static class Endpoint
     {
         group.MapPost("", Handle)
             .AllowAnonymous()
-            .Produces<HttpResponseEnvelopeResult<CreateTokenResponse>>(StatusCodes.Status201Created);
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created);
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] CreateTokenCommand request, HttpContext context, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command request, HttpContext context, IMediator mediator, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(request, cancellationToken);
         return EnvelopeHttpResults.CreatedAtRoute(GetToken.Endpoint.ROUTE_NAME, new { v = context.Request.RouteValues["v"], id = response.Id }, response);

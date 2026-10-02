@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Messages.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.MessageCreated;
+﻿using MessageCreated = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.MessageCreated;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -112,9 +112,9 @@ public class MessageCreatedDomainEventHandlerTests : AbstractTestsBase
         return relationshipsRepository;
     }
 
-    private MessageCreatedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext, IRelationshipsRepository relationshipsRepository)
+    private MessageCreated.Handler CreateHandler(ISynchronizationDbContext dbContext, IRelationshipsRepository relationshipsRepository)
     {
-        var logger = A.Dummy<ILogger<MessageCreatedDomainEventHandler>>();
-        return new MessageCreatedDomainEventHandler(dbContext, relationshipsRepository, logger);
+        var logger = A.Dummy<ILogger<MessageCreated.Handler>>();
+        return new MessageCreated.Handler(dbContext, relationshipsRepository, logger);
     }
 }

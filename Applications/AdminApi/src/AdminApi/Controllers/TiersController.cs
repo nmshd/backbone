@@ -1,15 +1,15 @@
+using CreateQuotaForTier = Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
+using CreateTier = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
+using DeleteTier = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
+using DeleteTierQuotaDefinition = Backbone.Modules.Quotas.Module.Features.Tiers.DeleteTierQuotaDefinition;
+using GetTier = Backbone.Modules.Quotas.Module.Features.Tiers.GetTier;
 using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
-using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.Modules.Quotas.Module.Features.Shared;
-using Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
-using Backbone.Modules.Quotas.Module.Features.Tiers.DeleteTierQuotaDefinition;
-using Backbone.Modules.Quotas.Module.Features.Tiers.GetTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -51,14 +51,14 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var tier = await _mediator.Send(new GetTierQuery { Id = tierId }, cancellationToken);
+        var tier = await _mediator.Send(new GetTier.Query { Id = tierId }, cancellationToken);
         return Ok(tier);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateTierResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateTier.Response>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<CreatedResult> PostTiers([FromBody] CreateTierCommand command, CancellationToken cancellationToken)
+    public async Task<CreatedResult> PostTiers([FromBody] CreateTier.Command command, CancellationToken cancellationToken)
     {
         var createdTier = await _mediator.Send(command, cancellationToken);
         return Created(createdTier);
@@ -70,7 +70,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteTier([FromRoute] string tierId, CancellationToken cancellationToken)
     {
-        var command = new DeleteTierCommand { TierId = tierId };
+        var command = new DeleteTier.Command { TierId = tierId };
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -81,7 +81,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<CreatedResult> CreateTierQuota([FromRoute] string tierId, [FromBody] CreateQuotaForTierRequest request, CancellationToken cancellationToken)
     {
-        var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTierCommand { TierId = tierId, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period },
+        var createdTierQuotaDefinition = await _mediator.Send(new CreateQuotaForTier.Command { TierId = tierId, MetricKey = request.MetricKey, Max = request.Max, Period = request.Period },
             cancellationToken);
         return Created(createdTierQuotaDefinition);
     }
@@ -91,7 +91,7 @@ public class TiersController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTierQuota([FromRoute] string tierId, [FromRoute] string tierQuotaDefinitionId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteTierQuotaDefinitionCommand { TierId = tierId, TierQuotaDefinitionId = tierQuotaDefinitionId }, cancellationToken);
+        await _mediator.Send(new DeleteTierQuotaDefinition.Command { TierId = tierId, TierQuotaDefinitionId = tierQuotaDefinitionId }, cancellationToken);
         return NoContent();
     }
 }

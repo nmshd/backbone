@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 
-public class Handler : IRequestHandler<DeleteTokensOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITokensRepository _tokensRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<DeleteTokensOfIdentityCommand>
         _tokensRepository = tokensRepository;
     }
 
-    public async Task Handle(DeleteTokensOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _tokensRepository.Delete(Token.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }

@@ -17,7 +17,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapCreateIdentityEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("", Handle)
-            .Produces<HttpResponseEnvelopeResult<CreateIdentityResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound)
             .AllowAnonymous();
@@ -32,7 +32,7 @@ internal static class Endpoint
         if (!await clients.ValidateSecret(request.ClientId, request.ClientSecret, cancellationToken))
             throw new OperationFailedException(GenericApplicationErrors.Unauthorized());
 
-        var command = new CreateIdentityCommand
+        var command = new Command
         {
             ClientId = request.ClientId,
             DevicePassword = request.DevicePassword,

@@ -1,3 +1,4 @@
+using ListIdentitiesSlice = Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 using Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListIdentitiesQuery { Addresses = [CreateRandomIdentityAddress()], Status = IdentityStatus.Active });
+        var validationResult = validator.TestValidate(new ListIdentitiesSlice.Query { Addresses = [CreateRandomIdentityAddress()], Status = IdentityStatus.Active });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,11 +28,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListIdentitiesQuery { Addresses = ["some-invalid-address"], Status = IdentityStatus.Active });
+        var validationResult = validator.TestValidate(new ListIdentitiesSlice.Query { Addresses = ["some-invalid-address"], Status = IdentityStatus.Active });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(
-            collectionWithInvalidId: nameof(ListIdentitiesQuery.Addresses),
+            collectionWithInvalidId: nameof(ListIdentitiesSlice.Query.Addresses),
             indexWithInvalidId: 0);
     }
 }

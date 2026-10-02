@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationship;
 
-public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelationshipResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<AcceptRelationshipResponse> Handle(AcceptRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.GetRelationshipWithContent(relationshipId, _activeIdentity, cancellationToken, track: true);
@@ -28,6 +28,6 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
 
         await _relationshipsRepository.Update(relationship);
 
-        return new AcceptRelationshipResponse(relationship);
+        return new Response(relationship);
     }
 }

@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListFeatureFlags;
 
-public class Handler : IRequestHandler<ListFeatureFlagsQuery, ListFeatureFlagsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identityRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
@@ -25,13 +25,13 @@ public class Handler : IRequestHandler<ListFeatureFlagsQuery, ListFeatureFlagsRe
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ListFeatureFlagsResponse> Handle(ListFeatureFlagsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         if (!await HasPermission(request.IdentityAddress, cancellationToken))
             throw new NotFoundException(nameof(Identity));
 
         var featureFlags = await _identityRepository.ListFeatureFlagsOfIdentity(request.IdentityAddress, cancellationToken);
-        return new ListFeatureFlagsResponse(featureFlags);
+        return new Response(featureFlags);
     }
 
     private async Task<bool> HasPermission(IdentityAddress peerAddress, CancellationToken cancellationToken)

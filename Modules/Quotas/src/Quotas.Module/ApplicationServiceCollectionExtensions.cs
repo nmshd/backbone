@@ -1,8 +1,8 @@
+using CreateQuotaForTier = Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Quotas.Module.Features.Metrics.Shared;
-using Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +16,7 @@ internal static class ApplicationServiceCollectionExtensions
         public void AddApplication()
         {
             services.AddMediatR(c => c
-                .RegisterServicesFromAssemblyContaining<CreateQuotaForTierCommand>()
+                .RegisterServicesFromAssemblyContaining<CreateQuotaForTier.Command>()
                 .AddOpenBehavior(typeof(LoggingBehavior<,>))
                 .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
                 .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))

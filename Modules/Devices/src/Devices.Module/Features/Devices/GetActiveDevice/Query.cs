@@ -3,4 +3,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.GetActiveDevice;
 
-public class GetActiveDeviceQuery : IRequest<DeviceDTO>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetActiveDeviceQuery")]
+public class Query : IRequest<DeviceDTO>;

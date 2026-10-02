@@ -1,4 +1,5 @@
-﻿using System.CommandLine;
+﻿using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
+using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
@@ -100,7 +101,7 @@ public class SendAnnouncementCommand : AdminCliCommand
 
             Console.WriteLine(@"Sending announcement...");
 
-            var response = await _mediator.Send(new CreateAnnouncementCommand
+            var response = await _mediator.Send(new CreateAnnouncement.Command
             {
                 Texts = texts,
                 Severity = severity,

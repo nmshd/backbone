@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.UpdateActiveDevice;
 
-public class Validator : AbstractValidator<UpdateActiveDeviceCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

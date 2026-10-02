@@ -3,4 +3,5 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;
 
-public class CreateChallengeCommand : IRequest<ChallengeDTO>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateChallengeCommand")]
+public class Command : IRequest<ChallengeDTO>;

@@ -13,7 +13,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapUpdateTokenContentEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("{id}/UpdateContent", Handle)
-            .Produces<HttpResponseEnvelopeResult<UpdateTokenContentResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -21,7 +21,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string id, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new UpdateTokenContentCommand { TokenId = id, NewContent = body.NewContent, Password = body.Password }, cancellationToken);
+        var response = await mediator.Send(new Command { TokenId = id, NewContent = body.NewContent, Password = body.Password }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

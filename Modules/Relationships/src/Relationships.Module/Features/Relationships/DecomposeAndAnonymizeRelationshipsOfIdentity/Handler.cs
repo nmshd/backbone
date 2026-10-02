@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 
-public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly ApplicationConfiguration _applicationConfiguration;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<DecomposeAndAnonymizeRelationshipsOfIdent
         _applicationConfiguration = applicationOptions.Value;
     }
 
-    public async Task Handle(DecomposeAndAnonymizeRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         /*
          * We have to ignore the cache (and force a reload from db) here, because the data can get changed by the deletion of the relationship template,

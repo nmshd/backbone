@@ -25,7 +25,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string fileId, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new GetFileContentQuery { Id = fileId }, cancellationToken);
+        var response = await mediator.Send(new Query { Id = fileId }, cancellationToken);
         return Results.File(response.FileContent, MediaTypeNames.Application.Octet);
     }
 }

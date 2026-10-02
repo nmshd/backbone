@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 
-public class Validator : AbstractValidator<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Command, IdentityAddress>();
     }
 }

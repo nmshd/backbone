@@ -9,12 +9,12 @@ using FluentValidation;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 
-public class Validator : AbstractValidator<CreateTokenCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator(IUserContext userContext)
     {
         RuleFor(t => t.ForIdentity)
-            .ValidId<CreateTokenCommand, IdentityAddress>()
+            .ValidId<Command, IdentityAddress>()
             .When(t => t.ForIdentity != null);
 
         RuleFor(c => c.Password).NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH).When(c => c.Password != null);

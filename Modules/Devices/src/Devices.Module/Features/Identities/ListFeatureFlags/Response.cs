@@ -2,9 +2,10 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListFeatureFlags;
 
-public class ListFeatureFlagsResponse : Dictionary<string, bool>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListFeatureFlagsResponse")]
+public class Response : Dictionary<string, bool>
 {
-    public ListFeatureFlagsResponse(FeatureFlagSet featureFlags)
+    public Response(FeatureFlagSet featureFlags)
     {
         foreach (var featureFlag in featureFlags)
         {

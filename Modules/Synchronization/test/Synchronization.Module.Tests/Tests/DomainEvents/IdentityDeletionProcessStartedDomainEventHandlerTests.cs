@@ -1,5 +1,5 @@
+using IdentityDeletionProcessStarted = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStarted;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
@@ -18,7 +18,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStarted.Handler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStarted.Handler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
@@ -37,7 +37,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStarted.Handler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStarted.Handler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);

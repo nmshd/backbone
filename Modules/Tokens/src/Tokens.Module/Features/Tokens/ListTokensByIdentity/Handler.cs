@@ -5,12 +5,12 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
 
-public class Handler(ITokensRepository tokensRepository) : IRequestHandler<ListTokensByIdentityQuery, ListTokensResponse>
+public class Handler(ITokensRepository tokensRepository) : IRequestHandler<Query, Response>
 {
-    public async Task<ListTokensResponse> Handle(ListTokensByIdentityQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await tokensRepository.ListWithoutContent(request.PaginationFilter, Token.WasCreatedBy(request.CreatedBy), cancellationToken);
-        var pagedResult = new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
+        var pagedResult = new Response(dbPaginationResult, request.PaginationFilter);
 
         return pagedResult;
     }

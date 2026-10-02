@@ -6,7 +6,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 
-public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly ITiersRepository _tierRepository;
     private readonly ILogger<Handler> _logger;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
         _logger = logger;
     }
 
-    public async Task<CreateTierResponse> Handle(CreateTierCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var tierName = TierName.Create(request.Name);
 
@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         _logger.CreatedTier(tier.Id.Value, tier.Name.Value);
 
-        return new CreateTierResponse(tier.Id, tier.Name);
+        return new Response(tier.Id, tier.Name);
     }
 }
 

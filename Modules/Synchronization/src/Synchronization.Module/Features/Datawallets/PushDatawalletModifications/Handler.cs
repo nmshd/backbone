@@ -11,7 +11,7 @@ using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 
-public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushDatawalletModificationsResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
@@ -20,8 +20,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private Datawallet? _datawallet;
     private DatawalletModification[] _modifications = null!;
 
-    private PushDatawalletModificationsCommand _request = null!;
-    private PushDatawalletModificationsResponse _response = null!;
+    private Command _request = null!;
+    private Response _response = null!;
     private DatawalletVersion _supportedDatawalletVersion = null!;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<PushDatawalletModificationsResponse> Handle(PushDatawalletModificationsCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         _request = request;
         _cancellationToken = cancellationToken;
@@ -119,7 +119,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private void BuildResponse()
     {
         var responseItems = _modifications.Select(m => new PushDatawalletModificationsResponseItem(m));
-        _response = new PushDatawalletModificationsResponse { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
+        _response = new Response { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
     }
 
     private async Task Save(DatawalletModification[] modifications)

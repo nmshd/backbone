@@ -18,7 +18,7 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] ChangePasswordCommand request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command request, IMediator mediator, CancellationToken cancellationToken)
     {
         if (request.OldPassword == null || request.NewPassword == null)
             throw new BadHttpRequestException("Required request fields must not be null.");

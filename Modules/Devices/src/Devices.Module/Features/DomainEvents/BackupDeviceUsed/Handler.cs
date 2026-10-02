@@ -5,11 +5,11 @@ using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Device;
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.BackupDeviceUsed;
 
-public class BackupDeviceUsedDomainEventHandler : IDomainEventHandler<BackupDeviceUsedDomainEvent>
+public class Handler : IDomainEventHandler<BackupDeviceUsedDomainEvent>
 {
     private readonly IPushNotificationSender _pushNotificationSender;
 
-    public BackupDeviceUsedDomainEventHandler(IPushNotificationSender pushNotificationSender)
+    public Handler(IPushNotificationSender pushNotificationSender)
     {
         _pushNotificationSender = pushNotificationSender;
     }

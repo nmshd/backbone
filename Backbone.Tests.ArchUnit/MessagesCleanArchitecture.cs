@@ -9,7 +9,7 @@ public class MessagesCleanArchitecture
     private static readonly IObjectProvider<IType> USE_CASE_TYPES =
         Classes().That()
             .ResideInNamespaceMatching("Backbone.Modules.Messages.Module.Features.*")
-            .And().HaveNameMatching(".+(Command|Query|Handler|Validator|Response)$")
+            .And().HaveNameMatching(".*(Command|Query|Handler|Validator|Response)$")
             .As("Messages use case types");
 
     [Fact]

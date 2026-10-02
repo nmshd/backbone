@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity;
 
-public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IMetricsRepository _metricsRepository;
@@ -19,12 +19,12 @@ public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
         _metricCalculatorFactory = metricCalculatorFactory;
     }
 
-    public async Task<GetIdentityResponse> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
         var metricsKeys = identity.TierQuotas.Select(q => q.MetricKey).Union(identity.IndividualQuotas.Select(q => q.MetricKey));
         var metrics = await _metricsRepository.List(metricsKeys, cancellationToken);
-        return await GetIdentityResponse.Create(_metricCalculatorFactory, identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics, cancellationToken);
+        return await Response.Create(_metricCalculatorFactory, identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics, cancellationToken);
     }
 }

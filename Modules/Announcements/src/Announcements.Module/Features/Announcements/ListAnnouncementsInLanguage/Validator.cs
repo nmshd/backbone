@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
 
-public class Validator : AbstractValidator<ListAnnouncementsForActiveIdentityInLanguageQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {

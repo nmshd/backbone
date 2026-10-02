@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.DeleteQuotaForIdentity;
 
-public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<Handler> _logger;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<DeleteQuotaForIdentityCommand>
         _logger = logger;
     }
 
-    public async Task Handle(DeleteQuotaForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Deleting individual quota with id: '{individualQuotaId}'.", request.IndividualQuotaId);
 

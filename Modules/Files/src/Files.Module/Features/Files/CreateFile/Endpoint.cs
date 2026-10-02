@@ -19,7 +19,7 @@ internal static class Endpoint
         group.MapPost("", Handle)
             .DisableAntiforgery()
             .Accepts<RequestFormParams>("multipart/form-data")
-            .Produces<HttpResponseEnvelopeResult<CreateFileResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -33,7 +33,7 @@ internal static class Endpoint
 
         using var inputStream = new MemoryStream();
         await dto.Content.CopyToAsync(inputStream, cancellationToken);
-        var response = await mediator.Send(new CreateFileCommand
+        var response = await mediator.Send(new Command
         {
             FileContent = inputStream.ToArray(),
             ExpiresAt = dto.ExpiresAt,

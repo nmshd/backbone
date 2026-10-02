@@ -1,6 +1,7 @@
 namespace Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken;
 
-public class ValidateFileOwnershipTokenResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ValidateFileOwnershipTokenResponse")]
+public class Response
 {
     public required bool IsValid { get; init; }
 }

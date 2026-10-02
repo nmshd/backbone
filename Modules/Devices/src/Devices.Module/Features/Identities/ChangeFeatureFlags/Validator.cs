@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ChangeFeatureFlags;
 
-public class Validator : AbstractValidator<ChangeFeatureFlagsCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator(IOptions<ApplicationConfiguration> configuration)
     {

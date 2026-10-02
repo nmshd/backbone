@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.GetDatawallet;
 
-internal class Handler : IRequestHandler<GetDatawalletQuery, DatawalletDTO>
+internal class Handler : IRequestHandler<Query, DatawalletDTO>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
@@ -19,7 +19,7 @@ internal class Handler : IRequestHandler<GetDatawalletQuery, DatawalletDTO>
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<DatawalletDTO> Handle(GetDatawalletQuery request, CancellationToken cancellationToken)
+    public async Task<DatawalletDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var datawallet = await _dbContext.GetDatawallet(_activeIdentity, cancellationToken) ?? throw new NotFoundException(nameof(Datawallet));
         return new DatawalletDTO(datawallet);

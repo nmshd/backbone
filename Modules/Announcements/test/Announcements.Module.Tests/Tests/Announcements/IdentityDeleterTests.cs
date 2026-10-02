@@ -1,6 +1,6 @@
+using DeleteAnnouncementRecipients = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Announcements.Module.Features.Identities.DeleteIdentity;
-using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using FakeItEasy;
 using MediatR;
 
@@ -21,7 +21,7 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteAnnouncementRecipientsCommand>
+        A.CallTo(() => mockMediator.Send(A<DeleteAnnouncementRecipients.Command>
                 .That
                 .Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._))
             .MustHaveHappened();

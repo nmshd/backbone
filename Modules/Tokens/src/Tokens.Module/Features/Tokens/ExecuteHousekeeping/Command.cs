@@ -2,4 +2,5 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ExecuteHousekeeping;
 
-public class ExecuteHousekeepingCommand : IRequest;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ExecuteHousekeepingCommand")]
+public class Command : IRequest;

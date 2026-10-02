@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
-public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, TriggerRipeDeletionProcessesResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -14,11 +14,11 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.List(Identity.IsReadyForDeletion(), cancellationToken, track: true);
 
-        var response = new TriggerRipeDeletionProcessesResponse();
+        var response = new Response();
 
         foreach (var identity in identities)
         {

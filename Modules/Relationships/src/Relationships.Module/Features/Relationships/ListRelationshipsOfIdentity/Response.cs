@@ -3,9 +3,10 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
 
-public class ListRelationshipsOfIdentityResponse : CollectionResponseBase<Relationship>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListRelationshipsOfIdentityResponse")]
+public class Response : CollectionResponseBase<Relationship>
 {
-    public ListRelationshipsOfIdentityResponse(IEnumerable<Relationship> items) : base(items)
+    public Response(IEnumerable<Relationship> items) : base(items)
     {
     }
 }

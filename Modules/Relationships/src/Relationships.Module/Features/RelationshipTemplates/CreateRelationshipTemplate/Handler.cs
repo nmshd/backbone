@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 
-public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
         _userContext = userContext;
     }
 
-    public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
         var template = new RelationshipTemplate(
@@ -31,6 +31,6 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
-        return new CreateRelationshipTemplateResponse(template);
+        return new Response(template);
     }
 }

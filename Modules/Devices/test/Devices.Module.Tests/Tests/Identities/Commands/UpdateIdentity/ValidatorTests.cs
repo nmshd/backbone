@@ -1,3 +1,4 @@
+using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = CreateRandomIdentityAddress(), TierId = TierId.Generate() });
+        var validationResult = validator.TestValidate(new UpdateIdentitySlice.Command { Address = CreateRandomIdentityAddress(), TierId = TierId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,10 +28,10 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = "some-invalid-address", TierId = TierId.Generate() });
+        var validationResult = validator.TestValidate(new UpdateIdentitySlice.Command { Address = "some-invalid-address", TierId = TierId.Generate() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentityCommand.Address));
+        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentitySlice.Command.Address));
     }
 
     [Fact]
@@ -40,9 +41,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = CreateRandomIdentityAddress(), TierId = "some-invalid-tier-id" });
+        var validationResult = validator.TestValidate(new UpdateIdentitySlice.Command { Address = CreateRandomIdentityAddress(), TierId = "some-invalid-tier-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentityCommand.TierId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentitySlice.Command.TierId));
     }
 }

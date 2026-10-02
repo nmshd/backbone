@@ -8,7 +8,7 @@ using FluentValidation;
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokens;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<ListTokensQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
@@ -20,7 +20,7 @@ public class Validator : AbstractValidator<ListTokensQuery>
 
         RuleForEach(q => q.Ids)
             .Cascade(CascadeMode.Stop)
-            .ValidId<ListTokensQuery, TokenId>();
+            .ValidId<Query, TokenId>();
     }
 }
 

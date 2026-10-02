@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
 
-public class Handler : IRequestHandler<ListAnnouncementsQuery, ListAnnouncementsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
 
@@ -12,10 +12,10 @@ public class Handler : IRequestHandler<ListAnnouncementsQuery, ListAnnouncements
         _announcementsRepository = announcementsRepository;
     }
 
-    public async Task<ListAnnouncementsResponse> Handle(ListAnnouncementsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var announcements = await _announcementsRepository.List(cancellationToken);
 
-        return new ListAnnouncementsResponse(announcements);
+        return new Response(announcements);
     }
 }

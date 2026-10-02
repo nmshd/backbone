@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
 
-public class Handler : IRequestHandler<GetRelationshipTemplateQuery, RelationshipTemplateDTO>
+public class Handler : IRequestHandler<Query, RelationshipTemplateDTO>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
         _userContext = userContext;
     }
 
-    public async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
+    public async Task<RelationshipTemplateDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var template = await GetRelationshipTemplate(request.Id, request.Password, cancellationToken);
 

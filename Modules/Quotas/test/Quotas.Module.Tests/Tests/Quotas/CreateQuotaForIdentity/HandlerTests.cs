@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
+﻿using CreateQuotaForIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
+using Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Module.Features.Metrics.Shared;
 using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
@@ -20,7 +21,7 @@ public class HandlerTests : AbstractTestsBase
         var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tierId = TierId.Parse("TIRsomeTierId1111111");
         var identity = new Identity(CreateRandomIdentityAddress(), tierId);
-        var command = new CreateQuotaForIdentityCommand { IdentityAddress = identity.Address, MetricKey = metricKey.Value, Max = 5, Period = QuotaPeriod.Month };
+        var command = new CreateQuotaForIdentitySlice.Command { IdentityAddress = identity.Address, MetricKey = metricKey.Value, Max = 5, Period = QuotaPeriod.Month };
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Get(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);

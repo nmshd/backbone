@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.DeleteFile;
 
-public class Validator : AbstractValidator<DeleteFileCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
         RuleFor(f => f.Id)
-            .ValidId<DeleteFileCommand, FileId>();
+            .ValidId<Command, FileId>();
     }
 }

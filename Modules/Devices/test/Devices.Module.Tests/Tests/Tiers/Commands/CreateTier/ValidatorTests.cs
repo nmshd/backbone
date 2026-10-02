@@ -1,3 +1,4 @@
+using CreateTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.UnitTestTools.FluentValidation;
@@ -17,11 +18,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CreateTierCommand { Name = value });
+        var validationResult = validator.TestValidate(new CreateTierSlice.Command { Name = value });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(CreateTierCommand.Name),
+            propertyName: nameof(CreateTierSlice.Command.Name),
             expectedErrorCode: "error.platform.validation.invalidTierName",
             expectedErrorMessage: $"Tier Name length must be between {TierName.MIN_LENGTH} and {TierName.MAX_LENGTH}");
     }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.CreateQueuedForDeletionTier;
 
-public class Handler : IRequestHandler<CreateQueuedForDeletionTierCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITiersRepository _tiersRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<CreateQueuedForDeletionTierCommand>
         _tiersRepository = tiersRepository;
     }
 
-    public async Task Handle(CreateQueuedForDeletionTierCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         if (!await _tiersRepository.ExistsWithId(TierId.Create(Tier.QUEUED_FOR_DELETION.Id).Value, CancellationToken.None))
             await _tiersRepository.AddAsync(Tier.QUEUED_FOR_DELETION, cancellationToken);

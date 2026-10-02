@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.ListQuotasForIdentity;
 
-public class ListQuotasForIdentityQuery : IRequest<ListQuotasForIdentityResponse>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListQuotasForIdentityQuery")]
+public class Query : IRequest<Response>;

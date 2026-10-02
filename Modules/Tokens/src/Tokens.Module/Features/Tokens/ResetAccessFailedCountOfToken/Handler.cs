@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ResetAccessFailedCountOfToken;
 
-public class Handler : IRequestHandler<ResetAccessFailedCountOfTokenCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITokensRepository _tokensRepository;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<ResetAccessFailedCountOfTokenCommand>
         _tokensRepository = tokensRepository;
     }
 
-    public async Task Handle(ResetAccessFailedCountOfTokenCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var token = await _tokensRepository.GetWithoutContent(TokenId.Parse(request.TokenId), cancellationToken) ?? throw new NotFoundException(nameof(Token));
         token.ResetAccessFailedCount();

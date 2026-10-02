@@ -9,14 +9,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionDeleted;
 
-public class TierQuotaDefinitionDeletedDomainEventHandler : IDomainEventHandler<TierQuotaDefinitionDeletedDomainEvent>
+public class Handler : IDomainEventHandler<TierQuotaDefinitionDeletedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IMetricStatusesService _metricStatusesService;
-    private readonly ILogger<TierQuotaDefinitionDeletedDomainEventHandler> _logger;
+    private readonly ILogger<Handler> _logger;
 
-    public TierQuotaDefinitionDeletedDomainEventHandler(IIdentitiesRepository identitiesRepository, IMetricStatusesService metricStatusesService,
-        ILogger<TierQuotaDefinitionDeletedDomainEventHandler> logger)
+    public Handler(IIdentitiesRepository identitiesRepository, IMetricStatusesService metricStatusesService,
+        ILogger<Handler> logger)
     {
         _metricStatusesService = metricStatusesService;
         _identitiesRepository = identitiesRepository;

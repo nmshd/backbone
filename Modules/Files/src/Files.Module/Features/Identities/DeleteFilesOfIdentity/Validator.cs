@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 
-public class Validator : AbstractValidator<DeleteFilesOfIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<DeleteFilesOfIdentityCommand, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Command, IdentityAddress>();
     }
 }

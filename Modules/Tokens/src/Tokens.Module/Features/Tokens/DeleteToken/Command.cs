@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.DeleteToken;
 
-public class DeleteTokenCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteTokenCommand")]
+public class Command : IRequest
 {
     public required string Id { get; init; }
 }

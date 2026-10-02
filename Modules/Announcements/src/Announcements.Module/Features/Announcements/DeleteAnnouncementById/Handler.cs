@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
 
-public class Handler : IRequestHandler<DeleteAnnouncementByIdCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
     private readonly ILogger<Handler> _logger;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<DeleteAnnouncementByIdCommand>
         _logger = logger;
     }
 
-    public async Task Handle(DeleteAnnouncementByIdCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var parsedId = AnnouncementId.Parse(request.Id);
         var linesDeleted = await _announcementsRepository.Delete(parsedId, cancellationToken);

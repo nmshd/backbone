@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplate;
 
-public class Validator : AbstractValidator<DeleteRelationshipTemplateCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(command => command.Id).ValidId<DeleteRelationshipTemplateCommand, RelationshipTemplateId>();
+        RuleFor(command => command.Id).ValidId<Command, RelationshipTemplateId>();
     }
 }

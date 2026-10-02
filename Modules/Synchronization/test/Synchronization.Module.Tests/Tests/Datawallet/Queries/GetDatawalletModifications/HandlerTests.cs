@@ -1,3 +1,4 @@
+using ListModifications = Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -42,7 +43,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -65,7 +66,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -88,7 +89,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -112,7 +113,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -136,7 +137,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);
@@ -153,7 +154,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(0);
@@ -238,7 +239,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawalletOfActiveIdentity);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(9);
@@ -273,7 +274,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { LocalIndex = 0, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { LocalIndex = 0, SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(1);
@@ -302,9 +303,9 @@ public class HandlerTests : AbstractTestsBase
 
         // Act
         var firstPage =
-            await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(1, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+            await _handler.Handle(new ListModifications.Query { PaginationFilter = new PaginationFilter(1, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
         var secondPage =
-            await _handler.Handle(new ListModificationsQuery { PaginationFilter = new PaginationFilter(2, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+            await _handler.Handle(new ListModifications.Query { PaginationFilter = new PaginationFilter(2, pageSize), SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         firstPage.ShouldHaveCount(2);
@@ -336,7 +337,7 @@ public class HandlerTests : AbstractTestsBase
         _arrangeContext.SaveEntity(datawallet);
 
         // Act
-        var result = await _handler.Handle(new ListModificationsQuery { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
+        var result = await _handler.Handle(new ListModifications.Query { SupportedDatawalletVersion = DATAWALLET_VERSION }, CancellationToken.None);
 
         // Assert
         result.ShouldHaveCount(2);

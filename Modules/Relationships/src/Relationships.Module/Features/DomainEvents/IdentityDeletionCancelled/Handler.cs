@@ -8,12 +8,12 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityDeletionCancelled;
 
-public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<IdentityDeletionCancelledDomainEvent>
+public class Handler : IDomainEventHandler<IdentityDeletionCancelledDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IEventBus _eventBus;
 
-    public IdentityDeletionCancelledDomainEventHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
+    public Handler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
         _relationshipsRepository = relationshipsRepository;
         _eventBus = eventBus;

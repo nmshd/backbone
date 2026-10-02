@@ -7,7 +7,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 
-public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         _tiersRepository = tiersRepository;
     }
 
-    public async Task<UpdateClientResponse> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Get(request.ClientId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(OAuthClient));
 
@@ -38,6 +38,6 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (hasChanges)
             await _oAuthClientsRepository.Update(client, cancellationToken);
 
-        return new UpdateClientResponse(client);
+        return new Response(client);
     }
 }

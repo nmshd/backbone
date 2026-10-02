@@ -14,7 +14,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapCanEstablishRelationshipEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("CanCreate", Handle)
-            .Produces<HttpResponseEnvelopeResult<CanEstablishRelationshipResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -22,8 +22,8 @@ internal static class Endpoint
     private static async Task<IResult> Handle([FromQuery(Name = "peer")] string peerAddress, IIdentityStatusProvider identities, IMediator mediator, CancellationToken cancellationToken)
     {
         var response = !await identities.IsActive(peerAddress, cancellationToken)
-            ? new CanEstablishRelationshipResponse { CanCreate = false, Code = ApplicationErrors.Relationship.PeerIsToBeDeleted().Code }
-            : await mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peerAddress }, cancellationToken);
+            ? new Response { CanCreate = false, Code = ApplicationErrors.Relationship.PeerIsToBeDeleted().Code }
+            : await mediator.Send(new Query { PeerAddress = peerAddress }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

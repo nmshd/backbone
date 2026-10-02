@@ -8,7 +8,7 @@ public class IdentityStatusProvider(IMediator mediator) : IIdentityStatusProvide
 {
     public async Task<bool> IsActive(string address, CancellationToken cancellationToken)
     {
-        var identity = await mediator.Send(new GetIdentityQuery { Address = address }, cancellationToken);
+        var identity = await mediator.Send(new Query { Address = address }, cancellationToken);
         return identity.Status is IdentityStatus.Active;
     }
 }

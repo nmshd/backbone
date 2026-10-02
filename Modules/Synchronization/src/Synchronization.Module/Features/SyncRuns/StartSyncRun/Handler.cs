@@ -12,7 +12,7 @@ using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 
-public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private const int MAX_NUMBER_OF_SYNC_ERRORS_PER_EVENT = 3;
     private const int DEFAULT_DURATION = 10;
@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
     private SyncRun? _previousSyncRun;
-    private StartSyncRunCommand _request = null!;
+    private Command _request = null!;
     private DatawalletVersion? _supportedDatawalletVersion;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<StartSyncRunResponse> Handle(StartSyncRunCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         _request = request;
         _supportedDatawalletVersion = new DatawalletVersion(_request.SupportedDatawalletVersion);
@@ -49,7 +49,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         };
     }
 
-    private async Task<StartSyncRunResponse> StartExternalEventSync()
+    private async Task<Response> StartExternalEventSync()
     {
         EnsureDatawalletExists();
         EnsureSufficientSupportedDatawalletVersion();
@@ -65,7 +65,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return CreateResponse(StartSyncRunStatus.Created, newSyncRun);
     }
 
-    private async Task<StartSyncRunResponse> StartDatawalletVersionUpgrade()
+    private async Task<Response> StartDatawalletVersionUpgrade()
     {
         EnsureSufficientSupportedDatawalletVersion();
         await EnsureNoActiveSyncRunExists();
@@ -153,8 +153,8 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
     }
 
-    private static StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
+    private static Response CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
-        return new StartSyncRunResponse(status, newSyncRun);
+        return new Response(status, newSyncRun);
     }
 }

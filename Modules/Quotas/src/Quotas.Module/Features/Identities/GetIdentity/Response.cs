@@ -6,12 +6,13 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity;
 
-public class GetIdentityResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetIdentityResponse")]
+public class Response
 {
     public required string Address { get; set; }
     public required IEnumerable<QuotaDTO> Quotas { get; set; }
 
-    public static async Task<GetIdentityResponse> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
+    public static async Task<Response> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
     {
         var quotasList = new List<QuotaDTO>();
 
@@ -27,7 +28,7 @@ public class GetIdentityResponse
                 ));
         }
 
-        return new GetIdentityResponse
+        return new Response
         {
             Address = identityAddress,
             Quotas = quotasList

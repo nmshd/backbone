@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.CanEstablishRelationship;
 
-public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstablishRelationshipResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
         _userContext = userContext;
     }
 
-    public async Task<CanEstablishRelationshipResponse> Handle(CanEstablishRelationshipQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var existingRelationships = await _relationshipsRepository.ListWithoutContent(
             Relationship.IsBetween(request.PeerAddress, _userContext.GetAddress()),
@@ -25,6 +25,6 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 
         var error = Relationship.CanEstablish(existingRelationships.ToList());
 
-        return new CanEstablishRelationshipResponse { CanCreate = error == null, Code = error?.Code };
+        return new Response { CanCreate = error == null, Code = error?.Code };
     }
 }

@@ -18,7 +18,7 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] ChangeFeatureFlagsCommand request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command request, IMediator mediator, CancellationToken cancellationToken)
     {
         await mediator.Send(request, cancellationToken);
         return Results.NoContent();

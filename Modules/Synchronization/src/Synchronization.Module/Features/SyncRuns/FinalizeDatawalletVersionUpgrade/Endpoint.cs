@@ -1,3 +1,4 @@
+using FinalizeExternalEventSync = Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.MinimalApi;
 using MediatR;
@@ -16,7 +17,7 @@ internal static class Endpoint
     {
         group.MapPut("{id}/FinalizeDatawalletVersionUpgrade", Handle)
             .Accepts<FinalizeDatawalletVersionUpgradeRequest>(isOptional: true, "application/json", "application/*+json")
-            .Produces<HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<FinalizeExternalEventSync.Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -27,7 +28,7 @@ internal static class Endpoint
         if (request == null || request.DatawalletModifications == null || request.DatawalletModifications.Any(m => m != null && (m.Collection == null || m.ObjectIdentifier == null)))
             throw new BadHttpRequestException("Required request fields must not be null.");
 
-        var response = await mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand
+        var response = await mediator.Send(new Command
         {
             SyncRunId = id, NewDatawalletVersion = request.NewDatawalletVersion, DatawalletModifications = request.DatawalletModifications
         }, cancellationToken);

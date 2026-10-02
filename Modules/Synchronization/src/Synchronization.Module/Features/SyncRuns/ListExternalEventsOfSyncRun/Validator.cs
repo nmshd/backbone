@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.ListExternalEventsOfSyncRun;
 
-public class Validator : AbstractValidator<ListExternalEventsOfSyncRunQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.SyncRunId).ValidId<ListExternalEventsOfSyncRunQuery, SyncRunId>();
+        RuleFor(x => x.SyncRunId).ValidId<Query, SyncRunId>();
     }
 }

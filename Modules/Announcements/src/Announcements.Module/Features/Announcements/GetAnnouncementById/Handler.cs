@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;
 
-public class Handler : IRequestHandler<GetAnnouncementByIdQuery, AnnouncementDTO>
+public class Handler : IRequestHandler<Query, AnnouncementDTO>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
 
@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<GetAnnouncementByIdQuery, AnnouncementDTO
         _announcementsRepository = announcementsRepository;
     }
 
-    public async Task<AnnouncementDTO> Handle(GetAnnouncementByIdQuery request, CancellationToken cancellationToken)
+    public async Task<AnnouncementDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var announcementId = AnnouncementId.Parse(request.Id);
 

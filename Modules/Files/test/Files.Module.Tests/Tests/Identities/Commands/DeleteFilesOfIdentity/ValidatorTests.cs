@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
+﻿using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
+using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 
@@ -13,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteFilesOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() });
+        var validationResult = validator.TestValidate(new DeleteFilesOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -26,9 +27,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteFilesOfIdentityCommand { IdentityAddress = "invalid-identity-address" });
+        var validationResult = validator.TestValidate(new DeleteFilesOfIdentitySlice.Command { IdentityAddress = "invalid-identity-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteFilesOfIdentityCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteFilesOfIdentitySlice.Command.IdentityAddress));
     }
 }

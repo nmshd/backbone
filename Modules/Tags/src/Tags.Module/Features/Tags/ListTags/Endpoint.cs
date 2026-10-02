@@ -13,14 +13,14 @@ internal static class Endpoint
     {
         group.MapGet("", Handle)
             .AllowAnonymous()
-            .Produces<HttpResponseEnvelopeResult<ListTagsResponse>>(StatusCodes.Status200OK);
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK);
 
         return group;
     }
 
     private static async Task<IResult> Handle(IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ListTagsQuery(), cancellationToken);
+        var response = await mediator.Send(new Query(), cancellationToken);
         return EnvelopeHttpResults.Ok(response).WithHttpCaching();
     }
 }

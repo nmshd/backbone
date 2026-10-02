@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.ListExternalEventsOfSyncRun;
 
-public class Handler : IRequestHandler<ListExternalEventsOfSyncRunQuery, ListExternalEventsOfSyncRunResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ListExternalEventsOfSyncRunQuery, ListExt
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<ListExternalEventsOfSyncRunResponse> Handle(ListExternalEventsOfSyncRunQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var syncRun = await _dbContext.GetSyncRunAsNoTracking(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
@@ -33,6 +33,6 @@ public class Handler : IRequestHandler<ListExternalEventsOfSyncRunQuery, ListExt
 
         var dbPaginationResult = await _dbContext.GetExternalEventsOfSyncRun(request.PaginationFilter, _activeIdentity, syncRun.Id, cancellationToken);
 
-        return new ListExternalEventsOfSyncRunResponse(dbPaginationResult.ItemsOnPage.Select(e => new ExternalEventDTO(e)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new Response(dbPaginationResult.ItemsOnPage.Select(e => new ExternalEventDTO(e)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }

@@ -10,13 +10,13 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Relationships.Module.Features.DomainEvents.FeatureFlagsOfIdentityChanged;
 
-public class FeatureFlagsOfIdentityChangedDomainEventHandler : IDomainEventHandler<FeatureFlagsOfIdentityChangedDomainEvent>
+public class Handler : IDomainEventHandler<FeatureFlagsOfIdentityChangedDomainEvent>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IEventBus _eventBus;
 
-    public FeatureFlagsOfIdentityChangedDomainEventHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;

@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.PushNotifications.SendTestNotification;
 
-public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
+public class Handler : IRequestHandler<Command, Unit>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushNotificationSender _pushSenderService;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<Unit> Handle(SendTestNotificationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
     {
         await _pushSenderService.SendNotification(
             new TestPushNotification { Data = request.Data },

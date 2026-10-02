@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 
-public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
+public class Handler : IRequestHandler<Query, ChallengeDTO>
 {
     private readonly IChallengesRepository _challengesRepository;
 
@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
         _challengesRepository = challengesRepository;
     }
 
-    public async Task<ChallengeDTO> Handle(GetChallengeByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ChallengeDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var challenge = await _challengesRepository.Get(ChallengeId.Parse(request.Id), cancellationToken);
 

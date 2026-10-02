@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.IsIdentityOfUserDeleted;
 
-public class Validator : AbstractValidator<IsIdentityOfUserDeletedQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Username).ValidId<IsIdentityOfUserDeletedQuery, Username>();
+        RuleFor(x => x.Username).ValidId<Query, Username>();
     }
 }

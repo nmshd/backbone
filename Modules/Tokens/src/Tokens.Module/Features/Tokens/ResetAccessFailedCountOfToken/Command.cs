@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ResetAccessFailedCountOfToken;
 
-public class ResetAccessFailedCountOfTokenCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ResetAccessFailedCountOfTokenCommand")]
+public class Command : IRequest
 {
     public required string TokenId { get; init; }
 }

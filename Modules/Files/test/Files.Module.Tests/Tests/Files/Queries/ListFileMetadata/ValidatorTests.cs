@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Pagination;
+﻿using ListFileMetadataSlice = Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -15,7 +16,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListFileMetadataQuery { PaginationFilter = new PaginationFilter(), Ids = [FileId.New()] });
+        var validationResult = validator.TestValidate(new ListFileMetadataSlice.Query { PaginationFilter = new PaginationFilter(), Ids = [FileId.New()] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,11 +29,11 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListFileMetadataQuery { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-file-id"] });
+        var validationResult = validator.TestValidate(new ListFileMetadataSlice.Query { PaginationFilter = new PaginationFilter(), Ids = ["some-invalid-file-id"] });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForIdInCollection(
-            collectionWithInvalidId: nameof(ListFileMetadataQuery.Ids),
+            collectionWithInvalidId: nameof(ListFileMetadataSlice.Query.Ids),
             indexWithInvalidId: 0);
     }
 }

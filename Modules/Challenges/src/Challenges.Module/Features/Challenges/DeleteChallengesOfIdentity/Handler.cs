@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 
-public class Handler : IRequestHandler<DeleteChallengesOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IChallengesRepository _challengesRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<DeleteChallengesOfIdentityCommand>
         _challengesRepository = challengesRepository;
     }
 
-    public async Task Handle(DeleteChallengesOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _challengesRepository.Delete(Challenge.WasCreatedBy(request.IdentityAddress), cancellationToken);
     }

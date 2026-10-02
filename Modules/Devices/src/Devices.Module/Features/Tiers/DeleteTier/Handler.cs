@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 
-public class Handler : IRequestHandler<DeleteTierCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly IEventBus _eventBus;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<DeleteTierCommand>
         _eventBus = eventBus;
     }
 
-    public async Task Handle(DeleteTierCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var tierIdResult = TierId.Create(request.TierId);
 

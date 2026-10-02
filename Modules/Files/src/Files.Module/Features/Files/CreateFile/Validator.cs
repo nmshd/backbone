@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.CreateFile;
 
-public class Validator : AbstractValidator<CreateFileCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

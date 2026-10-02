@@ -2,9 +2,10 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
 
-public class CreateIdentityResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateIdentityResponse")]
+public class Response
 {
-    public CreateIdentityResponse(Identity identity)
+    public Response(Identity identity)
     {
         Address = identity.Address;
         CreatedAt = identity.CreatedAt;

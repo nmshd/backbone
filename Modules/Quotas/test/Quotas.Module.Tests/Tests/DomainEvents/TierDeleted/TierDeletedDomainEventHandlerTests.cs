@@ -1,5 +1,5 @@
+using TierDeletedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierDeleted;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Quotas.Module.Features.DomainEvents.TierDeleted;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
@@ -27,8 +27,8 @@ public class TierDeletedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => tiersRepository.RemoveById(tier.Id)).MustHaveHappenedOnceExactly();
     }
 
-    private static TierDeletedDomainEventHandler CreateHandler(ITiersRepository tiersRepository)
+    private static TierDeletedSlice.Handler CreateHandler(ITiersRepository tiersRepository)
     {
-        return new TierDeletedDomainEventHandler(A.Dummy<ILogger<TierDeletedDomainEventHandler>>(), tiersRepository);
+        return new TierDeletedSlice.Handler(A.Dummy<ILogger<TierDeletedSlice.Handler>>(), tiersRepository);
     }
 }

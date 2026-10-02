@@ -1,3 +1,4 @@
+using GetDeletionProcessAsOwnerSlice = Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerQuery { Id = IdentityDeletionProcessId.Generate() });
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerSlice.Query { Id = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,9 +28,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerQuery { Id = "some-invalid-deletion-process-id" });
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerSlice.Query { Id = "some-invalid-deletion-process-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsOwnerQuery.Id));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsOwnerSlice.Query.Id));
     }
 }

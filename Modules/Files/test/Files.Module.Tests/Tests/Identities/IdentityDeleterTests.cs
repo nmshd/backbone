@@ -1,6 +1,6 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
+﻿using DeleteFilesOfIdentity = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Files.Module.Features.Identities.DeleteIdentity;
-using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 using FakeItEasy;
 using MediatR;
 
@@ -21,7 +21,7 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteFilesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeleteFilesOfIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 
     [Fact]

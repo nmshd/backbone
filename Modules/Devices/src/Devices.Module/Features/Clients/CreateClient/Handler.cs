@@ -9,7 +9,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
 
-public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
     private readonly ITiersRepository _tiersRepository;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
         _tiersRepository = tiersRepository;
     }
 
-    public async Task<CreateClientResponse> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         await EnsureClientIdDoesNotExist(request, cancellationToken);
 
@@ -33,10 +33,10 @@ public class Handler : IRequestHandler<CreateClientCommand, CreateClientResponse
 
         await _oAuthClientsRepository.Add(client, clientSecret, cancellationToken);
 
-        return new CreateClientResponse(client, clientSecret);
+        return new Response(client, clientSecret);
     }
 
-    private async Task EnsureClientIdDoesNotExist(CreateClientCommand request, CancellationToken cancellationToken)
+    private async Task EnsureClientIdDoesNotExist(Command request, CancellationToken cancellationToken)
     {
         if (!string.IsNullOrEmpty(request.ClientId))
         {

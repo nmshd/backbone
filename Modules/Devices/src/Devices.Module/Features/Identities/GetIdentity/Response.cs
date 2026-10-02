@@ -3,7 +3,8 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 
-public class GetIdentityResponse : IdentitySummaryDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetIdentityResponse")]
+public class Response : IdentitySummaryDTO
 {
-    public GetIdentityResponse(Identity identity) : base(identity) { }
+    public Response(Identity identity) : base(identity) { }
 }

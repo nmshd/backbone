@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
-public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly ILogger<Handler> _logger;
     private readonly ApplicationConfiguration _configuration;
@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task<SendMessageResponse> Handle(SendMessageCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var recipients = await ValidateRecipients(request, cancellationToken);
 
@@ -39,10 +39,10 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             recipients);
 
         await _messagesRepository.Add(message, cancellationToken);
-        return new SendMessageResponse(message);
+        return new Response(message);
     }
 
-    private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
+    private async Task<List<RecipientInformation>> ValidateRecipients(Command request, CancellationToken cancellationToken)
     {
         _logger.LogTrace("Validating recipients...");
         var sender = _userContext.GetAddress();

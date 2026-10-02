@@ -8,13 +8,13 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.TierOfIdentityChanged;
 
-public class TierOfIdentityChangedDomainEventHandler : IDomainEventHandler<TierOfIdentityChangedDomainEvent>
+public class Handler : IDomainEventHandler<TierOfIdentityChangedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
     private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
-    public TierOfIdentityChangedDomainEventHandler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, MetricCalculatorFactory metricCalculatorFactory)
+    public Handler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;

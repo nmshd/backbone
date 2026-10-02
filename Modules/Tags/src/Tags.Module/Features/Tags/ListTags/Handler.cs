@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tags.Module.Features.Tags.ListTags;
 
-public class Handler : IRequestHandler<ListTagsQuery, ListTagsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly ITagsRepository _tagsRepository;
 
@@ -12,9 +12,9 @@ public class Handler : IRequestHandler<ListTagsQuery, ListTagsResponse>
         _tagsRepository = tagsRepository;
     }
 
-    public Task<ListTagsResponse> Handle(ListTagsQuery request, CancellationToken cancellationToken)
+    public Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
-        var response = new ListTagsResponse
+        var response = new Response
         {
             SupportedLanguages = _tagsRepository.ListSupportedLanguages(),
             TagsForAttributeValueTypes = _tagsRepository.ListAttributes()

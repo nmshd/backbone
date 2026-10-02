@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.UpdateActiveDevice;
 
-public class UpdateActiveDeviceCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateActiveDeviceCommand")]
+public class Command : IRequest
 {
     public required string CommunicationLanguage { get; init; }
 }

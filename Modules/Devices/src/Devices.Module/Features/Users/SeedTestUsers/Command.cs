@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Users.SeedTestUsers;
 
-public class SeedTestUsersCommand : IRequest;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("SeedTestUsersCommand")]
+public class Command : IRequest;

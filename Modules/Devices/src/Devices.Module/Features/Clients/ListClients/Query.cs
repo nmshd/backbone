@@ -2,4 +2,5 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 
-public class ListClientsQuery : IRequest<ListClientsResponse>;
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListClientsQuery")]
+public class Query : IRequest<Response>;

@@ -6,7 +6,7 @@ using FluentValidation;
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<PushDatawalletModificationsCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

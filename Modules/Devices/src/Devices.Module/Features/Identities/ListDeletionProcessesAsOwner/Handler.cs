@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsOwner;
 
-public class Handler : IRequestHandler<ListDeletionProcessesAsOwnerQuery, ListDeletionProcessesAsOwnerResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identityRepository;
     private readonly IUserContext _userContext;
@@ -17,11 +17,11 @@ public class Handler : IRequestHandler<ListDeletionProcessesAsOwnerQuery, ListDe
         _userContext = userContext;
     }
 
-    public async Task<ListDeletionProcessesAsOwnerResponse> Handle(ListDeletionProcessesAsOwnerQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identityRepository.Get(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         var processes = identity.DeletionProcesses;
-        var response = new ListDeletionProcessesAsOwnerResponse(processes);
+        var response = new Response(processes);
 
         return response;
     }

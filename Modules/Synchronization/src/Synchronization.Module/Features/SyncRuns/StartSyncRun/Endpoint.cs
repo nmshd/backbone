@@ -18,8 +18,8 @@ internal static class Endpoint
     {
         group.MapPost("", Handle)
             .Accepts<StartSyncRunRequestBody>(isOptional: true, "application/json", "application/*+json")
-            .Produces<HttpResponseEnvelopeResult<StartSyncRunResponse>>(StatusCodes.Status200OK)
-            .Produces<HttpResponseEnvelopeResult<StartSyncRunResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
@@ -34,7 +34,7 @@ internal static class Endpoint
         if (!await identityStatusProvider.IsActive(userContext.GetAddress(), cancellationToken))
             throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
 
-        var response = await mediator.Send(new StartSyncRunCommand
+        var response = await mediator.Send(new Command
         {
             Type = requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync,
             Duration = requestBody.Duration, SupportedDatawalletVersion = supportedDatawalletVersion ?? 0

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 
-public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
 
@@ -12,13 +12,13 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
         _oAuthClientsRepository = oAuthClientsRepository;
     }
 
-    public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var clients = (await _oAuthClientsRepository.List(cancellationToken)).ToList();
 
         var clientIds = clients.Select(c => c.ClientId).ToList();
         var numberOfIdentitiesByClient = await _oAuthClientsRepository.CountIdentities(clientIds, cancellationToken);
 
-        return new ListClientsResponse(clients, numberOfIdentitiesByClient);
+        return new Response(clients, numberOfIdentitiesByClient);
     }
 }

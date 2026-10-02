@@ -6,11 +6,11 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.MessageCreated;
 
-public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreatedDomainEvent>
+public class Handler : IDomainEventHandler<MessageCreatedDomainEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public MessageCreatedDomainEventHandler(IMetricStatusesService metricStatusesService)
+    public Handler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

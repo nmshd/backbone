@@ -1,3 +1,4 @@
+using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -118,9 +119,9 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
     }
 
-    private static UpdateIdentityCommand BuildRequest(Tier newTier, Identity identity)
+    private static UpdateIdentitySlice.Command BuildRequest(Tier newTier, Identity identity)
     {
-        return new UpdateIdentityCommand
+        return new UpdateIdentitySlice.Command
         {
             Address = identity.Address,
             TierId = newTier.Id.Value

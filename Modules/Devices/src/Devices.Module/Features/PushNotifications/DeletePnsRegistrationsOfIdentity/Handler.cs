@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 
-public class Handler : IRequestHandler<DeletePnsRegistrationsOfIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<DeletePnsRegistrationsOfIdentityCommand>
         _pnsRegistrationRepository = pnsRegistrationRepository;
     }
 
-    public async Task Handle(DeletePnsRegistrationsOfIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _pnsRegistrationRepository.Delete(PnsRegistration.HasAddress(request.IdentityAddress), cancellationToken);
     }

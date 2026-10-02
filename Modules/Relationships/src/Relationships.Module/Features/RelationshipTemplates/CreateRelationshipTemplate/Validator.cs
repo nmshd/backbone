@@ -9,7 +9,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 
-public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
@@ -23,7 +23,7 @@ public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
             .When(c => c.ExpiresAt != null);
 
         RuleFor(c => c.ForIdentity)
-            .ValidId<CreateRelationshipTemplateCommand, IdentityAddress>()
+            .ValidId<Command, IdentityAddress>()
             .When(c => c.ForIdentity != null);
 
         RuleFor(c => c.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH).When(t => t.Password != null);

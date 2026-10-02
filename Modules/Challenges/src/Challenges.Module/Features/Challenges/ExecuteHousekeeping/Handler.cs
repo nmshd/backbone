@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.ExecuteHousekeeping;
 
-public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IChallengesRepository _challengesRepository;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         _challengesRepository = challengesRepository;
     }
 
-    public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await DeleteChallenges(cancellationToken);
     }

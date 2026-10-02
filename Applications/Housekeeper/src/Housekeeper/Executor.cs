@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Housekeeping;
 using MediatR;
-using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Module.Features.Announcements.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Module.Features.Challenges.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Module.Features.SyncRuns.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Module.Features.Tokens.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Module.Features.Announcements.ExecuteHousekeeping.Command;
+using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Module.Features.Challenges.ExecuteHousekeeping.Command;
+using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping.Command;
+using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping.Command;
+using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping.Command;
+using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Module.Features.SyncRuns.ExecuteHousekeeping.Command;
+using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Module.Features.Tokens.ExecuteHousekeeping.Command;
 
 namespace Backbone.Housekeeper;
 

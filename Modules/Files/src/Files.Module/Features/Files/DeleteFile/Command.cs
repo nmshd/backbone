@@ -2,7 +2,8 @@
 
 namespace Backbone.Modules.Files.Module.Features.Files.DeleteFile;
 
-public class DeleteFileCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteFileCommand")]
+public class Command : IRequest
 {
     public required string Id { get; init; }
 }

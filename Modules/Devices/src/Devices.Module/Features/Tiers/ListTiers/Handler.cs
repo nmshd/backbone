@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 
-public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly ITiersRepository _tierRepository;
 
@@ -12,9 +12,9 @@ public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
         _tierRepository = repository;
     }
 
-    public async Task<ListTiersResponse> Handle(ListTiersQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _tierRepository.List(request.PaginationFilter, cancellationToken);
-        return new ListTiersResponse(dbPaginationResult, request.PaginationFilter);
+        return new Response(dbPaginationResult, request.PaginationFilter);
     }
 }

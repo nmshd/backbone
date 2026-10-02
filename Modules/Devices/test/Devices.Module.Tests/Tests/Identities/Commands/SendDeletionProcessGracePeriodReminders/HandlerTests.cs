@@ -1,3 +1,4 @@
+using SendDeletionProcessGracePeriodRemindersSlice = Backbone.Modules.Devices.Module.Features.Identities.SendDeletionProcessGracePeriodReminders;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Module.Features.Identities.SendDeletionProcessGracePeriodReminders;
 using Backbone.Modules.Devices.Abstractions;
@@ -24,7 +25,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
@@ -54,7 +55,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(
@@ -87,7 +88,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(
@@ -122,7 +123,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(
@@ -155,7 +156,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(
@@ -189,7 +190,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
         // Act
-        await handler.Handle(new SendDeletionProcessGracePeriodRemindersCommand(), CancellationToken.None);
+        await handler.Handle(new SendDeletionProcessGracePeriodRemindersSlice.Command(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(

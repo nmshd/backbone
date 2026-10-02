@@ -22,7 +22,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle(HttpContext context, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new CreateChallengeCommand(), cancellationToken);
+        var response = await mediator.Send(new Command(), cancellationToken);
         return EnvelopeHttpResults.CreatedAtRoute(GetChallengeById.Endpoint.ROUTE_NAME, new { v = context.Request.RouteValues["v"], id = response.Id }, response);
     }
 }

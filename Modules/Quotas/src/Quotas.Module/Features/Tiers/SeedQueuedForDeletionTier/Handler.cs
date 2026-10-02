@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.SeedQueuedForDeletionTier;
 
-public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
+public class Handler : IRequestHandler<Command>
 {
     private const int MAX_RETRIES_TO_FIND_QUEUED_FOR_DELETION_TIER = 5;
     private static readonly TimeSpan RETRY_DELAY = 5.Seconds();
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         _metricsRepository = metricsRepository;
     }
 
-    public async Task Handle(SeedQueuedForDeletionTierCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var queuedForDeletionTier = await ReadQueuedForDeletionTier(cancellationToken) ?? throw new Exception("Queued for deletion tier not found");
         await Seed(queuedForDeletionTier);

@@ -22,7 +22,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string fileId, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new GetFileMetadataQuery { Id = fileId }, cancellationToken);
+        var response = await mediator.Send(new Query { Id = fileId }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

@@ -2,6 +2,7 @@ using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
+using Backbone.BuildingBlocks.Application.Abstractions;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
@@ -191,7 +192,7 @@ public static class ServiceCollectionExtensions
                     {
                         if (!type.IsGenericType)
                         {
-                            return type.Name
+                            return (type.GetCustomAttribute<JsonSchemaNameAttribute>()?.Name ?? type.Name)
                                 .Replace("DTO", string.Empty)
                                 .Replace("Command", "Request")
                                 .Replace("Query", "Request");

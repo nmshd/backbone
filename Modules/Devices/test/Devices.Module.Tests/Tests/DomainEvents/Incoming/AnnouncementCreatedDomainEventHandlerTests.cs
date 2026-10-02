@@ -1,6 +1,6 @@
+using AnnouncementCreated = Backbone.Modules.Devices.Module.Features.DomainEvents.AnnouncementCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Announcements.Contracts.DomainEvents;
-using Backbone.Modules.Devices.Module.Features.DomainEvents.AnnouncementCreated;
 using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Module.Tests.Tests.DomainEvents.Incoming;
@@ -12,7 +12,7 @@ public class AnnouncementCreatedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockPushSenderService = A.Fake<IPushNotificationSender>();
-        var handler = new AnnouncementCreatedDomainEventHandler(mockPushSenderService);
+        var handler = new AnnouncementCreated.Handler(mockPushSenderService);
 
         // Act
         await handler.Handle(new AnnouncementCreatedDomainEvent
@@ -31,7 +31,7 @@ public class AnnouncementCreatedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockPushSenderService = A.Fake<IPushNotificationSender>();
-        var handler = new AnnouncementCreatedDomainEventHandler(mockPushSenderService);
+        var handler = new AnnouncementCreated.Handler(mockPushSenderService);
 
         // Act
         await handler.Handle(new AnnouncementCreatedDomainEvent

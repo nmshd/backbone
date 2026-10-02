@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 
-public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -16,9 +16,9 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
         _identitiesRepository = devicesRepository;
     }
 
-    public async Task<ListDevicesResponse> Handle(ListDevicesQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _identitiesRepository.ListDevicesOfIdentity(_activeIdentity, request.Ids.Select(DeviceId.Parse), request.PaginationFilter, cancellationToken);
-        return new ListDevicesResponse(dbPaginationResult, request.PaginationFilter);
+        return new Response(dbPaginationResult, request.PaginationFilter);
     }
 }

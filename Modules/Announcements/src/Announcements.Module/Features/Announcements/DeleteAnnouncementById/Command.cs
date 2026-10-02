@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
 
-public class DeleteAnnouncementByIdCommand : IRequest
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteAnnouncementByIdCommand")]
+public class Command : IRequest
 {
     public required string Id { get; init; }
 }

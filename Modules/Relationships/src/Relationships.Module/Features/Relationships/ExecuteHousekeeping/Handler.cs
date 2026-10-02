@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping;
 
-public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await DeleteRelationshipTemplates(cancellationToken);
         await DeleteRelationships(cancellationToken);

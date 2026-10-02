@@ -1,3 +1,4 @@
+using GetRelationshipTemplate = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
 using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
 using Backbone.Modules.Devices.Contracts;
@@ -16,18 +17,18 @@ internal static class Endpoint
     public static RouteGroupBuilder MapCreateRelationshipEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("", Handle)
-            .Produces<HttpResponseEnvelopeResult<CreateRelationshipResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] CreateRelationshipCommand request, IIdentityStatusProvider identities, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command request, IIdentityStatusProvider identities, IMediator mediator, CancellationToken cancellationToken)
     {
         if (request.RelationshipTemplateId == null)
             throw new BadHttpRequestException("RelationshipTemplateId is required.");
 
-        var template = await mediator.Send(new GetRelationshipTemplateQuery { Id = request.RelationshipTemplateId }, cancellationToken);
+        var template = await mediator.Send(new GetRelationshipTemplate.Query { Id = request.RelationshipTemplateId }, cancellationToken);
         if (!await identities.IsActive(template.CreatedBy, cancellationToken))
             throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted());
 

@@ -5,7 +5,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping;
 
-public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IFilesRepository _filesRepository;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<ExecuteHousekeepingCommand>
         _filesRepository = filesRepository;
     }
 
-    public async Task Handle(ExecuteHousekeepingCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await DeleteFiles(cancellationToken);
         await DeleteOrphanedBlobs(cancellationToken);

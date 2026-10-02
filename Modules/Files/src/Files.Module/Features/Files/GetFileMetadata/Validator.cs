@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
 
-public class Validator : AbstractValidator<GetFileMetadataQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetFileMetadataQuery, FileId>();
+        RuleFor(x => x.Id).ValidId<Query, FileId>();
     }
 }

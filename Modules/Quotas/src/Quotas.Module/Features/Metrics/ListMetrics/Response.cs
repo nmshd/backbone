@@ -4,9 +4,10 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 
-public class ListMetricsResponse : CollectionResponseBase<MetricDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListMetricsResponse")]
+public class Response : CollectionResponseBase<MetricDTO>
 {
-    public ListMetricsResponse(IEnumerable<Metric> items) : base(items.Select(m => new MetricDTO(m)))
+    public Response(IEnumerable<Metric> items) : base(items.Select(m => new MetricDTO(m)))
     {
     }
 }

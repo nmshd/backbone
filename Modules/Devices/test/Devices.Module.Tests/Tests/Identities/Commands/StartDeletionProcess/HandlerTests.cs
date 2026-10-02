@@ -1,3 +1,4 @@
+using StartDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
@@ -31,7 +32,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
-        var response = await handler.Handle(new StartDeletionProcessCommand(), CancellationToken.None);
+        var response = await handler.Handle(new StartDeletionProcessSlice.Command(), CancellationToken.None);
 
         // Assert
         response.ShouldNotBeNull();
@@ -70,7 +71,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var acting = async () => await handler.Handle(new StartDeletionProcessCommand(), CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessSlice.Command(), CancellationToken.None);
 
         // Assert
         var exception = await acting.ShouldThrowAsync<NotFoundException>();

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 
-public class Handler : IRequestHandler<DeleteAnnouncementRecipientsCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<DeleteAnnouncementRecipientsCommand>
         _announcementsRepository = announcementsRepository;
     }
 
-    public async Task Handle(DeleteAnnouncementRecipientsCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var parsedIdentityAddress = IdentityAddress.Parse(request.IdentityAddress);
 

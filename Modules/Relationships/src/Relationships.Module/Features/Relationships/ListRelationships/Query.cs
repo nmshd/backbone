@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationships;
 
-public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListRelationshipsQuery")]
+public class Query : IRequest<Response>
 {
     public required PaginationFilter PaginationFilter { get; init; }
     public required List<string> Ids { get; set; }

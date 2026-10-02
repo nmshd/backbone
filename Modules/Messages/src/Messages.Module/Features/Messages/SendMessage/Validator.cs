@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
-public class Validator : AbstractValidator<SendMessageCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator(IOptions<ApplicationConfiguration> options)
     {

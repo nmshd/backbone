@@ -2,9 +2,10 @@ using Backbone.Modules.Tokens.Domain.Entities;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 
-public class CreateTokenResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateTokenResponse")]
+public class Response
 {
-    public CreateTokenResponse(Token token)
+    public Response(Token token)
     {
         Id = token.Id;
         CreatedAt = token.CreatedAt;

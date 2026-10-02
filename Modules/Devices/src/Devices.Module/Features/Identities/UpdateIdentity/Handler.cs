@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 
-public class Handler : IRequestHandler<UpdateIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
         _tiersRepository = tiersRepository;
     }
 
-    public async Task Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var newTierIdResult = TierId.Create(request.TierId);
         var identity = await _identitiesRepository.Get(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));

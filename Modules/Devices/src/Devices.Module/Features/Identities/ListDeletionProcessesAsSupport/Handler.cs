@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsSupport;
 
-public class Handler : IRequestHandler<ListDeletionProcessesAsSupportQuery, GetDeletionProcessesAsSupportResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identityRepository;
 
@@ -14,10 +14,10 @@ public class Handler : IRequestHandler<ListDeletionProcessesAsSupportQuery, GetD
         _identityRepository = identityRepository;
     }
 
-    public async Task<GetDeletionProcessesAsSupportResponse> Handle(ListDeletionProcessesAsSupportQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identityRepository.Get(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        var response = new GetDeletionProcessesAsSupportResponse(identity.DeletionProcesses);
+        var response = new Response(identity.DeletionProcesses);
 
         return response;
     }

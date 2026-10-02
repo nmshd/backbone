@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.GetSyncRunById;
 
-public class Handler : IRequestHandler<GetSyncRunByIdQuery, SyncRunDTO>
+public class Handler : IRequestHandler<Query, SyncRunDTO>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<GetSyncRunByIdQuery, SyncRunDTO>
         userContext.GetDeviceId();
     }
 
-    public async Task<SyncRunDTO> Handle(GetSyncRunByIdQuery request, CancellationToken cancellationToken)
+    public async Task<SyncRunDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var syncRun = await _dbContext.GetSyncRunAsNoTracking(SyncRunId.Parse(request.SyncRunId), _activeIdentity, CancellationToken.None);
         return new SyncRunDTO(syncRun);

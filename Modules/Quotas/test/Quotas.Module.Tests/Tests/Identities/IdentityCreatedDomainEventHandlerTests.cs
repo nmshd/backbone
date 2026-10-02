@@ -1,5 +1,5 @@
+using IdentityCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -55,10 +55,10 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();
     }
 
-    private static IdentityCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
+    private static IdentityCreated.Handler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
     {
-        var logger = A.Fake<ILogger<IdentityCreatedDomainEventHandler>>();
+        var logger = A.Fake<ILogger<IdentityCreated.Handler>>();
         var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();
-        return new IdentityCreatedDomainEventHandler(identities, logger, tiers, metricCalculatorFactory);
+        return new IdentityCreated.Handler(identities, logger, tiers, metricCalculatorFactory);
     }
 }

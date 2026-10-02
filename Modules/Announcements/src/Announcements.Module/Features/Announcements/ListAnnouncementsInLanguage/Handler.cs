@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
 
-public class Handler : IRequestHandler<ListAnnouncementsForActiveIdentityInLanguageQuery, ListAnnouncementsInLanguageResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IAnnouncementsRepository _announcementsRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -17,12 +17,12 @@ public class Handler : IRequestHandler<ListAnnouncementsForActiveIdentityInLangu
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ListAnnouncementsInLanguageResponse> Handle(ListAnnouncementsForActiveIdentityInLanguageQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var announcements = await _announcementsRepository.List(Announcement.IsForRecipient(_activeIdentity), cancellationToken);
 
         var expectedLanguage = AnnouncementLanguage.Parse(request.Language);
 
-        return new ListAnnouncementsInLanguageResponse(announcements, expectedLanguage);
+        return new Response(announcements, expectedLanguage);
     }
 }

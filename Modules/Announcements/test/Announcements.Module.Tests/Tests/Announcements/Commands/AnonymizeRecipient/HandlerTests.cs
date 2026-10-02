@@ -1,3 +1,4 @@
+using DeleteAnnouncementRecipients = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using System.Linq.Expressions;
 using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using Backbone.Modules.Announcements.Abstractions;
@@ -15,7 +16,7 @@ public class HandlerTests : AbstractTestsBase
         var mockRepository = A.Fake<IAnnouncementsRepository>();
 
         var handler = new Handler(mockRepository);
-        var command = new DeleteAnnouncementRecipientsCommand { IdentityAddress = CreateRandomIdentityAddress().Value };
+        var command = new DeleteAnnouncementRecipients.Command { IdentityAddress = CreateRandomIdentityAddress().Value };
 
         // Act
         await handler.Handle(command, CancellationToken.None);

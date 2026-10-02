@@ -1,3 +1,4 @@
+using TriggerRipeDeletionProcesses = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 using System.Linq.Expressions;
 using Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Abstractions;
@@ -19,7 +20,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcesses.Command(), CancellationToken.None);
 
         // Assert
         response.Results.ShouldBeEmpty();
@@ -37,7 +38,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(identitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcesses.Command(), CancellationToken.None);
 
         // Assert
         response.Results.ShouldHaveCount(1);
@@ -58,7 +59,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(identitiesRepository);
 
         // Act
-        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcesses.Command(), CancellationToken.None);
 
         // Assert
         response.Results.ShouldHaveCount(1);

@@ -6,11 +6,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
 
-public class Validator : AbstractValidator<CreateQuotaForTierCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(c => c.TierId).ValidId<CreateQuotaForTierCommand, TierId>();
+        RuleFor(c => c.TierId).ValidId<Command, TierId>();
         RuleFor(c => c.Max)
             .GreaterThan(0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
         RuleFor(c => c.Period)

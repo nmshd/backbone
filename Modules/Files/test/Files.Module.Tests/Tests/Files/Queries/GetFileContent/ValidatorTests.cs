@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Module.Features.Files.GetFileContent;
+﻿using GetFileContentSlice = Backbone.Modules.Files.Module.Features.Files.GetFileContent;
+using Backbone.Modules.Files.Module.Features.Files.GetFileContent;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetFileContentQuery { Id = FileId.New() });
+        var validationResult = validator.TestValidate(new GetFileContentSlice.Query { Id = FileId.New() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,9 +28,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetFileContentQuery { Id = "some-invalid-file-id" });
+        var validationResult = validator.TestValidate(new GetFileContentSlice.Query { Id = "some-invalid-file-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetFileContentQuery.Id));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetFileContentSlice.Query.Id));
     }
 }

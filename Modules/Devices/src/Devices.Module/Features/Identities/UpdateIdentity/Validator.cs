@@ -5,11 +5,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 
-public class Validator : AbstractValidator<UpdateIdentityCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.Address).ValidId<UpdateIdentityCommand, IdentityAddress>();
-        RuleFor(c => c.TierId).ValidId<UpdateIdentityCommand, TierId>();
+        RuleFor(x => x.Address).ValidId<Command, IdentityAddress>();
+        RuleFor(c => c.TierId).ValidId<Command, TierId>();
     }
 }

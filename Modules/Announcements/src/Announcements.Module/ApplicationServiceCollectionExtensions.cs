@@ -1,3 +1,4 @@
+using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using FluentValidation;
@@ -10,7 +11,7 @@ internal static class ApplicationServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(c => c
-            .RegisterServicesFromAssemblyContaining<CreateAnnouncementCommand>()
+            .RegisterServicesFromAssemblyContaining<CreateAnnouncement.Command>()
             .AddOpenBehavior(typeof(LoggingBehavior<,>))
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))

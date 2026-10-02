@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.GetTier;
 
-public class Handler : IRequestHandler<GetTierQuery, TierDetailsDTO>
+public class Handler : IRequestHandler<Query, TierDetailsDTO>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly IMetricsRepository _metricsRepository;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<GetTierQuery, TierDetailsDTO>
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<TierDetailsDTO> Handle(GetTierQuery request, CancellationToken cancellationToken)
+    public async Task<TierDetailsDTO> Handle(Query request, CancellationToken cancellationToken)
     {
         var tier = await _tiersRepository.Get(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
 

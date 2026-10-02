@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 
-public class Handler : IRequestHandler<LogDeletionProcessCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<LogDeletionProcessCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(LogDeletionProcessCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var auditLogEntry = IdentityDeletionProcessAuditLogEntry.DataDeleted(request.IdentityAddress, request.AggregateType);
         await _identitiesRepository.AddDeletionProcessAuditLogEntry(auditLogEntry);

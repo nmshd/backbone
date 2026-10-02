@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.DeleteTierQuotaDefinition;
 
-public class Validator : AbstractValidator<DeleteTierQuotaDefinitionCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(c => c.TierId).ValidId<DeleteTierQuotaDefinitionCommand, TierId>();
-        RuleFor(c => c.TierQuotaDefinitionId).ValidId<DeleteTierQuotaDefinitionCommand, TierQuotaDefinitionId>();
+        RuleFor(c => c.TierId).ValidId<Command, TierId>();
+        RuleFor(c => c.TierQuotaDefinitionId).ValidId<Command, TierQuotaDefinitionId>();
     }
 }

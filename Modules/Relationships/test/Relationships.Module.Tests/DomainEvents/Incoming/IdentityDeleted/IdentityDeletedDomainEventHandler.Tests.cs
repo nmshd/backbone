@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using IdentityDeletedSlice = Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityDeleted;
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityDeleted;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Module.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;
@@ -47,8 +47,8 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
             .MustHaveHappenedOnceExactly();
     }
 
-    private static IdentityDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
+    private static IdentityDeletedSlice.Handler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
     {
-        return new IdentityDeletedDomainEventHandler(relationshipsRepository, eventBus);
+        return new IdentityDeletedSlice.Handler(relationshipsRepository, eventBus);
     }
 }

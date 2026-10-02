@@ -5,11 +5,11 @@ using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Deletion
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.IdentityDeletionProcessStarted;
 
-public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHandler<IdentityDeletionProcessStartedDomainEvent>
+public class Handler : IDomainEventHandler<IdentityDeletionProcessStartedDomainEvent>
 {
     private readonly IPushNotificationSender _pushNotificationSender;
 
-    public IdentityDeletionProcessStartedDomainEventHandler(IPushNotificationSender pushNotificationSender)
+    public Handler(IPushNotificationSender pushNotificationSender)
     {
         _pushNotificationSender = pushNotificationSender;
     }

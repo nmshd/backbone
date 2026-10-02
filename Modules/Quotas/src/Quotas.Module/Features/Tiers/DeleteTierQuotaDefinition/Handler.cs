@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.DeleteTierQuotaDefinition;
 
-public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
         _logger = logger;
     }
 
-    public async Task Handle(DeleteTierQuotaDefinitionCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var tier = await _tiersRepository.Get(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 

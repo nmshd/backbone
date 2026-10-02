@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.HandleErrorDuringIdentityDeletion;
 
-public class Handler : IRequestHandler<HandleErrorDuringIdentityDeletionCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<HandleErrorDuringIdentityDeletionCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(HandleErrorDuringIdentityDeletionCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(request.IdentityAddress, cancellationToken, track: true);
 

@@ -1,3 +1,4 @@
+using GetDeletionProcessAsSupportSlice = Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.FluentValidation;
@@ -15,7 +16,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult =
-            validator.TestValidate(new GetDeletionProcessAsSupportQuery { IdentityAddress = CreateRandomIdentityAddress(), DeletionProcessId = IdentityDeletionProcessId.Generate() });
+            validator.TestValidate(new GetDeletionProcessAsSupportSlice.Query { IdentityAddress = CreateRandomIdentityAddress(), DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,10 +29,10 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery { IdentityAddress = "invalid-identity-address", DeletionProcessId = IdentityDeletionProcessId.Generate() });
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportSlice.Query { IdentityAddress = "invalid-identity-address", DeletionProcessId = IdentityDeletionProcessId.Generate() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportQuery.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportSlice.Query.IdentityAddress));
     }
 
     [Fact]
@@ -41,9 +42,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery { IdentityAddress = CreateRandomIdentityAddress(), DeletionProcessId = "invalid-deletion-process-id" });
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportSlice.Query { IdentityAddress = CreateRandomIdentityAddress(), DeletionProcessId = "invalid-deletion-process-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportQuery.DeletionProcessId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportSlice.Query.DeletionProcessId));
     }
 }

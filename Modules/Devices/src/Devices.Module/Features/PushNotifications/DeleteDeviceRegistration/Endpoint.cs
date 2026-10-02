@@ -19,7 +19,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle(IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new DeleteDeviceRegistrationCommand(), cancellationToken);
+        await mediator.Send(new Command(), cancellationToken);
         return Results.NoContent();
     }
 }

@@ -15,7 +15,7 @@ internal static class Endpoint
     {
         group.MapPut("{id}/FinalizeExternalEventSync", Handle)
             .Accepts<FinalizeExternalEventSyncRequest>(isOptional: true, "application/json", "application/*+json")
-            .Produces<HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -28,7 +28,7 @@ internal static class Endpoint
             request.DatawalletModifications.Any(m => m != null && (m.Collection == null || m.ObjectIdentifier == null)))
             throw new BadHttpRequestException("Required request fields must not be null.");
 
-        var response = await mediator.Send(new FinalizeExternalEventSyncSyncRunCommand
+        var response = await mediator.Send(new Command
         {
             SyncRunId = id, ExternalEventResults = request.ExternalEventResults, DatawalletModifications = request.DatawalletModifications
         }, cancellationToken);
@@ -38,6 +38,6 @@ internal static class Endpoint
 
 public class FinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<Command.ExternalEventResult> ExternalEventResults { get; set; } = [];
     public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }

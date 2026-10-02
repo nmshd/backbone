@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 
-public class Validator : AbstractValidator<CancelDeletionProcessCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.DeletionProcessId).ValidId<CancelDeletionProcessCommand, IdentityDeletionProcessId>();
+        RuleFor(x => x.DeletionProcessId).ValidId<Command, IdentityDeletionProcessId>();
     }
 }

@@ -7,12 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.TierDeleted;
 
-public class TierDeletedDomainEventHandler : IDomainEventHandler<TierDeletedDomainEvent>
+public class Handler : IDomainEventHandler<TierDeletedDomainEvent>
 {
     private readonly ITiersRepository _tiersRepository;
-    private readonly ILogger<TierDeletedDomainEventHandler> _logger;
+    private readonly ILogger<Handler> _logger;
 
-    public TierDeletedDomainEventHandler(ILogger<TierDeletedDomainEventHandler> logger, ITiersRepository tiersRepository)
+    public Handler(ILogger<Handler> logger, ITiersRepository tiersRepository)
     {
         _tiersRepository = tiersRepository;
         _logger = logger;

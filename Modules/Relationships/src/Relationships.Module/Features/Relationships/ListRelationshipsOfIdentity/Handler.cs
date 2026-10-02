@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
 
-public class Handler : IRequestHandler<ListRelationshipsOfIdentityQuery, ListRelationshipsOfIdentityResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
 
@@ -13,10 +13,10 @@ public class Handler : IRequestHandler<ListRelationshipsOfIdentityQuery, ListRel
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task<ListRelationshipsOfIdentityResponse> Handle(ListRelationshipsOfIdentityQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var relationships = await _relationshipsRepository.ListWithoutContent(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
 
-        return new ListRelationshipsOfIdentityResponse(relationships);
+        return new Response(relationships);
     }
 }

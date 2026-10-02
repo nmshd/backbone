@@ -6,9 +6,9 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
-public class RegisterDeviceCommandValidator : AbstractValidator<RegisterDeviceCommand>
+public class Validator : AbstractValidator<Command>
 {
-    public RegisterDeviceCommandValidator()
+    public Validator()
     {
         RuleFor(c => c.DevicePassword).DetailedNotEmpty();
         RuleFor(c => c.SignedChallenge).DetailedNotEmpty().SetValidator(new SignedChallengeDTOValidator());

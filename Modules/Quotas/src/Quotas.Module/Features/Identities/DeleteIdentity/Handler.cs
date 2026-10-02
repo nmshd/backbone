@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 
-public class Handler : IRequestHandler<DeleteIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -13,7 +13,7 @@ public class Handler : IRequestHandler<DeleteIdentityCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(DeleteIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _identitiesRepository.Delete(Identity.HasAddress(request.IdentityAddress), cancellationToken);
     }

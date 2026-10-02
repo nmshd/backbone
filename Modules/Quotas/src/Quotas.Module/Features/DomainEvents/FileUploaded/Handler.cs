@@ -6,11 +6,11 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.FileUploaded;
 
-public class FileUploadedDomainEventHandler : IDomainEventHandler<FileUploadedDomainEvent>
+public class Handler : IDomainEventHandler<FileUploadedDomainEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public FileUploadedDomainEventHandler(IMetricStatusesService metricStatusesService)
+    public Handler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

@@ -2,7 +2,8 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
 
-public class ListRelationshipsOfIdentityQuery : IRequest<ListRelationshipsOfIdentityResponse>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListRelationshipsOfIdentityQuery")]
+public class Query : IRequest<Response>
 {
     public required string IdentityAddress { get; init; }
 }

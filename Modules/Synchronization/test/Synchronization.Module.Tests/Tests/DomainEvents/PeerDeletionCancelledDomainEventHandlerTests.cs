@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeletionCancelled;
+﻿using PeerDeletionCancelled = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeletionCancelled;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
@@ -19,8 +19,8 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var handler = new PeerDeletionCancelledDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<PeerDeletionCancelledDomainEventHandler>>());
+        var handler = new PeerDeletionCancelled.Handler(mockDbContext,
+            A.Fake<ILogger<PeerDeletionCancelled.Handler>>());
 
         // Act
         await handler.Handle(domainEvent);

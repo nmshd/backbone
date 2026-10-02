@@ -6,7 +6,7 @@ using FluentValidation;
 namespace Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 
 // ReSharper disable once UnusedMember.Global
-public class Validator : AbstractValidator<UpdateDeviceRegistrationCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

@@ -3,14 +3,15 @@ using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
-public class TriggerRipeDeletionProcessesResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("TriggerRipeDeletionProcessesResponse")]
+public class Response
 {
-    public TriggerRipeDeletionProcessesResponse()
+    public Response()
     {
         Results = new Dictionary<string, UnitResult<DomainError>>();
     }
 
-    public TriggerRipeDeletionProcessesResponse(Dictionary<string, UnitResult<DomainError>> results)
+    public Response(Dictionary<string, UnitResult<DomainError>> results)
     {
         Results = results;
     }

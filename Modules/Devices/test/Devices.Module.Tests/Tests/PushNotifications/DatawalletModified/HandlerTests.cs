@@ -1,5 +1,5 @@
+using DatawalletModificationCreated = Backbone.Modules.Devices.Module.Features.DomainEvents.DatawalletModificationCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Module.Features.DomainEvents.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Datawallet;
 using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using FakeItEasy;
@@ -15,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
         var modifiedByDevice = CreateRandomDeviceId();
         var identity = CreateRandomIdentityAddress();
         var mockSender = A.Fake<IPushNotificationSender>();
-        var handler = new DatawalletModifiedDomainEventHandler(mockSender);
+        var handler = new DatawalletModificationCreated.Handler(mockSender);
         var domainEvent = new DatawalletModifiedDomainEvent { Identity = identity, ModifiedByDevice = modifiedByDevice };
 
         // Act

@@ -2,9 +2,10 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.CreateFile;
 
-public class CreateFileResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateFileResponse")]
+public class Response
 {
-    public CreateFileResponse(File file)
+    public Response(File file)
     {
         Id = file.Id;
         CreatedAt = file.CreatedAt;

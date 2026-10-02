@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
 
-public class Handler : IRequestHandler<HandleCompletedDeletionProcessCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -14,14 +14,14 @@ public class Handler : IRequestHandler<HandleCompletedDeletionProcessCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(HandleCompletedDeletionProcessCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await _identitiesRepository.AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry.DeletionCompleted(request.IdentityAddress));
 
         await AssociateUsernames(request, cancellationToken);
     }
 
-    private async Task AssociateUsernames(HandleCompletedDeletionProcessCommand request, CancellationToken cancellationToken)
+    private async Task AssociateUsernames(Command request, CancellationToken cancellationToken)
     {
         var identityAddressHash = Hasher.HashUtf8(request.IdentityAddress);
 

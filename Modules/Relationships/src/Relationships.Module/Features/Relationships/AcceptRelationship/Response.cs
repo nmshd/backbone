@@ -3,9 +3,10 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationship;
 
-public class AcceptRelationshipResponse : RelationshipMetadataDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("AcceptRelationshipResponse")]
+public class Response : RelationshipMetadataDTO
 {
-    public AcceptRelationshipResponse(Relationship relationship) : base(relationship)
+    public Response(Relationship relationship) : base(relationship)
     {
     }
 }

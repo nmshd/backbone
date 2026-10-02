@@ -15,7 +15,7 @@ internal static class Endpoint
     {
         group.MapPost("Modifications", Handle)
             .Accepts<PushDatawalletModificationsRequestBody>(isOptional: true, "application/json", "application/*+json")
-            .Produces<HttpResponseEnvelopeResult<PushDatawalletModificationsResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -27,7 +27,7 @@ internal static class Endpoint
         if (request == null || request.Modifications == null || request.Modifications.Any(m => m != null && (m.Collection == null || m.ObjectIdentifier == null)))
             throw new BadHttpRequestException("Required request fields must not be null.");
 
-        var response = await mediator.Send(new PushDatawalletModificationsCommand
+        var response = await mediator.Send(new Command
         {
             Modifications = request.Modifications, LocalIndex = request.LocalIndex, SupportedDatawalletVersion = supportedDatawalletVersion ?? 0
         }, cancellationToken);

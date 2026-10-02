@@ -13,7 +13,7 @@ internal static class Endpoint
     public static RouteGroupBuilder MapRejectRelationshipEndpoint(this RouteGroupBuilder group)
     {
         group.MapPut("{id}/Reject", Handle)
-            .Produces<HttpResponseEnvelopeResult<RejectRelationshipResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status404NotFound);
         return group;
@@ -21,7 +21,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromRoute] string id, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new RejectRelationshipCommand { RelationshipId = id, CreationResponseContent = body.CreationResponseContent }, cancellationToken);
+        var response = await mediator.Send(new Command { RelationshipId = id, CreationResponseContent = body.CreationResponseContent }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

@@ -2,9 +2,10 @@ using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
-public class SendMessageResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("SendMessageResponse")]
+public class Response
 {
-    public SendMessageResponse(Message message)
+    public Response(Message message)
     {
         Id = message.Id;
         CreatedAt = message.CreatedAt;

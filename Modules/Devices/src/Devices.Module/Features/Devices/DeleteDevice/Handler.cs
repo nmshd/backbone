@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 
-public class Handler : IRequestHandler<DeleteDeviceCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ILogger<Handler> _logger;
     private readonly IUserContext _userContext;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         _logger = logger;
     }
 
-    public async Task Handle(DeleteDeviceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var deviceId = DeviceId.Parse(request.DeviceId);
         var deviceThatIsBeingDeleted = await _identitiesRepository.Get(deviceId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));

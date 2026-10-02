@@ -1,3 +1,4 @@
+using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
 using FluentValidation.TestHelper;
@@ -13,7 +14,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsSlice.Command
         {
             Modifications =
             [
@@ -36,7 +37,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsSlice.Command
         {
             Modifications =
             [

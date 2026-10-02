@@ -7,12 +7,12 @@ using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.TokenLocked;
 
-public class TokenLockedDomainEventHandler : IDomainEventHandler<TokenLockedDomainEvent>
+public class Handler : IDomainEventHandler<TokenLockedDomainEvent>
 {
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly IIdentitiesRepository _identitiesRepository;
 
-    public TokenLockedDomainEventHandler(IPushNotificationSender pushNotificationSender, IIdentitiesRepository identitiesRepository)
+    public Handler(IPushNotificationSender pushNotificationSender, IIdentitiesRepository identitiesRepository)
     {
         _pushNotificationSender = pushNotificationSender;
         _identitiesRepository = identitiesRepository;

@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 
-public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, RefreshExpirationTimeOfSyncRunResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, Re
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<RefreshExpirationTimeOfSyncRunResponse> Handle(RefreshExpirationTimeOfSyncRunCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var syncRun = await _dbContext.GetSyncRun(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, Re
 
         await SaveSyncRun(syncRun, cancellationToken);
 
-        return new RefreshExpirationTimeOfSyncRunResponse { ExpiresAt = syncRun.ExpiresAt };
+        return new Response { ExpiresAt = syncRun.ExpiresAt };
     }
 
     private void CheckPrerequisites(SyncRun syncRun)

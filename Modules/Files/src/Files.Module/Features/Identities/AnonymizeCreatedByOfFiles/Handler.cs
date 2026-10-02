@@ -6,7 +6,7 @@ using static Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Identities.AnonymizeCreatedByOfFiles;
 
-public class Handler : IRequestHandler<AnonymizeCreatedByOfFilesCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly ApplicationConfiguration _applicationConfiguration;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<AnonymizeCreatedByOfFilesCommand>
         _applicationConfiguration = applicationOptions.Value;
     }
 
-    public async Task Handle(AnonymizeCreatedByOfFilesCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var addressOfIdentityToAnonymize = IdentityAddress.ParseUnsafe(request.IdentityAddress);
         var anonymizedAddress = IdentityAddress.GetAnonymized(_applicationConfiguration.DidDomainName);

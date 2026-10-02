@@ -6,11 +6,11 @@ using Backbone.Modules.Relationships.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Module.Features.DomainEvents.RelationshipTemplateCreated;
 
-public class RelationshipTemplateCreatedDomainEventHandler : IDomainEventHandler<RelationshipTemplateCreatedDomainEvent>
+public class Handler : IDomainEventHandler<RelationshipTemplateCreatedDomainEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public RelationshipTemplateCreatedDomainEventHandler(IMetricStatusesService metricStatusesService)
+    public Handler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }

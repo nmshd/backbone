@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DeleteIdentity = Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
+using System.Linq.Expressions;
 using Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -16,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var handler = CreateHandler(mockIdentitiesRepository);
 
-        await handler.Handle(new DeleteIdentityCommand { IdentityAddress = identity.Address }, CancellationToken.None);
+        await handler.Handle(new DeleteIdentity.Command { IdentityAddress = identity.Address }, CancellationToken.None);
 
         A.CallTo(() => mockIdentitiesRepository.Delete(A<Expression<Func<Identity, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }

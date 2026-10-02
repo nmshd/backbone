@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipReactivationCompleted;
+﻿using RelationshipReactivationCompleted = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipReactivationCompleted;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -65,10 +65,10 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
         };
     }
 
-    private static RelationshipReactivationCompletedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
+    private static RelationshipReactivationCompleted.Handler CreateHandler(ISynchronizationDbContext dbContext)
     {
-        var logger = A.Dummy<ILogger<RelationshipReactivationCompletedDomainEventHandler>>();
+        var logger = A.Dummy<ILogger<RelationshipReactivationCompleted.Handler>>();
 
-        return new RelationshipReactivationCompletedDomainEventHandler(dbContext, logger);
+        return new RelationshipReactivationCompleted.Handler(dbContext, logger);
     }
 }

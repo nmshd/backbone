@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 
-public class Handler : IRequestHandler<ListMetricsQuery, ListMetricsResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IMetricsRepository _metricsRepository;
 
@@ -12,9 +12,9 @@ public class Handler : IRequestHandler<ListMetricsQuery, ListMetricsResponse>
         _metricsRepository = metricsRepository;
     }
 
-    public async Task<ListMetricsResponse> Handle(ListMetricsQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var metrics = await _metricsRepository.List(cancellationToken);
-        return new ListMetricsResponse(metrics);
+        return new Response(metrics);
     }
 }

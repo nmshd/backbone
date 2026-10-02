@@ -7,12 +7,12 @@ using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.ExternalEventCreated;
 
-public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<ExternalEventCreatedDomainEvent>
+public class Handler : IDomainEventHandler<ExternalEventCreatedDomainEvent>
 {
     private readonly IPushNotificationSender _pushSenderService;
     private readonly IIdentitiesRepository _identitiesRepository;
 
-    public ExternalEventCreatedDomainEventHandler(IPushNotificationSender pushSenderService, IIdentitiesRepository identitiesRepository)
+    public Handler(IPushNotificationSender pushSenderService, IIdentitiesRepository identitiesRepository)
     {
         _pushSenderService = pushSenderService;
         _identitiesRepository = identitiesRepository;

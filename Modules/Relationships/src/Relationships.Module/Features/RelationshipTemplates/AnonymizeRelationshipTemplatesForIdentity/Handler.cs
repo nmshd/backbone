@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
 
-public class Handler : IRequestHandler<AnonymizeRelationshipTemplatesForIdentityCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly ApplicationConfiguration _applicationConfiguration;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplatesForIdentity
         _applicationConfiguration = options.Value;
     }
 
-    public async Task Handle(AnonymizeRelationshipTemplatesForIdentityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var relationshipTemplates = (await _relationshipTemplatesRepository.ListWithoutContent(RelationshipTemplate.IsFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken)).ToList();
 

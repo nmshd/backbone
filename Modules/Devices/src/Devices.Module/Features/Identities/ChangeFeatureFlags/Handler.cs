@@ -9,7 +9,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ChangeFeatureFlags;
 
-public class Handler : IRequestHandler<ChangeFeatureFlagsCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<ChangeFeatureFlagsCommand>
         _configuration = configuration.Value;
     }
 
-    public async Task Handle(ChangeFeatureFlagsCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_activeIdentity, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
         EnsureAllAdditionalFeatureFlagsCanBeCreated(request, identity);
@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<ChangeFeatureFlagsCommand>
         await _identitiesRepository.Update(identity, cancellationToken);
     }
 
-    private void EnsureAllAdditionalFeatureFlagsCanBeCreated(ChangeFeatureFlagsCommand request, Identity identity)
+    private void EnsureAllAdditionalFeatureFlagsCanBeCreated(Command request, Identity identity)
     {
         var combinedFeatureFlagNames = identity.FeatureFlags.Names.Select(n => n.Value).Concat(request.Keys).ToHashSet();
         if (combinedFeatureFlagNames.Count > _configuration.MaxNumberOfFeatureFlagsPerIdentity)

@@ -1,8 +1,9 @@
 namespace Backbone.Modules.Devices.Module.Features.Identities.IsIdentityOfUserDeleted;
 
-public class IsIdentityOfUserDeletedResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("IsIdentityOfUserDeletedResponse")]
+public class Response
 {
-    public IsIdentityOfUserDeletedResponse(bool isDeleted, DateTime? deletionDate)
+    public Response(bool isDeleted, DateTime? deletionDate)
     {
         IsDeleted = isDeleted;
         DeletionDate = deletionDate;

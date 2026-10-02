@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.CreateRelationship;
 
-public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private readonly DeviceId _activeDevice;
 
     private CancellationToken _cancellationToken;
-    private CreateRelationshipCommand _request;
+    private Command _request;
     private RelationshipTemplate _template;
     private Relationship _relationship;
 
@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _relationship = null!;
     }
 
-    public async Task<CreateRelationshipResponse> Handle(CreateRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         _cancellationToken = cancellationToken;
         _request = request;
@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await ReadTemplateFromDb();
         await CreateAndSaveRelationship();
 
-        return new CreateRelationshipResponse(_relationship);
+        return new Response(_relationship);
     }
 
     private async Task ReadTemplateFromDb()

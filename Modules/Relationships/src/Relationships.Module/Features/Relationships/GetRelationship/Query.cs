@@ -3,7 +3,8 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.GetRelationship;
 
-public class GetRelationshipQuery : IRequest<RelationshipDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetRelationshipQuery")]
+public class Query : IRequest<RelationshipDTO>
 {
     public required string Id { get; init; }
 }

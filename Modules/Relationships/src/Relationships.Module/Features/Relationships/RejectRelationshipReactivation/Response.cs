@@ -3,9 +3,10 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RejectRelationshipReactivation;
 
-public class RejectRelationshipReactivationResponse : RelationshipMetadataDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RejectRelationshipReactivationResponse")]
+public class Response : RelationshipMetadataDTO
 {
-    public RejectRelationshipReactivationResponse(Relationship relationship) : base(relationship)
+    public Response(Relationship relationship) : base(relationship)
     {
     }
 }

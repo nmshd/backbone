@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.GetFileContent;
 
-public class Validator : AbstractValidator<GetFileContentQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetFileContentQuery, FileId>();
+        RuleFor(x => x.Id).ValidId<Query, FileId>();
     }
 }

@@ -1,3 +1,4 @@
+using GetChallengeByIdSlice = Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 using Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.UnitTestTools.FluentValidation;
@@ -15,7 +16,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetChallengeByIdQuery { Id = ChallengeId.New() });
+        var validationResult = validator.TestValidate(new GetChallengeByIdSlice.Query { Id = ChallengeId.New() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -28,9 +29,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetChallengeByIdQuery { Id = "some-invalid-challenge-id" });
+        var validationResult = validator.TestValidate(new GetChallengeByIdSlice.Query { Id = "some-invalid-challenge-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(GetChallengeByIdQuery.Id));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetChallengeByIdSlice.Query.Id));
     }
 }

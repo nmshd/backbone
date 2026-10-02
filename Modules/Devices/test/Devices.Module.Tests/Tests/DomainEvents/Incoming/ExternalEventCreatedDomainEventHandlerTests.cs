@@ -1,5 +1,5 @@
+using ExternalEventCreated = Backbone.Modules.Devices.Module.Features.DomainEvents.ExternalEventCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Module.Features.DomainEvents.ExternalEventCreated;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.ExternalEvents;
 using Backbone.Modules.Synchronization.Contracts.DomainEvents;
@@ -17,7 +17,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreated.Handler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
@@ -42,7 +42,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreated.Handler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
@@ -69,7 +69,7 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreated.Handler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 

@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;
 
-public class Handler : IRequestHandler<CreateChallengeCommand, ChallengeDTO>
+public class Handler : IRequestHandler<Command, ChallengeDTO>
 {
     private readonly IChallengesRepository _challengesRepository;
     private readonly IUserContext _userContext;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<CreateChallengeCommand, ChallengeDTO>
         _userContext = userContext;
     }
 
-    public async Task<ChallengeDTO> Handle(CreateChallengeCommand request, CancellationToken cancellationToken)
+    public async Task<ChallengeDTO> Handle(Command request, CancellationToken cancellationToken)
     {
         var challenge = new Challenge(_userContext.GetAddressOrNull(), _userContext.GetDeviceIdOrNull());
 

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Abstractions;
+﻿using DecomposeAndAnonymizeRelationshipsOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
+using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using FakeItEasy;
@@ -16,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
         var mockOptions = A.Dummy<IOptions<ApplicationConfiguration>>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository, mockOptions);
-        var request = new DecomposeAndAnonymizeRelationshipsOfIdentityCommand { IdentityAddress = CreateRandomIdentityAddress() };
+        var request = new DecomposeAndAnonymizeRelationshipsOfIdentitySlice.Command { IdentityAddress = CreateRandomIdentityAddress() };
 
         // Act
         await handler.Handle(request, CancellationToken.None);

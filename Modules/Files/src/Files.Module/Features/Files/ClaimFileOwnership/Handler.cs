@@ -10,7 +10,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ClaimFileOwnership;
 
-public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwnershipResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ClaimFileOwnershipResponse> Handle(ClaimFileOwnershipCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var file = await _filesRepository.Get(FileId.Parse(request.FileId), cancellationToken, true, false) ?? throw new NotFoundException(nameof(File));
 
@@ -43,6 +43,6 @@ public class Handler : IRequestHandler<ClaimFileOwnershipCommand, ClaimFileOwner
                 throw new UnreachableException();
         }
 
-        return new ClaimFileOwnershipResponse(file);
+        return new Response(file);
     }
 }

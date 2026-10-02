@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 
-public class Validator : AbstractValidator<DeleteAnnouncementRecipientsCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
         RuleFor(c => c.IdentityAddress)
-            .ValidId<DeleteAnnouncementRecipientsCommand, IdentityAddress>();
+            .ValidId<Command, IdentityAddress>();
     }
 }

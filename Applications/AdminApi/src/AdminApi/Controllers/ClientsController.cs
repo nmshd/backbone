@@ -1,15 +1,15 @@
+using ChangeClientSecret = Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
+using CreateClient = Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
+using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
+using GetClient = Backbone.Modules.Devices.Module.Features.Clients.GetClient;
+using UpdateClient = Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
-using Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
-using Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
-using Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 using Backbone.Modules.Devices.Module.Features.Clients.Shared;
-using Backbone.Modules.Devices.Module.Features.Clients.GetClient;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,35 +51,35 @@ public class ClientsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetClient([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var client = await _mediator.Send(new GetClientQuery { Id = id }, cancellationToken);
+        var client = await _mediator.Send(new GetClient.Query { Id = id }, cancellationToken);
         return Ok(client);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateClientResponse>), StatusCodes.Status200OK)]
-    public async Task<CreatedResult> CreateOAuthClients(CreateClientCommand command, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateClient.Response>), StatusCodes.Status200OK)]
+    public async Task<CreatedResult> CreateOAuthClients(CreateClient.Command command, CancellationToken cancellationToken)
     {
         var createdClient = await _mediator.Send(command, cancellationToken);
         return Created(createdClient);
     }
 
     [HttpPatch("{clientId}/ChangeSecret")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChangeClientSecretResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChangeClientSecret.Response>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeClientSecret([FromRoute] string clientId, [FromBody] ChangeClientSecretRequest request, CancellationToken cancellationToken)
     {
-        var changedClient = await _mediator.Send(new ChangeClientSecretCommand { ClientId = clientId, NewSecret = request.NewSecret }, cancellationToken);
+        var changedClient = await _mediator.Send(new ChangeClientSecret.Command { ClientId = clientId, NewSecret = request.NewSecret }, cancellationToken);
         return Ok(changedClient);
     }
 
     [HttpPut("{clientId}")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateClientResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<UpdateClient.Response>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateClient([FromRoute] string clientId, [FromBody] UpdateClientRequest request, CancellationToken cancellationToken)
     {
-        var updatedClient = await _mediator.Send(new UpdateClientCommand { ClientId = clientId, DefaultTier = request.DefaultTier, MaxIdentities = request.MaxIdentities }, cancellationToken);
+        var updatedClient = await _mediator.Send(new UpdateClient.Command { ClientId = clientId, DefaultTier = request.DefaultTier, MaxIdentities = request.MaxIdentities }, cancellationToken);
         return Ok(updatedClient);
     }
 
@@ -88,7 +88,7 @@ public class ClientsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteClient([FromRoute] string clientId, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteClientCommand { ClientId = clientId }, cancellationToken);
+        await _mediator.Send(new DeleteClient.Command { ClientId = clientId }, cancellationToken);
         return NoContent();
     }
 }

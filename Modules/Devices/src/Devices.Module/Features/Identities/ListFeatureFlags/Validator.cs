@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListFeatureFlags;
 
-public class Validator : AbstractValidator<ListFeatureFlagsQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.IdentityAddress).ValidId<ListFeatureFlagsQuery, IdentityAddress>();
+        RuleFor(x => x.IdentityAddress).ValidId<Query, IdentityAddress>();
     }
 }

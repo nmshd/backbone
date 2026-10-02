@@ -4,9 +4,10 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 
-public class ListDeletionProcessesAuditLogsResponse : CollectionResponseBase<IdentityDeletionProcessAuditLogEntryDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListDeletionProcessesAuditLogsResponse")]
+public class Response : CollectionResponseBase<IdentityDeletionProcessAuditLogEntryDTO>
 {
-    public ListDeletionProcessesAuditLogsResponse(IEnumerable<IdentityDeletionProcessAuditLogEntry> processes)
+    public Response(IEnumerable<IdentityDeletionProcessAuditLogEntry> processes)
         : base(processes.Select(p => new IdentityDeletionProcessAuditLogEntryDTO(p)))
     {
     }

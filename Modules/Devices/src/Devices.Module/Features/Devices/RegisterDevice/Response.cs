@@ -2,9 +2,10 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
-public class RegisterDeviceResponse
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RegisterDeviceResponse")]
+public class Response
 {
-    public RegisterDeviceResponse(Device device)
+    public Response(Device device)
     {
         Id = device.Id.Value;
         Username = device.Username;

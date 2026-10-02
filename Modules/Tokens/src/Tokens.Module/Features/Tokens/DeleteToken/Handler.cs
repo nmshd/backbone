@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.DeleteToken;
 
-public class Handler : IRequestHandler<DeleteTokenCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ITokensRepository _tokensRepository;
     private readonly IUserContext _userContext;
@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<DeleteTokenCommand>
         _tokensRepository = tokensRepository;
     }
 
-    public async Task Handle(DeleteTokenCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var token = await _tokensRepository.GetWithoutContent(TokenId.Parse(request.Id), cancellationToken) ?? throw new NotFoundException(nameof(Token));
 

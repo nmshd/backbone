@@ -6,11 +6,11 @@ using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Devices.Module.Features.DomainEvents.DatawalletModificationCreated;
 
-public class DatawalletModifiedDomainEventHandler : IDomainEventHandler<DatawalletModifiedDomainEvent>
+public class Handler : IDomainEventHandler<DatawalletModifiedDomainEvent>
 {
     private readonly IPushNotificationSender _pushSenderService;
 
-    public DatawalletModifiedDomainEventHandler(IPushNotificationSender pushSenderService)
+    public Handler(IPushNotificationSender pushSenderService)
     {
         _pushSenderService = pushSenderService;
     }

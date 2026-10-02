@@ -12,14 +12,14 @@ internal static class Endpoint
     public static RouteGroupBuilder MapListQuotasForIdentityEndpoint(this RouteGroupBuilder group)
     {
         group.MapGet("", Handle)
-            .Produces<HttpResponseEnvelopeResult<ListQuotasForIdentityResponse>>(StatusCodes.Status200OK)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status200OK)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
 
     private static async Task<IResult> Handle(IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ListQuotasForIdentityQuery(), cancellationToken);
+        var response = await mediator.Send(new Query(), cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
 }

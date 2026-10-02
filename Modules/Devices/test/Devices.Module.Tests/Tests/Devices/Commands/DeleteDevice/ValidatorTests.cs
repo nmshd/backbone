@@ -1,3 +1,4 @@
+using DeleteDeviceSlice = Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 using Backbone.UnitTestTools.FluentValidation;
@@ -14,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteDeviceCommand { DeviceId = DeviceId.New() });
+        var validationResult = validator.TestValidate(new DeleteDeviceSlice.Command { DeviceId = DeviceId.New() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -27,9 +28,9 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteDeviceCommand { DeviceId = "some-invalid-device-id" });
+        var validationResult = validator.TestValidate(new DeleteDeviceSlice.Command { DeviceId = "some-invalid-device-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteDeviceCommand.DeviceId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteDeviceSlice.Command.DeviceId));
     }
 }

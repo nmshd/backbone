@@ -1,6 +1,6 @@
+using DeleteChallengesOfIdentity = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Identities.DeleteIdentity;
@@ -18,7 +18,7 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteChallengesOfIdentityCommand { IdentityAddress = identityAddress });
+        await _mediator.Send(new DeleteChallengesOfIdentity.Command { IdentityAddress = identityAddress });
         await _deletionProcessLogger.LogDeletion(identityAddress, "Challenges");
     }
 }

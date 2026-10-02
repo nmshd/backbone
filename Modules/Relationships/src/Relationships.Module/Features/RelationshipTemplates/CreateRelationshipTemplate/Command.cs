@@ -3,8 +3,9 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateRelationshipTemplateCommand")]
 [ApplyQuotasForMetrics("NumberOfRelationshipTemplates")]
-public class CreateRelationshipTemplateCommand : IRequest<CreateRelationshipTemplateResponse>
+public class Command : IRequest<Response>
 {
     public DateTime? ExpiresAt { get; init; }
     public int? MaxNumberOfAllocations { get; init; }

@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokens;
 
-public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly ITokensRepository _tokensRepository;
@@ -17,10 +17,10 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
         _activeIdentity = userContext.GetAddress();
     }
 
-    public async Task<ListTokensResponse> Handle(ListTokensQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _tokensRepository.ListTokensAllocatedOrCreatedByWithContent(request.Ids, _activeIdentity, request.PaginationFilter, cancellationToken, track: false);
 
-        return new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
+        return new Response(dbPaginationResult, request.PaginationFilter);
     }
 }

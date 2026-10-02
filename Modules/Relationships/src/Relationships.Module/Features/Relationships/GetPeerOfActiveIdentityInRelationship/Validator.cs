@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.GetPeerOfActiveIdentityInRelationship;
 
-public class Validator : AbstractValidator<GetPeerOfActiveIdentityInRelationshipQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).ValidId<GetPeerOfActiveIdentityInRelationshipQuery, RelationshipId>();
+        RuleFor(x => x.Id).ValidId<Query, RelationshipId>();
     }
 }

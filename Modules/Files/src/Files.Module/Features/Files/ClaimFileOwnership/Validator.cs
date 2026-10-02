@@ -6,11 +6,11 @@ using FluentValidation;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ClaimFileOwnership;
 
-public class Validator : AbstractValidator<ClaimFileOwnershipCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.FileId).ValidId<ClaimFileOwnershipCommand, FileId>();
+        RuleFor(x => x.FileId).ValidId<Command, FileId>();
         RuleFor(x => x.OwnershipToken)
             .DetailedNotEmpty()
             .Must(x => FileOwnershipToken.IsValid(x!))

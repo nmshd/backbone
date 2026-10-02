@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Module.Features.Users.SeedTestUsers;
 
-public class Handler : IRequestHandler<SeedTestUsersCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly ApplicationConfiguration _applicationConfiguration;
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         _applicationConfiguration = applicationOptions.Value;
     }
 
-    public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         _cancellationToken = cancellationToken;
         _basicTier = (await _tiersRepository.GetBasicTier(cancellationToken))!;

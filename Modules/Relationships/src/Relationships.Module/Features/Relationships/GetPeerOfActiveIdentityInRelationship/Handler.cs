@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.GetPeerOfActiveIdentityInRelationship;
 
-public class Handler : IRequestHandler<GetPeerOfActiveIdentityInRelationshipQuery, GetPeerOfActiveIdentityInRelationshipResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
@@ -16,9 +16,9 @@ public class Handler : IRequestHandler<GetPeerOfActiveIdentityInRelationshipQuer
         _userContext = userContext;
     }
 
-    public async Task<GetPeerOfActiveIdentityInRelationshipResponse> Handle(GetPeerOfActiveIdentityInRelationshipQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var peerIdentityAddress = await _relationshipsRepository.GetRelationshipPeer(RelationshipId.Parse(request.Id), _userContext.GetAddress(), cancellationToken);
-        return new GetPeerOfActiveIdentityInRelationshipResponse { IdentityAddress = peerIdentityAddress };
+        return new Response { IdentityAddress = peerIdentityAddress };
     }
 }

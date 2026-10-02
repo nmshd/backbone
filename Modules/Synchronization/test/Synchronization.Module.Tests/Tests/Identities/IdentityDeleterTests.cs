@@ -1,8 +1,8 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
+﻿using DeleteDatawalletsOfIdentity = Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
+using DeleteExternalEventsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
+using DeleteSyncRunsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Synchronization.Module.Features.Identities.DeleteIdentity;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
 using FakeItEasy;
 using MediatR;
 
@@ -23,9 +23,9 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteExternalEventsOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
-        A.CallTo(() => mockMediator.Send(A<DeleteSyncRunsOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
-        A.CallTo(() => mockMediator.Send(A<DeleteDatawalletsOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeleteExternalEventsOfIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeleteSyncRunsOfIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeleteDatawalletsOfIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 
     [Fact]

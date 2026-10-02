@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
 
-public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletionProcessResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
         _notificationSender = notificationSender;
     }
 
-    public async Task<StartDeletionProcessResponse> Handle(StartDeletionProcessCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -44,6 +44,6 @@ public class Handler : IRequestHandler<StartDeletionProcessCommand, StartDeletio
             cancellationToken
         );
 
-        return new StartDeletionProcessResponse(deletionProcess);
+        return new Response(deletionProcess);
     }
 }

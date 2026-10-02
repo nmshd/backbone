@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 
-public class Validator : AbstractValidator<RefreshExpirationTimeOfSyncRunCommand>
+public class Validator : AbstractValidator<Command>
 {
     public Validator()
     {
-        RuleFor(x => x.SyncRunId).ValidId<RefreshExpirationTimeOfSyncRunCommand, SyncRunId>();
+        RuleFor(x => x.SyncRunId).ValidId<Command, SyncRunId>();
     }
 }

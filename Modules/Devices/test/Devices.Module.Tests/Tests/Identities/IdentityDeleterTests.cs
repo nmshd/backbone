@@ -1,6 +1,7 @@
+using DeleteIdentity = Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
+using DeletePnsRegistrationsOfIdentity = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using FakeItEasy;
 using MediatR;
 
@@ -21,8 +22,8 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
-        A.CallTo(() => mockMediator.Send(A<DeletePnsRegistrationsOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeleteIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<DeletePnsRegistrationsOfIdentity.Command>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 
     [Fact]

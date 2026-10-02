@@ -3,9 +3,10 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeRelationship;
 
-public class DecomposeRelationshipResponse : RelationshipMetadataDTO
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DecomposeRelationshipResponse")]
+public class Response : RelationshipMetadataDTO
 {
-    public DecomposeRelationshipResponse(Relationship relationship) : base(relationship)
+    public Response(Relationship relationship) : base(relationship)
     {
     }
 }

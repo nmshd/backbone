@@ -5,7 +5,7 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.CreateFile;
 
-public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
         _filesRepository = filesRepository;
     }
 
-    public async Task<CreateFileResponse> Handle(CreateFileCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var file = new File(
             _userContext.GetAddress(),
@@ -34,6 +34,6 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             cancellationToken
         );
 
-        return new CreateFileResponse(file);
+        return new Response(file);
     }
 }

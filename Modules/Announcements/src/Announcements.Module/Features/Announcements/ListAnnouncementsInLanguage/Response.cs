@@ -4,9 +4,10 @@ using Backbone.Modules.Announcements.Domain.Entities;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
 
-public class ListAnnouncementsInLanguageResponse : CollectionResponseBase<SingleLanguageAnnouncementDTO>
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListAnnouncementsInLanguageResponse")]
+public class Response : CollectionResponseBase<SingleLanguageAnnouncementDTO>
 {
-    public ListAnnouncementsInLanguageResponse(IEnumerable<Announcement> items, AnnouncementLanguage language) : base(items.Select(a => new SingleLanguageAnnouncementDTO(a, language)))
+    public Response(IEnumerable<Announcement> items, AnnouncementLanguage language) : base(items.Select(a => new SingleLanguageAnnouncementDTO(a, language)))
     {
     }
 }

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 
-internal class Validator : AbstractValidator<StartSyncRunCommand>
+internal class Validator : AbstractValidator<Command>
 {
     public Validator()
     {

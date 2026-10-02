@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeRelationship;
 
-public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRelationshipResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -19,7 +19,7 @@ public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRe
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<DecomposeRelationshipResponse> Handle(DecomposeRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.GetRelationshipWithoutContent(relationshipId, _activeIdentity, cancellationToken, track: true);
@@ -28,6 +28,6 @@ public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRe
 
         await _relationshipsRepository.Update(relationship);
 
-        return new DecomposeRelationshipResponse(relationship);
+        return new Response(relationship);
     }
 }

@@ -20,7 +20,7 @@ internal static class Endpoint
 
     private static async Task<IResult> Handle([FromBody] object data, IMediator mediator, CancellationToken cancellationToken)
     {
-        await mediator.Send(new SendTestNotificationCommand { Data = data }, cancellationToken);
+        await mediator.Send(new Command { Data = data }, cancellationToken);
         return Results.NoContent();
     }
 }

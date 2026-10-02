@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.SendDeletionProcessGracePeriodReminders;
 
-public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCommand>
+public class Handler : IRequestHandler<Command>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IPushNotificationSender _pushSender;
@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         _logger = logger;
     }
 
-    public async Task Handle(SendDeletionProcessGracePeriodRemindersCommand request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.ListWithDeletionProcessInStatus(DeletionProcessStatus.Active, cancellationToken, track: true);
 

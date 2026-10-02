@@ -13,12 +13,12 @@ internal static class Endpoint
     public static RouteGroupBuilder MapCreateRelationshipTemplateEndpoint(this RouteGroupBuilder group)
     {
         group.MapPost("", Handle)
-            .Produces<HttpResponseEnvelopeResult<CreateRelationshipTemplateResponse>>(StatusCodes.Status201Created)
+            .Produces<HttpResponseEnvelopeResult<Response>>(StatusCodes.Status201Created)
             .Produces<HttpResponseEnvelopeError>(StatusCodes.Status400BadRequest);
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] CreateRelationshipTemplateCommand request, HttpContext context, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] Command request, HttpContext context, IMediator mediator, CancellationToken cancellationToken)
     {
         if (request.Content == null)
             throw new BadHttpRequestException("Content is required.");

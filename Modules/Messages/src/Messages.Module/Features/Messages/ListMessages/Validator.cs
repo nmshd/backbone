@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.ListMessages;
 
-public class Validator : AbstractValidator<ListMessagesQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleForEach(query => query.Ids).ValidId<ListMessagesQuery, MessageId>();
+        RuleForEach(query => query.Ids).ValidId<Query, MessageId>();
     }
 }

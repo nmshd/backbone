@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity;
 
-public class Validator : AbstractValidator<GetIdentityQuery>
+public class Validator : AbstractValidator<Query>
 {
     public Validator()
     {
-        RuleFor(x => x.Address).ValidId<GetIdentityQuery, IdentityAddress>();
+        RuleFor(x => x.Address).ValidId<Query, IdentityAddress>();
     }
 }

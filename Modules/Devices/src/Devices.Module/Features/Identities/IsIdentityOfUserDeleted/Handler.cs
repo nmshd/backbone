@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.IsIdentityOfUserDeleted;
 
-public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityOfUserDeletedResponse>
+public class Handler : IRequestHandler<Query, Response>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
 
@@ -14,7 +14,7 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task<IsIdentityOfUserDeletedResponse> Handle(IsIdentityOfUserDeletedQuery request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.GetFirst(Identity.HasUser(request.Username), cancellationToken);
 
@@ -38,6 +38,6 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
             deletionGracePeriodEndsAt = deletionCompletedAuditLogEntry?.CreatedAt;
         }
 
-        return new IsIdentityOfUserDeletedResponse(isDeleted, deletionGracePeriodEndsAt);
+        return new Response(isDeleted, deletionGracePeriodEndsAt);
     }
 }

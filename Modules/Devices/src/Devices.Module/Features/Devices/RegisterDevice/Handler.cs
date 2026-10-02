@@ -9,7 +9,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
-public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly ChallengeValidator _challengeValidator;
     private readonly ILogger<Handler> _logger;
@@ -24,7 +24,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command command, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.Get(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse(newDevice);
+        return new Response(newDevice);
     }
 }
 

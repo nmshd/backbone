@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
 
-public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSecretResponse>
+public class Handler : IRequestHandler<Command, Response>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
 
@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
         _oAuthClientsRepository = oAuthClientsRepository;
     }
 
-    public async Task<ChangeClientSecretResponse> Handle(ChangeClientSecretCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Get(request.ClientId, cancellationToken, track: true) ?? throw new NotFoundException(nameof(OAuthClient));
 
@@ -23,6 +23,6 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
 
         await _oAuthClientsRepository.ChangeClientSecret(client, clientSecret, cancellationToken);
 
-        return new ChangeClientSecretResponse(client, clientSecret);
+        return new Response(client, clientSecret);
     }
 }
