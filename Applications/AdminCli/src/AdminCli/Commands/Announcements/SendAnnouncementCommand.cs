@@ -1,10 +1,10 @@
-﻿using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
-using System.CommandLine;
+﻿using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using MediatR;
+using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 
 namespace Backbone.AdminCli.Commands.Announcements;
 

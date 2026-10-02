@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +27,7 @@ internal static class Endpoint
     }
 }
 
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ClaimFileRequest")]
 public class RequestBody
 {
     public required string OwnershipToken { get; init; }

@@ -1,9 +1,9 @@
-using FluentValidation;
-using Backbone.Tooling.Extensions;
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

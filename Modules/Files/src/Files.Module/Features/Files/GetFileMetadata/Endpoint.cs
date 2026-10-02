@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.Modules.Files.Module.Features.Files.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

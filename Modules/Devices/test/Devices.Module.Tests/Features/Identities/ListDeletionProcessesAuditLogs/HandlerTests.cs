@@ -1,8 +1,7 @@
-using ListDeletionProcessesAuditLogsSlice = Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
-using Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 using Backbone.UnitTestTools.Extensions;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
@@ -10,6 +9,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ListDeletionProcessesAuditLogsSlice = Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAuditLogs;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.ListDeletionProcessesAuditLogs;
 

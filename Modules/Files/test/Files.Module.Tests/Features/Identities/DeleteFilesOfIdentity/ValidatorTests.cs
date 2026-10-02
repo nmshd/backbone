@@ -1,7 +1,7 @@
-﻿using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
-using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
+﻿using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Identities.DeleteFilesOfIdentity;
 

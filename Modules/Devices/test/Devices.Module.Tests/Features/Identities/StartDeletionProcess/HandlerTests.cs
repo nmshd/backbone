@@ -1,13 +1,13 @@
-using StartDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
 using Backbone.Modules.Devices.Abstractions;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using FakeItEasy;
+using StartDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.StartDeletionProcess;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.StartDeletionProcess;
 

@@ -1,9 +1,5 @@
 using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.Modules.Relationships.Module.Features.PublicRelationshipTemplateReferences.ListPublicRelationshipTemplateReferences;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplate;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationship;
 using Backbone.Modules.Relationships.Module.Features.Relationships.AcceptRelationshipReactivation;
 using Backbone.Modules.Relationships.Module.Features.Relationships.CanEstablishRelationship;
@@ -17,6 +13,10 @@ using Backbone.Modules.Relationships.Module.Features.Relationships.RequestRelati
 using Backbone.Modules.Relationships.Module.Features.Relationships.RevokeRelationship;
 using Backbone.Modules.Relationships.Module.Features.Relationships.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Module.Features.Relationships.TerminateRelationship;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplate;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 using Microsoft.AspNetCore.Routing;
 using OpenIddict.Validation.AspNetCore;
 

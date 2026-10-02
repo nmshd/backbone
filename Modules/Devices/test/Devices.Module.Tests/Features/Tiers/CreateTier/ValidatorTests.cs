@@ -1,8 +1,8 @@
-using CreateTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
-using Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using CreateTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using Validator = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier.Validator;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Tiers.CreateTier;

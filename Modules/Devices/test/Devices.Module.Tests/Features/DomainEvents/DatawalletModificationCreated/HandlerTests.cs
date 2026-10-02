@@ -1,8 +1,8 @@
-using DatawalletModificationCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.DatawalletModificationCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Datawallet;
 using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using FakeItEasy;
+using DatawalletModificationCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.DatawalletModificationCreated;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.DomainEvents.DatawalletModificationCreated;
 

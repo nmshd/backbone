@@ -1,9 +1,9 @@
-﻿using PeerDeletionCancelledSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeletionCancelled;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using PeerDeletionCancelledSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeletionCancelled;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.PeerDeletionCancelled;
 

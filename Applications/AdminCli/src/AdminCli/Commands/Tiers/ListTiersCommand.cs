@@ -1,9 +1,9 @@
-using ListTiers = Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;
+using ListTiers = Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 
 namespace Backbone.AdminCli.Commands.Tiers;
 

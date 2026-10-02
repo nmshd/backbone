@@ -1,12 +1,12 @@
 using Backbone.BuildingBlocks.API.MinimalApi;
+using Backbone.Modules.Files.Module.Features.Files.ClaimFileOwnership;
 using Backbone.Modules.Files.Module.Features.Files.CreateFile;
+using Backbone.Modules.Files.Module.Features.Files.DeleteFile;
 using Backbone.Modules.Files.Module.Features.Files.GetFileContent;
 using Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
-using Backbone.Modules.Files.Module.Features.Files.RegenerateFileOwnershipToken;
-using Backbone.Modules.Files.Module.Features.Files.ClaimFileOwnership;
-using Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken;
-using Backbone.Modules.Files.Module.Features.Files.DeleteFile;
 using Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
+using Backbone.Modules.Files.Module.Features.Files.RegenerateFileOwnershipToken;
+using Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken;
 using Microsoft.AspNetCore.Routing;
 using OpenIddict.Validation.AspNetCore;
 

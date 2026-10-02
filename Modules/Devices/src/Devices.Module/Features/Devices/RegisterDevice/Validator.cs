@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Devices.Module.Features.Devices.Shared.Validators;
 using Backbone.Modules.Devices.Module.Features.Devices.Shared;
+using Backbone.Modules.Devices.Module.Features.Devices.Shared.Validators;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;

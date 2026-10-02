@@ -1,8 +1,8 @@
-﻿using GetFileContentSlice = Backbone.Modules.Files.Module.Features.Files.GetFileContent;
+﻿using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Module.Features.Files.GetFileContent;
-using Backbone.Modules.Files.Domain.Entities;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using GetFileContentSlice = Backbone.Modules.Files.Module.Features.Files.GetFileContent;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Files.GetFileContent;
 

@@ -1,8 +1,8 @@
-﻿using DeleteIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.Identities.DeleteIdentity;
 

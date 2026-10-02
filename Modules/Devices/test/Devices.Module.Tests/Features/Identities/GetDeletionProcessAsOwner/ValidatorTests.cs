@@ -1,8 +1,8 @@
-using GetDeletionProcessAsOwnerSlice = Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
-using Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using GetDeletionProcessAsOwnerSlice = Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsOwner;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.GetDeletionProcessAsOwner;
 

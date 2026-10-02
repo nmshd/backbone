@@ -1,10 +1,10 @@
-using ListMetrics = Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ListMetrics = Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 
 namespace Backbone.AdminApi.Controllers;
 

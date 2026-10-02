@@ -1,7 +1,7 @@
-﻿using SeedQueuedForDeletionTier = Backbone.Modules.Quotas.Module.Features.Tiers.SeedQueuedForDeletionTier;
-using Backbone.BuildingBlocks.API.Extensions;
+﻿using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using MediatR;
+using SeedQueuedForDeletionTier = Backbone.Modules.Quotas.Module.Features.Tiers.SeedQueuedForDeletionTier;
 
 namespace Backbone.ConsumerApi;
 

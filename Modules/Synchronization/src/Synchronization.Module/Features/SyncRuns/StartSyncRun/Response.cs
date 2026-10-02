@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 

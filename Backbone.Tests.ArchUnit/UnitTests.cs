@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using ArchUnitNET.xUnitV3;
 using Backbone.UnitTestTools.BaseClasses;
 using Shouldly;
@@ -49,9 +48,13 @@ public class UnitTests
             .Check(Backbone.ARCHITECTURE);
     }
 
-    private static IEnumerable<(string TestFile, string TestDirectory, string SourceDirectory, string RootNamespace)> GetUnitTestFiles([CallerFilePath] string callerFile = "")
+    private static IEnumerable<(string TestFile, string TestDirectory, string SourceDirectory, string RootNamespace)> GetUnitTestFiles()
     {
-        var repositoryDirectory = Path.GetDirectoryName(Path.GetDirectoryName(callerFile))!;
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (!File.Exists(Path.Combine(directory.FullName, "Backbone.slnx")))
+            directory = directory.Parent ?? throw new DirectoryNotFoundException("Could not locate Backbone.slnx from the test output directory.");
+
+        var repositoryDirectory = directory.FullName;
         var projects = Directory.GetFiles(repositoryDirectory, "*.csproj", SearchOption.AllDirectories);
         var sourceProjects = projects.Where(p => p.Contains($"{Path.DirectorySeparatorChar}src{Path.DirectorySeparatorChar}"))
             .ToDictionary(p => Path.GetFileNameWithoutExtension(p)!, p => p);

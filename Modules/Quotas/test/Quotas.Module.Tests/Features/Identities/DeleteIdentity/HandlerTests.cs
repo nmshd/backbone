@@ -1,10 +1,10 @@
-﻿using DeleteIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
-using System.Linq.Expressions;
-using Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
+﻿using System.Linq.Expressions;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
+using DeleteIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.DeleteIdentity;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.Identities.DeleteIdentity;
 

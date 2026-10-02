@@ -1,8 +1,8 @@
-﻿using TokenLockedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.TokenLocked;
-using Backbone.Modules.Synchronization.Abstractions;
+﻿using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FakeItEasy;
+using TokenLockedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.TokenLocked;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.TokenLocked;
 

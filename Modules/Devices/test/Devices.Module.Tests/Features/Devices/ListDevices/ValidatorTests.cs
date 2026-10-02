@@ -1,9 +1,9 @@
-using ListDevicesSlice = Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using ListDevicesSlice = Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Devices.ListDevices;
 

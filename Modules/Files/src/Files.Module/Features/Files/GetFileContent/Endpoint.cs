@@ -1,11 +1,11 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
+using System.Net.Mime;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System.Net.Mime;
 
 namespace Backbone.Modules.Files.Module.Features.Files.GetFileContent;
 

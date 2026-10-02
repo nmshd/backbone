@@ -1,8 +1,8 @@
-using DeleteChallengesOfIdentitySlice = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Challenges.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteChallengesOfIdentitySlice = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 
 namespace Backbone.Modules.Challenges.Module.Tests.Features.Identities.DeleteIdentity;
 

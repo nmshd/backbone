@@ -1,7 +1,7 @@
-using CreateAnnouncementSlice = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
-using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 using FluentValidation.TestHelper;
+using CreateAnnouncementSlice = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 
 namespace Backbone.Modules.Announcements.Module.Tests.Features.Announcements.CreateAnnouncement;
 

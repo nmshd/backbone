@@ -1,3 +1,10 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Files.Contracts.DomainEvents;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
+using Backbone.Modules.Quotas.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FileUploaded = Backbone.Modules.Quotas.Module.Features.DomainEvents.FileUploaded;
 using IdentityCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 using MessageCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.MessageCreated;
@@ -9,13 +16,6 @@ using TierOfIdentityChanged = Backbone.Modules.Quotas.Module.Features.DomainEven
 using TierQuotaDefinitionCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionCreated;
 using TierQuotaDefinitionDeleted = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionDeleted;
 using TokenCreated = Backbone.Modules.Quotas.Module.Features.DomainEvents.TokenCreated;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Files.Contracts.DomainEvents;
-using Backbone.Modules.Messages.Contracts.DomainEvents;
-using Backbone.Modules.Quotas.Contracts.DomainEvents;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Quotas.Module;
 

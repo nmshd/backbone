@@ -1,7 +1,7 @@
 using System.Dynamic;
 using System.Globalization;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.Shared;
 

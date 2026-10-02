@@ -1,5 +1,5 @@
-using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using Microsoft.IdentityModel.Tokens;
 

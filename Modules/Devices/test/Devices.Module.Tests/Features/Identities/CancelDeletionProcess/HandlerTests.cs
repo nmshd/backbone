@@ -1,12 +1,12 @@
-using CancelDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.Modules.Devices.Abstractions;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using FakeItEasy;
+using CancelDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.CancelDeletionProcess;
 

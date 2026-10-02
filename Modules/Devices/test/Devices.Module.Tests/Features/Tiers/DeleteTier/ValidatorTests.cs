@@ -1,8 +1,8 @@
-using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
-using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Tiers.DeleteTier;
 

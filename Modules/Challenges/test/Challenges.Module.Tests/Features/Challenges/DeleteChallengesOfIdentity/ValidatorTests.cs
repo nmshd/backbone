@@ -1,7 +1,7 @@
-using DeleteChallengesOfIdentitySlice = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeleteChallengesOfIdentitySlice = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 
 namespace Backbone.Modules.Challenges.Module.Tests.Features.Challenges.DeleteChallengesOfIdentity;
 

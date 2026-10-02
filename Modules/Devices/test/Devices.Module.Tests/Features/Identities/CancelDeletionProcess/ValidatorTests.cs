@@ -1,8 +1,8 @@
-using CancelDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
-using Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using CancelDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.CancelDeletionProcess;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.CancelDeletionProcess;
 

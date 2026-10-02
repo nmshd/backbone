@@ -1,5 +1,5 @@
-using Backbone.Modules.Quotas.Module.Features.Shared;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Module.Features.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;

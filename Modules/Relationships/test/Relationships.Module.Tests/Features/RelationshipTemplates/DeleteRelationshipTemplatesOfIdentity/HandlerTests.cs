@@ -1,9 +1,9 @@
-﻿using DeleteRelationshipTemplatesOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Backbone.Modules.Relationships.Abstractions;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 using FakeItEasy;
+using DeleteRelationshipTemplatesOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 
 namespace Backbone.Modules.Relationships.Module.Tests.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
 

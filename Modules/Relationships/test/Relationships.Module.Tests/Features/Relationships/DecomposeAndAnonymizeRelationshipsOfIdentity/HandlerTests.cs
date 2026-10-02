@@ -1,9 +1,9 @@
-﻿using DecomposeAndAnonymizeRelationshipsOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
-using Backbone.Modules.Relationships.Abstractions;
-using Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
+﻿using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
+using DecomposeAndAnonymizeRelationshipsOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 
 namespace Backbone.Modules.Relationships.Module.Tests.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 

@@ -1,9 +1,9 @@
-﻿using ListFileMetadataSlice = Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
-using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
+﻿using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using ListFileMetadataSlice = Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Files.ListFileMetadata;
 

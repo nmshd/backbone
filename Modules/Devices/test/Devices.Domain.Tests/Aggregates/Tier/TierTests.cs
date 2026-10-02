@@ -1,5 +1,5 @@
-using TierEntity = Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using TierEntity = Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Aggregates.Tier;
 

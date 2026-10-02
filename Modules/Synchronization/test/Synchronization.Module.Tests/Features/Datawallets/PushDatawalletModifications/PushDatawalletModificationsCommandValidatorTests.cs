@@ -1,7 +1,7 @@
-using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
 using FluentValidation.TestHelper;
+using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.Datawallets.PushDatawalletModifications;
 

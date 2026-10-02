@@ -1,9 +1,9 @@
-using DeleteAnnouncementRecipientsSlice = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using System.Linq.Expressions;
-using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using Backbone.Modules.Announcements.Abstractions;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using FakeItEasy;
+using DeleteAnnouncementRecipientsSlice = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 
 namespace Backbone.Modules.Announcements.Module.Tests.Features.Announcements.DeleteAnnouncementRecipients;
 

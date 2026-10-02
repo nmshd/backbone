@@ -1,7 +1,7 @@
-using DeleteAnnouncementRecipients = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using DeleteAnnouncementRecipients = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 
 namespace Backbone.Modules.Announcements.Module.Features.Identities.DeleteIdentity;
 

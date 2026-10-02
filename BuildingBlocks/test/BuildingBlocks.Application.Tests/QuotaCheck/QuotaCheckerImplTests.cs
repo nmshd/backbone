@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Application.Tests.TestDoubles;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles;

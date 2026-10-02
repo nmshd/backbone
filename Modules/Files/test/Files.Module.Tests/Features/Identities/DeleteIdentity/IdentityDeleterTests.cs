@@ -1,8 +1,8 @@
-﻿using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Files.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Identities.DeleteIdentity;
 

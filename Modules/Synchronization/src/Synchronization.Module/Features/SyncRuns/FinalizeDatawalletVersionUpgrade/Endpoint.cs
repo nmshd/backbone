@@ -1,13 +1,13 @@
-using FinalizeExternalEventSync = Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.MinimalApi;
+using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
+using Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
+using FinalizeExternalEventSync = Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeDatawalletVersionUpgrade;
 

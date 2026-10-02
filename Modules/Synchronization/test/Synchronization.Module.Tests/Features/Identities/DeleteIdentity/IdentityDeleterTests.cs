@@ -1,10 +1,10 @@
-﻿using DeleteDatawalletsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
-using DeleteExternalEventsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
-using DeleteSyncRunsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Synchronization.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteDatawalletsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
+using DeleteExternalEventsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
+using DeleteSyncRunsOfIdentitySlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.Identities.DeleteIdentity;
 

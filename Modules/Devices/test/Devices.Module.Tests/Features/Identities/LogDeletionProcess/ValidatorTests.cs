@@ -1,7 +1,7 @@
-using LogDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 using Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using LogDeletionProcessSlice = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.LogDeletionProcess;
 

@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Files.Module.Features.Files.Shared;
 using Backbone.Modules.Files.Abstractions;
 using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Module.Features.Files.Shared;
 using MediatR;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 

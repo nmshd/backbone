@@ -1,8 +1,8 @@
-using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
-using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.UpdateIdentity;
 

@@ -1,9 +1,9 @@
-﻿using PeerDeletedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeleted;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using PeerDeletedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeleted;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.PeerDeleted;
 

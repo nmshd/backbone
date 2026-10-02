@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Tags.Abstractions;
-using Backbone.Modules.Tags.Infrastructure.Persistence;
 using Backbone.Modules.Tags.Infrastructure;
+using Backbone.Modules.Tags.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

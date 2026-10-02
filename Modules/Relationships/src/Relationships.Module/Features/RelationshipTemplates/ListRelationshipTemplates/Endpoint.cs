@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using MediatR;

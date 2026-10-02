@@ -1,8 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain.Exceptions;
-using Backbone.Modules.Quotas.Module.Features.Shared;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Module.Features.Shared;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;

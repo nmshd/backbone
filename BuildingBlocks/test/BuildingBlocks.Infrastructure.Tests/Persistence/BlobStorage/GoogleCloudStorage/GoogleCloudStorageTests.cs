@@ -1,4 +1,3 @@
-using GoogleCloudBlobStorage = Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage.GoogleCloudStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
@@ -6,6 +5,7 @@ using FakeItEasy;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.Logging;
+using GoogleCloudBlobStorage = Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage.GoogleCloudStorage;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Persistence.BlobStorage.GoogleCloudStorage;
 

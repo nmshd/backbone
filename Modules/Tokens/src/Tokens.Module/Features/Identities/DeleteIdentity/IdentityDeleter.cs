@@ -1,9 +1,9 @@
-﻿using AnonymizeTokenAllocationsOfIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokenAllocationsOfIdentity;
-using AnonymizeTokensForIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokensForIdentity;
-using DeleteTokensOfIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using AnonymizeTokenAllocationsOfIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokenAllocationsOfIdentity;
+using AnonymizeTokensForIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokensForIdentity;
+using DeleteTokensOfIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 
 namespace Backbone.Modules.Tokens.Module.Features.Identities.DeleteIdentity;
 

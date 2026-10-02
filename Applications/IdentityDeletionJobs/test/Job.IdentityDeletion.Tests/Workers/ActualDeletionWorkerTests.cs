@@ -1,19 +1,19 @@
-﻿using GetIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
-using ListRelationshipsOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
-using TriggerRipeDeletionProcessesSlice = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using GetIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
+using ListRelationshipsOfIdentitySlice = Backbone.Modules.Relationships.Module.Features.Relationships.ListRelationshipsOfIdentity;
+using TriggerRipeDeletionProcessesSlice = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Workers;
 

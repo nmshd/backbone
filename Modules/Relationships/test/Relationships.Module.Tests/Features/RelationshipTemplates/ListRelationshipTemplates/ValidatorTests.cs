@@ -1,9 +1,9 @@
-using ListRelationshipTemplatesSlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using ListRelationshipTemplatesSlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Module.Tests.Features.RelationshipTemplates.ListRelationshipTemplates;
 

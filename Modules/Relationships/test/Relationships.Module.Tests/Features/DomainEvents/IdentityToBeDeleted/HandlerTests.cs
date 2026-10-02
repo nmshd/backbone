@@ -1,12 +1,12 @@
-﻿using IdentityToBeDeletedSlice = Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityToBeDeleted;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Abstractions;
-using Backbone.Modules.Relationships.Module.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Module.Tests.TestHelpers;
 using FakeItEasy;
+using IdentityToBeDeletedSlice = Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityToBeDeleted;
 
 namespace Backbone.Modules.Relationships.Module.Tests.Features.DomainEvents.IdentityToBeDeleted;
 

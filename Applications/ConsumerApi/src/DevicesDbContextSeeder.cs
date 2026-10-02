@@ -1,11 +1,11 @@
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Module.Features.Tiers.Shared;
+using MediatR;
 using CreateQueuedForDeletionTier = Backbone.Modules.Devices.Module.Features.Tiers.CreateQueuedForDeletionTier;
 using CreateTier = Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
 using SeedTestUsers = Backbone.Modules.Devices.Module.Features.Users.SeedTestUsers;
-using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Devices.Module.Features.Tiers.Shared;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using MediatR;
 
 namespace Backbone.ConsumerApi;
 

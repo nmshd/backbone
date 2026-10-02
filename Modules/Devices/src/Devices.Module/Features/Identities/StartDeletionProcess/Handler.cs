@@ -3,8 +3,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Abstractions;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using MediatR;
 

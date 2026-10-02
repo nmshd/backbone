@@ -1,7 +1,7 @@
-using AnnouncementCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.AnnouncementCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Announcements.Contracts.DomainEvents;
 using FakeItEasy;
+using AnnouncementCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.AnnouncementCreated;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.DomainEvents.AnnouncementCreated;
 

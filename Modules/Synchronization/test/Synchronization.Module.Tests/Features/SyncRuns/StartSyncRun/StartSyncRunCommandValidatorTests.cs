@@ -1,7 +1,7 @@
-using StartSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
+using Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 using FluentValidation.TestHelper;
+using StartSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.SyncRuns.StartSyncRun;
 

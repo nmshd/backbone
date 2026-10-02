@@ -1,7 +1,7 @@
-﻿using LogDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using LogDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 
 namespace Backbone.Job.IdentityDeletion;
 

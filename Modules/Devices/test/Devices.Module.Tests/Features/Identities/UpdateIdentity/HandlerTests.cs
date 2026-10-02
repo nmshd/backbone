@@ -1,12 +1,12 @@
-using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 using FakeItEasy;
+using UpdateIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.UpdateIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.UpdateIdentity;
 

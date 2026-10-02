@@ -1,7 +1,7 @@
-﻿using CreateRelationshipTemplateSlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
-using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
+﻿using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using CreateRelationshipTemplateSlice = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 
 namespace Backbone.Modules.Relationships.Module.Tests.Features.RelationshipTemplates.CreateRelationshipTemplate;
 

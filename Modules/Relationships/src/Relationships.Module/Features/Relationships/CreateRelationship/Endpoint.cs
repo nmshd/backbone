@@ -1,6 +1,5 @@
-using GetRelationshipTemplate = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.Modules.Devices.Contracts;
 using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
 using MediatR;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using GetRelationshipTemplate = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.GetRelationshipTemplate;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.CreateRelationship;
 

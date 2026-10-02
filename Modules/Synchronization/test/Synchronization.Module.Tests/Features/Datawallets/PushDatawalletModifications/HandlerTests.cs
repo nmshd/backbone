@@ -1,15 +1,15 @@
-using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using PushDatawalletModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.Datawallets.PushDatawalletModifications;
 

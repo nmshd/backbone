@@ -1,9 +1,9 @@
-using DeleteIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
-using DeletePnsRegistrationsOfIdentitySlice = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
+using DeletePnsRegistrationsOfIdentitySlice = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.DeleteIdentity;
 

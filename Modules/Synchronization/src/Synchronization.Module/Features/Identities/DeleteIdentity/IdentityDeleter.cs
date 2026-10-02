@@ -1,9 +1,9 @@
-using DeleteDatawalletsOfIdentity = Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
-using DeleteExternalEventsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
-using DeleteSyncRunsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using DeleteDatawalletsOfIdentity = Backbone.Modules.Synchronization.Module.Features.Datawallets.DeleteDatawalletsOfIdentity;
+using DeleteExternalEventsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteExternalEventsOfIdentity;
+using DeleteSyncRunsOfIdentity = Backbone.Modules.Synchronization.Module.Features.SyncRuns.DeleteSyncRunsOfIdentity;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Identities.DeleteIdentity;
 

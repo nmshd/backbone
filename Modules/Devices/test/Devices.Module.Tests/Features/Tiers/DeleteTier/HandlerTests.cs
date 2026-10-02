@@ -1,11 +1,11 @@
-using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Abstractions;
-using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 using FakeItEasy;
+using DeleteTierSlice = Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Tiers.DeleteTier;
 

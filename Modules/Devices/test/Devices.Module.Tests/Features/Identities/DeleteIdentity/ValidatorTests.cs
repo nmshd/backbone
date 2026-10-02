@@ -1,7 +1,7 @@
-using DeleteIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 using Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeleteIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.DeleteIdentity;
 

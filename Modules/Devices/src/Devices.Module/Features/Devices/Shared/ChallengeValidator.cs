@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Crypto.Abstractions;
 using Backbone.Crypto;
+using Backbone.Crypto.Abstractions;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Module.Features.Devices.Shared;

@@ -1,8 +1,8 @@
-﻿using AnonymizeCreatedByOfFiles = Backbone.Modules.Files.Module.Features.Identities.AnonymizeCreatedByOfFiles;
-using DeleteFilesOfIdentity = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using AnonymizeCreatedByOfFiles = Backbone.Modules.Files.Module.Features.Identities.AnonymizeCreatedByOfFiles;
+using DeleteFilesOfIdentity = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 
 namespace Backbone.Modules.Files.Module.Features.Identities.DeleteIdentity;
 

@@ -1,8 +1,8 @@
-using DeleteDeviceSlice = Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeleteDeviceSlice = Backbone.Modules.Devices.Module.Features.Devices.DeleteDevice;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Devices.DeleteDevice;
 

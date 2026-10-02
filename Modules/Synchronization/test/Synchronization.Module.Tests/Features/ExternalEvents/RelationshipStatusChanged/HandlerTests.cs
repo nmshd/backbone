@@ -1,10 +1,10 @@
-﻿using RelationshipStatusChangedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipStatusChanged;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using RelationshipStatusChangedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.RelationshipStatusChanged;
 

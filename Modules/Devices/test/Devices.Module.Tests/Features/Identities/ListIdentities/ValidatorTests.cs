@@ -1,8 +1,8 @@
-using ListIdentitiesSlice = Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
-using Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using ListIdentitiesSlice = Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.ListIdentities;
 

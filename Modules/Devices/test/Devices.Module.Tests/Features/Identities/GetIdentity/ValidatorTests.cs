@@ -1,7 +1,7 @@
-using GetIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using GetIdentitySlice = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.Identities.GetIdentity;
 

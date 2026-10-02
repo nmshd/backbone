@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
-using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
 

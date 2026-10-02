@@ -1,8 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Abstractions;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.GetSyncRunById;

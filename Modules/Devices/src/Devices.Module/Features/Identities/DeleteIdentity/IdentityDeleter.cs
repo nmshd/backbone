@@ -1,9 +1,9 @@
-using DeletePnsRegistrationsOfIdentity = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using MediatR;
+using DeletePnsRegistrationsOfIdentity = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.DeleteIdentity;
 

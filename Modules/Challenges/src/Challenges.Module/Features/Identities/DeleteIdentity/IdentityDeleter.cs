@@ -1,7 +1,7 @@
-using DeleteChallengesOfIdentity = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
+using DeleteChallengesOfIdentity = Backbone.Modules.Challenges.Module.Features.Challenges.DeleteChallengesOfIdentity;
 
 namespace Backbone.Modules.Challenges.Module.Features.Identities.DeleteIdentity;
 

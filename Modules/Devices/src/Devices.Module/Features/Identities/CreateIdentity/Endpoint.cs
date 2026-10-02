@@ -1,5 +1,5 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -50,6 +50,7 @@ internal static class Endpoint
     }
 }
 
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateIdentityRequest")]
 public class RequestBody
 {
     public required string ClientId { get; set; }

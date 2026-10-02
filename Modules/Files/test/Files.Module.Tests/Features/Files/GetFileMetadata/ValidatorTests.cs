@@ -1,8 +1,8 @@
-﻿using GetFileMetadataSlice = Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
+﻿using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
-using Backbone.Modules.Files.Domain.Entities;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using GetFileMetadataSlice = Backbone.Modules.Files.Module.Features.Files.GetFileMetadata;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Files.GetFileMetadata;
 

@@ -1,9 +1,9 @@
-using TierDeletedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierDeleted;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using TierDeletedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierDeleted;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.DomainEvents.TierDeleted;
 

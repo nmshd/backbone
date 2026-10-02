@@ -1,9 +1,9 @@
-using ExternalEventCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.ExternalEventCreated;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.ExternalEvents;
 using Backbone.Modules.Synchronization.Contracts.DomainEvents;
 using FakeItEasy;
+using ExternalEventCreatedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.ExternalEventCreated;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.DomainEvents.ExternalEventCreated;
 

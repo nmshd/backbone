@@ -1,8 +1,8 @@
-using DeleteAnnouncementRecipientsSlice = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Announcements.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteAnnouncementRecipientsSlice = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementRecipients;
 
 namespace Backbone.Modules.Announcements.Module.Tests.Features.Identities.DeleteIdentity;
 

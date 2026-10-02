@@ -1,13 +1,13 @@
-using IdentityCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Abstractions;
-using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using IdentityCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.IdentityCreated;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.DomainEvents.IdentityCreated;
 

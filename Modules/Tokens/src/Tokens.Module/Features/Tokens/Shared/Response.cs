@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 

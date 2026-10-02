@@ -1,12 +1,12 @@
-using RefreshExpirationTimeOfSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using FakeItEasy;
+using RefreshExpirationTimeOfSyncRunSlice = Backbone.Modules.Synchronization.Module.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.SyncRuns.RefreshExpirationTimeOfSyncRun;
 

@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Announcements;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Datawallet;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.PushNotifications.NotificationTexts;
 

@@ -1,7 +1,7 @@
-using DeletePnsRegistrationsOfIdentitySlice = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using DeletePnsRegistrationsOfIdentitySlice = Backbone.Modules.Devices.Module.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.PushNotifications.DeletePnsRegistrationsOfIdentity;
 

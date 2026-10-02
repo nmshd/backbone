@@ -1,10 +1,10 @@
-using TokenLockedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.TokenLocked;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Tokens;
 using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FakeItEasy;
+using TokenLockedSlice = Backbone.Modules.Devices.Module.Features.DomainEvents.TokenLocked;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.DomainEvents.TokenLocked;
 

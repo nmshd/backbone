@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Quotas.Module.Features.Shared;
 using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Module.Features.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.GetTier;

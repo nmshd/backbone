@@ -1,14 +1,14 @@
-﻿using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
-using DeleteAnnouncementById = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
-using GetAnnouncementById = Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;
-using ListAnnouncements = Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
-using Backbone.AdminApi.Versions;
+﻿using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CreateAnnouncement = Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
+using DeleteAnnouncementById = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
+using GetAnnouncementById = Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;
+using ListAnnouncements = Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
 
 namespace Backbone.AdminApi.Controllers;
 

@@ -1,13 +1,13 @@
-using TierQuotaDefinitionCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Abstractions;
-using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Contracts.DomainEvents;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents;
+using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using TierQuotaDefinitionCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierQuotaDefinitionCreated;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.DomainEvents.TierQuotaDefinitionCreated;
 

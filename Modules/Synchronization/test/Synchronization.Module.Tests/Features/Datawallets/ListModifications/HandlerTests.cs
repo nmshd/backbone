@@ -1,13 +1,13 @@
-using ListModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 using Backbone.UnitTestTools.Shouldly.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
+using ListModificationsSlice = Backbone.Modules.Synchronization.Module.Features.Datawallets.ListModifications;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.Datawallets.ListModifications;
 

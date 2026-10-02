@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Abstractions;
-using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;

@@ -1,9 +1,9 @@
-﻿using DeleteTokensOfIdentitySlice = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Backbone.Modules.Tokens.Abstractions;
-using Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 using FakeItEasy;
+using DeleteTokensOfIdentitySlice = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 
 namespace Backbone.Modules.Tokens.Module.Tests.Features.Tokens.DeleteTokensOfIdentity;
 

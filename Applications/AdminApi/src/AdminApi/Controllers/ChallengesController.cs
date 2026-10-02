@@ -1,5 +1,4 @@
-﻿using CreateChallenge = Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;
-using Backbone.AdminApi.Versions;
+﻿using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -7,6 +6,7 @@ using Backbone.Modules.Challenges.Module.Features.Challenges.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CreateChallenge = Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;
 
 namespace Backbone.AdminApi.Controllers;
 

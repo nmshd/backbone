@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Housekeeping;
 using Backbone.Modules.Relationships.Abstractions;
-using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping;

@@ -1,8 +1,8 @@
-using GetChallengeByIdSlice = Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
-using Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
+using GetChallengeByIdSlice = Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById;
 using Validator = Backbone.Modules.Challenges.Module.Features.Challenges.GetChallengeById.Validator;
 
 namespace Backbone.Modules.Challenges.Module.Tests.Features.Challenges.GetChallengeById;

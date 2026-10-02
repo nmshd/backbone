@@ -1,6 +1,4 @@
-﻿using ListTokensByIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
-using ResetAccessFailedCountOfToken = Backbone.Modules.Tokens.Module.Features.Tokens.ResetAccessFailedCountOfToken;
-using Backbone.AdminApi.Versions;
+﻿using Backbone.AdminApi.Versions;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -13,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ListTokensByIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
+using ResetAccessFailedCountOfToken = Backbone.Modules.Tokens.Module.Features.Tokens.ResetAccessFailedCountOfToken;
 
 namespace Backbone.AdminApi.Controllers;
 

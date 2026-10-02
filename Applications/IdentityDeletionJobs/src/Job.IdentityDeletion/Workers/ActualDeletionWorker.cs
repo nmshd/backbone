@@ -1,14 +1,14 @@
-﻿using GetIdentity = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
-using HandleCompletedDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
-using HandleErrorDuringIdentityDeletion = Backbone.Modules.Devices.Module.Features.Identities.HandleErrorDuringIdentityDeletion;
-using ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting = Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
-using TriggerRipeDeletionProcesses = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using CSharpFunctionalExtensions;
 using MediatR;
+using GetIdentity = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
+using HandleCompletedDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
+using HandleErrorDuringIdentityDeletion = Backbone.Modules.Devices.Module.Features.Identities.HandleErrorDuringIdentityDeletion;
+using ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting = Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
+using TriggerRipeDeletionProcesses = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 

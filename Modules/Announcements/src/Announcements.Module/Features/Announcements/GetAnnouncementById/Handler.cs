@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 using Backbone.Modules.Announcements.Abstractions;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.GetAnnouncementById;

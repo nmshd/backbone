@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
-using Backbone.Modules.Quotas.Module.Features.Shared;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Module.Features.Shared;
 
 namespace Backbone.Modules.Quotas.Module.Features.Metrics.ListMetrics;
 

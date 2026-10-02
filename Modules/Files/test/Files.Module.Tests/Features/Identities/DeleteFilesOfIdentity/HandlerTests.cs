@@ -1,8 +1,8 @@
-﻿using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
-using System.Linq.Expressions;
-using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
+﻿using System.Linq.Expressions;
 using Backbone.Modules.Files.Abstractions;
+using Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 using FakeItEasy;
+using DeleteFilesOfIdentitySlice = Backbone.Modules.Files.Module.Features.Identities.DeleteFilesOfIdentity;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Tests.Features.Identities.DeleteFilesOfIdentity;

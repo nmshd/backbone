@@ -1,9 +1,9 @@
-using TierCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierCreated;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using TierCreatedSlice = Backbone.Modules.Quotas.Module.Features.DomainEvents.TierCreated;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.DomainEvents.TierCreated;
 

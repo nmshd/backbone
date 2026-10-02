@@ -1,12 +1,12 @@
-using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
@@ -37,6 +37,7 @@ internal static class Endpoint
     }
 }
 
+[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RegisterDeviceRequest")]
 public class RequestBody
 {
     public required string DevicePassword { get; set; }

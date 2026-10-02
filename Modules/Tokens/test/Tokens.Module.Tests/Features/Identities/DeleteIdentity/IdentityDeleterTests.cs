@@ -1,8 +1,8 @@
-﻿using DeleteTokensOfIdentitySlice = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Tokens.Module.Features.Identities.DeleteIdentity;
 using FakeItEasy;
 using MediatR;
+using DeleteTokensOfIdentitySlice = Backbone.Modules.Tokens.Module.Features.Tokens.DeleteTokensOfIdentity;
 
 namespace Backbone.Modules.Tokens.Module.Tests.Features.Identities.DeleteIdentity;
 

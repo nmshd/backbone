@@ -1,8 +1,8 @@
-using ListClients = Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
 using MediatR;
+using ListClients = Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 
 namespace Backbone.AdminCli.Commands.Clients;
 

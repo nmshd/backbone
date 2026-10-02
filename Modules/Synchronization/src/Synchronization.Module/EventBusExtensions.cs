@@ -1,3 +1,9 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Devices.Contracts.DomainEvents;
+using Backbone.Modules.Files.Contracts.DomainEvents;
+using Backbone.Modules.Messages.Contracts.DomainEvents;
+using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Tokens.Contracts.DomainEvents;
 using FileOwnershipClaimed = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.FileOwnershipClaimed;
 using FileOwnershipLocked = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.FileOwnershipLocked;
 using IdentityDeletionProcessStarted = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStarted;
@@ -12,12 +18,6 @@ using RelationshipReactivationRequested = Backbone.Modules.Synchronization.Modul
 using RelationshipStatusChanged = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipStatusChanged;
 using RelationshipTemplateAllocationsExhausted = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.RelationshipTemplateAllocationsExhausted;
 using TokenLocked = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.TokenLocked;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
-using Backbone.Modules.Files.Contracts.DomainEvents;
-using Backbone.Modules.Messages.Contracts.DomainEvents;
-using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Tokens.Contracts.DomainEvents;
 
 namespace Backbone.Modules.Synchronization.Module;
 

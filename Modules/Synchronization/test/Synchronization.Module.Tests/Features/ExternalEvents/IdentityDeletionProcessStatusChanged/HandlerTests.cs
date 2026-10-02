@@ -1,9 +1,9 @@
-﻿using IdentityDeletionProcessStatusChangedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStatusChanged;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
+﻿using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using IdentityDeletionProcessStatusChangedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.IdentityDeletionProcessStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.IdentityDeletionProcessStatusChanged;
 

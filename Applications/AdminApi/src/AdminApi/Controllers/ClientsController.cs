@@ -1,8 +1,3 @@
-using ChangeClientSecret = Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
-using CreateClient = Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
-using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
-using GetClient = Backbone.Modules.Devices.Module.Features.Clients.GetClient;
-using UpdateClient = Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 using Backbone.AdminApi.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.AdminApi.Versions;
@@ -14,6 +9,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ChangeClientSecret = Backbone.Modules.Devices.Module.Features.Clients.ChangeClientSecret;
+using CreateClient = Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
+using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
+using GetClient = Backbone.Modules.Devices.Module.Features.Clients.GetClient;
+using UpdateClient = Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 
 namespace Backbone.AdminApi.Controllers;
 

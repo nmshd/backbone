@@ -1,10 +1,10 @@
+using Backbone.BuildingBlocks.Application.Identities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using MediatR;
 using AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 using AnonymizeRelationshipTemplatesForIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.AnonymizeRelationshipTemplatesForIdentity;
 using DecomposeAndAnonymizeRelationshipsOfIdentity = Backbone.Modules.Relationships.Module.Features.Relationships.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using DeleteRelationshipTemplatesOfIdentity = Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.DeleteRelationshipTemplatesOfIdentity;
-using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Identities.DeleteIdentity;
 

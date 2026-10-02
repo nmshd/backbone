@@ -1,11 +1,11 @@
-﻿using CreateTokenSlice = Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 using Backbone.UnitTestTools.FluentValidation;
 using Backbone.UnitTestTools.TestDoubles;
 using FakeItEasy;
 using FluentValidation.TestHelper;
+using CreateTokenSlice = Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 
 namespace Backbone.Modules.Tokens.Module.Tests.Features.Tokens.CreateToken;
 

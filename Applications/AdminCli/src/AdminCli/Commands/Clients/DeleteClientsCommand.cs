@@ -1,7 +1,7 @@
-using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
 using System.CommandLine;
 using Backbone.AdminCli.Commands.BaseClasses;
 using MediatR;
+using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
 
 namespace Backbone.AdminCli.Commands.Clients;
 

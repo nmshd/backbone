@@ -1,13 +1,13 @@
-﻿using CreateQuotaForIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
-using Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
-using Backbone.Modules.Quotas.Abstractions;
-using Backbone.Modules.Quotas.Module.Features.Metrics.Shared;
-using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
+﻿using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
+using Backbone.Modules.Quotas.Module.Features.Metrics.Shared;
+using Backbone.Modules.Quotas.Module.Tests.TestDoubles;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
+using CreateQuotaForIdentitySlice = Backbone.Modules.Quotas.Module.Features.Identities.CreateQuotaForIdentity;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Module.Tests.Features.Identities.CreateQuotaForIdentity;

@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Challenges.Module.Features.Challenges.Shared;
 using Backbone.Modules.Challenges.Abstractions;
 using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.Modules.Challenges.Module.Features.Challenges.Shared;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;

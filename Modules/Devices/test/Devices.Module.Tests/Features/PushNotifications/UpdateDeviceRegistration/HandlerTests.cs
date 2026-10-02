@@ -1,12 +1,12 @@
-using UpdateDeviceRegistrationSlice = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
-using Backbone.Modules.Devices.Abstractions.PushNotifications;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared;
-using Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
+using Backbone.Modules.Devices.Abstractions.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 using FakeItEasy;
+using UpdateDeviceRegistrationSlice = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 
 namespace Backbone.Modules.Devices.Module.Tests.Features.PushNotifications.UpdateDeviceRegistration;
 

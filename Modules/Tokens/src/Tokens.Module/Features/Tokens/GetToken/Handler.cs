@@ -1,8 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Tokens.Abstractions;
-using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 

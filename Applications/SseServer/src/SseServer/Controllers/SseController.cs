@@ -1,12 +1,12 @@
-﻿using DeleteDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
-using UpdateDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 using Backbone.SseServer.Versions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DeleteDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
+using UpdateDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 
 namespace Backbone.SseServer.Controllers;
 
