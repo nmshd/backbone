@@ -26,7 +26,6 @@ internal static class Endpoint
     }
 }
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateTokenContentRequest")]
 public class RequestBody
 {
     public required byte[] NewContent { get; init; }

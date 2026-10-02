@@ -3,7 +3,6 @@ using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("TriggerRipeDeletionProcessesResponse")]
 public class Response
 {
     public Response()

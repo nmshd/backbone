@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
-namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
+namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsForActiveIdentityInLanguage;
 
 public class Validator : AbstractValidator<Query>
 {

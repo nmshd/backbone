@@ -2,7 +2,6 @@ using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("SendMessageResponse")]
 public class Response
 {
     public Response(Message message)

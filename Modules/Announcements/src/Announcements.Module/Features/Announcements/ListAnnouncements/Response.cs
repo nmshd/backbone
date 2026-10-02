@@ -4,7 +4,6 @@ using Backbone.Modules.Announcements.Module.Features.Announcements.Shared;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncements;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListAnnouncementsResponse")]
 public class Response : CollectionResponseBase<AnnouncementDTO>
 {
     public Response(IEnumerable<Announcement> items) : base(items.Select(a => new AnnouncementDTO(a)))

@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.ListQuotasForIdentity;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListQuotasForIdentityResponse")]
 public class Response : CollectionResponseBase<QuotaGroupDTO>
 {
     public Response(IEnumerable<QuotaGroupDTO> items) : base(items) { }

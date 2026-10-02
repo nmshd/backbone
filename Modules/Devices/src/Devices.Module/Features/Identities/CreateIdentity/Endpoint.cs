@@ -50,7 +50,6 @@ internal static class Endpoint
     }
 }
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateIdentityRequest")]
 public class RequestBody
 {
     public required string ClientId { get; set; }

@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.API.MinimalApi;
-using Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
+using Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsForActiveIdentityInLanguage;
 using Microsoft.AspNetCore.Routing;
 using OpenIddict.Validation.AspNetCore;
 

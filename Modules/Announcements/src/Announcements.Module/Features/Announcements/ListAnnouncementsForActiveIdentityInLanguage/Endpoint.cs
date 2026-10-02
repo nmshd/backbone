@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
+namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsForActiveIdentityInLanguage;
 
 internal static class Endpoint
 {

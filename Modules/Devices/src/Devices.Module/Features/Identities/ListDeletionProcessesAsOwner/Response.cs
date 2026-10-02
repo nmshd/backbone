@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListDeletionProcessesAsOwner;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListDeletionProcessesAsOwnerResponse")]
 public class Response : CollectionResponseBase<IdentityDeletionProcessOverviewDTO>
 {
     public Response(IEnumerable<IdentityDeletionProcess> processes)

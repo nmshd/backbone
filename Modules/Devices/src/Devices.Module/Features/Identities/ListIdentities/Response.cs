@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Module.Features.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListIdentities;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListIdentitiesResponse")]
 public class Response : CollectionResponseBase<IdentitySummaryDTO>
 {
     public Response(IEnumerable<Identity> items) : base(items.Select(i => new IdentitySummaryDTO(i)))

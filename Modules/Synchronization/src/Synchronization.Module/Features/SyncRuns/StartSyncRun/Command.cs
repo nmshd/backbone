@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("StartSyncRunCommand")]
 public class Command : IRequest<Response>
 {
     public required SyncRunDTO.SyncRunType Type { get; init; }

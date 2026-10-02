@@ -4,7 +4,6 @@ using Backbone.Modules.Synchronization.Module.Features.SyncRuns.Shared;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.StartSyncRun;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("StartSyncRunResponse")]
 public class Response
 {
     public Response(StartSyncRunStatus status, SyncRun? newSyncRun = null)

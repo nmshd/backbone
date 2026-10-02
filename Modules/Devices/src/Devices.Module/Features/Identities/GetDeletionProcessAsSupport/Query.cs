@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.GetDeletionProcessAsSupport;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetDeletionProcessAsSupportQuery")]
 public class Query : IRequest<IdentityDeletionProcessDetailsDTO>
 {
     public required string IdentityAddress { get; init; }

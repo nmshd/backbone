@@ -26,7 +26,6 @@ internal static class Endpoint
     }
 }
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("AcceptRelationshipRequest")]
 public class RequestBody
 {
     public byte[]? CreationResponseContent { get; set; } = [];

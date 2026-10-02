@@ -2,7 +2,6 @@
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.UpdateTokenContent;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateTokenContentResponse")]
 public class Response
 {
     public Response(Token token)

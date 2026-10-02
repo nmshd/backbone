@@ -3,7 +3,6 @@ using Backbone.Modules.Tags.Domain;
 
 namespace Backbone.Modules.Tags.Module.Features.Tags.ListTags;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListTagsResponse")]
 public class Response
 {
     public required IEnumerable<string> SupportedLanguages { get; set; }

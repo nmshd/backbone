@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Module.Features.Files.CreateFile;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateFileCommand")]
 [ApplyQuotasForMetrics("NumberOfFiles", "UsedFileStorageSpace")]
 public class Command : IRequest<Response>
 {

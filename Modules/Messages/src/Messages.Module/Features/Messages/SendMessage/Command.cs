@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.SendMessage;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("SendMessageCommand")]
 [ApplyQuotasForMetrics("NumberOfSentMessages")]
 public class Command : IRequest<Response>
 {

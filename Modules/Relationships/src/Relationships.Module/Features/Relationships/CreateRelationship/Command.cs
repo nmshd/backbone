@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.CreateRelationship;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateRelationshipCommand")]
 [ApplyQuotasForMetrics("NumberOfRelationships")]
 public class Command : IRequest<Response>
 {

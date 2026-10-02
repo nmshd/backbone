@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListDevicesQuery")]
 public class Query : IRequest<Response>
 {
     public required PaginationFilter PaginationFilter { get; init; }

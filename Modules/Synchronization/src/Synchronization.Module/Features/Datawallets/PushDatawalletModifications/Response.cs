@@ -2,7 +2,6 @@ using Backbone.Modules.Synchronization.Domain.Entities;
 
 namespace Backbone.Modules.Synchronization.Module.Features.Datawallets.PushDatawalletModifications;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("PushDatawalletModificationsResponse")]
 public class Response
 {
     public required long NewIndex { get; set; }

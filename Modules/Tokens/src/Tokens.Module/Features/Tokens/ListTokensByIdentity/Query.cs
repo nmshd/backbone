@@ -4,5 +4,4 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListTokensByIdentityQuery")]
 public record Query(string CreatedBy, PaginationFilter PaginationFilter) : IRequest<Response>;

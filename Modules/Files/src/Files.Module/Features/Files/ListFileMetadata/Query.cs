@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ListFileMetadata;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListFileMetadataQuery")]
 public class Query : IRequest<Response>
 {
     public required PaginationFilter PaginationFilter { get; init; }

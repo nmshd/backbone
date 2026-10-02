@@ -4,7 +4,7 @@ using Backbone.Modules.Announcements.Abstractions;
 using Backbone.Modules.Announcements.Domain.Entities;
 using MediatR;
 
-namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsInLanguage;
+namespace Backbone.Modules.Announcements.Module.Features.Announcements.ListAnnouncementsForActiveIdentityInLanguage;
 
 public class Handler : IRequestHandler<Query, Response>
 {

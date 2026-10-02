@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateTokenCommand")]
 [ApplyQuotasForMetrics("NumberOfTokens")]
 public class Command : IRequest<Response>
 {

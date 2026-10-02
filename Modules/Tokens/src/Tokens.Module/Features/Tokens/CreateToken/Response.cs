@@ -2,7 +2,6 @@ using Backbone.Modules.Tokens.Domain.Entities;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.CreateToken;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateTokenResponse")]
 public class Response
 {
     public Response(Token token)

@@ -2,7 +2,6 @@ using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.CreateClient;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateClientResponse")]
 public class Response
 {
     public Response(OAuthClient client, string clientSecret)

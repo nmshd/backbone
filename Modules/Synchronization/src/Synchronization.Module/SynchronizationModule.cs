@@ -1,5 +1,6 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.OpenApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Module;
@@ -17,6 +18,12 @@ public class SynchronizationModule : AbstractModule<ApplicationConfiguration, In
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
+        services.Configure<OpenApiSchemaNames>(names =>
+        {
+            names.Overrides[typeof(Features.SyncRuns.FinalizeDatawalletVersionUpgrade.Response)] = "FinalizeDatawalletVersionUpgradeSyncRunResponse";
+            names.Overrides[typeof(Features.SyncRuns.FinalizeExternalEventSync.Response)] = "FinalizeExternalEventSyncSyncRunResponse";
+        });
+
         services.AddPersistence(infrastructureConfiguration.SqlDatabase);
 
         services.AddMediatR(c => c

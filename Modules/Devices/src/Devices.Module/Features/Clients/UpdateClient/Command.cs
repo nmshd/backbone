@@ -2,7 +2,6 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateClientCommand")]
 public class Command : IRequest<Response>
 {
     public required string ClientId { get; init; }

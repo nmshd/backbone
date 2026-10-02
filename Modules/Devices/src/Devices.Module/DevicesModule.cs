@@ -1,5 +1,6 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.OpenApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Module;
@@ -22,6 +23,11 @@ public class DevicesModule : AbstractModule<ApplicationConfiguration, Infrastruc
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection rawModuleConfiguration)
     {
+        services.Configure<OpenApiSchemaNames>(names =>
+        {
+            names.Overrides[typeof(Features.Identities.ListDeletionProcessesAsSupport.Response)] = "GetDeletionProcessesAsSupportResponse";
+        });
+
         var applicationConfiguration = rawModuleConfiguration.GetSection("Application");
 
         services.ConfigureAndValidate<ApplicationConfiguration>(applicationConfiguration.Bind);

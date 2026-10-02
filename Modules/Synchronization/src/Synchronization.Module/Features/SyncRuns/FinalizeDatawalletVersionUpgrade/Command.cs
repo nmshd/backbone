@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeDatawalletVersionUpgrade;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("FinalizeDatawalletVersionUpgradeSyncRunCommand")]
 public class Command : IRequest<Response>
 {
     public required string SyncRunId { get; init; }

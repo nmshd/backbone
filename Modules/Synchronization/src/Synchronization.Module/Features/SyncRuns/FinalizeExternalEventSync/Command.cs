@@ -4,7 +4,6 @@ using MediatR;
 
 namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeExternalEventSync;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("FinalizeExternalEventSyncSyncRunCommand")]
 public class Command : IRequest<Response>
 {
     public required string SyncRunId { get; init; }

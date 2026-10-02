@@ -4,7 +4,6 @@ using MediatR;
 
 namespace Backbone.Modules.Announcements.Module.Features.Announcements.CreateAnnouncement;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateAnnouncementCommand")]
 public class Command : IRequest<AnnouncementDTO>
 {
     public required AnnouncementSeverity Severity { get; set; }

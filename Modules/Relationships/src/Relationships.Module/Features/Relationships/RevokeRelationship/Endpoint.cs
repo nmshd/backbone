@@ -26,7 +26,6 @@ internal static class Endpoint
     }
 }
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RevokeRelationshipRequest")]
 public class RequestBody
 {
     public byte[]? CreationResponseContent { get; set; } = [];

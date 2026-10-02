@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Module.Features.Tiers.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListTiersResponse")]
 public class Response : PagedResponse<TierDTO>
 {
     public Response(DbPaginationResult<Tier> dbPaginationResult, PaginationFilter previousPaginationFilter) : base(dbPaginationResult.ItemsOnPage.Select(el => new TierDTO(el.Id, el.Name)),

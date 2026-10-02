@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.ListDevices;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListDevicesResponse")]
 public class Response : PagedResponse<DeviceDTO>
 {
     public Response(DbPaginationResult<Device> dbPaginationResult, PaginationFilter previousPaginationFilter) : base(dbPaginationResult.ItemsOnPage.Select(d => new DeviceDTO(d)),

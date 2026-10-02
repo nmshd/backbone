@@ -2,7 +2,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.CreateIdentity;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateIdentityResponse")]
 public class Response
 {
     public Response(Identity identity)

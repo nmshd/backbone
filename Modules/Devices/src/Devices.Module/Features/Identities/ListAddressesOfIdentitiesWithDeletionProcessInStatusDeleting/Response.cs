@@ -2,7 +2,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingResponse")]
 public class Response
 {
     public Response(IEnumerable<IdentityAddress> identityAddresses)

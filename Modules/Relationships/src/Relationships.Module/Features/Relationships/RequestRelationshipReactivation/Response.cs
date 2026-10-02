@@ -3,7 +3,6 @@ using Backbone.Modules.Relationships.Module.Features.Shared;
 
 namespace Backbone.Modules.Relationships.Module.Features.Relationships.RequestRelationshipReactivation;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RequestRelationshipReactivationResponse")]
 public class Response : RelationshipMetadataDTO
 {
     public Response(Relationship relationship) : base(relationship)

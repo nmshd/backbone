@@ -2,7 +2,6 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.DeleteQuotaForIdentity;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("DeleteQuotaForIdentityCommand")]
 public class Command : IRequest
 {
     public required string IdentityAddress { get; init; }

@@ -2,7 +2,6 @@ using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Module.Features.Files.CreateFile;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateFileResponse")]
 public class Response
 {
     public Response(File file)

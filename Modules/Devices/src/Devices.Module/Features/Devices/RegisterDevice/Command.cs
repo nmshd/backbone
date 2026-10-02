@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RegisterDeviceCommand")]
 public class Command : IRequest<Response>
 {
     public required string DevicePassword { get; init; }

@@ -4,7 +4,6 @@ using MediatR;
 
 namespace Backbone.Modules.Quotas.Module.Features.Tiers.CreateQuotaForTier;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("CreateQuotaForTierCommand")]
 public class Command : IRequest<TierQuotaDefinitionDTO>
 {
     public required string TierId { get; init; }

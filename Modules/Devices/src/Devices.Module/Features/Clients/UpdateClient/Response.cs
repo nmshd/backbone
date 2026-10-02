@@ -2,7 +2,6 @@ using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Module.Features.Clients.UpdateClient;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("UpdateClientResponse")]
 public class Response
 {
     public Response(OAuthClient client)

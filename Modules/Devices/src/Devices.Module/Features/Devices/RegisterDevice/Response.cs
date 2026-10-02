@@ -2,7 +2,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Module.Features.Devices.RegisterDevice;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RegisterDeviceResponse")]
 public class Response
 {
     public Response(Device device)

@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Backbone.Modules.Messages.Module.Features.Messages.ListMessages;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListMessagesQuery")]
 public class Query : IRequest<Response>
 {
     public required PaginationFilter PaginationFilter { get; init; }

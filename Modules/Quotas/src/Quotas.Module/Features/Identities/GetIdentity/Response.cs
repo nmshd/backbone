@@ -6,7 +6,6 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Quotas.Module.Features.Identities.GetIdentity;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("GetIdentityResponse")]
 public class Response
 {
     public required string Address { get; set; }

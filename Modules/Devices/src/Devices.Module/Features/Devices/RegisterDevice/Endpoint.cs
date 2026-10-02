@@ -37,7 +37,6 @@ internal static class Endpoint
     }
 }
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("RegisterDeviceRequest")]
 public class RequestBody
 {
     public required string DevicePassword { get; set; }

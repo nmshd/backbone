@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.OpenApi;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Module;
@@ -16,6 +17,11 @@ public class TokensModule : AbstractModule<ApplicationConfiguration, Infrastruct
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfiguration, IConfigurationSection _)
     {
+        services.Configure<OpenApiSchemaNames>(names =>
+        {
+            names.Overrides[typeof(Features.Tokens.Shared.Response)] = "ListTokensResponse";
+        });
+
         services.AddPersistence(infrastructureConfiguration.SqlDatabase);
 
         services.AddMediatR(c => c

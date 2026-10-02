@@ -4,7 +4,6 @@ using MediatR;
 
 namespace Backbone.Modules.Tokens.Module.Features.Tokens.ListTokens;
 
-[Backbone.BuildingBlocks.Application.Abstractions.JsonSchemaName("ListTokensQuery")]
 public class Query : IRequest<Response>
 {
     public required PaginationFilter PaginationFilter { get; init; }
