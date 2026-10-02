@@ -24,7 +24,7 @@ public class AppOnboardingController : Controller
     [ProducesResponseType(StatusCodes.Status302Found)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [AllowAnonymous]
-    public IActionResult GetReference([FromRoute(Name = "referenceId")] string? _, [FromQuery] string? app)
+    public IActionResult GetReference([FromRoute(Name = "referenceId")] string? referenceId, [FromQuery] string? app)
     {
         if (_configuration == null)
             return NotFound();
@@ -38,7 +38,7 @@ public class AppOnboardingController : Controller
 
         var stores = ListStoresForUserAgent(selectedAppConfiguration);
 
-        return View("AppOnboarding", new AppOnboardingModel(selectedAppConfiguration, stores));
+        return View("AppOnboarding", new AppOnboardingModel(referenceId, selectedAppConfiguration, stores));
     }
 
     private List<AppOnboardingModel.AppStore> ListStoresForUserAgent(ConsumerApiConfiguration.AppOnboardingConfiguration.App appConfiguration)
@@ -110,8 +110,9 @@ public class AppSelectionModel
 
 public class AppOnboardingModel
 {
-    public AppOnboardingModel(ConsumerApiConfiguration.AppOnboardingConfiguration.App config, List<AppStore> links)
+    public AppOnboardingModel(string? referenceId, ConsumerApiConfiguration.AppOnboardingConfiguration.App config, List<AppStore> links)
     {
+        ReferenceId = referenceId;
         AppId = config.Id;
         AppDisplayName = config.DisplayName;
         AppDescription = config.Description;
@@ -121,6 +122,7 @@ public class AppOnboardingModel
         AppIconUrl = config.IconUrl;
     }
 
+    public string? ReferenceId { get; }
     public string AppId { get; }
     public string AppDisplayName { get; }
     public string AppDescription { get; set; }

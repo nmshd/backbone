@@ -86,6 +86,12 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
+      - name: Install OpenID4VP Verifier dependencies
+        working-directory: Applications/ConsumerApi/src/OpenId4VpVerifierSite
+        run: npm ci
+      - name: Run OpenID4VP Verifier unit tests
+        working-directory: Applications/ConsumerApi/src/OpenId4VpVerifierSite
+        run: npm test
       - name: Run tests
         run: ./.ci/test.sh
         env:

@@ -71,5 +71,19 @@ internal class AppOnboardingStepDefinitions
         matches.ShouldNotContain(link => link.Value.Contains(url));
     }
 
+    [Then("the response contains the OpenID4VP verifier bootstrap")]
+    public async Task ThenTheResponseContainsTheOpenId4VpVerifierBootstrap()
+    {
+        _onboardingResponse.ShouldNotBeNull();
+
+        var responseContent = await _onboardingResponse.Content.ReadAsStringAsync();
+
+        responseContent.ShouldContain("id=\"openid4vp-verifier-root\"");
+        responseContent.ShouldContain("data-reference-id=\"tok12345\"");
+        responseContent.ShouldContain("/openid4vp-verifier/assets/verifier.css");
+        responseContent.ShouldContain("/openid4vp-verifier/assets/verifier.js");
+        responseContent.ShouldContain("Der Nachweis<br />wird geprüft.");
+    }
+
     #endregion
 }

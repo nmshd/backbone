@@ -270,6 +270,8 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+Applications/ConsumerApi/src/OpenId4VpVerifierSite/dist/
+Applications/ConsumerApi/src/wwwroot/openid4vp-verifier/
 
 # Visual Studio 6 build log
 *.plg
