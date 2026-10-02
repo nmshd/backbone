@@ -1,0 +1,46 @@
+using Backbone.Modules.Devices.Abstractions;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+
+namespace Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
+
+public class Handler : IRequestHandler<Command, Response>
+{
+    private readonly ITiersRepository _tierRepository;
+    private readonly ILogger<Handler> _logger;
+
+    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger)
+    {
+        _tierRepository = tierRepository;
+        _logger = logger;
+    }
+
+    public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
+    {
+        var tierName = TierName.Create(request.Name);
+
+        var tierExists = await _tierRepository.ExistsWithName(tierName.Value, cancellationToken);
+        if (tierExists)
+            throw new ApplicationException(ApplicationErrors.Devices.TierNameAlreadyExists());
+
+        var tier = new Tier(tierName.Value);
+
+        await _tierRepository.AddAsync(tier, cancellationToken);
+
+        _logger.CreatedTier(tier.Id.Value, tier.Name.Value);
+
+        return new Response(tier.Id, tier.Name);
+    }
+}
+
+internal static partial class CreateTierLogs
+{
+    [LoggerMessage(
+        EventId = 383136,
+        EventName = "Devices.CreateTier.CreatedTier",
+        Level = LogLevel.Information,
+        Message = "Successfully created tier. Tier ID: '{tierId}', Tier Name: {tierName}")]
+    public static partial void CreatedTier(this ILogger logger, string tierId, string tierName);
+}

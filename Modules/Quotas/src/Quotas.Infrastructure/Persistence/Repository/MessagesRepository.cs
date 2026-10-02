@@ -1,5 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;

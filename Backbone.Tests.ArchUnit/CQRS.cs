@@ -22,26 +22,27 @@ public class Cqrs
             .And().HaveNameEndingWith("Query");
 
     [Fact]
-    public void ClassesInheritingFromIRequestShouldHaveNameEndingWithCommandOrQuery()
+    public void ClassesInheritingFromIRequestShouldBeNamedCommandOrQuery()
     {
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
-            .Should().HaveNameMatching(".+(Command|Query)$").As("should have names ending with 'Command' or 'Query'")
+            .And().AreNot(Backbone.TEST_TYPES)
+            .Should().HaveNameMatching("^(Command|Query)$").As("should be named 'Command' or 'Query'")
             .Check(Backbone.ARCHITECTURE);
     }
 
     [Fact]
-    public void CommandsShouldResideInCommandsNamespace()
+    public void CommandsShouldResideInFeaturesNamespace()
     {
         Classes().That().Are(COMMANDS)
-            .Should().ResideInNamespaceMatching(".+\\.Commands\\.")
+            .Should().ResideInNamespaceMatching(@"^Backbone\.Modules\.[^.]+\.Module\.Features\..*")
             .Check(Backbone.ARCHITECTURE);
     }
 
     [Fact]
-    public void QueriesShouldResideInQueriesNamespace()
+    public void QueriesShouldResideInFeaturesNamespace()
     {
         Classes().That().Are(QUERIES)
-            .Should().ResideInNamespaceMatching(".+\\.Queries\\.")
+            .Should().ResideInNamespaceMatching(@"^Backbone\.Modules\.[^.]+\.Module\.Features\..*")
             .Check(Backbone.ARCHITECTURE);
     }
 }

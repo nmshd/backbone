@@ -1,0 +1,18 @@
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Module.Features.Datawallets.Shared;
+using FluentValidation;
+
+namespace Backbone.Modules.Synchronization.Module.Features.SyncRuns.FinalizeDatawalletVersionUpgrade;
+
+// ReSharper disable once UnusedMember.Global
+public class Validator : AbstractValidator<Command>
+{
+    public Validator()
+    {
+        RuleFor(x => x.SyncRunId).ValidId<Command, SyncRunId>();
+        RuleFor(x => x.NewDatawalletVersion).DetailedNotEmpty();
+        RuleForEach(x => x.DatawalletModifications).SetValidator(new PushDatawalletModificationItemValidator());
+    }
+}

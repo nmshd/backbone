@@ -70,6 +70,9 @@ public class Device : Entity
 
     public virtual ApplicationUser User { get; set; }
 
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public string Username => User.UserName!;
+
     public DateTime CreatedAt { get; set; }
 
     public CommunicationLanguage CommunicationLanguage { get; private set; }

@@ -1,10 +1,10 @@
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Module;
-using Backbone.Modules.Challenges.Application;
-using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Infrastructure;
 using Backbone.Modules.Challenges.Infrastructure.Persistence;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +16,13 @@ public class ChallengesModule : AbstractModule<ApplicationConfiguration, Infrast
 
     protected override void ConfigureServices(IServiceCollection services, InfrastructureConfiguration infrastructureConfigurationConfiguration, IConfigurationSection _)
     {
-        services.AddApplication();
+        services.AddMediatR(c => c
+            .RegisterServicesFromAssembly(typeof(ChallengesModule).Assembly)
+            .AddOpenBehavior(typeof(LoggingBehavior<,>))
+            .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
+            .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
+        );
+        services.AddValidatorsFromAssembly(typeof(ChallengesModule).Assembly);
 
         services.AddDatabase(infrastructureConfigurationConfiguration.SqlDatabase);
 

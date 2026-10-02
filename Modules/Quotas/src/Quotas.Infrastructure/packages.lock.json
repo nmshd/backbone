@@ -776,36 +776,10 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
-      "Backbone.Modules.Devices.Contracts": {
+      "Backbone.Modules.Quotas.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Files.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Messages.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Quotas.Application": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Contracts": {
@@ -822,18 +796,6 @@
           "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
           "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]"
-        }
-      },
-      "Backbone.Modules.Relationships.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Tokens.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {

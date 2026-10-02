@@ -3,7 +3,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Module\BuildingBlocks.Module.csproj" />
-        <ProjectReference Include="..\Synchronization.Application\Synchronization.Application.csproj" />
+        <ProjectReference Include="..\Synchronization.Abstractions\Synchronization.Abstractions.csproj" />
         <ProjectReference Include="..\Synchronization.Domain\Synchronization.Domain.csproj" />
         <ProjectReference Include="..\Synchronization.Infrastructure.Database.Postgres\Synchronization.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\Synchronization.Infrastructure.Database.SqlServer\Synchronization.Infrastructure.Database.SqlServer.csproj" />
@@ -11,6 +11,18 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+        <ProjectReference Include="..\..\..\Devices\src\Devices.Contracts\Devices.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Files\src\Files.Contracts\Files.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Messages\src\Messages.Contracts\Messages.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Relationships\src\Relationships.Contracts\Relationships.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Tokens\src\Tokens.Contracts\Tokens.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     </ItemGroup>
 </Project>

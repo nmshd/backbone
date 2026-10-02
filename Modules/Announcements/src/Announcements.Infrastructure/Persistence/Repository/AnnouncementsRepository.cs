@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Extensions;
-using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Announcements.Abstractions;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;

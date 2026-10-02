@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;

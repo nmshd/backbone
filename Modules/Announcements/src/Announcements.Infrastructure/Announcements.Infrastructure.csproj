@@ -8,8 +8,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
-    <ProjectReference Include="..\Announcements.Application\Announcements.Application.csproj" />
+    <ProjectReference Include="..\Announcements.Abstractions\Announcements.Abstractions.csproj" />
     <ProjectReference Include="..\Announcements.Domain\Announcements.Domain.csproj" />
   </ItemGroup>
 

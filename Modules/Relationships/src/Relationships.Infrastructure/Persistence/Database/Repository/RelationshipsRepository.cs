@@ -4,11 +4,11 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Infrastructure;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
+using Backbone.Modules.Relationships.Infrastructure.Persistence;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 

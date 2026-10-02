@@ -17,21 +17,6 @@ public class CleanArchitecture
             .ResideInAssemblyMatching("Backbone.Modules.*.Contracts")
             .As("Contract Assemblies");
 
-    private static readonly IObjectProvider<IType> CONSUMER_API_ASSEMBLIES =
-        Types().That()
-            .ResideInAssemblyMatching("Backbone.Modules.*.ConsumerApi")
-            .As("ConsumerApi Assemblies");
-
-    private static readonly IObjectProvider<IType> APPLICATION_ASSEMBLIES =
-        Types().That()
-            .ResideInAssemblyMatching("Backbone.Modules.*.Application")
-            .As("Application Assemblies");
-
-    private static readonly IObjectProvider<IType> INFRASTRUCTURE_ASSEMBLIES =
-        Types().That()
-            .ResideInAssemblyMatching("Backbone.Modules.*.Infrastructure")
-            .As("Infrastructure Assemblies");
-
     [Theory]
     [ClassData(typeof(Modules))]
     public void ModulesShouldNotDependOnOtherModules(IObjectProvider<IType> module)
@@ -45,7 +30,6 @@ public class CleanArchitecture
         Types()
             .That().Are(module)
             .And().AreNot(Backbone.TEST_TYPES)
-            .And().AreNot(CONSUMER_API_ASSEMBLIES)
             .Should().NotDependOnAny(otherModules)
             .Because("modules should be self-contained.")
             .Check(Backbone.ARCHITECTURE);
@@ -65,38 +49,6 @@ public class CleanArchitecture
             .Should().NotDependOnAny(moduleTypesOutsideContract)
             .Because("contracts must not depend on module-specific projects.")
             .WithoutRequiringPositiveResults()
-            .Check(Backbone.ARCHITECTURE);
-    }
-
-    [Fact]
-    public void ApplicationAssembliesShouldNotDependOnInfrastructureAssemblies()
-    {
-        Types()
-            .That().Are(APPLICATION_ASSEMBLIES)
-            .And().AreNot(Backbone.TEST_TYPES)
-            .Should().NotDependOnAnyTypesThat().Are(INFRASTRUCTURE_ASSEMBLIES)
-            .Because("this would violate Clean Architecture")
-            .Check(Backbone.ARCHITECTURE);
-    }
-
-    [Fact]
-    public void ApplicationAssembliesShouldNotDependOnAPIAssemblies()
-    {
-        Types()
-            .That().Are(APPLICATION_ASSEMBLIES)
-            .Should().NotDependOnAnyTypesThat().ResideInAssembly("Backbone.Modules.*.API")
-            .Because("this would violate Clean Architecture")
-            .Check(Backbone.ARCHITECTURE);
-    }
-
-    [Fact]
-    public void ApplicationAssembliesShouldNotReferenceAspNetCore()
-    {
-        Types()
-            .That().Are(APPLICATION_ASSEMBLIES)
-            .And().DoNotResideInAssemblyMatching("Backbone.Modules.Devices.Application")
-            .Should().NotDependOnAnyTypesThat().ResideInNamespaceMatching("Microsoft.AspNetCore.*")
-            .Because("this would violate Clean Architecture")
             .Check(Backbone.ARCHITECTURE);
     }
 }

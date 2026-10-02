@@ -4,15 +4,15 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Tokens.Application;
-using Backbone.Modules.Tokens.Application.Tokens.Commands.ResetAccessFailedCountOfToken;
-using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokensByIdentity;
-using Backbone.Modules.Tokens.Application.Tokens.Queries.Shared;
+using Backbone.Modules.Tokens.Module;
+using Backbone.Modules.Tokens.Module.Features.Tokens.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ListTokensByIdentity = Backbone.Modules.Tokens.Module.Features.Tokens.ListTokensByIdentity;
+using ResetAccessFailedCountOfToken = Backbone.Modules.Tokens.Module.Features.Tokens.ResetAccessFailedCountOfToken;
 
 namespace Backbone.AdminApi.Controllers;
 
@@ -22,7 +22,7 @@ namespace Backbone.AdminApi.Controllers;
 public class TokensController(IMediator mediator, IOptions<ApplicationConfiguration> options) : ApiControllerBase(mediator)
 {
     [HttpGet]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListTokensResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<Response>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokensByIdentity([FromQuery] PaginationFilter paginationFilter, [FromQuery] string createdBy, CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize != null)
@@ -35,7 +35,7 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
             }
         }
 
-        var request = new ListTokensByIdentityQuery(createdBy, paginationFilter);
+        var request = new ListTokensByIdentity.Query(createdBy, paginationFilter);
         var pagedResult = await _mediator.Send(request, cancellationToken);
 
         return Paged(pagedResult);
@@ -47,7 +47,7 @@ public class TokensController(IMediator mediator, IOptions<ApplicationConfigurat
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetAccessFailedCount([FromRoute] string tokenId, CancellationToken cancellationToken)
     {
-        var request = new ResetAccessFailedCountOfTokenCommand { TokenId = tokenId };
+        var request = new ResetAccessFailedCountOfToken.Command { TokenId = tokenId };
         await _mediator.Send(request, cancellationToken);
         return NoContent();
     }

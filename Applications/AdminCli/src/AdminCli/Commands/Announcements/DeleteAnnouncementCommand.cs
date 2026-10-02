@@ -1,7 +1,7 @@
 using System.CommandLine;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Announcements.Application.Announcements.Commands.DeleteAnnouncementById;
 using MediatR;
+using DeleteAnnouncementById = Backbone.Modules.Announcements.Module.Features.Announcements.DeleteAnnouncementById;
 
 namespace Backbone.AdminCli.Commands.Announcements;
 
@@ -28,7 +28,7 @@ public class DeleteAnnouncementCommand : AdminCliCommand
     {
         try
         {
-            await _mediator.Send(new DeleteAnnouncementByIdCommand { Id = announcementId });
+            await _mediator.Send(new DeleteAnnouncementById.Command { Id = announcementId });
             Console.WriteLine($@"Successfully deleted announcement with id '{announcementId}'");
         }
         catch (Exception e)

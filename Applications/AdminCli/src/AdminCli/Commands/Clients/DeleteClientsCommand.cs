@@ -1,7 +1,7 @@
 using System.CommandLine;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using MediatR;
+using DeleteClient = Backbone.Modules.Devices.Module.Features.Clients.DeleteClient;
 
 namespace Backbone.AdminCli.Commands.Clients;
 
@@ -30,7 +30,7 @@ public class DeleteClientsCommand : AdminCliCommand
         {
             try
             {
-                await _mediator.Send(new DeleteClientCommand { ClientId = clientId }, CancellationToken.None);
+                await _mediator.Send(new DeleteClient.Command { ClientId = clientId }, CancellationToken.None);
                 Console.WriteLine($@"Successfully deleted client '{clientId}'");
             }
             catch (Exception ex)

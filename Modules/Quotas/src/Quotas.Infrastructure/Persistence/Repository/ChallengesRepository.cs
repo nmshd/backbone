@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Domain.Aggregates.Challenges;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;

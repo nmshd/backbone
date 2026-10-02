@@ -1,0 +1,29 @@
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Abstractions;
+using Backbone.Modules.Tokens.Domain.Entities;
+using MediatR;
+using Microsoft.Extensions.Options;
+
+namespace Backbone.Modules.Tokens.Module.Features.Tokens.AnonymizeTokenAllocationsOfIdentity;
+
+public class Handler : IRequestHandler<Command>
+{
+    private readonly ITokensRepository _tokensRepository;
+    private readonly ApplicationConfiguration _applicationConfiguration;
+
+    public Handler(ITokensRepository tokensRepository, IOptions<ApplicationConfiguration> applicationOptions)
+    {
+        _tokensRepository = tokensRepository;
+        _applicationConfiguration = applicationOptions.Value;
+    }
+
+    public async Task Handle(Command request, CancellationToken cancellationToken)
+    {
+        var tokens = (await _tokensRepository.ListWithoutContent(Token.HasAllocationFor(IdentityAddress.Parse(request.IdentityAddress)), cancellationToken, track: true)).ToList();
+
+        foreach (var token in tokens)
+            token.AnonymizeTokenAllocation(request.IdentityAddress, _applicationConfiguration.DidDomainName);
+
+        await _tokensRepository.Update(tokens, cancellationToken);
+    }
+}

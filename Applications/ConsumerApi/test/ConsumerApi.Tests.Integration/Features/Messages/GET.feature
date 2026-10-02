@@ -3,6 +3,13 @@ Feature: GET /Messages
 
 Identity gets all its Messages
 
+    Scenario: Filtering Messages by id
+        Given Identities i1 and i2
+        And an active Relationship r12 between i1 and i2
+        And i1 has sent a Message m to i2
+        When i1 sends a GET request to the /Messages endpoint with ids={m.Id}
+        Then the response status code is 200 (Ok)
+
     Scenario: Getting all Messages
         Given Identities i1 and i2
         And an active Relationship r12 between i1 and i2

@@ -4,8 +4,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence;
-using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Abstractions;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;

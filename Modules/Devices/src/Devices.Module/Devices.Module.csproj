@@ -2,7 +2,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
-        <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\..\..\Announcements\src\Announcements.Contracts\Announcements.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Synchronization\src\Synchronization.Contracts\Synchronization.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\Tokens\src\Tokens.Contracts\Tokens.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
+        <ProjectReference Include="..\Devices.Contracts\Devices.Contracts.csproj" />
+        <ProjectReference Include="..\Devices.Abstractions\Devices.Abstractions.csproj" />
         <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
         <ProjectReference Include="..\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj" />
         <ProjectReference Include="..\Devices.Infrastructure.Database.SqlServer\Devices.Infrastructure.Database.SqlServer.csproj" />
@@ -10,6 +15,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CSharpFunctionalExtensions" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+        <PackageReference Include="OpenIddict.AspNetCore" />
+        <PackageReference Include="OpenIddict.EntityFrameworkCore" />
+        <PackageReference Include="Polly" />
         <PackageReference Include="ReHackt.Extensions.Options.Validation" />
     </ItemGroup>
 </Project>

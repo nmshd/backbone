@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProcess;
 using MediatR;
+using LogDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.LogDeletionProcess;
 
 namespace Backbone.Job.IdentityDeletion;
 
@@ -16,6 +16,6 @@ public class DeletionProcessLogger : IDeletionProcessLogger
 
     public async Task LogDeletion(IdentityAddress identityAddress, string aggregateType)
     {
-        await _mediator.Send(new LogDeletionProcessCommand { IdentityAddress = identityAddress, AggregateType = aggregateType });
+        await _mediator.Send(new LogDeletionProcess.Command { IdentityAddress = identityAddress, AggregateType = aggregateType });
     }
 }

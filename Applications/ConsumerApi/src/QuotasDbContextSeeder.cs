@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using MediatR;
+using SeedQueuedForDeletionTier = Backbone.Modules.Quotas.Module.Features.Tiers.SeedQueuedForDeletionTier;
 
 namespace Backbone.ConsumerApi;
 
@@ -26,6 +26,6 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 
     private async Task SeedQueuedForDeletionTierMetrics()
     {
-        await _mediator.Send(new SeedQueuedForDeletionTierCommand());
+        await _mediator.Send(new SeedQueuedForDeletionTier.Command());
     }
 }

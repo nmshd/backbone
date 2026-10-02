@@ -1,5 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Abstractions.Persistence;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;

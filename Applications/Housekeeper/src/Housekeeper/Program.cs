@@ -10,7 +10,6 @@ using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Infrastructure;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
@@ -68,16 +67,16 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
     services.AddLogging();
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration,
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Module.ApplicationConfiguration,
             Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Module.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Module.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationConfiguration, InfrastructureConfiguration>(configuration);
+        .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 

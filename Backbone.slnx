@@ -54,7 +54,7 @@
   </Folder>
   <Folder Name="/Applications/Housekeeper/" />
   <Folder Name="/Applications/Housekeeper/src/">
-    <Project Path="Applications\Housekeeper\src\Housekeeper\Housekeeper.csproj" Type="Classic C#" />
+    <Project Path="Applications\Housekeeper\src\Housekeeper\Housekeeper.csproj" Type="C#" />
   </Folder>
   <Folder Name="/Applications/IdentityDeletionJobs/" />
   <Folder Name="/Applications/IdentityDeletionJobs/src/">
@@ -86,6 +86,7 @@
     <Project Path="BuildingBlocks/src/UnitTestTools/UnitTestTools.csproj" />
   </Folder>
   <Folder Name="/BuildingBlocks/test/">
+    <Project Path="BuildingBlocks/test/BuildingBlocks.API.Tests/BuildingBlocks.API.Tests.csproj" />
     <Project Path="BuildingBlocks/test/BuildingBlocks.Application.Tests/BuildingBlocks.Application.Tests.csproj" />
     <Project Path="BuildingBlocks/test/BuildingBlocks.Infrastructure.Tests/BuildingBlocks.Infrastructure.Tests.csproj" />
     <Project Path="BuildingBlocks/test/Crypto.Tests/Crypto.Tests.csproj" />
@@ -99,7 +100,7 @@
   <Folder Name="/Modules/" />
   <Folder Name="/Modules/Announcements/" />
   <Folder Name="/Modules/Announcements/src/">
-    <Project Path="Modules/Announcements/src/Announcements.Application/Announcements.Application.csproj" />
+    <Project Path="Modules/Announcements/src/Announcements.Abstractions/Announcements.Abstractions.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Contracts/Announcements.Contracts.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Domain/Announcements.Domain.csproj" />
     <Project Path="Modules/Announcements/src/Announcements.Infrastructure.Database.Postgres/Announcements.Infrastructure.Database.Postgres.csproj" />
@@ -108,12 +109,12 @@
     <Project Path="Modules/Announcements/src/Announcements.Module/Announcements.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Announcements/test/">
-    <Project Path="Modules/Announcements/test/Announcements.Application.Tests/Announcements.Application.Tests.csproj" />
+    <Project Path="Modules/Announcements/test/Announcements.Module.Tests/Announcements.Module.Tests.csproj" />
     <Project Path="Modules/Announcements/test/Announcements.Domain.Tests/Announcements.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Challenges/" />
   <Folder Name="/Modules/Challenges/src/">
-    <Project Path="Modules/Challenges/src/Challenges.Application/Challenges.Application.csproj" />
+    <Project Path="Modules/Challenges/src/Challenges.Abstractions/Challenges.Abstractions.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Domain/Challenges.Domain.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj" />
     <Project Path="Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj" />
@@ -121,11 +122,11 @@
     <Project Path="Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Challenges/test/">
-    <Project Path="Modules/Challenges/test/Challenges.Application.Tests/Challenges.Application.Tests.csproj" />
+    <Project Path="Modules/Challenges/test/Challenges.Module.Tests/Challenges.Module.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Devices/" />
   <Folder Name="/Modules/Devices/src/">
-    <Project Path="Modules/Devices/src/Devices.Application/Devices.Application.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Abstractions/Devices.Abstractions.csproj" />
     <Project Path="Modules/Devices/src/Devices.Contracts/Devices.Contracts.csproj" />
     <Project Path="Modules/Devices/src/Devices.Domain/Devices.Domain.csproj" />
     <Project Path="Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj" />
@@ -134,7 +135,7 @@
     <Project Path="Modules/Devices/src/Devices.Module/Devices.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Devices/test/">
-    <Project Path="Modules/Devices/test/Devices.Application.Tests/Devices.Application.Tests.csproj" />
+    <Project Path="Modules/Devices/test/Devices.Module.Tests/Devices.Module.Tests.csproj" />
     <Project Path="Modules/Devices/test/Devices.Domain.Tests/Devices.Domain.Tests.csproj" />
     <Project Path="Modules/Devices/test/Devices.Infrastructure.Tests/Devices.Infrastructure.Tests.csproj">
       <BuildDependency Project="BuildingBlocks/src/UnitTestTools/UnitTestTools.csproj" />
@@ -142,7 +143,7 @@
   </Folder>
   <Folder Name="/Modules/Files/" />
   <Folder Name="/Modules/Files/src/">
-    <Project Path="Modules/Files/src/Files.Application/Files.Application.csproj" />
+    <Project Path="Modules/Files/src/Files.Abstractions/Files.Abstractions.csproj" />
     <Project Path="Modules/Files/src/Files.Contracts/Files.Contracts.csproj" />
     <Project Path="Modules/Files/src/Files.Domain/Files.Domain.csproj" />
     <Project Path="Modules/Files/src/Files.Infrastructure.Database.Postgres/Files.Infrastructure.Database.Postgres.csproj" />
@@ -151,13 +152,13 @@
     <Project Path="Modules/Files/src/Files.Module/Files.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Files/test/">
-    <Project Path="Modules/Files/test/Files.Application.Tests/Files.Application.Tests.csproj" />
+    <Project Path="Modules/Files/test/Files.Module.Tests/Files.Module.Tests.csproj" />
     <Project Path="Modules/Files/test/Files.Domain.Tests/Files.Domain.Tests.csproj" />
     <Project Path="Modules/Files/test/Files.Infrastructure.Tests/Files.Infrastructure.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Messages/" />
   <Folder Name="/Modules/Messages/src/">
-    <Project Path="Modules/Messages/src/Messages.Application/Messages.Application.csproj" />
+    <Project Path="Modules/Messages/src/Messages.Abstractions/Messages.Abstractions.csproj" />
     <Project Path="Modules/Messages/src/Messages.Common/Messages.Common.csproj" />
     <Project Path="Modules/Messages/src/Messages.Contracts/Messages.Contracts.csproj" />
     <Project Path="Modules/Messages/src/Messages.Domain/Messages.Domain.csproj" />
@@ -167,12 +168,12 @@
     <Project Path="Modules/Messages/src/Messages.Module/Messages.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Messages/test/">
-    <Project Path="Modules/Messages/test/Messages.Application.Tests/Messages.Application.Tests.csproj" />
+    <Project Path="Modules/Messages/test/Messages.Module.Tests/Messages.Module.Tests.csproj" />
     <Project Path="Modules/Messages/test/Messages.Domain.Tests/Messages.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Quotas/" />
   <Folder Name="/Modules/Quotas/src/">
-    <Project Path="Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Abstractions/Quotas.Abstractions.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Contracts/Quotas.Contracts.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/Quotas.Infrastructure.Database.Postgres.csproj" />
@@ -181,13 +182,13 @@
     <Project Path="Modules/Quotas/src/Quotas.Module/Quotas.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Quotas/test/">
-    <Project Path="Modules/Quotas/test/Quotas.Application.Tests/Quotas.Application.Tests.csproj" />
+    <Project Path="Modules/Quotas/test/Quotas.Module.Tests/Quotas.Module.Tests.csproj" />
     <Project Path="Modules/Quotas/test/Quotas.Domain.Tests/Quotas.Domain.Tests.csproj" />
     <Project Path="Modules/Quotas/test/Quotas.Infrastructure.Tests/Quotas.Infrastructure.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Relationships/" />
   <Folder Name="/Modules/Relationships/src/">
-    <Project Path="Modules/Relationships/src/Relationships.Application/Relationships.Application.csproj" />
+    <Project Path="Modules/Relationships/src/Relationships.Abstractions/Relationships.Abstractions.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Common/Relationships.Common.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Contracts/Relationships.Contracts.csproj" />
     <Project Path="Modules/Relationships/src/Relationships.Domain/Relationships.Domain.csproj" />
@@ -197,13 +198,13 @@
     <Project Path="Modules/Relationships/src/Relationships.Module/Relationships.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Relationships/test/">
-    <Project Path="Modules/Relationships/test/Relationships.Application.Tests/Relationships.Application.Tests.csproj" />
+    <Project Path="Modules/Relationships/test/Relationships.Module.Tests/Relationships.Module.Tests.csproj" />
     <Project Path="Modules/Relationships/test/Relationships.Domain.Tests/Relationships.Domain.Tests.csproj" />
     <Project Path="Modules/Relationships/test/Relationships.Infrastructure.Tests/Relationships.Infrastructure.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Synchronization/" />
   <Folder Name="/Modules/Synchronization/src/">
-    <Project Path="Modules/Synchronization/src/Synchronization.Application/Synchronization.Application.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Abstractions/Synchronization.Abstractions.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Contracts/Synchronization.Contracts.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Domain/Synchronization.Domain.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/Synchronization.Infrastructure.Database.Postgres.csproj" />
@@ -212,19 +213,19 @@
     <Project Path="Modules/Synchronization/src/Synchronization.Module/Synchronization.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Synchronization/test/">
-    <Project Path="Modules/Synchronization/test/Synchronization.Application.Tests/Synchronization.Application.Tests.csproj" />
+    <Project Path="Modules/Synchronization/test/Synchronization.Module.Tests/Synchronization.Module.Tests.csproj" />
     <Project Path="Modules/Synchronization/test/Synchronization.Domain.Tests/Synchronization.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Tags/" />
   <Folder Name="/Modules/Tags/src/">
-    <Project Path="Modules/Tags/src/Tags.Application/Tags.Application.csproj" />
+    <Project Path="Modules/Tags/src/Tags.Abstractions/Tags.Abstractions.csproj" />
     <Project Path="Modules/Tags/src/Tags.Domain/Tags.Domain.csproj" />
     <Project Path="Modules/Tags/src/Tags.Infrastructure/Tags.Infrastructure.csproj" />
     <Project Path="Modules/Tags/src/Tags.Module/Tags.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Tokens/" />
   <Folder Name="/Modules/Tokens/src/">
-    <Project Path="Modules/Tokens/src/Tokens.Application/Tokens.Application.csproj" />
+    <Project Path="Modules/Tokens/src/Tokens.Abstractions/Tokens.Abstractions.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Contracts/Tokens.Contracts.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Domain/Tokens.Domain.csproj" />
     <Project Path="Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrastructure.Database.Postgres.csproj" />
@@ -233,7 +234,7 @@
     <Project Path="Modules/Tokens/src/Tokens.Module/Tokens.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Tokens/test/">
-    <Project Path="Modules/Tokens/test/Tokens.Application.Tests/Tokens.Application.Tests.csproj" />
+    <Project Path="Modules/Tokens/test/Tokens.Module.Tests/Tokens.Module.Tests.csproj" />
     <Project Path="Modules/Tokens/test/Tokens.Domain.Tests/Tokens.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Others/">

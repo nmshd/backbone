@@ -3,8 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Backbone.Tooling.Extensions;
@@ -70,26 +69,23 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<string> ids, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
-        var queryItemsList = queryItems.ToList();
+        Expression<Func<RelationshipTemplate, bool>> idFilter = template => false;
 
-        Expression<Func<RelationshipTemplate, bool>> idAndPasswordFilter = template => false;
-
-        foreach (var inputQuery in queryItemsList)
+        foreach (var id in ids)
         {
-            idAndPasswordFilter = idAndPasswordFilter
-                .Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(inputQuery.Id))
-                    .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
+            idFilter = idFilter.Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(id)));
         }
 
         var query = (track ? _templates : _readOnlyTemplates)
             .Include(t => t.Details)
             .NotExpiredFor(activeIdentity)
             .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
-            .Where(idAndPasswordFilter);
+            .Where(idFilter)
+            .Where(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, null));
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 

@@ -7,7 +7,7 @@ using OpenTelemetry;
 
 namespace Backbone.BuildingBlocks.API.Tests.Mvc.Middleware;
 
-public class UserContextBaggageMiddlewareTests
+public class UserContextBaggageMiddlewareTests : AbstractTestsBase
 {
     [Fact]
     public async Task InvokeAsync_SetsUserContextValuesAsBaggage()
@@ -23,10 +23,10 @@ public class UserContextBaggageMiddlewareTests
 
             var middleware = new UserContextBaggageMiddleware(_ =>
             {
-                Baggage.GetBaggage("deviceId").ShouldBe(deviceId.Value);
-                Baggage.GetBaggage("identityAddress").ShouldBe(identityAddress.Value);
-                Baggage.GetBaggage("clientId").ShouldBe("client-id");
-                Baggage.GetBaggage("username").ShouldBe("username");
+                Baggage.GetBaggage("enmeshed.backbone.device_id").ShouldBe(deviceId.Value);
+                Baggage.GetBaggage("enmeshed.backbone.identity_address").ShouldBe(identityAddress.Value);
+                Baggage.GetBaggage("enmeshed.backbone.client_id").ShouldBe("client-id");
+                Baggage.GetBaggage("enmeshed.backbone.username").ShouldBe("username");
 
                 return Task.CompletedTask;
             });

@@ -2,11 +2,11 @@
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
-using Backbone.Modules.Challenges.Application.Challenges.DTOs;
+using Backbone.Modules.Challenges.Module.Features.Challenges.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CreateChallenge = Backbone.Modules.Challenges.Module.Features.Challenges.CreateChallenge;
 
 namespace Backbone.AdminApi.Controllers;
 
@@ -24,7 +24,7 @@ public class ChallengesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CreateChallengeCommand(), cancellationToken);
+        var response = await _mediator.Send(new CreateChallenge.Command(), cancellationToken);
         return CreatedAtAction(nameof(Create), new { id = response.Id }, response);
     }
 }

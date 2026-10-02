@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\Quotas.Domain\Quotas.Domain.csproj" />
+    </ItemGroup>
+</Project>

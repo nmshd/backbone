@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -30,6 +30,7 @@ public static class IServiceCollectionExtensions
         public void AddRepositories()
         {
             services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
+            services.AddTransient<IDevicePasswordService, DevicePasswordService>();
             services.AddTransient<ITiersRepository, TiersRepository>();
             services.AddTransient<IChallengesRepository, ChallengesRepository>();
             services.AddTransient<IOAuthClientsRepository, OAuthClientsRepository>();

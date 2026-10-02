@@ -1,0 +1,33 @@
+﻿using Backbone.Modules.Relationships.Contracts.DomainEvents;
+using Backbone.Modules.Synchronization.Abstractions;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using FakeItEasy;
+using Microsoft.Extensions.Logging;
+using PeerDeletedSlice = Backbone.Modules.Synchronization.Module.Features.ExternalEvents.PeerDeleted;
+
+namespace Backbone.Modules.Synchronization.Module.Tests.Features.ExternalEvents.PeerDeleted;
+
+public class HandlerTests : AbstractTestsBase
+{
+    [Fact]
+    public async Task Creates_an_external_event()
+    {
+        // Arrange
+        var peerOfDeletedIdentity = CreateRandomIdentityAddress();
+
+        var mockDbContext = A.Fake<ISynchronizationDbContext>();
+
+        var handler = CreateHandler(mockDbContext);
+
+        // Act
+        await handler.Handle(new PeerDeletedDomainEvent { PeerOfDeletedIdentity = peerOfDeletedIdentity, RelationshipId = "some-relationship-id", DeletedIdentity = "some-deletedIdentity-id" });
+
+        // Assert
+        A.CallTo(() => mockDbContext.CreateExternalEvent(A<PeerDeletedExternalEvent>._)).MustHaveHappenedOnceExactly();
+    }
+
+    private static PeerDeletedSlice.Handler CreateHandler(ISynchronizationDbContext mockDbContext)
+    {
+        return new PeerDeletedSlice.Handler(mockDbContext, A.Fake<ILogger<PeerDeletedSlice.Handler>>());
+    }
+}

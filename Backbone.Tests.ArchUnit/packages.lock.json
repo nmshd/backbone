@@ -370,6 +370,42 @@
         "resolved": "10.0.10",
         "contentHash": "q2RNx0N/qrsU+JgbPE78I9pu5ekwguitAFVoeE1NCgxtkUTguvf7oTzBnn42zSQxuugJ4fmj0RSarob8Rvorrg=="
       },
+      "Microsoft.AspNetCore.Http": {
+        "type": "Transitive",
+        "resolved": "2.3.9",
+        "contentHash": "+CcfWi1LoKYbcxt+3toO4xbBG+qSSMbPuuow+cbZKIrITXuu1geN1traamL4jG8QaHdHGm3M0eCh+EOgdMgNPA==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Abstractions": "2.3.0",
+          "Microsoft.AspNetCore.WebUtilities": "2.3.0",
+          "Microsoft.Extensions.ObjectPool": "8.0.11",
+          "Microsoft.Extensions.Options": "8.0.2",
+          "Microsoft.Net.Http.Headers": "2.3.8"
+        }
+      },
+      "Microsoft.AspNetCore.Http.Abstractions": {
+        "type": "Transitive",
+        "resolved": "2.3.0",
+        "contentHash": "39r9PPrjA6s0blyFv5qarckjNkaHRA5B+3b53ybuGGNTXEj1/DStQJ4NWjFL6QTRQpL9zt7nDyKxZdJOlcnq+Q==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "2.3.0"
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features": {
+        "type": "Transitive",
+        "resolved": "2.3.0",
+        "contentHash": "f10WUgcsKqrkmnz6gt8HeZ7kyKjYN30PO7cSic1lPtH7paPtnQqXPOveul/SIPI43PhRD4trttg4ywnrEmmJpA==",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.WebUtilities": {
+        "type": "Transitive",
+        "resolved": "2.3.0",
+        "contentHash": "trbXdWzoAEUVd0PE2yTopkz4kjZaAIA7xUWekd5uBw+7xE8Do/YOVTeb9d9koPTlbtZT539aESJjSLSqD8eYrQ==",
+        "dependencies": {
+          "Microsoft.Net.Http.Headers": "2.3.0"
+        }
+      },
       "Microsoft.Azure.Amqp": {
         "type": "Transitive",
         "resolved": "2.7.0",
@@ -839,11 +875,11 @@
       },
       "Microsoft.IdentityModel.Protocols.OpenIdConnect": {
         "type": "Transitive",
-        "resolved": "8.16.0",
-        "contentHash": "h4yVXyJsEBBX5lg2G5ftMsi5JzcNEGAzrNphA6DQ6eOd8P0s+cDCOyPwVTYLePZvJL5unbPvYIvzrbTXzFjXnQ==",
+        "resolved": "8.19.2",
+        "contentHash": "1XOcyY36cVymzE3qKdzKaUEZ4Pzt7ZpSa14JZoPPK1NLFUkQDs85TCqpV6XDo0YjFXj6nVK00AfOHppjghjhtw==",
         "dependencies": {
-          "Microsoft.IdentityModel.Protocols": "8.16.0",
-          "System.IdentityModel.Tokens.Jwt": "8.16.0"
+          "Microsoft.IdentityModel.Protocols": "8.19.2",
+          "System.IdentityModel.Tokens.Jwt": "8.19.2"
         }
       },
       "Microsoft.IdentityModel.Tokens": {
@@ -854,6 +890,14 @@
           "Microsoft.Bcl.Cryptography": "10.0.2",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.IdentityModel.Logging": "8.19.2"
+        }
+      },
+      "Microsoft.Net.Http.Headers": {
+        "type": "Transitive",
+        "resolved": "2.3.8",
+        "contentHash": "JO60u/VVUdaZfv4XQ//zgcH54y8rnxdpcvXnsDqWLKB4adDKaCiaozixDfQ/6H+PKYfkNV2CL8b8U+F9mciE3Q==",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0"
         }
       },
       "Microsoft.OpenApi": {
@@ -1204,6 +1248,14 @@
           "Serilog": "4.2.0"
         }
       },
+      "Serilog.Sinks.Debug": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "4BzXcdrgRX7wde9PmHuYd9U6YqycCC28hhpKonK7hx0wb19eiuRj16fPcPSVp0o/Y1ipJuNLYQ00R3q2Zs8FDA==",
+        "dependencies": {
+          "Serilog": "4.0.0"
+        }
+      },
       "Serilog.Sinks.File": {
         "type": "Transitive",
         "resolved": "7.0.0",
@@ -1292,11 +1344,11 @@
       },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
-        "resolved": "8.16.0",
-        "contentHash": "rrs2u7DRMXQG2yh0oVyF/vLwosfRv20Ld2iEpYcKwQWXHjfV+gFXNQsQ9p008kR9Ou4pxBs68Q6/9zC8Gi1wjg==",
+        "resolved": "8.19.2",
+        "contentHash": "gqhDC/icByKEutygpr+OFgAmjwTVowyzFjWB8K0q1ww8uFj5a1BQNL+QvijUl9uhq4p8OdDwcAIrjVC+eC9FVA==",
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "8.16.0",
-          "Microsoft.IdentityModel.Tokens": "8.16.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "8.19.2",
+          "Microsoft.IdentityModel.Tokens": "8.19.2"
         }
       },
       "System.IO.Hashing": {
@@ -1562,6 +1614,39 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
+      "Backbone.ConsumerApi": {
+        "type": "Project",
+        "dependencies": {
+          "Autofac.Extensions.DependencyInjection": "[11.0.2, 11.0.2]",
+          "Backbone.BuildingBlocks.API": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Module": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Module": "[1.0.0, )",
+          "Backbone.Modules.Devices.Module": "[1.0.0, )",
+          "Backbone.Modules.Files.Module": "[1.0.0, )",
+          "Backbone.Modules.Messages.Module": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Module": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Module": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Module": "[1.0.0, )",
+          "Backbone.Modules.Tags.Module": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Module": "[1.0.0, )",
+          "DotNetDiag.HealthChecks.SqlServer": "[10.0.10, 10.0.10]",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.10, 10.0.10]",
+          "Microsoft.EntityFrameworkCore.Relational": "[10.0.10, 10.0.10]",
+          "MyCSharp.HttpUserAgentParser": "[3.1.6, 3.1.6]",
+          "MyCSharp.HttpUserAgentParser.AspNetCore": "[3.1.6, 3.1.6]",
+          "NetEscapades.AspNetCore.SecurityHeaders": "[1.3.1, 1.3.1]",
+          "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]",
+          "Serilog": "[4.4.0, 4.4.0]",
+          "Serilog.AspNetCore": "[10.0.0, 10.0.0]",
+          "Serilog.Enrichers.ClientInfo": "[2.9.0, 2.9.0]",
+          "Serilog.Enrichers.Sensitive": "[2.1.0, 2.1.0]",
+          "Serilog.Exceptions": "[8.4.0, 8.4.0]",
+          "Serilog.Exceptions.EntityFrameworkCore": "[8.4.0, 8.4.0]",
+          "Serilog.Formatting.Compact": "[3.0.0, 3.0.0]",
+          "Serilog.Sinks.Http": "[9.2.1, 9.2.1]",
+          "Serilog.Sinks.Seq": "[9.1.0, 9.1.0]"
+        }
+      },
       "Backbone.Crypto": {
         "type": "Project",
         "dependencies": {
@@ -1634,24 +1719,15 @@
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
           "Backbone.Modules.Announcements.Module": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
           "Backbone.Modules.Challenges.Module": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Devices.Module": "[1.0.0, )",
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
           "Backbone.Modules.Files.Module": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
           "Backbone.Modules.Messages.Module": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
           "Backbone.Modules.Quotas.Module": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Application": "[1.0.0, )",
           "Backbone.Modules.Relationships.Module": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Module": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
           "Backbone.Modules.Tokens.Module": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]",
@@ -1672,22 +1748,10 @@
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
         }
       },
-      "Backbone.Modules.Announcements.Application": {
+      "Backbone.Modules.Announcements.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Announcements.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
-          "Backbone.UnitTestTools": "[1.0.0, )",
-          "FluentValidation.Validators.UnitTestExtension": "[1.12.0.5, 1.12.0.5]",
-          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Announcements.Contracts": {
@@ -1717,8 +1781,9 @@
       "Backbone.Modules.Announcements.Infrastructure": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1742,31 +1807,30 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Module": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Announcements.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Challenges.Application": {
+      "Backbone.Modules.Announcements.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Challenges.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
-          "FakeItEasy": "[9.0.1, 9.0.1]",
+          "FluentValidation.Validators.UnitTestExtension": "[1.12.0.5, 1.12.0.5]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Challenges.Abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.Modules.Challenges.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Challenges.Domain": {
@@ -1781,7 +1845,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1805,42 +1869,31 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
           "Backbone.Modules.Challenges.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Challenges.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Challenges.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Devices.Application": {
+      "Backbone.Modules.Challenges.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Crypto": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "OpenIddict.Core": "[7.6.0, 7.6.0]",
-          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
-          "Polly": "[8.7.0, 8.7.0]"
-        }
-      },
-      "Backbone.Modules.Devices.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
-          "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Devices.Abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Devices.Contracts": {
@@ -1874,8 +1927,9 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "FirebaseAdmin": "[3.6.0, 3.6.0]",
           "JWT": "[11.1.0, 11.1.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1908,6 +1962,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Devices.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
@@ -1918,31 +1973,41 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Crypto": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
+          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
+          "FluentValidation": "[12.1.1, 12.1.1]",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
+          "OpenIddict.AspNetCore": "[7.6.0, 7.6.0]",
+          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
+          "Polly": "[8.7.0, 8.7.0]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Files.Application": {
+      "Backbone.Modules.Devices.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Files.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Files.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Devices.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Files.Abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
+          "Backbone.Modules.Files.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Files.Contracts": {
@@ -1971,9 +2036,9 @@
       "Backbone.Modules.Files.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
+          "Backbone.Modules.Files.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Files.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -2008,35 +2073,33 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
+          "Backbone.Modules.Files.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Files.Domain": "[1.0.0, )",
           "Backbone.Modules.Files.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Files.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Files.Infrastructure.Database.SqlServer": "[1.0.0, )",
           "Backbone.Tooling": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Messages.Application": {
+      "Backbone.Modules.Files.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Messages.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
-          "Backbone.Modules.Messages.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Files.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Messages.Abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Messages.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Messages.Common": {
@@ -2075,7 +2138,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -2099,36 +2162,31 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Messages.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Quotas.Application": {
+      "Backbone.Modules.Messages.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Quotas.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Messages.Module": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
           "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Quotas.Abstractions": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Contracts": {
@@ -2160,9 +2218,9 @@
       "Backbone.Modules.Quotas.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -2200,24 +2258,35 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Relationships.Application": {
+      "Backbone.Modules.Quotas.Module.Tests": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.Modules.Quotas.Module": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FakeItEasy": "[9.0.1, 9.0.1]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Relationships.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Common": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Relationships.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Relationships.Common": {
@@ -2245,7 +2314,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Application": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -2269,40 +2338,24 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Relationships.Common": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
           "Backbone.Modules.Relationships.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Relationships.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Relationships.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Synchronization.Application": {
+      "Backbone.Modules.Synchronization.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Synchronization.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Infrastructure": "[1.0.0, )",
-          "Backbone.UnitTestTools": "[1.0.0, )",
-          "FakeItEasy": "[9.0.1, 9.0.1]",
-          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Synchronization.Contracts": {
@@ -2334,7 +2387,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
           "Microsoft.Data.Sqlite.Core": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -2358,20 +2411,39 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
+          "FluentValidation": "[12.1.1, 12.1.1]",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Tags.Application": {
+      "Backbone.Modules.Synchronization.Module.Tests": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Module": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FakeItEasy": "[9.0.1, 9.0.1]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]"
+        }
+      },
+      "Backbone.Modules.Tags.Abstractions": {
+        "type": "Project",
+        "dependencies": {
           "Backbone.Modules.Tags.Domain": "[1.0.0, )"
         }
       },
@@ -2381,39 +2453,27 @@
       "Backbone.Modules.Tags.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.Modules.Tags.Application": "[1.0.0, )",
-          "Backbone.Modules.Tags.Domain": "[1.0.0, )"
+          "Backbone.Modules.Tags.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Tags.Domain": "[1.0.0, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, 10.0.10]",
+          "Microsoft.Extensions.Options": "[10.0.10, 10.0.10]"
         }
       },
       "Backbone.Modules.Tags.Module": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Tags.Application": "[1.0.0, )",
+          "Backbone.Modules.Tags.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tags.Infrastructure": "[1.0.0, )",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Tokens.Application": {
+      "Backbone.Modules.Tokens.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "Polly": "[8.7.0, 8.7.0]"
-        }
-      },
-      "Backbone.Modules.Tokens.Application.Tests": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Infrastructure": "[1.0.0, )",
-          "Backbone.UnitTestTools": "[1.0.0, )",
-          "FakeItEasy": "[9.0.1, 9.0.1]",
-          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Tokens.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Tokens.Contracts": {
@@ -2443,9 +2503,9 @@
       "Backbone.Modules.Tokens.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -2472,12 +2532,26 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "Backbone.Modules.Tokens.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Tokens.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Tokens.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
+          "Polly": "[8.7.0, 8.7.0]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
+        }
+      },
+      "Backbone.Modules.Tokens.Module.Tests": {
+        "type": "Project",
+        "dependencies": {
+          "Backbone.Modules.Tokens.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Module": "[1.0.0, )",
+          "Backbone.UnitTestTools": "[1.0.0, )",
+          "FakeItEasy": "[9.0.1, 9.0.1]",
+          "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
+          "Microsoft.NET.Test.Sdk": "[18.8.1, 18.8.1]",
+          "Polly": "[8.7.0, 8.7.0]"
         }
       },
       "Backbone.Tooling": {
@@ -2725,6 +2799,15 @@
         "requested": "[2.0.1, 2.0.1]",
         "resolved": "2.0.1",
         "contentHash": "FYv95bNT4UwcNA+G/J1oX5OpRiSUxteXaUt2BJbRSdRNiIUNbggJF69wy6mnk2wYToaanpdXZdCwVylt96MpwQ=="
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.10, 10.0.10]",
+        "resolved": "10.0.10",
+        "contentHash": "VAcqS42zb9WJd9DjPdkVTS5YrQENmNzPNJuRu8VAW7x3TEWUipc4d4hHzVJdFB0h/KLdr4XcXZzRHcUOKVanMQ==",
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.19.2"
+        }
       },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
         "type": "CentralTransitive",
@@ -2992,6 +3075,30 @@
           "Microsoft.Extensions.Primitives": "10.0.10"
         }
       },
+      "MyCSharp.HttpUserAgentParser": {
+        "type": "CentralTransitive",
+        "requested": "[3.1.6, 3.1.6]",
+        "resolved": "3.1.6",
+        "contentHash": "PmGxCD5U5zSEVKzxvzdsCTLppBDFH/ExsK7Sqeom5CwBvjEFDit3AamiQvAOnkaVSQQWBQ9hba8gHfXNyxWmXQ==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2"
+        }
+      },
+      "MyCSharp.HttpUserAgentParser.AspNetCore": {
+        "type": "CentralTransitive",
+        "requested": "[3.1.6, 3.1.6]",
+        "resolved": "3.1.6",
+        "contentHash": "NED5p3ePIBOzqDxvuBBeiiglbjkzx5o6jKN0Zfs4zhQnMEPgFJxFvErcnGYtMu2WyQ7Qxa6OMXopmxJ6O+u+ow==",
+        "dependencies": {
+          "MyCSharp.HttpUserAgentParser": "3.1.6"
+        }
+      },
+      "NetEscapades.AspNetCore.SecurityHeaders": {
+        "type": "CentralTransitive",
+        "requested": "[1.3.1, 1.3.1]",
+        "resolved": "1.3.1",
+        "contentHash": "wccVMVSGq9nQ43SjJl1s/VaAo+iWauJYWiZy/Hkvszk2vCQdq7aRn7GL3LTBMsnHuI13JRMfCi9Lk8747+njUg=="
+      },
       "Npgsql.EntityFrameworkCore.PostgreSQL": {
         "type": "CentralTransitive",
         "requested": "[10.0.3, 10.0.3]",
@@ -3149,6 +3256,31 @@
         "resolved": "4.4.0",
         "contentHash": "ZC6Le3rr4TVJJjS4KsQAesxeF1EhW9qcZmmG7eP5Y2G3+gTGkJEUXkq4+tZNPtyp05I0wWOxnIjwtxFweJsObw=="
       },
+      "Serilog.AspNetCore": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.0, 10.0.0]",
+        "resolved": "10.0.0",
+        "contentHash": "a/cNa1mY4On1oJlfGG1wAvxjp5g7OEzk/Jf/nm7NF9cWoE7KlZw1GldrifUBWm9oKibHkR7Lg/l5jy3y7ACR8w==",
+        "dependencies": {
+          "Serilog": "4.3.0",
+          "Serilog.Extensions.Hosting": "10.0.0",
+          "Serilog.Formatting.Compact": "3.0.0",
+          "Serilog.Settings.Configuration": "10.0.0",
+          "Serilog.Sinks.Console": "6.1.1",
+          "Serilog.Sinks.Debug": "3.0.0",
+          "Serilog.Sinks.File": "7.0.0"
+        }
+      },
+      "Serilog.Enrichers.ClientInfo": {
+        "type": "CentralTransitive",
+        "requested": "[2.9.0, 2.9.0]",
+        "resolved": "2.9.0",
+        "contentHash": "JsmW94VJJTG+Md/sKtw+Tbt7OSWx5TNs5NmnymD01mVU8FfPNMD8JBAZr2D1zKmnjSyfsQ8/RWn751XYBy+4Fw==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http": "2.3.9",
+          "Serilog": "4.3.0"
+        }
+      },
       "Serilog.Enrichers.Sensitive": {
         "type": "CentralTransitive",
         "requested": "[2.1.0, 2.1.0]",
@@ -3215,6 +3347,16 @@
         "contentHash": "8jbqgjUyZlfCuSTaJk6lOca465OndqOz3KZP6Cryt/IqZYybyBu7GP0fE/AXBzrrQB3EBmQntBFAvMVz1COvAA==",
         "dependencies": {
           "Serilog": "4.0.0"
+        }
+      },
+      "Serilog.Sinks.Http": {
+        "type": "CentralTransitive",
+        "requested": "[9.2.1, 9.2.1]",
+        "resolved": "9.2.1",
+        "contentHash": "sxc3GZSBsDFuRhcVKZMs66Mr7RfsGCPASSyiGG1Ew20a8kaeFbUL0tru352o0K0GLHjIcmxgkH2KrwoqjvJjjQ==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.1",
+          "Serilog.Sinks.File": "7.0.0"
         }
       },
       "Serilog.Sinks.Seq": {

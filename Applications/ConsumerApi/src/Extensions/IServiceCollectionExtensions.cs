@@ -5,17 +5,16 @@ using Asp.Versioning;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
-using Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
-using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
-using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
+using PublicKey = Backbone.Modules.Devices.Module.Features.Devices.Shared.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
 
@@ -27,8 +26,6 @@ public static class IServiceCollectionExtensions
             .AddControllersWithViews(options =>
                 {
                     options.Filters.Add(typeof(CustomExceptionFilter));
-
-                    options.ModelBinderProviders.Insert(0, new GenericArrayModelBinderProvider());
                 }
             )
             .ConfigureApiBehaviorOptions(options =>
@@ -55,26 +52,9 @@ public static class IServiceCollectionExtensions
                     return new BadRequestObjectResult(responsePayload);
                 };
             })
-            .AddJsonOptions(options =>
-            {
-                var jsonConverters =
-                    AppDomain.CurrentDomain
-                        .GetAssemblies()
-                        .SelectMany(x => x.ExportedTypes)
-                        .Where(x => !x.IsAbstract)
-                        .Where(x => !x.ContainsGenericParameters)
-                        .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
+            .AddJsonOptions(options => ConfigureJsonSerializerOptions(options.JsonSerializerOptions));
 
-                foreach (var jsonConverter in jsonConverters)
-                {
-                    if (jsonConverter == typeof(DynamicJsonConverter)) continue;
-                    var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
-                    options.JsonSerializerOptions.Converters.Add(instance);
-                }
-
-                options.JsonSerializerOptions.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
-                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-            });
+        services.ConfigureHttpJsonOptions(options => ConfigureJsonSerializerOptions(options.SerializerOptions));
 
         services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
@@ -112,6 +92,27 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
         return services;
+    }
+
+    private static void ConfigureJsonSerializerOptions(JsonSerializerOptions options)
+    {
+        var jsonConverters =
+            AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SelectMany(x => x.ExportedTypes)
+                .Where(x => !x.IsAbstract)
+                .Where(x => !x.ContainsGenericParameters)
+                .Where(x => x.BaseType != null && x.IsAssignableTo(typeof(JsonConverter)));
+
+        foreach (var jsonConverter in jsonConverters)
+        {
+            if (jsonConverter == typeof(DynamicJsonConverter)) continue;
+            var instance = (Activator.CreateInstance(jsonConverter) as JsonConverter)!;
+            options.Converters.Add(instance);
+        }
+
+        options.Converters.Add(new PublicKey.PublicKeyDTOJsonConverter());
+        options.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,

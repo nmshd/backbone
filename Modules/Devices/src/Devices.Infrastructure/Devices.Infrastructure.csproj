@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <PackageReference Include="BouncyCastle.Cryptography" />
         <PackageReference Include="FirebaseAdmin" />
         <PackageReference Include="JWT" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
@@ -19,7 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
-        <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
+        <ProjectReference Include="..\Devices.Abstractions\Devices.Abstractions.csproj" />
         <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
     </ItemGroup>
 

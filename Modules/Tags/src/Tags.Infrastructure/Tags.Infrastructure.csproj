@@ -1,8 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Tags.Application\Tags.Application.csproj" />
+        <ProjectReference Include="..\Tags.Abstractions\Tags.Abstractions.csproj" />
         <ProjectReference Include="..\Tags.Domain\Tags.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Options" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
 </Project>

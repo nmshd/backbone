@@ -8,7 +8,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
-        <ProjectReference Include="..\Relationships.Application\Relationships.Application.csproj" />
+        <ProjectReference Include="..\Relationships.Abstractions\Relationships.Abstractions.csproj" />
         <ProjectReference Include="..\Relationships.Domain\Relationships.Domain.csproj" />
     </ItemGroup>
 </Project>

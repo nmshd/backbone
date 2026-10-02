@@ -4,8 +4,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
@@ -112,7 +111,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         var createUserResult = await _userManager.CreateAsync(identity.Devices.First().User, password);
         if (!createUserResult.Succeeded)
-            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+            throw new OperationFailedException(DeviceRegistrationErrors.RegistrationFailed(createUserResult.Errors.First().Description));
     }
 
     public async Task UpdateWithNewDevice(Identity identity, string password)
@@ -121,7 +120,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
         var createUserResult = await _userManager.CreateAsync(newDevice.User, password);
         if (!createUserResult.Succeeded)
-            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+            throw new OperationFailedException(DeviceRegistrationErrors.RegistrationFailed(createUserResult.Errors.First().Description));
     }
 
     public async Task<DbPaginationResult<Device>> ListDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)

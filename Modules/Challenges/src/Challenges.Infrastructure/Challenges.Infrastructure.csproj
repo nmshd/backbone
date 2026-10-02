@@ -9,7 +9,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
-        <ProjectReference Include="..\Challenges.Application\Challenges.Application.csproj" />
+        <ProjectReference Include="..\Challenges.Abstractions\Challenges.Abstractions.csproj" />
         <ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj" />
     </ItemGroup>
 

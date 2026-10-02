@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Housekeeping;
 using MediatR;
-using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Application.Announcements.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Application.Challenges.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Application.Files.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Application.SyncRuns.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Application.Tokens.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Module.Features.Announcements.ExecuteHousekeeping.Command;
+using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Module.Features.Challenges.ExecuteHousekeeping.Command;
+using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping.Command;
+using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping.Command;
+using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping.Command;
+using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Module.Features.SyncRuns.ExecuteHousekeeping.Command;
+using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Module.Features.Tokens.ExecuteHousekeeping.Command;
 
 namespace Backbone.Housekeeper;
 

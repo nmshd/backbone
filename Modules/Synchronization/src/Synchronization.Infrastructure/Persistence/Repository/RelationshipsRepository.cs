@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Application.Infrastructure;
+﻿using Backbone.Modules.Synchronization.Abstractions;
 using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;

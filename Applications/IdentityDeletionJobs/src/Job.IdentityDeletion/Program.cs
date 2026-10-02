@@ -12,7 +12,6 @@ using Backbone.Modules.Messages.Module;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Module;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -84,17 +83,17 @@ public class Program
                 services.AddTransient(typeof(IHostedService), worker);
 
                 services
-                    .AddModule<AnnouncementsModule, Modules.Announcements.Application.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<ChallengesModule, Modules.Challenges.Application.ApplicationConfiguration, Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<DevicesModule, Modules.Devices.Application.ApplicationConfiguration, Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<FilesModule, Modules.Files.Application.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<MessagesModule, Modules.Messages.Application.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<QuotasModule, Modules.Quotas.Application.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<RelationshipsModule, Modules.Relationships.Application.ApplicationConfiguration,
+                    .AddModule<AnnouncementsModule, Modules.Announcements.Module.ApplicationConfiguration, Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<ChallengesModule, Modules.Challenges.Module.ApplicationConfiguration, Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<DevicesModule, Modules.Devices.Module.ApplicationConfiguration, Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<FilesModule, Modules.Files.Module.ApplicationConfiguration, Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<MessagesModule, Modules.Messages.Module.ApplicationConfiguration, Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<QuotasModule, Modules.Quotas.Module.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
+                    .AddModule<RelationshipsModule, Modules.Relationships.Module.ApplicationConfiguration,
                         Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
+                    .AddModule<SynchronizationModule, Modules.Synchronization.Module.ApplicationConfiguration,
                         Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<TokensModule, ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+                    .AddModule<TokensModule, Modules.Tokens.Module.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
                 services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 

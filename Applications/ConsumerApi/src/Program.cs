@@ -1,5 +1,6 @@
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.MinimalApi;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
@@ -19,6 +20,7 @@ using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Module;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Module;
+using Backbone.Modules.Messages.Module.Features.Messages;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Module;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
@@ -26,7 +28,6 @@ using Backbone.Modules.Relationships.Module;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.Module;
 using Backbone.Modules.Tags.Module;
-using Backbone.Modules.Tokens.Application;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Module;
 using Backbone.Tooling.Extensions;
@@ -124,6 +125,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.ConfigureAndValidate<ConsumerApiConfiguration>(configuration.Bind);
 
     services.AddSingleton<VersionService>();
+    services.AddMinimalApiErrorHandling();
 
     services.AddSaveChangesTimeInterceptor();
 
@@ -131,18 +133,18 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
-        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Application.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Application.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<FilesModule, Backbone.Modules.Files.Application.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<MessagesModule, Backbone.Modules.Messages.Application.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
-        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
+        .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Module.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Module.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<MessagesModule, Backbone.Modules.Messages.Module.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<QuotasModule, Backbone.Modules.Quotas.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+        .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Module.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TagsModule, Backbone.Modules.Tags.Application.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<TokensModule, ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
+        .AddModule<TagsModule, Backbone.Modules.Tags.Module.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
     var parsedBackboneConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ConsumerApiConfiguration>>().Value;
@@ -209,7 +211,18 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
 
     app.UseAuthentication().UseAuthorization();
     app.UseMiddleware<UserContextBaggageMiddleware>();
+    app.UseMiddleware<MinimalApiExceptionMiddleware>();
 
+    app.MapMessagesEndpoints();
+    app.MapTagsEndpoints();
+    app.MapChallengesEndpoints();
+    app.MapAnnouncementsEndpoints();
+    app.MapTokensEndpoints();
+    app.MapFilesEndpoints();
+    app.MapQuotasEndpoints();
+    app.MapDevicesEndpoints();
+    app.MapRelationshipsEndpoints();
+    app.MapSynchronizationEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {

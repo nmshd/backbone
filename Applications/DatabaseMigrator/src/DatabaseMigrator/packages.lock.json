@@ -368,11 +368,6 @@
         "resolved": "2.14.1",
         "contentHash": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw=="
       },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "MedallionTopologicalSort": {
         "type": "Transitive",
         "resolved": "1.0.0",
@@ -1543,13 +1538,6 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
-      "Backbone.Crypto": {
-        "type": "Project",
-        "dependencies": {
-          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
-          "NSec.Cryptography": "[26.4.0, 26.4.0]"
-        }
-      },
       "Backbone.DevelopmentKit.Identity": {
         "type": "Project",
         "dependencies": {
@@ -1557,12 +1545,10 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
-      "Backbone.Modules.Announcements.Application": {
+      "Backbone.Modules.Announcements.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Announcements.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Announcements.Contracts": {
@@ -1583,8 +1569,9 @@
       "Backbone.Modules.Announcements.Infrastructure": {
         "type": "Project",
         "dependencies": {
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Application": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1604,13 +1591,10 @@
           "Backbone.Modules.Announcements.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Challenges.Application": {
+      "Backbone.Modules.Challenges.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Challenges.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Challenges.Domain": {
@@ -1625,7 +1609,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Challenges.Application": "[1.0.0, )",
+          "Backbone.Modules.Challenges.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Challenges.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1644,23 +1628,11 @@
           "Backbone.Modules.Challenges.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Devices.Application": {
+      "Backbone.Modules.Devices.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Crypto": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "OpenIddict.Core": "[7.6.0, 7.6.0]",
-          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Devices.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Devices.Contracts": {
@@ -1684,8 +1656,9 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "FirebaseAdmin": "[3.6.0, 3.6.0]",
           "JWT": "[11.1.0, 11.1.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1714,13 +1687,11 @@
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Files.Application": {
+      "Backbone.Modules.Files.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Files.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Files.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Files.Contracts": {
@@ -1740,9 +1711,9 @@
       "Backbone.Modules.Files.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Files.Application": "[1.0.0, )",
+          "Backbone.Modules.Files.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Files.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1761,15 +1732,13 @@
           "Backbone.Modules.Files.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Messages.Application": {
+      "Backbone.Modules.Messages.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
+          "Backbone.Modules.Messages.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Messages.Contracts": {
@@ -1791,7 +1760,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Messages.Application": "[1.0.0, )",
+          "Backbone.Modules.Messages.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Messages.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1810,18 +1779,10 @@
           "Backbone.Modules.Messages.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Quotas.Application": {
+      "Backbone.Modules.Quotas.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Contracts": {
@@ -1843,9 +1804,9 @@
       "Backbone.Modules.Quotas.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1865,23 +1826,11 @@
           "Backbone.Modules.Quotas.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Relationships.Application": {
+      "Backbone.Modules.Relationships.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Common": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
-        }
-      },
-      "Backbone.Modules.Relationships.Common": {
-        "type": "Project",
-        "dependencies": {
-          "FluentValidation": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Relationships.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Relationships.Contracts": {
@@ -1903,7 +1852,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Application": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Relationships.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -1922,19 +1871,12 @@
           "Backbone.Modules.Relationships.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Synchronization.Application": {
+      "Backbone.Modules.Synchronization.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Synchronization.Contracts": {
@@ -1956,7 +1898,7 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
           "Microsoft.Data.Sqlite.Core": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1976,14 +1918,11 @@
           "Backbone.Modules.Synchronization.Infrastructure": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Tokens.Application": {
+      "Backbone.Modules.Tokens.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Tokens.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Tokens.Contracts": {
@@ -2003,9 +1942,9 @@
       "Backbone.Modules.Tokens.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Application": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
@@ -2174,16 +2113,6 @@
         "requested": "[12.1.1, 12.1.1]",
         "resolved": "12.1.1",
         "contentHash": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw=="
-      },
-      "FluentValidation.DependencyInjectionExtensions": {
-        "type": "CentralTransitive",
-        "requested": "[12.1.1, 12.1.1]",
-        "resolved": "12.1.1",
-        "contentHash": "D0VXh4dtjjX2aQizuaa0g6R8X3U1JaVqJPfGCvLwZX9t/O2h7tkpbitbadQMfwcgSPdDbI2vDxuwRMv/Uf9dHA==",
-        "dependencies": {
-          "FluentValidation": "12.1.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
-        }
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",
@@ -2449,15 +2378,6 @@
           "Npgsql": "10.0.3"
         }
       },
-      "NSec.Cryptography": {
-        "type": "CentralTransitive",
-        "requested": "[26.4.0, 26.4.0]",
-        "resolved": "26.4.0",
-        "contentHash": "0vsCtY5f+YgQROiWNqzgWp+l2pddfk9FkWoGV/bEo0MuEYPKlJWuoA8aOfO6qp3f+EnObKE3zSJhn1PspJeJVg==",
-        "dependencies": {
-          "libsodium": "[1.0.22, 1.0.23)"
-        }
-      },
       "OpenIddict.AspNetCore": {
         "type": "CentralTransitive",
         "requested": "[7.6.0, 7.6.0]",
@@ -2614,11 +2534,6 @@
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
       },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",
@@ -2692,11 +2607,6 @@
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
-      },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
       },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
@@ -2772,11 +2682,6 @@
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
       },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",
@@ -2850,11 +2755,6 @@
         "dependencies": {
           "runtime.native.System.Data.SqlClient.sni": "4.4.0"
         }
-      },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
       },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",

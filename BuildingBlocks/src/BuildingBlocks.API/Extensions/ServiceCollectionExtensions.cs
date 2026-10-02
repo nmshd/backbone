@@ -2,6 +2,7 @@ using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
+using Backbone.BuildingBlocks.API.OpenApi;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
@@ -183,30 +184,11 @@ public static class ServiceCollectionExtensions
                 }
             });
 
+            services.AddOptions<SwaggerGenOptions>()
+                .Configure<IOptions<OpenApiSchemaNames>>((options, schemaNames) => options.CustomSchemaIds(schemaNames.Value.GetSchemaId));
+
             services.AddSwaggerGen(options =>
             {
-                options.CustomSchemaIds(t =>
-                {
-                    static string GetReadableName(Type type)
-                    {
-                        if (!type.IsGenericType)
-                        {
-                            return type.Name
-                                .Replace("DTO", string.Empty)
-                                .Replace("Command", "Request")
-                                .Replace("Query", "Request");
-                        }
-
-                        var typeName = type.Name
-                            .Replace("HttpResponseEnvelopeResult", "ResponseWrapper")
-                            .Replace("PagedHttpResponseEnvelopeResult", "PagedResponseWrapper");
-                        var name = $"{typeName[..typeName.IndexOf('`')]}_{string.Join("_", type.GetGenericArguments().Select(GetReadableName))}";
-                        return name;
-                    }
-
-                    return GetReadableName(t);
-                });
-
                 const string securityDefinitionName = "oauth2";
 
                 options.AddSecurityDefinition(

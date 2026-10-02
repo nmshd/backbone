@@ -1,14 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDeletionProcess;
-using Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDuringIdentityDeletion;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using CSharpFunctionalExtensions;
 using MediatR;
+using GetIdentity = Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
+using HandleCompletedDeletionProcess = Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
+using HandleErrorDuringIdentityDeletion = Backbone.Modules.Devices.Module.Features.Identities.HandleErrorDuringIdentityDeletion;
+using ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting = Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
+using TriggerRipeDeletionProcesses = Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
@@ -49,7 +49,7 @@ public class ActualDeletionWorker : IHostedService
     public async Task StartProcessing(CancellationToken cancellationToken)
     {
         // In case there was an error during a previous run, we need to make sure we also process those identities again.
-        var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeletingQuery(), cancellationToken)).Addresses;
+        var addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast = (await _mediator.Send(new ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting.Query(), cancellationToken)).Addresses;
         var addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses = await TriggerRipeDeletionProcesses(cancellationToken);
 
         var allAddressesToProcess = addressesOfIdentitiesWithDeletionProcessesTriggeredInThePast.Union(addressesOfIdentitiesWithNewlyTriggeredDeletionProcesses).Distinct();
@@ -59,7 +59,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task<List<string>> TriggerRipeDeletionProcesses(CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new TriggerRipeDeletionProcessesCommand(), cancellationToken);
+        var response = await _mediator.Send(new TriggerRipeDeletionProcesses.Command(), cancellationToken);
 
         var addressesWithTriggeredDeletionProcesses = response.Results.Where(x => x.Value.IsSuccess).Select(x => x.Key).ToList();
         var erroringDeletionTriggers = response.Results.Where(x => x.Value.IsFailure);
@@ -102,13 +102,13 @@ public class ActualDeletionWorker : IHostedService
         }
         catch (Exception ex)
         {
-            await _mediator.Send(new HandleErrorDuringIdentityDeletionCommand { IdentityAddress = identityAddress, ErrorMessage = ex.Message });
+            await _mediator.Send(new HandleErrorDuringIdentityDeletion.Command { IdentityAddress = identityAddress, ErrorMessage = ex.Message });
         }
     }
 
     private async Task Delete(string identityAddress)
     {
-        var identity = await _mediator.Send(new GetIdentityQuery { Address = identityAddress });
+        var identity = await _mediator.Send(new GetIdentity.Query { Address = identityAddress });
 
         foreach (var identityDeleter in _identityDeleters)
         {
@@ -126,7 +126,7 @@ public class ActualDeletionWorker : IHostedService
 
         var usernames = identity.Devices.Select(d => d.Username);
 
-        await _mediator.Send(new HandleCompletedDeletionProcessCommand { IdentityAddress = identityAddress, Usernames = usernames });
+        await _mediator.Send(new HandleCompletedDeletionProcess.Command { IdentityAddress = identityAddress, Usernames = usernames });
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<string, UnitResult<DomainError>>> erroringDeletionTriggers)

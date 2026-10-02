@@ -2,7 +2,7 @@ namespace Backbone.BuildingBlocks.API;
 
 public class HttpResponseEnvelope
 {
-    public static HttpResponseEnvelope CreateError(HttpError error)
+    public static HttpResponseEnvelopeError CreateError(HttpError error)
     {
         return new HttpResponseEnvelopeError(error);
     }
