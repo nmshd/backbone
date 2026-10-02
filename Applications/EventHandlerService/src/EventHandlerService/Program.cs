@@ -81,7 +81,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddModule<QuotasModule, Backbone.Modules.Quotas.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
                 .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
                     Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+                .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Module.ApplicationConfiguration,
                     Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 

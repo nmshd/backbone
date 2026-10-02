@@ -91,7 +91,7 @@ public class Program
                     .AddModule<QuotasModule, Modules.Quotas.Module.ApplicationConfiguration, Modules.Quotas.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<RelationshipsModule, Modules.Relationships.Module.ApplicationConfiguration,
                         Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-                    .AddModule<SynchronizationModule, Modules.Synchronization.Application.ApplicationConfiguration,
+                    .AddModule<SynchronizationModule, Modules.Synchronization.Module.ApplicationConfiguration,
                         Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
                     .AddModule<TokensModule, Modules.Tokens.Module.ApplicationConfiguration, Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
 

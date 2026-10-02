@@ -735,43 +735,12 @@
           "SimpleBase": "[5.6.3, 5.6.3]"
         }
       },
-      "Backbone.Modules.Devices.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Files.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Messages.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Relationships.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Synchronization.Application": {
+      "Backbone.Modules.Synchronization.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]"
+          "Backbone.Modules.Synchronization.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Synchronization.Contracts": {
@@ -793,18 +762,12 @@
         "dependencies": {
           "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Application": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
           "Microsoft.Data.Sqlite.Core": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]"
-        }
-      },
-      "Backbone.Modules.Tokens.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {
@@ -894,16 +857,6 @@
         "requested": "[12.1.1, 12.1.1]",
         "resolved": "12.1.1",
         "contentHash": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw=="
-      },
-      "FluentValidation.DependencyInjectionExtensions": {
-        "type": "CentralTransitive",
-        "requested": "[12.1.1, 12.1.1]",
-        "resolved": "12.1.1",
-        "contentHash": "D0VXh4dtjjX2aQizuaa0g6R8X3U1JaVqJPfGCvLwZX9t/O2h7tkpbitbadQMfwcgSPdDbI2vDxuwRMv/Uf9dHA==",
-        "dependencies": {
-          "FluentValidation": "12.1.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
-        }
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",

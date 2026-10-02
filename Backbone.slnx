@@ -204,7 +204,7 @@
   </Folder>
   <Folder Name="/Modules/Synchronization/" />
   <Folder Name="/Modules/Synchronization/src/">
-    <Project Path="Modules/Synchronization/src/Synchronization.Application/Synchronization.Application.csproj" />
+    <Project Path="Modules/Synchronization/src/Synchronization.Abstractions/Synchronization.Abstractions.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Contracts/Synchronization.Contracts.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Domain/Synchronization.Domain.csproj" />
     <Project Path="Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/Synchronization.Infrastructure.Database.Postgres.csproj" />
@@ -213,7 +213,7 @@
     <Project Path="Modules/Synchronization/src/Synchronization.Module/Synchronization.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Synchronization/test/">
-    <Project Path="Modules/Synchronization/test/Synchronization.Application.Tests/Synchronization.Application.Tests.csproj" />
+    <Project Path="Modules/Synchronization/test/Synchronization.Module.Tests/Synchronization.Module.Tests.csproj" />
     <Project Path="Modules/Synchronization/test/Synchronization.Domain.Tests/Synchronization.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Tags/" />

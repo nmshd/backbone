@@ -82,7 +82,7 @@ COPY ["Modules/Relationships/src/Relationships.Infrastructure.Database.Postgres/
 
 COPY ["Modules/Synchronization/src/Synchronization.Infrastructure.Database.SqlServer/Synchronization.Infrastructure.Database.SqlServer.csproj", "Modules/Synchronization/src/Synchronization.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Infrastructure.Database.SqlServer/"]
 COPY ["Modules/Synchronization/src/Synchronization.Infrastructure/Synchronization.Infrastructure.csproj", "Modules/Synchronization/src/Synchronization.Infrastructure/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Infrastructure/"]
-COPY ["Modules/Synchronization/src/Synchronization.Application/Synchronization.Application.csproj", "Modules/Synchronization/src/Synchronization.Application/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Application/"]
+COPY ["Modules/Synchronization/src/Synchronization.Abstractions/Synchronization.Abstractions.csproj", "Modules/Synchronization/src/Synchronization.Abstractions/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Abstractions/"]
 COPY ["Modules/Synchronization/src/Synchronization.Domain/Synchronization.Domain.csproj", "Modules/Synchronization/src/Synchronization.Domain/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Domain/"]
 COPY ["Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/Synchronization.Infrastructure.Database.Postgres.csproj", "Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Synchronization/src/Synchronization.Infrastructure.Database.Postgres/"]
 

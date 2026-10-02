@@ -74,7 +74,7 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
         .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Module.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration);
 

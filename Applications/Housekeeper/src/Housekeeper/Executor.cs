@@ -6,7 +6,7 @@ using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.M
 using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Module.Features.Relationships.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Application.SyncRuns.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Module.Features.SyncRuns.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteTokensModuleHousekeepingCommand = Backbone.Modules.Tokens.Module.Features.Tokens.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 
 namespace Backbone.Housekeeper;

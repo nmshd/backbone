@@ -12,7 +12,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files", "Quotas", "Devices", "Relationships"];
+    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files", "Quotas", "Devices", "Relationships", "Synchronization"];
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -48,6 +48,7 @@ public class VerticalSliceArchitecture
     [InlineData("Quotas")]
     [InlineData("Devices")]
     [InlineData("Relationships")]
+    [InlineData("Synchronization")]
     public void UseCasesShouldResideInTheirModule(string module)
     {
         var useCases = Classes().That().AreAssignableTo(typeof(IBaseRequest))
@@ -72,10 +73,11 @@ public class VerticalSliceArchitecture
     [InlineData("Quotas")]
     [InlineData("Devices")]
     [InlineData("Relationships")]
+    [InlineData("Synchronization")]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
-            .ResideInAssemblyMatching(@"^Backbone\.Modules\.[^.]+\.Infrastructure[^,]*(,|$)")
+            .ResideInAssemblyMatching(@"^Backbone\.(Modules\.[^.]+\.Infrastructure[^,]*|.*Api|BuildingBlocks\.API)(,|$)")
             .Check(Backbone.ARCHITECTURE);
         // Validators nested in endpoints belong to the HTTP adapter; command/query validators remain independent.
         var httpValidators = Classes().That().HaveFullNameMatching(@".*\.Endpoint[+.].*")
@@ -95,6 +97,7 @@ public class VerticalSliceArchitecture
     [InlineData("Quotas")]
     [InlineData("Devices")]
     [InlineData("Relationships")]
+    [InlineData("Synchronization")]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))

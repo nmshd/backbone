@@ -141,7 +141,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule, Backbone.Modules.Quotas.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Module.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,
+        .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Module.ApplicationConfiguration,
             Backbone.Modules.Synchronization.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TagsModule, Backbone.Modules.Tags.Module.ApplicationConfiguration, Backbone.Modules.Tags.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<TokensModule, Backbone.Modules.Tokens.Module.ApplicationConfiguration, Backbone.Modules.Tokens.Infrastructure.InfrastructureConfiguration>(configuration);
@@ -222,6 +222,7 @@ static void Configure(WebApplication app, ConsumerApiConfiguration configuration
     app.MapQuotasEndpoints();
     app.MapDevicesEndpoints();
     app.MapRelationshipsEndpoints();
+    app.MapSynchronizationEndpoints();
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
     {
