@@ -24,7 +24,7 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromBody] CreateIdentityRequest request, IOAuthClientsRepository clients, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromBody] RequestBody request, IOAuthClientsRepository clients, IMediator mediator, CancellationToken cancellationToken)
     {
         if (request.ClientId == null || request.ClientSecret == null || request.IdentityPublicKey == null || request.DevicePassword == null || request.SignedChallenge == null || request.SignedChallenge.Challenge == null || request.SignedChallenge.Signature == null)
             throw new BadHttpRequestException("Required request fields must not be null.");
@@ -47,5 +47,22 @@ internal static class Endpoint
         };
         var response = await mediator.Send(command, cancellationToken);
         return EnvelopeHttpResults.Created("", response);
+    }
+}
+
+public class RequestBody
+{
+    public required string ClientId { get; set; }
+    public required string ClientSecret { get; set; }
+    public required byte[] IdentityPublicKey { get; set; }
+    public required string DevicePassword { get; set; }
+    public string? DeviceCommunicationLanguage { get; set; }
+    public required byte IdentityVersion { get; set; }
+    public required SignedChallengeC SignedChallenge { get; set; }
+
+    public class SignedChallengeC
+    {
+        public required string Challenge { get; set; }
+        public required byte[] Signature { get; set; }
     }
 }

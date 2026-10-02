@@ -148,15 +148,9 @@ internal class RelationshipTemplatesStepDefinitions
 
         var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-        var queryItems = getRequestPayloadSet.Select(payload =>
-        {
-            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
-            var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
+        var ids = getRequestPayloadSet.Select(payload => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id);
 
-            return new ListRelationshipTemplatesQueryItem { Id = relationshipTemplateId, Password = password };
-        }).ToList();
-
-        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);
+        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(ids);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /RelationshipTemplates/{RegexFor.SINGLE_THING}.Id endpoint")]
@@ -204,5 +198,4 @@ file class RelationshipTemplateProperties
 file class GetRequestPayload
 {
     public required string TemplateName { get; set; }
-    public required string PasswordOnGet { get; set; }
 }

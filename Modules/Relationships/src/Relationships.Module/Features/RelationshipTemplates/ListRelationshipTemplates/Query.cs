@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Relationships.Abstractions;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.ListRelationshipTemplates;
@@ -7,6 +6,5 @@ namespace Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.L
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {
     public required PaginationFilter PaginationFilter { get; init; }
-    public required List<ListRelationshipTemplatesQueryItem> QueryItems { get; init; }
+    public required List<string> Ids { get; init; }
 }
-

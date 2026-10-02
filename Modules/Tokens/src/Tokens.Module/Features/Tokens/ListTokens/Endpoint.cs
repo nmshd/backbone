@@ -24,14 +24,13 @@ internal static class Endpoint
     }
 
     private static async Task<IResult> Handle([FromQuery(Name = "PageNumber")] int? pageNumber, [FromQuery(Name = "PageSize")] int? pageSize,
-        [FromQuery] string[]? ids, HttpRequest request, IMediator mediator, IOptions<ApplicationConfiguration> options, CancellationToken cancellationToken)
+        [FromQuery] string[]? ids, IMediator mediator, IOptions<ApplicationConfiguration> options, CancellationToken cancellationToken)
     {
-        var tokenIds = ids is { Length: > 0 } ? ids.ToList() : ListTokensQueryItem.ReadIds(request.Query);
         var paginationFilter = new PaginationFilter { PageNumber = pageNumber ?? 1, PageSize = pageSize ?? options.Value.Pagination.DefaultPageSize };
         if (paginationFilter.PageSize > options.Value.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(options.Value.Pagination.MaxPageSize));
 
-        var response = await mediator.Send(new ListTokensQuery { PaginationFilter = paginationFilter, Ids = tokenIds }, cancellationToken);
+        var response = await mediator.Send(new ListTokensQuery { PaginationFilter = paginationFilter, Ids = ids?.ToList() ?? [] }, cancellationToken);
         return EnvelopeHttpResults.Paged(response);
     }
 }

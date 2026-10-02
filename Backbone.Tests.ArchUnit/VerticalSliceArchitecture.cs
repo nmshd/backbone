@@ -77,8 +77,8 @@ public class VerticalSliceArchitecture
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
             .ResideInAssemblyMatching(@"^Backbone\.Modules\.[^.]+\.Infrastructure[^,]*(,|$)")
             .Check(Backbone.ARCHITECTURE);
-        // Form DTO validators belong to the HTTP adapter; command/query validators remain independent.
-        var httpValidators = Classes().That().ResideInNamespaceMatching(@".*\.Http(\.|$)")
+        // Validators nested in endpoints belong to the HTTP adapter; command/query validators remain independent.
+        var httpValidators = Classes().That().HaveFullNameMatching(@".*\.Endpoint[+.].*")
             .And().AreAssignableTo(typeof(IValidator));
         Classes().That().Are(UseCases(module)).And().AreNot(httpValidators)
             .Should().NotDependOnAnyTypesThat().ResideInNamespaceMatching(@"Microsoft\.AspNetCore\..*")

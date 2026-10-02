@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Relationships.Module.Features.RelationshipTemplates.CreateRelationshipTemplate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Backbone.Modules.Relationships.Module;
 
@@ -24,7 +23,6 @@ internal static class ApplicationServiceCollectionExtensions
             services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
 
             services.AddEventHandlers();
-            services.Configure<Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions>(options => options.OperationFilter<Features.RelationshipTemplates.ListRelationshipTemplates.OpenApiOperationFilter>());
         }
 
         private void AddEventHandlers()

@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using FluentValidation;
 
@@ -11,22 +10,12 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
 {
     public Validator()
     {
-        RuleFor(q => q.QueryItems)
+        RuleFor(q => q.Ids)
             .Cascade(CascadeMode.Stop)
             .DetailedNotEmpty();
 
-        RuleForEach(x => x.QueryItems)
+        RuleForEach(x => x.Ids)
             .Cascade(CascadeMode.Stop)
-            .ChildRules(queryItems =>
-            {
-                queryItems
-                    .RuleFor(query => query.Id)
-                    .ValidId<ListRelationshipTemplatesQueryItem, RelationshipTemplateId>();
-
-                queryItems
-                    .RuleFor(query => query.Password)
-                    .NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH)
-                    .When(query => query.Password != null);
-            });
+            .ValidId<ListRelationshipTemplatesQuery, RelationshipTemplateId>();
     }
 }

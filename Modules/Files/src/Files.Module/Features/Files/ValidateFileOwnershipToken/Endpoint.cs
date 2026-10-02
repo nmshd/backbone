@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken.Http;
 
 namespace Backbone.Modules.Files.Module.Features.Files.ValidateFileOwnershipToken;
 
@@ -21,9 +20,14 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromRoute] string fileId, [FromBody] ValidateFileOwnershipTokenRequest request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromRoute] string fileId, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ValidateFileOwnershipTokenQuery { FileId = fileId, OwnershipToken = request.OwnershipToken }, cancellationToken);
+        var response = await mediator.Send(new ValidateFileOwnershipTokenQuery { FileId = fileId, OwnershipToken = body.OwnershipToken }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
+    }
+
+    private class RequestBody
+    {
+        public required string OwnershipToken { get; init; }
     }
 }

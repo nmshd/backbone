@@ -20,9 +20,14 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromRoute] string fileId, [FromBody] ClaimFileRequest request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromRoute] string fileId, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = request.OwnershipToken }, cancellationToken);
+        var response = await mediator.Send(new ClaimFileOwnershipCommand { FileId = fileId, OwnershipToken = body.OwnershipToken }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
+}
+
+public class RequestBody
+{
+    public required string OwnershipToken { get; init; }
 }

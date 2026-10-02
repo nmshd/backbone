@@ -19,9 +19,14 @@ internal static class Endpoint
         return group;
     }
 
-    private static async Task<IResult> Handle([FromRoute] string id, [FromBody] AcceptRelationshipRequest request, IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Handle([FromRoute] string id, [FromBody] RequestBody body, IMediator mediator, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        var response = await mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = body.CreationResponseContent }, cancellationToken);
         return EnvelopeHttpResults.Ok(response);
     }
+}
+
+public class RequestBody
+{
+    public byte[]? CreationResponseContent { get; set; } = [];
 }

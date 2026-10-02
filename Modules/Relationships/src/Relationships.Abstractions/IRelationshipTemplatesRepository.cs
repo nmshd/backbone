@@ -8,7 +8,7 @@ namespace Backbone.Modules.Relationships.Abstractions;
 
 public interface IRelationshipTemplatesRepository
 {
-    Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    Task<DbPaginationResult<RelationshipTemplate>> ListWithContent(IEnumerable<string> ids, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
 
     Task<IEnumerable<RelationshipTemplate>> ListWithoutContent(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
