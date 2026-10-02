@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Aggregates.Relationships;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;

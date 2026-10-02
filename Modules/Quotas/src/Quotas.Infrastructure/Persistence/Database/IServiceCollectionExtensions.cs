@@ -1,7 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.Metrics;
-using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Modules.Quotas.Abstractions;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +19,6 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
         services.AddTransient<ITokensRepository, TokensRepository>();
-        services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
         services.AddTransient<IIdentityDeletionProcessesRepository, IdentityDeletionProcessesRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IDatawalletModificationsRepository, DatawalletModificationsRepository>();

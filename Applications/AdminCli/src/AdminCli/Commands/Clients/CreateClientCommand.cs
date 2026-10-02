@@ -57,7 +57,7 @@ public class CreateClientCommand : AdminCliCommand
 
     private async Task CreateClient(string? clientId, string? displayName, string? clientSecret, string defaultTier, int? maxIdentities)
     {
-        var command = new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand
+        var command = new Modules.Devices.Module.Features.Clients.CreateClient.CreateClientCommand
         {
             ClientId = clientId,
             DisplayName = displayName,

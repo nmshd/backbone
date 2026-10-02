@@ -75,10 +75,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services
                 .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+                .AddModule<DevicesModule, Backbone.Modules.Devices.Module.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<MessagesModule, Backbone.Modules.Messages.Module.ApplicationConfiguration, Backbone.Modules.Messages.Infrastructure.InfrastructureConfiguration>(configuration)
-                .AddModule<QuotasModule, Backbone.Modules.Quotas.Application.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
+                .AddModule<QuotasModule, Backbone.Modules.Quotas.Module.ApplicationConfiguration, InfrastructureConfiguration>(configuration)
                 .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
                     Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<SynchronizationModule, Backbone.Modules.Synchronization.Application.ApplicationConfiguration,

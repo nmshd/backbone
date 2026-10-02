@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.ConsumerApi.Versions;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+using Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;

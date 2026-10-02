@@ -1,8 +1,8 @@
 using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Devices.Application.Extensions;
-using Backbone.Modules.Devices.Application.Tiers.Commands.CreateQueuedForDeletionTier;
-using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
-using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
+using Backbone.Modules.Devices.Module.Features.Tiers.Shared;
+using Backbone.Modules.Devices.Module.Features.Tiers.CreateQueuedForDeletionTier;
+using Backbone.Modules.Devices.Module.Features.Tiers.CreateTier;
+using Backbone.Modules.Devices.Module.Features.Users.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using MediatR;

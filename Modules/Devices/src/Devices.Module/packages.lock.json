@@ -2,6 +2,63 @@
   "version": 2,
   "dependencies": {
     "net10.0": {
+      "CSharpFunctionalExtensions": {
+        "type": "Direct",
+        "requested": "[3.7.0, 3.7.0]",
+        "resolved": "3.7.0",
+        "contentHash": "eMZp8tc88O96eEFutiIskF3LE8lFY3fjbNRGfNa1ca0CD9sB8A00r5ltyYDih/7UFdJdVbhVq7tGeHI8xj6DlQ=="
+      },
+      "FluentValidation": {
+        "type": "Direct",
+        "requested": "[12.1.1, 12.1.1]",
+        "resolved": "12.1.1",
+        "contentHash": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw=="
+      },
+      "FluentValidation.DependencyInjectionExtensions": {
+        "type": "Direct",
+        "requested": "[12.1.1, 12.1.1]",
+        "resolved": "12.1.1",
+        "contentHash": "D0VXh4dtjjX2aQizuaa0g6R8X3U1JaVqJPfGCvLwZX9t/O2h7tkpbitbadQMfwcgSPdDbI2vDxuwRMv/Uf9dHA==",
+        "dependencies": {
+          "FluentValidation": "12.1.1",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
+        }
+      },
+      "OpenIddict.AspNetCore": {
+        "type": "Direct",
+        "requested": "[7.6.0, 7.6.0]",
+        "resolved": "7.6.0",
+        "contentHash": "FblhXU1SzSjL1nPsK5kqi+uMofNYLg1gwBU/qqc8diOafTv/6jLOhpCzzk+wISR8OnkS7H3oFMcTjy8aaTm8ww==",
+        "dependencies": {
+          "OpenIddict": "7.6.0",
+          "OpenIddict.Client.AspNetCore": "7.6.0",
+          "OpenIddict.Client.DataProtection": "7.6.0",
+          "OpenIddict.Server.AspNetCore": "7.6.0",
+          "OpenIddict.Server.DataProtection": "7.6.0",
+          "OpenIddict.Validation.AspNetCore": "7.6.0",
+          "OpenIddict.Validation.DataProtection": "7.6.0"
+        }
+      },
+      "OpenIddict.EntityFrameworkCore": {
+        "type": "Direct",
+        "requested": "[7.6.0, 7.6.0]",
+        "resolved": "7.6.0",
+        "contentHash": "BWbgvgKbDcg3EuNJvmXtUzeLxg9c4bU+PfDnZetCjGwcnlCsWcASkjVexKKevtUgWxRWJTQFRchMA09OKmOF/w==",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "10.0.10",
+          "OpenIddict.Core": "7.6.0",
+          "OpenIddict.EntityFrameworkCore.Models": "7.6.0"
+        }
+      },
+      "Polly": {
+        "type": "Direct",
+        "requested": "[8.7.0, 8.7.0]",
+        "resolved": "8.7.0",
+        "contentHash": "0qR4f0OR8FeCAfLWcfwzAM7w6EmpUgwa22PgxKjcL25dEAto7sKpQQXbtxp38vVvK+V3RFkh/TeI7g/iUdoYIQ==",
+        "dependencies": {
+          "Polly.Core": "8.7.0"
+        }
+      },
       "ReHackt.Extensions.Options.Validation": {
         "type": "Direct",
         "requested": "[10.0.1, 10.0.1]",
@@ -1216,23 +1273,11 @@
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Devices.Application": {
+      "Backbone.Modules.Devices.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Crypto": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "OpenIddict.Core": "[7.6.0, 7.6.0]",
-          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Devices.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Devices.Contracts": {
@@ -1256,8 +1301,9 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "FirebaseAdmin": "[3.6.0, 3.6.0]",
           "JWT": "[11.1.0, 11.1.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1365,12 +1411,6 @@
         "resolved": "2.7.0",
         "contentHash": "U+12df8UEWHgBi04YVf/Lgi2dy3SItlIYvHjjEVa/BngCQIzDCDRBk50DDByCfDvSbe5pRNFr3b7UrVK2kMcLw=="
       },
-      "CSharpFunctionalExtensions": {
-        "type": "CentralTransitive",
-        "requested": "[3.7.0, 3.7.0]",
-        "resolved": "3.7.0",
-        "contentHash": "eMZp8tc88O96eEFutiIskF3LE8lFY3fjbNRGfNa1ca0CD9sB8A00r5ltyYDih/7UFdJdVbhVq7tGeHI8xj6DlQ=="
-      },
       "Dapper": {
         "type": "CentralTransitive",
         "requested": "[2.1.79, 2.1.79]",
@@ -1438,22 +1478,6 @@
         "dependencies": {
           "Google.Api.Gax.Rest": "4.13.1",
           "Google.Apis.Auth": "1.73.0"
-        }
-      },
-      "FluentValidation": {
-        "type": "CentralTransitive",
-        "requested": "[12.1.1, 12.1.1]",
-        "resolved": "12.1.1",
-        "contentHash": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw=="
-      },
-      "FluentValidation.DependencyInjectionExtensions": {
-        "type": "CentralTransitive",
-        "requested": "[12.1.1, 12.1.1]",
-        "resolved": "12.1.1",
-        "contentHash": "D0VXh4dtjjX2aQizuaa0g6R8X3U1JaVqJPfGCvLwZX9t/O2h7tkpbitbadQMfwcgSPdDbI2vDxuwRMv/Uf9dHA==",
-        "dependencies": {
-          "FluentValidation": "12.1.1",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
         }
       },
       "Google.Cloud.PubSub.V1": {
@@ -1763,21 +1787,6 @@
           "libsodium": "[1.0.22, 1.0.23)"
         }
       },
-      "OpenIddict.AspNetCore": {
-        "type": "CentralTransitive",
-        "requested": "[7.6.0, 7.6.0]",
-        "resolved": "7.6.0",
-        "contentHash": "FblhXU1SzSjL1nPsK5kqi+uMofNYLg1gwBU/qqc8diOafTv/6jLOhpCzzk+wISR8OnkS7H3oFMcTjy8aaTm8ww==",
-        "dependencies": {
-          "OpenIddict": "7.6.0",
-          "OpenIddict.Client.AspNetCore": "7.6.0",
-          "OpenIddict.Client.DataProtection": "7.6.0",
-          "OpenIddict.Server.AspNetCore": "7.6.0",
-          "OpenIddict.Server.DataProtection": "7.6.0",
-          "OpenIddict.Validation.AspNetCore": "7.6.0",
-          "OpenIddict.Validation.DataProtection": "7.6.0"
-        }
-      },
       "OpenIddict.Core": {
         "type": "CentralTransitive",
         "requested": "[7.6.0, 7.6.0]",
@@ -1788,17 +1797,6 @@
           "Microsoft.Extensions.Logging": "10.0.10",
           "Microsoft.Extensions.Options": "10.0.10",
           "OpenIddict.Abstractions": "7.6.0"
-        }
-      },
-      "OpenIddict.EntityFrameworkCore": {
-        "type": "CentralTransitive",
-        "requested": "[7.6.0, 7.6.0]",
-        "resolved": "7.6.0",
-        "contentHash": "BWbgvgKbDcg3EuNJvmXtUzeLxg9c4bU+PfDnZetCjGwcnlCsWcASkjVexKKevtUgWxRWJTQFRchMA09OKmOF/w==",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore.Relational": "10.0.10",
-          "OpenIddict.Core": "7.6.0",
-          "OpenIddict.EntityFrameworkCore.Models": "7.6.0"
         }
       },
       "OpenTelemetry.Api": {
@@ -1864,15 +1862,6 @@
         "contentHash": "McuXGjBJDL/Cown2PxfUQysK98MZG7ZDjO/IKUtaAx8t1m0PB0d+QtJC79RFTVipMhRIwjJiULNOp0OGfZbvwg==",
         "dependencies": {
           "OpenTelemetry.Api": "[1.18.0, 2.0.0)"
-        }
-      },
-      "Polly": {
-        "type": "CentralTransitive",
-        "requested": "[8.7.0, 8.7.0]",
-        "resolved": "8.7.0",
-        "contentHash": "0qR4f0OR8FeCAfLWcfwzAM7w6EmpUgwa22PgxKjcL25dEAto7sKpQQXbtxp38vVvK+V3RFkh/TeI7g/iUdoYIQ==",
-        "dependencies": {
-          "Polly.Core": "8.7.0"
         }
       },
       "RabbitMQ.Client": {

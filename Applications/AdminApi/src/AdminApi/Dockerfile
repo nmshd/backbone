@@ -49,14 +49,14 @@ COPY ["Modules/Challenges/src/Challenges.Module/Challenges.Module.csproj", "Modu
 COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj", "Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj", "Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/"]
 
-COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Modules/Devices/src/Devices.Application/packages.lock.json*", "Modules/Devices/src/Devices.Application/"]
+COPY ["Modules/Devices/src/Devices.Abstractions/Devices.Abstractions.csproj", "Modules/Devices/src/Devices.Abstractions/packages.lock.json*", "Modules/Devices/src/Devices.Abstractions/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/packages.lock.json*", "Modules/Devices/src/Devices.Domain/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/packages.lock.json*", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["Modules/Devices/src/Devices.Module/Devices.Module.csproj", "Modules/Devices/src/Devices.Module/packages.lock.json*", "Modules/Devices/src/Devices.Module/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/packages.lock.json*", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/packages.lock.json*", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/"]
 
-COPY ["Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj", "Modules/Quotas/src/Quotas.Application/packages.lock.json*", "Modules/Quotas/src/Quotas.Application/"]
+COPY ["Modules/Quotas/src/Quotas.Abstractions/Quotas.Abstractions.csproj", "Modules/Quotas/src/Quotas.Abstractions/packages.lock.json*", "Modules/Quotas/src/Quotas.Abstractions/"]
 COPY ["Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj", "Modules/Quotas/src/Quotas.Domain/packages.lock.json*", "Modules/Quotas/src/Quotas.Domain/"]
 COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "Modules/Quotas/src/Quotas.Infrastructure/packages.lock.json*", "Modules/Quotas/src/Quotas.Infrastructure/"]
 COPY ["Modules/Quotas/src/Quotas.Module/Quotas.Module.csproj", "Modules/Quotas/src/Quotas.Module/packages.lock.json*", "Modules/Quotas/src/Quotas.Module/"]

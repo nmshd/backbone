@@ -1,7 +1,7 @@
 using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
-using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
+using Backbone.Modules.Devices.Module.Features.Clients.ListClients;
 using MediatR;
 
 namespace Backbone.AdminCli.Commands.Clients;

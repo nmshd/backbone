@@ -1395,23 +1395,11 @@
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Devices.Application": {
+      "Backbone.Modules.Devices.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Crypto": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "OpenIddict.Core": "[7.6.0, 7.6.0]",
-          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Devices.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Devices.Contracts": {
@@ -1435,8 +1423,9 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "FirebaseAdmin": "[3.6.0, 3.6.0]",
           "JWT": "[11.1.0, 11.1.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1469,11 +1458,22 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Crypto": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Devices.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
+          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
+          "FluentValidation": "[12.1.1, 12.1.1]",
+          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
+          "OpenIddict.AspNetCore": "[7.6.0, 7.6.0]",
+          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
+          "Polly": "[8.7.0, 8.7.0]",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
@@ -1599,18 +1599,10 @@
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Quotas.Application": {
+      "Backbone.Modules.Quotas.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Contracts": {
@@ -1632,9 +1624,9 @@
       "Backbone.Modules.Quotas.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1659,10 +1651,17 @@
         "dependencies": {
           "Backbone.BuildingBlocks.API": "[1.0.0, )",
           "Backbone.BuildingBlocks.Module": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure.Database.Postgres": "[1.0.0, )",
           "Backbone.Modules.Quotas.Infrastructure.Database.SqlServer": "[1.0.0, )",
+          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
+          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },

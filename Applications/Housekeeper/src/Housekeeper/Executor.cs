@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Housekeeping;
 using MediatR;
 using ExecuteAnnouncementsModuleHousekeepingCommand = Backbone.Modules.Announcements.Module.Features.Announcements.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteChallengesModuleHousekeepingCommand = Backbone.Modules.Challenges.Module.Features.Challenges.ExecuteHousekeeping.ExecuteHousekeepingCommand;
-using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Application.Devices.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
+using ExecuteDevicesModuleHousekeepingCommand = Backbone.Modules.Devices.Module.Features.Devices.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteFilesModuleHousekeepingCommand = Backbone.Modules.Files.Module.Features.Files.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteRelationshipsModuleHousekeepingCommand = Backbone.Modules.Relationships.Application.Relationships.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;
 using ExecuteSynchronizationModuleHousekeepingCommand = Backbone.Modules.Synchronization.Application.SyncRuns.Commands.ExecuteHousekeeping.ExecuteHousekeepingCommand;

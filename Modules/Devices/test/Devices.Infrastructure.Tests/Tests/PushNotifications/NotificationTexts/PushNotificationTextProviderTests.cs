@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Announcements;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Announcements;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.Datawallet;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 

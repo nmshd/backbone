@@ -1,0 +1,9 @@
+using MediatR;
+
+namespace Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
+
+public class HandleCompletedDeletionProcessCommand : IRequest
+{
+    public required string IdentityAddress { get; init; }
+    public required IEnumerable<string> Usernames { get; init; }
+}

@@ -2,7 +2,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Abstractions;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
@@ -65,6 +65,12 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             Track(application);
 
         return application?.ToModel();
+    }
+
+    public async Task<bool> ValidateSecret(string clientId, string secret, CancellationToken cancellationToken)
+    {
+        var client = await _applicationManager.FindByClientIdAsync(clientId, cancellationToken);
+        return client != null && await _applicationManager.ValidateClientSecretAsync(client, secret, cancellationToken);
     }
 
     public async Task<bool> Exists(string clientId, CancellationToken cancellationToken)

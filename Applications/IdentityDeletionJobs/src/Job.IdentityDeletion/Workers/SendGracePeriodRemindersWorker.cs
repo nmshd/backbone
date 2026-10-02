@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessGracePeriodReminders;
+﻿using Backbone.Modules.Devices.Module.Features.Identities.SendDeletionProcessGracePeriodReminders;
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion.Workers;

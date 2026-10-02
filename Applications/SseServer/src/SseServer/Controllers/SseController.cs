@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
-using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.DeleteDeviceRegistration;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.UpdateDeviceRegistration;
 using Backbone.SseServer.Versions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

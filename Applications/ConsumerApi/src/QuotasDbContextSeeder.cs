@@ -1,5 +1,5 @@
 ﻿using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
+using Backbone.Modules.Quotas.Module.Features.Tiers.SeedQueuedForDeletionTier;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using MediatR;
 

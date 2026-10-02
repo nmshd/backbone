@@ -942,12 +942,6 @@
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
-      "Backbone.Modules.Files.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
       "Backbone.Modules.Messages.Abstractions": {
         "type": "Project",
         "dependencies": {
@@ -983,18 +977,10 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]"
         }
       },
-      "Backbone.Modules.Quotas.Application": {
+      "Backbone.Modules.Quotas.Abstractions": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Files.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Messages.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
-          "Backbone.Modules.Relationships.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )"
+          "Backbone.Modules.Quotas.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Quotas.Contracts": {
@@ -1016,9 +1002,9 @@
       "Backbone.Modules.Quotas.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
+          "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Quotas.Application": "[1.0.0, )",
+          "Backbone.Modules.Quotas.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1069,12 +1055,6 @@
           "Microsoft.EntityFrameworkCore": "[10.0.10, 10.0.10]",
           "Microsoft.EntityFrameworkCore.SqlServer": "[10.0.10, 10.0.10]",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.3, 10.0.3]"
-        }
-      },
-      "Backbone.Modules.Tokens.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {

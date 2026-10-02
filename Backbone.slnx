@@ -126,7 +126,7 @@
   </Folder>
   <Folder Name="/Modules/Devices/" />
   <Folder Name="/Modules/Devices/src/">
-    <Project Path="Modules/Devices/src/Devices.Application/Devices.Application.csproj" />
+    <Project Path="Modules/Devices/src/Devices.Abstractions/Devices.Abstractions.csproj" />
     <Project Path="Modules/Devices/src/Devices.Contracts/Devices.Contracts.csproj" />
     <Project Path="Modules/Devices/src/Devices.Domain/Devices.Domain.csproj" />
     <Project Path="Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj" />
@@ -135,7 +135,7 @@
     <Project Path="Modules/Devices/src/Devices.Module/Devices.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Devices/test/">
-    <Project Path="Modules/Devices/test/Devices.Application.Tests/Devices.Application.Tests.csproj" />
+    <Project Path="Modules/Devices/test/Devices.Module.Tests/Devices.Module.Tests.csproj" />
     <Project Path="Modules/Devices/test/Devices.Domain.Tests/Devices.Domain.Tests.csproj" />
     <Project Path="Modules/Devices/test/Devices.Infrastructure.Tests/Devices.Infrastructure.Tests.csproj">
       <BuildDependency Project="BuildingBlocks/src/UnitTestTools/UnitTestTools.csproj" />
@@ -173,7 +173,7 @@
   </Folder>
   <Folder Name="/Modules/Quotas/" />
   <Folder Name="/Modules/Quotas/src/">
-    <Project Path="Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj" />
+    <Project Path="Modules/Quotas/src/Quotas.Abstractions/Quotas.Abstractions.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Contracts/Quotas.Contracts.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj" />
     <Project Path="Modules/Quotas/src/Quotas.Infrastructure.Database.Postgres/Quotas.Infrastructure.Database.Postgres.csproj" />
@@ -182,7 +182,7 @@
     <Project Path="Modules/Quotas/src/Quotas.Module/Quotas.Module.csproj" />
   </Folder>
   <Folder Name="/Modules/Quotas/test/">
-    <Project Path="Modules/Quotas/test/Quotas.Application.Tests/Quotas.Application.Tests.csproj" />
+    <Project Path="Modules/Quotas/test/Quotas.Module.Tests/Quotas.Module.Tests.csproj" />
     <Project Path="Modules/Quotas/test/Quotas.Domain.Tests/Quotas.Domain.Tests.csproj" />
     <Project Path="Modules/Quotas/test/Quotas.Infrastructure.Tests/Quotas.Infrastructure.Tests.csproj" />
   </Folder>

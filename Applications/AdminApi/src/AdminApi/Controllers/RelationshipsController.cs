@@ -6,7 +6,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Module;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

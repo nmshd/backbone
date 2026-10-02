@@ -1,6 +1,6 @@
+using Backbone.Modules.Devices.Abstractions.PushNotifications;
 using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;

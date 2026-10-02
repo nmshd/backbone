@@ -1,6 +1,7 @@
 using System.Reflection;
 using ArchUnitNET.Domain;
 using ArchUnitNET.xUnitV3;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using FluentValidation;
 using MediatR;
 using Shouldly;
@@ -11,7 +12,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class VerticalSliceArchitecture
 {
-    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files"];
+    private static readonly string[] MIGRATED_MODULES = ["Messages", "Tags", "Challenges", "Announcements", "Tokens", "Files", "Quotas", "Devices"];
 
     [Fact]
     public void DomainsShouldNotDependOnOuterLayers()
@@ -32,7 +33,7 @@ public class VerticalSliceArchitecture
     [Fact]
     public void InfrastructureShouldNotDependOnModulesOrApis()
     {
-        Types().That().ResideInAssemblyMatching(@"^Backbone\.Modules\.[^.]+\.Infrastructure[^,]*(,|$)")
+        Types().That().ResideInAssemblyMatching(@"^Backbone\.Modules\.[^.]+\.Infrastructure(?![^,]*Tests)[^,]*(,|$)")
             .Should().NotDependOnAnyTypesThat().ResideInAssemblyMatching(@"^Backbone\.(Modules\.[^.]+\.Module|.*Api|BuildingBlocks\.API)(,|$)")
             .Check(Backbone.ARCHITECTURE);
     }
@@ -44,11 +45,14 @@ public class VerticalSliceArchitecture
     [InlineData("Announcements")]
     [InlineData("Tokens")]
     [InlineData("Files")]
+    [InlineData("Quotas")]
+    [InlineData("Devices")]
     public void UseCasesShouldResideInTheirModule(string module)
     {
         var useCases = Classes().That().AreAssignableTo(typeof(IBaseRequest))
             .Or().AreAssignableTo(typeof(IRequestHandler<>))
             .Or().AreAssignableTo(typeof(IRequestHandler<,>))
+            .Or().AreAssignableTo(typeof(IDomainEventHandler<>))
             .Or().AreAssignableTo(typeof(IValidator));
 
         Classes().That().ResideInAssemblyMatching($@"^Backbone\.Modules\.{module}\.(?!.*Tests).*$")
@@ -64,6 +68,8 @@ public class VerticalSliceArchitecture
     [InlineData("Announcements")]
     [InlineData("Tokens")]
     [InlineData("Files")]
+    [InlineData("Quotas")]
+    [InlineData("Devices")]
     public void UseCasesShouldNotDependOnAdapters(string module)
     {
         Classes().That().Are(UseCases(module)).Should().NotDependOnAnyTypesThat()
@@ -84,6 +90,8 @@ public class VerticalSliceArchitecture
     [InlineData("Announcements")]
     [InlineData("Tokens")]
     [InlineData("Files")]
+    [InlineData("Quotas")]
+    [InlineData("Devices")]
     public void ModulesShouldOnlyReferenceTheirOwnImplementationAndOtherContracts(string module)
     {
         foreach (var assembly in SolutionAssemblies().Where(assembly => assembly.GetName().Name == $"Backbone.Modules.{module}.Module"))

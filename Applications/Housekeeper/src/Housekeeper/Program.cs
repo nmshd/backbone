@@ -70,7 +70,7 @@ static HostApplicationBuilder CreateHostBuilder(string[] args)
         .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Module.ApplicationConfiguration,
             Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
-        .AddModule<DevicesModule, Backbone.Modules.Devices.Application.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
+        .AddModule<DevicesModule, Backbone.Modules.Devices.Module.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
         .AddModule<RelationshipsModule, Backbone.Modules.Relationships.Application.ApplicationConfiguration,
             Backbone.Modules.Relationships.Infrastructure.InfrastructureConfiguration>(configuration)

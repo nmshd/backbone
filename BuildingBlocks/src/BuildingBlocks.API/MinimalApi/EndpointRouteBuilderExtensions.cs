@@ -7,6 +7,9 @@ namespace Backbone.BuildingBlocks.API.MinimalApi;
 
 public static class EndpointRouteBuilderExtensions
 {
+    public static TBuilder WithMinimalApiErrorHandling<TBuilder>(this TBuilder builder) where TBuilder : IEndpointConventionBuilder =>
+        builder.WithMetadata(MinimalApiEndpointMetadata.INSTANCE);
+
     public static RouteGroupBuilder MapVersionedEndpointGroup(this IEndpointRouteBuilder endpoints, string route, string tag, int apiVersion,
         string authorizationPolicy)
     {

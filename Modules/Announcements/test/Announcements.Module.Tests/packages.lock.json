@@ -243,11 +243,6 @@
           "Grpc.Core.Api": "2.71.0"
         }
       },
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "MedallionTopologicalSort": {
         "type": "Transitive",
         "resolved": "1.0.0",
@@ -1407,13 +1402,6 @@
           "Polly": "[8.7.0, 8.7.0]"
         }
       },
-      "Backbone.Crypto": {
-        "type": "Project",
-        "dependencies": {
-          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
-          "NSec.Cryptography": "[26.4.0, 26.4.0]"
-        }
-      },
       "Backbone.DevelopmentKit.Identity": {
         "type": "Project",
         "dependencies": {
@@ -1481,23 +1469,11 @@
           "ReHackt.Extensions.Options.Validation": "[10.0.1, 10.0.1]"
         }
       },
-      "Backbone.Modules.Devices.Application": {
+      "Backbone.Modules.Devices.Abstractions": {
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
-          "Backbone.BuildingBlocks.Application.Abstractions": "[1.0.0, )",
-          "Backbone.Crypto": "[1.0.0, )",
-          "Backbone.Modules.Announcements.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Devices.Domain": "[1.0.0, )",
-          "Backbone.Modules.Synchronization.Contracts": "[1.0.0, )",
-          "Backbone.Modules.Tokens.Contracts": "[1.0.0, )",
-          "CSharpFunctionalExtensions": "[3.7.0, 3.7.0]",
-          "FluentValidation": "[12.1.1, 12.1.1]",
-          "FluentValidation.DependencyInjectionExtensions": "[12.1.1, 12.1.1]",
-          "OpenIddict.Core": "[7.6.0, 7.6.0]",
-          "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
-          "Polly": "[8.7.0, 8.7.0]"
+          "Backbone.Modules.Devices.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Modules.Devices.Contracts": {
@@ -1521,8 +1497,9 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
-          "Backbone.Modules.Devices.Application": "[1.0.0, )",
+          "Backbone.Modules.Devices.Abstractions": "[1.0.0, )",
           "Backbone.Modules.Devices.Domain": "[1.0.0, )",
+          "BouncyCastle.Cryptography": "[2.7.0, 2.7.0]",
           "FirebaseAdmin": "[3.6.0, 3.6.0]",
           "JWT": "[11.1.0, 11.1.0]",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.10, 10.0.10]",
@@ -1537,18 +1514,6 @@
           "OpenIddict.AspNetCore": "[7.6.0, 7.6.0]",
           "OpenIddict.EntityFrameworkCore": "[7.6.0, 7.6.0]",
           "Polly": "[8.7.0, 8.7.0]"
-        }
-      },
-      "Backbone.Modules.Synchronization.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
-        }
-      },
-      "Backbone.Modules.Tokens.Contracts": {
-        "type": "Project",
-        "dependencies": {
-          "Backbone.BuildingBlocks.Domain": "[1.0.0, )"
         }
       },
       "Backbone.Tooling": {
@@ -2054,15 +2019,6 @@
           "Npgsql": "10.0.3"
         }
       },
-      "NSec.Cryptography": {
-        "type": "CentralTransitive",
-        "requested": "[26.4.0, 26.4.0]",
-        "resolved": "26.4.0",
-        "contentHash": "0vsCtY5f+YgQROiWNqzgWp+l2pddfk9FkWoGV/bEo0MuEYPKlJWuoA8aOfO6qp3f+EnObKE3zSJhn1PspJeJVg==",
-        "dependencies": {
-          "libsodium": "[1.0.22, 1.0.23)"
-        }
-      },
       "OpenIddict.AspNetCore": {
         "type": "CentralTransitive",
         "requested": "[7.6.0, 7.6.0]",
@@ -2264,11 +2220,6 @@
       }
     },
     "net10.0/linux-arm64": {
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",
@@ -2354,11 +2305,6 @@
       }
     },
     "net10.0/linux-x64": {
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",
@@ -2444,11 +2390,6 @@
       }
     },
     "net10.0/osx-arm64": {
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",
@@ -2534,11 +2475,6 @@
       }
     },
     "net10.0/win-x64": {
-      "libsodium": {
-        "type": "Transitive",
-        "resolved": "1.0.22",
-        "contentHash": "KPD9SloJFclrsjnhABu7dzWrcyYkwPbvx5l1gRSPAX/0n+OBtSiVCKtGFv4n+ecWUHU0tCG9LSSwoZZx673zBQ=="
-      },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
         "resolved": "7.0.2",

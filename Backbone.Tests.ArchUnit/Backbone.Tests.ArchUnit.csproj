@@ -29,7 +29,8 @@
         <ProjectReference Include="..\Modules\Announcements\test\Announcements.Domain.Tests\Announcements.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\test\Challenges.Module.Tests\Challenges.Module.Tests.csproj" />
         <ProjectReference Include="..\Modules\Challenges\src\Challenges.Abstractions\Challenges.Abstractions.csproj" />
-        <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Devices\src\Devices.Abstractions\Devices.Abstractions.csproj" />
+        <ProjectReference Include="..\Modules\Devices\test\Devices.Module.Tests\Devices.Module.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\src\Devices.Contracts\Devices.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj" />
@@ -45,7 +46,8 @@
         <ProjectReference Include="..\Modules\Messages\src\Messages.Module\Messages.Module.csproj" />
         <ProjectReference Include="..\Modules\Messages\test\Messages.Module.Tests\Messages.Module.Tests.csproj" />
         <ProjectReference Include="..\Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj" />
+        <ProjectReference Include="..\Modules\Quotas\src\Quotas.Abstractions\Quotas.Abstractions.csproj" />
+        <ProjectReference Include="..\Modules\Quotas\test\Quotas.Module.Tests\Quotas.Module.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\src\Quotas.Contracts\Quotas.Contracts.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />

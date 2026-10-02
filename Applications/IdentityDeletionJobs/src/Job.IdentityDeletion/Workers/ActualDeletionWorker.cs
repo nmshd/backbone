@@ -1,12 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Devices.Application.Identities.Commands.HandleCompletedDeletionProcess;
-using Backbone.Modules.Devices.Application.Identities.Commands.HandleErrorDuringIdentityDeletion;
-using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Module.Features.Identities.HandleCompletedDeletionProcess;
+using Backbone.Modules.Devices.Module.Features.Identities.HandleErrorDuringIdentityDeletion;
+using Backbone.Modules.Devices.Module.Features.Identities.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Module.Features.Identities.GetIdentity;
+using Backbone.Modules.Devices.Module.Features.Identities.ListAddressesOfIdentitiesWithDeletionProcessInStatusDeleting;
+using Backbone.Modules.Devices.Module.Features.PushNotifications.Shared.DeletionProcess;
 using CSharpFunctionalExtensions;
 using MediatR;
 

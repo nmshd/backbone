@@ -2,7 +2,7 @@ using System.CommandLine;
 using System.Text.Json;
 using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
+using Backbone.Modules.Devices.Module.Features.Tiers.ListTiers;
 using MediatR;
 
 namespace Backbone.AdminCli.Commands.Tiers;

@@ -7,10 +7,10 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
+using PublicKey = Backbone.Modules.Devices.Module.Features.Devices.Shared.PublicKey;
 
 namespace Backbone.SseServer.Extensions;
 

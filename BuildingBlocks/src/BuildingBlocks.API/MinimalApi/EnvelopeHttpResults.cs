@@ -7,6 +7,8 @@ public static class EnvelopeHttpResults
 {
     public static IResult Ok<T>(T result) => Results.Ok(HttpResponseEnvelope.CreateSuccess(result));
 
+    public static IResult Created<T>(string uri, T result) => Results.Created(uri, HttpResponseEnvelope.CreateSuccess(result));
+
     public static IResult CreatedAtRoute<T>(string routeName, object routeValues, T result) =>
         Results.CreatedAtRoute(routeName, routeValues, HttpResponseEnvelope.CreateSuccess(result));
 

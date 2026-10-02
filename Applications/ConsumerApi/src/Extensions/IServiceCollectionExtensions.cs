@@ -9,13 +9,13 @@ using Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
-using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Module.Features.Devices.Shared;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Validation.AspNetCore;
-using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
+using PublicKey = Backbone.Modules.Devices.Module.Features.Devices.Shared.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
 
