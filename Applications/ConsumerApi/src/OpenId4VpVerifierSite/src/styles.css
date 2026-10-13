@@ -1,0 +1,284 @@
+body.openid4vp-verifier-visible {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #f7f9ff;
+  color: #181c20;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+}
+
+body.openid4vp-verifier-visible #app-onboarding-content {
+  display: none;
+}
+
+#openid4vp-verifier-root {
+  display: none;
+}
+
+body.openid4vp-verifier-visible #openid4vp-verifier-root {
+  display: block;
+}
+
+.openid4vp-verifier,
+.openid4vp-verifier * {
+  box-sizing: border-box;
+}
+
+.openid4vp-verifier button {
+  font: inherit;
+}
+
+.openid4vp-verifier [hidden] {
+  display: none !important;
+}
+
+.openid4vp-verifier.verifier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: max(100svh, 812px);
+  max-width: 375px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #f7f9ff;
+}
+
+.openid4vp-verifier .verifier-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.openid4vp-verifier .intro {
+  width: 100%;
+  min-height: 80px;
+  margin: 0;
+  padding: 16px 24px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.openid4vp-verifier .credential-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
+}
+
+.openid4vp-verifier .pass-card {
+  position: relative;
+  width: 100%;
+  height: 216px;
+  flex: 0 0 216px;
+  overflow: hidden;
+  color: #fff;
+  background: #971d50;
+  border-radius: 12px;
+}
+
+.openid4vp-verifier .pass-card h1 {
+  position: absolute;
+  right: 15px;
+  bottom: 13px;
+  left: 15px;
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 0;
+}
+
+.openid4vp-verifier .pass-logo {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 49px;
+  height: 49px;
+  object-fit: contain;
+  object-position: left top;
+}
+
+.openid4vp-verifier .pass-portrait {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 84px;
+  height: 108px;
+  object-fit: cover;
+  background: #e6e8ee;
+  border-radius: 6px;
+}
+
+.openid4vp-verifier .details {
+  width: 100%;
+  overflow: hidden;
+  color: #181c20;
+  background: #F5E5DB;
+  border-radius: 8px;
+}
+
+.openid4vp-verifier .verified-by {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  padding: 4px 12px 4px 4px;
+  background: #e0e2e8;
+  border-radius: 4px 4px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.openid4vp-verifier .verified-by svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+}
+
+.openid4vp-verifier .details dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 8px;
+  background: #f5e5db;
+  border-radius: 0 0 4px 4px;
+}
+
+.openid4vp-verifier .details dt {
+  margin: 0;
+  color: #42474e;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.openid4vp-verifier .details dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  overflow-wrap: anywhere;
+}
+
+.openid4vp-verifier .additional-claims {
+  display: contents;
+}
+
+.openid4vp-verifier .result {
+  display: flex;
+  min-height: 283px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 24px;
+  color: #42474e;
+  background: #f7f9ff;
+}
+
+.openid4vp-verifier .result p,
+.openid4vp-verifier .closed-view p {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: 0;
+  white-space: pre-line;
+}
+
+.openid4vp-verifier .status-mark {
+  display: grid;
+  place-items: center;
+  width: 147px;
+  height: 147px;
+  flex: 0 0 147px;
+  border: 7px solid currentColor;
+  border-radius: 50%;
+}
+
+.openid4vp-verifier .status-mark svg {
+  width: 64px;
+  height: 64px;
+}
+
+.openid4vp-verifier.is-valid .status-mark {
+  color: #428c17;
+}
+
+.openid4vp-verifier.is-invalid .status-mark {
+  color: #ff5449;
+}
+
+.openid4vp-verifier.is-loading .status-mark {
+  color: #2f628c;
+}
+
+.openid4vp-verifier .loading-mark {
+  border-right-color: transparent;
+  animation: openid4vp-spin 1s linear infinite;
+}
+
+.openid4vp-verifier .button-area {
+  display: flex;
+  width: 100%;
+  min-height: 88px;
+  align-items: center;
+  padding: 24px;
+  margin-top: auto;
+  background: #fff8f5;
+}
+
+.openid4vp-verifier .close-button {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  background: #2f628c;
+  border: 0;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.openid4vp-verifier .close-button:active {
+  transform: translateY(1px);
+}
+
+.openid4vp-verifier .closed-view {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding: 24px;
+  color: #42474e;
+}
+
+.openid4vp-verifier .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@keyframes openid4vp-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

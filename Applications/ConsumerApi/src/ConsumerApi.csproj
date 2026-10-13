@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <UserSecretsId>f114fba8-95dd-4fee-8385-af8e8a343c68</UserSecretsId>
+        <OpenId4VpVerifierSiteRoot>$(MSBuildProjectDirectory)/OpenId4VpVerifierSite/</OpenId4VpVerifierSiteRoot>
+        <OpenId4VpVerifierDistRoot>$(OpenId4VpVerifierSiteRoot)dist/openid4vp-verifier/</OpenId4VpVerifierDistRoot>
+        <OpenId4VpVerifierWwwRoot>$(MSBuildProjectDirectory)/wwwroot/openid4vp-verifier/</OpenId4VpVerifierWwwRoot>
     </PropertyGroup>
 
     <ItemGroup>
@@ -41,5 +44,29 @@
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
         <Delete Files="$(ProjectDir)appsettings.override.json" />
         <Copy SourceFiles="..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
+    </Target>
+
+    <Target Name="InstallOpenId4VpVerifierSiteDependencies"
+            Inputs="$(OpenId4VpVerifierSiteRoot)package-lock.json"
+            Outputs="$(OpenId4VpVerifierSiteRoot)node_modules/.package-lock.json"
+            Condition="'$(DesignTimeBuild)' != 'true' and '$(SkipOpenId4VpVerifierBuild)' != 'true'">
+        <Exec WorkingDirectory="$(OpenId4VpVerifierSiteRoot)" Command="npm ci" />
+    </Target>
+
+    <Target Name="BuildOpenId4VpVerifierSite"
+            BeforeTargets="ResolveProjectStaticWebAssets"
+            DependsOnTargets="InstallOpenId4VpVerifierSiteDependencies"
+            Condition="'$(DesignTimeBuild)' != 'true' and '$(SkipOpenId4VpVerifierBuild)' != 'true'">
+        <Exec WorkingDirectory="$(OpenId4VpVerifierSiteRoot)" Command="npm run build" />
+        <RemoveDir Directories="$(OpenId4VpVerifierWwwRoot)" />
+        <MakeDir Directories="$(OpenId4VpVerifierWwwRoot)" />
+        <ItemGroup>
+            <OpenId4VpVerifierDistFiles Include="$(OpenId4VpVerifierDistRoot)**/*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(OpenId4VpVerifierDistFiles)"
+              DestinationFiles="@(OpenId4VpVerifierDistFiles->'$(OpenId4VpVerifierWwwRoot)%(RecursiveDir)%(Filename)%(Extension)')" />
+        <ItemGroup>
+            <Content Include="$(OpenId4VpVerifierWwwRoot)**/*" />
+        </ItemGroup>
     </Target>
 </Project>
