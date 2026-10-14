@@ -166,6 +166,8 @@ consumerapi:
   httpRoute:
     # enabled - whether to enable the HttpRoute for the Consumer API
     enabled: false
+    # annotations - annotations added to the Consumer API HTTPRoute
+    annotations: {}
     # parentRefName - the name of the gateway this Route wants to be attached to
     parentRefName: ""
     # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
@@ -538,10 +540,12 @@ sseserver:
       # resourceGroup - the Azure resource group the LoadBalancer should be created in
       azureResourceGroup: ""
 
-  # httpRoute - the configuration of the HttpRoute for the Consumer API
+  # httpRoute - the configuration of the HttpRoute for the SSE Server
   httpRoute:
-    # enabled - whether to enable the HttpRoute for the Consumer API
+    # enabled - whether to enable the HttpRoute for the SSE Server
     enabled: false
+    # annotations - annotations added to the SSE Server HTTPRoute
+    annotations: {}
     # parentRefName - the name of the gateway this Route wants to be attached to
     parentRefName: ""
     # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
