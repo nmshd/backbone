@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
@@ -17,11 +16,7 @@ public class ChallengesDbContext : AbstractDbContextBase
     {
     }
 
-    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IEventBus eventBus) : base(options, eventBus)
-    {
-    }
-
-    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options) : base(options)
     {
     }
 

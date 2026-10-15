@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Abstractions;
 using Backbone.Modules.Files.Domain.Entities;
@@ -18,11 +17,7 @@ public class FilesDbContext : AbstractDbContextBase
     {
     }
 
-    public FilesDbContext(DbContextOptions<FilesDbContext> options, IEventBus eventBus) : base(options, eventBus)
-    {
-    }
-
-    public FilesDbContext(DbContextOptions<FilesDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
+    public FilesDbContext(DbContextOptions<FilesDbContext> options) : base(options)
     {
     }
 

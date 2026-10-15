@@ -1,5 +1,4 @@
 using System.Data;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
@@ -26,11 +25,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
     }
 
-    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : this(options, serviceProvider)
-    {
-    }
-
-    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider = null) : base(options)
     {
         _serviceProvider = serviceProvider;
     }

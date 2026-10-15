@@ -1,9 +1,9 @@
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using System.Diagnostics;
 using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Cloud.PubSub.V1;

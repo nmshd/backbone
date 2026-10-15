@@ -1,5 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -19,7 +17,7 @@ public static class FakeDbContextFactory
             .AddInterceptors(interceptors ?? [])
             .Options;
 
-        object[] args = [options, A.Dummy<IEventBus>()];
+        object[] args = [options];
 
         var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();

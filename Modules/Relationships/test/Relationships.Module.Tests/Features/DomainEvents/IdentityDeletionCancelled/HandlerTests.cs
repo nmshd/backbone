@@ -1,6 +1,6 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
-using System.Linq.Expressions;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;

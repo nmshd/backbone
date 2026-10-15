@@ -1,5 +1,4 @@
 using System.Data;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
@@ -38,15 +37,6 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IOpenIddictE
     }
 
     public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider) : base(options)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
-    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IEventBus eventBus) : base(options)
-    {
-    }
-
-    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options)
     {
         _serviceProvider = serviceProvider;
     }

@@ -1,13 +1,12 @@
 using System.Data.Common;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using FakeItEasy;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.Outbox;
@@ -23,8 +22,7 @@ public class OutboxPersistenceTests : AbstractTestsBase
     {
         await using var connection = new SqliteConnection("Data Source=:memory:");
         await connection.OpenAsync(TestContext.Current.CancellationToken);
-        var bus = A.Fake<IEventBus>();
-        await using var context = Create(connection, bus);
+        await using var context = Create(connection);
         await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
         var entity = new TestEntity { Id = "one", Name = "first" };
         entity.Raise("created");
@@ -47,7 +45,6 @@ public class OutboxPersistenceTests : AbstractTestsBase
         message.Payload.ShouldContain("created");
         message.PublishedAt.ShouldBeNull();
         entity.DomainEvents.ShouldBeEmpty();
-        A.CallTo(() => bus.Publish(A<DomainEvent>._)).MustNotHaveHappened();
     }
 
     [Fact]
@@ -80,7 +77,7 @@ public class OutboxPersistenceTests : AbstractTestsBase
         await connection.OpenAsync(TestContext.Current.CancellationToken);
         var failure = new FailCommitInterceptor();
         var options = new DbContextOptionsBuilder<OutboxTestDbContext>().UseSqlite(connection).AddInterceptors(failure).Options;
-        await using var context = new OutboxTestDbContext(options, A.Fake<IEventBus>());
+        await using var context = new OutboxTestDbContext(options);
         await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
         var entity = new TestEntity { Id = "one", Name = "test" };
         entity.Raise("created");
@@ -208,16 +205,12 @@ public class OutboxPersistenceTests : AbstractTestsBase
         entity.DomainEvents.ShouldBeEmpty();
     }
 
-    private static OutboxTestDbContext Create(SqliteConnection connection, IEventBus? bus = null) => new(
-        new DbContextOptionsBuilder<OutboxTestDbContext>().UseSqlite(connection).Options, bus ?? A.Fake<IEventBus>());
+    private static OutboxTestDbContext Create(SqliteConnection connection) => new(
+        new DbContextOptionsBuilder<OutboxTestDbContext>().UseSqlite(connection).Options);
 }
 
-public class OutboxTestDbContext(DbContextOptions<OutboxTestDbContext> options, IEventBus bus) : AbstractDbContextBase(options, bus)
+public class OutboxTestDbContext(DbContextOptions<OutboxTestDbContext> options, IServiceProvider? provider = null) : AbstractDbContextBase(options, provider)
 {
-    public OutboxTestDbContext(DbContextOptions<OutboxTestDbContext> options, IServiceProvider provider) : this(options, (IEventBus)null!)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

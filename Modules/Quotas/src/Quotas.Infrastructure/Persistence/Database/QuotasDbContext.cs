@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Modules.Quotas.Domain.Aggregates.Challenges;
@@ -25,11 +24,7 @@ public class QuotasDbContext : AbstractDbContextBase
     {
     }
 
-    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IEventBus eventBus) : base(options, eventBus)
-    {
-    }
-
-    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
+    public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options)
     {
     }
 

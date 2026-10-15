@@ -6,7 +6,7 @@ Each module DbContext owns `OutboxMessages` and `InboxMessages` in its existing 
 
 `EventHandlerService` hosts the dispatcher. It already owns the module registrations, event contracts and broker subscriptions. It now also registers Announcements so events written by AdminApi are dispatched. The same database connection settings/permissions used by a producer module must point at that module's database in EventHandlerService. Separate databases per module remain supported. All writer processes (ConsumerApi, AdminApi, jobs, event handlers, CLI) get the same persistence behavior through their DbContexts; no worker is added to HTTP applications.
 
-The module DbContext registration selects a broker-free constructor through a delegate compiled once per context type. Legacy constructors remain callable. Merely resolving a production DbContext therefore does not initialize RabbitMQ or another broker. Direct `IEventBus` users still initialize and use their configured provider normally.
+DbContext constructors have no event-bus dependency and use the standard EF Core dependency-injection registration. Merely resolving a production DbContext therefore does not initialize RabbitMQ or another broker. Direct `IEventBus` users still initialize and use their configured provider normally.
 
 ### Event lifecycle
 

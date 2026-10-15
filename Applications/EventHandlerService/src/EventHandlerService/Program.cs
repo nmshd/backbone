@@ -1,8 +1,8 @@
-using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.EventHandlerService;
 using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;

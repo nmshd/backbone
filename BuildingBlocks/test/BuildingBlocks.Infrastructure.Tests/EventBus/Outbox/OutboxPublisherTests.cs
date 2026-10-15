@@ -280,7 +280,6 @@ internal sealed class TestDatabase : IAsyncDisposable
             if (provider == "POSTGRES") builder.UseNpgsql(connection, x => x.EnableRetryOnFailure());
             else builder.UseSqlServer(connection, x => x.EnableRetryOnFailure());
         });
-        services.AddScoped(provider => new OutboxTestDbContext(provider.GetRequiredService<DbContextOptions<OutboxTestDbContext>>(), provider));
         Services = services.BuildServiceProvider();
     }
 

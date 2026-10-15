@@ -3,7 +3,6 @@ using Backbone.AdminApi.Infrastructure.Persistence.Models.Messages;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Relationships;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization;
 using Backbone.AdminApi.Infrastructure.Persistence.Models.Tokens;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using File = Backbone.AdminApi.Infrastructure.Persistence.Models.Files.File;
@@ -20,11 +19,7 @@ public class AdminApiDbContext : AbstractDbContextBase
     {
     }
 
-    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IEventBus eventBus) : base(options, eventBus)
-    {
-    }
-
-    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options) : base(options)
     {
     }
 
