@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -18,16 +17,14 @@ public class HandlerTests : AbstractTestsBase
     private readonly DeviceId _activeDevice = CreateRandomDeviceId();
     private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
-    private readonly IEventBus _eventBus;
 
     public HandlerTests()
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
-        _eventBus = A.Dummy<IEventBus>();
 
-        var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
+        var setupContext = new SynchronizationDbContext(_dbOptions);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
     }
@@ -68,7 +65,7 @@ public class HandlerTests : AbstractTestsBase
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions, _eventBus);
+        return new SynchronizationDbContext(_dbOptions);
     }
 
     private Handler CreateHandlerWithDelayedSave()
@@ -78,7 +75,7 @@ public class HandlerTests : AbstractTestsBase
 
     private ApplicationDbContextWithDelayedSave CreateDbContextWithDelayedSave()
     {
-        return new ApplicationDbContextWithDelayedSave(_dbOptions, TimeSpan.FromMilliseconds(200), _eventBus);
+        return new ApplicationDbContextWithDelayedSave(_dbOptions, TimeSpan.FromMilliseconds(200));
     }
 
     private static Handler CreateHandler(IdentityAddress activeIdentity, DeviceId activeDevice, SynchronizationDbContext dbContext)

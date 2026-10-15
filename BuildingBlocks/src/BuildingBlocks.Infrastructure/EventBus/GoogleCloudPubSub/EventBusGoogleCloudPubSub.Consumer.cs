@@ -3,6 +3,7 @@ using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Cloud.PubSub.V1;
@@ -120,23 +121,14 @@ public partial class EventBusGoogleCloudPubSub
         Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.start_processing"));
 
         var subscriptionName = GetSubscriptionName(_projectId, handlerType, eventType).SubscriptionId;
-        var domainEvent = JsonSerializer.Deserialize(message, eventType)!;
-
-        await using var scope = _serviceProvider.CreateAsyncScope();
-
-        if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
-            throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
-
-        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
-
-        var handleMethod = handler.GetType().GetMethod("Handle");
+        var domainEvent = (DomainEvent)JsonSerializer.Deserialize(message, eventType)!;
 
         var startedAt = Stopwatch.GetTimestamp();
         using (var handlerActivity = StartHandlerActivity(eventType, handlerType))
         {
             try
             {
-                await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
+                await InboxDispatcher.Handle(_serviceProvider, handlerType, domainEvent);
             }
             catch (Exception ex)
             {

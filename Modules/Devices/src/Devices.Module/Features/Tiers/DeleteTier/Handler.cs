@@ -1,10 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Abstractions;
-using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.DomainEvents;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
@@ -12,12 +9,10 @@ namespace Backbone.Modules.Devices.Module.Features.Tiers.DeleteTier;
 public class Handler : IRequestHandler<Command>
 {
     private readonly ITiersRepository _tiersRepository;
-    private readonly IEventBus _eventBus;
 
-    public Handler(ITiersRepository tiersRepository, IEventBus eventBus)
+    public Handler(ITiersRepository tiersRepository)
     {
         _tiersRepository = tiersRepository;
-        _eventBus = eventBus;
     }
 
     public async Task Handle(Command request, CancellationToken cancellationToken)
@@ -40,8 +35,7 @@ public class Handler : IRequestHandler<Command>
             throw new DomainException(deletionError);
         }
 
+        tier.Delete();
         await _tiersRepository.Remove(tier);
-
-        await _eventBus.Publish(TierDeletedDomainEvent.Create(tier));
     }
 }

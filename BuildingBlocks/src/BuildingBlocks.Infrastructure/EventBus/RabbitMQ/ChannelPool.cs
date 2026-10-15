@@ -1,4 +1,4 @@
-﻿using Backbone.Tooling;
+using Backbone.Tooling;
 using RabbitMQ.Client;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
@@ -14,7 +14,7 @@ public class ChannelPool : ObjectPool<IChannel>, IDisposable
 
     protected override async Task<IChannel> CreateObject()
     {
-        return await _connection.CreateChannelAsync();
+        return await _connection.CreateChannelAsync(new CreateChannelOptions(publisherConfirmationsEnabled: true, publisherConfirmationTrackingEnabled: true));
     }
 
     public void Dispose()

@@ -4,6 +4,7 @@ using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -145,19 +146,12 @@ public partial class EventBusRabbitMq
 
         var handlerType = typeof(THandler);
 
-        await using var scope = _serviceProvider.CreateAsyncScope();
-
-        if (scope.ServiceProvider.GetService(handlerType) is not IDomainEventHandler handler)
-            throw new Exception("Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
-
-        Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
-
         var startedAt = Stopwatch.GetTimestamp();
         using (var handlerActivity = StartHandlerActivity<TEvent, THandler>())
         {
             try
             {
-                await (Task)handlerType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+                await InboxDispatcher.Handle(_serviceProvider, handlerType, domainEvent!);
             }
             catch (Exception ex)
             {

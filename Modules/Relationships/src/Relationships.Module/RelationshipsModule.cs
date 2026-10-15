@@ -2,9 +2,11 @@ using System.Reflection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Relationships.Infrastructure;
 using Backbone.Modules.Relationships.Infrastructure.Persistence;
+using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +31,7 @@ public class RelationshipsModule : AbstractModule<ApplicationConfiguration, Infr
         AddEventHandlers(services);
 
         services.AddPersistence(infrastructureConfiguration.SqlDatabase);
+        services.AddScoped<IEventOutbox<RelationshipsModule>, EfEventOutbox<RelationshipsModule, RelationshipsDbContext>>();
 
         if (infrastructureConfiguration.SqlDatabase.EnableHealthCheck)
             services.AddSqlDatabaseHealthCheck(infrastructureConfiguration.SqlDatabase.Provider, infrastructureConfiguration.SqlDatabase.ConnectionString);

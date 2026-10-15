@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -41,6 +42,7 @@ public static class IServiceCollectionExtensions
         public void AddDbContext<T>(DatabaseConfiguration configuration, Func<string, string> migrationAssemblyNameBuilder, string schemaName,
             Action<DbContextOptionsBuilder>? setupDbContextOptions = null, QueryTrackingBehavior queryTrackingBehavior = QueryTrackingBehavior.TrackAll) where T : DbContext
         {
+            services.AddSingleton(new OutboxDatabase(typeof(T), schemaName));
             var migrationsAssemblyName = migrationAssemblyNameBuilder(configuration.Provider);
 
             services.AddDbContext<T>(dbContextOptions =>

@@ -22,3 +22,7 @@ Backbone` debug configuration.
 
 See [docker-compose/README.md](docker-compose/README.md) for debugging,
 hot-reload behavior, shutdown, and the on-demand tools.
+
+## Transactional domain-event outbox
+
+See the [outbox architecture and operations guide](BuildingBlocks/src/BuildingBlocks.Infrastructure/EventBus/Outbox/README.md) for transaction semantics, configuration, migrations, rollout, replay and tests.
