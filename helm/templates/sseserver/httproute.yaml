@@ -6,6 +6,10 @@ metadata:
   name: {{ .Values.sseserver.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
+  {{- with .Values.sseserver.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   parentRefs:
     - name: {{ .Values.sseserver.httpRoute.parentRefName | quote }}

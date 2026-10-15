@@ -5,6 +5,10 @@ metadata:
   name: {{ .Values.consumerapi.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
+  {{- with .Values.consumerapi.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   parentRefs:
     - name: {{ .Values.consumerapi.httpRoute.parentRefName | quote }}
