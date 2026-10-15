@@ -1362,6 +1362,7 @@
           "OpenTelemetry.Api": "[1.18.0, )",
           "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.2, 7.2.2]",
+          "ReHackt.Extensions.Options.Validation": "[10.0.13, 10.0.13]",
           "Serilog": "[4.4.0, 4.4.0]"
         }
       },
