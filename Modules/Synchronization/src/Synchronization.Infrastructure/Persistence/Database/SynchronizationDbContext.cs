@@ -26,6 +26,10 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     {
     }
 
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

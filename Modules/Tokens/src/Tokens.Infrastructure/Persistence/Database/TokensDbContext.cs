@@ -12,6 +12,10 @@ public class TokensDbContext : AbstractDbContextBase
     {
     }
 
+    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public TokensDbContext(DbContextOptions<TokensDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

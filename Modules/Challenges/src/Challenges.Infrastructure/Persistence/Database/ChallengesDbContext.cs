@@ -13,6 +13,10 @@ public class ChallengesDbContext : AbstractDbContextBase
     {
     }
 
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

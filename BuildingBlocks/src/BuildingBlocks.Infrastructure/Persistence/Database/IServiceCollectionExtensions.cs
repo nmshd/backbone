@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -41,6 +43,7 @@ public static class IServiceCollectionExtensions
         public void AddDbContext<T>(DatabaseConfiguration configuration, Func<string, string> migrationAssemblyNameBuilder, string schemaName,
             Action<DbContextOptionsBuilder>? setupDbContextOptions = null, QueryTrackingBehavior queryTrackingBehavior = QueryTrackingBehavior.TrackAll) where T : DbContext
         {
+            services.AddSingleton(new OutboxDatabase(typeof(T), schemaName));
             var migrationsAssemblyName = migrationAssemblyNameBuilder(configuration.Provider);
 
             services.AddDbContext<T>(dbContextOptions =>
@@ -73,6 +76,24 @@ public static class IServiceCollectionExtensions
 
                 setupDbContextOptions?.Invoke(dbContextOptions);
             });
+            // Explicitly choose the broker-free constructor. Keep legacy constructors for callers
+            // outside DI, but never initialize a broker connection just to save database changes.
+            services.Replace(ServiceDescriptor.Scoped<T>(provider => ContextFactory<T>.Create(provider.GetRequiredService<DbContextOptions<T>>(), provider)));
         }
     }
+
+    private static class ContextFactory<T> where T : DbContext
+    {
+        public static readonly Func<DbContextOptions<T>, IServiceProvider, T> Create = Build();
+
+        private static Func<DbContextOptions<T>, IServiceProvider, T> Build()
+        {
+            var options = Expression.Parameter(typeof(DbContextOptions<T>));
+            var provider = Expression.Parameter(typeof(IServiceProvider));
+            var constructor = typeof(T).GetConstructor([typeof(DbContextOptions<T>), typeof(IServiceProvider)])
+                              ?? throw new InvalidOperationException($"{typeof(T).Name} needs a broker-free constructor.");
+            return Expression.Lambda<Func<DbContextOptions<T>, IServiceProvider, T>>(Expression.New(constructor, options, provider), options, provider).Compile();
+        }
+    }
+
 }

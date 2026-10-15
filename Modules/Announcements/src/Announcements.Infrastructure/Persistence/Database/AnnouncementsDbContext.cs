@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Announcements.Domain.Entities;
 using Backbone.Modules.Announcements.Infrastructure.Persistence.Database.ValueConverters;
@@ -9,6 +9,10 @@ namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 public class AnnouncementsDbContext : AbstractDbContextBase
 {
     public AnnouncementsDbContext()
+    {
+    }
+
+    public AnnouncementsDbContext(DbContextOptions<AnnouncementsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
     {
     }
 

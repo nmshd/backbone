@@ -1,10 +1,11 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents;
 using Backbone.Tooling.Extensions;
 
@@ -14,12 +15,12 @@ public class Handler : IDomainEventHandler<FeatureFlagsOfIdentityChangedDomainEv
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly IEventBus _eventBus;
+    private readonly IEventOutbox<RelationshipsModule> _outbox;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IEventBus eventBus, IRelationshipsRepository relationshipsRepository)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IEventOutbox<RelationshipsModule> outbox, IRelationshipsRepository relationshipsRepository)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
-        _eventBus = eventBus;
+        _outbox = outbox;
         _relationshipsRepository = relationshipsRepository;
     }
 
@@ -27,9 +28,8 @@ public class Handler : IDomainEventHandler<FeatureFlagsOfIdentityChangedDomainEv
     {
         var identitiesToBeNotified = await ListIdentitiesToBeNotified(@event);
 
-        var publishEventTasks = identitiesToBeNotified.Select(i => _eventBus.Publish(PeerFeatureFlagsChangedDomainEvent.Create(@event.IdentityAddress, i)));
-
-        await Task.WhenAll(publishEventTasks);
+        await _outbox.Enqueue(identitiesToBeNotified.Select(identity =>
+            ((DomainEvent)PeerFeatureFlagsChangedDomainEvent.Create(@event.IdentityAddress, identity), $"peer-notification:{identity}")));
     }
 
     private async Task<HashSet<IdentityAddress>> ListIdentitiesToBeNotified(FeatureFlagsOfIdentityChangedDomainEvent @event)

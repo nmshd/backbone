@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Backbone.BuildingBlocks.API.Diagnostics;
 using Backbone.BuildingBlocks.API.OpenApi;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Module;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -140,6 +141,7 @@ public static class ServiceCollectionExtensions
                     metrics
                         .AddAspNetCoreInstrumentation()
                         .AddMeter(meterName)
+                        .AddMeter(OutboxDiagnostics.NAME)
                         .AddMeter("Microsoft.EntityFrameworkCore")
                         .AddMeter("Microsoft.AspNetCore.Hosting")
                         .AddMeter("Microsoft.AspNetCore.Diagnostics")
@@ -155,6 +157,7 @@ public static class ServiceCollectionExtensions
                         .AddEntityFrameworkCoreInstrumentation()
                         .AddHttpClientInstrumentation()
                         .AddSource(EventBusDiagnostics.ACTIVITY_SOURCE_NAME)
+                        .AddSource(OutboxDiagnostics.NAME)
                         .AddProcessor<DatabaseNameProcessor>()
                         .AddProcessor<UserContextProcessor>();
 

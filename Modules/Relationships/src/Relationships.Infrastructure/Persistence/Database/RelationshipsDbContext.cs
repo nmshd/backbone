@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +10,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 public class RelationshipsDbContext : AbstractDbContextBase
 {
     public RelationshipsDbContext()
+    {
+    }
+
+    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
     {
     }
 

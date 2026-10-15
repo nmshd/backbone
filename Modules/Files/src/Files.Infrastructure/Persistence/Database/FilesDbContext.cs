@@ -14,6 +14,10 @@ public class FilesDbContext : AbstractDbContextBase
     {
     }
 
+    public FilesDbContext(DbContextOptions<FilesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public FilesDbContext(DbContextOptions<FilesDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

@@ -16,6 +16,10 @@ public class AdminApiDbContext : AbstractDbContextBase
     {
     }
 
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

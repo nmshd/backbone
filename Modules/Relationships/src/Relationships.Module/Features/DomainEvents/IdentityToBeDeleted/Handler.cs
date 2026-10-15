@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;
@@ -11,12 +12,12 @@ namespace Backbone.Modules.Relationships.Module.Features.DomainEvents.IdentityTo
 public class Handler : IDomainEventHandler<IdentityToBeDeletedDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly IEventBus _eventBus;
+    private readonly IEventOutbox<RelationshipsModule> _outbox;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
+    public Handler(IRelationshipsRepository relationshipsRepository, IEventOutbox<RelationshipsModule> outbox)
     {
         _relationshipsRepository = relationshipsRepository;
-        _eventBus = eventBus;
+        _outbox = outbox;
     }
 
     public async Task Handle(IdentityToBeDeletedDomainEvent @event)
@@ -37,9 +38,7 @@ public class Handler : IDomainEventHandler<IdentityToBeDeletedDomainEvent>
 
     private async Task NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships, DateTime gracePeriodEndsAt)
     {
-        foreach (var relationship in relationships)
-        {
-            await _eventBus.Publish(PeerToBeDeletedDomainEvent.Create(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted, gracePeriodEndsAt));
-        }
+        await _outbox.Enqueue(relationships.Select(relationship =>
+            ((DomainEvent)PeerToBeDeletedDomainEvent.Create(relationship.GetPeerOf(identityToBeDeleted), relationship.Id, identityToBeDeleted, gracePeriodEndsAt), $"peer-notification:{relationship.Id}")));
     }
 }

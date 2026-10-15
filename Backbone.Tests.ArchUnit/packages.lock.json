@@ -1676,6 +1676,7 @@
         "dependencies": {
           "Autofac.Extensions.DependencyInjection": "[11.0.2, 11.0.2]",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Module": "[1.0.0, )",
           "Backbone.Modules.Challenges.Module": "[1.0.0, )",
           "Backbone.Modules.Devices.Module": "[1.0.0, )",
           "Backbone.Modules.Files.Module": "[1.0.0, )",

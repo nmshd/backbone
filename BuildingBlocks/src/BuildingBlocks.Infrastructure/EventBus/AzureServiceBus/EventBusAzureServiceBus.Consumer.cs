@@ -6,6 +6,7 @@ using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -127,26 +128,17 @@ public partial class EventBusAzureServiceBus
     {
         Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.start_processing"));
 
-        var eventType = typeof(TEvent);
 
         var domainEvent = JsonSerializer.Deserialize<TEvent>(message)!;
-        var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
         try
         {
-            await using var scope = _serviceProvider.CreateAsyncScope();
-
-            if (scope.ServiceProvider.GetService(typeof(THandler)) is not IDomainEventHandler handler)
-                throw new Exception($"Domain event handler '{typeof(THandler).FullName}' could not be resolved from dependency container or it does not implement {nameof(IDomainEventHandler)}.");
-
-            Activity.Current?.AddEvent(new ActivityEvent("enmeshed.backbone.event_bus.consumer.handler_resolved"));
-
             var startedAt = Stopwatch.GetTimestamp();
             using (var handlerActivity = StartHandlerActivity<TEvent, THandler>())
             {
                 try
                 {
-                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
+                    await InboxDispatcher.Handle(_serviceProvider, typeof(THandler), domainEvent);
                 }
                 catch (Exception ex)
                 {

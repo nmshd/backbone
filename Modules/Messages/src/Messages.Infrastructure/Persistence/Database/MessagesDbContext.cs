@@ -13,6 +13,10 @@ public class MessagesDbContext : AbstractDbContextBase
     {
     }
 
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }

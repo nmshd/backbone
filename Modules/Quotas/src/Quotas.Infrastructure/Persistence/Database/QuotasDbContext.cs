@@ -21,6 +21,10 @@ public class QuotasDbContext : AbstractDbContextBase
     {
     }
 
+    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
+
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
