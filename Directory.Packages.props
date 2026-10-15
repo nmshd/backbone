@@ -103,6 +103,10 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.2.3]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.13]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
+    <!-- Even though we don't reference this package directly (it comes via Microsoft.Data.SqlClient and System.Security.Cryptography.Xml), we have to pin this version because there is a vulnerability in versions >= 10.0.0 and <= 10.0.12 (see https://github.com/advisories/GHSA-846f-f764-76mx) -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="[10.0.13]" />
+    <!-- Even though we don't reference this package directly (it comes via Microsoft.AspNetCore.DataProtection and OpenIddict), we have to pin this version because there is a vulnerability in versions >= 10.0.0 and <= 10.0.12 (see https://github.com/advisories/GHSA-r955-8q5j-3h83) -->
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="[10.0.13]" />
     <PackageVersion Include="Testcontainers.Azurite" Version="[4.13.0]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.13.0]" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.4]" />
