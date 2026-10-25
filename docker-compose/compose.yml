@@ -263,7 +263,7 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4.3.6-management-alpine@sha256:6e6e8952c2b56245de7ac61f06c9af9fdd38da675cd82cdbf7e3f30b33494dcc
+    image: rabbitmq:4.3.7-management-alpine@sha256:ddbbe6b99ce941f74f566947463e3f47f99c3bf0fe80d4ee250cf30b942b1800
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -296,7 +296,7 @@ services:
     restart: unless-stopped
 
   tempo:
-    image: grafana/tempo:3.0.3
+    image: grafana/tempo:3.0.5@sha256:54bfbf8713813b5eb56e0ddf580553f48f9d55d7d8b15159159c91ecfdb5b949
     user: "0:0"
     command:
       - -config.file=/etc/tempo/tempo.yml
@@ -306,7 +306,7 @@ services:
     restart: unless-stopped
 
   loki:
-    image: grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193
+    image: grafana/loki:3.7.9@sha256:0db216b630ae1f348a1584c67f3cead8b4c1fc839169a39501db664744158e28
     command:
       - -config.file=/etc/loki/loki.yml
     ports:
