@@ -87,7 +87,7 @@ RUN dotnet build /p:ContinuousIntegrationBuild=true "EventHandlerService.csproj"
 
 RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
-FROM dhi.io/aspnetcore:10.0.13-debian13@sha256:fd3c2052991fc4094bc852df6813f190a88be41e0430c4771c27b4540eb6030e
+FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:acddc81f6517bdb783f6d7219df5eea629292efa4e01ddbaf854515cbbcb942d
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
