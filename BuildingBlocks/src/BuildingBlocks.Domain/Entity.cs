@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.BuildingBlocks.Domain;
 
@@ -12,6 +12,12 @@ public abstract class Entity
     protected void RaiseDomainEvent(DomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);
+    }
+
+    public void RemoveDomainEvents(IEnumerable<DomainEvent> events)
+    {
+        foreach (var domainEvent in events.ToArray())
+            _domainEvents.Remove(domainEvent);
     }
 
     public void ClearDomainEvents()

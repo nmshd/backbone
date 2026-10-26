@@ -1,5 +1,6 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Devices.Contracts.DomainEvents;
 using Backbone.Modules.Relationships.Abstractions;
 using Backbone.Modules.Relationships.Contracts.DomainEvents;
@@ -13,7 +14,7 @@ namespace Backbone.Modules.Relationships.Module.Tests.Features.DomainEvents.Iden
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]
-    public static async Task Publishes_PeerToBeDeletedDomainEvent()
+    public static async Task Persists_PeerDeletedDomainEvent_in_outbox()
     {
         //Arrange
         var identityToBeDeleted = CreateRandomIdentityAddress();
@@ -25,30 +26,29 @@ public class HandlerTests : AbstractTestsBase
         var relationshipToPeer2 = TestData.CreateActiveRelationship(peer2, identityToBeDeleted);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var mockEventBus = A.Fake<IEventBus>();
+        var outbox = A.Fake<IEventOutbox<RelationshipsModule>>();
+        var events = new List<DomainEvent>();
+        A.CallTo(() => outbox.Enqueue(A<IEnumerable<(DomainEvent Event, string Stream)>>._, A<CancellationToken>._))
+            .ReturnsLazily((IEnumerable<(DomainEvent Event, string Stream)> notifications, CancellationToken _) =>
+            {
+                events.AddRange(notifications.Select(x => x.Event));
+                return Task.CompletedTask;
+            });
 
         A.CallTo(() => fakeRelationshipsRepository.ListWithoutContent(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._, A<bool>._, A<bool>._))
             .Returns([relationshipToPeer1, relationshipToPeer2]);
 
-        var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
+        var handler = new IdentityDeletedSlice.Handler(fakeRelationshipsRepository, outbox);
 
         //Act
         await handler.Handle(new IdentityDeletedDomainEvent { IdentityAddress = identityToBeDeleted });
 
         //Assert
-        A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(e => e.PeerOfDeletedIdentity == peer1 &&
-                                                                                        e.RelationshipId == relationshipToPeer1.Id &&
-                                                                                        e.DeletedIdentity == identityToBeDeleted)))
-            .MustHaveHappenedOnceExactly();
+        events.Count.ShouldBe(2);
+        var notifications = events.Cast<PeerDeletedDomainEvent>().ToList();
+        notifications.ShouldContain(e => e.PeerOfDeletedIdentity == peer1 && e.RelationshipId == relationshipToPeer1.Id && e.DeletedIdentity == identityToBeDeleted);
 
-        A.CallTo(() => mockEventBus.Publish(A<PeerDeletedDomainEvent>.That.Matches(e => e.PeerOfDeletedIdentity == peer2 &&
-                                                                                        e.RelationshipId == relationshipToPeer2.Id &&
-                                                                                        e.DeletedIdentity == identityToBeDeleted)))
-            .MustHaveHappenedOnceExactly();
+        notifications.ShouldContain(e => e.PeerOfDeletedIdentity == peer2 && e.RelationshipId == relationshipToPeer2.Id && e.DeletedIdentity == identityToBeDeleted);
     }
 
-    private static IdentityDeletedSlice.Handler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus eventBus)
-    {
-        return new IdentityDeletedSlice.Handler(relationshipsRepository, eventBus);
-    }
 }

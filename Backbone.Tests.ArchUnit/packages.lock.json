@@ -1565,6 +1565,7 @@
           "OpenTelemetry.Api": "[1.18.0, )",
           "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.2, 7.2.2]",
+          "ReHackt.Extensions.Options.Validation": "[10.0.13, 10.0.13]",
           "Serilog": "[4.4.0, 4.4.0]"
         }
       },
@@ -1676,6 +1677,7 @@
         "dependencies": {
           "Autofac.Extensions.DependencyInjection": "[11.0.2, 11.0.2]",
           "Backbone.BuildingBlocks.Infrastructure": "[1.0.0, )",
+          "Backbone.Modules.Announcements.Module": "[1.0.0, )",
           "Backbone.Modules.Challenges.Module": "[1.0.0, )",
           "Backbone.Modules.Devices.Module": "[1.0.0, )",
           "Backbone.Modules.Files.Module": "[1.0.0, )",

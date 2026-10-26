@@ -55,6 +55,11 @@ public class Tier : Entity
         return null;
     }
 
+    public void Delete()
+    {
+        RaiseDomainEvent(TierDeletedDomainEvent.Create(this));
+    }
+
     public bool IsBasicTier()
     {
         return Name == TierName.BASIC_DEFAULT_NAME;

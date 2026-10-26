@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -19,7 +20,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
             modelBuilder
                 .HasDefaultSchema("AdminUi")
                 .HasAnnotation("DbProvider", "SqlServer")
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -502,6 +503,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ErrorCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -509,14 +513,9 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("ExternalEventId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SyncRunId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExternalEventId");
-
-                    b.HasIndex("SyncRunId");
 
                     b.ToTable("SyncErrors", "Synchronization", t =>
                         {
@@ -546,14 +545,12 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<byte[]>("Content")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiresAt")
@@ -565,6 +562,120 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         {
                             t.ExcludeFromMigrations();
                         });
+                });
+
+            modelBuilder.Entity("Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox.InboxMessage", b =>
+                {
+                    b.Property<string>("EventId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Handler")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime>("ProcessedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EventId", "Handler");
+
+                    b.HasIndex("ProcessedAt");
+
+                    b.ToTable("InboxMessages", "AdminUi");
+                });
+
+            modelBuilder.Entity("Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("FailedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("LeaseExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LeaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("NextAttemptAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SaveId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Sequence")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Sequence"));
+
+                    b.Property<string>("Stream")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("TraceParent")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("TraceState")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NextAttemptAt", "Sequence")
+                        .HasFilter("\"PublishedAt\" IS NULL AND \"FailedAt\" IS NULL");
+
+                    b.HasIndex("SaveId", "Stream", "Sequence");
+
+                    b.HasIndex("Stream", "Sequence")
+                        .HasFilter("\"PublishedAt\" IS NULL");
+
+                    b.ToTable("OutboxMessages", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.AspNetUser", b =>
@@ -636,13 +747,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
                         .WithMany()
                         .HasForeignKey("ExternalEventId");
 
-                    b.HasOne("Backbone.AdminApi.Infrastructure.Persistence.Models.Synchronization.SyncRun", "SyncRun")
-                        .WithMany()
-                        .HasForeignKey("SyncRunId");
-
                     b.Navigation("ExternalEvent");
-
-                    b.Navigation("SyncRun");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.Persistence.Models.Devices.Device", b =>

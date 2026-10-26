@@ -762,6 +762,7 @@
           "OpenTelemetry.Api": "[1.18.0, )",
           "Polly": "[8.7.0, 8.7.0]",
           "RabbitMQ.Client": "[7.2.2, 7.2.2]",
+          "ReHackt.Extensions.Options.Validation": "[10.0.13, 10.0.13]",
           "Serilog": "[4.4.0, 4.4.0]"
         }
       },
@@ -1048,6 +1049,12 @@
         "requested": "[7.2.2, 7.2.2]",
         "resolved": "7.2.2",
         "contentHash": "k4b6RnTXpLbsF96V93ooNYxgPMnoA2tEm24B6AXNJr1mG8wwNYdA1XJtgU66L5xqeGyveS7SJriRzlX3cbqQNA=="
+      },
+      "ReHackt.Extensions.Options.Validation": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.13, 10.0.13]",
+        "resolved": "10.0.13",
+        "contentHash": "jFak39k5IktUgTl01qkLln0K0miH3by14bOV9jnvTu7eA8mSFY251cswZsB85+gErA2albPTB/HBT4Bdalqkaw=="
       },
       "Serilog": {
         "type": "CentralTransitive",

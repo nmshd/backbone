@@ -1,7 +1,6 @@
 using System.Data;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
@@ -19,19 +18,16 @@ public class AbstractDbContextBase : DbContext, IDbContext
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
-    private readonly IEventBus _eventBus;
+    private readonly OutboxSaveChangesInterceptor _outbox = new();
     private readonly IServiceProvider? _serviceProvider;
 
     protected AbstractDbContextBase()
     {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        _eventBus = null!;
     }
 
-    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider = null) : base(options)
     {
         _serviceProvider = serviceProvider;
-        _eventBus = eventBus;
     }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
@@ -42,6 +38,12 @@ public class AbstractDbContextBase : DbContext, IDbContext
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
+        if (Database.CurrentTransaction != null)
+        {
+            await action();
+            return;
+        }
+
         ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
@@ -58,8 +60,23 @@ public class AbstractDbContextBase : DbContext, IDbContext
         await executionStrategy.ExecuteAsync(async () =>
         {
             await using var transaction = await Database.BeginTransactionAsync(isolationLevel);
-            await action();
-            await transaction.CommitAsync();
+            try
+            {
+                await action();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch (Exception)
+                {
+                    // Preserve the original error for the execution strategy/broker retry.
+                }
+                throw;
+            }
         });
     }
 
@@ -84,18 +101,10 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = await base.SaveChangesAsync(cancellationToken);
-        await PublishDomainEvents(entities);
-
-        return result;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
+        optionsBuilder.AddInterceptors(_outbox, _outbox.Transactions);
 
         if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
@@ -120,6 +129,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        OutboxModel.Configure(modelBuilder, Database.ProviderName);
 
         modelBuilder.Model.SetDbProvider(Database);
     }
@@ -134,47 +144,5 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
-    }
-
-    public override int SaveChanges()
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChanges();
-        PublishDomainEvents(entities).GetAwaiter().GetResult();
-
-        return result;
-    }
-
-    public override int SaveChanges(bool acceptAllChangesOnSuccess)
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChanges(acceptAllChangesOnSuccess);
-        PublishDomainEvents(entities).GetAwaiter().GetResult();
-
-        return result;
-    }
-
-    public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        await PublishDomainEvents(entities);
-
-        return result;
-    }
-
-    private List<Entity> GetChangedEntities() => ChangeTracker
-        .Entries()
-        .Where(x => x.Entity is Entity)
-        .Select(x => (Entity)x.Entity)
-        .ToList();
-
-    private async Task PublishDomainEvents(List<Entity> entities)
-    {
-        foreach (var e in entities)
-        {
-            await _eventBus.Publish(e.DomainEvents);
-            e.ClearDomainEvents();
-        }
     }
 }

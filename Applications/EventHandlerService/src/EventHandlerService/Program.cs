@@ -1,8 +1,10 @@
-﻿using Autofac.Extensions.DependencyInjection;
+using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.Outbox;
 using Backbone.EventHandlerService;
+using Backbone.Modules.Announcements.Module;
 using Backbone.Modules.Challenges.Module;
 using Backbone.Modules.Devices.Module;
 using Backbone.Modules.Files.Module;
@@ -74,6 +76,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddTransient<IHostedService, EventHandlerService>();
 
             services
+                .AddModule<AnnouncementsModule, Backbone.Modules.Announcements.Module.ApplicationConfiguration, Backbone.Modules.Announcements.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<ChallengesModule, Backbone.Modules.Challenges.Module.ApplicationConfiguration, Backbone.Modules.Challenges.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<DevicesModule, Backbone.Modules.Devices.Module.ApplicationConfiguration, Backbone.Modules.Devices.Infrastructure.InfrastructureConfiguration>(configuration)
                 .AddModule<FilesModule, Backbone.Modules.Files.Module.ApplicationConfiguration, Backbone.Modules.Files.Infrastructure.InfrastructureConfiguration>(configuration)
@@ -88,6 +91,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus, METER_NAME);
+            services.AddOutboxPublisher(configuration);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

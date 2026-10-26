@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -24,16 +23,14 @@ public class HandlerTests : AbstractTestsBase
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _assertionContext;
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
-    private readonly IEventBus _eventBus;
 
     public HandlerTests()
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
-        _eventBus = A.Dummy<IEventBus>();
 
-        var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
+        var setupContext = new SynchronizationDbContext(_dbOptions);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
 
@@ -238,7 +235,7 @@ public class HandlerTests : AbstractTestsBase
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions, _eventBus);
+        return new SynchronizationDbContext(_dbOptions);
     }
 
     private Handler CreateHandlerWithDelayedSave(TimeSpan delay)
@@ -248,7 +245,7 @@ public class HandlerTests : AbstractTestsBase
 
     private ApplicationDbContextWithDelayedSave CreateDbContextWithDelayedSave(TimeSpan delay)
     {
-        return new ApplicationDbContextWithDelayedSave(_dbOptions, delay, _eventBus);
+        return new ApplicationDbContextWithDelayedSave(_dbOptions, delay);
     }
 
     private Handler CreateHandler(IdentityAddress activeIdentity)
