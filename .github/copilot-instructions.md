@@ -37,7 +37,7 @@ Backbone/
 
 ## Key Dependencies & Versions
 
--   **.NET SDK**: 10.0.101 (pinned in `global.json`)
+-   **.NET SDK**: 10.0.403 (pinned in `global.json`)
 -   **Testing Framework**: xUnit 3 with Shouldly assertions, AutoFixture
 -   **ORM**: Entity Framework Core 10.0.1
 -   **API Framework**: ASP.NET Core 10, OData 9.4.1, Asp.Versioning 8.1.1
@@ -270,7 +270,7 @@ melos bootstrap
 | `Backbone.slnx`                     | Main solution file (modern format)                                            |
 | `Directory.Build.props`             | Global project settings (net10.0, implicit usings, nullable refs, code style) |
 | `Directory.Packages.props`          | Central NuGet version management, locked mode for reproducible builds         |
-| `global.json`                       | .NET SDK version pinning (10.0.101)                                           |
+| `global.json`                       | .NET SDK version pinning (10.0.403)                                           |
 | `.editorconfig`                     | Code style rules (4-space indentation, line limits, C# conventions)           |
 | `.ci/checkFormatting.sh`            | Format validation script                                                      |
 | `.ci/test.sh`                       | Complete test pipeline script                                                 |
