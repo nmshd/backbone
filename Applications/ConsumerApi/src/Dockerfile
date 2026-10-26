@@ -1,4 +1,4 @@
-FROM dhi.io/dotnet:10.0.403-sdk@sha256:27bdaf2998a6b38358c91b1d61c1005ebfdeafd1c1da7bc85c81468be76649d7 AS build-env
+FROM dhi.io/dotnet:10.0.403-sdk@sha256:d28c2315ebd487c92806a75064b1c584f823bc7bec095726be95b39c33397f5d AS build-env
 
 ARG VERSION
 
@@ -11,7 +11,7 @@ RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/HealthCheck/
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health --no-restore "Applications/HealthCheck/src/HealthCheck.csproj"
 
-FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:acddc81f6517bdb783f6d7219df5eea629292efa4e01ddbaf854515cbbcb942d
+FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:7eb2ebe35840cb2a80369a46b8e8feb89f3994eb37dee6129605b6d135bb70a3
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
