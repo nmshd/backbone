@@ -19,12 +19,12 @@
       },
       "ReHackt.Extensions.Options.Validation": {
         "type": "Direct",
-        "requested": "[10.0.13, 10.0.13]",
-        "resolved": "10.0.13",
-        "contentHash": "jFak39k5IktUgTl01qkLln0K0miH3by14bOV9jnvTu7eA8mSFY251cswZsB85+gErA2albPTB/HBT4Bdalqkaw==",
+        "requested": "[10.1.1, 10.1.1]",
+        "resolved": "10.1.1",
+        "contentHash": "xX8S2TdcmYGXDsY3TeFVRdY6qSY2ANvB81ZuF66hjKxBKMosrRSPoW042EPKtiAggQEDapY+BWK5Vb52On8ptw==",
         "dependencies": {
-          "Microsoft.Extensions.Hosting": "10.0.13",
-          "Microsoft.Extensions.Options": "10.0.13"
+          "Microsoft.Extensions.Hosting": "10.0.14",
+          "Microsoft.Extensions.Options": "10.0.14"
         }
       },
       "Microsoft.EntityFrameworkCore.Analyzers": {
