@@ -60,12 +60,13 @@ public static class IServiceCollectionExtensions
                     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
                 });
 
+#pragma warning disable AV0022 // OData endpoints intentionally remain unversioned at /odata.
             services.AddApiVersioning(options =>
                 {
-                    options.AssumeDefaultVersionWhenUnspecified = true;
                     options.ApiVersionReader = new UrlSegmentApiVersionReader();
                 })
                 .AddMvc();
+#pragma warning restore AV0022
 
             if (configuration.Cors != null)
             {

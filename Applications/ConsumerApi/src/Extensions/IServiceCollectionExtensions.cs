@@ -67,7 +67,6 @@ public static class IServiceCollectionExtensions
 
         services.AddApiVersioning(options =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ApiVersionReader = new UrlSegmentApiVersionReader();
             })
             .AddMvc();

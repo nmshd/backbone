@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.SseServer.Controllers;
 
+[ApiController]
 public class EventsController : ControllerBase
 {
     private readonly IEventQueue _eventQueue;

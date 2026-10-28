@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace Backbone.AdminApi.Controllers.OData;
 
+#pragma warning disable AV0014 // Preserve OData convention routing and the existing model binding and error responses.
 [Authorize("ApiKey")]
 public class IdentitiesController : ODataController
 {
@@ -32,3 +33,4 @@ public class IdentitiesController : ODataController
         });
     }
 }
+#pragma warning restore AV0014
