@@ -10,6 +10,13 @@
             "abandonmentThreshold": null
         },
         {
+            "description": "Run NuGet lock file maintenance only through the central package file",
+            "matchManagers": ["nuget"],
+            "matchUpdateTypes": ["lockFileMaintenance"],
+            "matchFileNames": ["!Directory.Packages.props"],
+            "enabled": false
+        },
+        {
             "description": "Don't report flutter because it's a false positive",
             "matchDatasources": ["pub"],
             "matchPackageNames": ["flutter"],
