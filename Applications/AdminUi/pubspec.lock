@@ -274,7 +274,7 @@ packages:
     source: hosted
     version: "4.0.1"
   flutter:
-    dependency: transitive
+    dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
