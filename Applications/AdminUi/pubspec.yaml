@@ -13,6 +13,9 @@ workspace:
   - packages/admin_api_types
 
 dev_dependencies:
+  # Ensure Renovate uses Flutter for the shared workspace lockfile.
+  flutter:
+    sdk: flutter
   melos: ^8.0.0
   very_good_analysis: ^10.0.0
 
