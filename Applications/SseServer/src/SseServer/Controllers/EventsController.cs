@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.SseServer.Controllers;
 
-#pragma warning disable AV0014 // Preserve the existing model binding and error responses for SSE clients.
+[ApiController]
 public class EventsController : ControllerBase
 {
     private readonly IEventQueue _eventQueue;
@@ -33,7 +33,6 @@ public class EventsController : ControllerBase
         }
     }
 }
-#pragma warning restore AV0014
 
 public class CreateEventRequest
 {
