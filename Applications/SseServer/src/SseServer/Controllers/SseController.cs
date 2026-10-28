@@ -10,6 +10,7 @@ using UpdateDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNo
 
 namespace Backbone.SseServer.Controllers;
 
+#pragma warning disable AV0014 // Preserve the existing model binding and error responses for SSE clients.
 [V1]
 [V2]
 public class SseController : ControllerBase
@@ -84,6 +85,7 @@ public class SseController : ControllerBase
         }
     }
 }
+#pragma warning restore AV0014
 
 public static class StreamWriterExtensions
 {
