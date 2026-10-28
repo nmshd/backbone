@@ -232,7 +232,7 @@ services:
 
   azure-storage-emulator:
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite:3.36.0@sha256:76b8127d608fab8287a14a4bfeb9a5502cdcffb4bf1e86f09f324ebb0e70edba
+    image: mcr.microsoft.com/azure-storage/azurite:3.37.0@sha256:830430c1da1a2d537e08f3e6764dd1f5ae00cf0346bcaf625b968ec3f0971fd5
     command: azurite-blob -l /data --blobHost "0.0.0.0" --skipApiVersionCheck
     ports:
       - "10000:10000"
@@ -253,7 +253,7 @@ services:
 
   postgres:
     hostname: postgres
-    image: postgres:18.4@sha256:3a82e1f56c8f0f5616a11103ac3d47e632c3938698946a7ad26da0df1334744a
+    image: postgres:18.6@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:
@@ -263,7 +263,7 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4.3.7-management-alpine@sha256:ddbbe6b99ce941f74f566947463e3f47f99c3bf0fe80d4ee250cf30b942b1800
+    image: rabbitmq:4.4.0-management-alpine@sha256:0452ee3fd3b9a74160b251e693338616b464f22df4d4ba43304c101bebdca292
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -283,7 +283,7 @@ services:
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:v3.14.0
+    image: prom/prometheus:v3.15.1@sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -296,7 +296,7 @@ services:
     restart: unless-stopped
 
   tempo:
-    image: grafana/tempo:3.0.5@sha256:54bfbf8713813b5eb56e0ddf580553f48f9d55d7d8b15159159c91ecfdb5b949
+    image: grafana/tempo:3.1.1@sha256:64e2fbd56d9c2b3412a4b430a58ea59e91a670b1e75f920a0c702213ad145044
     user: "0:0"
     command:
       - -config.file=/etc/tempo/tempo.yml
@@ -317,7 +317,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:13.2.5@sha256:9f7aa1e1e3246aade5792d35a738049f7f32f89cd51d1956cf426a4e86268a84
+    image: grafana/grafana:13.3.0@sha256:488984b716c0862639f91a698adbe2862677a5a07bad42da5f03f3030883b205
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -333,7 +333,7 @@ services:
     restart: unless-stopped
 
   otel-collector:
-    image: otel/opentelemetry-collector:0.159.0
+    image: otel/opentelemetry-collector:0.164.0@sha256:28b6d41ac51bff6b41ba5e8fe503569ffb9d6a1ea90f7a78419e86f34e44f750
     volumes:
       - ./otel-collector/otel-collector-config.yml:/etc/otel/config.yaml
       # - ./log:/log/otel

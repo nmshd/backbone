@@ -10,6 +10,7 @@ using UpdateDeviceRegistration = Backbone.Modules.Devices.Module.Features.PushNo
 
 namespace Backbone.SseServer.Controllers;
 
+[ApiController]
 [V1]
 [V2]
 public class SseController : ControllerBase
