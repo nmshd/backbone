@@ -1,4 +1,4 @@
-FROM dhi.io/dotnet:10.0.403-sdk@sha256:d28c2315ebd487c92806a75064b1c584f823bc7bec095726be95b39c33397f5d AS build-env
+FROM dhi.io/dotnet:10.0.403-sdk@sha256:cbec5ea09e27d615e872404ababdb15d921ad79ff876625def27aef13d90ca68 AS build-env
 
 ARG VERSION
 
@@ -87,7 +87,7 @@ RUN dotnet build /p:ContinuousIntegrationBuild=true "EventHandlerService.csproj"
 
 RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
-FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:7eb2ebe35840cb2a80369a46b8e8feb89f3994eb37dee6129605b6d135bb70a3
+FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:ecf93dc794deabaca33ade3f7556088661b3c94fac5092f0174bce3bf38eff14
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
