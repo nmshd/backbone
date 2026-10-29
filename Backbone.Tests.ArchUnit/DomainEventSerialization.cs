@@ -14,9 +14,7 @@ public class DomainEventSerialization
             .Where(t => !t.IsAbstract && t.IsAssignableTo(typeof(DomainEvent)))
             .ToList();
 
-        Assert.NotEmpty(contractDomainEventTypes);
-
-        foreach (var eventType in contractDomainEventTypes)
+        Assert.All(contractDomainEventTypes, eventType =>
         {
             var domainEvent = Activator.CreateInstance(eventType)!;
             var json = JsonSerializer.Serialize(domainEvent, eventType);
@@ -24,6 +22,6 @@ public class DomainEventSerialization
             var deserializedDomainEvent = JsonSerializer.Deserialize(json, eventType);
 
             Assert.NotNull(deserializedDomainEvent);
-        }
+        }, throwIfEmpty: true);
     }
 }

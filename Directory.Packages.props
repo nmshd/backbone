@@ -108,6 +108,6 @@
     <PackageVersion Include="Testcontainers.Azurite" Version="[4.16.0]" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="[4.16.0]" />
     <PackageVersion Include="TngTech.ArchUnitNET.xUnitV3" Version="[0.13.5]" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="[3.2.2]" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="[4.0.2]" />
   </ItemGroup>
 </Project>
