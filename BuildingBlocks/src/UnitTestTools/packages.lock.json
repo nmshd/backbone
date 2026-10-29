@@ -178,37 +178,37 @@
       },
       "Google.Apis": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "Z6hSkmRD6V8/raSBqn/EsPpNop6suaLaGE9DbSY3yRE5G47l4zYqrJgapcLARk2Z3TsQUDmWz+w/tob3wuVt3g==",
+        "resolved": "1.76.0",
+        "contentHash": "sIhJW2vT1cXE/yUFp1q1Mv7EUgbGu2uMIcqqv+BgElRdGQApxiYpZ/jG6hFkQB8/AG9kGurJOzLOM9PZ++GEtA==",
         "dependencies": {
-          "Google.Apis.Core": "1.74.0"
+          "Google.Apis.Core": "1.76.0"
         }
       },
       "Google.Apis.Auth": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "43H4foh3zfWgboK8QnJjIfPQuBiS794TxqQLDfeE3erQSluKmEN0qeDuwxLTpSr9Mtwj76S4LWxPneuSbC6fNg==",
+        "resolved": "1.76.0",
+        "contentHash": "WzRCykQ0OApOEFdUYYBJ6riIxs+xk635s0KsGb83zJcABa66DCgaAXiWZuZjSqnwA3hjm7u8mmzR4EUHpJ1UfQ==",
         "dependencies": {
-          "Google.Apis": "1.74.0",
-          "Google.Apis.Core": "1.74.0",
+          "Google.Apis": "1.76.0",
+          "Google.Apis.Core": "1.76.0",
           "System.Management": "7.0.2"
         }
       },
       "Google.Apis.Core": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "gWOIiks6yo2TRliIyy10V18BJOO2BfUSPJFiTW6Tfap4tm3hFj7nvYU3XIfwzAxwoIy6nsBoqVDt9iBDSXrvYQ==",
+        "resolved": "1.76.0",
+        "contentHash": "P2nFbC0SsnUe8sGjhpCLs6CHIWFzURgUS2M9l9aUV1vJjVXpesRbegEYZS/dLKehcgx8twDP7xA5OMGygMD55g==",
         "dependencies": {
           "Newtonsoft.Json": "13.0.4"
         }
       },
       "Google.Apis.Storage.v1": {
         "type": "Transitive",
-        "resolved": "1.74.0.4115",
-        "contentHash": "9J3YPPSG53xwQLzdQ304dI+DMtVxJDpEazA2QQ2LA8IJoM4VUu4DpIxyhTGxpnAK4Db7s4LwzeNi6NkPKM3HzQ==",
+        "resolved": "1.76.0.4250",
+        "contentHash": "Bfl61KU1OdkgOZC+5ps1TlUdy/gmUvYk4eUfsu3/tFb9rKHxkSK37NxIgAFh8+Ae3ueU+FNQzLD/khS+4++zvw==",
         "dependencies": {
-          "Google.Apis": "1.74.0",
-          "Google.Apis.Auth": "1.74.0"
+          "Google.Apis": "1.76.0",
+          "Google.Apis.Auth": "1.76.0"
         }
       },
       "Google.Cloud.Iam.V1": {
@@ -700,7 +700,7 @@
           "EFCore.BulkExtensions.PostgreSql": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.SqlServer": "[10.0.1, 10.0.1]",
           "Google.Cloud.PubSub.V1": "[3.39.0, 3.39.0]",
-          "Google.Cloud.Storage.V1": "[4.16.0, 4.16.0]",
+          "Google.Cloud.Storage.V1": "[5.0.0, 5.0.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.14, 10.0.14]",
           "Microsoft.EntityFrameworkCore.Abstractions": "[10.0.14, 10.0.14]",
           "Microsoft.EntityFrameworkCore.Proxies": "[10.0.14, 10.0.14]",
@@ -814,12 +814,12 @@
       },
       "Google.Cloud.Storage.V1": {
         "type": "CentralTransitive",
-        "requested": "[4.16.0, 4.16.0]",
-        "resolved": "4.16.0",
-        "contentHash": "rz4GaZPlpBhuOjebPhp1xg7GylDkYReqHjbXoiGy3shahoGsgbH5FQclotR8/HSaVgeEWdGrIhkdKxoZFUAAog==",
+        "requested": "[5.0.0, 5.0.0]",
+        "resolved": "5.0.0",
+        "contentHash": "zA7njaxwj5N+FLtdPD4XIOuMqdt3yNpaaHCSZoZxdOtMV6a9/oucNsPdTdrwJ65LY9ggNoZ1GD2WyvPS5d4DTA==",
         "dependencies": {
           "Google.Api.Gax.Rest": "[4.13.1, 5.0.0)",
-          "Google.Apis.Storage.v1": "[1.74.0.4115, 2.0.0)"
+          "Google.Apis.Storage.v1": "[1.76.0.4250, 2.0.0)"
         }
       },
       "MediatR.Contracts": {
