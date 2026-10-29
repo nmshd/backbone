@@ -89,7 +89,7 @@ WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
 #### Final #####
-FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:7eb2ebe35840cb2a80369a46b8e8feb89f3994eb37dee6129605b6d135bb70a3
+FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:ecf93dc794deabaca33ade3f7556088661b3c94fac5092f0174bce3bf38eff14
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
