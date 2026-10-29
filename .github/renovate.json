@@ -64,6 +64,13 @@
             "matchDatasources": ["dart"],
             "matchPackageNames": ["admin_api_sdk", "admin_api_types"],
             "enabled": false
+        },
+        {
+            "description": "Update the .NET SDK and runtime together across Docker images, global.json and CI workflows.",
+            "matchDatasources": ["dotnet-version", "docker"],
+            "matchPackageNames": ["dotnet-sdk", "dotnet-runtime", "mcr.microsoft.com/dotnet/**", "dhi.io/dotnet", "dhi.io/aspnetcore"],
+            "groupName": ".NET SDK and Runtime",
+            "groupSlug": "dotnet"
         }
     ]
 }

@@ -2,9 +2,7 @@
     "test": {
         "runner": "Microsoft.Testing.Platform"
     },
-    "global": {
-        "sdk": {
-            "version": "10.0.403"
-        }
+    "sdk": {
+        "version": "10.0.403"
     }
 }
