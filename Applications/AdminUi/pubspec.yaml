@@ -16,7 +16,7 @@ dev_dependencies:
   flutter:
     sdk: flutter
   melos: ^8.0.0
-  very_good_analysis: ^10.0.0
+  very_good_analysis: ^11.0.0
 
 # flutter_launcher_icons currently constrains cli_util to ^0.4.1, while Melos 8
 # requires ^0.5.0. The APIs used by flutter_launcher_icons are compatible with
