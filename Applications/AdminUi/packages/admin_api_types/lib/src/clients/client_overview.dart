@@ -13,7 +13,7 @@ class ClientOverview {
   final int? maxIdentities;
   final int numberOfIdentities;
 
-  ClientOverview({
+  new({
     required this.clientId,
     required this.displayName,
     required this.defaultTier,
@@ -22,6 +22,6 @@ class ClientOverview {
     required this.numberOfIdentities,
   });
 
-  factory ClientOverview.fromJson(dynamic json) => _$ClientOverviewFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$ClientOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$ClientOverviewToJson(this);
 }

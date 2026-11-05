@@ -9,8 +9,8 @@ class AnnouncementAction {
   final String link;
   final Map<String, String> displayName;
 
-  AnnouncementAction({required this.link, required this.displayName});
+  new({required this.link, required this.displayName});
 
-  factory AnnouncementAction.fromJson(dynamic json) => _$AnnouncementActionFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$AnnouncementActionFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AnnouncementActionToJson(this);
 }

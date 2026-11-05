@@ -13,7 +13,7 @@ class MessageOverview {
   final int numberOfAttachments;
   final List<MessageRecipient> recipients;
 
-  MessageOverview({
+  new({
     required this.messageId,
     required this.senderAddress,
     required this.senderDevice,
@@ -22,6 +22,6 @@ class MessageOverview {
     required this.recipients,
   });
 
-  factory MessageOverview.fromJson(dynamic json) => _$MessageOverviewFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$MessageOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$MessageOverviewToJson(this);
 }

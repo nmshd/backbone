@@ -8,7 +8,7 @@ class DateFilter extends StatefulWidget {
   final void Function(FilterOperator operator, DateTime? selectedDate) onFilterSelected;
   final String label;
 
-  const DateFilter({required this.onFilterSelected, required this.label, super.key});
+  const new({required this.onFilterSelected, required this.label, super.key});
 
   @override
   State<DateFilter> createState() => _DateFilterState();

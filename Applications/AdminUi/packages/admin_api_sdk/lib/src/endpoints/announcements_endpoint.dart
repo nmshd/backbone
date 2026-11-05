@@ -4,7 +4,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class AnnouncementsEndpoint extends Endpoint {
-  AnnouncementsEndpoint(super._dio);
+  new(super._dio);
 
   Future<ApiResponse<List<Announcement>>> getAnnouncements() =>
       get('/api/v1/Announcements', transformer: (e) => (e as List).map(Announcement.fromJson).toList());
@@ -34,10 +34,6 @@ class AnnouncementsEndpoint extends Endpoint {
     transformer: CreateAnnouncementResponse.fromJson,
   );
 
-  Future<ApiResponse<void>> deleteAnnouncement(String announcementId) => delete(
-    '/api/v1/Announcements/$announcementId',
-    expectedStatus: 204,
-    transformer: (e) {},
-    allowEmptyResponse: true,
-  );
+  Future<ApiResponse<void>> deleteAnnouncement(String announcementId) =>
+      delete('/api/v1/Announcements/$announcementId', expectedStatus: 204, transformer: (e) {}, allowEmptyResponse: true);
 }

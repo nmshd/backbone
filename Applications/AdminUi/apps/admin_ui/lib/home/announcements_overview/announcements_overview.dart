@@ -12,7 +12,7 @@ import '/core/core.dart';
 import 'modals/create_announcement_dialog.dart';
 
 class AnnouncementsOverview extends StatefulWidget {
-  const AnnouncementsOverview({super.key});
+  const new({super.key});
 
   @override
   State<AnnouncementsOverview> createState() => _AnnouncementsOverviewState();
@@ -43,7 +43,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                 mainAxisAlignment: .end,
                 children: [
                   if (kIsDesktop)
-                    IconButton(icon: const Icon(Icons.refresh), onPressed: () async => _reloadAnnouncements(), tooltip: context.l10n.reload),
+                    IconButton(icon: const Icon(Icons.refresh), onPressed: () async => await _reloadAnnouncements(), tooltip: context.l10n.reload),
                   IconButton.filled(
                     icon: const Icon(Icons.add),
                     onPressed: () => showCreateAnnouncementDialog(context: context, onAnnouncementCreated: _reloadAnnouncements),

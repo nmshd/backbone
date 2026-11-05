@@ -10,8 +10,8 @@ class AnnouncementText {
   final String title;
   final String body;
 
-  AnnouncementText({required this.language, required this.title, required this.body});
+  new({required this.language, required this.title, required this.body});
 
-  factory AnnouncementText.fromJson(dynamic json) => _$AnnouncementTextFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$AnnouncementTextFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AnnouncementTextToJson(this);
 }

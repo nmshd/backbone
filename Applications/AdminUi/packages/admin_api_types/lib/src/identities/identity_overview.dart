@@ -15,7 +15,7 @@ class IdentityOverview {
   final DateTime? lastLoginAt;
   final int? datawalletVersion;
 
-  IdentityOverview({
+  new({
     required this.address,
     required this.createdAt,
     required this.createdWithClient,
@@ -26,6 +26,6 @@ class IdentityOverview {
     this.datawalletVersion,
   });
 
-  factory IdentityOverview.fromJson(dynamic json) => _$IdentityOverviewFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityOverviewToJson(this);
 }

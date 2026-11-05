@@ -11,7 +11,7 @@ class ChangeClientSecretResponse {
   final DateTime createdAt;
   final int? maxIdentities;
 
-  ChangeClientSecretResponse({
+  new({
     required this.clientId,
     required this.displayName,
     required this.clientSecret,
@@ -20,6 +20,6 @@ class ChangeClientSecretResponse {
     required this.maxIdentities,
   });
 
-  factory ChangeClientSecretResponse.fromJson(dynamic json) => _$ChangeClientSecretResponseFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$ChangeClientSecretResponseFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$ChangeClientSecretResponseToJson(this);
 }

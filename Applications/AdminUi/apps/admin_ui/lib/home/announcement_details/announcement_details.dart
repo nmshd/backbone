@@ -14,7 +14,7 @@ import '/core/core.dart';
 class AnnouncementDetails extends StatefulWidget {
   final String announcementId;
 
-  const AnnouncementDetails({required this.announcementId, super.key});
+  const new({required this.announcementId, super.key});
 
   @override
   State<AnnouncementDetails> createState() => _AnnouncementDetailsState();
@@ -153,7 +153,7 @@ class _AnnouncementDetailsState extends State<AnnouncementDetails> {
 class _AnnouncementTextsCard extends StatelessWidget {
   final List<AnnouncementText> announcementTexts;
 
-  const _AnnouncementTextsCard({required this.announcementTexts});
+  const new({required this.announcementTexts});
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +187,7 @@ class _AnnouncementTextsCard extends StatelessWidget {
 class _AnnouncementActionsCard extends StatelessWidget {
   final List<AnnouncementAction> announcementActions;
 
-  const _AnnouncementActionsCard({required this.announcementActions});
+  const new({required this.announcementActions});
 
   @override
   Widget build(BuildContext context) {
@@ -212,39 +212,24 @@ class _AnnouncementActionsCard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Table(
-                            columnWidths: const <int, TableColumnWidth>{
-                              0: IntrinsicColumnWidth(),
-                              1: FlexColumnWidth(),
-                            },
+                            columnWidths: const <int, TableColumnWidth>{0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
                             children: [
                               TableRow(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                    child: Text(
-                                      context.l10n.announcementDetails_actions_englishName,
-                                      style: const TextStyle(fontWeight: .bold),
-                                    ),
+                                    child: Text(context.l10n.announcementDetails_actions_englishName, style: const TextStyle(fontWeight: .bold)),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                    child: Text(action.displayName['en'] ?? ''),
-                                  ),
+                                  Padding(padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12), child: Text(action.displayName['en'] ?? '')),
                                 ],
                               ),
                               TableRow(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
-                                    child: Text(
-                                      context.l10n.announcementDetails_actions_germanName,
-                                      style: const TextStyle(fontWeight: .bold),
-                                    ),
+                                    child: Text(context.l10n.announcementDetails_actions_germanName, style: const TextStyle(fontWeight: .bold)),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                    child: Text(action.displayName['de'] ?? ''),
-                                  ),
+                                  Padding(padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12), child: Text(action.displayName['de'] ?? '')),
                                 ],
                               ),
                               TableRow(
@@ -253,10 +238,7 @@ class _AnnouncementActionsCard extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 12, bottom: 12),
                                     child: Text(context.l10n.announcementDetails_actions_link, style: const TextStyle(fontWeight: .bold)),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
-                                    child: Text(action.link),
-                                  ),
+                                  Padding(padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12), child: Text(action.link)),
                                 ],
                               ),
                             ],

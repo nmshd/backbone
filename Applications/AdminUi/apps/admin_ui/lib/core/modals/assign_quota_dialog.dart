@@ -41,7 +41,7 @@ class _AssignQuotaDialog extends StatefulWidget {
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AssignQuotaDialog({required this.availableMetrics, required this.addQuota, required this.onQuotaAdded});
+  const new({required this.availableMetrics, required this.addQuota, required this.onQuotaAdded});
 
   @override
   State<_AssignQuotaDialog> createState() => _AssignQuotaDialogState();

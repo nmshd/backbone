@@ -22,7 +22,7 @@ class _CreateClientDialog extends StatefulWidget {
   final List<TierOverview> defaultTiers;
   final VoidCallback onClientCreated;
 
-  const _CreateClientDialog({required this.defaultTiers, required this.onClientCreated});
+  const new({required this.defaultTiers, required this.onClientCreated});
 
   @override
   State<_CreateClientDialog> createState() => _CreateClientDialogState();

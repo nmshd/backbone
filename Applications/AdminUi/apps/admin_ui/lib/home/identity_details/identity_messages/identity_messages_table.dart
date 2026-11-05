@@ -12,14 +12,7 @@ class IdentityMessagesTable extends StatefulWidget {
   final String subtitle;
   final String emptyTableMessage;
 
-  const IdentityMessagesTable({
-    required this.dataSource,
-    required this.type,
-    required this.title,
-    required this.subtitle,
-    required this.emptyTableMessage,
-    super.key,
-  });
+  const new({required this.dataSource, required this.type, required this.title, required this.subtitle, required this.emptyTableMessage, super.key});
 
   @override
   State<IdentityMessagesTable> createState() => _IdentityMessagesTableState();

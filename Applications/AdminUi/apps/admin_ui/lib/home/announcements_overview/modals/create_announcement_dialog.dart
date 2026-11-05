@@ -17,7 +17,7 @@ Future<void> showCreateAnnouncementDialog({required BuildContext context, requir
 class _CreateAnnouncementDialog extends StatefulWidget {
   final VoidCallback onAnnouncementCreated;
 
-  const _CreateAnnouncementDialog({required this.onAnnouncementCreated});
+  const new({required this.onAnnouncementCreated});
 
   @override
   State<_CreateAnnouncementDialog> createState() => _CreateAnnouncementDialogState();
@@ -204,11 +204,8 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                                 _actions.insert(newIndex, item);
                               });
                             },
-                            itemBuilder: (context, index) => _ActionRow(
-                              key: ValueKey(index),
-                              action: _actions[index],
-                              remove: () => setState(() => _actions.removeAt(index)),
-                            ),
+                            itemBuilder: (context, index) =>
+                                _ActionRow(key: ValueKey(index), action: _actions[index], remove: () => setState(() => _actions.removeAt(index))),
                           ),
                         ],
                       ),
@@ -227,10 +224,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
         ),
         SizedBox(
           height: 40,
-          child: FilledButton(
-            onPressed: _createAnnouncement,
-            child: Text(context.l10n.create),
-          ),
+          child: FilledButton(onPressed: _createAnnouncement, child: Text(context.l10n.create)),
         ),
       ],
     );
@@ -302,7 +296,7 @@ class _CreateAnnouncementAction {
   String englishDisplayName;
   String germanDisplayName;
 
-  _CreateAnnouncementAction({required this.link}) : englishDisplayName = '', germanDisplayName = '';
+  new({required this.link}) : englishDisplayName = '', germanDisplayName = '';
 
   bool equals(_CreateAnnouncementAction other) {
     if (identical(this, other)) return true;
@@ -322,7 +316,7 @@ class _ActionRow extends StatefulWidget {
   final VoidCallback remove;
   final _CreateAnnouncementAction action;
 
-  const _ActionRow({required this.remove, required this.action, super.key});
+  const new({required this.remove, required this.action, super.key});
 
   @override
   State<_ActionRow> createState() => _ActionRowState();

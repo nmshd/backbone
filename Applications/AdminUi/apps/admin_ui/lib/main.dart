@@ -128,7 +128,7 @@ final _router = GoRouter(
 );
 
 class AdminUiApp extends StatelessWidget with WatchItMixin {
-  const AdminUiApp({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {

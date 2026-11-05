@@ -12,7 +12,7 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
   final Locale locale;
   final String address;
 
-  IdentityRelationshipDataTableSource({required this.address, required this.locale});
+  new({required this.address, required this.locale});
 
   @override
   bool get isRowCountApproximate => false;

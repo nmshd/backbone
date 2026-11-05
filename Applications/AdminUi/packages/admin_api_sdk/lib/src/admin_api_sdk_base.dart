@@ -14,7 +14,7 @@ class AdminApiClient {
   late final MetricsEndpoint metrics;
   late final AnnouncementsEndpoint announcements;
 
-  AdminApiClient._(String baseUrl, String apiKey) {
+  new _(String baseUrl, String apiKey) {
     final dio = Dio(BaseOptions(baseUrl: baseUrl, headers: {'X-API-KEY': apiKey}, validateStatus: (_) => true));
     _dio = dio;
 

@@ -13,7 +13,7 @@ import 'clients_filter.dart';
 import 'modals/modals.dart';
 
 class ClientsOverview extends StatefulWidget {
-  const ClientsOverview({super.key});
+  const new({super.key});
 
   @override
   State<ClientsOverview> createState() => _ClientsOverviewState();
@@ -172,9 +172,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     for (final clientId in _selectedClients) {
       final result = await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
       if (result.hasError && mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_error), showCloseIcon: true));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_error), showCloseIcon: true));
         return;
       }
 
@@ -184,9 +183,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     _selectedClients.clear();
 
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_success), showCloseIcon: true));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(context.l10n.clientsOverview_removeSelectedClients_success), showCloseIcon: true));
     }
   }
 }

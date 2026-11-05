@@ -8,7 +8,7 @@ class MultiSelectFilter extends StatefulWidget {
   final List<MultiSelectFilterOption> options;
   final void Function(List<String> selectedOptions) onOptionSelected;
 
-  const MultiSelectFilter({required this.label, required this.options, required this.onOptionSelected, super.key});
+  const new({required this.label, required this.options, required this.onOptionSelected, super.key});
 
   @override
   State<MultiSelectFilter> createState() => _MultiSelectFilterState();

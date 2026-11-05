@@ -21,7 +21,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   final bool hideClientColumn;
   final void Function({required String address}) navigateToIdentity;
 
-  IdentityDataTableSource({
+  new({
     required this.locale,
     required this.navigateToIdentity,
     this.hideTierColumn = false,

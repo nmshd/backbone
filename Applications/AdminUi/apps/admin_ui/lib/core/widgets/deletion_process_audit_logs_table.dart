@@ -8,7 +8,7 @@ import '/core/core.dart';
 class DeletionProcessAuditLogsTable extends StatefulWidget {
   final List<IdentityDeletionProcessAuditLogEntry> auditLogs;
 
-  const DeletionProcessAuditLogsTable({required this.auditLogs, super.key});
+  const new({required this.auditLogs, super.key});
 
   @override
   State<DeletionProcessAuditLogsTable> createState() => _DeletionProcessAuditLogsTableState();

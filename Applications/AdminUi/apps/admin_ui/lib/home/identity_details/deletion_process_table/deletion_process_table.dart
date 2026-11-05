@@ -14,7 +14,7 @@ import '/core/core.dart';
 class DeletionProcessTable extends StatefulWidget {
   final String address;
 
-  const DeletionProcessTable({required this.address, super.key});
+  const new({required this.address, super.key});
 
   @override
   State<DeletionProcessTable> createState() => _DeletionProcessTableState();
@@ -130,7 +130,7 @@ class _RemindersCell extends StatelessWidget {
   final List<DateTime> reminders;
   final Color textColor;
 
-  const _RemindersCell({required this.name, required this.noDataText, required this.reminders, required this.textColor});
+  const new({required this.name, required this.noDataText, required this.reminders, required this.textColor});
 
   @override
   Widget build(BuildContext context) {

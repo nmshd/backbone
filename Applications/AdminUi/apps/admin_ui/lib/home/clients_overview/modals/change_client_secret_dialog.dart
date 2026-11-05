@@ -15,7 +15,7 @@ Future<void> showChangeClientSecretDialog({required BuildContext context, requir
 class _ChangeClientSecretDialog extends StatefulWidget {
   final String clientId;
 
-  const _ChangeClientSecretDialog({required this.clientId});
+  const new({required this.clientId});
 
   @override
   State<_ChangeClientSecretDialog> createState() => _ChangeClientSecretDialogState();

@@ -12,8 +12,8 @@ class IdentityDeletionProcessDetail {
   final DateTime createdAt;
   final List<IdentityDeletionProcessAuditLogEntry> auditLog;
 
-  IdentityDeletionProcessDetail({required this.id, required this.status, required this.createdAt, required this.auditLog});
+  new({required this.id, required this.status, required this.createdAt, required this.auditLog});
 
-  factory IdentityDeletionProcessDetail.fromJson(dynamic json) => _$IdentityDeletionProcessDetailFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityDeletionProcessDetailFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityDeletionProcessDetailToJson(this);
 }

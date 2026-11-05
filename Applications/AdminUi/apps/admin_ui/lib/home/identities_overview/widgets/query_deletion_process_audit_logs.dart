@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '/core/core.dart';
 
 class QueryDeletionProcessAuditLogs extends StatefulWidget {
-  const QueryDeletionProcessAuditLogs({super.key});
+  const new({super.key});
 
   @override
   State<QueryDeletionProcessAuditLogs> createState() => _QueryDeletionProcessAuditLogsState();

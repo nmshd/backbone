@@ -15,7 +15,7 @@ class IdentityDeletionProcess {
   final DateTime? gracePeriodReminder2SentAt;
   final DateTime? gracePeriodReminder3SentAt;
 
-  IdentityDeletionProcess({
+  new({
     required this.id,
     required this.status,
     required this.createdAt,
@@ -26,6 +26,6 @@ class IdentityDeletionProcess {
     this.gracePeriodReminder3SentAt,
   });
 
-  factory IdentityDeletionProcess.fromJson(dynamic json) => _$IdentityDeletionProcessFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityDeletionProcessFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityDeletionProcessToJson(this);
 }

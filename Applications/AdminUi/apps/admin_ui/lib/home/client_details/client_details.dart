@@ -12,7 +12,7 @@ import '/core/core.dart';
 class ClientDetails extends StatefulWidget {
   final String clientId;
 
-  const ClientDetails({required this.clientId, super.key});
+  const new({required this.clientId, super.key});
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -102,7 +102,7 @@ class _ClientDetailsCard extends StatelessWidget {
   final List<TierOverview> availableTiers;
   final VoidCallback updateClient;
 
-  const _ClientDetailsCard({required this.clientDetails, required this.availableTiers, required this.updateClient, this.selectedTier});
+  const new({required this.clientDetails, required this.availableTiers, required this.updateClient, this.selectedTier});
 
   @override
   Widget build(BuildContext context) {

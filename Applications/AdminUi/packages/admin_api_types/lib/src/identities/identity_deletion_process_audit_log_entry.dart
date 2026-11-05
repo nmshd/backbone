@@ -11,15 +11,8 @@ class IdentityDeletionProcessAuditLogEntry {
   final String newStatus;
   final Map<String, String> additionalData;
 
-  IdentityDeletionProcessAuditLogEntry({
-    required this.id,
-    required this.createdAt,
-    required this.messageKey,
-    required this.newStatus,
-    this.additionalData = const {},
-    this.oldStatus,
-  });
+  new({required this.id, required this.createdAt, required this.messageKey, required this.newStatus, this.additionalData = const {}, this.oldStatus});
 
-  factory IdentityDeletionProcessAuditLogEntry.fromJson(dynamic json) => _$IdentityDeletionProcessAuditLogEntryFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityDeletionProcessAuditLogEntryFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityDeletionProcessAuditLogEntryToJson(this);
 }

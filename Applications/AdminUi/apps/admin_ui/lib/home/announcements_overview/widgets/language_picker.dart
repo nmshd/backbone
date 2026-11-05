@@ -7,7 +7,7 @@ class LanguagePicker extends StatelessWidget {
   final ValueChanged<String> onLanguageChanged;
   final double? width;
 
-  const LanguagePicker({required this.labelText, required this.onLanguageChanged, super.key, this.validator, this.width});
+  const new({required this.labelText, required this.onLanguageChanged, super.key, this.validator, this.width});
 
   @override
   Widget build(BuildContext context) {

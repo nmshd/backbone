@@ -9,7 +9,7 @@ Future<void> openSettingsDialog(BuildContext context) async {
 }
 
 class _SettingsDialog extends StatelessWidget with WatchItMixin {
-  const _SettingsDialog();
+  const new();
 
   @override
   Widget build(BuildContext context) {

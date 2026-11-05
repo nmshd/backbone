@@ -9,7 +9,7 @@ class IdentitiesTable extends StatefulWidget {
   final Client? clientDetails;
   final TierDetails? tierDetails;
 
-  const IdentitiesTable({this.clientDetails, this.tierDetails, super.key})
+  const new({this.clientDetails, this.tierDetails, super.key})
     : assert(clientDetails != null || tierDetails != null, 'Either client details or tier details must be provided'),
       assert(clientDetails == null || tierDetails == null, 'Only one of client details or tier details can be provided');
 

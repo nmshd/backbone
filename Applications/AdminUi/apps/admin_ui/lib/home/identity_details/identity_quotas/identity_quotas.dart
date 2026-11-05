@@ -8,7 +8,7 @@ class IdentityQuotas extends StatefulWidget {
   final Identity identityDetails;
   final VoidCallback onQuotasChanged;
 
-  const IdentityQuotas(this.identityDetails, this.onQuotasChanged, {super.key});
+  const new(this.identityDetails, this.onQuotasChanged, {super.key});
 
   @override
   State<IdentityQuotas> createState() => IdentityQuotasState();

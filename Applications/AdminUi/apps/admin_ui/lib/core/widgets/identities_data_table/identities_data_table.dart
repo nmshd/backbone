@@ -12,7 +12,7 @@ class IdentitiesDataTable extends StatefulWidget {
   final bool hideClientColumn;
   final bool hideTierColumn;
 
-  const IdentitiesDataTable({required this.dataSource, this.hideTierColumn = false, this.hideClientColumn = false, super.key});
+  const new({required this.dataSource, this.hideTierColumn = false, this.hideClientColumn = false, super.key});
 
   @override
   State<IdentitiesDataTable> createState() => _IdentitiesDataTableState();

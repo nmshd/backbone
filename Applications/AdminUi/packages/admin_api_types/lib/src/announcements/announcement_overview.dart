@@ -16,7 +16,7 @@ class Announcement {
   final String? iqlQuery;
   final bool isSilent;
 
-  Announcement({
+  new({
     required this.id,
     required this.createdAt,
     required this.expiresAt,
@@ -27,6 +27,6 @@ class Announcement {
     required this.isSilent,
   });
 
-  factory Announcement.fromJson(dynamic json) => _$AnnouncementFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$AnnouncementFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AnnouncementToJson(this);
 }
