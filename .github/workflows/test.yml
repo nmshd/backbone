@@ -12,6 +12,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  compose-startup-test:
+    runs-on: ubuntu-latest
+    name: Check Compose Startup Retries
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Test database startup retries
+        run: ./.ci/tests/startComposeStack.test.sh
+
   adminui-checks:
     runs-on: ubuntu-latest
     name: Run Admin UI Checks
@@ -237,7 +246,7 @@ jobs:
       - name: Start compose stack
         run: |
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
+          ./.ci/startComposeStack.sh -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml
           docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml wait admin-cli
 
       - name: Run integration tests
@@ -294,7 +303,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Start compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
+        run: ./backbone/.ci/startComposeStack.sh -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml
 
       - name: Install runtime dependencies
         working-directory: ./runtime
