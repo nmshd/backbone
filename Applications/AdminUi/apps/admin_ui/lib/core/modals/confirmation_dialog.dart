@@ -12,8 +12,7 @@ Future<bool> showConfirmationDialog({
 }) async {
   final result = await showDialog<bool>(
     context: context,
-    builder: (BuildContext context) =>
-        _ConfirmationDialog(title: title, message: message, actionText: actionText, cancelActionText: cancelActionText),
+    builder: (context) => _ConfirmationDialog(title: title, message: message, actionText: actionText, cancelActionText: cancelActionText),
   );
 
   return result ?? false;

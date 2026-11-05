@@ -39,7 +39,7 @@ class LanguagePicker extends StatelessWidget {
               dropdownMenuEntries: languageOptions.map((language) {
                 return DropdownMenuEntry(value: language.isoCode, label: language.name);
               }).toList(),
-              onSelected: (String? selectedLanguageIsoCode) {
+              onSelected: (selectedLanguageIsoCode) {
                 if (selectedLanguageIsoCode != null) {
                   onLanguageChanged(selectedLanguageIsoCode);
                 }

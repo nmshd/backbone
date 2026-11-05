@@ -14,7 +14,7 @@ Future<void> showCreateClientDialog({
 }) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _CreateClientDialog(defaultTiers: defaultTiers, onClientCreated: onClientCreated),
+    builder: (context) => _CreateClientDialog(defaultTiers: defaultTiers, onClientCreated: onClientCreated),
   );
 }
 

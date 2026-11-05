@@ -76,7 +76,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
-              onTierChanged: (String? newValue) {
+              onTierChanged: (newValue) {
                 setState(() {
                   _selectedTier = newValue;
                 });

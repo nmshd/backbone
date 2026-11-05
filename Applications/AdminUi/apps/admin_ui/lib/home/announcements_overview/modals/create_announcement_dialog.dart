@@ -10,7 +10,7 @@ import '/core/core.dart';
 Future<void> showCreateAnnouncementDialog({required BuildContext context, required VoidCallback onAnnouncementCreated}) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _CreateAnnouncementDialog(onAnnouncementCreated: onAnnouncementCreated),
+    builder: (context) => _CreateAnnouncementDialog(onAnnouncementCreated: onAnnouncementCreated),
   );
 }
 
