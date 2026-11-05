@@ -8,7 +8,7 @@ import '/core/core.dart';
 Future<void> showChangeClientSecretDialog({required BuildContext context, required String clientId}) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId),
+    builder: (context) => _ChangeClientSecretDialog(clientId: clientId),
   );
 }
 

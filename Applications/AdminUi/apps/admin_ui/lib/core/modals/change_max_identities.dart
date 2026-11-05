@@ -12,7 +12,7 @@ Future<void> showChangeMaxIdentitiesDialog({
 }) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ShowChangeMaxIdentitiesDialog(onMaxIdentitiesUpdated: onMaxIdentitiesUpdated, clientDetails: clientDetails),
+    builder: (context) => _ShowChangeMaxIdentitiesDialog(onMaxIdentitiesUpdated: onMaxIdentitiesUpdated, clientDetails: clientDetails),
   );
 }
 
@@ -61,7 +61,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
                   border: const OutlineInputBorder(),
                 ),
                 keyboardType: .number,
-                onChanged: _saving ? null : (String? newValue) => setState(() => _maxIdentities = int.tryParse(newValue ?? '0')),
+                onChanged: _saving ? null : (newValue) => setState(() => _maxIdentities = int.tryParse(newValue)),
               ),
             ],
           ),
