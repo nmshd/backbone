@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class AppTitle extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
 
-  const AppTitle({this.padding, super.key});
+  const new({this.padding, super.key});
 
   @override
   Widget build(BuildContext context) {

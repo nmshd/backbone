@@ -9,7 +9,7 @@ class ThemeModeModel {
 
   final ValueNotifier<ThemeMode> themeMode;
 
-  ThemeModeModel._(this._sharedPreferences, {required ThemeMode initialThemeMode}) : themeMode = ValueNotifier(initialThemeMode);
+  new _(this._sharedPreferences, {required ThemeMode initialThemeMode}) : themeMode = ValueNotifier(initialThemeMode);
 
   static Future<ThemeModeModel> create() async {
     final sharedPreferences = await SharedPreferences.getInstance();

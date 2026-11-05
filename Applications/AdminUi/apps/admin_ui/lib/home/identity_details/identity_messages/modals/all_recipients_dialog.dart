@@ -8,12 +8,12 @@ import '/core/extensions.dart';
 
 Future<void> showAllRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) => showDialog<void>(
   context: context,
-  builder: (BuildContext context) => _AllRecipientsDialog(recipients: recipients),
+  builder: (context) => _AllRecipientsDialog(recipients: recipients),
 );
 
 class _AllRecipientsDialog extends StatefulWidget {
   final List<MessageRecipient> recipients;
-  const _AllRecipientsDialog({required this.recipients});
+  const new({required this.recipients});
 
   @override
   State<_AllRecipientsDialog> createState() => _AllRecipientsDialogState();

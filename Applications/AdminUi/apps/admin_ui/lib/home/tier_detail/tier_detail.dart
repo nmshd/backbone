@@ -12,7 +12,7 @@ import '/core/core.dart';
 class TierDetail extends StatefulWidget {
   final String tierId;
 
-  const TierDetail({required this.tierId, super.key});
+  const new({required this.tierId, super.key});
 
   @override
   State<TierDetail> createState() => _TierDetailState();
@@ -96,7 +96,7 @@ class _QuotaList extends StatefulWidget {
   final TierDetails tierDetails;
   final VoidCallback onQuotasChanged;
 
-  const _QuotaList(this.tierDetails, this.onQuotasChanged);
+  const new(this.tierDetails, this.onQuotasChanged);
 
   @override
   State<_QuotaList> createState() => _QuotaListState();

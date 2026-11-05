@@ -11,7 +11,7 @@ class CreateClientResponse {
   final DateTime createdAt;
   final int? maxIdentities;
 
-  CreateClientResponse({
+  new({
     required this.clientId,
     required this.displayName,
     required this.clientSecret,
@@ -20,6 +20,6 @@ class CreateClientResponse {
     required this.maxIdentities,
   });
 
-  factory CreateClientResponse.fromJson(dynamic json) => _$CreateClientResponseFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$CreateClientResponseFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$CreateClientResponseToJson(this);
 }

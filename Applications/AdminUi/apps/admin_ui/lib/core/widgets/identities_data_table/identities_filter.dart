@@ -14,7 +14,7 @@ class IdentitiesFilter extends StatefulWidget {
   final String? fixedTierId;
   final String? fixedClientId;
 
-  const IdentitiesFilter({required this.onFilterChanged, this.fixedTierId, this.fixedClientId, super.key});
+  const new({required this.onFilterChanged, this.fixedTierId, this.fixedClientId, super.key});
 
   @override
   State<IdentitiesFilter> createState() => _IdentitiesFilterState();
@@ -49,7 +49,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
           children: [
             InputField(
               label: context.l10n.address,
-              onEnteredText: (String enteredText) {
+              onEnteredText: (enteredText) {
                 _filter = _filter.copyWith(address: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
                 widget.onFilterChanged(filter: _filter);
               },
@@ -59,7 +59,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               MultiSelectFilter(
                 label: context.l10n.tiers,
                 options: _availableTiers,
-                onOptionSelected: (List<String> selectedTiers) {
+                onOptionSelected: (selectedTiers) {
                   _filter = _filter.copyWith(tiers: selectedTiers.isEmpty ? const Optional.absent() : Optional(selectedTiers));
                   widget.onFilterChanged(filter: _filter);
                 },
@@ -70,7 +70,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               MultiSelectFilter(
                 label: context.l10n.clients,
                 options: _availableClients,
-                onOptionSelected: (List<String> selectedClients) {
+                onOptionSelected: (selectedClients) {
                   _filter = _filter.copyWith(clients: selectedClients.isEmpty ? const Optional.absent() : Optional(selectedClients));
                   widget.onFilterChanged(filter: _filter);
                 },
@@ -79,7 +79,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             NumberFilter(
               label: context.l10n.numberOfDevices,
-              onNumberSelected: (FilterOperator operator, String enteredValue) {
+              onNumberSelected: (operator, enteredValue) {
                 final numberOfDevices = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(numberOfDevices: numberOfDevices.value.isEmpty ? const Optional.absent() : Optional(numberOfDevices));
                 widget.onFilterChanged(filter: _filter);
@@ -88,7 +88,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             DateFilter(
               label: context.l10n.createdAt,
-              onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
+              onFilterSelected: (operator, selectedDate) {
                 final createdAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(createdAt: createdAt.value.isEmpty ? const Optional.absent() : Optional(createdAt));
                 widget.onFilterChanged(filter: _filter);
@@ -97,7 +97,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             DateFilter(
               label: context.l10n.lastLoginAt,
-              onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
+              onFilterSelected: (operator, selectedDate) {
                 final lastLoginAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(lastLoginAt: lastLoginAt.value.isEmpty ? const Optional.absent() : Optional(lastLoginAt));
                 widget.onFilterChanged(filter: _filter);
@@ -106,7 +106,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             NumberFilter(
               label: context.l10n.datawalletVersion,
-              onNumberSelected: (FilterOperator operator, String enteredValue) {
+              onNumberSelected: (operator, enteredValue) {
                 final datawalletVersion = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(
                   datawalletVersion: datawalletVersion.value.isEmpty ? const Optional.absent() : Optional(datawalletVersion),
@@ -117,7 +117,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             NumberFilter(
               label: context.l10n.identityVersion,
-              onNumberSelected: (FilterOperator operator, String enteredValue) {
+              onNumberSelected: (operator, enteredValue) {
                 final identityVersion = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(identityVersion: identityVersion.value.isEmpty ? const Optional.absent() : Optional(identityVersion));
                 widget.onFilterChanged(filter: _filter);

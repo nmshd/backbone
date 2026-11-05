@@ -13,9 +13,7 @@ TierQuotaDefinition _$TierQuotaDefinitionFromJson(Map<String, dynamic> json) => 
   period: json['period'] as String,
 );
 
-Map<String, dynamic> _$TierQuotaDefinitionToJson(
-  TierQuotaDefinition instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$TierQuotaDefinitionToJson(TierQuotaDefinition instance) => <String, dynamic>{
   'id': instance.id,
   'metric': instance.metric,
   'max': instance.max,

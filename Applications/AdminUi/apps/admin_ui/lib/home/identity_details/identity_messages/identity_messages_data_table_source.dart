@@ -17,7 +17,7 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
   final String participant;
   final MessageType type;
 
-  IdentityMessagesDataTableSource({required this.participant, required this.type, required this.locale});
+  new({required this.participant, required this.type, required this.locale});
 
   @override
   bool get isRowCountApproximate => false;
@@ -82,7 +82,7 @@ class IdentityMessagesDataTableSource extends AsyncDataTableSource {
 class _RecipientsCell extends StatelessWidget {
   final List<MessageRecipient> recipients;
 
-  const _RecipientsCell({required this.recipients});
+  const new({required this.recipients});
 
   @override
   Widget build(BuildContext context) {

@@ -128,11 +128,11 @@ final _router = GoRouter(
 );
 
 class AdminUiApp extends StatelessWidget with WatchItMixin {
-  const AdminUiApp({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ThemeMode themeMode = watchValue((ThemeModeModel x) => x.themeMode);
+    final themeMode = watchValue<ThemeModeModel, ThemeMode>((x) => x.themeMode);
 
     return MaterialApp.router(
       title: 'Admin UI',

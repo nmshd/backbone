@@ -9,7 +9,7 @@ class CopyToClipboardButton extends StatelessWidget {
   final ButtonStyle? style;
   final String? tooltip;
 
-  const CopyToClipboardButton({required this.clipboardText, required this.successMessage, this.style, this.tooltip, super.key});
+  const new({required this.clipboardText, required this.successMessage, this.style, this.tooltip, super.key});
 
   @override
   Widget build(BuildContext context) {

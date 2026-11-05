@@ -10,14 +10,8 @@ class UpdateClientResponse {
   final DateTime createdAt;
   final int? maxIdentities;
 
-  UpdateClientResponse({
-    required this.clientId,
-    required this.displayName,
-    required this.defaultTier,
-    required this.createdAt,
-    required this.maxIdentities,
-  });
+  new({required this.clientId, required this.displayName, required this.defaultTier, required this.createdAt, required this.maxIdentities});
 
-  factory UpdateClientResponse.fromJson(dynamic json) => _$UpdateClientResponseFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$UpdateClientResponseFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$UpdateClientResponseToJson(this);
 }

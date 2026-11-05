@@ -6,9 +6,7 @@ part of 'create_client_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CreateClientResponse _$CreateClientResponseFromJson(
-  Map<String, dynamic> json,
-) => CreateClientResponse(
+CreateClientResponse _$CreateClientResponseFromJson(Map<String, dynamic> json) => CreateClientResponse(
   clientId: json['clientId'] as String,
   displayName: json['displayName'] as String,
   clientSecret: json['clientSecret'] as String,
@@ -17,9 +15,7 @@ CreateClientResponse _$CreateClientResponseFromJson(
   maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$CreateClientResponseToJson(
-  CreateClientResponse instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$CreateClientResponseToJson(CreateClientResponse instance) => <String, dynamic>{
   'clientId': instance.clientId,
   'displayName': instance.displayName,
   'clientSecret': instance.clientSecret,

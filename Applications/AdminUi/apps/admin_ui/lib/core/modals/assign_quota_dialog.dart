@@ -17,9 +17,9 @@ Future<void> showAddQuotaDialog({required BuildContext context, required VoidCal
 
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _AssignQuotaDialog(
+    builder: (context) => _AssignQuotaDialog(
       availableMetrics: metrics.data,
-      addQuota: ({required String metricKey, required int max, required String period}) {
+      addQuota: ({required metricKey, required max, required period}) {
         if (tierId != null) {
           return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
         }
@@ -41,7 +41,7 @@ class _AssignQuotaDialog extends StatefulWidget {
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AssignQuotaDialog({required this.availableMetrics, required this.addQuota, required this.onQuotaAdded});
+  const new({required this.availableMetrics, required this.addQuota, required this.onQuotaAdded});
 
   @override
   State<_AssignQuotaDialog> createState() => _AssignQuotaDialogState();
@@ -89,10 +89,10 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
             children: [
               Padding(padding: const EdgeInsets.all(8), child: Text('*${context.l10n.required}')),
               Gaps.h32,
-              DropdownButtonFormField(
+              DropdownButtonFormField<String>(
                 initialValue: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
-                onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
+                onChanged: _saving ? null : (selected) => setState(() => _selectedMetric = selected),
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.metric}*'),
               ),
               Gaps.h24,
@@ -108,7 +108,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
                 keyboardType: .number,
               ),
               Gaps.h24,
-              DropdownButtonFormField(
+              DropdownButtonFormField<String>(
                 initialValue: _selectedPeriod,
                 items: [
                   DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
@@ -118,7 +118,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
                   DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
                   DropdownMenuItem(value: 'Total', child: Text(context.l10n.total)),
                 ],
-                onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
+                onChanged: _saving ? null : (selected) => setState(() => _selectedPeriod = selected),
                 decoration: InputDecoration(border: const OutlineInputBorder(), labelText: '${context.l10n.period}*'),
               ),
               if (_errorMessage != null)

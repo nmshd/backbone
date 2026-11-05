@@ -1,4 +1,3 @@
-import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,7 +5,7 @@ import '/core/core.dart';
 import 'widgets/query_deletion_process_audit_logs.dart';
 
 class IdentitiesOverview extends StatefulWidget {
-  const IdentitiesOverview({super.key});
+  const new({super.key});
 
   @override
   State<IdentitiesOverview> createState() => _IdentitiesOverviewState();
@@ -21,7 +20,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
     _dataSource = IdentityDataTableSource(
       locale: Localizations.localeOf(context),
-      navigateToIdentity: ({required String address}) {
+      navigateToIdentity: ({required address}) {
         context.go('/identities/$address');
       },
     );
@@ -48,7 +47,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                   mainAxisSize: .min,
                   children: [
                     IdentitiesFilter(
-                      onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                      onFilterChanged: ({filter}) async {
                         _dataSource
                           ..filter = filter
                           ..refreshDatasource();

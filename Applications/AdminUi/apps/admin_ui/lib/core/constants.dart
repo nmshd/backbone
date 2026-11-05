@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 final bool kIsDesktop = !kIsWeb && (defaultTargetPlatform == .linux || defaultTargetPlatform == .macOS || defaultTargetPlatform == .windows);
 
 class Gaps {
-  Gaps._();
+  new _();
 
   static const SizedBox h4 = SizedBox(height: 4);
   static const SizedBox h8 = SizedBox(height: 8);

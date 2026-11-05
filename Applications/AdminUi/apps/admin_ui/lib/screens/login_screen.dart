@@ -9,7 +9,7 @@ import '/core/core.dart';
 class LoginScreen extends StatefulWidget {
   final String? redirect;
 
-  const LoginScreen({required this.redirect, super.key});
+  const new({required this.redirect, super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();

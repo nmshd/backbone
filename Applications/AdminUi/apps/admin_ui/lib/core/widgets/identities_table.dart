@@ -9,7 +9,7 @@ class IdentitiesTable extends StatefulWidget {
   final Client? clientDetails;
   final TierDetails? tierDetails;
 
-  const IdentitiesTable({this.clientDetails, this.tierDetails, super.key})
+  const new({this.clientDetails, this.tierDetails, super.key})
     : assert(clientDetails != null || tierDetails != null, 'Either client details or tier details must be provided'),
       assert(clientDetails == null || tierDetails == null, 'Only one of client details or tier details can be provided');
 
@@ -31,14 +31,14 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
         locale: locale,
         hideClientColumn: true,
         filter: IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]),
-        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
+        navigateToIdentity: ({required address}) => context.push('/identities/$address'),
       );
     } else {
       _dataSource = IdentityDataTableSource(
         locale: locale,
         hideTierColumn: true,
         filter: IdentityOverviewFilter(tiers: [widget.tierDetails!.id]),
-        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
+        navigateToIdentity: ({required address}) => context.push('/identities/$address'),
       );
     }
   }
@@ -65,7 +65,7 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
                 IdentitiesFilter(
                   fixedClientId: widget.clientDetails?.clientId,
                   fixedTierId: widget.tierDetails?.id,
-                  onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                  onFilterChanged: ({filter}) async {
                     _dataSource
                       ..filter = filter
                       ..refreshDatasource();

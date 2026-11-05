@@ -7,7 +7,7 @@ class CopyableEntityDetails extends StatelessWidget {
   final String value;
   final int? ellipsize;
 
-  const CopyableEntityDetails({required this.title, required this.value, this.ellipsize, super.key});
+  const new({required this.title, required this.value, this.ellipsize, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class EntityDetails extends StatelessWidget {
   final String? tooltipMessage;
   final int? ellipsize;
 
-  const EntityDetails({required this.title, required this.value, this.onIconPressed, this.icon, this.tooltipMessage, this.ellipsize, super.key});
+  const new({required this.title, required this.value, this.onIconPressed, this.icon, this.tooltipMessage, this.ellipsize, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,9 +6,7 @@ part of 'identity_deletion_process.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-IdentityDeletionProcess _$IdentityDeletionProcessFromJson(
-  Map<String, dynamic> json,
-) => IdentityDeletionProcess(
+IdentityDeletionProcess _$IdentityDeletionProcessFromJson(Map<String, dynamic> json) => IdentityDeletionProcess(
   id: json['id'] as String,
   status: $enumDecode(_$DeletionProcessStatusEnumMap, json['status']),
   createdAt: DateTime.parse(json['createdAt'] as String),
@@ -19,9 +17,7 @@ IdentityDeletionProcess _$IdentityDeletionProcessFromJson(
   gracePeriodReminder3SentAt: json['gracePeriodReminder3SentAt'] == null ? null : DateTime.parse(json['gracePeriodReminder3SentAt'] as String),
 );
 
-Map<String, dynamic> _$IdentityDeletionProcessToJson(
-  IdentityDeletionProcess instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$IdentityDeletionProcessToJson(IdentityDeletionProcess instance) => <String, dynamic>{
   'id': instance.id,
   'status': _$DeletionProcessStatusEnumMap[instance.status]!,
   'createdAt': instance.createdAt.toIso8601String(),

@@ -17,7 +17,7 @@ import 'identity_relationships/identity_relationships.dart';
 class IdentityDetails extends StatefulWidget {
   final String address;
 
-  const IdentityDetails({required this.address, super.key});
+  const new({required this.address, super.key});
 
   @override
   State<IdentityDetails> createState() => _IdentityDetailsState();
@@ -76,7 +76,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
-              onTierChanged: (String? newValue) {
+              onTierChanged: (newValue) {
                 setState(() {
                   _selectedTier = newValue;
                 });
@@ -142,13 +142,7 @@ class _IdentityDetailsCard extends StatelessWidget {
   final List<TierOverview> availableTiers;
   final VoidCallback updateTierOfIdentity;
 
-  const _IdentityDetailsCard({
-    required this.identityDetails,
-    required this.availableTiers,
-    required this.updateTierOfIdentity,
-    this.selectedTier,
-    this.onTierChanged,
-  });
+  const new({required this.identityDetails, required this.availableTiers, required this.updateTierOfIdentity, this.selectedTier, this.onTierChanged});
 
   @override
   Widget build(BuildContext context) {

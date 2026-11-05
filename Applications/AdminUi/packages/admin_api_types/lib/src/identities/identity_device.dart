@@ -11,7 +11,7 @@ class IdentityDevice {
   final LastLoginInformation? lastLogin;
   final String communicationLanguage;
 
-  IdentityDevice({
+  new({
     required this.id,
     required this.username,
     required this.createdAt,
@@ -20,7 +20,7 @@ class IdentityDevice {
     this.lastLogin,
   });
 
-  factory IdentityDevice.fromJson(dynamic json) => _$IdentityDeviceFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityDeviceFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityDeviceToJson(this);
 }
 
@@ -28,8 +28,8 @@ class IdentityDevice {
 class LastLoginInformation {
   final DateTime time;
 
-  LastLoginInformation({required this.time});
+  new({required this.time});
 
-  factory LastLoginInformation.fromJson(dynamic json) => _$LastLoginInformationFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$LastLoginInformationFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$LastLoginInformationToJson(this);
 }

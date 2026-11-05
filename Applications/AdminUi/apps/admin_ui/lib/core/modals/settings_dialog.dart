@@ -9,11 +9,11 @@ Future<void> openSettingsDialog(BuildContext context) async {
 }
 
 class _SettingsDialog extends StatelessWidget with WatchItMixin {
-  const _SettingsDialog();
+  const new();
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = watchValue((ThemeModeModel x) => x.themeMode);
+    final themeMode = watchValue<ThemeModeModel, ThemeMode>((x) => x.themeMode);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: .circular(8)),

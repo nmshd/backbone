@@ -8,14 +8,14 @@ import '/core/core.dart';
 Future<void> showChangeClientSecretDialog({required BuildContext context, required String clientId}) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ChangeClientSecretDialog(clientId: clientId),
+    builder: (context) => _ChangeClientSecretDialog(clientId: clientId),
   );
 }
 
 class _ChangeClientSecretDialog extends StatefulWidget {
   final String clientId;
 
-  const _ChangeClientSecretDialog({required this.clientId});
+  const new({required this.clientId});
 
   @override
   State<_ChangeClientSecretDialog> createState() => _ChangeClientSecretDialogState();

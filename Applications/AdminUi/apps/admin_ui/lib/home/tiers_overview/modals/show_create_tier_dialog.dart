@@ -7,10 +7,10 @@ import 'package:go_router/go_router.dart';
 import '/core/core.dart';
 
 Future<Tier?> showCreateTierDialog({required BuildContext context}) =>
-    showDialog<Tier>(context: context, builder: (BuildContext context) => const _CreateTierDialog());
+    showDialog<Tier>(context: context, builder: (context) => const _CreateTierDialog());
 
 class _CreateTierDialog extends StatefulWidget {
-  const _CreateTierDialog();
+  const new();
 
   @override
   State<_CreateTierDialog> createState() => _CreateTierDialogState();
