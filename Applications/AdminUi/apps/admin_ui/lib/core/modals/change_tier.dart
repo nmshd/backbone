@@ -17,10 +17,10 @@ Future<void> showChangeTierDialog({
 
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _ShowChangeTierDialog(
+    builder: (context) => _ShowChangeTierDialog(
       onTierUpdated: onTierUpdated,
       currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
-      assignTier: ({required String tierId}) {
+      assignTier: ({required tierId}) {
         if (clientDetails != null) {
           return GetIt.I.get<AdminApiClient>().clients.updateClient(
             clientDetails.clientId,
@@ -72,8 +72,8 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
           child: DropdownButtonFormField<String>(
             initialValue: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
-            onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue!),
-            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
+            onChanged: _saving ? null : (newValue) => setState(() => _selectedTier = newValue!),
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((tier) {
               return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
             }).toList(),
           ),
