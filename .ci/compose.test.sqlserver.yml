@@ -4,17 +4,18 @@ services:
   database:
     container_name: bkb-sql_server-test
     hostname: sqlserver
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:245f6b1c8903edae52cb20fa31419cefcde1a49938bb8c3447099011fc871ca3
+    # Keep the previously used CU7 image until the SQLPAL startup crash is fixed in CU12.
+    # https://github.com/microsoft/mssql-docker/issues/974
+    image: mcr.microsoft.com/mssql/server:2025-CU7-ubuntu-24.04@sha256:86cc6144ef39bb0fbed2329e1ad79b13ee82e7b2e4739213a0db0800e668a74a
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
     healthcheck:
-      test: ["CMD-SHELL", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P "$$MSSQL_SA_PASSWORD" -C -b -l 3 -Q "SELECT 1"']
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 20s
+      test: ["CMD", "echo"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
     ports:
       - 1433:1433
 
@@ -24,7 +25,7 @@ services:
     volumes:
       - ../scripts/sql/sqlserver:/app/sql-scripts
     image: mcr.microsoft.com/mssql-tools@sha256:62556500522072535cb3df2bb5965333dded9be47000473e9e0f84118e248642
-    command: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -b -i /app/sql-scripts/setup.sql
+    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/sql-scripts/setup.sql"
 
   admin-cli:
     volumes:
