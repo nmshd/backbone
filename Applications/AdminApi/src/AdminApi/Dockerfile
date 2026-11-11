@@ -1,4 +1,4 @@
-FROM dhi.io/dotnet:10.0.403-sdk@sha256:ca09be115c173d6828d92f547ead02057db11cdd873aad128c0a2578770e186b AS build-env
+FROM dhi.io/dotnet:10.0.403-sdk@sha256:eb58013cd929c44300e8d7f80652011c6d1abdb3dcf30305e622ead82c29ed3f AS build-env
 
 ARG VERSION
 
@@ -89,7 +89,7 @@ WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
 #### Final #####
-FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:b48b2fa7f1129be09cd7a3cfe9bd730121d2b206c5f678c61dad5e362dd0c1d6
+FROM dhi.io/aspnetcore:10.0.14-debian13@sha256:4c9bb4f36fb1969dce36c1605d64d3fa0913fe11aecadd02abf371f0d117a258
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
