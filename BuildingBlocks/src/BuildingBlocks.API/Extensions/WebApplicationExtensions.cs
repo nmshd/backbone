@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.OpenApi;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
 
@@ -6,7 +7,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication UseCustomSwaggerUi(this WebApplication app)
     {
-        app.UseSwagger(options => { options.RouteTemplate = "docs/{documentName}/openapi.json"; });
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "docs/{documentName}/openapi.json";
+            options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_2;
+        });
 
         app.UseSwaggerUI(options =>
         {
