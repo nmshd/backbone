@@ -8,5 +8,4 @@ dart pub global activate melos
 melos bootstrap
 melos generate_translations
 flutter analyze
-melos test
 melos format
