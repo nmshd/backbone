@@ -189,6 +189,8 @@ public static class ServiceCollectionExtensions
 
             services.AddSwaggerGen(options =>
             {
+                options.MapType<byte[]>(() => new OpenApiSchema { Type = JsonSchemaType.String, Format = "byte", ContentEncoding = "base64" });
+
                 const string securityDefinitionName = "oauth2";
 
                 options.AddSecurityDefinition(

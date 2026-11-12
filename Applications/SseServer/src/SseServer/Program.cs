@@ -8,6 +8,7 @@ using Backbone.Modules.Devices.Infrastructure;
 using Backbone.Modules.Devices.Module;
 using Backbone.SseServer.Controllers;
 using Backbone.SseServer.Extensions;
+using Backbone.SseServer.OpenApi;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -17,6 +18,7 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Configuration = Backbone.SseServer.Configuration;
 using LogHelper = Backbone.BuildingBlocks.API.Logging.LogHelper;
 
@@ -92,6 +94,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddCustomAspNetCore(parsedConfiguration);
     services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi, "SSE Server");
+    services.Configure<SwaggerGenOptions>(options => options.OperationFilter<SseOperationFilter>());
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
