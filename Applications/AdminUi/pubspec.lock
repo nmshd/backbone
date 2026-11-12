@@ -213,10 +213,10 @@ packages:
     dependency: transitive
     description:
       name: data_table_2
-      sha256: "2e5f1e18c87aea08237c8915b2636ae0cde6e45ef0c5ed8de1216e05737a1b3d"
+      sha256: e49d91e7aeabd751336b3981814c2d63c2e935d01ebfb5ad1f4047ab1f8438e5
       url: "https://pub.dev"
     source: hosted
-    version: "2.8.0"
+    version: "3.0.0"
   dio:
     dependency: transitive
     description:
@@ -277,10 +277,10 @@ packages:
     dependency: transitive
     description:
       name: flex_seed_scheme
-      sha256: a3183753bbcfc3af106224bff3ab3e1844b73f58062136b7499919f49f3667e7
+      sha256: "08f9ee11f9a08c2dee76d0a07ea824c8a09ea4db9456e32ac4f6dfb34d28392c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "5.0.1"
   flutter:
     dependency: "direct dev"
     description: flutter

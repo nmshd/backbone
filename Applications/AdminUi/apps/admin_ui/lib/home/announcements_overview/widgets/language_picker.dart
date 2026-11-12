@@ -1,5 +1,5 @@
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LanguagePicker extends StatelessWidget {
   final FormFieldValidator<String>? validator;

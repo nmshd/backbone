@@ -1,5 +1,5 @@
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _successSeedColor = Color(0xFF428C17);
 const _warningSeedColor = Color(0xFF8C6117);

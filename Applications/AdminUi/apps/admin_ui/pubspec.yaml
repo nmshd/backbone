@@ -15,7 +15,7 @@ dependencies:
   collection: any
   data_table_2: ^3.0.0
   dropdown_button2: ^3.0.0
-  flex_seed_scheme: ^4.0.1
+  flex_seed_scheme: ^5.0.1
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -27,6 +27,7 @@ dependencies:
   go_router: ^18.0.0
   intl: any
   logger: ^2.6.2
+  material_ui: ^1.10.0
   shared_preferences: ^2.5.4
   sn_progress_dialog: ^2.0.0
   watch_it: ^2.4.1

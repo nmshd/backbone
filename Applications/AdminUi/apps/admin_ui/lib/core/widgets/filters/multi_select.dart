@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as legacy;
+import 'package:material_ui/material_ui.dart';
 
 typedef MultiSelectFilterOption = ({String label, String value});
 
@@ -32,54 +33,59 @@ class _MultiSelectFilterState extends State<MultiSelectFilter> {
         Text('${widget.label}:', style: const TextStyle(fontWeight: .bold)),
         SizedBox(
           width: 250,
-          child: DropdownButtonFormField2<String>(
-            isExpanded: true,
-            items: widget.options
-                .map(
-                  (item) => DropdownItem(
-                    value: item.value,
-                    closeOnTap: false,
-                    child: ValueListenableBuilder(
+          child: legacy.Material(
+            type: legacy.MaterialType.transparency,
+            child: DropdownButtonFormField2<String>(
+              isExpanded: true,
+              items: widget.options
+                  .map(
+                    (item) => DropdownItem(
+                      value: item.value,
+                      closeOnTap: false,
+                      child: ValueListenableBuilder(
+                        valueListenable: selectedItems,
+                        builder: (context, selectedItems, _) {
+                          final isSelected = selectedItems.contains(item.value);
+                          return Container(
+                            height: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              children: [
+                                if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
+                                const SizedBox(width: 16),
+                                Expanded(child: Text(item.label, style: const TextStyle(fontSize: 14))),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                  .toList(),
+              multiValueListenable: selectedItems,
+              onChanged: (value) {
+                final newSelection = selectedItems.value.contains(value)
+                    ? ([...selectedItems.value]..remove(value))
+                    : [...selectedItems.value, value!];
+                selectedItems.value = newSelection;
+                widget.onOptionSelected(newSelection);
+              },
+              selectedItemBuilder: (context) => widget.options
+                  .map(
+                    (_) => ValueListenableBuilder(
                       valueListenable: selectedItems,
-                      builder: (context, selectedItems, _) {
-                        final isSelected = selectedItems.contains(item.value);
-                        return Container(
-                          height: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
-                              const SizedBox(width: 16),
-                              Expanded(child: Text(item.label, style: const TextStyle(fontSize: 14))),
-                            ],
-                          ),
-                        );
-                      },
+                      builder: (context, selectedItems, _) => Text(
+                        widget.options.where((item) => selectedItems.contains(item.value)).map((item) => item.label).join(', '),
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-            multiValueListenable: selectedItems,
-            onChanged: (value) {
-              final newSelection = selectedItems.value.contains(value) ? ([...selectedItems.value]..remove(value)) : [...selectedItems.value, value!];
-              selectedItems.value = newSelection;
-              widget.onOptionSelected(newSelection);
-            },
-            selectedItemBuilder: (context) => widget.options
-                .map(
-                  (_) => ValueListenableBuilder(
-                    valueListenable: selectedItems,
-                    builder: (context, selectedItems, _) => Text(
-                      widget.options.where((item) => selectedItems.contains(item.value)).map((item) => item.label).join(', '),
-                      maxLines: 1,
-                      overflow: .ellipsis,
-                    ),
-                  ),
-                )
-                .toList(),
-            buttonStyleData: const FormFieldButtonStyleData(padding: .zero),
-            menuItemStyleData: const MenuItemStyleData(padding: .zero),
-            decoration: const InputDecoration(border: OutlineInputBorder()),
+                  )
+                  .toList(),
+              buttonStyleData: const FormFieldButtonStyleData(padding: .zero),
+              menuItemStyleData: const MenuItemStyleData(padding: .zero),
+              decoration: const legacy.InputDecoration(border: legacy.OutlineInputBorder()),
+            ),
           ),
         ),
       ],
