@@ -30,7 +30,7 @@ ThemeData _generateColorScheme({
 }) {
   assert(!lightsOut || brightness == .dark, 'lightsOut can only be used with dark theme');
 
-  final colorScheme = SeedColorScheme.fromSeeds(
+  final seededScheme = SeedColorScheme.fromSeeds(
     brightness: brightness,
     primaryKey: _primarySeedColor,
     secondaryKey: _secondarySeedColor,
@@ -38,6 +38,58 @@ ThemeData _generateColorScheme({
     errorKey: _errorSeedColor,
     surface: lightsOut ? Colors.black : null,
     tones: tonesConstructor(brightness),
+  );
+
+  // FlexSeedScheme 5 returns the standalone material_ui ColorScheme.
+  // Copy every color role into the Flutter SDK type used by the app.
+  final colorScheme = ColorScheme(
+    brightness: seededScheme.brightness,
+    primary: seededScheme.primary,
+    onPrimary: seededScheme.onPrimary,
+    primaryContainer: seededScheme.primaryContainer,
+    onPrimaryContainer: seededScheme.onPrimaryContainer,
+    primaryFixed: seededScheme.primaryFixed,
+    primaryFixedDim: seededScheme.primaryFixedDim,
+    onPrimaryFixed: seededScheme.onPrimaryFixed,
+    onPrimaryFixedVariant: seededScheme.onPrimaryFixedVariant,
+    secondary: seededScheme.secondary,
+    onSecondary: seededScheme.onSecondary,
+    secondaryContainer: seededScheme.secondaryContainer,
+    onSecondaryContainer: seededScheme.onSecondaryContainer,
+    secondaryFixed: seededScheme.secondaryFixed,
+    secondaryFixedDim: seededScheme.secondaryFixedDim,
+    onSecondaryFixed: seededScheme.onSecondaryFixed,
+    onSecondaryFixedVariant: seededScheme.onSecondaryFixedVariant,
+    tertiary: seededScheme.tertiary,
+    onTertiary: seededScheme.onTertiary,
+    tertiaryContainer: seededScheme.tertiaryContainer,
+    onTertiaryContainer: seededScheme.onTertiaryContainer,
+    tertiaryFixed: seededScheme.tertiaryFixed,
+    tertiaryFixedDim: seededScheme.tertiaryFixedDim,
+    onTertiaryFixed: seededScheme.onTertiaryFixed,
+    onTertiaryFixedVariant: seededScheme.onTertiaryFixedVariant,
+    error: seededScheme.error,
+    onError: seededScheme.onError,
+    errorContainer: seededScheme.errorContainer,
+    onErrorContainer: seededScheme.onErrorContainer,
+    surface: seededScheme.surface,
+    onSurface: seededScheme.onSurface,
+    surfaceDim: seededScheme.surfaceDim,
+    surfaceBright: seededScheme.surfaceBright,
+    surfaceContainerLowest: seededScheme.surfaceContainerLowest,
+    surfaceContainerLow: seededScheme.surfaceContainerLow,
+    surfaceContainer: seededScheme.surfaceContainer,
+    surfaceContainerHigh: seededScheme.surfaceContainerHigh,
+    surfaceContainerHighest: seededScheme.surfaceContainerHighest,
+    onSurfaceVariant: seededScheme.onSurfaceVariant,
+    outline: seededScheme.outline,
+    outlineVariant: seededScheme.outlineVariant,
+    shadow: seededScheme.shadow,
+    scrim: seededScheme.scrim,
+    inverseSurface: seededScheme.inverseSurface,
+    onInverseSurface: seededScheme.onInverseSurface,
+    inversePrimary: seededScheme.inversePrimary,
+    surfaceTint: seededScheme.surfaceTint,
   );
 
   final cardTheme = CardThemeData(color: colorScheme.surface, shadowColor: colorScheme.shadow, surfaceTintColor: colorScheme.surfaceTint);
