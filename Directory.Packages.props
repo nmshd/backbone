@@ -36,6 +36,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.AspNetCore.OData" Version="[9.5.0]" />
+    <!-- Pin the transitive dependency from Microsoft.AspNetCore.Http to fix GHSA-6527-9fp8-r4x6. -->
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="[2.3.14]" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[10.0.14]" />
@@ -98,7 +100,7 @@
     <PackageVersion Include="Spectre.Console" Version="[0.57.2]" />
     <!-- Even though we don't reference this package directly (it comes via Testcontainers), we have to pin this version because there is a vulnerability in versions <=2025.1.0> (see https://github.com/advisories/GHSA-q939-rpr3-3284) -->
     <PackageVersion Include="SSH.NET" Version="[2026.0.0]" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[10.3.1]" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="[11.0.0]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.14]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
     <!-- Even though we don't reference this package directly (it comes via Microsoft.Data.SqlClient and System.Security.Cryptography.Xml), we have to pin this version because there is a vulnerability in versions >= 10.0.0 and <= 10.0.12 (see https://github.com/advisories/GHSA-846f-f764-76mx) -->
