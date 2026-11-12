@@ -36,6 +36,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.AspNetCore.OData" Version="[9.5.0]" />
+    <!-- Pin the transitive dependency from Microsoft.AspNetCore.Http to fix GHSA-6527-9fp8-r4x6. -->
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="[2.3.14]" />
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="[10.0.14]" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="[10.0.14]" />

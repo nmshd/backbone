@@ -3,6 +3,6 @@
         "runner": "Microsoft.Testing.Platform"
     },
     "sdk": {
-        "version": "10.0.403"
+        "version": "10.0.404"
     }
 }
