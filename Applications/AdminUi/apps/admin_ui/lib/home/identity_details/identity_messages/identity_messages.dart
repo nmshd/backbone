@@ -11,14 +11,7 @@ class IdentityMessages extends StatefulWidget {
   final String subtitle;
   final String emptyTableMessage;
 
-  const IdentityMessages({
-    required this.participant,
-    required this.type,
-    required this.title,
-    required this.subtitle,
-    required this.emptyTableMessage,
-    super.key,
-  });
+  const new({required this.participant, required this.type, required this.title, required this.subtitle, required this.emptyTableMessage, super.key});
 
   @override
   State<IdentityMessages> createState() => _IdentityMessagesState();

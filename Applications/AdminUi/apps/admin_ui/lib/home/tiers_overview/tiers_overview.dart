@@ -11,7 +11,7 @@ import '/core/core.dart';
 import 'modals/show_create_tier_dialog.dart';
 
 class TiersOverview extends StatefulWidget {
-  const TiersOverview({super.key});
+  const new({super.key});
 
   @override
   State<TiersOverview> createState() => _TiersOverviewState();

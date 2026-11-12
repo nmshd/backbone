@@ -27,10 +27,10 @@ class ApiResponse<T> {
     return _error;
   }
 
-  ApiResponse._(this._data, this._error, this._pagination);
+  new _(this._data, this._error, this._pagination);
 
-  factory ApiResponse.success(T data, [Pagination? pagination]) => ApiResponse._(data, null, pagination);
-  factory ApiResponse.fromError(ApiError error) => ApiResponse._(null, error, null);
+  factory success(T data, [Pagination? pagination]) => ApiResponse._(data, null, pagination);
+  factory fromError(ApiError error) => ApiResponse._(null, error, null);
 
   bool get hasError => _error != null;
   bool get hasData => _data != null;
@@ -42,9 +42,9 @@ class Pagination {
   final int totalPages;
   final int totalRecords;
 
-  Pagination({required this.pageNumber, required this.pageSize, required this.totalPages, required this.totalRecords});
+  new({required this.pageNumber, required this.pageSize, required this.totalPages, required this.totalRecords});
 
-  factory Pagination.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return Pagination(
       pageNumber: (json['pageNumber'] as num).toInt(),
       pageSize: (json['pageSize'] as num).toInt(),

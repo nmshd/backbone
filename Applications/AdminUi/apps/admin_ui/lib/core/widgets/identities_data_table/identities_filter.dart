@@ -14,7 +14,7 @@ class IdentitiesFilter extends StatefulWidget {
   final String? fixedTierId;
   final String? fixedClientId;
 
-  const IdentitiesFilter({required this.onFilterChanged, this.fixedTierId, this.fixedClientId, super.key});
+  const new({required this.onFilterChanged, this.fixedTierId, this.fixedClientId, super.key});
 
   @override
   State<IdentitiesFilter> createState() => _IdentitiesFilterState();

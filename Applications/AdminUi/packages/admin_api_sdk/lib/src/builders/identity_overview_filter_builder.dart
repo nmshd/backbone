@@ -5,7 +5,7 @@ class IdentityOverviewFilterBuilder {
 
   String _filter = '';
 
-  IdentityOverviewFilterBuilder(this.filter);
+  new(this.filter);
 
   String build() {
     if (filter.address != null) {
@@ -72,7 +72,7 @@ enum FilterOperator {
 
   final String userFriendlyOperator;
 
-  const FilterOperator(this.userFriendlyOperator);
+  new(this.userFriendlyOperator);
 }
 
 class IdentityOverviewFilter {
@@ -85,16 +85,7 @@ class IdentityOverviewFilter {
   final FilterOperatorValue? datawalletVersion;
   final FilterOperatorValue? identityVersion;
 
-  IdentityOverviewFilter({
-    this.address,
-    this.tiers,
-    this.clients,
-    this.createdAt,
-    this.lastLoginAt,
-    this.numberOfDevices,
-    this.datawalletVersion,
-    this.identityVersion,
-  });
+  new({this.address, this.tiers, this.clients, this.createdAt, this.lastLoginAt, this.numberOfDevices, this.datawalletVersion, this.identityVersion});
 
   IdentityOverviewFilter copyWith({
     Optional<String?>? address,
@@ -123,5 +114,5 @@ class FilterOperatorValue {
   final FilterOperator operator;
   final String value;
 
-  FilterOperatorValue(this.operator, this.value);
+  new(this.operator, this.value);
 }

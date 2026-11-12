@@ -6,7 +6,7 @@ import 'identity_relationship_table.dart';
 class IdentityRelationships extends StatefulWidget {
   final String address;
 
-  const IdentityRelationships({required this.address, super.key});
+  const new({required this.address, super.key});
 
   @override
   State<IdentityRelationships> createState() => _IdentityRelationshipsState();

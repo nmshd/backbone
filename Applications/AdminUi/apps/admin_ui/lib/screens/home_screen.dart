@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
   final Widget child;
   final String location;
 
-  const HomeScreen({required this.child, required this.location, super.key});
+  const new({required this.child, required this.location, super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

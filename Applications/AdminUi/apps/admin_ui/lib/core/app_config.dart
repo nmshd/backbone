@@ -1,5 +1,5 @@
 class AppConfig {
   final String baseUrl;
 
-  AppConfig({required this.baseUrl});
+  new({required this.baseUrl});
 }

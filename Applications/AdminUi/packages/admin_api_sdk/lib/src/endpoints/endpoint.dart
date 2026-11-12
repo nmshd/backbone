@@ -6,7 +6,7 @@ import '../types/types.dart';
 abstract class Endpoint {
   final Dio _dio;
 
-  Endpoint(this._dio);
+  new(this._dio);
 
   @protected
   Future<T> getPlain<T>(String path) async {

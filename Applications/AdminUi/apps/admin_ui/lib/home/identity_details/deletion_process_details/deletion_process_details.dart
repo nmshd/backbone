@@ -13,7 +13,7 @@ class DeletionProcessDetails extends StatefulWidget {
   final String address;
   final String deletionProcessId;
 
-  const DeletionProcessDetails({required this.address, required this.deletionProcessId, super.key});
+  const new({required this.address, required this.deletionProcessId, super.key});
 
   @override
   State<DeletionProcessDetails> createState() => _DeletionProcessDetailsState();
@@ -72,7 +72,7 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
   final String address;
   final IdentityDeletionProcessDetail deletionProcessDetails;
 
-  const _DeletionProcessDetailsCard({required this.address, required this.deletionProcessDetails});
+  const new({required this.address, required this.deletionProcessDetails});
 
   @override
   Widget build(BuildContext context) {

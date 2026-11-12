@@ -5,7 +5,7 @@ import '/core/core.dart';
 import 'widgets/query_deletion_process_audit_logs.dart';
 
 class IdentitiesOverview extends StatefulWidget {
-  const IdentitiesOverview({super.key});
+  const new({super.key});
 
   @override
   State<IdentitiesOverview> createState() => _IdentitiesOverviewState();

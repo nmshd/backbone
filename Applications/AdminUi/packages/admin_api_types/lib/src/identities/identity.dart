@@ -17,7 +17,7 @@ class Identity {
   final List<IdentityDevice> devices;
   final List<IdentityQuota> quotas;
 
-  Identity({
+  new({
     required this.address,
     required this.clientId,
     required this.publicKey,
@@ -29,6 +29,6 @@ class Identity {
     required this.quotas,
   });
 
-  factory Identity.fromJson(dynamic json) => _$IdentityFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$IdentityFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityToJson(this);
 }

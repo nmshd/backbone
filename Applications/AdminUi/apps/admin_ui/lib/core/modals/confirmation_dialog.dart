@@ -24,7 +24,7 @@ class _ConfirmationDialog extends StatelessWidget {
   final String actionText;
   final String? cancelActionText;
 
-  const _ConfirmationDialog({required this.title, required this.message, required this.actionText, this.cancelActionText});
+  const new({required this.title, required this.message, required this.actionText, this.cancelActionText});
 
   @override
   Widget build(BuildContext context) {

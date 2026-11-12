@@ -4,7 +4,7 @@ import '../types/types.dart';
 import 'endpoint.dart';
 
 class RelationshipsEndpoint extends Endpoint {
-  RelationshipsEndpoint(super._dio);
+  new(super._dio);
 
   Future<ApiResponse<List<Relationship>>> getRelationshipsByParticipantAddress(String participant, {int? pageNumber, int? pageSize}) {
     assert(pageNumber == null || pageNumber > 0, 'pageNumber must be greater than 0 when defined');

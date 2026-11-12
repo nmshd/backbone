@@ -2,7 +2,7 @@ class AnnouncementLanguage {
   final String isoCode;
   final String name;
 
-  const AnnouncementLanguage(this.isoCode, this.name);
+  const new(this.isoCode, this.name);
 }
 
 class AnnouncementLanguages {

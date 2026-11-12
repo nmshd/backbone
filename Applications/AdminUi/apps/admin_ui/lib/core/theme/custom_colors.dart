@@ -44,7 +44,7 @@ final darkHighContrastCustomColors = CustomColors.generate(
 
 @immutable
 class CustomColors extends ThemeExtension<CustomColors> {
-  const CustomColors({
+  const new({
     required this.success,
     required this.onSuccess,
     required this.successContainer,
@@ -64,7 +64,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.onDecorative2Container,
   });
 
-  factory CustomColors.generate({
+  factory generate({
     required FlexTones Function(Brightness brightness) tonesConstructor,
     required Brightness brightness,
     required Color successSeedColor,

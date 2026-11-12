@@ -13,7 +13,7 @@ class Relationship {
   final String createdByDevice;
   final String? answeredByDevice;
 
-  Relationship({
+  new({
     required this.peer,
     required this.requestedBy,
     required this.templateId,
@@ -24,6 +24,6 @@ class Relationship {
     required this.answeredByDevice,
   });
 
-  factory Relationship.fromJson(dynamic json) => _$RelationshipFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$RelationshipFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$RelationshipToJson(this);
 }

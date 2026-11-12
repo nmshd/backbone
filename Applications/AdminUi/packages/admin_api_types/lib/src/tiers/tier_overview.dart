@@ -10,7 +10,7 @@ class TierOverview {
   final bool canBeUsedAsDefaultForClient;
   final bool canBeManuallyAssigned;
 
-  TierOverview({
+  new({
     required this.id,
     required this.name,
     required this.numberOfIdentities,
@@ -18,6 +18,6 @@ class TierOverview {
     required this.canBeManuallyAssigned,
   });
 
-  factory TierOverview.fromJson(dynamic json) => _$TierOverviewFromJson(json as Map<String, dynamic>);
+  factory fromJson(dynamic json) => _$TierOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$TierOverviewToJson(this);
 }

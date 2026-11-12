@@ -8,7 +8,7 @@ import '/core/core.dart';
 class IdentityDevices extends StatelessWidget {
   final List<IdentityDevice> devices;
 
-  const IdentityDevices({required this.devices, super.key});
+  const new({required this.devices, super.key});
 
   @override
   Widget build(BuildContext context) {

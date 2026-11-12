@@ -4,7 +4,7 @@ class InputField extends StatelessWidget {
   final void Function(String enteredText) onEnteredText;
   final String label;
 
-  const InputField({required this.onEnteredText, required this.label, super.key});
+  const new({required this.onEnteredText, required this.label, super.key});
 
   @override
   Widget build(BuildContext context) {

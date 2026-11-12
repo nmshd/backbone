@@ -11,7 +11,7 @@ import '/core/core.dart';
 class DeletionProcessAuditLogDetails extends StatefulWidget {
   final String identityAddress;
 
-  const DeletionProcessAuditLogDetails({required this.identityAddress, super.key});
+  const new({required this.identityAddress, super.key});
 
   @override
   State<DeletionProcessAuditLogDetails> createState() => _DeletionProcessAuditLogDetailsState();

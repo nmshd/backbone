@@ -42,7 +42,7 @@ class _ShowChangeTierDialog extends StatefulWidget {
   final List<TierOverview> availableTiers;
   final String currentTier;
 
-  const _ShowChangeTierDialog({required this.onTierUpdated, required this.availableTiers, required this.assignTier, required this.currentTier});
+  const new({required this.onTierUpdated, required this.availableTiers, required this.assignTier, required this.currentTier});
 
   @override
   State<_ShowChangeTierDialog> createState() => _ShowChangeTierDialogState();

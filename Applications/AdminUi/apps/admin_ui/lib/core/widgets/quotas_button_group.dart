@@ -14,7 +14,7 @@ class QuotasButtonGroup extends StatefulWidget {
   final String? identityAddress;
   final String? tierId;
 
-  const QuotasButtonGroup({required this.selectedQuotas, required this.onQuotasChanged, this.identityAddress, this.tierId, super.key})
+  const new({required this.selectedQuotas, required this.onQuotasChanged, this.identityAddress, this.tierId, super.key})
     : assert(identityAddress != null || tierId != null, 'Either identityAddress or tierId must be provided'),
       assert(identityAddress == null || tierId == null, 'Only one of identityAddress or tierId can be provided');
 
@@ -71,11 +71,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       progressDialog = ProgressDialog(context: context);
 
       unawaited(
-        progressDialog.show(
-          max: widget.selectedQuotas.length,
-          msg: context.l10n.quotaButtonGroup_deletingMessage,
-          progressType: .determinate,
-        ),
+        progressDialog.show(max: widget.selectedQuotas.length, msg: context.l10n.quotaButtonGroup_deletingMessage, progressType: .determinate),
       );
     }
 

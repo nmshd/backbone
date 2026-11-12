@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SplashScreen extends StatefulWidget {
   final String? redirect;
 
-  const SplashScreen({required this.redirect, super.key});
+  const new({required this.redirect, super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
