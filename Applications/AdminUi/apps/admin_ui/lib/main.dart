@@ -143,9 +143,6 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
       highContrastDarkTheme: highContrastDarkTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
-      // The dropdown and progress dialog packages still use Flutter's Material library.
-      // ignore: deprecated_member_use
-      builder: (context, child) => MaterialUiCompatibilityBridge(child: child!),
       localizationsDelegates: const [AppLocalizations.delegate, ...GlobalMaterialLocalizations.delegates],
       supportedLocales: AppLocalizations.supportedLocales,
     );
