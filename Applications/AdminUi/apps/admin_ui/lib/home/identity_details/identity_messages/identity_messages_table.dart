@@ -1,6 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '/core/core.dart';
 import 'identity_messages_data_table_source.dart';
