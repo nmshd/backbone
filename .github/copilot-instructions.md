@@ -5,13 +5,13 @@
 **Enmeshed Backbone** is a comprehensive .NET-based cloud infrastructure platform that provides central services for the Enmeshed ecosystem. It consists of multiple services, libraries, feature modules, and a Flutter-based administrative UI.
 
 -   **Repository Size**: Large monorepo with 100+ projects across multiple layers
--   **Primary Language**: C# (.NET 10.0)
+-   **Primary Language**: C# (.NET 11.0)
 -   **Secondary Language**: Dart (Flutter for Admin UI)
 -   **Architecture Style**: Clean Architecture + CQRS + Domain-Driven Design
--   **Primary Target Runtime**: .NET 10.0 (net10.0)
+-   **Primary Target Runtime**: .NET 11.0 (net11.0)
 -   **Database Support**: PostgreSQL and SQL Server
 -   **Deployment**: Docker containers (8+ services)
--   **Framework**: ASP.NET Core 10 for APIs, Entity Framework Core 10 for data access
+-   **Framework**: ASP.NET Core 11 for APIs, Entity Framework Core 10 for data access
 
 ## Project Structure
 
@@ -69,7 +69,7 @@ dotnet restore /p:ContinuousIntegrationBuild=true "Backbone.slnx"
 
 -   Central package management is enabled (`Directory.Packages.props`)
 -   Locked mode is enforced in CI builds (`RestoreLockedMode=true`)
--   All projects use `net10.0` target framework
+-   All projects use `net11.0` target framework
 -   Implicit usings are enabled in all projects
 -   Nullable reference types are enabled (TreatWarningsAsErrors=true)
 
@@ -268,9 +268,9 @@ melos bootstrap
 | File                                | Purpose                                                                       |
 | ----------------------------------- | ----------------------------------------------------------------------------- |
 | `Backbone.slnx`                     | Main solution file (modern format)                                            |
-| `Directory.Build.props`             | Global project settings (net10.0, implicit usings, nullable refs, code style) |
+| `Directory.Build.props`             | Global project settings (net11.0, implicit usings, nullable refs, code style) |
 | `Directory.Packages.props`          | Central NuGet version management, locked mode for reproducible builds         |
-| `global.json`                       | .NET SDK version pinning (10.0.403)                                           |
+| `global.json`                       | .NET SDK version pinning (11.0.100)                                           |
 | `.editorconfig`                     | Code style rules (4-space indentation, line limits, C# conventions)           |
 | `.ci/checkFormatting.sh`            | Format validation script                                                      |
 | `.ci/test.sh`                       | Complete test pipeline script                                                 |
