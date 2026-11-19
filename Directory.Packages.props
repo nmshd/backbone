@@ -63,16 +63,16 @@
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.6.2]" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[10.0.3]" />
     <PackageVersion Include="NSec.Cryptography" Version="[26.4.0]" />
-    <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.9.0]" />
-    <PackageVersion Include="OpenIddict.Core" Version="[7.9.0]" />
-    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.9.0]" />
-    <PackageVersion Include="OpenTelemetry.Api" Version="1.21.0" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.21.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.21.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.21.0]" />
+    <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.8.0]" />
+    <PackageVersion Include="OpenIddict.Core" Version="[7.8.0]" />
+    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="[7.8.0]" />
+    <PackageVersion Include="OpenTelemetry.Api" Version="1.20.1" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.20.1" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="[1.20.1]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="[1.20.2]" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.18.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.21.0]" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.21.0]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="[1.20.2]" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="[1.20.1]" />
     <PackageVersion Include="Polly" Version="[8.9.1]" />
     <PackageVersion Include="RabbitMQ.Client" Version="[7.2.2]" />
     <PackageVersion Include="ReHackt.Extensions.Options.Validation" Version="[10.1.1]" />
