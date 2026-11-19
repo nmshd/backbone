@@ -99,7 +99,7 @@
     <PackageVersion Include="SimpleBase" Version="[5.6.4]" />
     <PackageVersion Include="Spectre.Console" Version="[0.57.2]" />
     <!-- Even though we don't reference this package directly (it comes via Testcontainers), we have to pin this version because there is a vulnerability in versions <=2025.1.0> (see https://github.com/advisories/GHSA-q939-rpr3-3284) -->
-    <PackageVersion Include="SSH.NET" Version="[2026.0.0]" />
+    <PackageVersion Include="SSH.NET" Version="[2026.0.1]" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="[11.0.1]" />
     <PackageVersion Include="System.CommandLine" Version="[2.0.15]" />
     <PackageVersion Include="System.Data.SqlClient" Version="[4.9.1]" />
