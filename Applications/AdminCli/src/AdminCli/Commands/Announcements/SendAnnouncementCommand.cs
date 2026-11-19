@@ -119,7 +119,7 @@ public class SendAnnouncementCommand : AdminCliCommand
         }
         catch (Exception e)
         {
-            await Console.Error.WriteLineAsync($@"An error occurred: {e.Message}");
+            await Console.Error.WriteLineAsync($@"An error occurred: {e.Message}", CancellationToken.None);
             return 1;
         }
     }

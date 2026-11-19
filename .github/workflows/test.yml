@@ -46,7 +46,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
       - name: Cache NuGet packages
@@ -78,7 +78,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
       - name: Cache NuGet packages
@@ -201,7 +201,7 @@ jobs:
       - name: Setup NuGet
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 
@@ -355,7 +355,7 @@ jobs:
       - name: Setup Dotnet
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: 11.0.x
           cache: true
           cache-dependency-path: "**/packages.lock.json"
       - name: Install nuget-licenses tool
