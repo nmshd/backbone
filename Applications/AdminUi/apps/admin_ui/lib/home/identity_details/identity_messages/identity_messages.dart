@@ -1,5 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'identity_messages_data_table_source.dart';
 import 'identity_messages_table.dart';

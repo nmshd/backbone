@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'identity_relationship_data_table_source.dart';
 import 'identity_relationship_table.dart';
