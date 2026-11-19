@@ -241,7 +241,7 @@ services:
 
   ms-sql-server:
     hostname: ms-sql-server
-    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:21cba63f9e5f93ae72d211e50bceca8f047a6233da18ed5ecb497152f97eca7b
+    image: mcr.microsoft.com/mssql/server:2025-latest@sha256:05644dad1266ca3d445d1e8f6d2ebb9a6a03df9a39376e0f7b48917356dca9d9
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
@@ -263,7 +263,7 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4.4.0-management-alpine@sha256:4841f6384ef8313c3594cd3f2e9f40c10805f8a61c45f08a9a5d9ddea8199267
+    image: rabbitmq:4.4.1-management-alpine@sha256:2b47b1aa05ec7e373950ad2e9200e9f95a9da7039c8d22c19dbf5a59101362c4
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
@@ -306,7 +306,7 @@ services:
     restart: unless-stopped
 
   loki:
-    image: grafana/loki:3.7.9@sha256:0db216b630ae1f348a1584c67f3cead8b4c1fc839169a39501db664744158e28
+    image: grafana/loki:3.7.10@sha256:b43c257ccfc925d4a50b8717cac61a3b51df8c48d01847936057e5c4075a24a7
     command:
       - -config.file=/etc/loki/loki.yml
     ports:
