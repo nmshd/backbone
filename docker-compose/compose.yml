@@ -232,7 +232,7 @@ services:
 
   azure-storage-emulator:
     hostname: azurite
-    image: mcr.microsoft.com/azure-storage/azurite:3.37.0@sha256:830430c1da1a2d537e08f3e6764dd1f5ae00cf0346bcaf625b968ec3f0971fd5
+    image: mcr.microsoft.com/azure-storage/azurite:3.38.0@sha256:c26024d62bf4a5b88a40968afd217234c00e1fc9a4790dc6105d1ca7979f6eec
     command: azurite-blob -l /data --blobHost "0.0.0.0" --skipApiVersionCheck
     ports:
       - "10000:10000"
@@ -253,7 +253,7 @@ services:
 
   postgres:
     hostname: postgres
-    image: postgres:18.6@sha256:e3d24f6906d0760bf4da0dae872415391ededefad23fd471c47dc53b0ddf3c42
+    image: postgres:18.7@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
     environment:
       - POSTGRES_PASSWORD=admin
     volumes:

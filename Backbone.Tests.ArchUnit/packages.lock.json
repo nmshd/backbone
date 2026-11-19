@@ -19,12 +19,12 @@
       },
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
-        "requested": "[18.11.1, 18.11.1]",
-        "resolved": "18.11.1",
-        "contentHash": "WhRZZb+oLAB2neaTa773vfPl+eIyfaMtDSZBHFJtWccty0OZbPXimIzDv1/dux5/Sr2/GqKEzOT8U4295g1GJg==",
+        "requested": "[18.12.0, 18.12.0]",
+        "resolved": "18.12.0",
+        "contentHash": "MdVkskM2ZCKSlNts5DIbz9MZidX7SwcXKBoBqY4XT91b30hAwC8PkjWbdGKRak6BKAD1BQqaZnh/SD0AJGoDCQ==",
         "dependencies": {
-          "Microsoft.CodeCoverage": "18.11.1",
-          "Microsoft.TestPlatform.TestHost": "18.11.1"
+          "Microsoft.CodeCoverage": "18.12.0",
+          "Microsoft.TestPlatform.TestHost": "18.12.0"
         }
       },
       "TngTech.ArchUnitNET.xUnitV3": {
@@ -68,8 +68,17 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "4.0.103",
-        "contentHash": "DCOotOZU/uuGTJHyhdzDaISArck4hYC6Y9OzZM8/PI+G4AhtNaD1hszFG1Giwdpod0Sn7gxxlx6xUfcPKNeQ8Q=="
+        "resolved": "4.1.1.1",
+        "contentHash": "paZNy+g/hXMCsEpWvmOFr14x9gVzIY2JRSzSk+nXpKcnaASxEFBMWE4CNBuI/WwGN1ygTwojRTsPRn3yXuhSYQ==",
+        "dependencies": {
+          "AWSSDK.Extensions.Numerics": "[4.1.0, 5.0.0)",
+          "System.IO.Hashing": "11.0.0"
+        }
+      },
+      "AWSSDK.Extensions.Numerics": {
+        "type": "Transitive",
+        "resolved": "4.1.0",
+        "contentHash": "hhoiXT1aUyVgIiQbQoqG3L1EEneqXDh2GKyH5izUlO6Rzi9GAAi8S6mlLiVwow23+EGg77zHjdmUi+ia3RSUTg=="
       },
       "Azure.Core": {
         "type": "Transitive",
@@ -399,8 +408,8 @@
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
-        "resolved": "18.11.1",
-        "contentHash": "E3VdeksrrkN0fp/Fjsfr3yraNGHbgxRx3k2pjVIohYiZcCcrXQ/Dz6YX7KcZpx8NCf4G8yqnGA5OnMalds/qjg=="
+        "resolved": "18.12.0",
+        "contentHash": "OhOPSaCAQhBJgXF1OrX0uK3eTkwZ1XnM44iGLZplYgKrmgKzQUdv9xtGGaE568RuQ738TlrTJ3pm9aWL5FH7iw=="
       },
       "Microsoft.Data.SqlClient": {
         "type": "Transitive",
@@ -836,15 +845,15 @@
       },
       "Microsoft.TestPlatform.ObjectModel": {
         "type": "Transitive",
-        "resolved": "18.11.1",
-        "contentHash": "CWP0wn6kt1LYKTPIlQZbklsZVZDurjszhX5+ijQaxFTJ4p6SNygniudtTcwIxPU1mDTHba7H3AwQ1AC40AA6bw=="
+        "resolved": "18.12.0",
+        "contentHash": "ilT2o4v/c1joLgsfzS4dYQ71bWAy/RsA6fBY7f5OEUpUsUhwIzoliGeXdS3yctWuy4NZyuSVlO7dPX4ed7R06A=="
       },
       "Microsoft.TestPlatform.TestHost": {
         "type": "Transitive",
-        "resolved": "18.11.1",
-        "contentHash": "dVQMb8GArL+vWgTbYhOgsCA1gKI1l52jfdw9pvQiaet5IbzwioQDCzbGDVt9QeeHCrMnheW2FA+Sm92mxGr+3w==",
+        "resolved": "18.12.0",
+        "contentHash": "WTT912JUqmFa2BkCeXPkMCUpbYOqsbeRfRJdhaIQROx49iokgnGPAlKvXmHWKC9nJwWrHwSQfR+k+Qn7NCxfzw==",
         "dependencies": {
-          "Microsoft.TestPlatform.ObjectModel": "18.11.1"
+          "Microsoft.TestPlatform.ObjectModel": "18.12.0"
         }
       },
       "Microsoft.Win32.Registry": {
@@ -1231,8 +1240,8 @@
       },
       "System.IO.Hashing": {
         "type": "Transitive",
-        "resolved": "10.0.9",
-        "contentHash": "vixglGnKEexAJDeIRhyayZYzxyrgK1K9GU3K/zRZVwDbaDcMkSqj4WDHoVmQMNfsdUtLALfNSJw6mBIpdxie4A=="
+        "resolved": "11.0.0",
+        "contentHash": "U+Bv2qCYt6eONi+arSP0QIp4uTO6os6uceBsqiAwruZ+Wo2HrRhO/0tj38M9URJtS+4DhAtT3ka2TGNFYsnhyQ=="
       },
       "System.Management": {
         "type": "Transitive",
@@ -1264,8 +1273,8 @@
       },
       "Testcontainers": {
         "type": "Transitive",
-        "resolved": "4.16.0",
-        "contentHash": "JmMUZk6ZXQovbGQjaMB+YxOR0PbJTdYjOYjRcrm5LrA2dhLVMuCbhVGGunzCGIQfFMUB5Lno2LPOHMMuaGmuIg==",
+        "resolved": "4.17.0",
+        "contentHash": "yXAdoZ3dcrg84Iy05X10qRfz8EO35tpSmI1kK91Qe32MNz0DyPuSbiCi33i5AvSbYMET9HxBw32UuHJHSSK49A==",
         "dependencies": {
           "Docker.DotNet.Enhanced": "4.3.3",
           "Docker.DotNet.Enhanced.X509": "4.3.3",
@@ -1396,7 +1405,7 @@
           "Backbone.BuildingBlocks.Application": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.BuildingBlocks.Domain": {
@@ -1408,7 +1417,7 @@
       "Backbone.BuildingBlocks.Infrastructure": {
         "type": "Project",
         "dependencies": {
-          "AWSSDK.S3": "[4.0.104.12, 4.0.104.12]",
+          "AWSSDK.S3": "[4.1.2, 4.1.2]",
           "Autofac": "[9.3.4, 9.3.4]",
           "Azure.Messaging.ServiceBus": "[7.21.0, 7.21.0]",
           "Azure.Storage.Blobs": "[12.30.1, 12.30.1]",
@@ -1416,7 +1425,7 @@
           "EFCore.BulkExtensions.Core": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.PostgreSql": "[10.0.1, 10.0.1]",
           "EFCore.BulkExtensions.SqlServer": "[10.0.1, 10.0.1]",
-          "Google.Cloud.PubSub.V1": "[3.39.0, 3.39.0]",
+          "Google.Cloud.PubSub.V1": "[3.40.0, 3.40.0]",
           "Google.Cloud.Storage.V1": "[5.0.0, 5.0.0]",
           "Microsoft.EntityFrameworkCore": "[10.0.15, 10.0.15]",
           "Microsoft.EntityFrameworkCore.Abstractions": "[10.0.15, 10.0.15]",
@@ -1444,8 +1453,8 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]",
-          "Testcontainers.Azurite": "[4.16.0, 4.16.0]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]",
+          "Testcontainers.Azurite": "[4.17.0, 4.17.0]"
         }
       },
       "Backbone.BuildingBlocks.Module": {
@@ -1517,7 +1526,7 @@
           "Backbone.Crypto": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.DevelopmentKit.Identity": {
@@ -1533,7 +1542,7 @@
           "Backbone.DevelopmentKit.Identity": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.EventHandlerService": {
@@ -1566,7 +1575,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Job.IdentityDeletion": {
@@ -1602,7 +1611,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Announcements.Abstractions": {
@@ -1632,7 +1641,7 @@
           "Backbone.Modules.Announcements.Domain": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Announcements.Infrastructure": {
@@ -1680,7 +1689,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FluentValidation.Validators.UnitTestExtension": "[1.12.0.5, 1.12.0.5]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Challenges.Abstractions": {
@@ -1742,7 +1751,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Devices.Abstractions": {
@@ -1776,7 +1785,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Devices.Infrastructure": {
@@ -1822,7 +1831,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Devices.Module": {
@@ -1856,7 +1865,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Files.Abstractions": {
@@ -1886,7 +1895,7 @@
           "Backbone.Modules.Files.Domain": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Files.Infrastructure": {
@@ -1921,7 +1930,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Files.Module": {
@@ -1946,7 +1955,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Messages.Abstractions": {
@@ -1986,7 +1995,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Messages.Infrastructure": {
@@ -2036,7 +2045,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Quotas.Abstractions": {
@@ -2067,7 +2076,7 @@
           "Backbone.Modules.Quotas.Domain": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]",
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]",
           "Serilog.Enrichers.Sensitive": "[2.1.0, 2.1.0]"
         }
       },
@@ -2106,7 +2115,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Quotas.Module": {
@@ -2135,7 +2144,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Relationships.Abstractions": {
@@ -2235,7 +2244,7 @@
           "Backbone.Modules.Synchronization.Domain": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Synchronization.Infrastructure": {
@@ -2294,7 +2303,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.Modules.Tags.Abstractions": {
@@ -2350,7 +2359,7 @@
           "Backbone.Modules.Tokens.Domain": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]",
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]",
           "Polly": "[8.9.1, 8.9.1]"
         }
       },
@@ -2404,7 +2413,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FakeItEasy": "[9.0.1, 9.0.1]",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]",
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]",
           "Polly": "[8.9.1, 8.9.1]"
         }
       },
@@ -2417,7 +2426,7 @@
           "Backbone.Tooling": "[1.0.0, )",
           "Backbone.UnitTestTools": "[1.0.0, )",
           "GitHubActionsTestLogger": "[3.0.5, 3.0.5]",
-          "Microsoft.NET.Test.Sdk": "[18.11.1, 18.11.1]"
+          "Microsoft.NET.Test.Sdk": "[18.12.0, 18.12.0]"
         }
       },
       "Backbone.UnitTestTools": {
@@ -2469,11 +2478,11 @@
       },
       "AWSSDK.S3": {
         "type": "CentralTransitive",
-        "requested": "[4.0.104.12, 4.0.104.12]",
-        "resolved": "4.0.104.12",
-        "contentHash": "z4rPjjQoPDuWtxk2utbO/I+xNEqA+ac7/cDjwd4KvFrYHfwatJ1IVwjQ7ukaSlSnqY5e9+Q6YHtu87LBJNj+SQ==",
+        "requested": "[4.1.2, 4.1.2]",
+        "resolved": "4.1.2",
+        "contentHash": "vGRpeXIxK7uRRHzVIrp2dYDri4wwlerUutG8TG7jHMolb3hX6Zu6VVDZpmwB8AlTIZ9BKLIV+V4Oi4xEsamZsQ==",
         "dependencies": {
-          "AWSSDK.Core": "[4.0.103, 5.0.0)"
+          "AWSSDK.Core": "[4.1.1.1, 5.0.0)"
         }
       },
       "Azure.Messaging.ServiceBus": {
@@ -2615,9 +2624,9 @@
       },
       "Google.Cloud.PubSub.V1": {
         "type": "CentralTransitive",
-        "requested": "[3.39.0, 3.39.0]",
-        "resolved": "3.39.0",
-        "contentHash": "hszXzV/GVMXNW0K5K+r15YlwcB9CqxhTieJo93WZN+BFd6rWHET5L+CDY5E08ULqZJLU/pbC56YwY98UeomSbA==",
+        "requested": "[3.40.0, 3.40.0]",
+        "resolved": "3.40.0",
+        "contentHash": "fTV237JlWQ94hRa7MZyXovEFKtXyuj8W56FmP0TDSDbnCnfge23O+E3wgLn0zg+fL0pPnn4P1M9xyBpDBYzSDQ==",
         "dependencies": {
           "Google.Api.Gax.Grpc": "[4.13.1, 5.0.0)",
           "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
@@ -3207,11 +3216,11 @@
       },
       "Testcontainers.Azurite": {
         "type": "CentralTransitive",
-        "requested": "[4.16.0, 4.16.0]",
-        "resolved": "4.16.0",
-        "contentHash": "KwR+TJ4knPJnM8Dd8fWaPCA7wp1x+SNnuTITIXY0YtqFH+aeO3zrZCil+juk+HgplFWlXO5b1Na1zdt1qe+EgA==",
+        "requested": "[4.17.0, 4.17.0]",
+        "resolved": "4.17.0",
+        "contentHash": "ZdFSaFFyoO/+aBPva37H/yamiFOJhNB8uW806N/EJ50zscwAqN67PbolJJ8EnCA0B11b1r+PDwnIVs+V2rITrw==",
         "dependencies": {
-          "Testcontainers": "4.16.0"
+          "Testcontainers": "4.17.0"
         }
       }
     },
