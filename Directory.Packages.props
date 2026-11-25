@@ -19,7 +19,7 @@
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.7.0]" />
     <PackageVersion Include="Dapper" Version="[2.1.100]" />
     <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.2]" />
-    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[10.0.2]" />
+    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[11.0.0]" />
     <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[10.0.2]" />
     <PackageVersion Include="FakeItEasy" Version="[9.0.1]" />
     <PackageVersion Include="FirebaseAdmin" Version="[3.7.1]" />
