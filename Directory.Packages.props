@@ -12,15 +12,15 @@
     <PackageVersion Include="DotNetDiag.HealthChecks.SqlServer" Version="[10.0.16]" />
     <PackageVersion Include="Autofac" Version="[9.3.4]" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="[11.0.2]" />
-    <PackageVersion Include="AWSSDK.S3" Version="[4.1.2]" />
+    <PackageVersion Include="AWSSDK.S3" Version="[4.1.2.1]" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="[7.21.0]" />
-    <PackageVersion Include="Azure.Storage.Blobs" Version="[12.30.1]" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="[12.30.2]" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="[2.7.0]" />
     <PackageVersion Include="CSharpFunctionalExtensions" Version="[3.7.0]" />
-    <PackageVersion Include="Dapper" Version="[2.1.89]" />
-    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.1]" />
-    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[10.0.1]" />
-    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[10.0.1]" />
+    <PackageVersion Include="Dapper" Version="[2.1.100]" />
+    <PackageVersion Include="EFCore.BulkExtensions.Core" Version="[10.0.2]" />
+    <PackageVersion Include="EFCore.BulkExtensions.PostgreSql" Version="[10.0.2]" />
+    <PackageVersion Include="EFCore.BulkExtensions.SqlServer" Version="[10.0.2]" />
     <PackageVersion Include="FakeItEasy" Version="[9.0.1]" />
     <PackageVersion Include="FirebaseAdmin" Version="[3.7.1]" />
     <PackageVersion Include="FluentValidation" Version="[12.2.0]" />
@@ -51,7 +51,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="[10.0.15]" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="[10.0.15]" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.15]" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[10.11.0]" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Common" Version="[10.11.1]" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="[10.0.15]" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="[10.0.15]" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="[10.0.15]" />
@@ -61,7 +61,7 @@
     <PackageVersion Include="MyCSharp.HttpUserAgentParser.AspNetCore" Version="[3.1.6]" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="[1.3.1]" />
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="[11.6.2]" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[10.0.3]" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[10.0.4]" />
     <PackageVersion Include="NSec.Cryptography" Version="[26.4.0]" />
     <PackageVersion Include="OpenIddict.AspNetCore" Version="[7.8.0]" />
     <PackageVersion Include="OpenIddict.Core" Version="[7.8.0]" />
