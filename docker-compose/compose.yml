@@ -263,7 +263,7 @@ services:
 
   rabbitmq:
     hostname: rabbitmq
-    image: rabbitmq:4.4.1-management-alpine@sha256:2b47b1aa05ec7e373950ad2e9200e9f95a9da7039c8d22c19dbf5a59101362c4
+    image: rabbitmq:4.4.1-management-alpine@sha256:5ba587917025c7120d4a96cb1d8299d173af62e455c73cae8d946f4a225d0527
     ports:
       - "5672:5672"
       - "15672:15672" # mgmt plugin, "guest/guest"
