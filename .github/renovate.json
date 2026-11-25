@@ -77,9 +77,7 @@
             "matchDatasources": ["nuget"],
             "matchPackageNames": ["EFCore.BulkExtensions", "EFCore.BulkExtensions.*"],
             "groupName": "EFCore.BulkExtensions",
-            "groupSlug": "efcore-bulkextensions",
-            "separateMajorMinor": false,
-            "separateMinorPatch": false
+            "groupSlug": "efcore-bulkextensions"
         }
     ]
 }
