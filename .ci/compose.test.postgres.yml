@@ -4,7 +4,7 @@ services:
   database:
     container_name: bkb-postgres-test
     hostname: postgres
-    image: postgres:18.7@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
+    image: postgres:18.7@sha256:c699303802144847d238196173655dbbecf7a96aeca1565f2b02eb671a1f0b6b
     environment:
       - POSTGRES_PASSWORD=Passw0rd
       - POSTGRES_DB=enmeshed
@@ -21,7 +21,7 @@ services:
   seed-database:
     volumes:
       - ../scripts/sql/postgres:/app/sql-scripts
-    image: postgres:18.7@sha256:e754b839f447639b7004895f4d8a4bfcb4e9dbe3a1bc035f27f646562a16fd61
+    image: postgres:18.7@sha256:c699303802144847d238196173655dbbecf7a96aeca1565f2b02eb671a1f0b6b
     environment:
       - PGPASSWORD=Passw0rd
     command: psql -h postgres -U postgres -d enmeshed -f /app/sql-scripts/setup.sql
