@@ -71,6 +71,13 @@
             "matchPackageNames": ["dotnet-sdk", "dotnet-runtime", "mcr.microsoft.com/dotnet/**", "dhi.io/dotnet", "dhi.io/aspnetcore"],
             "groupName": ".NET SDK and Runtime",
             "groupSlug": "dotnet"
+        },
+        {
+            "description": "Update all EFCore.BulkExtensions packages together.",
+            "matchDatasources": ["nuget"],
+            "matchPackageNames": ["EFCore.BulkExtensions", "EFCore.BulkExtensions.*"],
+            "groupName": "EFCore.BulkExtensions",
+            "groupSlug": "efcore-bulkextensions"
         }
     ]
 }
