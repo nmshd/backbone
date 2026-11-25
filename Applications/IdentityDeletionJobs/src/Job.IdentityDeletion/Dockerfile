@@ -1,7 +1,7 @@
-FROM dhi.io/aspnetcore:11.0.0-debian13@sha256:6bb1c585896870b9d56c1b065707e1a00968a042e44e60906f0d130988ae8e7b AS base
+FROM dhi.io/aspnetcore:11.0.0-debian13@sha256:7efd775f2709e46eac2cdc915a4367a05263f660b95d77b54646639071f6b087 AS base
 WORKDIR /app
 
-FROM dhi.io/dotnet:11.0.100-sdk@sha256:d7e0803b6e53a5b709e3e455559d997e8dbd18f5117ab6f3b41751bb47a86cb3 AS build
+FROM dhi.io/dotnet:11.0.100-sdk@sha256:883791cbca41daf20c01623c9b25c3b2e48e479ace1a61a56a8bd88017dbc3f6 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
