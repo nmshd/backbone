@@ -1,5 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 extension ToFilterOperatorDropdownMenuItem on List<FilterOperator> {
   List<DropdownMenuItem<FilterOperator>> toDropdownMenuItems() =>

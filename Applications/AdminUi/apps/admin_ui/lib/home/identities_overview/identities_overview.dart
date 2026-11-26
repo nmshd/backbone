@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '/core/core.dart';
 import 'widgets/query_deletion_process_audit_logs.dart';
