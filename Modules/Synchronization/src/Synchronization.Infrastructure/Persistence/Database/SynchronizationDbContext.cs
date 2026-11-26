@@ -53,7 +53,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             var activeIdentityParam = new NpgsqlParameter("createdBy", NpgsqlDbType.Char, IdentityAddress.MAX_LENGTH, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default,
                 activeIdentity.Value);
             var localIndexParam = new NpgsqlParameter("localIndex", localIndex);
-            query = DatawalletModifications.FromSqlInterpolated(
+            query = DatawalletModifications.FromSql(
                 $"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndexParam}) AS ignoreDuplicates WHERE rank = 1""");
         }
         else if (Database.IsSqlServer())
@@ -61,14 +61,14 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             var activeIdentityParam = new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default,
                 activeIdentity.Value);
             var localIndexParam = new SqlParameter("localIndex", localIndex);
-            query = DatawalletModifications.FromSqlInterpolated(
+            query = DatawalletModifications.FromSql(
                 $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [Synchronization].[DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndexParam}) AS ignoreDuplicates WHERE rank = 1");
         }
         else // Sqlite
         {
             var activeIdentityParam = new SqliteParameter("createdBy", activeIdentity.Value);
             var localIndexParam = new SqliteParameter("localIndex", localIndex);
-            query = DatawalletModifications.FromSqlInterpolated(
+            query = DatawalletModifications.FromSql(
                 $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndexParam}) AS ignoreDuplicates WHERE rank = 1");
         }
 
