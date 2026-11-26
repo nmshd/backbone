@@ -5,6 +5,7 @@ using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.AdminCli.Commands.Database.Model;
 using Backbone.Tooling;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Spectre.Console;
 
 namespace Backbone.AdminCli.Commands.Database;
@@ -145,7 +146,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                     : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == d.Identity.ClientId)!.DisplayName,
                 ClientId = d.Identity.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(devices, "devices.csv", progressReporter);
     }
@@ -162,7 +163,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                 IdentityAddressHash = i.IdentityAddressHash,
                 MessageKey = i.MessageKey
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(deletionAuditLogItems, "deletionAuditLogItems.csv", progressReporter);
     }
@@ -187,7 +188,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                             .DisplayName,
                 CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(templates, "relationshipTemplates.csv", progressReporter);
     }
@@ -216,7 +217,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                     : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId)!.DisplayName,
                 ToClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == r.To)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(relationships, "relationships.csv", progressReporter);
     }
@@ -245,7 +246,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                     : _adminApiDbContext.OpenIddictApplications.FirstOrDefault(a => a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId)!.DisplayName,
                 OwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == f.Owner)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(files, "files.csv", progressReporter);
     }
@@ -277,7 +278,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                             a.ClientId == _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId)!.DisplayName,
                 RecipientClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.Recipients.First().Address)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(messages, "messages.csv", progressReporter);
     }
@@ -303,7 +304,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                             .DisplayName,
                 CreatedByClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == m.CreatedBy)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(modifications, "datawalletModifications.csv", progressReporter);
     }
@@ -325,7 +326,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                             .DisplayName,
                 SyncItemOwnerClientId = _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == e.ExternalEvent.Owner)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(syncErrors, "syncErrors.csv", progressReporter);
     }
@@ -349,7 +350,7 @@ public class ExportDatabaseCommand : AdminCliCommand
                             .DisplayName,
                 CreatedByClientId = t.CreatedBy == null ? null : _adminApiDbContext.Identities.FirstOrDefault(i => i.Address == t.CreatedBy)!.ClientId
             })
-            .ToAsyncEnumerable();
+            .AsAsyncEnumerable();
 
         await StreamToCSV(tokens, "tokens.csv", progressReporter);
     }
